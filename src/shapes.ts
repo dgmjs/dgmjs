@@ -30,19 +30,19 @@ import { Transform } from "./transform/transform";
 import { evalScript } from "./mal/mal";
 import { Obj } from "./core/obj";
 
-export interface Constraint {
+interface Constraint {
   id: string;
   [key: string]: any; // allow all additional fields
 }
 
-export interface Property {
+interface Property {
   name: string;
   type: "string" | "boolean" | "number" | "enum" | "text";
   options?: string[];
   value: any;
 }
 
-export interface Script {
+interface Script {
   id: string;
   script: string;
 }
@@ -1804,6 +1804,10 @@ interface ShapeValues {
 }
 
 export {
+  type Constraint,
+  type Property,
+  type Script,
+  type ConstraintFn,
   ScriptType,
   Movable,
   Sizable,

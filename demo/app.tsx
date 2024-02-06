@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Editor, basicSetup, createDiagram } from "dgmjs";
+import { Editor, basicSetup } from "dgmjs";
 
 let editor: Editor | null = null;
 
@@ -11,11 +11,9 @@ function App() {
         document.querySelector("#editor-holder") as HTMLElement,
         options
       );
-      createDiagram(editor);
       editor.setActiveHandler("Select");
       editor.fit();
       editor.repaint();
-      editor.setDarkMode(false);
     }
   }, []);
 

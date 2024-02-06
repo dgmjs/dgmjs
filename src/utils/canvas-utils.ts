@@ -27,7 +27,7 @@ export function renderOnCanvas(
   const box = geometry.boundingRect(
     shape
       .traverseSequence()
-      .map((s) => s.getBoundingRect())
+      .map((s) => (s as Shape).getBoundingRect())
       .flat()
   );
 

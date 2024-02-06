@@ -13,7 +13,7 @@
 
 import { EventEmitter } from "events";
 import { Canvas, CanvasPointerEvent } from "./graphics/graphics";
-import type { Shape } from "./shapes";
+import { Diagram, type Shape } from "./shapes";
 import { Cursor, Color, Mouse } from "./graphics/const";
 import { assert } from "./std/assert";
 import * as geometry from "./graphics/geometry";
@@ -22,6 +22,7 @@ import { EditorState } from "./editor-state";
 import { ShapeFactory } from "./factory";
 import type { Obj } from "./core/obj";
 import { colors } from "./colors";
+import { Actions } from "./actions";
 
 const AUTOSCROLL_STEP = 2;
 const AUTOSCROLL_SPEED = 50; // speed in 1..1000
@@ -104,6 +105,64 @@ class AutoScroller {
   }
 }
 
+/**
+ * Create a touch event
+ * @param element A <canvas> HTML element
+ * @param canvas A canvas object
+ * @param e An event of canvas element
+ */
+function createTouchEvent(
+  element: HTMLCanvasElement,
+  canvas: Canvas,
+  e: TouchEvent
+): CanvasPointerEvent {
+  const rect = element.getBoundingClientRect();
+  // average of touch points if multi-touch
+  const cx =
+    e.touches.length === 2
+      ? (e.touches[0].clientX + e.touches[1].clientX) / 2
+      : e.touches[0].clientX;
+  const cy =
+    e.touches.length === 2
+      ? (e.touches[0].clientY + e.touches[1].clientY) / 2
+      : e.touches[0].clientY;
+  let _p = [cx - rect.left, cy - rect.top];
+  // transform pointer event point to CCS (canvas coord-system)
+  let p = [_p[0] * canvas.ratio, _p[1] * canvas.ratio];
+  const options = {
+    button: 0,
+    shiftKey: false,
+    altKey: false,
+    ctrlKey: false,
+    metaKey: false,
+    touchDistance: 0,
+  };
+  if (e.touches.length === 2) {
+    const xd = e.touches[0].clientX - e.touches[1].clientX;
+    const yd = e.touches[0].clientY - e.touches[1].clientY;
+    options.touchDistance = Math.sqrt(xd * xd + yd * yd);
+  }
+  return new CanvasPointerEvent(p[0], p[1], options);
+}
+
+/**
+ * Create a pointer event
+ * @param element A <canvas> HTML element
+ * @param canvas A canvas object
+ * @param e An event of canvas element
+ */
+function createPointerEvent(
+  element: HTMLCanvasElement,
+  canvas: Canvas,
+  e: MouseEvent
+): CanvasPointerEvent {
+  const rect = element.getBoundingClientRect();
+  let _p = [e.clientX - rect.left, e.clientY - rect.top];
+  // transform pointer event point to CCS (canvas coord-system)
+  let p = [_p[0] * canvas.ratio, _p[1] * canvas.ratio];
+  return new CanvasPointerEvent(p[0], p[1], e);
+}
+
 export interface EditorOptions {
   handlers?: Handler[];
   autoScroll?: boolean;
@@ -111,23 +170,12 @@ export interface EditorOptions {
 
 /**
  * The diagram editor
- *
- * This class dispatches theses events:
- *     - select (shapes)
- *     - move (shapes, dx, dy, container)
- *     - dblClick (shape, x, y)
- *     - anchorMove (shape, alpha, distance)
- *     - nodeResize (node, left, top, right, bottom)
- *     - nodeRotate (node, angle)
- *     - edgeRepath (edge, path)
- *     - edgeReconnect (edge, path, newEnd, isHead, cpIndex)
- *     - zoom (scale)
- *     - scroll (dx, dy)
  */
 class Editor extends EventEmitter {
   state: EditorState;
   factory: ShapeFactory;
-
+  actions: Actions;
+  autoScroller: AutoScroller;
   parent: HTMLElement;
   canvasElement: HTMLCanvasElement;
   canvas: Canvas;
@@ -141,7 +189,6 @@ class Editor extends EventEmitter {
   activeHandlerId: string | null;
   activeHandler: Handler | null;
   defaultHandlerId: string | null;
-  autoScroller: AutoScroller;
   leftButtonDown: boolean;
   downX: number;
   downY: number;
@@ -151,64 +198,6 @@ class Editor extends EventEmitter {
   touchPoint: number[];
 
   /**
-   * Create a mouse event (mouse)
-   * @param element A <canvas> HTML element
-   * @param canvas A canvas object
-   * @param e An event of canvas element
-   */
-  static createMouseEvent(
-    element: HTMLCanvasElement,
-    canvas: Canvas,
-    e: MouseEvent
-  ): CanvasPointerEvent {
-    const rect = element.getBoundingClientRect();
-    let _p = [e.clientX - rect.left, e.clientY - rect.top];
-    // transform pointer event point to CCS (canvas coord-system)
-    let p = [_p[0] * canvas.ratio, _p[1] * canvas.ratio];
-    return new CanvasPointerEvent(p[0], p[1], e);
-  }
-
-  /**
-   * Create a touch event
-   * @param element A <canvas> HTML element
-   * @param canvas A canvas object
-   * @param e An event of canvas element
-   */
-  static createTouchEvent(
-    element: HTMLCanvasElement,
-    canvas: Canvas,
-    e: TouchEvent
-  ): CanvasPointerEvent {
-    const rect = element.getBoundingClientRect();
-    // average of touch points if multi-touch
-    const cx =
-      e.touches.length === 2
-        ? (e.touches[0].clientX + e.touches[1].clientX) / 2
-        : e.touches[0].clientX;
-    const cy =
-      e.touches.length === 2
-        ? (e.touches[0].clientY + e.touches[1].clientY) / 2
-        : e.touches[0].clientY;
-    let _p = [cx - rect.left, cy - rect.top];
-    // transform pointer event point to CCS (canvas coord-system)
-    let p = [_p[0] * canvas.ratio, _p[1] * canvas.ratio];
-    const options = {
-      button: 0,
-      shiftKey: false,
-      altKey: false,
-      ctrlKey: false,
-      metaKey: false,
-      touchDistance: 0,
-    };
-    if (e.touches.length === 2) {
-      const xd = e.touches[0].clientX - e.touches[1].clientX;
-      const yd = e.touches[0].clientY - e.touches[1].clientY;
-      options.touchDistance = Math.sqrt(xd * xd + yd * yd);
-    }
-    return new CanvasPointerEvent(p[0], p[1], options);
-  }
-
-  /**
    * constructor
    */
   constructor(editorHolder: HTMLElement, options: EditorOptions) {
@@ -216,7 +205,8 @@ class Editor extends EventEmitter {
     this.parent = editorHolder;
     this.state = new EditorState();
     this.factory = new ShapeFactory(this);
-
+    this.actions = new Actions(this);
+    this.autoScroller = new AutoScroller(this);
     // initialize properties
     this.canvasElement = null as any;
     this.canvas = null as any;
@@ -230,7 +220,6 @@ class Editor extends EventEmitter {
     this.activeHandlerId = null;
     this.activeHandler = null;
     this.defaultHandlerId = null;
-    this.autoScroller = new AutoScroller(this);
     this.leftButtonDown = false; // To check mouse left button down in mouse move event.
     this.downX = 0;
     this.downY = 0;
@@ -238,13 +227,20 @@ class Editor extends EventEmitter {
     this.initialScale = 1;
     this.initialDistance = 0;
     this.touchPoint = [-1, -1];
+    this.initializeState();
     this.initializeCanvas();
     this.initializeKeys();
-    this.wiring();
-
     // options
     this.addHandlers(options.handlers ?? []);
     this.autoScroller.setEnabled(options.autoScroll ?? true);
+  }
+
+  initializeState() {
+    const diagram = new Diagram();
+    this.state.store.setRoot(diagram);
+    this.state.diagram = diagram;
+    this.state.transform.on("transaction", () => this.repaint());
+    this.state.selections.on("select", () => this.repaint());
   }
 
   initializeCanvas() {
@@ -257,12 +253,13 @@ class Editor extends EventEmitter {
     if (!context) throw new Error("Failed to create context2d");
     const pixelRatio = window.devicePixelRatio ?? 1;
     this.canvas = new Canvas(context, pixelRatio);
+    this.canvas.colorVariables = { ...colors["light"] };
 
     // pointer down handler
     this.canvasElement.addEventListener("pointerdown", (e) => {
       this.focus();
       if (e.button === Mouse.BUTTON1) this.leftButtonDown = true;
-      const event = Editor.createMouseEvent(this.canvasElement, this.canvas, e);
+      const event = createPointerEvent(this.canvasElement, this.canvas, e);
       this.autoScroller.pointerDown(event);
       if (event.ModDown) {
         // viewpoint move
@@ -281,7 +278,7 @@ class Editor extends EventEmitter {
 
     // pointer move
     this.canvasElement.addEventListener("pointermove", (e) => {
-      const event = Editor.createMouseEvent(this.canvasElement, this.canvas, e);
+      const event = createPointerEvent(this.canvasElement, this.canvas, e);
       event.leftButtonDown = this.leftButtonDown;
       this.autoScroller.pointerMove(event);
       if (event.ModDown) {
@@ -301,7 +298,7 @@ class Editor extends EventEmitter {
     // pointer up  handler
     this.canvasElement.addEventListener("pointerup", (e) => {
       if (e.button === Mouse.BUTTON1) this.leftButtonDown = false;
-      const event = Editor.createMouseEvent(this.canvasElement, this.canvas, e);
+      const event = createPointerEvent(this.canvasElement, this.canvas, e);
       this.autoScroller.pointerUp(event);
       if (event.ModDown) {
         // viewpoint move
@@ -319,11 +316,7 @@ class Editor extends EventEmitter {
     this.canvasElement.addEventListener("touchstart", (e) => {
       this.focus();
       if (e.touches.length === 2) {
-        const event = Editor.createTouchEvent(
-          this.canvasElement,
-          this.canvas,
-          e
-        );
+        const event = createTouchEvent(this.canvasElement, this.canvas, e);
         this.isPinching = true;
         this.initialScale = this.canvas.scale;
         this.initialDistance = event.touchDistance;
@@ -334,11 +327,7 @@ class Editor extends EventEmitter {
     // touch move handler
     this.canvasElement.addEventListener("touchmove", (e) => {
       if (this.isPinching && e.touches.length === 2) {
-        const event = Editor.createTouchEvent(
-          this.canvasElement,
-          this.canvas,
-          e
-        );
+        const event = createTouchEvent(this.canvasElement, this.canvas, e);
         const currentDistance = event.touchDistance;
         const scale = currentDistance / this.initialDistance;
         const p1 = this.canvas.globalCoordTransformRev(this.touchPoint);
@@ -361,7 +350,7 @@ class Editor extends EventEmitter {
     // mouse double click
     this.canvasElement.addEventListener("dblclick", (e) => {
       this.focus();
-      const event = Editor.createMouseEvent(this.canvasElement, this.canvas, e);
+      const event = createPointerEvent(this.canvasElement, this.canvas, e);
       var p = this.canvas.globalCoordTransformRev([event.x, event.y]);
       if (this.state.diagram) {
         // allows double click on a disable shape (e.g. a text inside another shape)
@@ -376,7 +365,7 @@ class Editor extends EventEmitter {
 
     // mouse wheel event
     this.canvasElement.addEventListener("wheel", (e) => {
-      const event = Editor.createMouseEvent(this.canvasElement, this.canvas, e);
+      const event = createPointerEvent(this.canvasElement, this.canvas, e);
       const dx = -e.deltaX;
       const dy = -e.deltaY;
       const h = this.getSize()[1] / (this.canvas.px * 4);
@@ -412,7 +401,7 @@ class Editor extends EventEmitter {
     this.canvasElement.addEventListener("drop", (e) => {
       this.focus();
       e.preventDefault();
-      const event = Editor.createMouseEvent(this.canvasElement, this.canvas, e);
+      const event = createPointerEvent(this.canvasElement, this.canvas, e);
       // const files = Array.from(e.dataTransfer?.files ?? []);
       this.triggerFileDrop(event, e.dataTransfer as DataTransfer);
     });
@@ -442,9 +431,13 @@ class Editor extends EventEmitter {
     });
   }
 
-  wiring() {
-    // engine events
-    this.on("dblClick", (shape, x, y) => {});
+  /**
+   * Set diagram
+   */
+  setDiagram(diagram: Diagram) {
+    this.state.diagram = diagram;
+    this.state.selections.deselectAll();
+    this.repaint();
   }
 
   /**
@@ -743,6 +736,8 @@ class Editor extends EventEmitter {
       this.drawGrid(this.canvas);
       this.state.diagram.render(this.canvas);
       if (drawSelection) this.drawSelection();
+    } else {
+      this.clearBackground(this.canvas);
     }
   }
 

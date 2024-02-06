@@ -2,13 +2,10 @@
 
 An extensible diagramming framework for the web
 
-### Run demo
+## Run demo
 
 ```sh
-# setup (only once)
-$ npm link
-$ npm link dgmjs
-
-# run demo
-$ npm run dev
+npm run build   # if dgmjs updated
+npm link dgmjs  # if dgmjs updated
+npm run dev     # run demo
 ```

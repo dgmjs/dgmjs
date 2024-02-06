@@ -2,9 +2,8 @@ import type { Diagram } from "./shapes";
 import { Canvas } from "./graphics/graphics";
 import * as geometry from "./graphics/geometry";
 import fileSaverPkg from "file-saver";
-import { colors, type Colors } from "./colors";
+import { colors } from "./colors";
 import { Context } from "svgcanvas";
-import { getFontsInStyle } from "@/components/astro/fonts-in-style";
 const { saveAs } = fileSaverPkg;
 
 export const DEFAULT_MARGIN = 10;
@@ -102,7 +101,8 @@ export async function getImageBlob(
 export async function getSVGImageData(
   canvas: Canvas,
   diagram: Diagram,
-  options: Partial<ExportImageOptions>
+  options: Partial<ExportImageOptions>,
+  styleInSVG?: string
 ): Promise<string> {
   const { scale, dark, fillBackground, margin } = {
     scale: 1,
@@ -144,12 +144,10 @@ export async function getSVGImageData(
   // TODO: add fonts in defs (temporal impls)
   const svg: SVGSVGElement = ctx.getSvg();
   const defs = svg.getElementsByTagName("defs");
-  if (defs.length > 0) {
+  if (styleInSVG && defs.length > 0) {
     const styleTag = document.createElement("style");
     styleTag.setAttribute("type", "text/css");
-    styleTag.appendChild(
-      document.createTextNode(getFontsInStyle("https://dgm.sh"))
-    );
+    styleTag.appendChild(document.createTextNode(styleInSVG));
     defs.item(0)?.appendChild(styleTag);
   }
 
@@ -162,11 +160,12 @@ export async function getSVGImageData(
 /**
  * Export diagram image as a file
  */
-export async function exportImage(
+export async function exportImageAsFile(
   canvas: Canvas,
   diagram: Diagram,
   fileName: string,
-  options: Partial<ExportImageOptions>
+  options: Partial<ExportImageOptions>,
+  styleInSVG?: string
 ) {
   switch (options.format) {
     case "image/png": {
@@ -177,7 +176,7 @@ export async function exportImage(
       break;
     }
     case "image/svg+xml": {
-      const data = await getSVGImageData(canvas, diagram, options);
+      const data = await getSVGImageData(canvas, diagram, options, styleInSVG);
       if (data) {
         const blob = new Blob([data], { type: "image/svg+xml" });
         saveAs(blob, fileName);

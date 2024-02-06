@@ -1,50 +1,15 @@
-import "./shapes";
 import "./manipulators";
 import "./constraints";
 
 export * as geometry from "./graphics/geometry";
-
-export {
-  Shape,
-  Diagram,
-  Box,
-  Line,
-  Connector,
-  Ellipse,
-  Rectangle,
-  Text,
-  Image,
-  Group,
-} from "./shapes";
-
+export * as constants from "./graphics/const";
+export * as utils from "./graphics/utils";
+export { Store } from "./core/store";
+export * from "./colors";
+export * from "./shapes";
 export { Editor } from "./editor";
-
-export {
-  undo,
-  redo,
-  update,
-  delete_,
-  copy,
-  cut,
-  paste,
-  duplicate,
-  selectAll,
-  move,
-  group,
-  ungroup,
-  bringToFront,
-  sendToBack,
-  bringForward,
-  sendBackward,
-  alignLeft,
-  alignCenter,
-  alignRight,
-  alignTop,
-  alignMiddle,
-  alignBottom,
-  createDiagram,
-  changeDiagram,
-  loadFromJSON,
-} from "./actions";
-
+export { EditorState } from "./editor-state";
+export * from "./export";
+export { renderOnCanvas } from "./utils/canvas-utils";
+export { convertDocToText, preprocessNode } from "./utils/text-utils";
 export { basicSetup } from "./basic-setup";

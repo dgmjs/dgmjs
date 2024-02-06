@@ -2,7 +2,6 @@ import { EventEmitter } from "events";
 import type { Editor } from "./editor";
 import {
   Connector,
-  Diagram,
   Ellipse,
   Image,
   Line,
@@ -33,17 +32,7 @@ export class ShapeFactory extends EventEmitter {
    */
   insertShape(shape: Shape, parent?: Shape) {
     this.emit("shapeInitialize", shape);
-    const tr = this.editor.state.transform;
-    const diagram = this.editor.state.diagram as Diagram;
-    tr.startTransaction("insert");
-    if (parent) {
-      tr.atomicInsert(shape);
-      tr.changeParent(shape, parent);
-    } else {
-      tr.addShapeToDiagram(diagram, shape);
-    }
-    tr.resolveAllConstraints(diagram, this.editor.canvas);
-    tr.endTransaction();
+    this.editor.actions.insert(shape, parent);
     this.emit("create", shape);
   }
 

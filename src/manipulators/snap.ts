@@ -369,7 +369,7 @@ class Snap {
             [Math.round(p[1].left - p[0].right), p[0], p[1]] as [
               number,
               Box,
-              Box
+              Box,
             ]
         )
         .filter((p) => p[0] > 0);
@@ -384,7 +384,7 @@ class Snap {
             [Math.round(p[1].left - p[0].right), p[0], p[1]] as [
               number,
               Box,
-              Box
+              Box,
             ]
         )
         .filter((p) => p[0] > 0);
@@ -415,7 +415,7 @@ class Snap {
             [Math.round(p[1].top - p[0].bottom), p[0], p[1]] as [
               number,
               Box,
-              Box
+              Box,
             ]
         )
         .filter((p) => p[0] > 0);
@@ -430,7 +430,7 @@ class Snap {
             [Math.round(p[1].top - p[0].bottom), p[0], p[1]] as [
               number,
               Box,
-              Box
+              Box,
             ]
         )
         .filter((p) => p[0] > 0);

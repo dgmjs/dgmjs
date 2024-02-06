@@ -1,17 +1,7 @@
 import { Instantiator } from "./core/instantiator";
+import { Shape, Diagram, Box, Line } from "./shapes";
 import { Store } from "./core/store";
-import {
-  Shape,
-  Diagram,
-  Box,
-  Line,
-  Connector,
-  Ellipse,
-  Rectangle,
-  Text,
-  Image,
-  Group,
-} from "./shapes";
+import { Connector, Ellipse, Rectangle, Text, Image, Group } from "./shapes";
 import { Clipboard } from "./core/clipboard";
 import { Transform } from "./transform/transform";
 import { SelectionManager } from "./selection-manager";
@@ -41,9 +31,5 @@ export class EditorState {
     this.instantiator.register("Connector", () => new Connector());
     this.instantiator.register("Group", () => new Group());
     this.diagram = null;
-  }
-
-  setDiagram(diagram: Diagram | null) {
-    this.diagram = diagram;
   }
 }
