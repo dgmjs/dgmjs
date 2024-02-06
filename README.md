@@ -1,12 +1,14 @@
 # dgmjs
-A diagramming framework for professional notations
 
+An extensible diagramming framework for the web
 
-### scripts
+### Run demo
 
 ```sh
-$ npm run dev    # development
-$ npm run test   # run tests
-$ npm run build
-$ npm publish
+# setup (only once)
+$ npm link
+$ npm link dgmjs
+
+# run demo
+$ npm run dev
 ```
