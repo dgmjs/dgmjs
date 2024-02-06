@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./app";
-import { add } from "dgmjs";
+import { geometry } from "dgmjs";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
@@ -9,4 +9,4 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   </React.StrictMode>
 );
 
-console.log(add(1, 2));
+console.log("distance", geometry.distance([0, 0], [100, 100]));
