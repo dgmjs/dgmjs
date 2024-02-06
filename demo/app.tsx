@@ -1,19 +1,24 @@
 import React, { useEffect } from "react";
 import { Editor, basicSetup } from "dgmjs";
 
-let editor: Editor | null = null;
+declare global {
+  interface Window {
+    editor: Editor;
+  }
+}
 
 function App() {
   useEffect(() => {
-    if (!editor) {
+    if (!window.editor) {
       const options = basicSetup();
-      editor = new Editor(
+      const editor = new Editor(
         document.querySelector("#editor-holder") as HTMLElement,
         options
       );
       editor.setActiveHandler("Select");
       editor.fit();
       editor.repaint();
+      window.editor = editor;
     }
   }, []);
 
