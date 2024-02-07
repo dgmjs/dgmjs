@@ -5,6 +5,7 @@ import { Connector, Ellipse, Rectangle, Text, Image, Group } from "./shapes";
 import { Clipboard } from "./core/clipboard";
 import { Transform } from "./transform/transform";
 import { SelectionManager } from "./selection-manager";
+import { Obj } from "./core/obj";
 
 export class EditorState {
   instantiator: Instantiator;
@@ -20,6 +21,7 @@ export class EditorState {
     this.transform = new Transform(this.store);
     this.clipboard = new Clipboard(this.store, this.transform);
     this.selections = new SelectionManager(this);
+    this.instantiator.register("Obj", () => new Obj());
     this.instantiator.register("Shape", () => new Shape());
     this.instantiator.register("Diagram", () => new Diagram());
     this.instantiator.register("Box", () => new Box());
