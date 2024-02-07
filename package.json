@@ -1,9 +1,10 @@
 {
   "name": "dgmjs",
-  "version": "0.2.0",
+  "version": "0.2.5",
   "description": "A diagramming framework for professional notations",
+  "type": "module",
   "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
