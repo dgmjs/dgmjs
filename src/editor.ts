@@ -179,12 +179,12 @@ class Editor extends EventEmitter {
   parent: HTMLElement;
   canvasElement: HTMLCanvasElement;
   canvas: Canvas;
+  backgroundColor: string;
   darkMode: boolean;
   gridSize: number[];
   showGrid: boolean;
   snapToGrid: boolean;
   snapToObject: boolean;
-  backgroundColor: string;
   handlers: Record<string, Handler>;
   activeHandlerId: string | null;
   activeHandler: Handler | null;
@@ -210,12 +210,12 @@ class Editor extends EventEmitter {
     // initialize properties
     this.canvasElement = null as any;
     this.canvas = null as any;
+    this.backgroundColor = Color.CANVAS;
     this.darkMode = false;
     this.gridSize = [8, 8];
-    this.showGrid = true;
-    this.snapToGrid = true;
-    this.snapToObject = true;
-    this.backgroundColor = Color.BACKGROUND;
+    this.showGrid = false;
+    this.snapToGrid = false;
+    this.snapToObject = false;
     this.handlers = {};
     this.activeHandlerId = null;
     this.activeHandler = null;
@@ -448,6 +448,14 @@ class Editor extends EventEmitter {
   }
 
   /**
+   * Set background color
+   */
+  setBackgroundColor(color: string) {
+    this.backgroundColor = color;
+    this.repaint();
+  }
+
+  /**
    * Set dark mode
    */
   setDarkMode(dark: boolean) {
@@ -456,6 +464,36 @@ class Editor extends EventEmitter {
       ...colors[this.darkMode ? "dark" : "light"],
     };
     this.repaint();
+  }
+
+  /**
+   * Set grid size
+   */
+  setGridSize(gridSize: number[]) {
+    this.gridSize = gridSize;
+    this.repaint();
+  }
+
+  /**
+   * Set show grid or not
+   */
+  setShowGrid(show: boolean) {
+    this.showGrid = show;
+    this.repaint();
+  }
+
+  /**
+   * Set snap to grid
+   */
+  setSnapToGrid(value: boolean) {
+    this.snapToGrid = value;
+  }
+
+  /**
+   * Set snap to object
+   */
+  setSnapToObject(value: boolean) {
+    this.snapToObject = value;
   }
 
   /**
@@ -671,7 +709,7 @@ class Editor extends EventEmitter {
    */
   clearBackground(canvas: Canvas) {
     const g = canvas.context;
-    g.fillStyle = this.canvas.resolveColor(Color.CANVAS);
+    g.fillStyle = this.canvas.resolveColor(this.backgroundColor);
     g.fillRect(0, 0, this.canvasElement.width, this.canvasElement.height);
   }
 
