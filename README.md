@@ -2,10 +2,16 @@
 
 An extensible diagramming framework for the web
 
+## Build and publish
+
+```sh
+cd packages/dgmjs
+npm run build
+npm publish
+```
+
 ## Run demo
 
 ```sh
-npm run build   # if dgmjs updated
-npm link dgmjs  # if dgmjs updated
-npm run dev     # run demo
+npm run dev -w apps/demo
 ```
