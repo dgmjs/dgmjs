@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Editor, basicSetup } from "dgmjs";
 
 declare global {
@@ -25,6 +25,7 @@ function App() {
   return (
     <div className="absolute inset-0 h-[calc(100dvh)] select-none">
       <div className="absolute inset-0" id="editor-holder" />
+      <div className=" absolute left-2 top-2 h-12">test...</div>
     </div>
   );
 }
