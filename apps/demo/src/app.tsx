@@ -1,7 +1,10 @@
 import { useEffect } from "react";
 import { Editor, basicSetup } from "dgmjs";
 import { Palette } from "./components/palette";
-import { useStore } from "./store";
+import { useDemoStore } from "./store";
+import { Button } from "./components/ui/button";
+import { Options } from "./components/options";
+import { Menus } from "./components/menus";
 
 declare global {
   interface Window {
@@ -10,7 +13,7 @@ declare global {
 }
 
 function App() {
-  const setActiveHandler = useStore((state) => state.setActiveHandler);
+  const { theme, setActiveHandler } = useDemoStore();
 
   useEffect(() => {
     if (!window.editor) {
@@ -35,8 +38,10 @@ function App() {
 
   return (
     <div className="absolute inset-0 h-[calc(100dvh)] select-none">
-      <div className="absolute top-0 inset-x-0 h-10 border-b flex items-center justify-center">
+      <div className="absolute top-0 inset-x-0 h-10 border-b flex items-center justify-between">
+        <Menus />
         <Palette />
+        <Options />
       </div>
       <div className="absolute inset-x-0 top-10 bottom-0" id="editor-holder" />
     </div>

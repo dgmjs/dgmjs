@@ -23,7 +23,7 @@ import {
 import { ConnectorIcon, LineIcon } from "@/components/icons";
 import { Toggle } from "@/components/ui/toggle";
 import { Separator } from "@/components/ui/separator";
-import { useStore } from "@/store";
+import { useDemoStore } from "@/store";
 
 interface PaletteItemProps {
   handlerId: string;
@@ -31,7 +31,7 @@ interface PaletteItemProps {
 }
 
 function PaletteItem({ handlerId, children }: PaletteItemProps) {
-  const activeHandler = useStore((state) => state.activeHandler);
+  const activeHandler = useDemoStore((state) => state.activeHandler);
 
   const handleToggleChange = (pressed: boolean) => {
     if (pressed) {
@@ -53,7 +53,7 @@ function PaletteItem({ handlerId, children }: PaletteItemProps) {
 
 export function Palette() {
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center h-8">
       <PaletteItem handlerId="Select">
         <MousePointer2Icon size={16} strokeWidth={1.5} />
       </PaletteItem>
