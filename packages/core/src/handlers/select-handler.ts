@@ -88,12 +88,7 @@ export class SelectHandler extends Handler {
         }
       }
       // find in diagram
-      const seq = editor.state.diagram.traverseDepthFirstSequence() as Shape[];
-      for (let s of seq) {
-        if (s.visible && s.enable && s.containsPoint(canvas, p)) {
-          return s;
-        }
-      }
+      return editor.state.diagram.getShapeAt(canvas, p);
     }
     return null;
   }

@@ -305,6 +305,13 @@ class Shape extends Obj {
   }
 
   /**
+   * Return true if this shape is contained by a group (recursively)
+   */
+  inGroup() {
+    return this.findParent((s) => s instanceof Group);
+  }
+
+  /**
    * Assign styles to canvas.
    */
   assignStyles(canvas: Canvas) {

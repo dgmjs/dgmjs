@@ -12,7 +12,7 @@
  */
 
 import React, { useState } from "react";
-import { LineEndType } from "dgmjs";
+import { LineEndType } from "@dgmjs/core";
 import {
   LineEndArrowIcon,
   LineEndCircleFilledIcon,

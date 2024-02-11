@@ -14,7 +14,7 @@
 import React from "react";
 import { Panel } from "../common/panel";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Connector, Line, LineType, RouteType } from "dgmjs";
+import { Connector, Line, LineType, RouteType } from "@dgmjs/core";
 import {
   LineCurveIcon,
   LineStraightIcon,

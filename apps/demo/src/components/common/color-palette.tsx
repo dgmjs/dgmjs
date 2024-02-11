@@ -12,7 +12,7 @@
  */
 
 import React from "react";
-import { colors } from "dgmjs";
+import { colors } from "@dgmjs/core";
 import { cn } from "@/lib/utils";
 
 export const simplePalette: string[][] = [

@@ -24,7 +24,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { Property } from "dgmjs";
+import type { Property } from "@dgmjs/core";
 import { MoreHorizontalIcon, PlusIcon, Settings2Icon } from "lucide-react";
 import { Empty } from "../common/empty";
 import { TextField } from "./fields/text-field";

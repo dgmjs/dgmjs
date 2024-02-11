@@ -12,7 +12,7 @@
  */
 
 import React from "react";
-import { Box } from "dgmjs";
+import { Box } from "@dgmjs/core";
 import { NumberField } from "./fields/number-field";
 import { Panel } from "../common/panel";
 import { Label } from "@/components/ui/label";

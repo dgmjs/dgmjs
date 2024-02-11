@@ -12,7 +12,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { geometry, Box, type ShapeValues } from "dgmjs";
+import { geometry, Box, type ShapeValues } from "@dgmjs/core";
 import { useEditor, extensions, RichTextEditor } from "./rich-text-editor";
 import {
   Popover,
@@ -41,7 +41,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { constants, convertDocToText, preprocessNode } from "dgmjs";
+import { constants, convertDocToText, preprocessNode } from "@dgmjs/core";
 import { ColorPalette, simplePalette } from "../common/color-palette";
 import { Button } from "@/components/ui/button";
 import { useDemoStore } from "@/store";

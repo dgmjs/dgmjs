@@ -13,7 +13,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { colors } from "dgmjs";
+import { colors } from "@dgmjs/core";
 import {
   Popover,
   PopoverContent,

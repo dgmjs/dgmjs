@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Toggle } from "@/components/ui/toggle";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Box, Text as TextShape } from "dgmjs";
+import { Box, Text as TextShape } from "@dgmjs/core";
 import {
   AlignCenterIcon,
   AlignLeftIcon,
@@ -41,7 +41,7 @@ import {
 } from "@/components/icons";
 import { Label } from "@/components/ui/label";
 import { SimpleTooltip } from "../common/simple-tooltip";
-import { constants } from "dgmjs";
+import { constants } from "@dgmjs/core";
 import {
   DropdownMenu,
   DropdownMenuContent,

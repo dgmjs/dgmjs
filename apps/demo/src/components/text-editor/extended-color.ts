@@ -1,6 +1,6 @@
 import "@tiptap/extension-text-style";
 import { Extension } from "@tiptap/core";
-import { utils } from "dgmjs";
+import { utils } from "@dgmjs/core";
 
 export const ExtendedColor = Extension.create({
   name: "color",

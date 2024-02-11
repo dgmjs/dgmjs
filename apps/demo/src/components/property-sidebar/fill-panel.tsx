@@ -15,7 +15,7 @@ import React from "react";
 import { ColorField } from "./fields/color-field";
 import { Panel } from "../common/panel";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { FillStyle } from "dgmjs";
+import { FillStyle } from "@dgmjs/core";
 import {
   FillCrossHatchIcon,
   FillHachureIcon,

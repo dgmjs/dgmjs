@@ -21,7 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Empty } from "../common/empty";
-import { ScriptType } from "dgmjs";
+import { ScriptType } from "@dgmjs/core";
 //import { useScriptEditorDialog } from "../dialogs/script-editor-dialog";
 import { Button } from "@/components/ui/button";
 import { ShapeEditorProps } from "@/types";

@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Movable, Sizable, Box, Line } from "dgmjs";
+import { Movable, Sizable, Box, Line } from "@dgmjs/core";
 import React from "react";
 import { Panel } from "../common/panel";
 import { Label } from "@/components/ui/label";

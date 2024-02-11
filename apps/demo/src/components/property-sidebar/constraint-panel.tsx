@@ -15,7 +15,7 @@ import React from "react";
 import { MoreHorizontalIcon, PlusIcon, Settings2Icon } from "lucide-react";
 import { Panel } from "../common/panel";
 import { Empty } from "../common/empty";
-import { constraintManager, type Constraint } from "dgmjs";
+import { constraintManager, type Constraint } from "@dgmjs/core";
 import {
   Popover,
   PopoverContent,
