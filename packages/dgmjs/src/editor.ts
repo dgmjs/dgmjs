@@ -23,6 +23,7 @@ import { ShapeFactory } from "./factory";
 import type { Obj } from "./core/obj";
 import { colors } from "./colors";
 import { Actions } from "./actions";
+import { KeyMap, KeymapManager } from "./keymap-manager";
 
 const AUTOSCROLL_STEP = 2;
 const AUTOSCROLL_SPEED = 50; // speed in 1..1000
@@ -166,15 +167,18 @@ function createPointerEvent(
 export interface EditorOptions {
   handlers?: Handler[];
   autoScroll?: boolean;
+  keymap?: KeyMap;
 }
 
 /**
  * The diagram editor
  */
 class Editor extends EventEmitter {
+  platform: string;
   state: EditorState;
   factory: ShapeFactory;
   actions: Actions;
+  keymap: KeymapManager;
   autoScroller: AutoScroller;
   parent: HTMLElement;
   canvasElement: HTMLCanvasElement;
@@ -202,10 +206,12 @@ class Editor extends EventEmitter {
    */
   constructor(editorHolder: HTMLElement, options: EditorOptions) {
     super();
+    this.platform = this.detectPlatform();
     this.parent = editorHolder;
     this.state = new EditorState();
     this.factory = new ShapeFactory(this);
     this.actions = new Actions(this);
+    this.keymap = new KeymapManager(this);
     this.autoScroller = new AutoScroller(this);
     // initialize properties
     this.canvasElement = null as any;
@@ -229,10 +235,22 @@ class Editor extends EventEmitter {
     this.touchPoint = [-1, -1];
     this.initializeState();
     this.initializeCanvas();
-    this.initializeKeys();
+    this.initializeKeymap(options);
     // options
     this.addHandlers(options.handlers ?? []);
     this.autoScroller.setEnabled(options.autoScroll ?? true);
+  }
+
+  detectPlatform(): string {
+    const p = navigator.platform.toLowerCase();
+    if (p.indexOf("mac") > -1) {
+      return "darwin";
+    } else if (p.indexOf("win") > -1) {
+      return "win32";
+    } else if (p.indexOf("linux") > -1) {
+      return "linux";
+    }
+    return "unknown";
   }
 
   initializeState() {
@@ -414,9 +432,10 @@ class Editor extends EventEmitter {
     });
   }
 
-  initializeKeys() {
-    // global key events
-    window.addEventListener("keydown", (e) => {
+  initializeKeymap(options: EditorOptions) {
+    this.keymap.bind(options.keymap ?? {});
+    // handle global key events
+    this.canvasElement.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && this.defaultHandlerId) {
         this.setActiveHandler(this.defaultHandlerId);
       }
@@ -424,7 +443,7 @@ class Editor extends EventEmitter {
         this.activeHandler.keyDown(this, e);
       }
     });
-    window.addEventListener("keyup", (e) => {
+    this.canvasElement.addEventListener("keyup", (e) => {
       if (this.activeHandler) {
         this.activeHandler.keyUp(this, e);
       }
