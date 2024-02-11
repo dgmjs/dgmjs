@@ -84,6 +84,10 @@ function App() {
       });
       editor.repaint();
       window.editor = editor;
+
+      window.addEventListener("resize", () => {
+        window.editor.fit();
+      });
     }
   };
 
