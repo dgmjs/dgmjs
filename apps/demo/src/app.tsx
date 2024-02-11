@@ -121,7 +121,10 @@ function App() {
 
   return (
     <div className="absolute inset-0 h-[calc(100dvh)] select-none">
-      <div className="absolute inset-0" id="editor-holder" />
+      <div
+        className="absolute top-10 bottom-0 left-0 right-64"
+        id="editor-holder"
+      />
       <div className="absolute top-0 inset-x-0 h-10 border-b flex items-center justify-between bg-background">
         <Menus />
         <Palette />

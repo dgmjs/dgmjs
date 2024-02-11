@@ -11,7 +11,7 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { Grid3x3Icon, MoonIcon, SunIcon } from "lucide-react";
+import { MoonIcon, SunIcon } from "lucide-react";
 import { useDemoStore } from "@/store";
 import { Button } from "./ui/button";
 
@@ -19,16 +19,6 @@ export function Options() {
   const { theme, setTheme } = useDemoStore();
   return (
     <div className="flex justify-center items-center h-8 px-1">
-      <Button
-        title="Grid"
-        variant="ghost"
-        className="h-8 w-8 p-0"
-        onClick={() => {
-          window.editor.setShowGrid(!window.editor.showGrid);
-        }}
-      >
-        <Grid3x3Icon size={16} strokeWidth={1.5} />
-      </Button>
       <Button
         title="Dark mode"
         variant="ghost"
@@ -39,11 +29,7 @@ export function Options() {
           setTheme(newTheme);
         }}
       >
-        {theme === "dark" ? (
-          <MoonIcon size={16} strokeWidth={1.5} />
-        ) : (
-          <SunIcon size={16} strokeWidth={1.5} />
-        )}
+        {theme === "dark" ? <MoonIcon size={16} /> : <SunIcon size={16} />}
       </Button>
     </div>
   );

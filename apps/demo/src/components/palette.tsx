@@ -55,33 +55,33 @@ export function Palette() {
   return (
     <div className="flex justify-center items-center h-8">
       <PaletteItem handlerId="Select">
-        <MousePointer2Icon size={16} strokeWidth={1.5} />
+        <MousePointer2Icon size={16} />
       </PaletteItem>
       <PaletteItem handlerId="Hand">
-        <HandIcon size={16} strokeWidth={1.5} />
+        <HandIcon size={16} />
       </PaletteItem>
       <Separator orientation="vertical" />
       <PaletteItem handlerId="Rectangle">
-        <SquareIcon size={16} strokeWidth={1.5} />
+        <SquareIcon size={16} />
       </PaletteItem>
       <PaletteItem handlerId="Ellipse">
-        <CircleIcon size={16} strokeWidth={1.5} />
+        <CircleIcon size={16} />
       </PaletteItem>
       <PaletteItem handlerId="Text">
-        <TypeIcon size={16} strokeWidth={1.5} />
+        <TypeIcon size={16} />
       </PaletteItem>
       <PaletteItem handlerId="Image">
-        <ImageIcon size={16} strokeWidth={1.5} />
+        <ImageIcon size={16} />
       </PaletteItem>
       <Separator orientation="vertical" className="dark:bg-gray-700 mx-0.5" />
       <PaletteItem handlerId="Connector">
-        <ConnectorIcon size={16} strokeWidth={1.5} />
+        <ConnectorIcon size={16} />
       </PaletteItem>
       <PaletteItem handlerId="Line">
-        <LineIcon size={16} strokeWidth={1.5} />
+        <LineIcon size={16} />
       </PaletteItem>
       <PaletteItem handlerId="Freehand">
-        <Pencil size={16} strokeWidth={1.5} />
+        <Pencil size={16} />
       </PaletteItem>
     </div>
   );

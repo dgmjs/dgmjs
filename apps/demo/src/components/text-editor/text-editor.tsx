@@ -136,10 +136,12 @@ export function TextEditor({ text, onChange, ...props }: TextEditorProps) {
           containerRef.current.style.paddingLeft = `${padding[3]}px`;
 
           // move container position
+          const canvasRect =
+            window.editor.canvasElement.getBoundingClientRect();
           const width = geometry.width(rect) * (1 / scale);
           const height = geometry.height(rect) * (1 / scale);
-          const left = rect[0][0] - (width * (1 - scale)) / 2;
-          const top = rect[0][1] - (height * (1 - scale)) / 2;
+          const left = rect[0][0] - (width * (1 - scale)) / 2 + canvasRect.left;
+          const top = rect[0][1] - (height * (1 - scale)) / 2 + canvasRect.top;
 
           containerRef.current.style.left = `${left}px`;
           containerRef.current.style.top = `${top}px`;

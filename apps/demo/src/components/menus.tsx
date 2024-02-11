@@ -11,16 +11,14 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { useDemoStore } from "@/store";
 import { MenuIcon } from "lucide-react";
 import { Button } from "./ui/button";
 
 export function Menus() {
-  // const { theme } = useDemoStore();
   return (
     <div className="flex justify-center items-center h-8 px-1">
       <Button variant="ghost" className="h-8 w-8 p-0">
-        <MenuIcon size={16} strokeWidth={1.5} />
+        <MenuIcon size={16} />
       </Button>
     </div>
   );

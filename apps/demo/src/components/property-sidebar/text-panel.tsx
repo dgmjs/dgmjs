@@ -40,7 +40,6 @@ import {
   VerticalTopIcon,
 } from "@/components/icons";
 import { Label } from "@/components/ui/label";
-import { SimpleTooltip } from "../common/simple-tooltip";
 import { constants } from "@dgmjs/core";
 import {
   DropdownMenu,
@@ -70,153 +69,159 @@ export const TextPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
 
   return (
     <Panel title="Text" borderTop>
-      <SimpleTooltip content="Font Color">
-        <ColorField
-          value={fontColor}
-          onValueChange={(value) => onChange({ fontColor: value })}
-        />
-      </SimpleTooltip>
-      <div className="grid grid-cols-3 items-center gap-2">
+      <ColorField
+        value={fontColor}
+        onValueChange={(value) => onChange({ fontColor: value })}
+        title="Font Color"
+      />
+      <div className="grid grid-cols-3 items-center gap-2 pr-3">
         <div className="col-span-2">
-          <SimpleTooltip content="Font Family">
-            <Select
-              value={fontFamily}
-              onValueChange={(value) => onChange({ fontFamily: value })}
-            >
-              <SelectTrigger className="h-8">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {fontFamilies.map((family) => (
-                  <SelectItem key={family} value={family}>
-                    {family}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </SimpleTooltip>
+          <Select
+            value={fontFamily}
+            onValueChange={(value) => onChange({ fontFamily: value })}
+          >
+            <SelectTrigger className="h-8" title="Font Family">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {fontFamilies.map((family) => (
+                <SelectItem key={family} value={family}>
+                  {family}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
-        <SimpleTooltip content="Font Size">
-          <div className="flex items-center">
-            <NumberField
-              value={fontSize}
-              onChange={(value) => onChange({ fontSize: value })}
-              className="w-20 h-8 items-center"
-            />
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <div className="flex h-8 min-w-6 relative -left-7 items-center">
-                  <Button
-                    variant="ghost"
-                    className="text-muted-foreground h-6 min-w-6 px-0"
-                  >
-                    <ChevronsUpDownIcon size={12} />
-                  </Button>
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                {constants.FontSizes.map((size) => (
-                  <DropdownMenuItem
-                    key={size}
-                    onSelect={() => onChange({ fontSize: size })}
-                  >
-                    {size}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </SimpleTooltip>
+        <div className="flex items-center">
+          <NumberField
+            value={fontSize}
+            onChange={(value) => onChange({ fontSize: value })}
+            className="w-20 h-8 items-center"
+            title="Font Size"
+          />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <div className="flex h-8 min-w-6 relative -left-7 items-center">
+                <Button
+                  variant="ghost"
+                  className="text-muted-foreground h-6 min-w-6 px-0"
+                >
+                  <ChevronsUpDownIcon size={12} />
+                </Button>
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {constants.FontSizes.map((size) => (
+                <DropdownMenuItem
+                  key={size}
+                  onSelect={() => onChange({ fontSize: size })}
+                >
+                  {size}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       {isBox && (
         <div className="flex items-center justify-between">
           <ToggleGroup
             type="single"
+            size="sm"
             value={horzAlign}
             onValueChange={(value) => {
               if (onChange && value) onChange({ horzAlign: value });
             }}
           >
-            <SimpleTooltip content="Align Left">
-              <ToggleGroupItem size="sm" value="left">
-                <AlignLeftIcon size={16} />
-              </ToggleGroupItem>
-            </SimpleTooltip>
-            <SimpleTooltip content="Align Center">
-              <ToggleGroupItem size="sm" value="center">
-                <AlignCenterIcon size={16} />
-              </ToggleGroupItem>
-            </SimpleTooltip>
-            <SimpleTooltip content="Align Right">
-              <ToggleGroupItem size="sm" value="right">
-                <AlignRightIcon size={16} />
-              </ToggleGroupItem>
-            </SimpleTooltip>
+            <ToggleGroupItem
+              value="left"
+              className="h-8 w-8 p-0"
+              title="Align Left"
+            >
+              <AlignLeftIcon size={16} />
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="center"
+              className="h-8 w-8 p-0"
+              title="Align Center"
+            >
+              <AlignCenterIcon size={16} />
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="right"
+              className="h-8 w-8 p-0"
+              title="Align Right"
+            >
+              <AlignRightIcon size={16} />
+            </ToggleGroupItem>
           </ToggleGroup>
           <ToggleGroup
             type="single"
+            size="sm"
             value={vertAlign}
             onValueChange={(value) => {
               if (onChange && value) onChange({ vertAlign: value });
             }}
           >
-            <SimpleTooltip content="Align Top">
-              <ToggleGroupItem size="sm" value="top">
-                <VerticalTopIcon size={16} />
-              </ToggleGroupItem>
-            </SimpleTooltip>
-            <SimpleTooltip content="Align Middle">
-              <ToggleGroupItem size="sm" value="middle">
-                <VerticalMiddleIcon size={16} />
-              </ToggleGroupItem>
-            </SimpleTooltip>
-            <SimpleTooltip content="Align Bottom">
-              <ToggleGroupItem size="sm" value="bottom">
-                <VerticalBottomIcon size={16} />
-              </ToggleGroupItem>
-            </SimpleTooltip>
+            <ToggleGroupItem
+              value="top"
+              className="h-8 w-8 p-0"
+              title="Align Top"
+            >
+              <VerticalTopIcon size={16} />
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="middle"
+              className="h-8 w-8 p-0"
+              title="Align Middle"
+            >
+              <VerticalMiddleIcon size={16} />
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="bottom"
+              className="h-8 w-8 p-0"
+              title="Align Bottom"
+            >
+              <VerticalBottomIcon size={16} />
+            </ToggleGroupItem>
           </ToggleGroup>
         </div>
       )}
       {isBox && (
         <div className="flex w-full items-center gap-2">
-          <SimpleTooltip content="Line Height">
-            <div className="flex items-center gap-2">
-              <Label htmlFor="text-line-height-field" className="text-sm px-1">
-                <LineHeightIcon size={16} />
-              </Label>
-              <NumberField
-                id="text-line-height-field"
-                className="flex-grow h-8"
-                value={lineHeight}
-                onChange={(value) => onChange({ lineHeight: value })}
-              />
-            </div>
-          </SimpleTooltip>
-          <SimpleTooltip content="Paragraph Spacing">
-            <div className="flex items-center gap-2">
-              <Label htmlFor="text-paragraph-spacing-field" className="text-sm">
-                <ParagraphSpacingIcon size={16} />
-              </Label>
-              <NumberField
-                id="text-paragraph-spacing-field"
-                className="flex-grow h-8"
-                value={paragraphSpacing}
-                onChange={(value) => onChange({ paragraphSpacing: value })}
-              />
-            </div>
-          </SimpleTooltip>
-          <SimpleTooltip content="Word Wrap">
-            <Toggle
-              className="w-9 px-2 justify-center flex-none"
-              variant="outline"
-              size="sm"
-              pressed={wordWrap}
-              onPressedChange={(pressed) => onChange({ wordWrap: pressed })}
-            >
-              <WrapTextIcon size={16} />
-            </Toggle>
-          </SimpleTooltip>
+          <div className="flex items-center gap-2">
+            <Label htmlFor="text-line-height-field" className="text-sm px-1">
+              <LineHeightIcon size={16} />
+            </Label>
+            <NumberField
+              id="text-line-height-field"
+              className="flex-grow h-8"
+              value={lineHeight}
+              onChange={(value) => onChange({ lineHeight: value })}
+              title="Line Height"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <Label htmlFor="text-paragraph-spacing-field" className="text-sm">
+              <ParagraphSpacingIcon size={16} />
+            </Label>
+            <NumberField
+              id="text-paragraph-spacing-field"
+              className="flex-grow h-8"
+              value={paragraphSpacing}
+              onChange={(value) => onChange({ paragraphSpacing: value })}
+              title="Paragraph Spacing"
+            />
+          </div>
+          <Toggle
+            variant="outline"
+            size="sm"
+            pressed={wordWrap}
+            onPressedChange={(pressed) => onChange({ wordWrap: pressed })}
+            title="Word Wrap"
+          >
+            <WrapTextIcon size={16} />
+          </Toggle>
         </div>
       )}
     </Panel>

@@ -29,7 +29,6 @@ import { PrototypePanel } from "./prototype-panel";
 import { ScriptPanel } from "./script-panel";
 import { AlignmentPanel } from "./alignment-panel";
 import { CommonPanel } from "./shape-panel";
-import { Info } from "../common/info";
 import { ShapeEditorProps } from "@/types";
 
 export const PropertySidebar: React.FC<ShapeEditorProps> = ({
@@ -37,7 +36,7 @@ export const PropertySidebar: React.FC<ShapeEditorProps> = ({
   onChange,
 }) => {
   return (
-    <div className="absolute bottom-0 right-0 top-10 w-72 border-l bg-background p-3">
+    <div className="absolute bottom-0 right-0 top-10 w-64 border-l bg-background p-3">
       <Tabs defaultValue="basic" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="basic">Basic</TabsTrigger>
