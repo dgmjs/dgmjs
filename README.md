@@ -15,3 +15,7 @@ npm publish
 ```sh
 npm run dev -w apps/demo
 ```
+
+## License
+
+DGM.js's source code and distributed packages are provided under the non-commercial DGM license. This license does not permit commercial use. If you wish to use dgm.js in a commercial product or enterprise, you will need to purchase a commercial license. To obtain a commercial license, please contact us at contact@dgm.sh.
