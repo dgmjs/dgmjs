@@ -22,9 +22,12 @@ import * as geometry from "./graphics/geometry";
 import * as utils from "./graphics/utils";
 import { ZodSchema } from "zod";
 import {
+  convertDocToText,
   convertTextToDoc,
-  preprocessNode,
-  renderNode,
+  preprocessDocNode,
+  drawDocNode,
+  drawRichText,
+  drawPlainText,
 } from "./utils/text-utils";
 import { Transform } from "./transform/transform";
 import { evalScript } from "./mal/mal";
@@ -889,7 +892,7 @@ class Box extends Shape {
     this.anchorAngle = json.anchorAngle ?? this.anchorAngle;
     this.anchorLength = json.anchorLength ?? this.anchorLength;
     this.anchorPosition = json.anchorPosition ?? this.anchorPosition;
-    this.richText = json.richText ?? true; // if not specified, true for backward compatibility
+    this.richText = json.richText ?? typeof json.text !== "string"; // for backward compatibility
     this.textEditable = json.textEditable ?? this.textEditable;
     this.text = json.text ?? this.text;
     this.wordWrap = json.wordWrap ?? this.wordWrap;
@@ -925,29 +928,11 @@ class Box extends Shape {
 
   renderText(canvas: Canvas): void {
     if (this._renderText) {
-      let doc = preprocessNode(
-        canvas,
-        typeof this.text === "string" ? convertTextToDoc(this.text) : this.text,
-        this,
-        this.wordWrap,
-        this.innerWidth,
-        1.5
-      );
-      // subtract last paragraph's spacing margin
-      const height = doc._height - this.paragraphSpacing * this.fontSize;
-      let top = this.innerTop;
-      switch (this.vertAlign) {
-        case "top":
-          top = this.innerTop;
-          break;
-        case "middle":
-          top = this.innerTop + (this.innerHeight - height) / 2;
-          break;
-        case "bottom":
-          top = this.innerBottom - height;
-          break;
+      if (this.richText) {
+        drawRichText(canvas, this);
+      } else {
+        drawPlainText(canvas, this);
       }
-      renderNode(canvas, doc, this, this.innerLeft, top, this.innerWidth, 1.5);
     }
   }
 

@@ -11,14 +11,16 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { BoxManipulator } from "./box";
-import { ConnectorManipulator } from "./connector";
-import { LineManipulator } from "./line";
-import { GroupManipulator } from "./group";
-import { SelectionsManipulator } from "./selections";
+import { BoxManipulator } from "./box-manipulator";
+import { TextManipulator } from "./text-manipulator";
+import { ConnectorManipulator } from "./connector-manipulator";
+import { LineManipulator } from "./line-manipulator";
+import { GroupManipulator } from "./group-manipulator";
+import { SelectionsManipulator } from "./selections-manipulator";
 
 export {
   BoxManipulator,
+  TextManipulator,
   ConnectorManipulator,
   LineManipulator,
   SelectionsManipulator,

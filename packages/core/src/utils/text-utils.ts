@@ -175,9 +175,9 @@ export function getTextNodeFont(
  *   inline = text
  *   text = <TERMINAL>
  *
- * @returns preprocessed node
+ * @returns preprocessed doc node
  */
-export function preprocessNode(
+export function preprocessDocNode(
   canvas: Canvas,
   node: any,
   shape: Box,
@@ -197,7 +197,7 @@ export function preprocessNode(
       let block = { ...node, _height: 0, _width: 0, _minWidth: 0 };
       if (Array.isArray(node.content)) {
         block.content = node.content.map((child: any, i: number) => {
-          let processed = preprocessNode(
+          let processed = preprocessDocNode(
             canvas,
             child,
             shape,
@@ -373,9 +373,9 @@ export function preprocessNode(
 }
 
 /**
- * Render preprocessed document nodes
+ * Draw preprocessed document nodes
  */
-export function renderNode(
+export function drawDocNode(
   canvas: Canvas,
   node: any,
   shape: Text,
@@ -392,7 +392,7 @@ export function renderNode(
         let y = top;
         for (let i = 0; i < node.content.length; i++) {
           let block = node.content[i];
-          renderNode(canvas, block, shape, left, y, width, listIndent);
+          drawDocNode(canvas, block, shape, left, y, width, listIndent);
           y += block._height;
         }
       }
@@ -439,7 +439,7 @@ export function renderNode(
         let y = top;
         for (let i = 0; i < node.content.length; i++) {
           let block = node.content[i];
-          renderNode(
+          drawDocNode(
             canvas,
             block,
             shape,
@@ -458,7 +458,7 @@ export function renderNode(
         let y = top;
         for (let i = 0; i < node.content.length; i++) {
           let line = node.content[i];
-          renderNode(canvas, line, shape, left, y, width, listIndent);
+          drawDocNode(canvas, line, shape, left, y, width, listIndent);
           y += line._height;
         }
       }
@@ -489,7 +489,7 @@ export function renderNode(
           let inline = node.content[i];
           inline._gap = node._last ? 0 : inline._gap || 0;
           inline._width += inline._gap;
-          renderNode(
+          drawDocNode(
             canvas,
             inline,
             shape,
@@ -551,7 +551,7 @@ export function measureText(
   canvas: Canvas,
   shape: Text
 ): { width: number; height: number; minWidth: number } {
-  const doc = preprocessNode(
+  const doc = preprocessDocNode(
     canvas,
     typeof shape.text === "string" ? convertTextToDoc(shape.text) : shape.text,
     shape,
@@ -564,4 +564,98 @@ export function measureText(
   // subtract last paragraph's spacing margin
   const textHeight = doc._height - shape.paragraphSpacing * shape.fontSize;
   return { width: textWidth, height: textHeight, minWidth: doc._minWidth };
+}
+
+export function drawRichText(canvas: Canvas, shape: Box) {
+  let doc = preprocessDocNode(
+    canvas,
+    typeof shape.text === "string" ? convertTextToDoc(shape.text) : shape.text,
+    shape,
+    shape.wordWrap,
+    shape.innerWidth,
+    1.5
+  );
+  // subtract last paragraph's spacing margin
+  const height = doc._height - shape.paragraphSpacing * shape.fontSize;
+  let top = shape.innerTop;
+  switch (shape.vertAlign) {
+    case "top":
+      top = shape.innerTop;
+      break;
+    case "middle":
+      top = shape.innerTop + (shape.innerHeight - height) / 2;
+      break;
+    case "bottom":
+      top = shape.innerBottom - height;
+      break;
+  }
+  drawDocNode(canvas, doc, shape, shape.innerLeft, top, shape.innerWidth, 1.5);
+}
+
+/**
+ * Draw plain text inside a box
+ *
+ * How to draw a text line:
+ *
+ *     + -------------- +
+ *     |                | G
+ *     |  ------- +      +
+ *  LH |  TEXT    | H    ____________ BL
+ *     |  ------- +
+ *     |
+ *     + --------+
+ *
+ * Legends:
+ * - LH (Line Height) = fontSize * lineHeight
+ * - H (Text Height) = metric.ascent + metric.descent (= metric.height)
+ * - G (Gap) = (LH - H) / 2
+ * - BL (Baseline) = G + metric.ascent
+ *
+ * To draw a text on (x, y)
+ * - canvas.fillText(x, y + BL)
+ */
+export function drawPlainText(canvas: Canvas, shape: Box) {
+  const text: string =
+    typeof shape.text !== "string" ? convertDocToText(shape.text) : shape.text;
+  const lines = text
+    .trim()
+    .split("\n")
+    .map((line) => line.trim());
+  const ms = lines.map((line) => canvas.textMetric(line));
+  const lineHeight = shape.fontSize * shape.lineHeight;
+  const height = lines.length * lineHeight;
+  let top = shape.innerTop;
+  switch (shape.vertAlign) {
+    case "top":
+      top = shape.innerTop;
+      break;
+    case "middle":
+      top = shape.innerTop + (shape.innerHeight - height) / 2;
+      break;
+    case "bottom":
+      top = shape.innerBottom - height;
+      break;
+  }
+  shape.assignStyles(canvas);
+  if (lines.length > 0) {
+    let x = shape.innerLeft;
+    let y = top;
+    for (let i = 0; i < lines.length; i++) {
+      const m = canvas.textMetric(lines[i]);
+      switch (shape.horzAlign) {
+        case "left":
+          x = shape.innerLeft;
+          break;
+        case "center":
+          x = shape.innerLeft + (shape.innerWidth - m.width) / 2;
+          break;
+        case "right":
+          x = shape.innerRight - m.width;
+          break;
+      }
+      const gap = (lineHeight - m.height) / 2;
+      canvas.fillText(x, y + gap + ms[i].ascent, lines[i]);
+      y = y + lineHeight;
+    }
+  }
 }

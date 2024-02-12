@@ -1254,8 +1254,18 @@ class Canvas {
   /**
    * Get Text Metric
    * Ref: https://developer.mozilla.org/en-US/docs/Web/API/TextMetrics
-   * Note: *ascent, *descent values are distance from baseline
-   * Therefore height = ascent + descent.
+   *
+   * Values:
+   * - ascent: Distance from the baseline to the top of the box.
+   * - descent: Distance from the baseline to the bottom of the box.
+   * - actualAscent: Distance from the baseline to the top of the font
+   *   (varies for each character: "." is a small value, "|" is a large value).
+   * - actualDescent: Distance from the baseline to the bottom of the font
+   *   (varies for each character).
+   *
+   * Hints:
+   * - ascent + descent = height
+   * - ascent + descent > actualAscent + actualDescent
    */
   textMetric(text: string): CanvasTextMetric {
     this.context.font = this.font;

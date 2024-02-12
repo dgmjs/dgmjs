@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import {
   Box,
   Connector,
+  Diagram,
   Editor,
   Shape,
   ShapeValues,
@@ -87,6 +88,18 @@ function App() {
           }, 0);
         }
       });
+      editor.state.transform.on("transaction", (tx) => {
+        const data = editor.state.store.toJSON();
+        localStorage.setItem("local-data", JSON.stringify(data));
+      });
+
+      // load from local storage
+      const localData = localStorage.getItem("local-data");
+      if (localData) {
+        editor.state.store.fromJSON(JSON.parse(localData));
+        editor.setDiagram(editor.state.store.root as Diagram);
+      }
+
       editor.repaint();
       window.editor = editor;
 

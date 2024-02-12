@@ -41,7 +41,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { constants, convertDocToText, preprocessNode } from "@dgmjs/core";
+import { constants, convertDocToText, preprocessDocNode } from "@dgmjs/core";
 import { ColorPalette, simplePalette } from "../common/color-palette";
 import { Button } from "@/components/ui/button";
 import { useDemoStore } from "@/store";
@@ -82,7 +82,7 @@ export function TextEditor({ text, onChange, ...props }: TextEditorProps) {
         window.editor
       ) {
         const canvas = window.editor.canvas;
-        const doc = preprocessNode(
+        const doc = preprocessDocNode(
           canvas,
           editor.getJSON(),
           editingText,

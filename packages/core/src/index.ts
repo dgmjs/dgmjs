@@ -11,5 +11,5 @@ export { Editor } from "./editor";
 export { EditorState } from "./editor-state";
 export * from "./export";
 export { renderOnCanvas } from "./utils/canvas-utils";
-export { convertDocToText, preprocessNode } from "./utils/text-utils";
+export { convertDocToText, preprocessDocNode } from "./utils/text-utils";
 export { basicSetup } from "./basic-setup";

@@ -48,7 +48,6 @@ class BoxManipulator extends Manipulator {
 
 manipulatorManager.define("Rectangle", new BoxManipulator());
 manipulatorManager.define("Ellipse", new BoxManipulator());
-manipulatorManager.define("Text", new BoxManipulator());
 manipulatorManager.define("Image", new BoxManipulator());
 
 export { BoxManipulator };
