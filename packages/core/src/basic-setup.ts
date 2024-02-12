@@ -24,6 +24,7 @@ import {
   FreehandFactoryHandler,
   ImageFactoryHandler,
 } from "./handlers";
+import { PlainTextEditor } from "./inplace-editors/plain-text-editor";
 
 export function basicSetup(options?: EditorOptions): EditorOptions {
   return {
@@ -68,6 +69,7 @@ export function basicSetup(options?: EditorOptions): EditorOptions {
       "mod-left": (editor) => editor.scroll(-editor.gridSize[0], 0),
       "mod-right": (editor) => editor.scroll(editor.gridSize[0], 0),
     },
+    inplaceEditors: [new PlainTextEditor()],
     ...(options ?? {}),
   };
 }

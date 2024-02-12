@@ -68,9 +68,9 @@ function App() {
         } else if (shape instanceof Image) {
           // nothing to do
         } else if (shape instanceof Box) {
-          if (shape.textEditable) {
-            demoStore.setEditingText(shape);
-          }
+          // if (shape.textEditable) {
+          //   demoStore.setEditingText(shape);
+          // }
         } else if (shape instanceof Connector) {
           const outline = shape.getOutline();
           const nearest = geometry.findNearestOnPath(

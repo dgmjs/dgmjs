@@ -164,10 +164,20 @@ function createPointerEvent(
   return new CanvasPointerEvent(p[0], p[1], e);
 }
 
+/**
+ * Inplace Editor
+ */
+export abstract class InplaceEditor {
+  abstract setup(editor: Editor): void;
+  abstract open(editor: Editor, shape: Shape): void;
+  abstract close(editor: Editor): void;
+}
+
 export interface EditorOptions {
   handlers?: Handler[];
   autoScroll?: boolean;
   keymap?: KeyMap;
+  inplaceEditors?: InplaceEditor[];
 }
 
 /**
@@ -179,6 +189,7 @@ class Editor extends EventEmitter {
   factory: ShapeFactory;
   actions: Actions;
   keymap: KeymapManager;
+  inplaceEditors: InplaceEditor[];
   autoScroller: AutoScroller;
   parent: HTMLElement;
   canvasElement: HTMLCanvasElement;
@@ -212,6 +223,7 @@ class Editor extends EventEmitter {
     this.factory = new ShapeFactory(this);
     this.actions = new Actions(this);
     this.keymap = new KeymapManager(this);
+    this.inplaceEditors = [];
     this.autoScroller = new AutoScroller(this);
     // initialize properties
     this.canvasElement = null as any;
@@ -236,6 +248,7 @@ class Editor extends EventEmitter {
     this.initializeState();
     this.initializeCanvas();
     this.initializeKeymap(options);
+    this.initializeInplaceEditors(options);
     // options
     this.addHandlers(options.handlers ?? []);
     this.autoScroller.setEnabled(options.autoScroll ?? true);
@@ -377,6 +390,10 @@ class Editor extends EventEmitter {
         const shape: Shape | null = this.state.diagram.findDepthFirst(
           pred
         ) as Shape | null;
+        // propagate to inplace editors
+        if (shape) {
+          this.inplaceEditors.forEach((e) => e.open(this, shape));
+        }
         this.triggerDblClick(shape, p[0], p[1]);
       }
     });
@@ -448,6 +465,11 @@ class Editor extends EventEmitter {
         this.activeHandler.keyUp(this, e);
       }
     });
+  }
+
+  initializeInplaceEditors(options: EditorOptions) {
+    this.inplaceEditors = options.inplaceEditors ?? [];
+    this.inplaceEditors.forEach((e) => e.setup(this));
   }
 
   /**
