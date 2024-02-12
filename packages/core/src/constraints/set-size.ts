@@ -62,7 +62,7 @@ function constraint(
         args.height === "text" ||
         args.height === "text-min")
     ) {
-      const textSize = measureText(canvas, shape);
+      const textSize = measureText(canvas, shape, shape.text);
       if (args.width === "text")
         width = textSize.minWidth + shape.padding[1] + shape.padding[3];
       if (args.width === "text-min")

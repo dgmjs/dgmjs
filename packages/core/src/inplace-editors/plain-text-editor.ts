@@ -1,30 +1,52 @@
 import { Editor, InplaceEditor } from "../editor";
 import { Box, Shape } from "../shapes";
 import * as geometry from "../graphics/geometry";
+import { measureText } from "../utils/text-utils";
 
 export class PlainTextEditor extends InplaceEditor {
-  shape: Shape | null;
+  box: Box | null;
   overlay: HTMLDivElement;
   textarea: HTMLTextAreaElement;
 
   constructor() {
     super();
-    this.shape = null;
+    this.box = null;
     this.overlay = document.createElement("div");
     this.textarea = document.createElement("textarea");
     document.body.appendChild(this.overlay);
     document.body.appendChild(this.textarea);
   }
 
-  getRect(editor: Editor, box: Box) {
-    const canvas = editor.canvas;
-    return box.getBoundingRect().map((p) => {
-      let tp = canvas.globalCoordTransform(p);
-      return [tp[0] / canvas.ratio, tp[1] / canvas.ratio];
-    });
+  setPositionSize(editor: Editor, text: string) {
+    if (this.box) {
+      // compute text bouding box in screen coordinates
+      const metric = measureText(editor.canvas, this.box, text);
+      const l = this.box?.left || 0;
+      const t = this.box?.top || 0;
+      const w = metric.minWidth;
+      const h = metric.height;
+      const r = [
+        [l, t],
+        [l + w, t + h],
+      ];
+      const rect = r.map((p) => {
+        let tp = editor.canvas.globalCoordTransform(p);
+        return [tp[0] / editor.canvas.ratio, tp[1] / editor.canvas.ratio];
+      });
+      // set position and size
+      const scale = editor.getScale();
+      const canvasRect = editor.canvasElement.getBoundingClientRect();
+      const width = geometry.width(rect) * (1 / scale);
+      const height = geometry.height(rect) * (1 / scale);
+      const left = rect[0][0] - (width * (1 - scale)) / 2 + canvasRect.left;
+      const top = rect[0][1] - (height * (1 - scale)) / 2 + canvasRect.top;
+      this.textarea.style.left = `${left}px`;
+      this.textarea.style.top = `${top}px`;
+      this.textarea.style.width = `${width}px`;
+      this.textarea.style.height = `${height + this.box.fontSize / 2}px`; // more bottom area prevents clipping text and vertical scrollbar
+      this.textarea.style.transform = `scale(${scale})`;
+    }
   }
-
-  setSize(editor: Editor, text: string) {}
 
   setup(editor: Editor) {
     this.overlay.style.position = "fixed";
@@ -41,19 +63,20 @@ export class PlainTextEditor extends InplaceEditor {
     this.textarea.style.zIndex = "1000";
     this.textarea.style.outline = "none";
     this.textarea.style.resize = "none";
+    this.textarea.style.overflow = "hidden";
     this.textarea.style.whiteSpace = "nowrap";
     this.textarea.style.display = "none";
     this.textarea.addEventListener("keydown", (e) => {
       if (e.key === "Escape") this.close(editor);
     });
     this.textarea.addEventListener("input", (e: any) => {
-      this.setSize(editor, e.target.value);
+      this.setPositionSize(editor, e.target.value);
     });
   }
 
   open(editor: Editor, shape: Shape) {
-    this.shape = shape;
     if (shape instanceof Box) {
+      this.box = shape;
       this.overlay.style.display = "block";
       this.textarea.style.display = "block";
       this.textarea.style.background = "transparent";
@@ -62,7 +85,6 @@ export class PlainTextEditor extends InplaceEditor {
       this.textarea.style.fontSize = `${shape.fontSize}px`;
       this.textarea.style.color = editor.canvas.resolveColor(shape.fontColor);
       this.textarea.style.textAlign = shape.horzAlign;
-      // set container styles
       const padding = shape.padding;
       this.textarea.style.paddingTop = `${padding[0]}px`;
       this.textarea.style.paddingRight = `${padding[1]}px`;
@@ -73,24 +95,13 @@ export class PlainTextEditor extends InplaceEditor {
       shape._renderText = false;
       editor.repaint();
 
-      // set position
-      const rect = this.getRect(editor, shape);
-      const scale = editor.getScale();
-      const canvasRect = editor.canvasElement.getBoundingClientRect();
-      const width = geometry.width(rect) * (1 / scale);
-      const height = geometry.height(rect) * (1 / scale);
-      const left = rect[0][0] - (width * (1 - scale)) / 2 + canvasRect.left;
-      const top = rect[0][1] - (height * (1 - scale)) / 2 + canvasRect.top;
+      // set position and size
+      this.setPositionSize(editor, shape.text);
 
-      this.textarea.style.left = `${left}px`;
-      this.textarea.style.top = `${top}px`;
-      this.textarea.style.width = `${width}px`;
-      this.textarea.style.height = `${height + shape.fontSize / 2}px`; // more bottom area prevents clipping text and vertical scrollbar
-      this.textarea.style.transform = `scale(${scale})`;
-
+      // assign text to textarea
       const textString = shape.text;
       if (textString.length > 0) {
-        this.textarea.value = textString.trim();
+        this.textarea.value = textString;
       }
       this.textarea.focus();
       this.textarea.select();
@@ -101,13 +112,12 @@ export class PlainTextEditor extends InplaceEditor {
   close(editor: Editor) {
     this.overlay.style.display = "none";
     this.textarea.style.display = "none";
-    if (this.shape instanceof Box) {
-      this.shape._renderText = true;
+    if (this.box instanceof Box) {
+      this.box._renderText = true;
       const value = this.textarea.value;
-      console.log("value", value);
-      editor.actions.update({ text: value }, [this.shape]);
+      editor.actions.update({ text: value }, [this.box]);
       editor.repaint();
     }
-    this.shape = null;
+    this.box = null;
   }
 }
