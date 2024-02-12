@@ -25,7 +25,7 @@ import {
 import { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { CONNECTION_POINT_APOTHEM } from "../graphics/const";
-import { convertTextToDoc } from "../utils/text-utils";
+import { convertDocToText, convertTextToDoc } from "../utils/text-utils";
 import {
   moveEndPoint,
   adjustObliqueRoute,
@@ -497,12 +497,37 @@ export class Transform extends EventEmitter {
   }
 
   /**
+   * A set of mutations to change rich text or not
+   */
+  setRichText(node: Box, richText: boolean): boolean {
+    let changed = false;
+    if (richText) {
+      let doc = structuredClone(
+        richText && typeof node.text === "string"
+          ? convertTextToDoc(node.text)
+          : node.text
+      );
+      changed = this.atomicAssign(node, "text", doc) || changed;
+    } else {
+      let str =
+        !richText && typeof node.text !== "string"
+          ? convertDocToText(node.text)
+          : node.text;
+      changed = this.atomicAssign(node, "text", str) || changed;
+    }
+    changed = this.atomicAssign(node, "richText", richText) || changed;
+    return changed;
+  }
+
+  /**
    * A set of mutations to change horz align
    */
   setHorzAlign(node: Box, horzAlign: string): boolean {
     let changed = false;
     let doc = structuredClone(
-      typeof node.text === "string" ? convertTextToDoc(node.text) : node.text
+      node.richText && typeof node.text === "string"
+        ? convertTextToDoc(node.text)
+        : node.text
     );
     node.visitNodes(doc, (docNode) => {
       if (docNode.attrs && docNode.attrs.textAlign)
@@ -519,7 +544,9 @@ export class Transform extends EventEmitter {
   setFontSize(node: Box, fontSize: number): boolean {
     let changed = false;
     let doc = structuredClone(
-      typeof node.text === "string" ? convertTextToDoc(node.text) : node.text
+      node.richText && typeof node.text === "string"
+        ? convertTextToDoc(node.text)
+        : node.text
     );
     node.visitNodes(doc, (docNode) => {
       if (Array.isArray(docNode.marks)) {
@@ -542,7 +569,9 @@ export class Transform extends EventEmitter {
   setFontFamily(node: Box, fontFamily: string): boolean {
     let changed = false;
     let doc = structuredClone(
-      typeof node.text === "string" ? convertTextToDoc(node.text) : node.text
+      node.richText && typeof node.text === "string"
+        ? convertTextToDoc(node.text)
+        : node.text
     );
     node.visitNodes(doc, (docNode) => {
       if (Array.isArray(docNode.marks)) {
@@ -565,7 +594,9 @@ export class Transform extends EventEmitter {
   setFontColor(node: Box, fontColor: string): boolean {
     let changed = false;
     let doc = structuredClone(
-      typeof node.text === "string" ? convertTextToDoc(node.text) : node.text
+      node.richText && typeof node.text === "string"
+        ? convertTextToDoc(node.text)
+        : node.text
     );
     node.visitNodes(doc, (docNode) => {
       if (Array.isArray(docNode.marks)) {

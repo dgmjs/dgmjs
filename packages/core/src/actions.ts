@@ -78,6 +78,10 @@ export class Actions {
           if (s instanceof Connector)
             tr.changeRouteType(s, (values as any)[key]);
         });
+      } else if (key === "richText") {
+        shapes.forEach((s) => {
+          if (s instanceof Box) tr.setRichText(s, (values as any)[key]);
+        });
       } else if (key === "horzAlign") {
         shapes.forEach((s) => {
           if (s instanceof Box) tr.setHorzAlign(s, (values as any)[key]);

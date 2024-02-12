@@ -57,7 +57,8 @@ export function convertTextToDoc(text: string): any {
   const lines = text.split("\n");
   lines.forEach((line, i) => {
     if (i > 0) doc.content[0].content.push({ type: "hardBreak" });
-    doc.content[0].content.push({ type: "text", text: line });
+    if (line.length > 0)
+      doc.content[0].content.push({ type: "text", text: line });
   });
   return doc;
 }

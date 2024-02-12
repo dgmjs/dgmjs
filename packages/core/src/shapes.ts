@@ -22,10 +22,7 @@ import * as geometry from "./graphics/geometry";
 import * as utils from "./graphics/utils";
 import { ZodSchema } from "zod";
 import {
-  convertDocToText,
   convertTextToDoc,
-  preprocessDocNode,
-  drawDocNode,
   drawRichText,
   drawPlainText,
 } from "./utils/text-utils";
