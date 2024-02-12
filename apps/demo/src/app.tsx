@@ -3,7 +3,9 @@ import {
   Box,
   Connector,
   Editor,
+  Shape,
   ShapeValues,
+  Text,
   basicSetup,
   constants,
   convertDocToText,
@@ -45,8 +47,11 @@ function App() {
       editor.on("handlerChange", (handlerId) => {
         demoStore.setActiveHandler(handlerId);
       });
-      editor.factory.on("create", (shape) => {
+      editor.factory.on("create", (shape: Shape) => {
         editor.setActiveHandler("Select");
+        if (shape instanceof Text && (shape as Text).textEditable) {
+          demoStore.setEditingText(shape);
+        }
       });
       editor.on("dblClick", (shape, x, y) => {
         editor.state.selections.deselectAll();

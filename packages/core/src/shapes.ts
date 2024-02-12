@@ -768,6 +768,11 @@ class Box extends Shape {
   anchorPosition: number;
 
   /**
+   * Rich text or plain text
+   */
+  richText: boolean;
+
+  /**
    * Text editable
    */
   textEditable: boolean;
@@ -843,6 +848,7 @@ class Box extends Shape {
     this.anchorAngle = 0;
     this.anchorLength = 0;
     this.anchorPosition = 0.5;
+    this.richText = false;
     this.textEditable = true;
     this.text = {
       type: "doc",
@@ -864,6 +870,7 @@ class Box extends Shape {
     json.anchorAngle = this.anchorAngle;
     json.anchorLength = this.anchorLength;
     json.anchorPosition = this.anchorPosition;
+    json.richText = this.richText;
     json.textEditable = this.textEditable;
     json.text = structuredClone(this.text);
     json.wordWrap = this.wordWrap;
@@ -882,6 +889,7 @@ class Box extends Shape {
     this.anchorAngle = json.anchorAngle ?? this.anchorAngle;
     this.anchorLength = json.anchorLength ?? this.anchorLength;
     this.anchorPosition = json.anchorPosition ?? this.anchorPosition;
+    this.richText = json.richText ?? true; // if not specified, true for backward compatibility
     this.textEditable = json.textEditable ?? this.textEditable;
     this.text = json.text ?? this.text;
     this.wordWrap = json.wordWrap ?? this.wordWrap;
@@ -1801,6 +1809,7 @@ interface ShapeValues {
   tailEndType?: string;
   padding?: number[];
   corners?: number[];
+  richText?: boolean;
   textEditable?: boolean;
   text?: any;
   wordWrap?: boolean;

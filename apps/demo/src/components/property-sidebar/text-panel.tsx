@@ -51,11 +51,13 @@ import { Button } from "@/components/ui/button";
 import { merge, unique } from "@/utils";
 import { ShapeEditorProps } from "@/types";
 import fontJson from "@/fonts.json";
+import { Switch } from "../ui/switch";
 
 export const TextPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
   const fontFamilies = unique(fontJson.map((f) => f.family));
 
   const isBox = shapes.every((s) => s instanceof Box);
+  const richText = shapes.every((s) => (s as TextShape).richText);
   const fontColor = merge(shapes.map((s) => (s as TextShape).fontColor));
   const fontFamily = merge(shapes.map((s) => (s as TextShape).fontFamily));
   const fontSize = merge(shapes.map((s) => (s as TextShape).fontSize));
@@ -69,6 +71,18 @@ export const TextPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
 
   return (
     <Panel title="Text" borderTop>
+      <div className="grid h-8 grid-cols-2 items-center">
+        <Label htmlFor="shape-richtext-switch" className="font-normal">
+          Rich Text
+        </Label>
+        <span className="text-right">
+          <Switch
+            id="shape-richtext-switch"
+            checked={richText}
+            onCheckedChange={(value) => onChange({ richText: value })}
+          />
+        </span>
+      </div>
       <ColorField
         value={fontColor}
         onValueChange={(value) => onChange({ fontColor: value })}
