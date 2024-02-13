@@ -38,7 +38,7 @@ function constraint(
   if (parent && !(parent instanceof Diagram)) {
     changed =
       transform.atomicAssign(shape, "opacity", parent.opacity) || changed;
-    if (args.stroke !== false) {
+    if (args.stroke) {
       changed =
         transform.atomicAssign(shape, "strokeColor", parent.strokeColor) ||
         changed;
@@ -51,13 +51,13 @@ function constraint(
       changed =
         transform.atomicAssign(shape, "roughness", parent.roughness) || changed;
     }
-    if (args.fill !== false) {
+    if (args.fill) {
       changed =
         transform.atomicAssign(shape, "fillColor", parent.fillColor) || changed;
       changed =
         transform.atomicAssign(shape, "fillStyle", parent.fillStyle) || changed;
     }
-    if (args.font !== false) {
+    if (args.font) {
       changed =
         transform.atomicAssign(shape, "fontColor", parent.fontColor) || changed;
       changed =
@@ -71,7 +71,7 @@ function constraint(
         transform.atomicAssign(shape, "fontWeight", parent.fontWeight) ||
         changed;
     }
-    if (args.textAlignment !== false && parent instanceof Box) {
+    if (args.textAlignment && parent instanceof Box) {
       changed =
         transform.atomicAssign(shape, "horzAlign", parent.horzAlign) || changed;
       changed =

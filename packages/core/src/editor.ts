@@ -13,7 +13,7 @@
 
 import { EventEmitter } from "events";
 import { Canvas, CanvasPointerEvent } from "./graphics/graphics";
-import { Connector, Diagram, type Shape, Text } from "./shapes";
+import { Connector, Diagram, type Shape, Text, Box } from "./shapes";
 import {
   Cursor,
   Color,
@@ -148,7 +148,12 @@ class Editor extends EventEmitter {
     this.state.transform.on("transaction", () => this.repaint());
     this.state.selections.on("select", () => this.repaint());
     this.factory.on("create", (shape: Shape) => {
-      if (shape instanceof Text) this.openInplaceEditor(shape);
+      this.state.selections.deselectAll();
+      if (shape instanceof Text) {
+        this.openInplaceEditor(shape);
+      } else {
+        this.state.selections.select([shape]);
+      }
     });
   }
 
@@ -358,6 +363,15 @@ class Editor extends EventEmitter {
     this.canvasElement.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && this.defaultHandlerId) {
         this.setActiveHandler(this.defaultHandlerId);
+      }
+      if (e.key === "Enter") {
+        const selections = this.state.selections.getSelections();
+        if (selections.length === 1 && selections[0] instanceof Box) {
+          const shape = selections[0] as Box;
+          if (shape.textEditable) {
+            this.openInplaceEditor(shape);
+          }
+        }
       }
       if (this.activeHandler) {
         this.activeHandler.keyDown(this, e);
