@@ -24,7 +24,8 @@ import {
   FreehandFactoryHandler,
   ImageFactoryHandler,
 } from "./handlers";
-import { PlainTextInplaceEditor } from "./inplace-editors/plain-text-editor";
+import { PlainTextInplaceEditor } from "./inplace-editors/plain-text-inplace-editor";
+import { RichTextInplaceEditor } from "./inplace-editors/rich-text-inplace-editor";
 
 export function basicSetup(options?: EditorOptions): EditorOptions {
   return {
@@ -69,7 +70,7 @@ export function basicSetup(options?: EditorOptions): EditorOptions {
       "mod-left": (editor) => editor.scroll(-editor.gridSize[0], 0),
       "mod-right": (editor) => editor.scroll(editor.gridSize[0], 0),
     },
-    inplaceEditors: [new PlainTextInplaceEditor()],
+    inplaceEditors: [new PlainTextInplaceEditor(), new RichTextInplaceEditor()],
     ...(options ?? {}),
   };
 }

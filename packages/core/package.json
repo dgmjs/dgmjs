@@ -11,12 +11,30 @@
   ],
   "scripts": {
     "build": "tsup",
+    "watch": "tsup --watch",
     "test": "jest"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@radix-ui/colors": "^3.0.0",
+    "@tiptap/core": "^2.2.2",
+    "@tiptap/extension-bold": "^2.2.2",
+    "@tiptap/extension-bullet-list": "^2.2.2",
+    "@tiptap/extension-document": "^2.2.2",
+    "@tiptap/extension-dropcursor": "^2.2.2",
+    "@tiptap/extension-font-family": "^2.2.2",
+    "@tiptap/extension-hard-break": "^2.2.2",
+    "@tiptap/extension-history": "^2.2.2",
+    "@tiptap/extension-italic": "^2.2.2",
+    "@tiptap/extension-list-item": "^2.2.2",
+    "@tiptap/extension-ordered-list": "^2.2.2",
+    "@tiptap/extension-paragraph": "^2.2.2",
+    "@tiptap/extension-strike": "^2.2.2",
+    "@tiptap/extension-text": "^2.2.2",
+    "@tiptap/extension-text-align": "^2.2.2",
+    "@tiptap/extension-text-style": "^2.2.2",
+    "@tiptap/extension-underline": "^2.2.2",
     "browser-fs-access": "^0.35.0",
     "events": "^3.3.0",
     "file-saver": "^2.0.5",
@@ -26,6 +44,7 @@
     "roughjs": "^4.6.6",
     "simplify-path": "^1.1.0",
     "svgcanvas": "^2.5.0",
+    "tiptap-extension-font-size": "^1.2.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
