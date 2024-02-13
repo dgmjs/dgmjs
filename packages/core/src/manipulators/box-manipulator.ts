@@ -25,10 +25,6 @@ import { BoxMoveAnchorPositionController } from "../controllers/box-move-anchor-
 class BoxManipulator extends Manipulator {
   constructor() {
     super();
-    this.controllers.push(new BoxMoveController(this));
-    this.controllers.push(new BoxRotateController(this));
-    this.controllers.push(new BoxMoveAnchoredController(this));
-    this.controllers.push(new BoxMoveAnchorPositionController(this));
     this.controllers.push(new BoxSizeController(this, SizingPosition.TOP));
     this.controllers.push(new BoxSizeController(this, SizingPosition.RIGHT));
     this.controllers.push(new BoxSizeController(this, SizingPosition.BOTTOM));
@@ -43,6 +39,10 @@ class BoxManipulator extends Manipulator {
     this.controllers.push(
       new BoxSizeController(this, SizingPosition.LEFT_BOTTOM)
     );
+    this.controllers.push(new BoxRotateController(this));
+    this.controllers.push(new BoxMoveAnchoredController(this));
+    this.controllers.push(new BoxMoveAnchorPositionController(this));
+    this.controllers.push(new BoxMoveController(this));
   }
 }
 

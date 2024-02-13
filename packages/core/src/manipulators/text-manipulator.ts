@@ -25,10 +25,6 @@ import { TextSizeController } from "../controllers/text-size";
 class TextManipulator extends Manipulator {
   constructor() {
     super();
-    this.controllers.push(new BoxMoveController(this));
-    this.controllers.push(new BoxRotateController(this));
-    this.controllers.push(new BoxMoveAnchoredController(this));
-    this.controllers.push(new BoxMoveAnchorPositionController(this));
     this.controllers.push(new TextSizeController(this, SizingPosition.TOP));
     this.controllers.push(new TextSizeController(this, SizingPosition.RIGHT));
     this.controllers.push(new TextSizeController(this, SizingPosition.BOTTOM));
@@ -45,6 +41,10 @@ class TextManipulator extends Manipulator {
     this.controllers.push(
       new TextSizeController(this, SizingPosition.LEFT_BOTTOM)
     );
+    this.controllers.push(new BoxRotateController(this));
+    this.controllers.push(new BoxMoveAnchoredController(this));
+    this.controllers.push(new BoxMoveAnchorPositionController(this));
+    this.controllers.push(new BoxMoveController(this));
   }
 }
 manipulatorManager.define("Text", new TextManipulator());

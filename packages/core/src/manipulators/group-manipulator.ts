@@ -24,10 +24,10 @@ class GroupManipulator extends Manipulator {
   constructor() {
     super();
     this.controllers.push(new BoxRotateController(this));
-    this.controllers.push(new GroupSizeController(this, SizingPosition.TOP));
-    this.controllers.push(new GroupSizeController(this, SizingPosition.RIGHT));
-    this.controllers.push(new GroupSizeController(this, SizingPosition.BOTTOM));
-    this.controllers.push(new GroupSizeController(this, SizingPosition.LEFT));
+    // this.controllers.push(new GroupSizeController(this, SizingPosition.TOP));
+    // this.controllers.push(new GroupSizeController(this, SizingPosition.RIGHT));
+    // this.controllers.push(new GroupSizeController(this, SizingPosition.BOTTOM));
+    // this.controllers.push(new GroupSizeController(this, SizingPosition.LEFT));
     this.controllers.push(
       new GroupSizeController(this, SizingPosition.LEFT_TOP)
     );

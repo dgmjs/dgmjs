@@ -116,7 +116,7 @@ export class BoxSizeController extends Controller {
    * Returns the point of the position of the ghost
    */
   getGhostPosition(editor: Editor, shape: Shape, position: string): number[] {
-    const offset = CONTROL_POINT_APOTHEM / editor.canvas.scale;
+    const offset = 0; //CONTROL_POINT_APOTHEM / editor.canvas.scale;
     if (this.ghost && this.ghost.length > 0) {
       switch (position) {
         case SizingPosition.TOP: {
@@ -367,16 +367,24 @@ export class BoxSizeController extends Controller {
       ghostCCS
     );
 
-    // transform shapes
+    // compute size
     const x1 = this.ghost[0][0] + delta[0];
     const y1 = this.ghost[0][1] + delta[1];
     const x2 = this.ghost[2][0] + delta[0];
     const y2 = this.ghost[2][1] + delta[1];
+    let w = Math.round(x2 - x1);
+    let h = Math.round(y2 - y1);
+    const minW = CONTROL_POINT_APOTHEM * 2 * canvas.px;
+    const minH = CONTROL_POINT_APOTHEM * 2 * canvas.px;
+    if (w < minW) w = minW;
+    if (h < minH) h = minH;
+
+    // transform shapes
     const tr = editor.state.transform;
     const diagram = editor.state.diagram as Diagram;
     tr.startTransaction("resize");
     tr.moveShapes(diagram, [shape], x1 - shape.left, y1 - shape.top);
-    tr.resize(shape, Math.round(x2 - x1), Math.round(y2 - y1));
+    tr.resize(shape, w, h);
     tr.resolveAllConstraints(diagram, canvas);
     tr.endTransaction();
 

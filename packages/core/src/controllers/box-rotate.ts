@@ -65,7 +65,7 @@ export class BoxRotateController extends Controller {
    * Get coord of the control point in CCS
    */
   getControlPoint(canvas: Canvas, shape: Shape): number[] {
-    const dist = 16 / canvas.scale;
+    const dist = (CONTROL_POINT_APOTHEM * 4) / canvas.scale;
     const enclosure = shape.getEnclosure();
     const mid = geometry.mid(enclosure[0], enclosure[1]);
     const cp = [mid[0], mid[1] - dist];

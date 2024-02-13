@@ -18,8 +18,8 @@
 const MAGNET_THRESHOLD = 6; // px
 const LINE_SELECTION_THRESHOLD = MAGNET_THRESHOLD;
 const LINE_STRATIFY_ANGLE_THRESHOLD = 10;
-const CONTROL_POINT_APOTHEM = 4; // px
-const CONNECTION_POINT_APOTHEM = 4; // px
+const CONTROL_POINT_APOTHEM = 5; // px
+const CONNECTION_POINT_APOTHEM = 5; // px
 const ANGLE_STEP = 5;
 const SHAPE_MIN_SIZE = 3;
 const SYSTEM_FONT = "Inter";
@@ -71,7 +71,7 @@ const Color = Object.freeze({
   ORANGE: "#FFC800",
   PINK: "#FFAFAF",
   YELLOW: "#FFFF00",
-  SELECTION: "$blue9", // #4497f7
+  SELECTION: "$blue10",
   GRID: "$slate4",
 });
 

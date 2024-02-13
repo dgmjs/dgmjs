@@ -14,7 +14,7 @@
 import * as geometry from "../graphics/geometry";
 import { Shape, Box, Diagram } from "../shapes";
 import { Editor, Manipulator } from "../editor";
-import { SizingPosition } from "../graphics/const";
+import { CONTROL_POINT_APOTHEM, SizingPosition } from "../graphics/const";
 import { lcs2ccs } from "../graphics/utils";
 import { fitEnclosureInCSS } from "./utils";
 import { BoxSizeController } from "./box-size";
@@ -159,16 +159,24 @@ export class TextSizeController extends BoxSizeController {
         ghostCCS
       );
 
-      // transform shapes
+      // compute size
       const x1 = this.ghost[0][0] + delta[0];
       const y1 = this.ghost[0][1] + delta[1];
       const x2 = this.ghost[2][0] + delta[0];
       const y2 = this.ghost[2][1] + delta[1];
+      let w = Math.round(x2 - x1);
+      let h = Math.round(y2 - y1);
+      const minW = CONTROL_POINT_APOTHEM * 2 * canvas.px;
+      const minH = CONTROL_POINT_APOTHEM * 2 * canvas.px;
+      if (w < minW) w = minW;
+      if (h < minH) h = minH;
+
+      // transform shapes
       const tr = editor.state.transform;
       const diagram = editor.state.diagram as Diagram;
       tr.startTransaction("resize");
       tr.moveShapes(diagram, [shape], x1 - shape.left, y1 - shape.top);
-      tr.resize(shape, Math.round(x2 - x1), Math.round(y2 - y1));
+      tr.resize(shape, w, h);
       tr.atomicAssign(shape, "fontSize", shape.fontSize * ratio);
       tr.resolveAllConstraints(diagram, canvas);
       tr.endTransaction();

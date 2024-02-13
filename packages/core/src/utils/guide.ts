@@ -224,8 +224,8 @@ function drawControlPoint(
   switch (type) {
     case 0: {
       // rect
-      canvas.fillRect(p1[0], p1[1], p2[0], p2[1]);
-      canvas.strokeRect(p1[0], p1[1], p2[0], p2[1]);
+      canvas.fillRoundRect(p1[0], p1[1], p2[0], p2[1], 2);
+      canvas.strokeRoundRect(p1[0], p1[1], p2[0], p2[1], 2);
       break;
     }
     case 1: {
@@ -326,7 +326,7 @@ function inControlPoint(
   controlPoint: number[],
   rotate: number = 0
 ): boolean {
-  const r = (CONTROL_POINT_APOTHEM + 4) * canvas.px;
+  const r = (CONTROL_POINT_APOTHEM + 3) * canvas.px;
   const cp = [
     [controlPoint[0] - r, controlPoint[1] - r],
     [controlPoint[0] + r, controlPoint[1] + r],

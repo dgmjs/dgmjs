@@ -127,7 +127,9 @@ export class SelectHandler extends Handler {
         editor.triggerDragStart(null, this.dragStartPoint);
       }
     }
+
     // delegates to manipulators
+    editor.repaint(false); // do not draw selections
     this.activeManipulator = null;
     let cursor: [string, number] = [Cursor.DEFAULT, 0];
     if (editor.state.diagram) {
@@ -172,7 +174,7 @@ export class SelectHandler extends Handler {
   pointerMove(editor: Editor, e: CanvasPointerEvent) {
     const canvas = editor.canvas;
     const p = canvas.globalCoordTransformRev([e.x, e.y]);
-    editor.repaint(false); // do not draw ghost
+    editor.repaint(false); // do not draw selections
 
     // handle extra behaviors
     for (let extra of this.extraBehaviors) {

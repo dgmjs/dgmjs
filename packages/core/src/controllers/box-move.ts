@@ -17,7 +17,7 @@ import { Shape, Box, Diagram, Movable, Line } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { drawPolylineInLCS } from "../utils/guide";
 import { Snap } from "../manipulators/snap";
-import { Cursor } from "../graphics/const";
+import { CONTROL_POINT_APOTHEM, Cursor } from "../graphics/const";
 
 /**
  * Move Controller
@@ -168,6 +168,12 @@ export class BoxMoveController extends Controller {
         (shape.path.length === 2 || shape.pathEditable)
       )
     ) {
+      // const enclosure = geometry.rectToPolygon(
+      //   geometry.expandRect(
+      //     shape.getBoundingRect(),
+      //     (CONTROL_POINT_APOTHEM * canvas.px) / 2
+      //   )
+      // );
       drawPolylineInLCS(canvas, shape, shape.getEnclosure());
     }
   }
