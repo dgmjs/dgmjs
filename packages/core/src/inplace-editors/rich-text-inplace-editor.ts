@@ -32,18 +32,26 @@ export class RichTextInplaceEditor extends InplaceEditor {
   overlay: HTMLDivElement;
   editorHolder: HTMLDivElement;
   editorStyle: HTMLStyleElement;
-  tipTapEditor: TiptapEditor;
+  toolbarHolder: HTMLDivElement;
+  tiptapEditor: TiptapEditor;
 
-  constructor() {
+  constructor(options?: { toolbarElement?: HTMLDivElement }) {
     super();
     this.box = null;
     this.overlay = document.createElement("div");
     this.editorHolder = document.createElement("div");
     this.editorStyle = document.createElement("style");
+    this.toolbarHolder = document.createElement("div");
+    this.toolbarHolder.setAttribute("id", "rich-text-inplace-editor-toolbar");
     document.body.appendChild(this.overlay);
     document.body.appendChild(this.editorHolder);
     document.body.appendChild(this.editorStyle);
-    this.tipTapEditor = new TiptapEditor({
+    document.body.appendChild(this.toolbarHolder);
+    if (options?.toolbarElement) {
+      this.toolbarHolder.appendChild(options.toolbarElement);
+    }
+
+    this.tiptapEditor = new TiptapEditor({
       element: this.editorHolder,
       extensions: [
         Document,
@@ -105,6 +113,18 @@ export class RichTextInplaceEditor extends InplaceEditor {
       this.editorHolder.style.width = `${width}px`;
       this.editorHolder.style.height = `${height}px`;
       this.editorHolder.style.transform = `scale(${scale})`;
+
+      const r = this.editorHolder.getBoundingClientRect();
+      const containerRect = [
+        [r.left, r.top],
+        [r.right, r.bottom],
+      ];
+      const isBelow = moveToAboveOrBelow(
+        editor,
+        this.toolbarHolder,
+        containerRect,
+        32
+      );
     }
   }
 
@@ -117,23 +137,30 @@ export class RichTextInplaceEditor extends InplaceEditor {
     });
     this.editorHolder.setAttribute("id", "rich-text-inplace-editor");
     this.editorHolder.style.position = "absolute";
+    this.editorHolder.style.background = "transparent";
     this.editorHolder.style.left = "100px";
     this.editorHolder.style.top = "100px";
     this.editorHolder.style.width = "100px";
     this.editorHolder.style.height = "100px";
-    this.editorHolder.style.zIndex = "1000";
+    this.editorHolder.style.zIndex = "10";
     this.editorHolder.style.outline = "none";
     this.editorHolder.style.resize = "none";
     this.editorHolder.style.overflow = "hidden";
     this.editorHolder.style.whiteSpace = "nowrap";
     this.editorHolder.style.display = "none";
+    // toolbar
+    this.toolbarHolder.style.position = "absolute";
+    this.toolbarHolder.style.background = "transparent";
+    this.toolbarHolder.style.zIndex = "10";
+    this.toolbarHolder.style.outline = "none";
+    this.toolbarHolder.style.display = "none";
 
-    this.tipTapEditor.on("transaction", (tr) => {
+    this.tiptapEditor.on("transaction", (tr) => {
       if (this.box) {
         const canvas = editor.canvas;
         const doc = preprocessDocNode(
           canvas,
-          this.tipTapEditor.getJSON(),
+          this.tiptapEditor.getJSON(),
           this.box,
           this.box.wordWrap, // word wrap
           this.box.innerWidth,
@@ -152,7 +179,7 @@ export class RichTextInplaceEditor extends InplaceEditor {
         }
       }
     });
-    this.tipTapEditor.view.dom.addEventListener("keydown", (e) => {
+    this.tiptapEditor.view.dom.addEventListener("keydown", (e) => {
       if (e.key === "Escape") this.close(editor);
     });
   }
@@ -203,7 +230,6 @@ export class RichTextInplaceEditor extends InplaceEditor {
     `;
 
       this.editorHolder.style.display = "flex";
-      this.editorHolder.style.background = "transparent";
       this.editorHolder.style.lineHeight = `${shape.lineHeight}em`;
       this.editorHolder.style.fontFamily = shape.fontFamily;
       this.editorHolder.style.fontSize = `${shape.fontSize}px`;
@@ -217,6 +243,8 @@ export class RichTextInplaceEditor extends InplaceEditor {
       this.editorHolder.style.paddingBottom = `${padding[2]}px`;
       this.editorHolder.style.paddingLeft = `${padding[3]}px`;
 
+      this.toolbarHolder.style.display = "block";
+
       // disable shape's text rendering
       shape._renderText = false;
       editor.repaint();
@@ -225,21 +253,69 @@ export class RichTextInplaceEditor extends InplaceEditor {
       this.setPositionSize(editor, shape);
 
       // assign text to tiptap editor
-      this.tipTapEditor.commands.setContent(shape.text);
-      this.tipTapEditor.commands.focus();
-      this.tipTapEditor.commands.selectAll();
+      this.tiptapEditor.commands.setContent(shape.text);
+      this.tiptapEditor.commands.focus();
+      this.tiptapEditor.commands.selectAll();
     }
   }
 
   close(editor: Editor) {
     this.overlay.style.display = "none";
     this.editorHolder.style.display = "none";
+    this.toolbarHolder.style.display = "none";
     if (this.box instanceof Box) {
       this.box._renderText = true;
-      const value = this.tipTapEditor.getJSON();
+      const value = this.tiptapEditor.getJSON();
       editor.actions.update({ text: value }, [this.box]);
       editor.repaint();
     }
     this.box = null;
   }
+}
+
+const SCREEN_LEFT_MARGIN = 16;
+const SCREEN_TOP_MARGIN = 16;
+const SCREEN_RIGHT_MARGIN = 16;
+const SCREEN_BOTTOM_MARGIN = 16;
+
+/**
+ * Set element position above or below near a given rectangle
+ * 1. if the rect is below than screen center, place element above the rect
+ * 2. if the rect is above than screen center, place element below the rect
+ * 3. keep margin
+ * @param element element to position
+ * @param rect
+ * @return true if position is below, false otherwise
+ */
+export function moveToAboveOrBelow(
+  editor: Editor,
+  element: HTMLElement,
+  rect: number[][],
+  gap: number = 46
+): boolean {
+  const canvasWidth = editor.canvasElement?.offsetWidth || 0;
+  const canvasHeight = editor.canvasElement?.offsetHeight || 0;
+
+  const cp = geometry.center(rect);
+  const isBelow = cp[1] < canvasHeight / 2;
+  let x = cp[0];
+  let y = isBelow ? rect[1][1] + gap : rect[0][1] - gap; // below or above
+
+  const w = element.offsetWidth;
+  const h = element.offsetHeight;
+  if (x - w / 2 < 0) {
+    x = w / 2 + SCREEN_LEFT_MARGIN;
+  }
+  if (x + w / 2 > canvasWidth) {
+    x = canvasWidth - w / 2 - SCREEN_RIGHT_MARGIN;
+  }
+  if (y - h / 2 < 0) {
+    y = h / 2 + SCREEN_TOP_MARGIN;
+  }
+  if (y + h / 2 > canvasHeight) {
+    y = canvasHeight - h / 2 - SCREEN_BOTTOM_MARGIN;
+  }
+  element.style.left = `${x - w / 2}px`;
+  element.style.top = `${y - h / 2}px`;
+  return isBelow;
 }

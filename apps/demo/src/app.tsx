@@ -6,7 +6,6 @@ import {
   Shape,
   ShapeValues,
   Text,
-  basicSetup,
   convertDocToText,
 } from "@dgmjs/core";
 import { Palette } from "./components/palette";
@@ -17,6 +16,7 @@ import { PropertySidebar } from "./components/property-sidebar/property-sidebar"
 import fontJson from "./fonts.json";
 import { Font, fetchFonts, insertFontsToDocument } from "./font-manager";
 import { TextEditor } from "./components/text-editor/text-editor";
+import { customSetup } from "./custom-setup";
 
 declare global {
   interface Window {
@@ -31,7 +31,7 @@ function App() {
     insertFontsToDocument(fontJson as Font[]);
     await fetchFonts(fontJson as Font[]);
     if (!window.editor) {
-      const options = basicSetup();
+      const options = customSetup();
       const editor = new Editor(
         document.querySelector("#editor-holder") as HTMLElement,
         options
