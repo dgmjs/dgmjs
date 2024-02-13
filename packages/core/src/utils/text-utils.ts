@@ -73,7 +73,8 @@ export function convertDocToText(node: any): string {
       if (Array.isArray(node.content)) {
         return node.content
           .map((child: any) => convertDocToText(child))
-          .join("");
+          .join("")
+          .trim();
       }
       return "";
     case "bulletList":
