@@ -76,6 +76,7 @@ export function RichTextInplaceEditorToolbar({
         textAlign: tr.editor.getAttributes("paragraph").textAlign || "left",
       });
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
