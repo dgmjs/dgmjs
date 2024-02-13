@@ -3,7 +3,10 @@ import { Box, Shape } from "../shapes";
 import * as geometry from "../graphics/geometry";
 import { measureText } from "../utils/text-utils";
 
-export class PlainTextEditor extends InplaceEditor {
+/**
+ * Plain text inplace editor
+ */
+export class PlainTextInplaceEditor extends InplaceEditor {
   box: Box | null;
   overlay: HTMLDivElement;
   textarea: HTMLTextAreaElement;
