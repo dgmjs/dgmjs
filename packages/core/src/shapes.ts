@@ -805,7 +805,7 @@ class Box extends Shape {
    *   ]
    * }
    */
-  text: string | any;
+  text: any;
 
   /**
    * Word wrap
@@ -850,10 +850,7 @@ class Box extends Shape {
     this.anchorPosition = 0.5;
     this.richText = false;
     this.textEditable = true;
-    this.text = {
-      type: "doc",
-      content: [{ type: "paragraph", attrs: { textAlign: "left" } }],
-    };
+    this.text = "";
     this.wordWrap = false;
     this.horzAlign = AlignmentKind.LEFT;
     this.vertAlign = AlignmentKind.TOP;

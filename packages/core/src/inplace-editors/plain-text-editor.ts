@@ -36,13 +36,14 @@ export class PlainTextEditor extends InplaceEditor {
       // set position and size
       const scale = editor.getScale();
       const canvasRect = editor.canvasElement.getBoundingClientRect();
+      const minWidth = 4;
       const width = geometry.width(rect) * (1 / scale);
       const height = geometry.height(rect) * (1 / scale);
       const left = rect[0][0] - (width * (1 - scale)) / 2 + canvasRect.left;
       const top = rect[0][1] - (height * (1 - scale)) / 2 + canvasRect.top;
       this.textarea.style.left = `${left}px`;
       this.textarea.style.top = `${top}px`;
-      this.textarea.style.width = `${width}px`;
+      this.textarea.style.width = `${width < minWidth ? minWidth : width}px`;
       this.textarea.style.height = `${height + this.box.fontSize / 2}px`; // more bottom area prevents clipping text and vertical scrollbar
       this.textarea.style.transform = `scale(${scale})`;
     }
@@ -74,6 +75,12 @@ export class PlainTextEditor extends InplaceEditor {
     });
   }
 
+  active(editor: Editor, shape: Shape): boolean {
+    return (
+      shape instanceof Box && shape.textEditable && shape.richText === false
+    );
+  }
+
   open(editor: Editor, shape: Shape) {
     if (shape instanceof Box) {
       this.box = shape;
@@ -100,7 +107,7 @@ export class PlainTextEditor extends InplaceEditor {
 
       // assign text to textarea
       const textString = shape.text;
-      if (textString.length > 0) {
+      if (typeof textString == "string") {
         this.textarea.value = textString;
       }
       this.textarea.focus();

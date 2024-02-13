@@ -50,9 +50,7 @@ function App() {
       });
       editor.factory.on("create", (shape: Shape) => {
         editor.setActiveHandler("Select");
-        if (shape instanceof Text && (shape as Text).textEditable) {
-          demoStore.setEditingText(shape);
-        }
+        if (shape instanceof Text) editor.openInplaceEditor(shape);
       });
       editor.on("dblClick", (shape, x, y) => {
         editor.state.selections.deselectAll();
@@ -62,15 +60,11 @@ function App() {
             [x, y],
             [x, y],
           ]);
-          setTimeout(() => {
-            demoStore.setEditingText(textShape);
-          }, 0);
+          editor.openInplaceEditor(textShape);
         } else if (shape instanceof Image) {
           // nothing to do
         } else if (shape instanceof Box) {
-          // if (shape.textEditable) {
-          //   demoStore.setEditingText(shape);
-          // }
+          editor.openInplaceEditor(shape);
         } else if (shape instanceof Connector) {
           const outline = shape.getOutline();
           const nearest = geometry.findNearestOnPath(
@@ -83,9 +77,7 @@ function App() {
             shape,
             position
           );
-          setTimeout(() => {
-            demoStore.setEditingText(textShape);
-          }, 0);
+          editor.openInplaceEditor(textShape);
         }
       });
       editor.state.transform.on("transaction", (tx) => {

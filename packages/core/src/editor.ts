@@ -169,8 +169,8 @@ function createPointerEvent(
  */
 export abstract class InplaceEditor {
   abstract setup(editor: Editor): void;
+  abstract active(editor: Editor, shape: Shape): boolean;
   abstract open(editor: Editor, shape: Shape): void;
-  abstract close(editor: Editor): void;
 }
 
 export interface EditorOptions {
@@ -390,10 +390,8 @@ class Editor extends EventEmitter {
         const shape: Shape | null = this.state.diagram.findDepthFirst(
           pred
         ) as Shape | null;
-        // propagate to inplace editors
-        if (shape) {
-          this.inplaceEditors.forEach((e) => e.open(this, shape));
-        }
+        // open an inplace editors
+        if (shape) this.openInplaceEditor(shape);
         this.triggerDblClick(shape, p[0], p[1]);
       }
     });
@@ -470,6 +468,17 @@ class Editor extends EventEmitter {
   initializeInplaceEditors(options: EditorOptions) {
     this.inplaceEditors = options.inplaceEditors ?? [];
     this.inplaceEditors.forEach((e) => e.setup(this));
+  }
+
+  /**
+   * Open an inplace editor for a shape
+   */
+  openInplaceEditor(shape: Shape) {
+    setTimeout(() => {
+      this.inplaceEditors.forEach((e) => {
+        if (e.active(this, shape)) e.open(this, shape);
+      });
+    }, 0);
   }
 
   /**

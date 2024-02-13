@@ -79,16 +79,8 @@ export class ShapeFactory extends EventEmitter {
    */
   createText(rect: number[][], initialText: string = ""): Text {
     const text = new Text();
-    text.text = {
-      type: "doc",
-      content: [
-        {
-          type: "paragraph",
-          attrs: { textAlign: "left" },
-          content: [{ type: "text", text: initialText }],
-        },
-      ],
-    };
+    text.richText = false;
+    text.text = initialText;
     text.constraints.push({
       id: "set-size",
       width: "text",
@@ -115,16 +107,8 @@ export class ShapeFactory extends EventEmitter {
     initialText: string = ""
   ): Text {
     const text = new Text();
-    text.text = {
-      type: "doc",
-      content: [
-        {
-          type: "paragraph",
-          attrs: { textAlign: "left" },
-          content: [{ type: "text", text: initialText }],
-        },
-      ],
-    };
+    text.richText = false;
+    text.text = initialText;
     text.strokeColor = "$transparent";
     text.fillColor = "$transparent";
     text.anchored = true;
