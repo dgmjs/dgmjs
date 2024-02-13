@@ -13,8 +13,13 @@
 
 import { EventEmitter } from "events";
 import { Canvas, CanvasPointerEvent } from "./graphics/graphics";
-import { Diagram, type Shape } from "./shapes";
-import { Cursor, Color, Mouse } from "./graphics/const";
+import { Connector, Diagram, type Shape, Text } from "./shapes";
+import {
+  Cursor,
+  Color,
+  Mouse,
+  CONNECTION_POINT_APOTHEM,
+} from "./graphics/const";
 import { assert } from "./std/assert";
 import * as geometry from "./graphics/geometry";
 import * as utils from "./graphics/utils";
@@ -24,145 +29,8 @@ import type { Obj } from "./core/obj";
 import { colors } from "./colors";
 import { Actions } from "./actions";
 import { KeyMap, KeymapManager } from "./keymap-manager";
-
-const AUTOSCROLL_STEP = 2;
-const AUTOSCROLL_SPEED = 50; // speed in 1..1000
-const AUTOSCROLL_MARGIN = 30; // px
-
-class AutoScroller {
-  editor: Editor;
-  enabled: boolean;
-  dx: number;
-  dy: number;
-  timerId: ReturnType<typeof setInterval> | null;
-  timerHandler: () => void;
-
-  constructor(editor: Editor) {
-    this.editor = editor;
-    this.enabled = false;
-    this.dx = 0;
-    this.dy = 0;
-    this.timerId = null;
-    this.timerHandler = () => {
-      let scrolled = false;
-      if (this.dx !== 0) {
-        let x = Math.round(this.editor.canvas.origin[0] + this.dx);
-        if (this.editor.canvas.origin[0] !== x) {
-          this.editor.canvas.origin[0] = x;
-          scrolled = true;
-        }
-      }
-      if (this.dy !== 0) {
-        let y = Math.round(this.editor.canvas.origin[1] + this.dy);
-        if (this.editor.canvas.origin[1] !== y) {
-          this.editor.canvas.origin[1] = y;
-          scrolled = true;
-        }
-      }
-      if (scrolled) {
-        this.editor.repaint(true);
-      }
-    };
-  }
-
-  setEnabled(enabled: boolean) {
-    this.enabled = enabled;
-  }
-
-  pointerDown(event: CanvasPointerEvent) {
-    if (this.enabled && this.editor.leftButtonDown) {
-      const speed = Math.round(AUTOSCROLL_SPEED / 1000);
-      this.timerId = setInterval(this.timerHandler, speed);
-    }
-  }
-
-  pointerMove(event: CanvasPointerEvent) {
-    if (this.enabled && this.editor.leftButtonDown && this.timerId) {
-      const autoscrollMargin = AUTOSCROLL_MARGIN * this.editor.canvas.px;
-      if (event.x > this.editor.canvasElement.width - autoscrollMargin) {
-        this.dx = -AUTOSCROLL_STEP;
-      } else if (event.x < autoscrollMargin) {
-        this.dx = AUTOSCROLL_STEP;
-      } else {
-        this.dx = 0;
-      }
-      if (event.y > this.editor.canvasElement.height - autoscrollMargin) {
-        this.dy = -AUTOSCROLL_STEP;
-      } else if (event.y < autoscrollMargin) {
-        this.dy = AUTOSCROLL_STEP;
-      } else {
-        this.dy = 0;
-      }
-    }
-  }
-
-  pointerUp(event: CanvasPointerEvent) {
-    if (this.enabled && this.timerId) {
-      clearInterval(this.timerId);
-      this.timerId = null;
-      this.dx = 0;
-      this.dy = 0;
-    }
-  }
-}
-
-/**
- * Create a touch event
- * @param element A <canvas> HTML element
- * @param canvas A canvas object
- * @param e An event of canvas element
- */
-function createTouchEvent(
-  element: HTMLCanvasElement,
-  canvas: Canvas,
-  e: TouchEvent
-): CanvasPointerEvent {
-  const rect = element.getBoundingClientRect();
-  // average of touch points if multi-touch
-  const cx =
-    e.touches.length === 2
-      ? (e.touches[0].clientX + e.touches[1].clientX) / 2
-      : e.touches[0].clientX;
-  const cy =
-    e.touches.length === 2
-      ? (e.touches[0].clientY + e.touches[1].clientY) / 2
-      : e.touches[0].clientY;
-  let _p = [cx - rect.left, cy - rect.top];
-  // transform pointer event point to CCS (canvas coord-system)
-  let p = [_p[0] * canvas.ratio, _p[1] * canvas.ratio];
-  const options = {
-    button: 0,
-    shiftKey: false,
-    altKey: false,
-    ctrlKey: false,
-    metaKey: false,
-    touchDistance: 0,
-  };
-  if (e.touches.length === 2) {
-    const xd = e.touches[0].clientX - e.touches[1].clientX;
-    const yd = e.touches[0].clientY - e.touches[1].clientY;
-    options.touchDistance = Math.sqrt(xd * xd + yd * yd);
-  }
-  return new CanvasPointerEvent(p[0], p[1], options);
-}
-
-/**
- * Create a pointer event
- * @param element A <canvas> HTML element
- * @param canvas A canvas object
- * @param e An event of canvas element
- */
-function createPointerEvent(
-  element: HTMLCanvasElement,
-  canvas: Canvas,
-  e: MouseEvent
-): CanvasPointerEvent {
-  const rect = element.getBoundingClientRect();
-  let _p = [e.clientX - rect.left, e.clientY - rect.top];
-  // transform pointer event point to CCS (canvas coord-system)
-  let p = [_p[0] * canvas.ratio, _p[1] * canvas.ratio];
-  return new CanvasPointerEvent(p[0], p[1], e);
-}
+import { AutoScroller } from "./utils/auto-scroller";
+import { createPointerEvent, createTouchEvent } from "./utils/canvas-utils";
 
 /**
  * Inplace Editor
@@ -175,15 +43,18 @@ export abstract class InplaceEditor {
 
 export interface EditorOptions {
   handlers?: Handler[];
-  autoScroll?: boolean;
   keymap?: KeyMap;
   inplaceEditors?: InplaceEditor[];
+  allowAutoScroll?: boolean;
+  allowCreateTextOnCanvas?: boolean;
+  allowCreateTextOnConnector?: boolean;
 }
 
 /**
  * The diagram editor
  */
 class Editor extends EventEmitter {
+  options: EditorOptions;
   platform: string;
   state: EditorState;
   factory: ShapeFactory;
@@ -217,6 +88,11 @@ class Editor extends EventEmitter {
    */
   constructor(editorHolder: HTMLElement, options: EditorOptions) {
     super();
+    this.options = {
+      allowCreateTextOnCanvas: true,
+      allowCreateTextOnConnector: true,
+      ...options,
+    };
     this.platform = this.detectPlatform();
     this.parent = editorHolder;
     this.state = new EditorState();
@@ -225,6 +101,7 @@ class Editor extends EventEmitter {
     this.keymap = new KeymapManager(this);
     this.inplaceEditors = [];
     this.autoScroller = new AutoScroller(this);
+    this.autoScroller.setEnabled(this.options.allowAutoScroll ?? true);
     // initialize properties
     this.canvasElement = null as any;
     this.canvas = null as any;
@@ -235,6 +112,7 @@ class Editor extends EventEmitter {
     this.snapToGrid = false;
     this.snapToObject = false;
     this.handlers = {};
+    this.addHandlers(this.options.handlers ?? []);
     this.activeHandlerId = null;
     this.activeHandler = null;
     this.defaultHandlerId = null;
@@ -247,11 +125,8 @@ class Editor extends EventEmitter {
     this.touchPoint = [-1, -1];
     this.initializeState();
     this.initializeCanvas();
-    this.initializeKeymap(options);
-    this.initializeInplaceEditors(options);
-    // options
-    this.addHandlers(options.handlers ?? []);
-    this.autoScroller.setEnabled(options.autoScroll ?? true);
+    this.initializeKeymap();
+    this.initializeInplaceEditors();
   }
 
   detectPlatform(): string {
@@ -272,6 +147,9 @@ class Editor extends EventEmitter {
     this.state.diagram = diagram;
     this.state.transform.on("transaction", () => this.repaint());
     this.state.selections.on("select", () => this.repaint());
+    this.factory.on("create", (shape: Shape) => {
+      if (shape instanceof Text) this.openInplaceEditor(shape);
+    });
   }
 
   initializeCanvas() {
@@ -381,8 +259,11 @@ class Editor extends EventEmitter {
     // mouse double click
     this.canvasElement.addEventListener("dblclick", (e) => {
       this.focus();
+      this.state.selections.deselectAll();
       const event = createPointerEvent(this.canvasElement, this.canvas, e);
-      var p = this.canvas.globalCoordTransformRev([event.x, event.y]);
+      const p = this.canvas.globalCoordTransformRev([event.x, event.y]);
+      const x = p[0];
+      const y = p[1];
       if (this.state.diagram) {
         // allows double click on a disable shape (e.g. a text inside another shape)
         const pred = (s: Obj) =>
@@ -392,7 +273,31 @@ class Editor extends EventEmitter {
         ) as Shape | null;
         // open an inplace editors
         if (shape) this.openInplaceEditor(shape);
-        this.triggerDblClick(shape, p[0], p[1]);
+        // create a text on canvas
+        if (this.options.allowCreateTextOnCanvas && !shape) {
+          const textShape = this.factory.createText([
+            [x, y],
+            [x, y],
+          ]);
+          this.openInplaceEditor(textShape);
+        }
+        // create a text on connector
+        if (
+          this.options.allowCreateTextOnConnector &&
+          shape instanceof Connector
+        ) {
+          const outline = shape.getOutline();
+          const nearest = geometry.findNearestOnPath(
+            [x, y],
+            outline,
+            CONNECTION_POINT_APOTHEM * 2
+          );
+          const position = geometry.getPositionOnPath(outline, nearest);
+          const textShape = this.factory.createTextOnConnector(shape, position);
+          this.openInplaceEditor(textShape);
+        }
+        // trigger double click event
+        this.triggerDblClick(shape, x, y);
       }
     });
 
@@ -447,8 +352,8 @@ class Editor extends EventEmitter {
     });
   }
 
-  initializeKeymap(options: EditorOptions) {
-    this.keymap.bind(options.keymap ?? {});
+  initializeKeymap() {
+    this.keymap.bind(this.options.keymap ?? {});
     // handle global key events
     this.canvasElement.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && this.defaultHandlerId) {
@@ -465,8 +370,8 @@ class Editor extends EventEmitter {
     });
   }
 
-  initializeInplaceEditors(options: EditorOptions) {
-    this.inplaceEditors = options.inplaceEditors ?? [];
+  initializeInplaceEditors() {
+    this.inplaceEditors = this.options.inplaceEditors ?? [];
     this.inplaceEditors.forEach((e) => e.setup(this));
   }
 

@@ -71,6 +71,9 @@ export function basicSetup(options?: EditorOptions): EditorOptions {
       "mod-right": (editor) => editor.scroll(editor.gridSize[0], 0),
     },
     inplaceEditors: [new PlainTextInplaceEditor(), new RichTextInplaceEditor()],
+    allowAutoScroll: true,
+    allowCreateTextOnCanvas: true,
+    allowCreateTextOnConnector: true,
     ...(options ?? {}),
   };
 }

@@ -1,16 +1,13 @@
 import { useEffect } from "react";
 import {
   Box,
-  Connector,
   Diagram,
   Editor,
   Shape,
   ShapeValues,
   Text,
   basicSetup,
-  constants,
   convertDocToText,
-  geometry,
 } from "@dgmjs/core";
 import { Palette } from "./components/palette";
 import { useDemoStore } from "./store";
@@ -50,35 +47,7 @@ function App() {
       });
       editor.factory.on("create", (shape: Shape) => {
         editor.setActiveHandler("Select");
-        if (shape instanceof Text) editor.openInplaceEditor(shape);
-      });
-      editor.on("dblClick", (shape, x, y) => {
-        editor.state.selections.deselectAll();
-        demoStore.setSelections([]);
-        if (!shape) {
-          const textShape = editor.factory.createText([
-            [x, y],
-            [x, y],
-          ]);
-          editor.openInplaceEditor(textShape);
-        } else if (shape instanceof Image) {
-          // nothing to do
-        } else if (shape instanceof Box) {
-          editor.openInplaceEditor(shape);
-        } else if (shape instanceof Connector) {
-          const outline = shape.getOutline();
-          const nearest = geometry.findNearestOnPath(
-            [x, y],
-            outline,
-            constants.CONNECTION_POINT_APOTHEM * 2
-          );
-          const position = geometry.getPositionOnPath(outline, nearest);
-          const textShape = editor.factory.createTextOnConnector(
-            shape,
-            position
-          );
-          editor.openInplaceEditor(textShape);
-        }
+        // if (shape instanceof Text) editor.openInplaceEditor(shape);
       });
       editor.state.transform.on("transaction", (tx) => {
         const data = editor.state.store.toJSON();
