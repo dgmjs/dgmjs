@@ -66,6 +66,7 @@ export function RichTextInplaceEditorToolbar({
       setState({
         fontSize:
           tr.editor.getAttributes("textStyle").fontSize?.trim().slice(0, -2) ??
+          inplaceEditor.box?.fontSize.toString() ??
           constants.DEFAULT_FONT_SIZE.toString(),
         bold: tr.editor.isActive("bold"),
         italic: tr.editor.isActive("italic"),
