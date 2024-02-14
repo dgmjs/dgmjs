@@ -1,6 +1,7 @@
 import { EventEmitter } from "events";
 import type { Editor } from "./editor";
 import {
+  AlignmentKind,
   Connector,
   Ellipse,
   Image,
@@ -52,6 +53,8 @@ export class ShapeFactory extends EventEmitter {
     }
     rectangle.width = w;
     rectangle.height = h;
+    rectangle.horzAlign = AlignmentKind.CENTER;
+    rectangle.vertAlign = AlignmentKind.MIDDLE;
     this.insertShape(rectangle);
     return rectangle;
   }
@@ -71,6 +74,8 @@ export class ShapeFactory extends EventEmitter {
     }
     ellipse.width = w;
     ellipse.height = h;
+    ellipse.horzAlign = AlignmentKind.CENTER;
+    ellipse.vertAlign = AlignmentKind.MIDDLE;
     this.insertShape(ellipse);
     return ellipse;
   }
@@ -95,6 +100,8 @@ export class ShapeFactory extends EventEmitter {
     let h = geometry.height(rect);
     text.width = w;
     text.height = h;
+    text.horzAlign = AlignmentKind.LEFT;
+    text.vertAlign = AlignmentKind.TOP;
     this.insertShape(text);
     return text;
   }
@@ -112,6 +119,8 @@ export class ShapeFactory extends EventEmitter {
     text.text = initialText;
     text.strokeColor = "$transparent";
     text.fillColor = "$transparent";
+    text.horzAlign = AlignmentKind.LEFT;
+    text.vertAlign = AlignmentKind.TOP;
     text.anchored = true;
     text.anchorPosition = anchorPosition;
     text.constraints.push({ id: "anchor-on-parent" });
@@ -175,6 +184,7 @@ export class ShapeFactory extends EventEmitter {
     image.height = size[1];
     image.left = position[0] - size[0] / 2;
     image.top = position[1] - size[1] / 2;
+    image.sizable = Sizable.RATIO;
     this.insertShape(image);
     return image;
   }

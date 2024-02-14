@@ -852,8 +852,8 @@ class Box extends Shape {
     this.textEditable = true;
     this.text = "";
     this.wordWrap = false;
-    this.horzAlign = AlignmentKind.LEFT;
-    this.vertAlign = AlignmentKind.TOP;
+    this.horzAlign = AlignmentKind.CENTER;
+    this.vertAlign = AlignmentKind.MIDDLE;
     this.lineHeight = 1.2;
     this.paragraphSpacing = 0;
     this._renderText = true;
@@ -1481,6 +1481,8 @@ class Text extends Box {
     this.type = "Text";
     this.fillColor = "$transparent";
     this.strokeColor = "$transparent";
+    this.horzAlign = AlignmentKind.LEFT;
+    this.vertAlign = AlignmentKind.TOP;
   }
 
   renderDefault(canvas: Canvas): void {
