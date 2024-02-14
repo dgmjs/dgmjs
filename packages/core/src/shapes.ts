@@ -1511,6 +1511,7 @@ class Image extends Box {
     this.imageWidth = 0;
     this.imageHeight = 0;
     this._image = null;
+    this.sizable = Sizable.RATIO;
   }
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {

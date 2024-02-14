@@ -9,6 +9,7 @@ import {
   Rectangle,
   RouteType,
   Shape,
+  Sizable,
   Text,
 } from "./shapes";
 import { fileToImageElement } from "./utils/image-utils";
@@ -146,6 +147,7 @@ export class ShapeFactory extends EventEmitter {
     image.height = h;
     image.left = rect[0][0] - w / 2;
     image.top = rect[0][1] - h / 2;
+    image.sizable = Sizable.RATIO;
     this.insertShape(image);
     return image;
   }
