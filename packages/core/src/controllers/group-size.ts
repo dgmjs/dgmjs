@@ -11,7 +11,7 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import type { Box, Diagram, Shape } from "../shapes";
+import { Box, Diagram, Shape } from "../shapes";
 import type { Editor } from "../editor";
 import { lcs2ccs } from "../graphics/utils";
 import { BoxSizeController } from "./box-size";
@@ -34,6 +34,7 @@ export class GroupSizeController extends BoxSizeController {
     const oh = shape.height;
     const rx = width / ow;
     const ry = height / oh;
+    const ratio = width / shape.width;
 
     // find best-fit
     const delta = fitEnclosureInCSS(
@@ -55,20 +56,31 @@ export class GroupSizeController extends BoxSizeController {
     tr.startTransaction("group-resize");
     tr.moveShapes(diagram, [shape], x1 - shape.left, y1 - shape.top);
     tr.resize(shape, x2 - x1, y2 - y1);
+    tr.atomicAssign(shape, "fontSize", shape.fontSize * ratio);
 
     // resize shapes inside the group
     const ol = shape.left;
     const ot = shape.top;
     shape.traverse((s) => {
-      if (s !== shape) {
-        const l = ol + ((s as Shape).left - ol) * rx;
-        const t = ot + ((s as Shape).top - ot) * ry;
-        const r = ol + ((s as Shape).right - ol) * rx;
-        const b = ot + ((s as Shape).bottom - ot) * ry;
+      if (s !== shape && s instanceof Shape) {
+        const l = ol + (s.left - ol) * rx;
+        const t = ot + (s.top - ot) * ry;
+        const r = ol + (s.right - ol) * rx;
+        const b = ot + (s.bottom - ot) * ry;
         const w = r - l;
         const h = b - t;
-        tr.move(s as Shape, l - (s as Shape).left, t - (s as Shape).top);
-        tr.resize(s as Shape, w, h);
+        tr.move(s, l - s.left, t - s.top);
+        tr.resize(s, w, h);
+        if (this.doScale) {
+          tr.atomicAssign(s, "fontSize", s.fontSize * ratio);
+          if (s instanceof Box) {
+            tr.atomicAssign(
+              s,
+              "padding",
+              s.padding.map((v) => v * ratio)
+            );
+          }
+        }
       }
     });
 

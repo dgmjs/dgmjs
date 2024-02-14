@@ -23,23 +23,19 @@ import { BoxMoveController } from "../controllers/box-move";
 class GroupManipulator extends Manipulator {
   constructor() {
     super();
+    this.controllers.push(
+      new GroupSizeController(this, SizingPosition.LEFT_TOP, true)
+    );
+    this.controllers.push(
+      new GroupSizeController(this, SizingPosition.RIGHT_TOP, true)
+    );
+    this.controllers.push(
+      new GroupSizeController(this, SizingPosition.RIGHT_BOTTOM, true)
+    );
+    this.controllers.push(
+      new GroupSizeController(this, SizingPosition.LEFT_BOTTOM, true)
+    );
     this.controllers.push(new BoxRotateController(this));
-    // this.controllers.push(new GroupSizeController(this, SizingPosition.TOP));
-    // this.controllers.push(new GroupSizeController(this, SizingPosition.RIGHT));
-    // this.controllers.push(new GroupSizeController(this, SizingPosition.BOTTOM));
-    // this.controllers.push(new GroupSizeController(this, SizingPosition.LEFT));
-    this.controllers.push(
-      new GroupSizeController(this, SizingPosition.LEFT_TOP)
-    );
-    this.controllers.push(
-      new GroupSizeController(this, SizingPosition.RIGHT_TOP)
-    );
-    this.controllers.push(
-      new GroupSizeController(this, SizingPosition.RIGHT_BOTTOM)
-    );
-    this.controllers.push(
-      new GroupSizeController(this, SizingPosition.LEFT_BOTTOM)
-    );
     this.controllers.push(new BoxMoveController(this));
   }
 }
