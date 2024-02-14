@@ -1,7 +1,7 @@
 import { Editor, InplaceEditor } from "../editor";
-import { Box, Shape } from "../shapes";
+import { Box, Shape, Text as TextShape } from "../shapes";
 import * as geometry from "../graphics/geometry";
-import { measureText, preprocessDocNode } from "../utils/text-utils";
+import { convertDocToText, preprocessDocNode } from "../utils/text-utils";
 import { Editor as TiptapEditor } from "@tiptap/core";
 import { Document } from "@tiptap/extension-document";
 import { Text } from "@tiptap/extension-text";
@@ -266,7 +266,12 @@ export class RichTextInplaceEditor extends InplaceEditor {
     if (this.box instanceof Box) {
       this.box._renderText = true;
       const value = this.tiptapEditor.getJSON();
-      editor.actions.update({ text: value }, [this.box]);
+      const valueString = convertDocToText(value).trim();
+      if (this.box instanceof TextShape && valueString.length === 0) {
+        editor.actions.delete_([this.box]);
+      } else {
+        editor.actions.update({ text: value }, [this.box]);
+      }
       editor.repaint();
     }
     this.box = null;

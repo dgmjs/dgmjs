@@ -1,5 +1,5 @@
 import { Editor, InplaceEditor } from "../editor";
-import { Box, Shape } from "../shapes";
+import { Box, Shape, Text } from "../shapes";
 import * as geometry from "../graphics/geometry";
 import { measureText } from "../utils/text-utils";
 
@@ -149,7 +149,11 @@ export class PlainTextInplaceEditor extends InplaceEditor {
     if (this.box instanceof Box) {
       this.box._renderText = true;
       const value = this.textarea.value;
-      editor.actions.update({ text: value }, [this.box]);
+      if (this.box instanceof Text && value.trim().length === 0) {
+        editor.actions.delete_([this.box]);
+      } else {
+        editor.actions.update({ text: value }, [this.box]);
+      }
       editor.repaint();
     }
     this.box = null;
