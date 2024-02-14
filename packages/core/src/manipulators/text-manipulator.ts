@@ -17,7 +17,7 @@ import { BoxRotateController } from "../controllers/box-rotate";
 import { BoxMoveController } from "../controllers/box-move";
 import { BoxMoveAnchoredController } from "../controllers/box-move-anchored";
 import { BoxMoveAnchorPositionController } from "../controllers/box-move-anchor-position";
-import { TextSizeController } from "../controllers/text-size";
+import { BoxSizeController } from "../controllers/box-size";
 
 /**
  * TextManipulator
@@ -25,21 +25,29 @@ import { TextSizeController } from "../controllers/text-size";
 class TextManipulator extends Manipulator {
   constructor() {
     super();
-    this.controllers.push(new TextSizeController(this, SizingPosition.TOP));
-    this.controllers.push(new TextSizeController(this, SizingPosition.RIGHT));
-    this.controllers.push(new TextSizeController(this, SizingPosition.BOTTOM));
-    this.controllers.push(new TextSizeController(this, SizingPosition.LEFT));
     this.controllers.push(
-      new TextSizeController(this, SizingPosition.LEFT_TOP)
+      new BoxSizeController(this, SizingPosition.TOP, true)
     );
     this.controllers.push(
-      new TextSizeController(this, SizingPosition.RIGHT_TOP)
+      new BoxSizeController(this, SizingPosition.RIGHT, true)
     );
     this.controllers.push(
-      new TextSizeController(this, SizingPosition.RIGHT_BOTTOM)
+      new BoxSizeController(this, SizingPosition.BOTTOM, true)
     );
     this.controllers.push(
-      new TextSizeController(this, SizingPosition.LEFT_BOTTOM)
+      new BoxSizeController(this, SizingPosition.LEFT, true)
+    );
+    this.controllers.push(
+      new BoxSizeController(this, SizingPosition.LEFT_TOP, true)
+    );
+    this.controllers.push(
+      new BoxSizeController(this, SizingPosition.RIGHT_TOP, true)
+    );
+    this.controllers.push(
+      new BoxSizeController(this, SizingPosition.RIGHT_BOTTOM, true)
+    );
+    this.controllers.push(
+      new BoxSizeController(this, SizingPosition.LEFT_BOTTOM, true)
     );
     this.controllers.push(new BoxRotateController(this));
     this.controllers.push(new BoxMoveAnchoredController(this));

@@ -20,7 +20,7 @@ import {
   Cursor,
   SizingPosition,
 } from "../graphics/const";
-import { lcs2ccs, ccs2lcs, angleInCCS } from "../graphics/utils";
+import { lcs2ccs, angleInCCS } from "../graphics/utils";
 import {
   drawControlPoint,
   drawPolylineInLCS,
@@ -29,6 +29,8 @@ import {
 } from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { fitEnclosureInCSS } from "./utils";
+
+const MIN_SIZE = CONTROL_POINT_APOTHEM * 4;
 
 /**
  * Size Controller
@@ -49,11 +51,21 @@ export class BoxSizeController extends Controller {
    */
   position: string;
 
-  constructor(manipulator: Manipulator, position: string) {
+  /**
+   * Scale fontSize and padding
+   */
+  doScale: boolean;
+
+  constructor(
+    manipulator: Manipulator,
+    position: string,
+    doScale: boolean = false
+  ) {
     super(manipulator);
     this.snap = new Snap();
     this.ghost = [];
     this.position = position;
+    this.doScale = doScale;
   }
 
   /**
@@ -67,21 +79,25 @@ export class BoxSizeController extends Controller {
       case SizingPosition.TOP:
         value =
           value &&
+          !this.doScale &&
           (shape.sizable === Sizable.VERT || shape.sizable === Sizable.FREE);
         break;
       case SizingPosition.RIGHT:
         value =
           value &&
+          !this.doScale &&
           (shape.sizable === Sizable.HORZ || shape.sizable === Sizable.FREE);
         break;
       case SizingPosition.BOTTOM:
         value =
           value &&
+          !this.doScale &&
           (shape.sizable === Sizable.VERT || shape.sizable === Sizable.FREE);
         break;
       case SizingPosition.LEFT:
         value =
           value &&
+          !this.doScale &&
           (shape.sizable === Sizable.HORZ || shape.sizable === Sizable.FREE);
         break;
       case SizingPosition.LEFT_TOP:
@@ -214,6 +230,7 @@ export class BoxSizeController extends Controller {
     // let w = shape.width;
     // let h = shape.height;
     let ratio = h / w;
+
     // snap ghost
     let xs: number[] = [];
     let ys: number[] = [];
@@ -252,48 +269,63 @@ export class BoxSizeController extends Controller {
     this.snap.toOutline(editor, shape, xs, ys);
     this.snap.toGrid(editor, [xs[0] ?? 0, ys[0] ?? 0]);
     this.snap.apply(this);
+
     // update ghost
     switch (this.position) {
       case SizingPosition.TOP:
+        if (h - this.dy < MIN_SIZE) this.dy = -(MIN_SIZE - h);
         this.ghost[0][1] += this.dy;
         this.ghost[1][1] += this.dy;
         this.ghost[4][1] += this.dy;
-        if (shape.sizable === Sizable.RATIO) {
+        if (this.doScale || shape.sizable === Sizable.RATIO) {
           this.ghost[1][0] += -this.dy / ratio;
           this.ghost[2][0] += -this.dy / ratio;
         }
         break;
       case SizingPosition.RIGHT:
+        if (w + this.dx < MIN_SIZE) this.dx = MIN_SIZE - w;
         this.ghost[1][0] += this.dx;
         this.ghost[2][0] += this.dx;
-        if (shape.sizable === Sizable.RATIO) {
+        if (this.doScale || shape.sizable === Sizable.RATIO) {
           this.ghost[2][1] += this.dx * ratio;
           this.ghost[3][1] += this.dx * ratio;
         }
         break;
       case SizingPosition.BOTTOM:
+        if (h + this.dy < MIN_SIZE) this.dy = MIN_SIZE - h;
         this.ghost[2][1] += this.dy;
         this.ghost[3][1] += this.dy;
-        if (shape.sizable === Sizable.RATIO) {
+        if (this.doScale || shape.sizable === Sizable.RATIO) {
           this.ghost[1][0] += this.dy / ratio;
           this.ghost[2][0] += this.dy / ratio;
         }
         break;
       case SizingPosition.LEFT:
+        if (w - this.dx < MIN_SIZE) this.dx = -(MIN_SIZE - w);
         this.ghost[0][0] += this.dx;
         this.ghost[3][0] += this.dx;
         this.ghost[4][0] += this.dx;
-        if (shape.sizable === Sizable.RATIO) {
+        if (this.doScale || shape.sizable === Sizable.RATIO) {
           this.ghost[2][1] += -this.dx * ratio;
           this.ghost[3][1] += -this.dx * ratio;
         }
         break;
       case SizingPosition.LEFT_TOP:
-        if (shape.sizable === Sizable.RATIO) {
+        if (w - this.dx < MIN_SIZE) this.dx = -(MIN_SIZE - w);
+        if (h - this.dy < MIN_SIZE) this.dy = -(MIN_SIZE - h);
+        if (this.doScale || shape.sizable === Sizable.RATIO) {
           if (this.dx * ratio > this.dy / ratio) {
             this.dy = this.dx * ratio;
           } else {
             this.dx = this.dy / ratio;
+          }
+          if (w - this.dx < MIN_SIZE) {
+            this.dx = -(MIN_SIZE - w);
+            this.dy = -this.dx * ratio;
+          }
+          if (h - this.dy < MIN_SIZE) {
+            this.dy = -(MIN_SIZE - h);
+            this.dx = -this.dy / ratio;
           }
         }
         this.ghost[0][0] += this.dx;
@@ -304,10 +336,20 @@ export class BoxSizeController extends Controller {
         this.ghost[3][0] += this.dx;
         break;
       case SizingPosition.RIGHT_TOP:
-        if (shape.sizable === Sizable.RATIO) {
+        if (w + this.dx < MIN_SIZE) this.dx = MIN_SIZE - w;
+        if (h - this.dy < MIN_SIZE) this.dy = -(MIN_SIZE - h);
+        if (this.doScale || shape.sizable === Sizable.RATIO) {
           if (this.dx * ratio > this.dy / ratio) {
             this.dy = -this.dx * ratio;
           } else {
+            this.dx = -this.dy / ratio;
+          }
+          if (w + this.dx < MIN_SIZE) {
+            this.dx = MIN_SIZE - w;
+            this.dy = -this.dx * ratio;
+          }
+          if (h - this.dy < MIN_SIZE) {
+            this.dy = -(MIN_SIZE - h);
             this.dx = -this.dy / ratio;
           }
         }
@@ -318,10 +360,20 @@ export class BoxSizeController extends Controller {
         this.ghost[4][1] += this.dy;
         break;
       case SizingPosition.RIGHT_BOTTOM:
-        if (shape.sizable === Sizable.RATIO) {
+        if (w + this.dx < MIN_SIZE) this.dx = MIN_SIZE - w;
+        if (h + this.dy < MIN_SIZE) this.dy = MIN_SIZE - h;
+        if (this.doScale || shape.sizable === Sizable.RATIO) {
           if (this.dx * ratio > this.dy / ratio) {
             this.dy = this.dx * ratio;
           } else {
+            this.dx = this.dy / ratio;
+          }
+          if (w + this.dx < MIN_SIZE) {
+            this.dx = MIN_SIZE - w;
+            this.dy = this.dx * ratio;
+          }
+          if (h + this.dy < MIN_SIZE) {
+            this.dy = MIN_SIZE - h;
             this.dx = this.dy / ratio;
           }
         }
@@ -331,10 +383,20 @@ export class BoxSizeController extends Controller {
         this.ghost[3][1] += this.dy;
         break;
       case SizingPosition.LEFT_BOTTOM:
-        if (shape.sizable === Sizable.RATIO) {
+        if (w - this.dx < MIN_SIZE) this.dx = -(MIN_SIZE - w);
+        if (h + this.dy < MIN_SIZE) this.dy = MIN_SIZE - h;
+        if (this.doScale || shape.sizable === Sizable.RATIO) {
           if (this.dx * ratio > this.dy / ratio) {
             this.dy = -this.dx * ratio;
           } else {
+            this.dx = -this.dy / ratio;
+          }
+          if (w - this.dx < MIN_SIZE) {
+            this.dx = -(MIN_SIZE - w);
+            this.dy = -this.dx * ratio;
+          }
+          if (h + this.dy < MIN_SIZE) {
+            this.dy = MIN_SIZE - h;
             this.dx = -this.dy / ratio;
           }
         }
@@ -355,6 +417,7 @@ export class BoxSizeController extends Controller {
     const ghostCCS = this.ghost.map((p) => lcs2ccs(canvas, shape, p));
     const width = this.ghost[2][0] - this.ghost[0][0];
     const height = this.ghost[2][1] - this.ghost[0][1];
+    const ratio = width / shape.width;
 
     // find best-fit [dx, dy]
     const delta = fitEnclosureInCSS(
@@ -385,6 +448,14 @@ export class BoxSizeController extends Controller {
     tr.startTransaction("resize");
     tr.moveShapes(diagram, [shape], x1 - shape.left, y1 - shape.top);
     tr.resize(shape, w, h);
+    if (this.doScale) {
+      tr.atomicAssign(shape, "fontSize", shape.fontSize * ratio);
+      tr.atomicAssign(
+        shape,
+        "padding",
+        shape.padding.map((v) => v * ratio)
+      );
+    }
     tr.resolveAllConstraints(diagram, canvas);
     tr.endTransaction();
 
