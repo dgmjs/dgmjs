@@ -34,7 +34,7 @@ export class SelectionManager extends EventEmitter {
    * Trigger event
    */
   triggerEvent() {
-    this.emit("select", this.selections);
+    this.emit("change", this.selections);
   }
 
   /**

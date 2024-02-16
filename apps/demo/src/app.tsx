@@ -31,10 +31,10 @@ function App() {
       editor.setActiveHandler("Select");
       editor.fit();
       editor.setShowGrid(true);
-      editor.state.selections.on("select", (shapes) => {
+      editor.state.selections.on("change", (shapes) => {
         demoStore.setSelections([...shapes]);
       });
-      editor.on("handlerChange", (handlerId) => {
+      editor.on("activeHandlerChange", (handlerId) => {
         demoStore.setActiveHandler(handlerId);
       });
       editor.factory.on("create", (shape: Shape) => {

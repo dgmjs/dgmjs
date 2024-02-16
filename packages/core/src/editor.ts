@@ -146,7 +146,7 @@ class Editor extends EventEmitter {
     this.state.store.setRoot(diagram);
     this.state.diagram = diagram;
     this.state.transform.on("transaction", () => this.repaint());
-    this.state.selections.on("select", () => this.repaint());
+    this.state.selections.on("change", () => this.repaint());
     this.factory.on("create", (shape: Shape) => {
       this.state.selections.deselectAll();
       if (shape instanceof Text) {
@@ -669,7 +669,7 @@ class Editor extends EventEmitter {
       this.activeHandlerId = id;
       this.activeHandler = this.handlers[this.activeHandlerId];
       this.activeHandler.onActivate(this);
-      this.emit("handlerChange", this.activeHandlerId);
+      this.emit("activeHandlerChange", this.activeHandlerId);
     }
   }
 
