@@ -41,6 +41,7 @@
     "@tiptap/extension-text-style": "^2.2.2",
     "@tiptap/extension-underline": "^2.2.2",
     "@tiptap/react": "^2.2.2",
+    "browser-fs-access": "^0.35.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "lucide-react": "^0.323.0",

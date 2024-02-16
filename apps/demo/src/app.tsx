@@ -1,13 +1,5 @@
 import { useEffect } from "react";
-import {
-  Box,
-  Diagram,
-  Editor,
-  Shape,
-  ShapeValues,
-  Text,
-  convertDocToText,
-} from "@dgmjs/core";
+import { Diagram, Editor, Shape, ShapeValues } from "@dgmjs/core";
 import { Palette } from "./components/palette";
 import { useDemoStore } from "./store";
 import { Options } from "./components/options";
@@ -15,8 +7,8 @@ import { Menus } from "./components/menus";
 import { PropertySidebar } from "./components/property-sidebar/property-sidebar";
 import fontJson from "./fonts.json";
 import { Font, fetchFonts, insertFontsToDocument } from "./font-manager";
-import { TextEditor } from "./components/text-editor/text-editor";
 import { customSetup } from "./custom-setup";
+import { ShapeSidebar } from "./components/shape-sidebar/shape-sidebar";
 
 declare global {
   interface Window {
@@ -62,8 +54,8 @@ function App() {
       }
 
       editor.repaint();
+      demoStore.setDiagram(editor.state.store.root as Diagram);
       window.editor = editor;
-
       window.addEventListener("resize", () => {
         window.editor.fit();
       });
@@ -75,33 +67,20 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleSelect = (selection: Shape[]) => {
+    window.editor.state.selections.select(selection);
+  };
+
   const handleValuesChange = (values: ShapeValues) => {
     const shapes = window.editor.state.selections.getSelections();
     window.editor.actions.update(values);
     demoStore.setSelections([...shapes]);
   };
 
-  const handleEditingTextChange = (values: ShapeValues) => {
-    if (demoStore.editingText) {
-      const textValue = convertDocToText(values.text).trim();
-      const textShape = demoStore.editingText;
-      // if text is empty, delete text
-      if (
-        textShape instanceof Text &&
-        textShape.enable &&
-        textValue.length === 0
-      ) {
-        window.editor.actions.delete_([textShape]);
-      } else {
-        window.editor.actions.update(values, [textShape]);
-      }
-    }
-  };
-
   return (
     <div className="absolute inset-0 h-[calc(100dvh)] select-none">
       <div
-        className="absolute top-10 bottom-0 left-0 right-64"
+        className="absolute top-10 bottom-0 left-64 right-64"
         id="editor-holder"
       />
       <div className="absolute top-0 inset-x-0 h-10 border-b flex items-center justify-between bg-background">
@@ -109,16 +88,11 @@ function App() {
         <Palette />
         <Options />
       </div>
+      <ShapeSidebar diagram={demoStore.diagram} onSelect={handleSelect} />
       <PropertySidebar
         shapes={demoStore.selections}
         onChange={handleValuesChange}
       />
-      {demoStore.editingText instanceof Box && (
-        <TextEditor
-          text={demoStore.editingText}
-          onChange={handleEditingTextChange}
-        />
-      )}
     </div>
   );
 }

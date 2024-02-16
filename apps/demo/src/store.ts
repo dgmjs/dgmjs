@@ -1,4 +1,4 @@
-import { Box, Shape } from "@dgmjs/core";
+import { Diagram, Shape } from "@dgmjs/core";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
@@ -7,14 +7,15 @@ export interface DemoState {
   origin: number[];
   theme: "light" | "dark";
   activeHandler: string | null;
+  diagram: Diagram | null;
   selections: Shape[];
-  editingText: Box | null;
+  libraries: Diagram[];
   setScale: (scale: number) => void;
   setOrigin: (origin: [number, number]) => void;
   setTheme: (theme: "light" | "dark") => void;
   setActiveHandler: (handlerId: string | null) => void;
+  setDiagram: (diagram: Diagram | null) => void;
   setSelections: (selections: Shape[]) => void;
-  setEditingText: (text: Box | null) => void;
 }
 
 export const useDemoStore = create<DemoState>()(
@@ -24,8 +25,9 @@ export const useDemoStore = create<DemoState>()(
       origin: [0, 0],
       theme: "light",
       activeHandler: "Select",
+      diagram: null,
       selections: [],
-      editingText: null,
+      libraries: [],
       setScale: (scale) => set((state) => ({ scale })),
       setOrigin: (origin) => set((state) => ({ origin })),
       setTheme: (theme) => {
@@ -36,9 +38,8 @@ export const useDemoStore = create<DemoState>()(
       },
       setActiveHandler: (handlerId) =>
         set((state) => ({ activeHandler: handlerId })),
+      setDiagram: (diagram) => set((state) => ({ diagram })),
       setSelections: (selections) => set((state) => ({ selections })),
-      setEditingText: (text) =>
-        set((state) => ({ editingText: text, selections: [] })),
     }),
     { name: "DemoStore" }
   )
