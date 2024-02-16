@@ -583,6 +583,7 @@ export function measureText(
 }
 
 export function drawRichText(canvas: Canvas, shape: Box) {
+  canvas.storeState();
   let doc = preprocessDocNode(
     canvas,
     typeof shape.text === "string" ? convertTextToDoc(shape.text) : shape.text,
@@ -606,6 +607,7 @@ export function drawRichText(canvas: Canvas, shape: Box) {
       break;
   }
   drawDocNode(canvas, doc, shape, shape.innerLeft, top, shape.innerWidth, 1.5);
+  canvas.restoreState();
 }
 
 /**
@@ -631,6 +633,7 @@ export function drawRichText(canvas: Canvas, shape: Box) {
  * - canvas.fillText(x, y + BL)
  */
 export function drawPlainText(canvas: Canvas, shape: Box) {
+  canvas.storeState();
   const text: string =
     typeof shape.text !== "string" ? convertDocToText(shape.text) : shape.text;
   const lines = text.split("\n");
@@ -670,4 +673,5 @@ export function drawPlainText(canvas: Canvas, shape: Box) {
       y = y + lineHeight;
     }
   }
+  canvas.restoreState();
 }
