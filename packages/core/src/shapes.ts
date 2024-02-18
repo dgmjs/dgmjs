@@ -493,6 +493,26 @@ class Shape extends Obj {
   }
 
   /**
+   * Return a bounding box in canvas element.
+   * Used to place DOM elements over the canvas.
+   */
+  getBoundingRectInCanvasElement(canvas: Canvas): number[][] {
+    const rect = this.getBoundingRect().map((p) => {
+      let tp = canvas.globalCoordTransform(p);
+      return [tp[0] / canvas.ratio, tp[1] / canvas.ratio];
+    });
+    const scale = canvas.scale;
+    let width = geometry.width(rect) * (1 / scale);
+    let height = geometry.height(rect) * (1 / scale);
+    const left = rect[0][0] - (width * (1 - scale)) / 2;
+    const top = rect[0][1] - (height * (1 - scale)) / 2;
+    return [
+      [left, top],
+      [left + width, top + height],
+    ];
+  }
+
+  /**
    * Return a enclosure
    */
   getEnclosure(): number[][] {
@@ -1761,17 +1781,12 @@ class Embed extends Box {
   }
 
   renderDefault(canvas: Canvas): void {
-    // TODO: 스크린 좌표 변환 함수를 Canvas로 보내자.
-    const rect = this.getBoundingRect().map((p) => {
-      let tp = canvas.globalCoordTransform(p);
-      return [tp[0] / canvas.ratio, tp[1] / canvas.ratio];
-    });
+    const rect = this.getBoundingRectInCanvasElement(canvas);
     const scale = canvas.scale;
-    // const canvasRect = canvas.element.getBoundingClientRect();
-    let width = geometry.width(rect) * (1 / scale);
-    let height = geometry.height(rect) * (1 / scale);
-    const left = rect[0][0] - (width * (1 - scale)) / 2; // + canvasRect.left;
-    const top = rect[0][1] - (height * (1 - scale)) / 2; // + canvasRect.top;
+    const left = rect[0][0];
+    const top = rect[0][1];
+    const width = geometry.width(rect);
+    const height = geometry.height(rect);
 
     if (this.iframe) {
       this.iframe.style.left = `${left}px`;
