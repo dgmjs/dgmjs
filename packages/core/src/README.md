@@ -94,12 +94,12 @@ export class Transform {
 class Controller {
 
   initialize(editor: Editor, shape: Shape) {
-    const tr = editor.state.transform;
+    const tr = editor.transform;
     tr.startTransaction();
   }
 
   update(editor: Editor, shape: Shape) {
-    const tr = editor.state.transform;
+    const tr = editor.transform;
     const dx = ...
     const dy = ...
     tr.assign(shape, 'left', shape.left + dx)
@@ -107,7 +107,7 @@ class Controller {
   }
 
   finalize(editor: Editor, shape: Shape) {
-    const tr = editor.state.transform;
+    const tr = editor.transform;
     tr.endTransaction();
   }
 }
@@ -118,7 +118,7 @@ class Constraint {
     ...
   }
   resolve(editor: Editor, shape: Shape) {
-    const tr = editor.state.transform;
+    const tr = editor.transform;
     if (...) {
       tr.assign(shape, 'left', ...);
       tr.assign(shape, 'top', ...);

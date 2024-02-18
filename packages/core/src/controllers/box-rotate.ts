@@ -51,8 +51,8 @@ export class BoxRotateController extends Controller {
    */
   active(editor: Editor, shape: Shape): boolean {
     let value =
-      editor.state.selections.size() === 1 &&
-      editor.state.selections.isSelected(shape) &&
+      editor.selections.size() === 1 &&
+      editor.selections.isSelected(shape) &&
       shape.rotatable;
     // don't allow rotating a single line
     if (shape instanceof Line && shape.path.length === 2) value = false;
@@ -127,8 +127,8 @@ export class BoxRotateController extends Controller {
     let angle = Math.round(geometry.normalizeAngle(shape.rotate + this.delta));
 
     // transform shapes
-    const tr = editor.state.transform;
-    const diagram = editor.state.diagram as Diagram;
+    const tr = editor.transform;
+    const diagram = editor.diagram as Diagram;
     tr.startTransaction("rotate");
     tr.atomicAssign(shape, "rotate", angle);
     tr.resolveAllConstraints(diagram, editor.canvas);

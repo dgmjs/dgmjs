@@ -45,8 +45,8 @@ export class BoxMoveAnchoredController extends Controller {
    */
   active(editor: Editor, shape: Shape): boolean {
     return (
-      editor.state.selections.size() === 1 &&
-      editor.state.selections.isSelected(shape) &&
+      editor.selections.size() === 1 &&
+      editor.selections.isSelected(shape) &&
       shape instanceof Box &&
       shape.anchored
     );
@@ -105,8 +105,8 @@ export class BoxMoveAnchoredController extends Controller {
     const angle = geometry.angle(anchorPoint, shapeCenter);
     const length = Math.round(geometry.distance(shapeCenter, anchorPoint));
     // transform shape
-    const tr = editor.state.transform;
-    const diagram = editor.state.diagram as Diagram;
+    const tr = editor.transform;
+    const diagram = editor.diagram as Diagram;
     tr.startTransaction("move-anchor");
     tr.moveAnchor(shape, angle, length);
     tr.resolveAllConstraints(diagram, canvas);

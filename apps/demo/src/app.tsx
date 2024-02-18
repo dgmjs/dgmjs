@@ -31,30 +31,30 @@ function App() {
       editor.setActiveHandler("Select");
       editor.fit();
       editor.setShowGrid(true);
-      editor.state.selections.on("change", (shapes) => {
+      editor.selections.on("change", (shapes: any) => {
         demoStore.setSelections([...shapes]);
       });
-      editor.on("activeHandlerChange", (handlerId) => {
+      editor.on("activeHandlerChange", (handlerId: any) => {
         demoStore.setActiveHandler(handlerId);
       });
       editor.factory.on("create", (shape: Shape) => {
         editor.setActiveHandler("Select");
         // if (shape instanceof Text) editor.openInplaceEditor(shape);
       });
-      editor.state.transform.on("transaction", (tx) => {
-        const data = editor.state.store.toJSON();
+      editor.transform.on("transaction", (tx) => {
+        const data = editor.store.toJSON();
         localStorage.setItem("local-data", JSON.stringify(data));
       });
 
       // load from local storage
       const localData = localStorage.getItem("local-data");
       if (localData) {
-        editor.state.store.fromJSON(JSON.parse(localData));
-        editor.setDiagram(editor.state.store.root as Diagram);
+        editor.store.fromJSON(JSON.parse(localData));
+        editor.setDiagram(editor.store.root as Diagram);
       }
 
       editor.repaint();
-      demoStore.setDiagram(editor.state.store.root as Diagram);
+      demoStore.setDiagram(editor.store.root as Diagram);
       window.editor = editor;
       window.addEventListener("resize", () => {
         window.editor.fit();
@@ -68,11 +68,11 @@ function App() {
   }, []);
 
   const handleSelect = (selection: Shape[]) => {
-    window.editor.state.selections.select(selection);
+    window.editor.selections.select(selection);
   };
 
   const handleValuesChange = (values: ShapeValues) => {
-    const shapes = window.editor.state.selections.getSelections();
+    const shapes = window.editor.selections.getSelections();
     window.editor.actions.update(values);
     demoStore.setSelections([...shapes]);
   };

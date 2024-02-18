@@ -8,7 +8,6 @@ export { Store } from "./core/store";
 export * from "./colors";
 export * from "./shapes";
 export { Editor, EditorOptions } from "./editor";
-export { EditorState } from "./editor-state";
 export * from "./handlers";
 export * from "./export";
 export { renderOnCanvas } from "./utils/canvas-utils";

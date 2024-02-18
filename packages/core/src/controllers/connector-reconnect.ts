@@ -53,8 +53,8 @@ export class ConnectorReconnectController extends Controller {
    */
   active(editor: Editor, shape: Shape): boolean {
     return (
-      editor.state.selections.size() === 1 &&
-      editor.state.selections.isSelected(shape) &&
+      editor.selections.size() === 1 &&
+      editor.selections.isSelected(shape) &&
       shape instanceof Connector
     );
   }
@@ -131,8 +131,8 @@ export class ConnectorReconnectController extends Controller {
     const isHead = cp > 0;
     const newEnd = this.connectionPoint ? this.end : null;
     // transform shape
-    const tr = editor.state.transform;
-    const diagram = editor.state.diagram as Diagram;
+    const tr = editor.transform;
+    const diagram = editor.diagram as Diagram;
     tr.startTransaction("reconnect");
     tr.setPath(shape, this.ghost);
     tr.atomicAssignRef(shape, isHead ? "head" : "tail", newEnd);

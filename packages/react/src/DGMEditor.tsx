@@ -33,7 +33,7 @@ export const DGMEditor = forwardRef(
       const editor = new Editor(editorHolderRef.current!, basicSetup());
 
       // events forwarding
-      editor.state.selections.on("select", (shapes) => {
+      editor.selections.on("select", (shapes) => {
         if (onSelectionChange) onSelectionChange(shapes);
       });
 

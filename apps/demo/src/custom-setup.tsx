@@ -13,6 +13,17 @@
 
 import { EmbedFactoryHandler, type EditorOptions } from "@dgmjs/core";
 import {
+  Box,
+  Connector,
+  Diagram,
+  Ellipse,
+  Embed,
+  Group,
+  Image,
+  Line,
+  Rectangle,
+  Shape,
+  Text,
   SelectHandler,
   SelectHandlerConnectorExtraBehavior,
   HandHandler,
@@ -45,6 +56,19 @@ export function customSetup(options?: EditorOptions): EditorOptions {
   );
 
   return {
+    instantiators: {
+      Shape: () => new Shape(),
+      Diagram: () => new Diagram(),
+      Box: () => new Box(),
+      Line: () => new Line(),
+      Rectangle: () => new Rectangle(),
+      Ellipse: () => new Ellipse(),
+      Text: () => new Text(),
+      Image: () => new Image(),
+      Connector: () => new Connector(),
+      Group: () => new Group(),
+      Embed: () => new Embed(),
+    },
     handlers: [
       new SelectHandler("Select", [new SelectHandlerConnectorExtraBehavior()]),
       new HandHandler("Hand"),
@@ -65,7 +89,7 @@ export function customSetup(options?: EditorOptions): EditorOptions {
       "mod-d": (editor) => editor.actions.duplicate(),
       "mod-v": (editor) => editor.actions.paste(),
       delete: (editor) => editor.actions.delete_(),
-      "mod-a": (editor) => editor.state.selections.selectAll(),
+      "mod-a": (editor) => editor.selections.selectAll(),
       "mod-[": (editor) => editor.actions.bringForward(),
       "mod-]": (editor) => editor.actions.sendBackward(),
       "mod-alt-[": (editor) => editor.actions.bringToFront(),

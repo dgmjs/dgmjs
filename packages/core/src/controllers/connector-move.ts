@@ -44,8 +44,8 @@ export class ConnectorMoveController extends Controller {
    */
   active(editor: Editor, shape: Shape): boolean {
     return (
-      editor.state.selections.size() === 1 &&
-      editor.state.selections.isSelected(shape) &&
+      editor.selections.size() === 1 &&
+      editor.selections.isSelected(shape) &&
       shape instanceof Connector
     );
   }
@@ -122,7 +122,7 @@ export class ConnectorMoveController extends Controller {
       ) as Shape;
     if (!targetShape || targetShape instanceof Diagram) return;
     const canvas = editor.canvas;
-    const diagram = editor.state.diagram as Diagram;
+    const diagram = editor.diagram as Diagram;
     let p1 = targetShape.localCoordTransform(
       canvas,
       this.dragStartPoint,
@@ -145,7 +145,7 @@ export class ConnectorMoveController extends Controller {
 
     // transform shape
     if (dx !== 0 || dy !== 0) {
-      const tr = editor.state.transform;
+      const tr = editor.transform;
       tr.startTransaction("repath");
       tr.setPath(shape, newPath);
       tr.atomicAssignRef(shape, "head", null);

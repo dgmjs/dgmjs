@@ -23,7 +23,6 @@ import {
 import { assert } from "./std/assert";
 import * as geometry from "./graphics/geometry";
 import * as utils from "./graphics/utils";
-import { EditorState } from "./editor-state";
 import { ShapeFactory } from "./factory";
 import type { Obj } from "./core/obj";
 import { colors } from "./colors";
@@ -31,6 +30,11 @@ import { Actions } from "./actions";
 import { KeyMap, KeymapManager } from "./keymap-manager";
 import { AutoScroller } from "./utils/auto-scroller";
 import { createPointerEvent, createTouchEvent } from "./utils/canvas-utils";
+import { Instantiator, InstantiatorFun } from "./core/instantiator";
+import { Store } from "./core/store";
+import { Transform } from "./transform/transform";
+import { SelectionManager } from "./selection-manager";
+import { Clipboard } from "./core/clipboard";
 
 /**
  * Inplace Editor
@@ -42,6 +46,7 @@ export abstract class InplaceEditor {
 }
 
 export interface EditorOptions {
+  instantiators?: Record<string, InstantiatorFun>;
   handlers?: Handler[];
   keymap?: KeyMap;
   inplaceEditors?: InplaceEditor[];
@@ -56,7 +61,14 @@ export interface EditorOptions {
 class Editor extends EventEmitter {
   options: EditorOptions;
   platform: string;
-  state: EditorState;
+
+  instantiator: Instantiator;
+  store: Store;
+  transform: Transform;
+  clipboard: Clipboard;
+  selections: SelectionManager;
+  diagram: Diagram | null;
+
   factory: ShapeFactory;
   actions: Actions;
   keymap: KeymapManager;
@@ -93,12 +105,18 @@ class Editor extends EventEmitter {
       allowCreateTextOnConnector: true,
       ...options,
     };
-    this.platform = this.detectPlatform();
-    this.parent = editorHolder;
-    this.state = new EditorState();
+    this.instantiator = new Instantiator(options.instantiators);
+    this.store = new Store(this.instantiator);
+    this.transform = new Transform(this.store);
+    this.clipboard = new Clipboard(this.store, this.transform);
+    this.selections = new SelectionManager(this);
     this.factory = new ShapeFactory(this);
     this.actions = new Actions(this);
     this.keymap = new KeymapManager(this);
+    this.diagram = null;
+
+    this.platform = this.detectPlatform();
+    this.parent = editorHolder;
     this.inplaceEditors = [];
     this.autoScroller = new AutoScroller(this);
     this.autoScroller.setEnabled(this.options.allowAutoScroll ?? true);
@@ -143,16 +161,16 @@ class Editor extends EventEmitter {
 
   initializeState() {
     const diagram = new Diagram();
-    this.state.store.setRoot(diagram);
-    this.state.diagram = diagram;
-    this.state.transform.on("transaction", () => this.repaint());
-    this.state.selections.on("change", () => this.repaint());
+    this.store.setRoot(diagram);
+    this.diagram = diagram;
+    this.transform.on("transaction", () => this.repaint());
+    this.selections.on("change", () => this.repaint());
     this.factory.on("create", (shape: Shape) => {
-      this.state.selections.deselectAll();
+      this.selections.deselectAll();
       if (shape instanceof Text) {
         this.openInplaceEditor(shape);
       } else {
-        this.state.selections.select([shape]);
+        this.selections.select([shape]);
       }
     });
   }
@@ -264,16 +282,16 @@ class Editor extends EventEmitter {
     // mouse double click
     this.canvasElement.addEventListener("dblclick", (e) => {
       this.focus();
-      this.state.selections.deselectAll();
+      this.selections.deselectAll();
       const event = createPointerEvent(this.canvasElement, this.canvas, e);
       const p = this.canvas.globalCoordTransformRev([event.x, event.y]);
       const x = p[0];
       const y = p[1];
-      if (this.state.diagram) {
+      if (this.diagram) {
         // allows double click on a disable shape (e.g. a text inside another shape)
         const pred = (s: Obj) =>
           (s as Shape).visible && (s as Shape).containsPoint(this.canvas, p);
-        const shape: Shape | null = this.state.diagram.findDepthFirst(
+        const shape: Shape | null = this.diagram.findDepthFirst(
           pred
         ) as Shape | null;
         // open an inplace editors
@@ -365,7 +383,7 @@ class Editor extends EventEmitter {
         this.setActiveHandler(this.defaultHandlerId);
       }
       if (e.key === "Enter") {
-        const selections = this.state.selections.getSelections();
+        const selections = this.selections.getSelections();
         if (selections.length === 1 && selections[0] instanceof Box) {
           const shape = selections[0] as Box;
           if (shape.textEditable) {
@@ -404,8 +422,8 @@ class Editor extends EventEmitter {
    * Set diagram
    */
   setDiagram(diagram: Diagram) {
-    this.state.diagram = diagram;
-    this.state.selections.deselectAll();
+    this.diagram = diagram;
+    this.selections.deselectAll();
     this.repaint();
   }
 
@@ -563,9 +581,9 @@ class Editor extends EventEmitter {
    * Fit diagram to screen and move to center
    */
   fitToScreen(scaleDelta: number = 0) {
-    if (this.state.diagram) {
+    if (this.diagram) {
       // diagram size in GCS
-      const diagram = this.state.diagram;
+      const diagram = this.diagram;
       const box = diagram.getDiagramBoundingBox(this.canvas);
       const center = geometry.center(box);
       const dw = geometry.width(box);
@@ -738,10 +756,10 @@ class Editor extends EventEmitter {
    * Repaint diagram
    */
   repaint(drawSelection: boolean = true) {
-    if (this.state.diagram) {
+    if (this.diagram) {
       this.clearBackground(this.canvas);
       this.drawGrid(this.canvas);
-      this.state.diagram.render(this.canvas);
+      this.diagram.render(this.canvas);
       if (drawSelection) this.drawSelection();
     } else {
       this.clearBackground(this.canvas);
@@ -1158,7 +1176,7 @@ class Manipulator {
   pointerMove(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
     if (
       this.mouseIn(editor, shape, e) &&
-      !editor.state.selections.isSelected(shape)
+      !editor.selections.isSelected(shape)
     ) {
       this.drawHovering(editor, shape, e);
     }

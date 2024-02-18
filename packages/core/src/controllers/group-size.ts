@@ -26,7 +26,7 @@ export class GroupSizeController extends BoxSizeController {
    */
   finalize(editor: Editor, shape: Box) {
     const canvas = editor.canvas;
-    const diagram = editor.state.diagram as Diagram;
+    const diagram = editor.diagram as Diagram;
     const ghostCCS = this.ghost.map((p) => lcs2ccs(canvas, shape, p));
     const width = this.ghost[2][0] - this.ghost[0][0];
     const height = this.ghost[2][1] - this.ghost[0][1];
@@ -52,7 +52,7 @@ export class GroupSizeController extends BoxSizeController {
     const y1 = this.ghost[0][1] + delta[1];
     const x2 = this.ghost[2][0] + delta[0];
     const y2 = this.ghost[2][1] + delta[1];
-    const tr = editor.state.transform;
+    const tr = editor.transform;
     tr.startTransaction("group-resize");
     tr.moveShapes(diagram, [shape], x1 - shape.left, y1 - shape.top);
     tr.resize(shape, x2 - x1, y2 - y1);
