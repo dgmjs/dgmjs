@@ -12,7 +12,7 @@
  */
 
 import { MoonIcon, SunIcon } from "lucide-react";
-import { useDemoStore } from "@/store";
+import { useDemoStore } from "@/demo-store";
 import { Button } from "./ui/button";
 
 export function Options() {

@@ -24,7 +24,7 @@ import {
 import { ConnectorIcon, LineIcon } from "@/components/icons";
 import { Toggle } from "@/components/ui/toggle";
 import { Separator } from "@/components/ui/separator";
-import { useDemoStore } from "@/store";
+import { useDemoStore } from "@/demo-store";
 
 interface PaletteItemProps {
   handlerId: string;

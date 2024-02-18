@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/popover";
 import { ColorPanel } from "../../common/color-panel";
 import { cn } from "@/lib/utils";
-import { useDemoStore } from "@/store";
+import { useDemoStore } from "@/demo-store";
 
 interface ColorFieldProps extends React.HTMLAttributes<HTMLDivElement> {
   value: string | undefined;

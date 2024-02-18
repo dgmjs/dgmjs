@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Diagram, Editor, Shape, ShapeValues } from "@dgmjs/core";
 import { Palette } from "./components/palette";
-import { useDemoStore } from "./store";
+import { useDemoStore } from "./demo-store";
 import { Options } from "./components/options";
 import { Menus } from "./components/menus";
 import { PropertySidebar } from "./components/property-sidebar/property-sidebar";
