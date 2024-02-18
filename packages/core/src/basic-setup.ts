@@ -23,6 +23,7 @@ import {
   LineFactoryHandler,
   FreehandFactoryHandler,
   ImageFactoryHandler,
+  EmbedFactoryHandler,
 } from "./handlers";
 import { PlainTextInplaceEditor } from "./inplace-editors/plain-text-inplace-editor";
 import { RichTextInplaceEditor } from "./inplace-editors/rich-text-inplace-editor";
@@ -39,6 +40,7 @@ export function basicSetup(options?: EditorOptions): EditorOptions {
       new LineFactoryHandler("Line"),
       new FreehandFactoryHandler("Freehand"),
       new ImageFactoryHandler("Image"),
+      new EmbedFactoryHandler("Embed"),
     ],
     keymap: {
       "mod-z": (editor) => editor.actions.undo(),

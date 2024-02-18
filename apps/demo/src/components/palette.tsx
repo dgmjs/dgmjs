@@ -17,6 +17,7 @@ import {
   ImageIcon,
   MousePointer2Icon,
   Pencil,
+  ScanIcon,
   SquareIcon,
   TypeIcon,
 } from "lucide-react";
@@ -82,6 +83,9 @@ export function Palette() {
       </PaletteItem>
       <PaletteItem handlerId="Freehand">
         <Pencil size={16} />
+      </PaletteItem>
+      <PaletteItem handlerId="Embed">
+        <ScanIcon size={16} />
       </PaletteItem>
     </div>
   );

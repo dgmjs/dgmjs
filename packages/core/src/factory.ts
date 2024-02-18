@@ -4,6 +4,7 @@ import {
   AlignmentKind,
   Connector,
   Ellipse,
+  Embed,
   Image,
   Line,
   LineType,
@@ -255,5 +256,23 @@ export class ShapeFactory extends EventEmitter {
     connector.height = geometry.height(rect);
     this.insertShape(connector);
     return connector;
+  }
+
+  createEmbed(rect: number[][]): Embed {
+    const embed = new Embed();
+    embed.left = rect[0][0];
+    embed.top = rect[0][1];
+    let w = geometry.width(rect);
+    let h = geometry.height(rect);
+    if (geometry.distance(rect[0], rect[1]) <= SHAPE_MIN_SIZE) {
+      w = 100;
+      h = 100;
+    }
+    embed.width = w;
+    embed.height = h;
+    embed.horzAlign = AlignmentKind.CENTER;
+    embed.vertAlign = AlignmentKind.MIDDLE;
+    this.insertShape(embed);
+    return embed;
   }
 }

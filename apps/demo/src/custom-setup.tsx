@@ -11,7 +11,7 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { type EditorOptions } from "@dgmjs/core";
+import { EmbedFactoryHandler, type EditorOptions } from "@dgmjs/core";
 import {
   SelectHandler,
   SelectHandlerConnectorExtraBehavior,
@@ -55,6 +55,7 @@ export function customSetup(options?: EditorOptions): EditorOptions {
       new LineFactoryHandler("Line"),
       new FreehandFactoryHandler("Freehand"),
       new ImageFactoryHandler("Image"),
+      new EmbedFactoryHandler("Embed"),
     ],
     keymap: {
       "mod-z": (editor) => editor.actions.undo(),

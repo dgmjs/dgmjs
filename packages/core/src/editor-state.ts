@@ -1,5 +1,5 @@
 import { Instantiator } from "./core/instantiator";
-import { Shape, Diagram, Box, Line } from "./shapes";
+import { Shape, Diagram, Box, Line, Embed } from "./shapes";
 import { Store } from "./core/store";
 import { Connector, Ellipse, Rectangle, Text, Image, Group } from "./shapes";
 import { Clipboard } from "./core/clipboard";
@@ -32,6 +32,7 @@ export class EditorState {
     this.instantiator.register("Image", () => new Image());
     this.instantiator.register("Connector", () => new Connector());
     this.instantiator.register("Group", () => new Group());
+    this.instantiator.register("Embed", () => new Embed());
     this.diagram = null;
   }
 }

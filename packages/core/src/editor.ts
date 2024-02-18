@@ -163,10 +163,10 @@ class Editor extends EventEmitter {
     this.canvasElement.style.touchAction = "none"; // prevent pointer cancel event in mobile
     this.canvasElement.style.outline = "none"; // remove focus outline
     this.parent.appendChild(this.canvasElement);
-    const context = this.canvasElement.getContext("2d");
-    if (!context) throw new Error("Failed to create context2d");
+    // const context = this.canvasElement.getContext("2d");
+    // if (!context) throw new Error("Failed to create context2d");
     const pixelRatio = window.devicePixelRatio ?? 1;
-    this.canvas = new Canvas(context, pixelRatio);
+    this.canvas = new Canvas(this.canvasElement, pixelRatio);
     this.canvas.colorVariables = { ...colors["light"] };
 
     // pointer down handler

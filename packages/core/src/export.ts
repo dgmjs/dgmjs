@@ -27,10 +27,7 @@ function getImageCanvas(diagram: Diagram, options: ExportImageOptions) {
 
   // make a new canvas element for making image data
   const canvasElement = document.createElement("canvas");
-  const canvas = new Canvas(
-    canvasElement.getContext("2d") as CanvasRenderingContext2D,
-    scale
-  );
+  const canvas = new Canvas(canvasElement, scale);
   let boundingBox = diagram.getDiagramBoundingBox(canvas);
 
   // initialize new canvas
@@ -122,7 +119,12 @@ export async function getSVGImageData(
   const w = geometry.width(boundingBox);
   const h = geometry.height(boundingBox);
   const ctx = new Context(w * scale, h * scale);
-  const svgCanvas = new Canvas(ctx, 1);
+  const pseudoCanvas: HTMLCanvasElement = {
+    getContext: (contextId: string) => {
+      if (contextId === "2d") return ctx;
+    },
+  } as HTMLCanvasElement;
+  const svgCanvas = new Canvas(pseudoCanvas, 1);
 
   // Initialize new SVG Canvas
   svgCanvas.origin = [-boundingBox[0][0], -boundingBox[0][1]];
