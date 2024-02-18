@@ -25,7 +25,7 @@ import {
   TypeIcon,
 } from "lucide-react";
 import { LineIcon } from "@/components/icons";
-import { useDemoStore } from "@/store";
+import { useDemoStore } from "@/demo-store";
 
 interface ShapeTreeNodeProps {
   level: number;

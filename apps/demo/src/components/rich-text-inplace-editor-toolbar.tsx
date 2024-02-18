@@ -40,7 +40,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "./ui/button";
 import { ColorPalette, simplePalette } from "./common/color-palette";
-import { useDemoStore } from "@/store";
+import { useDemoStore } from "@/demo-store";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 
 export function RichTextInplaceEditorToolbar({

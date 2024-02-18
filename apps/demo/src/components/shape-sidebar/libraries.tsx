@@ -29,7 +29,7 @@ import {
 import { fileOpen } from "browser-fs-access";
 import { Button } from "@/components/ui/button";
 import { Empty } from "../common/empty";
-import { useDemoStore } from "@/store";
+import { useDemoStore } from "@/demo-store";
 
 interface LibrariesProps {
   onShapeHover?: (target: HTMLDivElement | null, shape: Shape | null) => void;

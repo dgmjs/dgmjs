@@ -13,7 +13,7 @@
 
 import { useEffect, useRef } from "react";
 import { Shape, Diagram, renderOnCanvas } from "@dgmjs/core";
-import { useDemoStore } from "@/store";
+import { useDemoStore } from "@/demo-store";
 
 export type ShapeClickEvent = (shape: Shape) => void;
 

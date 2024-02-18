@@ -23,12 +23,39 @@ import {
   LineFactoryHandler,
   FreehandFactoryHandler,
   ImageFactoryHandler,
+  EmbedFactoryHandler,
 } from "./handlers";
 import { PlainTextInplaceEditor } from "./inplace-editors/plain-text-inplace-editor";
 import { RichTextInplaceEditor } from "./inplace-editors/rich-text-inplace-editor";
+import {
+  Box,
+  Connector,
+  Diagram,
+  Ellipse,
+  Embed,
+  Group,
+  Image,
+  Line,
+  Rectangle,
+  Shape,
+  Text,
+} from "./shapes";
 
 export function basicSetup(options?: EditorOptions): EditorOptions {
   return {
+    instantiators: {
+      Shape: () => new Shape(),
+      Diagram: () => new Diagram(),
+      Box: () => new Box(),
+      Line: () => new Line(),
+      Rectangle: () => new Rectangle(),
+      Ellipse: () => new Ellipse(),
+      Text: () => new Text(),
+      Image: () => new Image(),
+      Connector: () => new Connector(),
+      Group: () => new Group(),
+      Embed: () => new Embed(),
+    },
     handlers: [
       new SelectHandler("Select", [new SelectHandlerConnectorExtraBehavior()]),
       new HandHandler("Hand"),
@@ -39,6 +66,7 @@ export function basicSetup(options?: EditorOptions): EditorOptions {
       new LineFactoryHandler("Line"),
       new FreehandFactoryHandler("Freehand"),
       new ImageFactoryHandler("Image"),
+      new EmbedFactoryHandler("Embed"),
     ],
     keymap: {
       "mod-z": (editor) => editor.actions.undo(),
@@ -48,7 +76,7 @@ export function basicSetup(options?: EditorOptions): EditorOptions {
       "mod-d": (editor) => editor.actions.duplicate(),
       "mod-v": (editor) => editor.actions.paste(),
       delete: (editor) => editor.actions.delete_(),
-      "mod-a": (editor) => editor.state.selections.selectAll(),
+      "mod-a": (editor) => editor.selections.selectAll(),
       "mod-[": (editor) => editor.actions.bringForward(),
       "mod-]": (editor) => editor.actions.sendBackward(),
       "mod-alt-[": (editor) => editor.actions.bringToFront(),

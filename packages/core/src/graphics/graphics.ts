@@ -187,6 +187,7 @@ function pathToString(path: SVGPath): string {
  * Canvas
  */
 class Canvas {
+  element: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
   colorVariables: Record<string, string>;
   generator: RoughGenerator;
@@ -205,7 +206,10 @@ class Canvas {
   origin: number[];
   scale: number;
 
-  constructor(context: CanvasRenderingContext2D, pixelRatio: number) {
+  constructor(element: HTMLCanvasElement, pixelRatio: number) {
+    this.element = element;
+    const context = this.element.getContext("2d");
+    if (!context) throw new Error("Failed to create context2d");
     this.context = context;
     this.colorVariables = {
       background: "#ffffff",

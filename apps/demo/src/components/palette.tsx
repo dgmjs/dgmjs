@@ -17,13 +17,14 @@ import {
   ImageIcon,
   MousePointer2Icon,
   Pencil,
+  ScanIcon,
   SquareIcon,
   TypeIcon,
 } from "lucide-react";
 import { ConnectorIcon, LineIcon } from "@/components/icons";
 import { Toggle } from "@/components/ui/toggle";
 import { Separator } from "@/components/ui/separator";
-import { useDemoStore } from "@/store";
+import { useDemoStore } from "@/demo-store";
 
 interface PaletteItemProps {
   handlerId: string;
@@ -82,6 +83,9 @@ export function Palette() {
       </PaletteItem>
       <PaletteItem handlerId="Freehand">
         <Pencil size={16} />
+      </PaletteItem>
+      <PaletteItem handlerId="Embed">
+        <ScanIcon size={16} />
       </PaletteItem>
     </div>
   );

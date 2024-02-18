@@ -73,8 +73,7 @@ export class BoxSizeController extends Controller {
    */
   active(editor: Editor, shape: Shape): boolean {
     let value =
-      editor.state.selections.size() === 1 &&
-      editor.state.selections.isSelected(shape);
+      editor.selections.size() === 1 && editor.selections.isSelected(shape);
     switch (this.position) {
       case SizingPosition.TOP:
         value =
@@ -443,8 +442,8 @@ export class BoxSizeController extends Controller {
     if (h < minH) h = minH;
 
     // transform shapes
-    const tr = editor.state.transform;
-    const diagram = editor.state.diagram as Diagram;
+    const tr = editor.transform;
+    const diagram = editor.diagram as Diagram;
     tr.startTransaction("resize");
     tr.moveShapes(diagram, [shape], x1 - shape.left, y1 - shape.top);
     tr.resize(shape, w, h);

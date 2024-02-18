@@ -63,8 +63,8 @@ export class BoxMoveAnchorPositionController extends Controller {
    */
   active(editor: Editor, shape: Shape): boolean {
     return (
-      editor.state.selections.size() === 1 &&
-      editor.state.selections.isSelected(shape) &&
+      editor.selections.size() === 1 &&
+      editor.selections.isSelected(shape) &&
       shape instanceof Box &&
       shape.anchored
     );
@@ -146,8 +146,8 @@ export class BoxMoveAnchorPositionController extends Controller {
   finalize(editor: Editor, shape: Box) {
     const canvas = editor.canvas;
     // transform shape
-    const tr = editor.state.transform;
-    const diagram = editor.state.diagram as Diagram;
+    const tr = editor.transform;
+    const diagram = editor.diagram as Diagram;
     tr.startTransaction("move-anchor");
     tr.atomicAssign(shape, "anchorPosition", this.anchorPosition);
     tr.resolveAllConstraints(diagram, canvas);

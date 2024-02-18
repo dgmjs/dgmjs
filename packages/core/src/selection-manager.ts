@@ -15,18 +15,18 @@ import { EventEmitter } from "events";
 import type { Shape } from "./shapes";
 import * as geometry from "./graphics/geometry";
 import type { Canvas } from "./graphics/graphics";
-import type { EditorState } from "./editor-state";
+import { Editor } from "./editor";
 
 /**
  * Selection Manager
  */
 export class SelectionManager extends EventEmitter {
-  editorState: EditorState;
+  editor: Editor;
   selections: Shape[];
 
-  constructor(editorState: EditorState) {
+  constructor(editorState: Editor) {
     super();
-    this.editorState = editorState;
+    this.editor = editorState;
     this.selections = [];
   }
 
@@ -105,7 +105,7 @@ export class SelectionManager extends EventEmitter {
       [x2, y2],
     ]);
     this.selections = [];
-    this.editorState.diagram?.traverse((s) => {
+    this.editor.diagram?.traverse((s) => {
       if (
         (s as Shape).visible &&
         (s as Shape).enable &&
@@ -123,7 +123,7 @@ export class SelectionManager extends EventEmitter {
    */
   selectAll() {
     this.selections = [];
-    this.editorState.diagram?.traverse((s) => {
+    this.editor.diagram?.traverse((s) => {
       if ((s as Shape).visible && (s as Shape).enable) {
         this.selections.push(s as Shape);
       }

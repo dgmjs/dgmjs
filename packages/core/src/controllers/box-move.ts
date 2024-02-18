@@ -44,8 +44,8 @@ export class BoxMoveController extends Controller {
    */
   active(editor: Editor, shape: Shape): boolean {
     let value =
-      editor.state.selections.size() === 1 &&
-      editor.state.selections.isSelected(shape) &&
+      editor.selections.size() === 1 &&
+      editor.selections.isSelected(shape) &&
       !(shape as Box).anchored;
     return value;
   }
@@ -141,15 +141,15 @@ export class BoxMoveController extends Controller {
 
     // determine container
     // (container shouldn't be itself of a descendant of target)
-    let container = editor.state.diagram?.getShapeAt(canvas, p2, [shape]);
+    let container = editor.diagram?.getShapeAt(canvas, p2, [shape]);
     const r = targetShape.find((s) => s.id === container?.id);
     if (r) container = null;
     if (!(container && container.canContain(targetShape)))
-      container = editor.state.diagram;
+      container = editor.diagram;
 
     // transform shapes
-    const tr = editor.state.transform;
-    const diagram = editor.state.diagram as Diagram;
+    const tr = editor.transform;
+    const diagram = editor.diagram as Diagram;
     tr.startTransaction("move");
     tr.moveShapes(diagram, [targetShape], dx, dy, container);
     tr.resolveAllConstraints(diagram, canvas);
@@ -188,7 +188,7 @@ export class BoxMoveController extends Controller {
     drawPolylineInLCS(canvas, shape, this.ghost);
     // hovering containable
     const dp = shape.localCoordTransform(canvas, this.dragPoint, true);
-    const container = editor.state.diagram?.getShapeAt(canvas, dp, [shape]);
+    const container = editor.diagram?.getShapeAt(canvas, dp, [shape]);
     if (container && container !== shape && container.canContain(shape)) {
       const manipulator = manipulatorManager.get(container.type);
       if (manipulator) manipulator.drawHovering(editor, container, e);

@@ -50,8 +50,7 @@ export function renderOnCanvas(
   canvasElement.style.height = `${ch}px`;
 
   // draw shape on canvas
-  const ctx = canvasElement.getContext("2d");
-  const canvas = new Canvas(ctx as CanvasRenderingContext2D, px);
+  const canvas = new Canvas(canvasElement, px);
   canvas.colorVariables = colors[theme];
   canvas.origin = [-box[0][0] + margin / scale, -box[0][1] + margin / scale];
   canvas.scale = scale;

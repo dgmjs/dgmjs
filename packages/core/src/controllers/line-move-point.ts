@@ -57,8 +57,8 @@ export class LineMovePointController extends Controller {
    */
   active(editor: Editor, shape: Shape): boolean {
     let value =
-      editor.state.selections.size() === 1 &&
-      editor.state.selections.isSelected(shape) &&
+      editor.selections.size() === 1 &&
+      editor.selections.isSelected(shape) &&
       shape instanceof Line &&
       shape.pathEditable;
     if (shape instanceof Connector && shape.routeType === RouteType.RECTILINEAR)
@@ -148,8 +148,8 @@ export class LineMovePointController extends Controller {
     const newPath = this.ghost.map((p) => [p[0] + delta[0], p[1] + delta[1]]);
 
     // transform shape
-    const diagram = editor.state.diagram as Diagram;
-    const tr = editor.state.transform;
+    const diagram = editor.diagram as Diagram;
+    const tr = editor.transform;
     tr.startTransaction("repath");
     tr.setPath(shape, newPath);
     tr.resolveAllConstraints(diagram, canvas);
