@@ -13,7 +13,7 @@
 
 import { EventEmitter } from "events";
 import { Canvas, CanvasPointerEvent } from "./graphics/graphics";
-import { Connector, Diagram, type Shape, Text, Box } from "./shapes";
+import { Connector, Diagram, Shape, Text, Box } from "./shapes";
 import {
   Cursor,
   Color,
@@ -106,7 +106,14 @@ class Editor extends EventEmitter {
       ...options,
     };
     this.instantiator = new Instantiator(options.instantiators);
-    this.store = new Store(this.instantiator);
+    this.store = new Store(this.instantiator, {
+      objInitializer: (o) => {
+        if (o instanceof Shape) o.initialze(this.canvas);
+      },
+      objFinalizer: (o) => {
+        if (o instanceof Shape) o.finalize(this.canvas);
+      },
+    });
     this.transform = new Transform(this.store);
     this.clipboard = new Clipboard(this.store, this.transform);
     this.selections = new SelectionManager(this);

@@ -205,6 +205,10 @@ class Shape extends Obj {
     this.scripts = [];
   }
 
+  initialze(canvas: Canvas) {}
+
+  finalize(canvas: Canvas) {}
+
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
     json.name = this.name;
@@ -1673,24 +1677,33 @@ class Connector extends Line {
  * Embed
  */
 class Embed extends Box {
-  iframe: HTMLIFrameElement;
+  iframe: HTMLIFrameElement | null;
 
   constructor() {
     super();
     this.type = "Embed";
-    this.iframe = document.createElement("iframe");
-    this.iframe.style.position = "absolute";
-    this.iframe.style.pointerEvents = "none";
-    this.iframe.src =
-      "https://www.youtube.com/embed/MTdbhePtCco?si=6-6HWSoOtx0qAmM6"; // "https://dgm.sh/home";
-    // <iframe width="560" height="315" src="https://www.youtube.com/embed/MTdbhePtCco?si=6-6HWSoOtx0qAmM6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    this.iframe = null;
+  }
+
+  initialze(canvas: Canvas): void {
+    if (!this.iframe) {
+      this.iframe = document.createElement("iframe");
+      this.iframe.style.position = "absolute";
+      this.iframe.style.pointerEvents = "none";
+      this.iframe.src =
+        "https://www.youtube.com/embed/MTdbhePtCco?si=6-6HWSoOtx0qAmM6"; // "https://dgm.sh/home";
+      canvas.element.parentElement?.appendChild(this.iframe);
+    }
+  }
+
+  finalize(canvas: Canvas): void {
+    if (this.iframe) {
+      this.iframe.remove();
+      this.iframe = null;
+    }
   }
 
   renderDefault(canvas: Canvas): void {
-    if (!this.iframe.parentElement) {
-      canvas.element.parentElement?.appendChild(this.iframe);
-    }
-
     // TODO: 스크린 좌표 변환 함수를 Canvas로 보내자.
     const rect = this.getBoundingRect().map((p) => {
       let tp = canvas.globalCoordTransform(p);
@@ -1703,11 +1716,13 @@ class Embed extends Box {
     const left = rect[0][0] - (width * (1 - scale)) / 2; // + canvasRect.left;
     const top = rect[0][1] - (height * (1 - scale)) / 2; // + canvasRect.top;
 
-    this.iframe.style.left = `${left}px`;
-    this.iframe.style.top = `${top}px`;
-    this.iframe.style.width = `${width}px`;
-    this.iframe.style.height = `${height}px`;
-    this.iframe.style.transform = `scale(${scale})`;
+    if (this.iframe) {
+      this.iframe.style.left = `${left}px`;
+      this.iframe.style.top = `${top}px`;
+      this.iframe.style.width = `${width}px`;
+      this.iframe.style.height = `${height}px`;
+      this.iframe.style.transform = `scale(${scale})`;
+    }
   }
 }
 
