@@ -15,8 +15,11 @@ import { assert } from "./std/assert";
 import { Canvas } from "./graphics/graphics";
 import {
   CONNECTION_POINT_APOTHEM,
+  Color,
   DEFAULT_FONT_SIZE,
   LINE_SELECTION_THRESHOLD,
+  SYSTEM_FONT,
+  SYSTEM_FONT_SIZE,
 } from "./graphics/const";
 import * as geometry from "./graphics/geometry";
 import * as utils from "./graphics/utils";
@@ -1674,6 +1677,60 @@ class Connector extends Line {
 }
 
 /**
+ * Frame
+ */
+class Frame extends Box {
+  constructor() {
+    super();
+    this.type = "Frame";
+    this.name = "Frame";
+    this.containable = true;
+  }
+
+  render(canvas: Canvas) {
+    if (this.visible) {
+      canvas.save();
+      this.assignStyles(canvas);
+      this.localTransform(canvas);
+      // const script = this.getScript(ScriptType.RENDER);
+      // if (script) {
+      //   try {
+      //     evalScript({ canvas: canvas, shape: this }, script);
+      //   } catch (err) {
+      //     console.log("[Script Error]", err);
+      //   }
+      // } else {
+      //   this.renderDefault(canvas);
+      // }
+      canvas.storeState();
+      canvas.fillColor = Color.BACKGROUND;
+      canvas.fillStyle = FillStyle.SOLID;
+      canvas.strokeColor = Color.FOREGROUND;
+      canvas.strokePattern = [];
+      canvas.strokeWidth = 1 / canvas.scale;
+      canvas.fontColor = Color.FOREGROUND;
+      const fontSize = SYSTEM_FONT_SIZE / canvas.scale;
+      canvas.font = utils.toCssFont("normal", 400, fontSize, SYSTEM_FONT);
+      canvas.alpha = 1;
+      canvas.roughness = 0;
+
+      canvas.fillText(this.left, this.top - fontSize / 2, this.name);
+      canvas.roundRect(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.corners
+      );
+      canvas.context.clip();
+      canvas.restoreState();
+      this.children.forEach((s) => (s as Shape).render(canvas));
+      canvas.restore();
+    }
+  }
+}
+
+/**
  * Embed
  */
 class Embed extends Box {
@@ -1881,6 +1938,7 @@ export {
   Image,
   Group,
   Connector,
+  Frame,
   Embed,
   constraintManager,
   type ShapeValues,

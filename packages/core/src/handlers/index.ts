@@ -8,6 +8,7 @@ import { RectangleFactoryHandler } from "./rectangle-handler";
 import { SelectHandler } from "./select-handler";
 import { SelectHandlerConnectorExtraBehavior } from "./select-handler-extra";
 import { TextFactoryHandler } from "./text-handler";
+import { FrameFactoryHandler } from "./frame-handler";
 import { EmbedFactoryHandler } from "./embed-handler";
 
 export {
@@ -21,5 +22,6 @@ export {
   LineFactoryHandler,
   FreehandFactoryHandler,
   ImageFactoryHandler,
+  FrameFactoryHandler,
   EmbedFactoryHandler,
 };

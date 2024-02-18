@@ -25,6 +25,7 @@ import {
   ImageFactoryHandler,
   EmbedFactoryHandler,
 } from "./handlers";
+import { FrameFactoryHandler } from "./handlers/frame-handler";
 import { PlainTextInplaceEditor } from "./inplace-editors/plain-text-inplace-editor";
 import { RichTextInplaceEditor } from "./inplace-editors/rich-text-inplace-editor";
 import {
@@ -33,6 +34,7 @@ import {
   Diagram,
   Ellipse,
   Embed,
+  Frame,
   Group,
   Image,
   Line,
@@ -54,6 +56,7 @@ export function basicSetup(options?: EditorOptions): EditorOptions {
       Image: () => new Image(),
       Connector: () => new Connector(),
       Group: () => new Group(),
+      Frame: () => new Frame(),
       Embed: () => new Embed(),
     },
     handlers: [
@@ -66,6 +69,7 @@ export function basicSetup(options?: EditorOptions): EditorOptions {
       new LineFactoryHandler("Line"),
       new FreehandFactoryHandler("Freehand"),
       new ImageFactoryHandler("Image"),
+      new FrameFactoryHandler("Frame"),
       new EmbedFactoryHandler("Embed"),
     ],
     keymap: {

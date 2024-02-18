@@ -11,7 +11,12 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { EmbedFactoryHandler, type EditorOptions } from "@dgmjs/core";
+import {
+  EmbedFactoryHandler,
+  type EditorOptions,
+  Frame,
+  FrameFactoryHandler,
+} from "@dgmjs/core";
 import {
   Box,
   Connector,
@@ -67,6 +72,7 @@ export function customSetup(options?: EditorOptions): EditorOptions {
       Image: () => new Image(),
       Connector: () => new Connector(),
       Group: () => new Group(),
+      Frame: () => new Frame(),
       Embed: () => new Embed(),
     },
     handlers: [
@@ -79,6 +85,7 @@ export function customSetup(options?: EditorOptions): EditorOptions {
       new LineFactoryHandler("Line"),
       new FreehandFactoryHandler("Freehand"),
       new ImageFactoryHandler("Image"),
+      new FrameFactoryHandler("Frame"),
       new EmbedFactoryHandler("Embed"),
     ],
     keymap: {
