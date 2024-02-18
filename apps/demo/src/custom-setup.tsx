@@ -49,17 +49,6 @@ import { RichTextInplaceEditorToolbar } from "./components/rich-text-inplace-edi
 export function customSetup(options?: EditorOptions): EditorOptions {
   const plainTextInplaceEditor = new PlainTextInplaceEditor();
   const richTextInplaceEditor = new RichTextInplaceEditor();
-
-  ReactDOM.createRoot(
-    document.getElementById(
-      "rich-text-inplace-editor-toolbar"
-    ) as HTMLDivElement
-  ).render(
-    <React.StrictMode>
-      <RichTextInplaceEditorToolbar inplaceEditor={richTextInplaceEditor} />
-    </React.StrictMode>
-  );
-
   return {
     instantiators: {
       Shape: () => new Shape(),
@@ -122,6 +111,17 @@ export function customSetup(options?: EditorOptions): EditorOptions {
     allowAutoScroll: true,
     allowCreateTextOnCanvas: true,
     allowCreateTextOnConnector: true,
+    onReady: (editor) => {
+      ReactDOM.createRoot(
+        document.getElementById(
+          "rich-text-inplace-editor-toolbar"
+        ) as HTMLDivElement
+      ).render(
+        <React.StrictMode>
+          <RichTextInplaceEditorToolbar inplaceEditor={richTextInplaceEditor} />
+        </React.StrictMode>
+      );
+    },
     ...(options ?? {}),
   };
 }

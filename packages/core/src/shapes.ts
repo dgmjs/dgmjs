@@ -494,7 +494,9 @@ class Shape extends Obj {
 
   /**
    * Return a bounding box in canvas element.
-   * Used to place DOM elements over the canvas.
+   *
+   * [Note] If you want to place DOM elements over the canvas, use this method
+   * and don't forget to apply transform scale to the DOM element.
    */
   getBoundingRectInCanvasElement(canvas: Canvas): number[][] {
     const rect = this.getBoundingRect().map((p) => {

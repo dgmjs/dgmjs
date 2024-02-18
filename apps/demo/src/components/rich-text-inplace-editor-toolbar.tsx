@@ -106,9 +106,7 @@ export function RichTextInplaceEditorToolbar({
       <Select
         value={state.fontSize}
         onValueChange={(value) => {
-          inplaceEditor.tiptapEditor
-            .chain()
-            .focus()
+          (inplaceEditor.tiptapEditor.chain().focus() as any)
             .setFontSize(`${value}px`)
             .run();
         }}
@@ -136,7 +134,7 @@ export function RichTextInplaceEditorToolbar({
         className="w-8 h-8 px-2 border-y rounded-none"
         pressed={state.bold}
         onPressedChange={() =>
-          inplaceEditor.tiptapEditor.chain().focus().toggleBold().run()
+          (inplaceEditor.tiptapEditor.chain().focus() as any).toggleBold().run()
         }
       >
         <BoldIcon size={16} />
@@ -145,7 +143,9 @@ export function RichTextInplaceEditorToolbar({
         className="w-8 h-8 px-2 border-y rounded-none"
         pressed={state.italic}
         onPressedChange={() =>
-          inplaceEditor.tiptapEditor.chain().focus().toggleItalic().run()
+          (inplaceEditor.tiptapEditor.chain().focus() as any)
+            .toggleItalic()
+            .run()
         }
       >
         <ItalicIcon size={16} />
@@ -154,7 +154,9 @@ export function RichTextInplaceEditorToolbar({
         className="w-8 h-8 px-2 border-y rounded-none"
         pressed={state.underline}
         onPressedChange={() =>
-          inplaceEditor.tiptapEditor.chain().focus().toggleUnderline().run()
+          (inplaceEditor.tiptapEditor.chain().focus() as any)
+            .toggleUnderline()
+            .run()
         }
       >
         <UnderlineIcon size={16} />
@@ -163,7 +165,9 @@ export function RichTextInplaceEditorToolbar({
         className="w-8 h-8 px-2 border-y rounded-none"
         pressed={state.strike}
         onPressedChange={() =>
-          inplaceEditor.tiptapEditor.chain().focus().toggleStrike().run()
+          (inplaceEditor.tiptapEditor.chain().focus() as any)
+            .toggleStrike()
+            .run()
         }
       >
         <StrikethroughIcon size={16} />
@@ -172,7 +176,9 @@ export function RichTextInplaceEditorToolbar({
         className="w-8 h-8 px-2 border-l border-y rounded-none"
         pressed={state.bulletList}
         onPressedChange={() =>
-          inplaceEditor.tiptapEditor.chain().focus().toggleBulletList().run()
+          (inplaceEditor.tiptapEditor.chain().focus() as any)
+            .toggleBulletList()
+            .run()
         }
       >
         <ListIcon size={16} />
@@ -181,7 +187,9 @@ export function RichTextInplaceEditorToolbar({
         className="w-8 h-8 px-2 border-y rounded-none"
         pressed={state.orderedList}
         onPressedChange={() =>
-          inplaceEditor.tiptapEditor.chain().focus().toggleOrderedList().run()
+          (inplaceEditor.tiptapEditor.chain().focus() as any)
+            .toggleOrderedList()
+            .run()
         }
       >
         <ListOrderedIcon size={16} />
@@ -191,7 +199,9 @@ export function RichTextInplaceEditorToolbar({
         className="border-none h-8 gap-0"
         value={state.textAlign}
         onValueChange={(value) => {
-          inplaceEditor.tiptapEditor.chain().focus().setTextAlign(value).run();
+          (inplaceEditor.tiptapEditor.chain().focus() as any)
+            .setTextAlign(value)
+            .run();
         }}
       >
         <ToggleGroupItem

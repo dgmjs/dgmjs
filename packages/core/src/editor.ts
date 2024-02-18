@@ -53,6 +53,7 @@ export interface EditorOptions {
   allowAutoScroll?: boolean;
   allowCreateTextOnCanvas?: boolean;
   allowCreateTextOnConnector?: boolean;
+  onReady?: (editor: Editor) => void;
 }
 
 /**
@@ -152,6 +153,7 @@ class Editor extends EventEmitter {
     this.initializeCanvas();
     this.initializeKeymap();
     this.initializeInplaceEditors();
+    if (this.options.onReady) this.options.onReady(this);
   }
 
   detectPlatform(): string {
