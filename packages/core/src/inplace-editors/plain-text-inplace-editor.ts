@@ -8,20 +8,20 @@ import { measureText } from "../utils/text-utils";
  */
 export class PlainTextInplaceEditor extends InplaceEditor {
   box: Box | null;
-  overlay: HTMLDivElement | null;
-  textareaHolder: HTMLDivElement | null;
-  textarea: HTMLTextAreaElement | null;
+  overlay: HTMLDivElement;
+  textareaHolder: HTMLDivElement;
+  textarea: HTMLTextAreaElement;
 
   constructor() {
     super();
     this.box = null;
-    this.overlay = null;
-    this.textareaHolder = null;
-    this.textarea = null;
+    this.overlay = document.createElement("div");
+    this.textareaHolder = document.createElement("div");
+    this.textarea = document.createElement("textarea");
   }
 
   setStyle(editor: Editor) {
-    if (this.box && this.textareaHolder && this.textarea && this.overlay) {
+    if (this.box) {
       let alignItems = "start";
       if (this.box.vertAlign === "top") alignItems = "start";
       if (this.box.vertAlign === "middle") alignItems = "center";
@@ -41,7 +41,7 @@ export class PlainTextInplaceEditor extends InplaceEditor {
   }
 
   setPositionSize(editor: Editor, text: string) {
-    if (this.box && this.textareaHolder && this.textarea) {
+    if (this.box) {
       // set padding
       const padding = this.box.padding;
       this.textareaHolder.style.paddingTop = `${padding[0]}px`;
@@ -50,13 +50,13 @@ export class PlainTextInplaceEditor extends InplaceEditor {
       this.textareaHolder.style.paddingLeft = `${padding[3]}px`;
 
       // compute position and size
-      const scale = editor.getScale();
-      const MIN_WIDTH = 4;
       const rect = this.box.getBoundingRectInCanvasElement(editor.canvas);
+      const scale = editor.getScale();
       const left = rect[0][0];
       const top = rect[0][1];
       let width = geometry.width(rect);
       let height = geometry.height(rect);
+      const MIN_WIDTH = 4;
 
       // auto sizing fit to text
       const m = measureText(editor.canvas, this.box, text);
@@ -76,7 +76,34 @@ export class PlainTextInplaceEditor extends InplaceEditor {
     }
   }
 
-  setup(editor: Editor) {}
+  setup(editor: Editor) {
+    this.overlay.style.position = "fixed";
+    this.overlay.style.inset = "0";
+    this.overlay.style.display = "none";
+    this.overlay.addEventListener("pointerdown", (e) => {
+      this.close(editor);
+    });
+    document.body.appendChild(this.overlay);
+
+    this.textareaHolder.style.position = "absolute";
+    this.textareaHolder.style.zIndex = "1000";
+    this.textareaHolder.style.outline = "none";
+    this.textareaHolder.style.overflow = "hidden";
+    this.textareaHolder.style.display = "none";
+    editor.canvasElement.parentElement?.appendChild(this.textareaHolder);
+
+    this.textarea.style.width = "100%";
+    this.textarea.style.outline = "none";
+    this.textarea.style.resize = "none";
+    this.textarea.style.whiteSpace = "nowrap";
+    this.textarea.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") this.close(editor);
+    });
+    this.textarea.addEventListener("input", (e: any) => {
+      this.setPositionSize(editor, e.target.value);
+    });
+    this.textareaHolder.appendChild(this.textarea);
+  }
 
   active(editor: Editor, shape: Shape): boolean {
     return (
@@ -87,40 +114,6 @@ export class PlainTextInplaceEditor extends InplaceEditor {
   open(editor: Editor, shape: Shape) {
     if (shape instanceof Box) {
       this.box = shape;
-      // overlay
-      this.overlay = document.createElement("div");
-      this.overlay.style.position = "fixed";
-      this.overlay.style.inset = "0";
-      this.overlay.style.display = "none";
-      this.overlay.addEventListener("pointerdown", (e) => {
-        this.close(editor);
-      });
-      document.body.appendChild(this.overlay);
-
-      // textarea holder
-      this.textareaHolder = document.createElement("div");
-      this.textareaHolder.style.position = "absolute";
-      this.textareaHolder.style.zIndex = "1000";
-      this.textareaHolder.style.outline = "none";
-      this.textareaHolder.style.overflow = "hidden";
-      this.textareaHolder.style.display = "none";
-      editor.canvasElement.parentElement?.appendChild(this.textareaHolder);
-
-      // textarea
-      this.textarea = document.createElement("textarea");
-      this.textarea.style.width = "100%";
-      this.textarea.style.outline = "none";
-      this.textarea.style.resize = "none";
-      this.textarea.style.whiteSpace = "nowrap";
-      this.textarea.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") this.close(editor);
-      });
-      this.textarea.addEventListener("input", (e: any) => {
-        this.setPositionSize(editor, e.target.value);
-      });
-      this.textareaHolder.appendChild(this.textarea);
-
-      // set styles
       this.setStyle(editor);
 
       // disable shape's text rendering
@@ -142,20 +135,16 @@ export class PlainTextInplaceEditor extends InplaceEditor {
   }
 
   close(editor: Editor) {
+    this.overlay.style.display = "none";
+    this.textareaHolder.style.display = "none";
     if (this.box instanceof Box) {
       this.box._renderText = true;
-      const value = this.textarea?.value ?? this.box.text;
+      const value = this.textarea.value;
       if (this.box instanceof Text && value.trim().length === 0) {
         editor.actions.delete_([this.box]);
       } else {
         editor.actions.update({ text: value }, [this.box]);
       }
-      this.overlay?.remove();
-      this.overlay = null;
-      this.textareaHolder?.remove();
-      this.textareaHolder = null;
-      this.textarea?.remove();
-      this.textarea = null;
       editor.repaint();
     }
     this.box = null;
