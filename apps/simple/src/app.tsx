@@ -1,4 +1,5 @@
-import { DGMEditor, Editor } from "@dgmjs/react";
+import { Editor } from "@dgmjs/core";
+import { DGMEditor } from "@dgmjs/react";
 
 declare global {
   interface Window {

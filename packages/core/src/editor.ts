@@ -125,6 +125,7 @@ class Editor extends EventEmitter {
 
     this.platform = this.detectPlatform();
     this.parent = editorHolder;
+    this.parent.style.overflow = "hidden";
     this.inplaceEditors = [];
     this.autoScroller = new AutoScroller(this);
     this.autoScroller.setEnabled(this.options.allowAutoScroll ?? true);
@@ -792,7 +793,7 @@ class Editor extends EventEmitter {
   }
 
   triggerScroll(originX: number, originY: number) {
-    this.emit("scroll", originX, originY);
+    this.emit("scroll", [originX, originY]);
   }
 
   triggerDragStart(controller: Controller | null, dragStartPoint: number[]) {
