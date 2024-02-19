@@ -1,9 +1,21 @@
-import { DGMEditor } from "@dgmjs/react";
+import { DGMEditor, Editor } from "@dgmjs/react";
+
+declare global {
+  interface Window {
+    editor: Editor;
+  }
+}
 
 function App() {
   return (
     <div className="absolute inset-0 h-[calc(100dvh)] select-none">
-      <DGMEditor className="w-full h-full" />
+      <DGMEditor
+        className="w-full h-full"
+        showGrid={true}
+        onMount={(editor) => {
+          window.editor = editor;
+        }}
+      />
     </div>
   );
 }

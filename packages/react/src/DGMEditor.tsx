@@ -1,52 +1,45 @@
-import { Editor, Shape, basicSetup } from "@dgmjs/core";
-import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
+import { Editor, EditorOptions, Shape, basicSetup } from "@dgmjs/core";
+import { useEffect, useRef } from "react";
 
 interface DGMEditorProps extends React.HTMLAttributes<HTMLDivElement> {
+  options?: EditorOptions;
   showGrid?: boolean;
+  onMount?: (editor: Editor) => void;
   onSelectionChange?: (selections: Shape[]) => void;
 }
 
-export interface DGMEditorHandle {
-  fromJSON: (json: any) => void;
-  toJSON: () => any;
-  focus: () => void;
-  repaint: () => void;
-}
+export const DGMEditor: React.FC<DGMEditorProps> = ({
+  options,
+  showGrid = false,
+  onMount,
+  onSelectionChange,
+  ...others
+}) => {
+  const editorHolderRef = useRef<HTMLDivElement>(null);
+  const editorRef = useRef<Editor | null>(null);
 
-export const DGMEditor = forwardRef(
-  ({ showGrid = false, onSelectionChange, ...others }: DGMEditorProps, ref) => {
-    const editorHolderRef = useRef<HTMLDivElement>(null);
-    const editorRef = useRef<Editor | null>(null);
+  useEffect(() => {
+    const editor = new Editor(
+      editorHolderRef.current!,
+      basicSetup({ ...options })
+    );
 
-    useImperativeHandle(ref, () => ({
-      fromJSON: (json: any) => {},
-      toJSON: () => {},
-      focus: () => {
-        editorRef.current?.focus();
-      },
-      repaint: () => {
-        editorRef.current?.repaint();
-      },
-    }));
+    // events forwarding
+    editor.selections.on("select", (shapes) => {
+      if (onSelectionChange) onSelectionChange(shapes);
+    });
 
-    useEffect(() => {
-      const editor = new Editor(editorHolderRef.current!, basicSetup());
+    // initialize
+    editorRef.current = editor;
+    editor.fit();
+    editor.setActiveHandler("Select");
+    editor.repaint();
+    if (onMount) onMount(editor);
+  }, []);
 
-      // events forwarding
-      editor.selections.on("select", (shapes) => {
-        if (onSelectionChange) onSelectionChange(shapes);
-      });
+  useEffect(() => {
+    editorRef.current?.setShowGrid(showGrid);
+  }, [showGrid]);
 
-      // initialize
-      editorRef.current = editor;
-      editor.fit();
-      editor.setActiveHandler("Rectangle");
-    }, []);
-
-    useEffect(() => {
-      editorRef.current?.setShowGrid(showGrid);
-    }, [showGrid]);
-
-    return <div ref={editorHolderRef} {...others} />;
-  }
-);
+  return <div ref={editorHolderRef} {...others} />;
+};
