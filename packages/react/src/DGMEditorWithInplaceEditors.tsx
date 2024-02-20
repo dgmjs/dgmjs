@@ -2,6 +2,7 @@ import { Editor } from "@dgmjs/core";
 import { useState } from "react";
 import { DGMEditor, DGMEditorProps } from "./DGMEditor";
 import { DGMPlainTextInplaceEditor } from "./DGMPlainTextInplaceEditor";
+import { DGMRichTextInplaceEditor } from "./DGMRichTextInplaceEditor";
 
 export const DGMEditorWithInplaceEditors: React.FC<DGMEditorProps> = ({
   onMount,
@@ -19,6 +20,7 @@ export const DGMEditorWithInplaceEditors: React.FC<DGMEditorProps> = ({
         {...props}
       >
         <DGMPlainTextInplaceEditor editor={editor as Editor} />
+        <DGMRichTextInplaceEditor editor={editor as Editor} />
       </DGMEditor>
     </>
   );
