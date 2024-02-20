@@ -214,6 +214,9 @@ export function preprocessDocNode(
             processed._list = "ordered";
             processed._order = i + 1;
           }
+          if (block.type === "doc" && i === node.content.length - 1) {
+            processed._height -= shape.paragraphSpacing * shape.fontSize;
+          }
           if (processed.type === "listItem") {
             processed._width += listIndent * shape.fontSize;
             processed._minWidth += listIndent * shape.fontSize;
@@ -546,6 +549,17 @@ export function drawDocNode(
   }
 }
 
+function getLastLine(doc: any): any {
+  if (Array.isArray(doc.content)) {
+    let last = doc.content[doc.content.length - 1];
+    if (last.type === "line" && last._last) {
+      return last;
+    }
+    return getLastLine(last);
+  }
+  return null;
+}
+
 /**
  * Measure text size
  */
@@ -564,16 +578,25 @@ export function measureText(
       1.5
     );
     const textWidth = doc._width;
-    // const textWidth = shape.wordWrap ? 0 : doc._width;
-    // subtract last paragraph's spacing margin
-    const textHeight = doc._height - shape.paragraphSpacing * shape.fontSize;
+    // adjust last line height
+    const lastLine = getLastLine(doc);
+    const fontHeight = lastLine._ascent + lastLine._descent;
+    const gap = (lastLine._height - fontHeight) / 2;
+    const lastLineHeight = Math.max(lastLine._height, fontHeight + gap);
+    const textHeight = doc._height - lastLine._height + lastLineHeight;
     return { width: textWidth, height: textHeight, minWidth: doc._minWidth };
   } else {
     const plain = typeof text !== "string" ? convertDocToText(text) : text;
     const lines = plain.split("\n");
     shape.assignStyles(canvas);
     const textWidth = Math.max(...lines.map((l) => canvas.textMetric(l).width));
-    const textHeight = lines.length * (shape.fontSize * shape.lineHeight);
+    // adjust last line height
+    const fontMetric = canvas.textMetric("|"); // any character is possible
+    const gap = (shape.fontSize * shape.lineHeight - fontMetric.height) / 2;
+    const lineHeight = shape.fontSize * shape.lineHeight;
+    const lastLineHeight = Math.max(lineHeight, fontMetric.height + gap);
+    const textHeight = (lines.length - 1) * lineHeight + lastLineHeight;
+
     return {
       width: shape.width,
       height: textHeight,
