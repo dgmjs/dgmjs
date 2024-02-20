@@ -1,4 +1,4 @@
-import { DGMEditor } from "@dgmjs/react";
+import { DGMEditor, DGMEditorWithInplaceEditors } from "@dgmjs/react";
 import { Diagram, Editor, Shape, ShapeValues, Transaction } from "@dgmjs/core";
 import { Palette } from "./components/palette";
 import { useDemoStore } from "./demo-store";
@@ -8,6 +8,7 @@ import { PropertySidebar } from "./components/property-sidebar/property-sidebar"
 import fontJson from "./fonts.json";
 import { Font, fetchFonts, insertFontsToDocument } from "./font-manager";
 import { ShapeSidebar } from "./components/shape-sidebar/shape-sidebar";
+import { customSetup } from "./custom-setup";
 
 declare global {
   interface Window {
@@ -65,8 +66,9 @@ function App() {
 
   return (
     <div className="absolute inset-0 h-[calc(100dvh)] select-none">
-      <DGMEditor
+      <DGMEditorWithInplaceEditors
         className="absolute top-10 bottom-0 left-64 right-64"
+        options={customSetup()}
         showGrid={true}
         onMount={handleMount}
         onSelectionChange={handleSelectionChange}

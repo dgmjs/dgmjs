@@ -8,7 +8,7 @@ import {
 } from "@dgmjs/core";
 import { useEffect, useRef } from "react";
 
-interface DGMEditorProps
+export interface DGMEditorProps
   extends Omit<
     React.HTMLAttributes<HTMLDivElement>,
     "onScroll" | "onDragStart" | "onDrag" | "onDragEnd"

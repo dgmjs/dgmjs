@@ -107,20 +107,20 @@ export function customSetup(options?: EditorOptions): EditorOptions {
       "mod-left": (editor) => editor.scroll(-editor.gridSize[0], 0),
       "mod-right": (editor) => editor.scroll(editor.gridSize[0], 0),
     },
-    inplaceEditors: [plainTextInplaceEditor, richTextInplaceEditor],
+    inplaceEditors: [], // [plainTextInplaceEditor, richTextInplaceEditor],
     allowAutoScroll: true,
     allowCreateTextOnCanvas: true,
     allowCreateTextOnConnector: true,
     onReady: (editor) => {
-      ReactDOM.createRoot(
-        document.getElementById(
-          "rich-text-inplace-editor-toolbar"
-        ) as HTMLDivElement
-      ).render(
-        <React.StrictMode>
-          <RichTextInplaceEditorToolbar inplaceEditor={richTextInplaceEditor} />
-        </React.StrictMode>
-      );
+      // ReactDOM.createRoot(
+      //   document.getElementById(
+      //     "rich-text-inplace-editor-toolbar"
+      //   ) as HTMLDivElement
+      // ).render(
+      //   <React.StrictMode>
+      //     <RichTextInplaceEditorToolbar inplaceEditor={richTextInplaceEditor} />
+      //   </React.StrictMode>
+      // );
     },
     ...(options ?? {}),
   };

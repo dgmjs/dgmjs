@@ -13,7 +13,11 @@ export { Editor, EditorOptions } from "./editor";
 export * from "./handlers";
 export * from "./export";
 export { renderOnCanvas } from "./utils/canvas-utils";
-export { convertDocToText, preprocessDocNode } from "./utils/text-utils";
+export {
+  convertDocToText,
+  preprocessDocNode,
+  measureText,
+} from "./utils/text-utils";
 export { PlainTextInplaceEditor } from "./inplace-editors/plain-text-inplace-editor";
 export { RichTextInplaceEditor } from "./inplace-editors/rich-text-inplace-editor";
 export { basicSetup } from "./basic-setup";

@@ -330,7 +330,7 @@ class Editor extends EventEmitter {
           this.openInplaceEditor(textShape);
         }
         // trigger double click event
-        this.triggerDblClick(shape, x, y);
+        this.triggerDblClick(shape, [x, y]);
       }
     });
 
@@ -784,8 +784,8 @@ class Editor extends EventEmitter {
     this.canvasElement.style.cursor = cssCursor;
   }
 
-  triggerDblClick(shape: Shape | null, x: number, y: number) {
-    this.emit("dblClick", shape, x, y);
+  triggerDblClick(shape: Shape | null, point: number[]) {
+    this.emit("dblClick", shape, point);
   }
 
   triggerZoom(scale: number) {
