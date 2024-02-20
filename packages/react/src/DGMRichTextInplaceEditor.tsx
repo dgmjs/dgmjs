@@ -79,7 +79,7 @@ export const DGMRichTextInplaceEditor: React.FC<
         const padding = state.textShape.padding;
         const pl = padding[0];
         const pr = padding[2];
-        let width = doc._width + pl + pr;
+        let width = Math.ceil(doc._width + pl + pr);
         if (width < 2) width = 2; // min width (to show cursor)
         if (width > currentWidth) {
           // containerRef.current.style.width = `${width}px`;
@@ -102,10 +102,12 @@ export const DGMRichTextInplaceEditor: React.FC<
       const top = rect[0][1];
       let width = geometry.width(rect);
       let height = geometry.height(rect);
-      const MIN_WIDTH = 4;
+      const MIN_WIDTH = 2;
       const m = measureText(editor.canvas, textShape, textShape.text);
-      width = Math.max(m.minWidth + padding[1] + padding[3], width, MIN_WIDTH);
-      height = Math.max(m.height + padding[0] + padding[2], height);
+      width = Math.ceil(
+        Math.max(m.minWidth + padding[1] + padding[3], width, MIN_WIDTH)
+      );
+      height = Math.ceil(Math.max(m.height + padding[0] + padding[2], height));
 
       // update states
       setState({
@@ -130,7 +132,6 @@ export const DGMRichTextInplaceEditor: React.FC<
       tiptapEditor?.commands.setContent(textShape.text);
       tiptapEditor?.commands.focus();
       tiptapEditor?.commands.selectAll();
-      tiptapEditor?.commands.scrollIntoView();
     }
   };
 
