@@ -572,7 +572,13 @@ export function measureText(
   canvas: Canvas,
   shape: Text,
   text: string | any
-): { width: number; height: number; minWidth: number } {
+): {
+  width: number;
+  height: number;
+  minWidth: number;
+  lineHeight: number;
+  preprocessedDoc?: any;
+} {
   if (shape.richText) {
     const doc = preprocessDocNode(
       canvas,
@@ -589,7 +595,13 @@ export function measureText(
     const gap = (lastLine._height - fontHeight) / 2;
     const lastLineHeight = Math.max(lastLine._height, fontHeight + gap);
     const textHeight = doc._height - lastLine._height + lastLineHeight;
-    return { width: textWidth, height: textHeight, minWidth: doc._minWidth };
+    return {
+      width: textWidth,
+      height: textHeight,
+      minWidth: doc._minWidth,
+      lineHeight: shape.fontSize * shape.lineHeight,
+      preprocessedDoc: doc,
+    };
   } else {
     const plain = typeof text !== "string" ? convertDocToText(text) : text;
     const lines = plain.split("\n");
@@ -601,40 +613,50 @@ export function measureText(
     const lineHeight = shape.fontSize * shape.lineHeight;
     const lastLineHeight = Math.max(lineHeight, fontMetric.height + gap);
     const textHeight = (lines.length - 1) * lineHeight + lastLineHeight;
-
     return {
       width: shape.width,
       height: textHeight,
       minWidth: textWidth,
+      lineHeight: lineHeight,
     };
   }
 }
 
 export function drawRichText(canvas: Canvas, shape: Box) {
   canvas.storeState();
-  let doc = preprocessDocNode(
-    canvas,
-    typeof shape.text === "string" ? convertTextToDoc(shape.text) : shape.text,
-    shape,
-    shape.wordWrap,
-    shape.innerWidth,
-    1.5
-  );
-  // subtract last paragraph's spacing margin
-  const height = doc._height - shape.paragraphSpacing * shape.fontSize;
+  // let doc = preprocessDocNode(
+  //   canvas,
+  //   typeof shape.text === "string" ? convertTextToDoc(shape.text) : shape.text,
+  //   shape,
+  //   shape.wordWrap,
+  //   shape.innerWidth,
+  //   1.5
+  // );
+
+  // const textValue =
+  //   typeof shape.text === "string" ? convertTextToDoc(shape.text) : shape.text;
+  const textMetric = measureText(canvas, shape, shape.text);
   let top = shape.innerTop;
   switch (shape.vertAlign) {
     case "top":
       top = shape.innerTop;
       break;
     case "middle":
-      top = shape.innerTop + (shape.innerHeight - height) / 2;
+      top = shape.innerTop + (shape.innerHeight - textMetric.height) / 2;
       break;
     case "bottom":
-      top = shape.innerBottom - height;
+      top = shape.innerBottom - textMetric.height;
       break;
   }
-  drawDocNode(canvas, doc, shape, shape.innerLeft, top, shape.innerWidth, 1.5);
+  drawDocNode(
+    canvas,
+    textMetric.preprocessedDoc,
+    shape,
+    shape.innerLeft,
+    top,
+    shape.innerWidth,
+    1.5
+  );
   canvas.restoreState();
 }
 
@@ -664,19 +686,23 @@ export function drawPlainText(canvas: Canvas, shape: Box) {
   canvas.storeState();
   const text: string =
     typeof shape.text !== "string" ? convertDocToText(shape.text) : shape.text;
+
   const lines = text.split("\n");
   const lineHeight = shape.fontSize * shape.lineHeight;
-  const height = lines.length * lineHeight;
+  // const height = lines.length * lineHeight;
+
+  const textMetric = measureText(canvas, shape, text);
+
   let top = shape.innerTop;
   switch (shape.vertAlign) {
     case "top":
       top = shape.innerTop;
       break;
     case "middle":
-      top = shape.innerTop + (shape.innerHeight - height) / 2;
+      top = shape.innerTop + (shape.innerHeight - textMetric.height) / 2;
       break;
     case "bottom":
-      top = shape.innerBottom - height;
+      top = shape.innerBottom - textMetric.height;
       break;
   }
   shape.assignStyles(canvas);
