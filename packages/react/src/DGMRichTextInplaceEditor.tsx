@@ -3,12 +3,10 @@ import {
   Shape,
   Box,
   Text,
-  geometry,
   measureText,
   convertDocToText,
-  preprocessDocNode,
 } from "@dgmjs/core";
-import { KeyboardEvent, useEffect, useRef, useState } from "react";
+import { KeyboardEvent, useEffect, useState } from "react";
 import { textVertAlignToAlignItems } from "./utils";
 import { useEditor, extensions, TiptapEditor } from "./tiptap/tiptap-editor";
 
@@ -58,59 +56,49 @@ export const DGMRichTextInplaceEditor: React.FC<
     textHeight: 0,
   });
 
+  const getTextRect = (textShape: Text, doc: any) => {
+    const rect = textShape.getRectInDOM(editor.canvas);
+    const textMetric = measureText(editor.canvas, textShape, doc);
+    const textWidth = textMetric.minWidth + state.padding[1] + state.padding[3];
+    const textHeight = textMetric.height + state.padding[0] + state.padding[2];
+    const MIN_WIDTH = 2;
+    return {
+      left: rect.left,
+      top: rect.top,
+      width: Math.max(textWidth, MIN_WIDTH),
+      height: textHeight,
+    };
+  };
+
   const tiptapEditor = useEditor({
     extensions,
     content: /* textString.length > 0 ? editingText?.text : */ "",
     onTransaction: (tr) => {
       // expand editor width if text width is larger than current width
       if (editor && tiptapEditor && state.textShape) {
-        const canvas = editor.canvas;
-        const doc = preprocessDocNode(
-          canvas,
-          tiptapEditor.getJSON(),
-          state.textShape,
-          state.textShape.wordWrap, // word wrap
-          state.textShape.innerWidth,
-          1.5
-        );
-        const scale = editor.getScale();
-        const rect = state.textShape.getRectInDOM(canvas);
-        const currentWidth = rect.width * (1 / scale);
-        const padding = state.textShape.padding;
-        const pl = padding[0];
-        const pr = padding[2];
-        const MIN_WIDTH = 2;
-        let width = Math.ceil(doc._width + pl + pr);
-        if (width < MIN_WIDTH) width = MIN_WIDTH; // min width (to show cursor)
-        if (width > currentWidth) {
-          setState((state) => ({ ...state, width }));
-        }
+        const rect = getTextRect(state.textShape, tiptapEditor.getJSON());
+        setState((state) => ({
+          ...state,
+          width: Math.max(state.textShape?.width || 0, rect.width),
+          height: Math.max(state.textShape?.height || 0, rect.height),
+          textWidth: rect.width,
+          textHeight: rect.height,
+        }));
       }
     },
   });
 
-  const open = (textShape: Text | null) => {
+  const open = (textShape: Box) => {
     if (textShape) {
       // disable shape's text rendering
       textShape._renderText = false;
       editor.repaint();
 
-      // compute new states
-      const padding = textShape.padding;
-      const rect = textShape.getRectInDOM(editor.canvas);
-      const MIN_WIDTH = 2;
-      const m = measureText(editor.canvas, textShape, textShape.text);
-      const width = Math.ceil(
-        Math.max(m.minWidth + padding[1] + padding[3], rect.width, MIN_WIDTH)
-      );
-      const height = Math.ceil(
-        Math.max(m.height + padding[0] + padding[2], rect.height)
-      );
-
       // update states
+      const rect = getTextRect(textShape, textShape.text);
       setState({
         textShape,
-        padding,
+        padding: textShape.padding,
         alignItems: textVertAlignToAlignItems(textShape.vertAlign),
         textAlign: textShape.horzAlign,
         lineHeight: textShape.lineHeight,
@@ -121,10 +109,10 @@ export const DGMRichTextInplaceEditor: React.FC<
         scale: editor.getScale(),
         left: rect.left,
         top: rect.top,
-        width,
-        height,
-        textWidth: 0,
-        textHeight: m.height,
+        width: Math.max(textShape.width, rect.width),
+        height: Math.max(textShape.height, rect.height),
+        textWidth: rect.width,
+        textHeight: rect.height,
       });
 
       tiptapEditor?.commands.setContent(textShape.text);

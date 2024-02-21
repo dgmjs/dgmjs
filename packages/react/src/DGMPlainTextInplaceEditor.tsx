@@ -50,31 +50,34 @@ export const DGMPlainTextInplaceEditor: React.FC<
     textHeight: 0,
   });
 
-  const open = (textShape: Text | null) => {
+  const getTextRect = (textShape: Text, textValue: string) => {
+    const rect = textShape.getRectInDOM(editor.canvas);
+    const textMetric = measureText(editor.canvas, textShape, textValue);
+    const textWidth = textMetric.minWidth + state.padding[1] + state.padding[3];
+    const textHeight = textMetric.height + state.padding[0] + state.padding[2];
+    const MIN_WIDTH = 2;
+    return {
+      left: rect.left,
+      top: rect.top,
+      width: Math.max(textWidth, MIN_WIDTH),
+      height: textHeight,
+    };
+  };
+
+  const open = (textShape: Box) => {
     if (textShape) {
       // disable shape's text rendering
       textShape._renderText = false;
       editor.repaint();
 
-      // compute new states
-      const padding = textShape.padding;
+      // update states
       const textValue =
         typeof textShape.text === "string" ? textShape.text : "";
-      const rect = textShape.getRectInDOM(editor.canvas);
-      const MIN_WIDTH = 2;
-      const m = measureText(editor.canvas, textShape, textValue);
-      const width = Math.max(
-        m.minWidth + padding[1] + padding[3],
-        rect.width,
-        MIN_WIDTH
-      );
-      const height = Math.max(m.height + padding[0] + padding[2], rect.height);
-
-      // update states
-      setState({
+      const rect = getTextRect(textShape, textValue);
+      setState((state) => ({
         textShape,
         textValue,
-        padding,
+        padding: textShape.padding,
         alignItems: textVertAlignToAlignItems(textShape.vertAlign),
         textAlign: textShape.horzAlign,
         lineHeight: textShape.lineHeight,
@@ -84,21 +87,20 @@ export const DGMPlainTextInplaceEditor: React.FC<
         scale: editor.getScale(),
         left: rect.left,
         top: rect.top,
-        width,
-        height,
-        textWidth: 0,
-        textHeight: m.height,
-      });
-
-      if (textareaRef.current) {
-        textareaRef.current.focus();
-        textareaRef.current.select();
-        textareaRef.current.scrollTop = 0;
-      }
+        width: Math.max(textShape.width, rect.width),
+        height: Math.max(textShape.height, rect.height),
+        textWidth: rect.width,
+        textHeight: rect.height,
+      }));
+      setTimeout(() => {
+        if (textareaRef.current) {
+          textareaRef.current.focus();
+          textareaRef.current.select();
+          textareaRef.current.scrollTop = 0;
+        }
+      }, 0);
     }
   };
-
-  const update = () => {};
 
   const applyChanges = () => {
     if (state.textShape) {
@@ -119,7 +121,15 @@ export const DGMPlainTextInplaceEditor: React.FC<
 
   const handleInput = (event: React.FormEvent<HTMLTextAreaElement>) => {
     const textValue = (event.target as HTMLTextAreaElement).value;
-    setState((state) => ({ ...state, textValue }));
+    const size = getTextRect(state.textShape as Box, textValue);
+    setState((state) => ({
+      ...state,
+      textValue,
+      width: Math.max(state.textShape?.width || 0, size.width),
+      height: Math.max(state.textShape?.height || 0, size.height),
+      textWidth: size.width,
+      textHeight: size.height,
+    }));
   };
 
   useEffect(() => {

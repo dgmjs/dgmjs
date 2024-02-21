@@ -549,15 +549,20 @@ export function drawDocNode(
   }
 }
 
-function getLastLine(doc: any): any {
-  if (Array.isArray(doc.content)) {
-    let last = doc.content[doc.content.length - 1];
+function getLastLine(node: any): any {
+  if (Array.isArray(node.content) && node.content.length > 0) {
+    let last = node.content[node.content.length - 1];
     if (last.type === "line" && last._last) {
       return last;
     }
     return getLastLine(last);
+  } else {
+    node._width = node._width || 0;
+    node._height = node._height || 0;
+    node._ascent = node._ascent || 0;
+    node._descent = node._descent || 0;
+    return node;
   }
-  return null;
 }
 
 /**
