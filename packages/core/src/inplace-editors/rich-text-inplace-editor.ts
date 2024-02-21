@@ -88,21 +88,24 @@ export class RichTextInplaceEditor extends InplaceEditor {
       this.editorHolder.style.paddingLeft = `${padding[3]}px`;
 
       // move editor holder position
-      const rect = this.box.getBoundingRectInCanvasElement(editor.canvas);
+      const rect = this.box.getRectInDOM(editor.canvas);
       const scale = editor.getScale();
-      const width = geometry.width(rect);
-      const height = geometry.height(rect);
-      const left = rect[0][0];
-      const top = rect[0][1];
-
-      this.editorHolder.style.left = `${left}px`;
-      this.editorHolder.style.top = `${top}px`;
-      this.editorHolder.style.width = `${width}px`;
-      this.editorHolder.style.height = `${height}px`;
+      this.editorHolder.style.left = `${rect.left}px`;
+      this.editorHolder.style.top = `${rect.top}px`;
+      this.editorHolder.style.width = `${rect.width}px`;
+      this.editorHolder.style.height = `${rect.height}px`;
       this.editorHolder.style.transform = `scale(${scale})`;
 
       // move toolbar position
-      const isBelow = moveToAboveOrBelow(editor, this.toolbarHolder, rect, 32);
+      const isBelow = moveToAboveOrBelow(
+        editor,
+        this.toolbarHolder,
+        [
+          [rect.left, rect.top],
+          [rect.left + rect.width, rect.top + rect.height],
+        ],
+        32
+      );
     }
   }
 
@@ -151,14 +154,13 @@ export class RichTextInplaceEditor extends InplaceEditor {
           this.box.innerWidth,
           1.5
         );
-        const rect = this.box.getBoundingRectInCanvasElement(editor.canvas);
-        const currentWidth = geometry.width(rect);
+        const rect = this.box.getRectInDOM(editor.canvas);
         const padding = this.box.padding;
         const pl = padding[0];
         const pr = padding[2];
         let width = doc._width + pl + pr;
         if (width < 2) width = 2; // min width (to show cursor)
-        if (width > currentWidth) {
+        if (width > rect.width) {
           this.editorHolder.style.width = `${width}px`;
         }
       }

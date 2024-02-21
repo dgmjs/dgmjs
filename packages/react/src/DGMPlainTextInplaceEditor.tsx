@@ -60,15 +60,15 @@ export const DGMPlainTextInplaceEditor: React.FC<
       const padding = textShape.padding;
       const textValue =
         typeof textShape.text === "string" ? textShape.text : "";
-      const rect = textShape.getBoundingRectInCanvasElement(editor.canvas);
-      const left = rect[0][0];
-      const top = rect[0][1];
-      let width = geometry.width(rect);
-      let height = geometry.height(rect);
-      const MIN_WIDTH = 4;
+      const rect = textShape.getRectInDOM(editor.canvas);
+      const MIN_WIDTH = 2;
       const m = measureText(editor.canvas, textShape, textValue);
-      width = Math.max(m.minWidth + padding[1] + padding[3], width, MIN_WIDTH);
-      height = Math.max(m.height + padding[0] + padding[2], height);
+      const width = Math.max(
+        m.minWidth + padding[1] + padding[3],
+        rect.width,
+        MIN_WIDTH
+      );
+      const height = Math.max(m.height + padding[0] + padding[2], rect.height);
 
       // update states
       setState({
@@ -82,8 +82,8 @@ export const DGMPlainTextInplaceEditor: React.FC<
         fontSize: textShape.fontSize,
         color: editor.canvas.resolveColor(textShape.fontColor),
         scale: editor.getScale(),
-        left,
-        top,
+        left: rect.left,
+        top: rect.top,
         width,
         height,
         textWidth: 0,
@@ -97,6 +97,8 @@ export const DGMPlainTextInplaceEditor: React.FC<
       }
     }
   };
+
+  const update = () => {};
 
   const applyChanges = () => {
     if (state.textShape) {

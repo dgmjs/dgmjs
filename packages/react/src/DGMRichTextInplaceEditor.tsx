@@ -74,15 +74,15 @@ export const DGMRichTextInplaceEditor: React.FC<
           1.5
         );
         const scale = editor.getScale();
-        const rect = state.textShape.getBoundingRectInCanvasElement(canvas);
-        const currentWidth = geometry.width(rect) * (1 / scale);
+        const rect = state.textShape.getRectInDOM(canvas);
+        const currentWidth = rect.width * (1 / scale);
         const padding = state.textShape.padding;
         const pl = padding[0];
         const pr = padding[2];
+        const MIN_WIDTH = 2;
         let width = Math.ceil(doc._width + pl + pr);
-        if (width < 2) width = 2; // min width (to show cursor)
+        if (width < MIN_WIDTH) width = MIN_WIDTH; // min width (to show cursor)
         if (width > currentWidth) {
-          // containerRef.current.style.width = `${width}px`;
           setState((state) => ({ ...state, width }));
         }
       }
@@ -97,17 +97,15 @@ export const DGMRichTextInplaceEditor: React.FC<
 
       // compute new states
       const padding = textShape.padding;
-      const rect = textShape.getBoundingRectInCanvasElement(editor.canvas);
-      const left = rect[0][0];
-      const top = rect[0][1];
-      let width = geometry.width(rect);
-      let height = geometry.height(rect);
+      const rect = textShape.getRectInDOM(editor.canvas);
       const MIN_WIDTH = 2;
       const m = measureText(editor.canvas, textShape, textShape.text);
-      width = Math.ceil(
-        Math.max(m.minWidth + padding[1] + padding[3], width, MIN_WIDTH)
+      const width = Math.ceil(
+        Math.max(m.minWidth + padding[1] + padding[3], rect.width, MIN_WIDTH)
       );
-      height = Math.ceil(Math.max(m.height + padding[0] + padding[2], height));
+      const height = Math.ceil(
+        Math.max(m.height + padding[0] + padding[2], rect.height)
+      );
 
       // update states
       setState({
@@ -121,8 +119,8 @@ export const DGMRichTextInplaceEditor: React.FC<
         fontSize: textShape.fontSize,
         color: editor.canvas.resolveColor(textShape.fontColor),
         scale: editor.getScale(),
-        left,
-        top,
+        left: rect.left,
+        top: rect.top,
         width,
         height,
         textWidth: 0,

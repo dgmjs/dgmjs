@@ -50,22 +50,16 @@ export class PlainTextInplaceEditor extends InplaceEditor {
       this.textareaHolder.style.paddingLeft = `${padding[3]}px`;
 
       // compute position and size
-      const rect = this.box.getBoundingRectInCanvasElement(editor.canvas);
+      const rect = this.box.getRectInDOM(editor.canvas);
       const scale = editor.getScale();
-      const left = rect[0][0];
-      const top = rect[0][1];
-      let width = geometry.width(rect);
-      let height = geometry.height(rect);
+      const m = measureText(editor.canvas, this.box, text);
+      const width = Math.max(m.minWidth + padding[1] + padding[3], rect.width);
+      const height = Math.max(m.height + padding[0] + padding[2], rect.height);
       const MIN_WIDTH = 4;
 
-      // auto sizing fit to text
-      const m = measureText(editor.canvas, this.box, text);
-      width = Math.max(m.minWidth + padding[1] + padding[3], width);
-      height = Math.max(m.height + padding[0] + padding[2], height);
-
       // set container size and position
-      this.textareaHolder.style.left = `${left}px`;
-      this.textareaHolder.style.top = `${top}px`;
+      this.textareaHolder.style.left = `${rect.left}px`;
+      this.textareaHolder.style.top = `${rect.top}px`;
       this.textareaHolder.style.width = `${
         width < MIN_WIDTH ? MIN_WIDTH : width
       }px`;
