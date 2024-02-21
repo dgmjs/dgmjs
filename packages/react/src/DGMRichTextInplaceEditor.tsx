@@ -6,8 +6,8 @@ import {
   measureText,
   convertDocToText,
 } from "@dgmjs/core";
-import { KeyboardEvent, useEffect, useState } from "react";
-import { textVertAlignToAlignItems } from "./utils";
+import { KeyboardEvent, useEffect, useRef, useState } from "react";
+import { moveToAboveOrBelow, textVertAlignToAlignItems } from "./utils";
 import { useEditor, extensions, TiptapEditor } from "./tiptap/tiptap-editor";
 
 interface DGMRichTextInplaceEditorProps
@@ -37,6 +37,8 @@ interface InternalState {
 export const DGMRichTextInplaceEditor: React.FC<
   DGMRichTextInplaceEditorProps
 > = ({ editor, ...others }) => {
+  const toolbarHolderRef = useRef<HTMLDivElement>(null);
+
   const [state, setState] = useState<InternalState>({
     textShape: null,
     padding: [0, 0, 0, 0],
@@ -68,6 +70,25 @@ export const DGMRichTextInplaceEditor: React.FC<
       width: Math.max(textWidth, MIN_WIDTH),
       height: textHeight,
     };
+  };
+
+  const setToolbarPosition = (rect: {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+  }) => {
+    if (toolbarHolderRef.current) {
+      moveToAboveOrBelow(
+        editor,
+        toolbarHolderRef.current,
+        [
+          [rect.left, rect.top],
+          [rect.left + rect.width, rect.top + rect.height],
+        ],
+        32
+      );
+    }
   };
 
   const tiptapEditor = useEditor({
@@ -118,6 +139,15 @@ export const DGMRichTextInplaceEditor: React.FC<
       tiptapEditor?.commands.setContent(textShape.text);
       tiptapEditor?.commands.focus();
       tiptapEditor?.commands.selectAll();
+
+      setTimeout(() => {
+        setToolbarPosition({
+          left: rect.left,
+          top: rect.top,
+          width: textShape.width,
+          height: textShape.height,
+        });
+      }, 0);
     }
   };
 
@@ -153,6 +183,12 @@ export const DGMRichTextInplaceEditor: React.FC<
       });
     }
   }, [editor]);
+
+  useEffect(() => {
+    if (tiptapEditor) {
+      console.log("tiptapEditor", tiptapEditor);
+    }
+  }, [tiptapEditor]);
 
   return (
     <>
@@ -196,6 +232,17 @@ export const DGMRichTextInplaceEditor: React.FC<
               onBlur={() => {}}
               onKeyDown={handleKeyDown}
             />
+          </div>
+          <div
+            ref={toolbarHolderRef}
+            style={{
+              position: "absolute",
+              background: "red",
+              zIndex: 10,
+              outline: "none",
+            }}
+          >
+            toolbar
           </div>
         </>
       )}
