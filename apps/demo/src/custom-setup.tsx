@@ -40,15 +40,8 @@ import {
   FreehandFactoryHandler,
   ImageFactoryHandler,
 } from "@dgmjs/core";
-import { PlainTextInplaceEditor } from "@dgmjs/core";
-import { RichTextInplaceEditor } from "@dgmjs/core";
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { RichTextInplaceEditorToolbar } from "./components/rich-text-inplace-editor-toolbar";
 
 export function customSetup(options?: EditorOptions): EditorOptions {
-  const plainTextInplaceEditor = new PlainTextInplaceEditor();
-  const richTextInplaceEditor = new RichTextInplaceEditor();
   return {
     instantiators: {
       Shape: () => new Shape(),
@@ -107,21 +100,9 @@ export function customSetup(options?: EditorOptions): EditorOptions {
       "mod-left": (editor) => editor.scroll(-editor.gridSize[0], 0),
       "mod-right": (editor) => editor.scroll(editor.gridSize[0], 0),
     },
-    inplaceEditors: [], // [plainTextInplaceEditor, richTextInplaceEditor],
     allowAutoScroll: true,
     allowCreateTextOnCanvas: true,
     allowCreateTextOnConnector: true,
-    onReady: (editor) => {
-      // ReactDOM.createRoot(
-      //   document.getElementById(
-      //     "rich-text-inplace-editor-toolbar"
-      //   ) as HTMLDivElement
-      // ).render(
-      //   <React.StrictMode>
-      //     <RichTextInplaceEditorToolbar inplaceEditor={richTextInplaceEditor} />
-      //   </React.StrictMode>
-      // );
-    },
     ...(options ?? {}),
   };
 }

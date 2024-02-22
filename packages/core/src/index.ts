@@ -18,6 +18,4 @@ export {
   preprocessDocNode,
   measureText,
 } from "./utils/text-utils";
-export { PlainTextInplaceEditor } from "./inplace-editors/plain-text-inplace-editor";
-export { RichTextInplaceEditor } from "./inplace-editors/rich-text-inplace-editor";
 export { basicSetup } from "./basic-setup";

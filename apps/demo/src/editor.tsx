@@ -1,19 +1,14 @@
-/*
- * Copyright (c) 2023 MKLabs. All rights reserved.
- *
- * NOTICE:  All information contained herein is, and remains the
- * property of MKLabs. The intellectual and technical concepts
- * contained herein are proprietary to MKLabs and may be covered
- * by Republic of Korea and Foreign Patents, patents in process,
- * and are protected by trade secret or copyright law.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from MKLabs (niklaus.lee@gmail.com).
- */
-
-import { RichTextInplaceEditor, constants } from "@dgmjs/core";
-import { useEffect, useState } from "react";
-import { Toggle } from "./ui/toggle";
+import { Box, Editor } from "@dgmjs/core";
+import { useState, useEffect } from "react";
+import {
+  DGMEditor,
+  DGMEditorProps,
+  DGMPlainTextInplaceEditor,
+  DGMRichTextInplaceEditor,
+  TiptapEditor,
+} from "@dgmjs/react";
+import { constants } from "@dgmjs/core";
+import { Toggle } from "@/components/ui/toggle";
 import {
   AlignCenterIcon,
   AlignLeftIcon,
@@ -38,18 +33,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "./ui/button";
-import { ColorPalette, simplePalette } from "./common/color-palette";
-import { useDemoStore } from "@/demo-store";
-import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
+import { Button } from "@/components/ui/button";
+import { ColorPalette, simplePalette } from "@/components/common/color-palette";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 export function RichTextInplaceEditorToolbar({
-  inplaceEditor,
+  tiptapEditor,
+  theme,
+  shape,
 }: {
-  inplaceEditor: RichTextInplaceEditor;
+  tiptapEditor: TiptapEditor;
+  theme: "light" | "dark";
+  shape: Box | null;
 }) {
-  const demoStore = useDemoStore();
-
   const [state, setState] = useState({
     fontSize: constants.DEFAULT_FONT_SIZE.toString(),
     bold: false,
@@ -62,11 +58,11 @@ export function RichTextInplaceEditorToolbar({
   });
 
   useEffect(() => {
-    inplaceEditor.tiptapEditor.on("transaction", (tr) => {
+    tiptapEditor.on("transaction", (tr) => {
       setState({
         fontSize:
           tr.editor.getAttributes("textStyle").fontSize?.trim().slice(0, -2) ??
-          inplaceEditor.box?.fontSize.toString() ??
+          shape?.fontSize.toString() ??
           constants.DEFAULT_FONT_SIZE.toString(),
         bold: tr.editor.isActive("bold"),
         italic: tr.editor.isActive("italic"),
@@ -93,12 +89,10 @@ export function RichTextInplaceEditorToolbar({
         </PopoverTrigger>
         <PopoverContent sideOffset={8} className="w-fit dark:bg-slate-950">
           <ColorPalette
-            theme={demoStore.theme}
+            theme={theme}
             palette={simplePalette}
-            onClick={(value) => {
-              (inplaceEditor.tiptapEditor.chain().focus() as any)
-                .setColor(value)
-                .run();
+            onClick={(value: any) => {
+              (tiptapEditor.chain().focus() as any).setColor(value).run();
             }}
           />
         </PopoverContent>
@@ -106,9 +100,7 @@ export function RichTextInplaceEditorToolbar({
       <Select
         value={state.fontSize}
         onValueChange={(value) => {
-          (inplaceEditor.tiptapEditor.chain().focus() as any)
-            .setFontSize(`${value}px`)
-            .run();
+          (tiptapEditor.chain().focus() as any).setFontSize(`${value}px`).run();
         }}
       >
         <SelectTrigger className="w-[72px] h-8 border border-l-0 rounded-none">
@@ -134,7 +126,7 @@ export function RichTextInplaceEditorToolbar({
         className="w-8 h-8 px-2 border-y rounded-none"
         pressed={state.bold}
         onPressedChange={() =>
-          (inplaceEditor.tiptapEditor.chain().focus() as any).toggleBold().run()
+          (tiptapEditor.chain().focus() as any).toggleBold().run()
         }
       >
         <BoldIcon size={16} />
@@ -143,9 +135,7 @@ export function RichTextInplaceEditorToolbar({
         className="w-8 h-8 px-2 border-y rounded-none"
         pressed={state.italic}
         onPressedChange={() =>
-          (inplaceEditor.tiptapEditor.chain().focus() as any)
-            .toggleItalic()
-            .run()
+          (tiptapEditor.chain().focus() as any).toggleItalic().run()
         }
       >
         <ItalicIcon size={16} />
@@ -154,9 +144,7 @@ export function RichTextInplaceEditorToolbar({
         className="w-8 h-8 px-2 border-y rounded-none"
         pressed={state.underline}
         onPressedChange={() =>
-          (inplaceEditor.tiptapEditor.chain().focus() as any)
-            .toggleUnderline()
-            .run()
+          (tiptapEditor.chain().focus() as any).toggleUnderline().run()
         }
       >
         <UnderlineIcon size={16} />
@@ -165,9 +153,7 @@ export function RichTextInplaceEditorToolbar({
         className="w-8 h-8 px-2 border-y rounded-none"
         pressed={state.strike}
         onPressedChange={() =>
-          (inplaceEditor.tiptapEditor.chain().focus() as any)
-            .toggleStrike()
-            .run()
+          (tiptapEditor.chain().focus() as any).toggleStrike().run()
         }
       >
         <StrikethroughIcon size={16} />
@@ -176,9 +162,7 @@ export function RichTextInplaceEditorToolbar({
         className="w-8 h-8 px-2 border-l border-y rounded-none"
         pressed={state.bulletList}
         onPressedChange={() =>
-          (inplaceEditor.tiptapEditor.chain().focus() as any)
-            .toggleBulletList()
-            .run()
+          (tiptapEditor.chain().focus() as any).toggleBulletList().run()
         }
       >
         <ListIcon size={16} />
@@ -187,9 +171,7 @@ export function RichTextInplaceEditorToolbar({
         className="w-8 h-8 px-2 border-y rounded-none"
         pressed={state.orderedList}
         onPressedChange={() =>
-          (inplaceEditor.tiptapEditor.chain().focus() as any)
-            .toggleOrderedList()
-            .run()
+          (tiptapEditor.chain().focus() as any).toggleOrderedList().run()
         }
       >
         <ListOrderedIcon size={16} />
@@ -199,9 +181,7 @@ export function RichTextInplaceEditorToolbar({
         className="border-none h-8 gap-0"
         value={state.textAlign}
         onValueChange={(value) => {
-          (inplaceEditor.tiptapEditor.chain().focus() as any)
-            .setTextAlign(value)
-            .run();
+          (tiptapEditor.chain().focus() as any).setTextAlign(value).run();
         }}
       >
         <ToggleGroupItem
@@ -229,3 +209,47 @@ export function RichTextInplaceEditorToolbar({
     </div>
   );
 }
+
+interface EditorWrapperProps extends DGMEditorProps {
+  theme: "light" | "dark";
+}
+
+export const EditorWrapper: React.FC<EditorWrapperProps> = ({
+  theme,
+  onMount,
+  ...props
+}) => {
+  const [editor, setEditor] = useState<Editor | null>(null);
+  const [tiptapEditor, setTiptapEditor] = useState<any>(null);
+  const [editingText, setEditingText] = useState<Box | null>(null);
+
+  return (
+    <>
+      <DGMEditor
+        onMount={(editor) => {
+          setEditor(editor);
+          if (onMount) onMount(editor);
+        }}
+        {...props}
+      >
+        <DGMPlainTextInplaceEditor editor={editor as Editor} />
+        <DGMRichTextInplaceEditor
+          onMount={(tiptapEditor) => {
+            setTiptapEditor(tiptapEditor);
+          }}
+          onOpen={(shape) => {
+            setEditingText(shape as Box);
+          }}
+          editor={editor as Editor}
+          toolbar={
+            <RichTextInplaceEditorToolbar
+              theme={theme}
+              tiptapEditor={tiptapEditor}
+              shape={editingText}
+            />
+          }
+        />
+      </DGMEditor>
+    </>
+  );
+};

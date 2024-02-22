@@ -26,8 +26,6 @@ import {
   EmbedFactoryHandler,
 } from "./handlers";
 import { FrameFactoryHandler } from "./handlers/frame-handler";
-import { PlainTextInplaceEditor } from "./inplace-editors/plain-text-inplace-editor";
-import { RichTextInplaceEditor } from "./inplace-editors/rich-text-inplace-editor";
 import {
   Box,
   Connector,
@@ -102,7 +100,6 @@ export function basicSetup(options?: EditorOptions): EditorOptions {
       "mod-left": (editor) => editor.scroll(-editor.gridSize[0], 0),
       "mod-right": (editor) => editor.scroll(editor.gridSize[0], 0),
     },
-    inplaceEditors: [new PlainTextInplaceEditor(), new RichTextInplaceEditor()],
     allowAutoScroll: true,
     allowCreateTextOnCanvas: true,
     allowCreateTextOnConnector: true,

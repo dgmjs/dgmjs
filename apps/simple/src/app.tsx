@@ -1,5 +1,5 @@
 import { Editor } from "@dgmjs/core";
-import { DGMEditor, DGMEditorWithInplaceEditors } from "@dgmjs/react";
+import { DGMEditorWithInplaceEditors } from "@dgmjs/react";
 
 declare global {
   interface Window {

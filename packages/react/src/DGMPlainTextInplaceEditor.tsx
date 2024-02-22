@@ -142,6 +142,16 @@ export const DGMPlainTextInplaceEditor: React.FC<
         )
           open(shape);
       });
+      editor.factory.on("create", (shape: Shape) => {
+        if (
+          shape instanceof Box &&
+          shape.textEditable &&
+          shape.richText === false
+        ) {
+          editor.selections.deselectAll();
+          open(shape);
+        }
+      });
     }
   }, [editor]);
 

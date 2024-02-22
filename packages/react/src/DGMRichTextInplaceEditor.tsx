@@ -9,10 +9,14 @@ import {
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { moveToAboveOrBelow, textVertAlignToAlignItems } from "./utils";
 import { useEditor, extensions, TiptapEditor } from "./tiptap/tiptap-editor";
+import { Editor as TiptapEditorType } from "@tiptap/react";
 
 interface DGMRichTextInplaceEditorProps
   extends React.HTMLAttributes<HTMLDivElement> {
   editor: Editor;
+  toolbar?: React.ReactNode;
+  onMount?: (tiptapEditor: TiptapEditorType) => void;
+  onOpen?: (shape: Box) => void;
 }
 
 interface InternalState {
@@ -36,7 +40,7 @@ interface InternalState {
 
 export const DGMRichTextInplaceEditor: React.FC<
   DGMRichTextInplaceEditorProps
-> = ({ editor, ...others }) => {
+> = ({ editor, toolbar, onMount, onOpen, ...others }) => {
   const toolbarHolderRef = useRef<HTMLDivElement>(null);
 
   const [state, setState] = useState<InternalState>({
@@ -147,6 +151,7 @@ export const DGMRichTextInplaceEditor: React.FC<
           width: textShape.width,
           height: textShape.height,
         });
+        if (onOpen) onOpen(textShape as Box);
       }, 0);
     }
   };
@@ -181,12 +186,22 @@ export const DGMRichTextInplaceEditor: React.FC<
         )
           open(shape);
       });
+      editor.factory.on("create", (shape: Shape) => {
+        if (
+          shape instanceof Box &&
+          shape.textEditable &&
+          shape.richText === true
+        ) {
+          editor.selections.deselectAll();
+          open(shape);
+        }
+      });
     }
   }, [editor]);
 
   useEffect(() => {
-    if (tiptapEditor) {
-      console.log("tiptapEditor", tiptapEditor);
+    if (tiptapEditor && onMount) {
+      onMount(tiptapEditor);
     }
   }, [tiptapEditor]);
 
@@ -237,12 +252,12 @@ export const DGMRichTextInplaceEditor: React.FC<
             ref={toolbarHolderRef}
             style={{
               position: "absolute",
-              background: "red",
+              background: "transparent",
               zIndex: 10,
               outline: "none",
             }}
           >
-            toolbar
+            {toolbar}
           </div>
         </>
       )}

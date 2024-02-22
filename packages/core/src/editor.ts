@@ -36,20 +36,10 @@ import { Transform } from "./transform/transform";
 import { SelectionManager } from "./selection-manager";
 import { Clipboard } from "./core/clipboard";
 
-/**
- * Inplace Editor
- */
-export abstract class InplaceEditor {
-  abstract setup(editor: Editor): void;
-  abstract active(editor: Editor, shape: Shape): boolean;
-  abstract open(editor: Editor, shape: Shape): void;
-}
-
 export interface EditorOptions {
   instantiators?: Record<string, InstantiatorFun>;
   handlers?: Handler[];
   keymap?: KeyMap;
-  inplaceEditors?: InplaceEditor[];
   allowAutoScroll?: boolean;
   allowCreateTextOnCanvas?: boolean;
   allowCreateTextOnConnector?: boolean;
@@ -73,7 +63,6 @@ class Editor extends EventEmitter {
   factory: ShapeFactory;
   actions: Actions;
   keymap: KeymapManager;
-  inplaceEditors: InplaceEditor[];
   autoScroller: AutoScroller;
   parent: HTMLElement;
   canvasElement: HTMLCanvasElement;
@@ -126,7 +115,6 @@ class Editor extends EventEmitter {
     this.platform = this.detectPlatform();
     this.parent = editorHolder;
     this.parent.style.overflow = "hidden";
-    this.inplaceEditors = [];
     this.autoScroller = new AutoScroller(this);
     this.autoScroller.setEnabled(this.options.allowAutoScroll ?? true);
     // initialize properties
@@ -153,7 +141,6 @@ class Editor extends EventEmitter {
     this.initializeState();
     this.initializeCanvas();
     this.initializeKeymap();
-    this.initializeInplaceEditors();
     if (this.options.onReady) this.options.onReady(this);
   }
 
@@ -176,12 +163,7 @@ class Editor extends EventEmitter {
     this.transform.on("transaction", () => this.repaint());
     this.selections.on("change", () => this.repaint());
     this.factory.on("create", (shape: Shape) => {
-      this.selections.deselectAll();
-      if (shape instanceof Text) {
-        this.openInplaceEditor(shape);
-      } else {
-        this.selections.select([shape]);
-      }
+      this.selections.select([shape]);
     });
   }
 
@@ -304,15 +286,12 @@ class Editor extends EventEmitter {
         const shape: Shape | null = this.diagram.findDepthFirst(
           pred
         ) as Shape | null;
-        // open an inplace editors
-        if (shape) this.openInplaceEditor(shape);
         // create a text on canvas
         if (this.options.allowCreateTextOnCanvas && !shape) {
           const textShape = this.factory.createText([
             [x, y],
             [x, y],
           ]);
-          this.openInplaceEditor(textShape);
         }
         // create a text on connector
         if (
@@ -327,7 +306,6 @@ class Editor extends EventEmitter {
           );
           const position = geometry.getPositionOnPath(outline, nearest);
           const textShape = this.factory.createTextOnConnector(shape, position);
-          this.openInplaceEditor(textShape);
         }
         // trigger double click event
         this.triggerDblClick(shape, [x, y]);
@@ -393,13 +371,7 @@ class Editor extends EventEmitter {
         this.setActiveHandler(this.defaultHandlerId);
       }
       if (e.key === "Enter") {
-        const selections = this.selections.getSelections();
-        if (selections.length === 1 && selections[0] instanceof Box) {
-          const shape = selections[0] as Box;
-          if (shape.textEditable) {
-            this.openInplaceEditor(shape);
-          }
-        }
+        // ...
       }
       if (this.activeHandler) {
         this.activeHandler.keyDown(this, e);
@@ -410,22 +382,6 @@ class Editor extends EventEmitter {
         this.activeHandler.keyUp(this, e);
       }
     });
-  }
-
-  initializeInplaceEditors() {
-    this.inplaceEditors = this.options.inplaceEditors ?? [];
-    this.inplaceEditors.forEach((e) => e.setup(this));
-  }
-
-  /**
-   * Open an inplace editor for a shape
-   */
-  openInplaceEditor(shape: Shape) {
-    setTimeout(() => {
-      this.inplaceEditors.forEach((e) => {
-        if (e.active(this, shape)) e.open(this, shape);
-      });
-    }, 0);
   }
 
   /**
