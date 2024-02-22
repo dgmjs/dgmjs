@@ -1,5 +1,5 @@
 import {
-  Editor,
+  Editor as CoreEditor,
   EditorOptions,
   Shape,
   Transaction,
@@ -8,14 +8,14 @@ import {
 } from "@dgmjs/core";
 import { useEffect, useRef } from "react";
 
-export interface DGMEditorProps
+export interface EditorProps
   extends Omit<
     React.HTMLAttributes<HTMLDivElement>,
     "onScroll" | "onDragStart" | "onDrag" | "onDragEnd"
   > {
   options?: EditorOptions;
   showGrid?: boolean;
-  onMount?: (editor: Editor) => void;
+  onMount?: (editor: CoreEditor) => void;
   onSelectionChange?: (selections: Shape[]) => void;
   onActiveHandlerChange?: (handlerId: string) => void;
   onShapeCreate?: (shape: Shape) => void;
@@ -28,7 +28,7 @@ export interface DGMEditorProps
   onFileDrop?: (event: CanvasPointerEvent, dataTransfer: DataTransfer) => void;
 }
 
-export const DGMEditor: React.FC<DGMEditorProps> = ({
+export const Editor: React.FC<EditorProps> = ({
   options,
   showGrid = false,
   onMount,
@@ -45,11 +45,11 @@ export const DGMEditor: React.FC<DGMEditorProps> = ({
   ...others
 }) => {
   const editorHolderRef = useRef<HTMLDivElement>(null);
-  const editorRef = useRef<Editor | null>(null);
+  const editorRef = useRef<CoreEditor | null>(null);
 
   useEffect(() => {
     if (!editorRef.current) {
-      const editor = new Editor(
+      const editor = new CoreEditor(
         editorHolderRef.current!,
         basicSetup({ ...options })
       );

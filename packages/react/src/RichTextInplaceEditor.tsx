@@ -1,19 +1,35 @@
-import { Editor, Shape, Box, Text, geometry, measureText } from "@dgmjs/core";
+import {
+  Editor,
+  Shape,
+  Box,
+  Text,
+  measureText,
+  convertDocToText,
+} from "@dgmjs/core";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
-import { textVertAlignToAlignItems } from "./utils";
+import { moveToAboveOrBelow, textVertAlignToAlignItems } from "./utils";
+import {
+  useEditor,
+  extensions,
+  TiptapEditorComponent,
+} from "./tiptap/tiptap-editor";
+import { Editor as TiptapEditor } from "@tiptap/react";
 
-interface DGMPlainTextInplaceEditorProps
+interface RichTextInplaceEditorProps
   extends React.HTMLAttributes<HTMLDivElement> {
   editor: Editor;
+  toolbar?: React.ReactNode;
+  onMount?: (tiptapEditor: TiptapEditor) => void;
+  onOpen?: (shape: Box) => void;
 }
 
 interface InternalState {
   textShape: Text | null;
-  textValue: string;
   padding: number[];
   alignItems: string;
   textAlign: string;
   lineHeight: number;
+  paragraphSpacing: number;
   fontFamily: string;
   fontSize: number;
   color: string;
@@ -26,18 +42,22 @@ interface InternalState {
   textHeight: number;
 }
 
-export const DGMPlainTextInplaceEditor: React.FC<
-  DGMPlainTextInplaceEditorProps
-> = ({ editor, ...others }) => {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+export const RichTextInplaceEditor: React.FC<RichTextInplaceEditorProps> = ({
+  editor,
+  toolbar,
+  onMount,
+  onOpen,
+  ...others
+}) => {
+  const toolbarHolderRef = useRef<HTMLDivElement>(null);
 
   const [state, setState] = useState<InternalState>({
     textShape: null,
-    textValue: "",
     padding: [0, 0, 0, 0],
     alignItems: "start",
     textAlign: "left",
     lineHeight: 1.2,
+    paragraphSpacing: 1,
     fontFamily: "",
     fontSize: 16,
     color: "",
@@ -50,9 +70,9 @@ export const DGMPlainTextInplaceEditor: React.FC<
     textHeight: 0,
   });
 
-  const getTextRect = (textShape: Text, textValue: string) => {
+  const getTextRect = (textShape: Text, doc: any) => {
     const rect = textShape.getRectInDOM(editor.canvas);
-    const textMetric = measureText(editor.canvas, textShape, textValue);
+    const textMetric = measureText(editor.canvas, textShape, doc);
     const textWidth = textMetric.minWidth + state.padding[1] + state.padding[3];
     const textHeight = textMetric.height + state.padding[0] + state.padding[2];
     const MIN_WIDTH = 2;
@@ -64,6 +84,43 @@ export const DGMPlainTextInplaceEditor: React.FC<
     };
   };
 
+  const setToolbarPosition = (rect: {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+  }) => {
+    if (toolbarHolderRef.current) {
+      moveToAboveOrBelow(
+        editor,
+        toolbarHolderRef.current,
+        [
+          [rect.left, rect.top],
+          [rect.left + rect.width, rect.top + rect.height],
+        ],
+        32
+      );
+    }
+  };
+
+  const tiptapEditor = useEditor({
+    extensions,
+    content: /* textString.length > 0 ? editingText?.text : */ "",
+    onTransaction: (tr) => {
+      // expand editor width if text width is larger than current width
+      if (editor && tiptapEditor && state.textShape) {
+        const rect = getTextRect(state.textShape, tiptapEditor.getJSON());
+        setState((state) => ({
+          ...state,
+          width: Math.max(state.textShape?.width || 0, rect.width),
+          height: Math.max(state.textShape?.height || 0, rect.height),
+          textWidth: rect.width,
+          textHeight: rect.height,
+        }));
+      }
+    },
+  });
+
   const open = (textShape: Box) => {
     if (textShape) {
       // disable shape's text rendering
@@ -71,16 +128,14 @@ export const DGMPlainTextInplaceEditor: React.FC<
       editor.repaint();
 
       // update states
-      const textValue =
-        typeof textShape.text === "string" ? textShape.text : "";
-      const rect = getTextRect(textShape, textValue);
-      setState((state) => ({
+      const rect = getTextRect(textShape, textShape.text);
+      setState({
         textShape,
-        textValue,
         padding: textShape.padding,
         alignItems: textVertAlignToAlignItems(textShape.vertAlign),
         textAlign: textShape.horzAlign,
         lineHeight: textShape.lineHeight,
+        paragraphSpacing: textShape.paragraphSpacing,
         fontFamily: textShape.fontFamily,
         fontSize: textShape.fontSize,
         color: editor.canvas.resolveColor(textShape.fontColor),
@@ -91,23 +146,33 @@ export const DGMPlainTextInplaceEditor: React.FC<
         height: Math.max(textShape.height, rect.height),
         textWidth: rect.width,
         textHeight: rect.height,
-      }));
+      });
+
+      tiptapEditor?.commands.setContent(textShape.text);
+      tiptapEditor?.commands.focus();
+      tiptapEditor?.commands.selectAll();
+
       setTimeout(() => {
-        if (textareaRef.current) {
-          textareaRef.current.focus();
-          textareaRef.current.select();
-          textareaRef.current.scrollTop = 0;
-        }
+        setToolbarPosition({
+          left: rect.left,
+          top: rect.top,
+          width: textShape.width,
+          height: textShape.height,
+        });
+        if (onOpen) onOpen(textShape as Box);
       }, 0);
     }
   };
 
   const applyChanges = () => {
-    if (state.textShape) {
-      if (state.textValue.trim().length === 0) {
+    if (tiptapEditor && state.textShape) {
+      const textString = convertDocToText(tiptapEditor.getJSON());
+      if (textString.trim().length === 0) {
         editor.actions.delete_([state.textShape]);
       } else {
-        editor.actions.update({ text: state.textValue }, [state.textShape]);
+        editor.actions.update({ text: tiptapEditor.getJSON() }, [
+          state.textShape,
+        ]);
       }
       state.textShape._renderText = true;
       editor.repaint();
@@ -119,26 +184,13 @@ export const DGMPlainTextInplaceEditor: React.FC<
     if (event.key === "Escape") applyChanges();
   };
 
-  const handleInput = (event: React.FormEvent<HTMLTextAreaElement>) => {
-    const textValue = (event.target as HTMLTextAreaElement).value;
-    const size = getTextRect(state.textShape as Box, textValue);
-    setState((state) => ({
-      ...state,
-      textValue,
-      width: Math.max(state.textShape?.width || 0, size.width),
-      height: Math.max(state.textShape?.height || 0, size.height),
-      textWidth: size.width,
-      textHeight: size.height,
-    }));
-  };
-
   useEffect(() => {
     if (editor) {
       editor.on("dblClick", (shape: Shape, point: number[]) => {
         if (
           shape instanceof Box &&
           shape.textEditable &&
-          shape.richText === false
+          shape.richText === true
         )
           open(shape);
       });
@@ -146,7 +198,7 @@ export const DGMPlainTextInplaceEditor: React.FC<
         if (
           shape instanceof Box &&
           shape.textEditable &&
-          shape.richText === false
+          shape.richText === true
         ) {
           editor.selections.deselectAll();
           open(shape);
@@ -154,6 +206,12 @@ export const DGMPlainTextInplaceEditor: React.FC<
       });
     }
   }, [editor]);
+
+  useEffect(() => {
+    if (tiptapEditor && onMount) {
+      onMount(tiptapEditor);
+    }
+  }, [tiptapEditor]);
 
   return (
     <>
@@ -186,25 +244,28 @@ export const DGMPlainTextInplaceEditor: React.FC<
             }}
             {...others}
           >
-            <textarea
-              ref={textareaRef}
-              style={{
-                background: "transparent",
-                width: "100%",
-                outline: "none",
-                resize: "none",
-                whiteSpace: "nowrap",
-                lineHeight: `${state.lineHeight}em`,
-                fontFamily: state.fontFamily,
-                fontSize: `${state.fontSize}px`,
-                color: state.color,
-                textAlign: state.textAlign as any,
-                height: state.textHeight,
-              }}
-              value={state.textValue}
+            <TiptapEditorComponent
+              editor={tiptapEditor}
+              fontFamily={state.fontFamily}
+              fontSize={state.fontSize}
+              fontColor={state.color}
+              lineHeight={state.lineHeight}
+              paragraphSpacing={state.paragraphSpacing}
+              alignItems={state.alignItems}
+              onBlur={() => {}}
               onKeyDown={handleKeyDown}
-              onInput={handleInput}
-            ></textarea>
+            />
+          </div>
+          <div
+            ref={toolbarHolderRef}
+            style={{
+              position: "absolute",
+              background: "transparent",
+              zIndex: 10,
+              outline: "none",
+            }}
+          >
+            {toolbar}
           </div>
         </>
       )}

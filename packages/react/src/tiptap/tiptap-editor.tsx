@@ -68,7 +68,7 @@ export const extensions = [
  * - [x] undo, redo
  * - [x] copy, cut, paste
  */
-export const TiptapEditor = ({
+export const TiptapEditorComponent = ({
   editor,
   fontFamily,
   fontSize,
@@ -134,4 +134,4 @@ export const TiptapEditor = ({
     </>
   );
 };
-TiptapEditor.displayName = "RichTextEditor";
+TiptapEditorComponent.displayName = "TiptapEditorComponent";

@@ -1,10 +1,10 @@
-import { Box, Editor } from "@dgmjs/core";
+import { Box, Editor as CoreEditor } from "@dgmjs/core";
 import { useState, useEffect } from "react";
 import {
-  DGMEditor,
-  DGMEditorProps,
-  DGMPlainTextInplaceEditor,
-  DGMRichTextInplaceEditor,
+  Editor,
+  EditorProps,
+  PlainTextInplaceEditor,
+  RichTextInplaceEditor,
   TiptapEditor,
 } from "@dgmjs/react";
 import { constants } from "@dgmjs/core";
@@ -210,7 +210,7 @@ export function RichTextInplaceEditorToolbar({
   );
 }
 
-interface EditorWrapperProps extends DGMEditorProps {
+interface EditorWrapperProps extends EditorProps {
   theme: "light" | "dark";
 }
 
@@ -219,28 +219,28 @@ export const EditorWrapper: React.FC<EditorWrapperProps> = ({
   onMount,
   ...props
 }) => {
-  const [editor, setEditor] = useState<Editor | null>(null);
+  const [editor, setEditor] = useState<CoreEditor | null>(null);
   const [tiptapEditor, setTiptapEditor] = useState<any>(null);
   const [editingText, setEditingText] = useState<Box | null>(null);
 
   return (
     <>
-      <DGMEditor
+      <Editor
         onMount={(editor) => {
           setEditor(editor);
           if (onMount) onMount(editor);
         }}
         {...props}
       >
-        <DGMPlainTextInplaceEditor editor={editor as Editor} />
-        <DGMRichTextInplaceEditor
+        <PlainTextInplaceEditor editor={editor as CoreEditor} />
+        <RichTextInplaceEditor
           onMount={(tiptapEditor) => {
             setTiptapEditor(tiptapEditor);
           }}
           onOpen={(shape) => {
             setEditingText(shape as Box);
           }}
-          editor={editor as Editor}
+          editor={editor as CoreEditor}
           toolbar={
             <RichTextInplaceEditorToolbar
               theme={theme}
@@ -249,7 +249,7 @@ export const EditorWrapper: React.FC<EditorWrapperProps> = ({
             />
           }
         />
-      </DGMEditor>
+      </Editor>
     </>
   );
 };
