@@ -144,7 +144,7 @@ export const DGMPlainTextInplaceEditor: React.FC<
       });
       editor.factory.on("create", (shape: Shape) => {
         if (
-          shape instanceof Box &&
+          shape instanceof Text &&
           shape.textEditable &&
           shape.richText === false
         ) {
