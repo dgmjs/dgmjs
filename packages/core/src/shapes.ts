@@ -15,8 +15,11 @@ import { assert } from "./std/assert";
 import { Canvas } from "./graphics/graphics";
 import {
   CONNECTION_POINT_APOTHEM,
+  Color,
   DEFAULT_FONT_SIZE,
   LINE_SELECTION_THRESHOLD,
+  SYSTEM_FONT,
+  SYSTEM_FONT_SIZE,
 } from "./graphics/const";
 import * as geometry from "./graphics/geometry";
 import * as utils from "./graphics/utils";
@@ -204,6 +207,10 @@ class Shape extends Obj {
     this.properties = [];
     this.scripts = [];
   }
+
+  initialze(canvas: Canvas) {}
+
+  finalize(canvas: Canvas) {}
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
@@ -483,6 +490,35 @@ class Shape extends Obj {
       .filter((s) => (s as Shape).visible)
       .map((s) => (s as Shape).getBoundingRect())
       .reduce(geometry.unionRect);
+  }
+
+  /**
+   * Return a bounding box in canvas element.
+   *
+   * [Note] If you want to place DOM elements over the canvas, use this method
+   * and don't forget to apply transform scale to the DOM element.
+   */
+  getRectInDOM(canvas: Canvas): {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+  } {
+    const rect = this.getBoundingRect().map((p) => {
+      let tp = canvas.globalCoordTransform(p);
+      return [tp[0] / canvas.ratio, tp[1] / canvas.ratio];
+    });
+    const scale = canvas.scale;
+    let width = geometry.width(rect) * (1 / scale);
+    let height = geometry.height(rect) * (1 / scale);
+    const left = rect[0][0] - (width * (1 - scale)) / 2;
+    const top = rect[0][1] - (height * (1 - scale)) / 2;
+    return {
+      left,
+      top,
+      width,
+      height,
+    };
   }
 
   /**
@@ -1670,44 +1706,99 @@ class Connector extends Line {
 }
 
 /**
+ * Frame
+ */
+class Frame extends Box {
+  constructor() {
+    super();
+    this.type = "Frame";
+    this.name = "Frame";
+    this.containable = true;
+  }
+
+  render(canvas: Canvas) {
+    if (this.visible) {
+      canvas.save();
+      this.assignStyles(canvas);
+      this.localTransform(canvas);
+      // const script = this.getScript(ScriptType.RENDER);
+      // if (script) {
+      //   try {
+      //     evalScript({ canvas: canvas, shape: this }, script);
+      //   } catch (err) {
+      //     console.log("[Script Error]", err);
+      //   }
+      // } else {
+      //   this.renderDefault(canvas);
+      // }
+      canvas.storeState();
+      canvas.fillColor = Color.BACKGROUND;
+      canvas.fillStyle = FillStyle.SOLID;
+      canvas.strokeColor = Color.FOREGROUND;
+      canvas.strokePattern = [];
+      canvas.strokeWidth = 1 / canvas.scale;
+      canvas.fontColor = Color.FOREGROUND;
+      const fontSize = SYSTEM_FONT_SIZE / canvas.scale;
+      canvas.font = utils.toCssFont("normal", 400, fontSize, SYSTEM_FONT);
+      canvas.alpha = 1;
+      canvas.roughness = 0;
+
+      canvas.fillText(this.left, this.top - fontSize / 2, this.name);
+      canvas.roundRect(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.corners
+      );
+      canvas.context.clip();
+      canvas.restoreState();
+      this.children.forEach((s) => (s as Shape).render(canvas));
+      canvas.restore();
+    }
+  }
+}
+
+/**
  * Embed
  */
 class Embed extends Box {
-  iframe: HTMLIFrameElement;
+  iframe: HTMLIFrameElement | null;
 
   constructor() {
     super();
     this.type = "Embed";
-    this.iframe = document.createElement("iframe");
-    this.iframe.style.position = "absolute";
-    this.iframe.style.pointerEvents = "none";
-    this.iframe.src =
-      "https://www.youtube.com/embed/MTdbhePtCco?si=6-6HWSoOtx0qAmM6"; // "https://dgm.sh/home";
-    // <iframe width="560" height="315" src="https://www.youtube.com/embed/MTdbhePtCco?si=6-6HWSoOtx0qAmM6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    this.iframe = null;
+  }
+
+  initialze(canvas: Canvas): void {
+    if (!this.iframe) {
+      this.iframe = document.createElement("iframe");
+      this.iframe.style.position = "absolute";
+      this.iframe.style.pointerEvents = "none";
+      this.iframe.src =
+        "https://www.youtube.com/embed/MTdbhePtCco?si=6-6HWSoOtx0qAmM6"; // "https://dgm.sh/home";
+      canvas.element.parentElement?.appendChild(this.iframe);
+    }
+  }
+
+  finalize(canvas: Canvas): void {
+    if (this.iframe) {
+      this.iframe.remove();
+      this.iframe = null;
+    }
   }
 
   renderDefault(canvas: Canvas): void {
-    if (!this.iframe.parentElement) {
-      canvas.element.parentElement?.appendChild(this.iframe);
-    }
-
-    // TODO: 스크린 좌표 변환 함수를 Canvas로 보내자.
-    const rect = this.getBoundingRect().map((p) => {
-      let tp = canvas.globalCoordTransform(p);
-      return [tp[0] / canvas.ratio, tp[1] / canvas.ratio];
-    });
+    const rect = this.getRectInDOM(canvas);
     const scale = canvas.scale;
-    // const canvasRect = canvas.element.getBoundingClientRect();
-    let width = geometry.width(rect) * (1 / scale);
-    let height = geometry.height(rect) * (1 / scale);
-    const left = rect[0][0] - (width * (1 - scale)) / 2; // + canvasRect.left;
-    const top = rect[0][1] - (height * (1 - scale)) / 2; // + canvasRect.top;
-
-    this.iframe.style.left = `${left}px`;
-    this.iframe.style.top = `${top}px`;
-    this.iframe.style.width = `${width}px`;
-    this.iframe.style.height = `${height}px`;
-    this.iframe.style.transform = `scale(${scale})`;
+    if (this.iframe) {
+      this.iframe.style.left = `${rect.left}px`;
+      this.iframe.style.top = `${rect.top}px`;
+      this.iframe.style.width = `${rect.width}px`;
+      this.iframe.style.height = `${rect.height}px`;
+      this.iframe.style.transform = `scale(${scale})`;
+    }
   }
 }
 
@@ -1866,6 +1957,7 @@ export {
   Image,
   Group,
   Connector,
+  Frame,
   Embed,
   constraintManager,
   type ShapeValues,

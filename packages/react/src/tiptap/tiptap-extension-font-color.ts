@@ -1,8 +1,8 @@
 import "@tiptap/extension-text-style";
 import { Extension } from "@tiptap/core";
-import { toCssColor } from "../graphics/utils";
+import { utils } from "@dgmjs/core";
 
-export const ExtendedColor = Extension.create({
+export const FontColor = Extension.create({
   name: "color",
 
   addOptions() {
@@ -27,7 +27,7 @@ export const ExtendedColor = Extension.create({
               }
 
               return {
-                style: `color: ${toCssColor(attributes.color)}`,
+                style: `color: ${utils.toCssColor(attributes.color)}`,
               };
             },
           },

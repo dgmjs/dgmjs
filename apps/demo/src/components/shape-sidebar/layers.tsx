@@ -18,8 +18,10 @@ import { TreeNode, Tree } from "@/components/common/tree";
 import {
   CircleIcon,
   ComponentIcon,
+  FrameIcon,
   GroupIcon,
   PencilIcon,
+  ScanIcon,
   ShapesIcon,
   SquareIcon,
   TypeIcon,
@@ -63,6 +65,8 @@ const ShapeTreeNode: React.FC<ShapeTreeNodeProps> = ({
             {shape.type === "Group" && <GroupIcon size={16} />}
             {shape.type === "Connector" && <LineIcon size={16} />}
             {shape.type === "Line" && <PencilIcon size={16} />}
+            {shape.type === "Embed" && <ScanIcon size={16} />}
+            {shape.type === "Frame" && <FrameIcon size={16} />}
           </div>
           {shape.proto && <ComponentIcon size={16} className="mr-2" />}
           <div className="truncate">

@@ -14,6 +14,11 @@
 import { Instantiator } from "./instantiator";
 import type { Obj } from "./obj";
 
+type StoreOptions = {
+  objInitializer?: (obj: Obj) => void;
+  objFinalizer?: (obj: Obj) => void;
+};
+
 /**
  * Object store
  * - access to all objects
@@ -25,6 +30,8 @@ export class Store {
    */
   instantiator: Instantiator;
 
+  options: StoreOptions;
+
   /**
    * Index for object.id
    */
@@ -35,8 +42,9 @@ export class Store {
    */
   root: Obj | null;
 
-  constructor(instantiator: Instantiator) {
+  constructor(instantiator: Instantiator, options?: StoreOptions) {
     this.instantiator = instantiator;
+    this.options = options || {};
     this.idIndex = {};
     this.root = null;
   }
@@ -56,6 +64,9 @@ export class Store {
     if (obj) {
       obj.traverse((o) => {
         this.idIndex[o.id] = o;
+        if (this.options.objInitializer) {
+          this.options.objInitializer(o);
+        }
       });
     }
   }
@@ -67,6 +78,9 @@ export class Store {
     if (obj) {
       obj.traverse((o) => {
         delete this.idIndex[o.id];
+        if (this.options.objFinalizer) {
+          this.options.objFinalizer(o);
+        }
       });
     }
   }

@@ -11,7 +11,12 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { EmbedFactoryHandler, type EditorOptions } from "@dgmjs/core";
+import {
+  EmbedFactoryHandler,
+  type EditorOptions,
+  Frame,
+  FrameFactoryHandler,
+} from "@dgmjs/core";
 import {
   Box,
   Connector,
@@ -35,26 +40,8 @@ import {
   FreehandFactoryHandler,
   ImageFactoryHandler,
 } from "@dgmjs/core";
-import { PlainTextInplaceEditor } from "@dgmjs/core";
-import { RichTextInplaceEditor } from "@dgmjs/core";
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { RichTextInplaceEditorToolbar } from "./components/rich-text-inplace-editor-toolbar";
 
 export function customSetup(options?: EditorOptions): EditorOptions {
-  const plainTextInplaceEditor = new PlainTextInplaceEditor();
-  const richTextInplaceEditor = new RichTextInplaceEditor();
-
-  ReactDOM.createRoot(
-    document.getElementById(
-      "rich-text-inplace-editor-toolbar"
-    ) as HTMLDivElement
-  ).render(
-    <React.StrictMode>
-      <RichTextInplaceEditorToolbar inplaceEditor={richTextInplaceEditor} />
-    </React.StrictMode>
-  );
-
   return {
     instantiators: {
       Shape: () => new Shape(),
@@ -67,6 +54,7 @@ export function customSetup(options?: EditorOptions): EditorOptions {
       Image: () => new Image(),
       Connector: () => new Connector(),
       Group: () => new Group(),
+      Frame: () => new Frame(),
       Embed: () => new Embed(),
     },
     handlers: [
@@ -79,6 +67,7 @@ export function customSetup(options?: EditorOptions): EditorOptions {
       new LineFactoryHandler("Line"),
       new FreehandFactoryHandler("Freehand"),
       new ImageFactoryHandler("Image"),
+      new FrameFactoryHandler("Frame"),
       new EmbedFactoryHandler("Embed"),
     ],
     keymap: {
@@ -111,7 +100,6 @@ export function customSetup(options?: EditorOptions): EditorOptions {
       "mod-left": (editor) => editor.scroll(-editor.gridSize[0], 0),
       "mod-right": (editor) => editor.scroll(editor.gridSize[0], 0),
     },
-    inplaceEditors: [plainTextInplaceEditor, richTextInplaceEditor],
     allowAutoScroll: true,
     allowCreateTextOnCanvas: true,
     allowCreateTextOnConnector: true,

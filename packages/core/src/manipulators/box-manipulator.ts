@@ -50,7 +50,8 @@ manipulatorManager.define("Rectangle", new BoxManipulator());
 manipulatorManager.define("Ellipse", new BoxManipulator());
 manipulatorManager.define("Image", new BoxManipulator());
 
-// for embed
+// for frame, embed
+manipulatorManager.define("Frame", new BoxManipulator());
 manipulatorManager.define("Embed", new BoxManipulator());
 
 export { BoxManipulator };

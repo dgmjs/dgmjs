@@ -497,6 +497,7 @@ class Canvas {
         fillStyle: this.fillStyle,
         fillLineDash: [],
         stroke: this.resolveColor("$transparent"),
+        strokeWidth: this.strokeWidth,
       });
       roughDraw(this.context, rd);
     } else {
@@ -545,7 +546,7 @@ class Canvas {
           y + rs[0]
         } Q${x},${y} ${x + rs[0]},${y} Z`,
         {
-          seed: w + h,
+          seed: x + y + w + h,
           roughness: this.roughness,
           stroke: this.resolveColor(this.strokeColor),
           strokeWidth: this.strokeWidth,
@@ -606,6 +607,7 @@ class Canvas {
           fillStyle: this.fillStyle,
           fillLineDash: [],
           stroke: this.resolveColor("$transparent"),
+          strokeWidth: this.strokeWidth,
         }
       );
       roughDraw(this.context, rd);
@@ -708,6 +710,7 @@ class Canvas {
         fillStyle: this.fillStyle,
         fillLineDash: [],
         stroke: this.resolveColor("$transparent"),
+        strokeWidth: this.strokeWidth,
       });
       roughDraw(this.context, rd);
     } else {
@@ -971,6 +974,7 @@ class Canvas {
         fillStyle: this.fillStyle,
         fillLineDash: [],
         stroke: this.resolveColor("$transparent"),
+        strokeWidth: this.strokeWidth,
       });
       roughDraw(this.context, rd);
     } else {
@@ -1054,6 +1058,7 @@ class Canvas {
         fillStyle: this.fillStyle,
         fillLineDash: [],
         stroke: this.resolveColor("$transparent"),
+        strokeWidth: this.strokeWidth,
       });
       roughDraw(this.context, rd);
     } else {
@@ -1138,6 +1143,7 @@ class Canvas {
         fillStyle: this.fillStyle,
         fillLineDash: [],
         stroke: this.resolveColor("$transparent"),
+        strokeWidth: this.strokeWidth,
       });
       roughDraw(this.context, rd);
     } else {
@@ -1206,6 +1212,7 @@ class Canvas {
         fillStyle: this.fillStyle,
         fillLineDash: [],
         stroke: this.resolveColor("$transparent"),
+        strokeWidth: this.strokeWidth,
       });
       roughDraw(this.context, rd);
     } else {

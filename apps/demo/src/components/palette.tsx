@@ -13,6 +13,7 @@
 
 import {
   CircleIcon,
+  FrameIcon,
   HandIcon,
   ImageIcon,
   MousePointer2Icon,
@@ -83,6 +84,9 @@ export function Palette() {
       </PaletteItem>
       <PaletteItem handlerId="Freehand">
         <Pencil size={16} />
+      </PaletteItem>
+      <PaletteItem handlerId="Frame">
+        <FrameIcon size={16} />
       </PaletteItem>
       <PaletteItem handlerId="Embed">
         <ScanIcon size={16} />
