@@ -8,7 +8,7 @@ import {
 } from "@dgmjs/core";
 import { useEffect, useRef } from "react";
 
-export interface EditorProps
+export interface DGMEditorProps
   extends Omit<
     React.HTMLAttributes<HTMLDivElement>,
     "onScroll" | "onDragStart" | "onDrag" | "onDragEnd"
@@ -28,7 +28,7 @@ export interface EditorProps
   onFileDrop?: (event: CanvasPointerEvent, dataTransfer: DataTransfer) => void;
 }
 
-export const Editor: React.FC<EditorProps> = ({
+export const DGMEditor: React.FC<DGMEditorProps> = ({
   options,
   showGrid = false,
   onMount,

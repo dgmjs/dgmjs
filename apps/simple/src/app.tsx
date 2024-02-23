@@ -1,5 +1,5 @@
 import { Editor } from "@dgmjs/core";
-import { EditorWithInplaceEditors } from "@dgmjs/react";
+import { DGMEditorWithInplaceEditors } from "@dgmjs/react";
 
 declare global {
   interface Window {
@@ -10,7 +10,7 @@ declare global {
 function App() {
   return (
     <div className="absolute inset-0 h-[calc(100dvh)] select-none">
-      <EditorWithInplaceEditors
+      <DGMEditorWithInplaceEditors
         className="w-full h-full"
         showGrid={true}
         onMount={(editor) => {

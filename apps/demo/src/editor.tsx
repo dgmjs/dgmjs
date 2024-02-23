@@ -1,10 +1,10 @@
 import { Box, Editor as CoreEditor } from "@dgmjs/core";
 import { useState, useEffect } from "react";
 import {
-  Editor,
-  EditorProps,
-  PlainTextInplaceEditor,
-  RichTextInplaceEditor,
+  DGMEditor,
+  DGMEditorProps,
+  DGMPlainTextInplaceEditor,
+  DGMRichTextInplaceEditor,
   TiptapEditor,
 } from "@dgmjs/react";
 import { constants } from "@dgmjs/core";
@@ -210,7 +210,7 @@ export function RichTextInplaceEditorToolbar({
   );
 }
 
-interface EditorWrapperProps extends EditorProps {
+interface EditorWrapperProps extends DGMEditorProps {
   theme: "light" | "dark";
 }
 
@@ -225,15 +225,15 @@ export const EditorWrapper: React.FC<EditorWrapperProps> = ({
 
   return (
     <>
-      <Editor
+      <DGMEditor
         onMount={(editor) => {
           setEditor(editor);
           if (onMount) onMount(editor);
         }}
         {...props}
       >
-        <PlainTextInplaceEditor editor={editor as CoreEditor} />
-        <RichTextInplaceEditor
+        <DGMPlainTextInplaceEditor editor={editor as CoreEditor} />
+        <DGMRichTextInplaceEditor
           onMount={(tiptapEditor) => {
             setTiptapEditor(tiptapEditor);
           }}
@@ -249,7 +249,7 @@ export const EditorWrapper: React.FC<EditorWrapperProps> = ({
             />
           }
         />
-      </Editor>
+      </DGMEditor>
     </>
   );
 };
