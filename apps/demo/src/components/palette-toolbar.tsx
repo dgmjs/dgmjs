@@ -53,44 +53,46 @@ function PaletteItem({ handlerId, children }: PaletteItemProps) {
   );
 }
 
-export function Palette() {
+export function PaletteToolbar() {
   return (
-    <div className="flex justify-center items-center h-8">
-      <PaletteItem handlerId="Select">
-        <MousePointer2Icon size={16} />
-      </PaletteItem>
-      <PaletteItem handlerId="Hand">
-        <HandIcon size={16} />
-      </PaletteItem>
-      <Separator orientation="vertical" />
-      <PaletteItem handlerId="Rectangle">
-        <SquareIcon size={16} />
-      </PaletteItem>
-      <PaletteItem handlerId="Ellipse">
-        <CircleIcon size={16} />
-      </PaletteItem>
-      <PaletteItem handlerId="Text">
-        <TypeIcon size={16} />
-      </PaletteItem>
-      <PaletteItem handlerId="Image">
-        <ImageIcon size={16} />
-      </PaletteItem>
-      <Separator orientation="vertical" className="dark:bg-gray-700 mx-0.5" />
-      <PaletteItem handlerId="Connector">
-        <ConnectorIcon size={16} />
-      </PaletteItem>
-      <PaletteItem handlerId="Line">
-        <LineIcon size={16} />
-      </PaletteItem>
-      <PaletteItem handlerId="Freehand">
-        <Pencil size={16} />
-      </PaletteItem>
-      <PaletteItem handlerId="Frame">
-        <FrameIcon size={16} />
-      </PaletteItem>
-      <PaletteItem handlerId="Embed">
-        <ScanIcon size={16} />
-      </PaletteItem>
+    <div className="absolute bottom-4 inset-x-0 flex items-center justify-center">
+      <div className="flex justify-center items-center h-10 bg-background border rounded-lg px-1 gap-0.5">
+        <PaletteItem handlerId="Select">
+          <MousePointer2Icon size={16} />
+        </PaletteItem>
+        <PaletteItem handlerId="Hand">
+          <HandIcon size={16} />
+        </PaletteItem>
+        <Separator orientation="vertical" className="dark:bg-gray-700 mx-1" />
+        <PaletteItem handlerId="Rectangle">
+          <SquareIcon size={16} />
+        </PaletteItem>
+        <PaletteItem handlerId="Ellipse">
+          <CircleIcon size={16} />
+        </PaletteItem>
+        <PaletteItem handlerId="Text">
+          <TypeIcon size={16} />
+        </PaletteItem>
+        <PaletteItem handlerId="Image">
+          <ImageIcon size={16} />
+        </PaletteItem>
+        <Separator orientation="vertical" className="dark:bg-gray-700 mx-1" />
+        <PaletteItem handlerId="Connector">
+          <ConnectorIcon size={16} />
+        </PaletteItem>
+        <PaletteItem handlerId="Line">
+          <LineIcon size={16} />
+        </PaletteItem>
+        <PaletteItem handlerId="Freehand">
+          <Pencil size={16} />
+        </PaletteItem>
+        <PaletteItem handlerId="Frame">
+          <FrameIcon size={16} />
+        </PaletteItem>
+        <PaletteItem handlerId="Embed">
+          <ScanIcon size={16} />
+        </PaletteItem>
+      </div>
     </div>
   );
 }

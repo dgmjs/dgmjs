@@ -1,13 +1,19 @@
-import { Diagram, Editor, Shape, ShapeValues, Transaction } from "@dgmjs/core";
-import { Palette } from "./components/palette";
+import {
+  Diagram,
+  Editor,
+  Shape,
+  ShapeValues,
+  Transaction,
+  basicSetup,
+} from "@dgmjs/core";
+import { PaletteToolbar } from "./components/palette-toolbar";
 import { useDemoStore } from "./demo-store";
 import { Options } from "./components/options";
 import { Menus } from "./components/menus";
-import { PropertySidebar } from "./components/property-sidebar/property-sidebar";
+import { PropertySidebar } from "./components/property-sidebar";
 import fontJson from "./fonts.json";
 import { Font, fetchFonts, insertFontsToDocument } from "./font-manager";
-import { ShapeSidebar } from "./components/shape-sidebar/shape-sidebar";
-import { customSetup } from "./custom-setup";
+import { ShapeSidebar } from "./components/shape-sidebar";
 import { EditorWrapper } from "./editor";
 
 declare global {
@@ -67,9 +73,9 @@ function App() {
   return (
     <div className="absolute inset-0 h-[calc(100dvh)] select-none">
       <EditorWrapper
-        className="absolute top-10 bottom-0 left-64 right-64"
+        className="absolute inset-0"
         theme={demoStore.theme}
-        options={customSetup()}
+        options={basicSetup()}
         showGrid={true}
         onMount={handleMount}
         onSelectionChange={handleSelectionChange}
@@ -79,9 +85,10 @@ function App() {
       />
       <div className="absolute top-0 inset-x-0 h-10 border-b flex items-center justify-between bg-background">
         <Menus />
-        <Palette />
+
         <Options />
       </div>
+      <PaletteToolbar />
       <ShapeSidebar
         diagram={demoStore.diagram}
         onSelect={handleSidebarSelect}
