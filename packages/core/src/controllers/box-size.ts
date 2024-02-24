@@ -73,7 +73,7 @@ export class BoxSizeController extends Controller {
    */
   active(editor: Editor, shape: Shape): boolean {
     let value =
-      editor.selections.size() === 1 && editor.selections.isSelected(shape);
+      editor.selection.size() === 1 && editor.selection.isSelected(shape);
     switch (this.position) {
       case SizingPosition.TOP:
         value =

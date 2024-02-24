@@ -8,14 +8,14 @@ export interface DemoState {
   theme: "light" | "dark";
   activeHandler: string | null;
   diagram: Diagram | null;
-  selections: Shape[];
+  selection: Shape[];
   libraries: Diagram[];
   setScale: (scale: number) => void;
   setOrigin: (origin: [number, number]) => void;
   setTheme: (theme: "light" | "dark") => void;
   setActiveHandler: (handlerId: string | null) => void;
   setDiagram: (diagram: Diagram | null) => void;
-  setSelections: (selections: Shape[]) => void;
+  setSelection: (selections: Shape[]) => void;
 }
 
 export const useDemoStore = create<DemoState>()(
@@ -26,7 +26,7 @@ export const useDemoStore = create<DemoState>()(
       theme: "light",
       activeHandler: "Select",
       diagram: null,
-      selections: [],
+      selection: [],
       libraries: [],
       setScale: (scale) => set((state) => ({ scale })),
       setOrigin: (origin) => set((state) => ({ origin })),
@@ -39,7 +39,7 @@ export const useDemoStore = create<DemoState>()(
       setActiveHandler: (handlerId) =>
         set((state) => ({ activeHandler: handlerId })),
       setDiagram: (diagram) => set((state) => ({ diagram })),
-      setSelections: (selections) => set((state) => ({ selections })),
+      setSelection: (selections) => set((state) => ({ selection: selections })),
     }),
     { name: "DemoStore" }
   )

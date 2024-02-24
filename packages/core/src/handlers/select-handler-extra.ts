@@ -60,7 +60,7 @@ export class SelectHandlerConnectorExtraBehavior extends SelectHandlerExtraBehav
       end.connectable &&
       !end.containsPoint(canvas, p) &&
       cp &&
-      !editor.selections.isSelected(end)
+      !editor.selection.isSelected(end)
     );
   }
 

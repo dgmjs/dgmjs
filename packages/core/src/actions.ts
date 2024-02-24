@@ -68,7 +68,7 @@ export class Actions {
    * Update shape properties
    */
   update(values: ShapeValues, shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     const diagram = this.editor.diagram as Diagram;
     const tr = this.editor.transform;
     tr.startTransaction("update");
@@ -112,21 +112,21 @@ export class Actions {
    * Delete selected shapes
    */
   delete_(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     const diagram = this.editor.diagram as Diagram;
     const tr = this.editor.transform;
     tr.startTransaction("delete");
     tr.deleteShapes(diagram, shapes);
     tr.resolveAllConstraints(diagram, this.editor.canvas);
     tr.endTransaction();
-    this.editor.selections.deselectAll();
+    this.editor.selection.deselectAll();
   }
 
   /**
    * Copy selected shapes
    */
   copy(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     const clipboard = this.editor.clipboard;
     clipboard.clearBuffer();
     clipboard.putObjects(shapes, clipboard.buffer);
@@ -136,7 +136,7 @@ export class Actions {
    * Cut selected shapes
    */
   cut(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     const diagram = this.editor.diagram as Diagram;
     const tr = this.editor.transform;
     const clipboard = this.editor.clipboard;
@@ -145,7 +145,7 @@ export class Actions {
     tr.startTransaction("cut");
     tr.deleteShapes(diagram, shapes);
     tr.endTransaction();
-    this.editor.selections.deselectAll();
+    this.editor.selection.deselectAll();
   }
 
   /**
@@ -172,7 +172,7 @@ export class Actions {
       });
       tr.moveShapes(diagram, shapes, dx, dy);
       tr.endTransaction();
-      this.editor.selections.select(shapes);
+      this.editor.selection.select(shapes);
     }
   }
 
@@ -180,7 +180,7 @@ export class Actions {
    * Duplicate selected shapes
    */
   duplicate(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     const tr = this.editor.transform;
     const diagram = this.editor.diagram as Diagram;
     const clipboard = this.editor.clipboard;
@@ -195,7 +195,7 @@ export class Actions {
       });
       tr.moveShapes(diagram, copied, 30, 30);
       tr.endTransaction();
-      this.editor.selections.select(copied);
+      this.editor.selection.select(copied);
     }
   }
 
@@ -203,7 +203,7 @@ export class Actions {
    * Move selected shapes
    */
   move(dx: number, dy: number, shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
       const tr = this.editor.transform;
       const diagram = this.editor.diagram as Diagram;
@@ -237,8 +237,8 @@ export class Actions {
    * Group selected shapes
    */
   group(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.selections.getSelections();
-    const box = this.editor.selections.getBoundingRect(this.editor.canvas);
+    shapes = shapes ?? this.editor.selection.getShapes();
+    const box = this.editor.selection.getBoundingRect(this.editor.canvas);
     const diagram = this.editor.diagram as Diagram;
     // filter all descendants of one of grouping shapes
     let filteredShapes: Shape[] = [];
@@ -265,7 +265,7 @@ export class Actions {
         });
       tr.resolveAllConstraints(diagram, this.editor.canvas);
       tr.endTransaction();
-      this.editor.selections.select([group]);
+      this.editor.selection.select([group]);
     }
   }
 
@@ -273,7 +273,7 @@ export class Actions {
    * Ungroup selected shapes
    */
   ungroup(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     const diagram = this.editor.diagram as Diagram;
     const children: Shape[] = [];
     if (shapes.some((s) => s instanceof Group)) {
@@ -291,7 +291,7 @@ export class Actions {
       }
       tr.resolveAllConstraints(diagram, this.editor.canvas);
       tr.endTransaction();
-      this.editor.selections.select(children);
+      this.editor.selection.select(children);
     }
   }
 
@@ -299,7 +299,7 @@ export class Actions {
    * Bring selected shapes to front
    */
   bringToFront(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     const diagram = this.editor.diagram as Diagram;
     if (shapes.length > 0) {
       const tr = this.editor.transform;
@@ -316,7 +316,7 @@ export class Actions {
    * Send selected shapes to back
    */
   sendToBack(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     const diagram = this.editor.diagram as Diagram;
     if (shapes.length > 0) {
       const tr = this.editor.transform;
@@ -333,7 +333,7 @@ export class Actions {
    * Bring selected shapes forward
    */
   bringForward(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     const diagram = this.editor.diagram as Diagram;
     if (shapes.length > 0) {
       const tr = this.editor.transform;
@@ -350,7 +350,7 @@ export class Actions {
    * Send selected shapes backward
    */
   sendBackward(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     const diagram = this.editor.diagram as Diagram;
     if (shapes.length > 0) {
       const tr = this.editor.transform;
@@ -367,7 +367,7 @@ export class Actions {
    * Align selected shapes to left
    */
   alignLeft(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
       const tr = this.editor.transform;
       const diagram = this.editor.diagram as Diagram;
@@ -392,7 +392,7 @@ export class Actions {
    * Align selected shapes to right
    */
   alignRight(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
       const tr = this.editor.transform;
       const diagram = this.editor.diagram as Diagram;
@@ -417,7 +417,7 @@ export class Actions {
    * Align selected shapes to horizontally center
    */
   alignCenter(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
       const tr = this.editor.transform;
       const diagram = this.editor.diagram as Diagram;
@@ -447,7 +447,7 @@ export class Actions {
    * Align selected shapes to top
    */
   alignTop(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
       const tr = this.editor.transform;
       const diagram = this.editor.diagram as Diagram;
@@ -472,7 +472,7 @@ export class Actions {
    * Align selected shapes to bottom
    */
   alignBottom(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
       const tr = this.editor.transform;
       const diagram = this.editor.diagram as Diagram;
@@ -497,7 +497,7 @@ export class Actions {
    * Align selected shapes to vertically middle
    */
   alignMiddle(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
       const tr = this.editor.transform;
       const diagram = this.editor.diagram as Diagram;
@@ -538,7 +538,7 @@ export class Actions {
    */
   loadFromJSON(json: any) {
     if (json) {
-      this.editor.selections.deselectAll();
+      this.editor.selection.deselectAll();
       this.editor.store.fromJSON(json);
       if (this.editor.store.root instanceof Diagram) {
         this.editor.setDiagram(this.editor.store.root);

@@ -44,8 +44,8 @@ export class BoxMoveController extends Controller {
    */
   active(editor: Editor, shape: Shape): boolean {
     let value =
-      editor.selections.size() === 1 &&
-      editor.selections.isSelected(shape) &&
+      editor.selection.size() === 1 &&
+      editor.selection.isSelected(shape) &&
       !(shape as Box).anchored;
     return value;
   }

@@ -119,7 +119,7 @@ export interface LayerProps {
 }
 
 export const Layers: React.FC<LayerProps> = ({ diagram, onSelect }) => {
-  const selections = useDemoStore((state) => state.selections);
+  const selections = useDemoStore((state) => state.selection);
 
   return (
     <ScrollArea className="h-full w-full">

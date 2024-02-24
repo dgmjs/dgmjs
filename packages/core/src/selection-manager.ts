@@ -22,19 +22,19 @@ import { Editor } from "./editor";
  */
 export class SelectionManager extends EventEmitter {
   editor: Editor;
-  selections: Shape[];
+  shapes: Shape[];
 
   constructor(editorState: Editor) {
     super();
     this.editor = editorState;
-    this.selections = [];
+    this.shapes = [];
   }
 
   /**
    * Trigger event
    */
   triggerEvent() {
-    this.emit("change", this.selections);
+    this.emit("change", this.shapes);
   }
 
   /**
@@ -44,12 +44,12 @@ export class SelectionManager extends EventEmitter {
     shapes = shapes || [];
     for (let i = 0, len = shapes.length; i < len; i++) {
       let v = shapes[i];
-      if (!this.selections.includes(v)) {
+      if (!this.shapes.includes(v)) {
         return true;
       }
     }
-    for (let i = 0, len = this.selections.length; i < len; i++) {
-      let v = this.selections[i];
+    for (let i = 0, len = this.shapes.length; i < len; i++) {
+      let v = this.shapes[i];
       if (!shapes.includes(v)) {
         return true;
       }
@@ -61,26 +61,26 @@ export class SelectionManager extends EventEmitter {
    * Return selected shapes.
    * @return an array of selected shapes.
    */
-  getSelections(): Shape[] {
-    return this.selections;
+  getShapes(): Shape[] {
+    return this.shapes;
   }
 
   /**
    * Return the number of selections
    */
   size(): number {
-    return this.selections.length;
+    return this.shapes.length;
   }
 
   isSelected(shape: Shape) {
-    return this.selections.includes(shape);
+    return this.shapes.includes(shape);
   }
 
   /**
    * Select shapes
    */
   select(shapes: Shape[]) {
-    this.selections = [];
+    this.shapes = [];
     this.selectAdditional(shapes);
   }
 
@@ -90,7 +90,7 @@ export class SelectionManager extends EventEmitter {
   selectAdditional(shapes: Shape[]) {
     for (let shape of shapes) {
       if (!this.isSelected(shape)) {
-        this.selections.push(shape);
+        this.shapes.push(shape);
       }
     }
     this.triggerEvent();
@@ -104,7 +104,7 @@ export class SelectionManager extends EventEmitter {
       [x1, y1],
       [x2, y2],
     ]);
-    this.selections = [];
+    this.shapes = [];
     this.editor.diagram?.traverse((s) => {
       if (
         (s as Shape).visible &&
@@ -112,7 +112,7 @@ export class SelectionManager extends EventEmitter {
         (s as Shape).overlapRect(r) &&
         !this.isSelected(s as Shape)
       ) {
-        this.selections.push(s as Shape);
+        this.shapes.push(s as Shape);
       }
     });
     this.triggerEvent();
@@ -122,10 +122,10 @@ export class SelectionManager extends EventEmitter {
    * Select all
    */
   selectAll() {
-    this.selections = [];
+    this.shapes = [];
     this.editor.diagram?.traverse((s) => {
       if ((s as Shape).visible && (s as Shape).enable) {
-        this.selections.push(s as Shape);
+        this.shapes.push(s as Shape);
       }
     });
     this.triggerEvent();
@@ -137,7 +137,7 @@ export class SelectionManager extends EventEmitter {
   deselect(shapes: Shape[]) {
     for (let shape of shapes) {
       if (this.isSelected(shape)) {
-        this.selections.splice(this.selections.indexOf(shape), 1);
+        this.shapes.splice(this.shapes.indexOf(shape), 1);
       }
     }
     this.triggerEvent();
@@ -147,8 +147,8 @@ export class SelectionManager extends EventEmitter {
    * Deselect all shapes.
    */
   deselectAll() {
-    if (this.selections.length > 0) {
-      this.selections = [];
+    if (this.shapes.length > 0) {
+      this.shapes = [];
       this.triggerEvent();
     }
   }
@@ -157,8 +157,8 @@ export class SelectionManager extends EventEmitter {
    * Returns bounding rect of selected shapes
    */
   getBoundingRect(canvas: Canvas): number[][] {
-    return this.selections.length > 0
-      ? this.selections
+    return this.shapes.length > 0
+      ? this.shapes
           .map((s) =>
             geometry.boundingRect(
               s.getOutline().map((p) => s.localCoordTransform(canvas, p, true))

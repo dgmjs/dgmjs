@@ -38,7 +38,7 @@ function App() {
   };
 
   const handleSelectionChange = (selection: Shape[]) => {
-    demoStore.setSelections([...selection]);
+    demoStore.setSelection([...selection]);
   };
 
   const handleActiveHandlerChange = (handlerId: string) => {
@@ -55,13 +55,13 @@ function App() {
   };
 
   const handleSidebarSelect = (selection: Shape[]) => {
-    window.editor.selections.select(selection);
+    window.editor.selection.select(selection);
   };
 
   const handleValuesChange = (values: ShapeValues) => {
-    const shapes = window.editor.selections.getSelections();
+    const shapes = window.editor.selection.getShapes();
     window.editor.actions.update(values);
-    demoStore.setSelections([...shapes]);
+    demoStore.setSelection([...shapes]);
   };
 
   return (
@@ -87,7 +87,7 @@ function App() {
         onSelect={handleSidebarSelect}
       />
       <PropertySidebar
-        shapes={demoStore.selections}
+        shapes={demoStore.selection}
         onChange={handleValuesChange}
       />
     </div>

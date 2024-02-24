@@ -81,7 +81,7 @@ export class SelectHandler extends Handler {
     if (editor.diagram) {
       let p = canvas.globalCoordTransformRev([e.x, e.y]);
       // find in selected shapes' manipulators
-      for (let s of editor.selections.getSelections()) {
+      for (let s of editor.selection.getShapes()) {
         const manipulator = manipulatorManager.get(s.type);
         if (manipulator && manipulator.mouseIn(editor, s, e)) {
           return s;
@@ -109,19 +109,19 @@ export class SelectHandler extends Handler {
       if (shape) {
         // single selection
         if (e.shiftDown) {
-          if (editor.selections.isSelected(shape)) {
-            editor.selections.deselect([shape]);
+          if (editor.selection.isSelected(shape)) {
+            editor.selection.deselect([shape]);
           } else {
-            editor.selections.selectAdditional([shape]);
+            editor.selection.selectAdditional([shape]);
           }
         } else {
-          if (!editor.selections.isSelected(shape)) {
-            editor.selections.select([shape]);
+          if (!editor.selection.isSelected(shape)) {
+            editor.selection.select([shape]);
           }
         }
       } else {
         // area selection
-        editor.selections.deselectAll();
+        editor.selection.deselectAll();
         this.dragging = true;
         this.dragStartPoint = canvas.globalCoordTransformRev([e.x, e.y]);
         editor.triggerDragStart(null, this.dragStartPoint);
@@ -133,7 +133,7 @@ export class SelectHandler extends Handler {
     this.activeManipulator = null;
     let cursor: [string, number] = [Cursor.DEFAULT, 0];
     if (editor.diagram) {
-      if (editor.selections.getSelections().length > 1) {
+      if (editor.selection.getShapes().length > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) {
           const handled = manipulator.pointerDown(editor, editor.diagram, e);
@@ -205,7 +205,7 @@ export class SelectHandler extends Handler {
       } else if (!e.leftButtonDown) {
         // other shape hovering
         const shape = editor.diagram.getShapeAt(canvas, p);
-        if (shape && !editor.selections.isSelected(shape)) {
+        if (shape && !editor.selection.isSelected(shape)) {
           guide.drawHovering(editor, shape, e);
         }
       }
@@ -218,7 +218,7 @@ export class SelectHandler extends Handler {
     this.activeManipulator = null;
     let cursor: [string, number] = [Cursor.DEFAULT, 0];
     if (editor.diagram) {
-      if (editor.selections.getSelections().length > 1) {
+      if (editor.selection.getShapes().length > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) {
           const handled = manipulator.pointerMove(editor, editor.diagram, e);
@@ -262,7 +262,7 @@ export class SelectHandler extends Handler {
     const p = canvas.globalCoordTransformRev([e.x, e.y]);
     // select area
     if (e.button === Mouse.BUTTON1 && this.dragging) {
-      editor.selections.selectArea(
+      editor.selection.selectArea(
         this.dragStartPoint[0],
         this.dragStartPoint[1],
         p[0],
@@ -273,7 +273,7 @@ export class SelectHandler extends Handler {
     this.activeManipulator = null;
     let cursor: [string, number] = [Cursor.DEFAULT, 0];
     if (editor.diagram) {
-      if (editor.selections.getSelections().length > 1) {
+      if (editor.selection.getShapes().length > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) {
           if (manipulator.mouseIn(editor, editor.diagram, e)) {
@@ -327,16 +327,16 @@ export class SelectHandler extends Handler {
     if (e.key === "Escape") {
       this.dragging = false;
       this.dragStartPoint = [-1, -1];
-      editor.selections.deselectAll();
+      editor.selection.deselectAll();
       editor.repaint();
     }
     // delegates to manipulators
     if (editor.diagram) {
-      if (editor.selections.getSelections().length === 1) {
-        const shape = editor.selections.getSelections()[0];
+      if (editor.selection.getShapes().length === 1) {
+        const shape = editor.selection.getShapes()[0];
         const manipulator = manipulatorManager.get(shape.type);
         if (manipulator) manipulator.keyDown(editor, shape, e);
-      } else if (editor.selections.getSelections().length > 1) {
+      } else if (editor.selection.getShapes().length > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) manipulator.keyDown(editor, editor.diagram, e);
       }
@@ -360,14 +360,14 @@ export class SelectHandler extends Handler {
   drawSelection(editor: Editor) {
     if (editor.diagram) {
       // delegates to manipulators
-      if (editor.selections.getSelections().length > 1) {
+      if (editor.selection.getShapes().length > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) manipulator.draw(editor, editor.diagram);
       }
       editor.diagram.traverse((shape) => {
         const s = shape as Shape;
         const manipulator = manipulatorManager.get(s.type);
-        if (manipulator && editor.selections.isSelected(s)) {
+        if (manipulator && editor.selection.isSelected(s)) {
           manipulator.draw(editor, s);
         }
       });

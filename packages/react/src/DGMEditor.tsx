@@ -55,7 +55,7 @@ export const DGMEditor: React.FC<DGMEditorProps> = ({
       );
 
       // events forwarding
-      editor.selections.on("change", (shapes: Shape[]) => {
+      editor.selection.on("change", (shapes: Shape[]) => {
         if (onSelectionChange) onSelectionChange(shapes);
       });
       editor.on("activeHandlerChange", (handlerId: string) => {

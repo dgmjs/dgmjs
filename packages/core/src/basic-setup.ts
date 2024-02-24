@@ -78,7 +78,7 @@ export function basicSetup(options?: EditorOptions): EditorOptions {
       "mod-d": (editor) => editor.actions.duplicate(),
       "mod-v": (editor) => editor.actions.paste(),
       delete: (editor) => editor.actions.delete_(),
-      "mod-a": (editor) => editor.selections.selectAll(),
+      "mod-a": (editor) => editor.selection.selectAll(),
       "mod-[": (editor) => editor.actions.bringForward(),
       "mod-]": (editor) => editor.actions.sendBackward(),
       "mod-alt-[": (editor) => editor.actions.bringToFront(),

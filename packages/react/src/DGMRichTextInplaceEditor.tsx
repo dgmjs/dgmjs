@@ -196,7 +196,7 @@ export const DGMRichTextInplaceEditor: React.FC<
           shape.textEditable &&
           shape.richText === true
         ) {
-          editor.selections.deselectAll();
+          editor.selection.deselectAll();
           open(shape);
         }
       });

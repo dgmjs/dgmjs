@@ -51,8 +51,8 @@ export class BoxRotateController extends Controller {
    */
   active(editor: Editor, shape: Shape): boolean {
     let value =
-      editor.selections.size() === 1 &&
-      editor.selections.isSelected(shape) &&
+      editor.selection.size() === 1 &&
+      editor.selection.isSelected(shape) &&
       shape.rotatable;
     // don't allow rotating a single line
     if (shape instanceof Line && shape.path.length === 2) value = false;

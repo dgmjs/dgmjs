@@ -44,7 +44,7 @@ export class SelectionsMoveController extends Controller {
    * Indicates the controller is active or not
    */
   active(editor: Editor, shape: Shape): boolean {
-    return editor.selections.size() > 1;
+    return editor.selection.size() > 1;
   }
 
   /**
@@ -55,7 +55,7 @@ export class SelectionsMoveController extends Controller {
     if (shape instanceof Diagram) {
       const canvas = editor.canvas;
       const p = canvas.globalCoordTransformRev([e.x, e.y]);
-      for (let s of editor.selections.getSelections()) {
+      for (let s of editor.selection.getShapes()) {
         if (s.visible && s.enable && s.containsPoint(canvas, p)) return true;
       }
     }
@@ -75,7 +75,7 @@ export class SelectionsMoveController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
-    this.ghost = editor.selections.getEnclosure(editor.canvas);
+    this.ghost = editor.selection.getEnclosure(editor.canvas);
   }
 
   /**
@@ -83,7 +83,7 @@ export class SelectionsMoveController extends Controller {
    * @param shape (is a diagram in group manipulator)
    */
   update(editor: Editor, shape: Shape) {
-    let ghost = editor.selections.getEnclosure(editor.canvas);
+    let ghost = editor.selection.getEnclosure(editor.canvas);
     // snap ghost
     let bx = geometry.boundingRect(ghost);
     let xs = [bx[0][0] + this.dx, bx[1][0] + this.dx];
@@ -104,7 +104,7 @@ export class SelectionsMoveController extends Controller {
   finalize(editor: Editor, shape: Shape) {
     const canvas = editor.canvas;
     let dp = shape.localCoordTransform(canvas, this.dragPoint, false);
-    const selections = editor.selections.getSelections();
+    const selections = editor.selection.getShapes();
     const diagram = editor.diagram as Diagram;
 
     // determine container
@@ -129,7 +129,7 @@ export class SelectionsMoveController extends Controller {
   draw(editor: Editor, shape: Shape) {
     if (shape instanceof Diagram) {
       const canvas = editor.canvas;
-      let ghostCCS = editor.selections
+      let ghostCCS = editor.selection
         .getEnclosure(editor.canvas)
         .map((p) => lcs2ccs(canvas, shape, p));
       canvas.storeState();
@@ -139,7 +139,7 @@ export class SelectionsMoveController extends Controller {
       canvas.roughness = 0;
       canvas.alpha = 1;
       canvas.polyline(ghostCCS);
-      editor.selections.getSelections().forEach((s) => {
+      editor.selection.getShapes().forEach((s) => {
         const shapeGhostCSS = s
           .getEnclosure()
           .map((p) => lcs2ccs(canvas, s, p));
@@ -158,7 +158,7 @@ export class SelectionsMoveController extends Controller {
     drawPolylineInLCS(canvas, shape, this.ghost);
     // hovering containable
     const dp = shape.localCoordTransform(canvas, this.dragPoint, true);
-    const selections = editor.selections.getSelections();
+    const selections = editor.selection.getShapes();
     const container = editor.diagram?.getShapeAt(canvas, dp, selections);
     if (
       container &&

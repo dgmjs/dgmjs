@@ -57,8 +57,8 @@ export class LineMovePointController extends Controller {
    */
   active(editor: Editor, shape: Shape): boolean {
     let value =
-      editor.selections.size() === 1 &&
-      editor.selections.isSelected(shape) &&
+      editor.selection.size() === 1 &&
+      editor.selection.isSelected(shape) &&
       shape instanceof Line &&
       shape.pathEditable;
     if (shape instanceof Connector && shape.routeType === RouteType.RECTILINEAR)

@@ -47,8 +47,8 @@ export class ConnectorMoveSegmentController extends Controller {
    */
   active(editor: Editor, shape: Shape): boolean {
     return (
-      editor.selections.size() === 1 &&
-      editor.selections.isSelected(shape) &&
+      editor.selection.size() === 1 &&
+      editor.selection.isSelected(shape) &&
       shape instanceof Connector &&
       shape.routeType === RouteType.RECTILINEAR
     );

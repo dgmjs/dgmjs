@@ -57,7 +57,7 @@ class Editor extends EventEmitter {
   store: Store;
   transform: Transform;
   clipboard: Clipboard;
-  selections: SelectionManager;
+  selection: SelectionManager;
   diagram: Diagram | null;
 
   factory: ShapeFactory;
@@ -106,7 +106,7 @@ class Editor extends EventEmitter {
     });
     this.transform = new Transform(this.store);
     this.clipboard = new Clipboard(this.store, this.transform);
-    this.selections = new SelectionManager(this);
+    this.selection = new SelectionManager(this);
     this.factory = new ShapeFactory(this);
     this.actions = new Actions(this);
     this.keymap = new KeymapManager(this);
@@ -161,9 +161,9 @@ class Editor extends EventEmitter {
     this.store.setRoot(diagram);
     this.diagram = diagram;
     this.transform.on("transaction", () => this.repaint());
-    this.selections.on("change", () => this.repaint());
+    this.selection.on("change", () => this.repaint());
     this.factory.on("create", (shape: Shape) => {
-      this.selections.select([shape]);
+      this.selection.select([shape]);
     });
   }
 
@@ -274,7 +274,7 @@ class Editor extends EventEmitter {
     // mouse double click
     this.canvasElement.addEventListener("dblclick", (e) => {
       this.focus();
-      this.selections.deselectAll();
+      this.selection.deselectAll();
       const event = createPointerEvent(this.canvasElement, this.canvas, e);
       const p = this.canvas.globalCoordTransformRev([event.x, event.y]);
       const x = p[0];
@@ -389,7 +389,7 @@ class Editor extends EventEmitter {
    */
   setDiagram(diagram: Diagram) {
     this.diagram = diagram;
-    this.selections.deselectAll();
+    this.selection.deselectAll();
     this.repaint();
   }
 
@@ -1140,10 +1140,7 @@ class Manipulator {
    * @returns handled or not
    */
   pointerMove(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
-    if (
-      this.mouseIn(editor, shape, e) &&
-      !editor.selections.isSelected(shape)
-    ) {
+    if (this.mouseIn(editor, shape, e) && !editor.selection.isSelected(shape)) {
       this.drawHovering(editor, shape, e);
     }
     let handled = false;
