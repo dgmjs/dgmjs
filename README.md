@@ -1,6 +1,6 @@
 # dgmjs
 
-An extensible diagramming framework for the web
+An extensible diagramming library for the web
 
 ## Build and publish
 
