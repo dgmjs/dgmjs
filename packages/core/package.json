@@ -35,6 +35,8 @@
     "@tiptap/extension-text-align": "^2.2.2",
     "@tiptap/extension-text-style": "^2.2.2",
     "@tiptap/extension-underline": "^2.2.2",
+    "@types/events": "^3.0.3",
+    "@types/file-saver": "^2.0.7",
     "browser-fs-access": "^0.35.0",
     "events": "^3.3.0",
     "file-saver": "^2.0.5",
@@ -45,9 +47,7 @@
     "simplify-path": "^1.1.0",
     "svgcanvas": "^2.5.0",
     "tiptap-extension-font-size": "^1.2.0",
-    "zod": "^3.22.4",
-    "@types/events": "^3.0.3",
-    "@types/file-saver": "^2.0.7"
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
