@@ -29,7 +29,7 @@ export const ShapeSidebar: React.FC<ShapeSidebarProps> = ({
   return (
     <div
       id="shape-sidebar"
-      className="absolute bottom-4 left-4 top-4 w-64 border bg-background p-3 rounded"
+      className="absolute bottom-4 left-4 top-12 w-64 border bg-background p-3 rounded"
     >
       <Tabs defaultValue="libraries" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
