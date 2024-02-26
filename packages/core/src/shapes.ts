@@ -1573,6 +1573,19 @@ class Image extends Box {
       this._image.src = this.imageData;
     }
     if (this._image && this._image.complete) {
+      canvas.save();
+      canvas.fillColor = Color.TRANSPARENT;
+      canvas.strokeColor = Color.TRANSPARENT;
+      canvas.alpha = 1;
+      canvas.roughness = 0;
+      canvas.fillRoundRect(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.corners
+      );
+      canvas.context.clip();
       canvas.drawImage(
         this._image,
         this.left,
@@ -1580,6 +1593,7 @@ class Image extends Box {
         this.width,
         this.height
       );
+      canvas.restore();
     }
   }
 }
