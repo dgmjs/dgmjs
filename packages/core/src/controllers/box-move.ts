@@ -14,7 +14,13 @@
 import { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { Shape, Box, Document, Movable, Line } from "../shapes";
-import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
+import {
+  Controller,
+  Controller2,
+  Editor,
+  Manipulator,
+  manipulatorManager,
+} from "../editor";
 import { drawPolylineInLCS } from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { CONTROL_POINT_APOTHEM, Cursor } from "../graphics/const";
@@ -87,7 +93,6 @@ export class BoxMoveController extends Controller {
       targetShape.movable === Movable.NONE
     )
       this.dy = 0;
-
     // snap ghost
     let bx = geometry.boundingRect(this.ghost);
     let cp = geometry.center(bx);
@@ -102,7 +107,6 @@ export class BoxMoveController extends Controller {
     this.snap.toOutline(editor, targetShape, xs, ys);
     this.snap.toGrid(editor, [bx[0][0] + this.dx, bx[0][1] + this.dy]);
     this.snap.apply(this);
-
     // update ghost
     this.ghost = shape
       .getEnclosure()
@@ -138,7 +142,6 @@ export class BoxMoveController extends Controller {
       targetShape.movable === Movable.NONE
     )
       dy = 0;
-
     // determine container
     // (container shouldn't be itself of a descendant of target)
     let container = editor.doc?.getShapeAt(canvas, p2, [shape]);
@@ -146,7 +149,6 @@ export class BoxMoveController extends Controller {
     if (r) container = null;
     if (!(container && container.canContain(targetShape)))
       container = editor.doc;
-
     // transform shapes
     const tr = editor.transform;
     const diagram = editor.doc as Document;
@@ -195,5 +197,109 @@ export class BoxMoveController extends Controller {
     }
     // draw snap
     this.snap.draw(editor, shape, this.ghost);
+  }
+}
+
+/**
+ * Move Controller 2
+ */
+export class BoxMoveController2 extends Controller2 {
+  /**
+   * Snap support for controller
+   */
+  snap: Snap;
+
+  constructor(manipulator: Manipulator) {
+    super(manipulator);
+    this.snap = new Snap();
+  }
+
+  /**
+   * Indicates the controller is active or not
+   */
+  active(editor: Editor, shape: Shape): boolean {
+    let value =
+      editor.selection.size() === 1 &&
+      editor.selection.isSelected(shape) &&
+      !(shape as Box).anchored;
+    return value;
+  }
+
+  /**
+   * Returns mouse cursor for the controller
+   * @returns cursor [type, angle]
+   */
+  mouseCursor(
+    editor: Editor,
+    shape: Shape,
+    e: CanvasPointerEvent
+  ): [string, number] {
+    return [Cursor.MOVE, 0];
+  }
+
+  initialize(editor: Editor, shape: Shape): void {
+    const tr = editor.transform;
+    tr.startTransaction("move");
+  }
+
+  /**
+   * Update ghost
+   */
+  update(editor: Editor, shape: Shape) {
+    let targetShape: Shape | null = shape;
+    if (targetShape.movable === Movable.PARENT)
+      targetShape = targetShape.findParent(
+        (s) => (s as Shape).movable !== Movable.PARENT
+      ) as Shape;
+    if (!targetShape || targetShape instanceof Document) return;
+    if (
+      targetShape.movable === Movable.VERT ||
+      targetShape.movable === Movable.NONE
+    )
+      this.dx = 0;
+    if (
+      targetShape.movable === Movable.HORZ ||
+      targetShape.movable === Movable.NONE
+    )
+      this.dy = 0;
+
+    // determine container
+    // (container shouldn't be itself of a descendant of target)
+    const canvas = editor.canvas;
+    let p2 = targetShape.localCoordTransform(canvas, this.dragPoint, false);
+    let container = editor.doc?.getShapeAt(canvas, p2, [shape]);
+    const r = targetShape.find((s) => s.id === container?.id);
+    if (r) container = null;
+    if (!(container && container.canContain(targetShape)))
+      container = editor.doc;
+
+    // update
+    const tr = editor.transform;
+    const doc = editor.doc as Document;
+    tr.moveShapes(doc, [targetShape], this.dx, this.dy, container);
+    tr.resolveAllConstraints(doc, canvas);
+  }
+
+  /**
+   * Finalize shape by ghost
+   */
+  finalize(editor: Editor, shape: Shape) {
+    const tr = editor.transform;
+    tr.endTransaction();
+  }
+
+  /**
+   * Draw controller
+   */
+  draw(editor: Editor, shape: Shape): void {
+    const canvas = editor.canvas;
+    if (
+      !(
+        shape instanceof Line &&
+        (shape.path.length === 2 || shape.pathEditable)
+      )
+    ) {
+      drawPolylineInLCS(canvas, shape, shape.getEnclosure());
+    }
   }
 }

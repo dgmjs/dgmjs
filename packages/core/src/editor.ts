@@ -1067,6 +1067,215 @@ class Controller {
 }
 
 /**
+ * Controller2
+ */
+class Controller2 {
+  manipulator: Manipulator;
+
+  /**
+   * Indicates whether this controller is dragging or not
+   */
+  dragging: boolean;
+
+  /**
+   * Drag start point in shape's LCS
+   */
+  dragStartPoint: number[];
+
+  /**
+   * Previous drag point in shape's LCS
+   */
+  dragPrevPoint: number[];
+
+  /**
+   * Current drag point in shape's LCS
+   */
+  dragPoint: number[];
+
+  /**
+   * X-distance from dragStartPoint to dragPoint in shape's LCS
+   */
+  accumulatedDX: number;
+
+  /**
+   * Y-distance from dragStartPoint to dragPoint in shape's LCS
+   */
+  accumulatedDY: number;
+
+  /**
+   * X-distance from dragPrevPoint to dragPoint in shape's LCS
+   */
+  dx: number;
+
+  /**
+   * Y-distance from dragPrevPoint to dragPoint in shape's LCS
+   */
+  dy: number;
+
+  constructor(manipulator: Manipulator) {
+    this.manipulator = manipulator;
+    this.dragging = false;
+    this.dragStartPoint = [-1, -1];
+    this.dragPrevPoint = [-1, -1];
+    this.dragPoint = [-1, -1];
+    this.accumulatedDX = 0;
+    this.accumulatedDY = 0;
+    this.dx = 0;
+    this.dy = 0;
+  }
+
+  /**
+   * Indicates the controller is active or not
+   */
+  active(editor: Editor, shape: Shape): boolean {
+    return true;
+  }
+
+  /**
+   * Returns true if mouse cursor is inside the controller.
+   * Default implementation returns true if the point inside the shape.
+   */
+  mouseIn(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
+    const canvas = editor.canvas;
+    let p = canvas.globalCoordTransformRev([e.x, e.y]);
+    return shape.visible && shape.enable && shape.containsPoint(canvas, p);
+  }
+
+  /**
+   * Returns mouse cursor for the controller
+   * @returns cursor object (null is default cursor)
+   */
+  mouseCursor(
+    editor: Editor,
+    shape: Shape,
+    e: CanvasPointerEvent
+  ): [string, number] | null {
+    return null;
+  }
+
+  /**
+   * Draw controller
+   */
+  draw(editor: Editor, shape: Shape) {}
+
+  /**
+   * Draw on dragging
+   */
+  drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent) {}
+
+  /**
+   * Draw on hovering
+   */
+  drawHovering(editor: Editor, shape: Shape, e: CanvasPointerEvent) {}
+
+  /**
+   * Initialize before dragging
+   */
+  initialize(editor: Editor, shape: Shape) {}
+
+  /**
+   * Update ghost
+   */
+  update(editor: Editor, shape: Shape) {}
+
+  /**
+   * Finalize shape by ghost
+   */
+  finalize(editor: Editor, shape: Shape) {}
+
+  /**
+   * Handle pointer down event
+   * @returns handled or not
+   */
+  pointerDown(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
+    const canvas = editor.canvas;
+    if (e.button === Mouse.BUTTON1 && this.mouseIn(editor, shape, e)) {
+      this.dragging = true;
+      this.dragStartPoint = utils.ccs2lcs(canvas, shape, [e.x, e.y]);
+      this.dragPrevPoint = geometry.copy(this.dragStartPoint);
+      this.dragPoint = geometry.copy(this.dragStartPoint);
+      this.accumulatedDX = 0;
+      this.accumulatedDY = 0;
+      this.dx = this.dragPoint[0] - this.dragPrevPoint[0];
+      this.dy = this.dragPoint[1] - this.dragPrevPoint[1];
+      this.initialize(editor, shape);
+      this.update(editor, shape);
+      this.drawDragging(editor, shape, e);
+      editor.triggerDragStart(this, this.dragStartPoint);
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Handle pointer move event
+   * @returns handled or not
+   */
+  pointerMove(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
+    const canvas = editor.canvas;
+    let handled = false;
+    if (this.dragging) {
+      this.dragPrevPoint = geometry.copy(this.dragPoint);
+      this.dragPoint = utils.ccs2lcs(canvas, shape, [e.x, e.y]);
+      this.accumulatedDX = this.dragPoint[0] - this.dragStartPoint[0];
+      this.accumulatedDY = this.dragPoint[1] - this.dragStartPoint[1];
+      this.dx = this.dragPoint[0] - this.dragPrevPoint[0];
+      this.dy = this.dragPoint[1] - this.dragPrevPoint[1];
+      this.update(editor, shape);
+      this.drawDragging(editor, shape, e);
+      editor.triggerDrag(this, this.dragPoint);
+      return true;
+    }
+    return handled;
+  }
+
+  /**
+   * Handle pointer up event
+   * @returns handled or not
+   */
+  pointerUp(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
+    let handled = false;
+    if (e.button === Mouse.BUTTON1 && this.dragging) {
+      this.dragging = false;
+      this.dragPrevPoint = [-1, -1];
+      this.dragStartPoint = [-1, -1];
+      this.accumulatedDX = 0;
+      this.accumulatedDY = 0;
+      this.dx = 0;
+      this.dy = 0;
+      handled = true;
+      this.finalize(editor, shape);
+      editor.triggerDragEnd(this, this.dragPoint);
+    }
+    return handled;
+  }
+
+  /**
+   * Handle keydown event
+   * @returns handled or not
+   */
+  keyDown(editor: Editor, shape: Shape, e: KeyboardEvent): boolean {
+    if (this.dragging && e.key === "Escape") {
+      this.dragging = false;
+      this.dragStartPoint = [-1, -1];
+      this.accumulatedDX = 0;
+      this.accumulatedDY = 0;
+      editor.repaint();
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Handle keyup event
+   * @returns handled or not
+   */
+  keyUp(editor: Editor, shape: Shape, e: KeyboardEvent): boolean {
+    return false;
+  }
+}
+
+/**
  * Manipulator
  */
 class Manipulator {
@@ -1241,4 +1450,11 @@ class Manipulator {
 
 const manipulatorManager = ManipulatorManager.getInstance();
 
-export { Editor, Handler, Manipulator, Controller, manipulatorManager };
+export {
+  Editor,
+  Handler,
+  Manipulator,
+  Controller,
+  Controller2,
+  manipulatorManager,
+};

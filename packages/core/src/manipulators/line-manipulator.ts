@@ -16,7 +16,10 @@ import { Manipulator, manipulatorManager } from "../editor";
 import { BoxRotateController } from "../controllers/box-rotate";
 import { BoxSizeController } from "../controllers/box-size";
 import { BoxMoveController } from "../controllers/box-move";
-import { LineMovePointController } from "../controllers/line-move-point";
+import {
+  LineMovePointController,
+  LineMovePointController2,
+} from "../controllers/line-move-point";
 import { LineAddPointController } from "../controllers/line-add-point";
 
 /**
@@ -25,7 +28,7 @@ import { LineAddPointController } from "../controllers/line-add-point";
 class LineManipulator extends Manipulator {
   constructor() {
     super();
-    this.controllers.push(new LineMovePointController(this));
+    this.controllers.push(new LineMovePointController2(this));
     this.controllers.push(new LineAddPointController(this));
     this.controllers.push(new BoxRotateController(this));
     this.controllers.push(new BoxSizeController(this, SizingPosition.TOP));
