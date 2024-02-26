@@ -13,7 +13,7 @@
 
 import { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Shape, Box, Diagram, Movable, Line } from "../shapes";
+import { Shape, Box, Document, Movable, Line } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { drawPolylineInLCS } from "../utils/guide";
 import { Snap } from "../manipulators/snap";
@@ -76,7 +76,7 @@ export class BoxMoveController extends Controller {
       targetShape = targetShape.findParent(
         (s) => (s as Shape).movable !== Movable.PARENT
       ) as Shape;
-    if (!targetShape || targetShape instanceof Diagram) return;
+    if (!targetShape || targetShape instanceof Document) return;
     if (
       targetShape.movable === Movable.VERT ||
       targetShape.movable === Movable.NONE
@@ -118,7 +118,7 @@ export class BoxMoveController extends Controller {
       targetShape = targetShape.findParent(
         (s) => (s as Shape).movable !== Movable.PARENT
       ) as Shape;
-    if (!targetShape || targetShape instanceof Diagram) return;
+    if (!targetShape || targetShape instanceof Document) return;
     const canvas = editor.canvas;
     let p1 = targetShape.localCoordTransform(
       canvas,
@@ -141,15 +141,15 @@ export class BoxMoveController extends Controller {
 
     // determine container
     // (container shouldn't be itself of a descendant of target)
-    let container = editor.diagram?.getShapeAt(canvas, p2, [shape]);
+    let container = editor.doc?.getShapeAt(canvas, p2, [shape]);
     const r = targetShape.find((s) => s.id === container?.id);
     if (r) container = null;
     if (!(container && container.canContain(targetShape)))
-      container = editor.diagram;
+      container = editor.doc;
 
     // transform shapes
     const tr = editor.transform;
-    const diagram = editor.diagram as Diagram;
+    const diagram = editor.doc as Document;
     tr.startTransaction("move");
     tr.moveShapes(diagram, [targetShape], dx, dy, container);
     tr.resolveAllConstraints(diagram, canvas);
@@ -188,7 +188,7 @@ export class BoxMoveController extends Controller {
     drawPolylineInLCS(canvas, shape, this.ghost);
     // hovering containable
     const dp = shape.localCoordTransform(canvas, this.dragPoint, true);
-    const container = editor.diagram?.getShapeAt(canvas, dp, [shape]);
+    const container = editor.doc?.getShapeAt(canvas, dp, [shape]);
     if (container && container !== shape && container.canContain(shape)) {
       const manipulator = manipulatorManager.get(container.type);
       if (manipulator) manipulator.drawHovering(editor, container, e);

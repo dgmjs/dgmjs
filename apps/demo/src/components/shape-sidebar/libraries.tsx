@@ -122,7 +122,7 @@ export function Libraries({ onShapeHover }: LibrariesProps) {
           }
         >
           <LibraryView
-            diagram={libraries[key]}
+            doc={libraries[key]}
             onShapeClick={handleShapeClick}
             onShapeEnter={handleShapeEnter}
             onShapeLeave={handleShapeLeave}

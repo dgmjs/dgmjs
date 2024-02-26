@@ -12,7 +12,7 @@
  */
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
-import { Shape, Line, Movable, Diagram, Connector } from "../shapes";
+import { Shape, Line, Movable, Document, Connector } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import { Snap } from "../manipulators/snap";
 import * as geometry from "../graphics/geometry";
@@ -76,7 +76,7 @@ export class ConnectorMoveController extends Controller {
       targetShape = targetShape.findParent(
         (s) => (s as Shape).movable !== Movable.PARENT
       ) as Shape;
-    if (!targetShape || targetShape instanceof Diagram) return;
+    if (!targetShape || targetShape instanceof Document) return;
     if (
       targetShape.movable === Movable.VERT ||
       targetShape.movable === Movable.NONE
@@ -120,9 +120,9 @@ export class ConnectorMoveController extends Controller {
       targetShape = targetShape.findParent(
         (s) => (s as Shape).movable !== Movable.PARENT
       ) as Shape;
-    if (!targetShape || targetShape instanceof Diagram) return;
+    if (!targetShape || targetShape instanceof Document) return;
     const canvas = editor.canvas;
-    const diagram = editor.diagram as Diagram;
+    const diagram = editor.doc as Document;
     let p1 = targetShape.localCoordTransform(
       canvas,
       this.dragStartPoint,

@@ -13,7 +13,7 @@
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Shape, Diagram } from "../shapes";
+import { Shape, Document } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { Color, Cursor } from "../graphics/const";
 import { Snap } from "../manipulators/snap";
@@ -52,7 +52,7 @@ export class SelectionsMoveController extends Controller {
    */
   mouseIn(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
     if (this.dragging) return true;
-    if (shape instanceof Diagram) {
+    if (shape instanceof Document) {
       const canvas = editor.canvas;
       const p = canvas.globalCoordTransformRev([e.x, e.y]);
       for (let s of editor.selection.getShapes()) {
@@ -105,15 +105,15 @@ export class SelectionsMoveController extends Controller {
     const canvas = editor.canvas;
     let dp = shape.localCoordTransform(canvas, this.dragPoint, false);
     const selections = editor.selection.getShapes();
-    const diagram = editor.diagram as Diagram;
+    const diagram = editor.doc as Document;
 
     // determine container
     // (container shouldn't be itself of a descendant of target)
-    let container = editor.diagram?.getShapeAt(canvas, dp, selections);
+    let container = editor.doc?.getShapeAt(canvas, dp, selections);
     const r = selections.find((sh) => sh.find((s) => s.id === container?.id));
     if (r) container = null;
     if (!(container && selections.every((s) => container?.canContain(s))))
-      container = editor.diagram;
+      container = editor.doc;
 
     const tr = editor.transform;
     tr.startTransaction("move");
@@ -127,7 +127,7 @@ export class SelectionsMoveController extends Controller {
    * @param shape (is a diagram in group manipulator)
    */
   draw(editor: Editor, shape: Shape) {
-    if (shape instanceof Diagram) {
+    if (shape instanceof Document) {
       const canvas = editor.canvas;
       let ghostCCS = editor.selection
         .getEnclosure(editor.canvas)
@@ -159,7 +159,7 @@ export class SelectionsMoveController extends Controller {
     // hovering containable
     const dp = shape.localCoordTransform(canvas, this.dragPoint, true);
     const selections = editor.selection.getShapes();
-    const container = editor.diagram?.getShapeAt(canvas, dp, selections);
+    const container = editor.doc?.getShapeAt(canvas, dp, selections);
     if (
       container &&
       container !== shape &&

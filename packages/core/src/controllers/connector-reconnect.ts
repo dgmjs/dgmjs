@@ -13,7 +13,7 @@
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { RouteType, Shape, Line, Connector, Diagram } from "../shapes";
+import { RouteType, Shape, Line, Connector, Document } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { Cursor } from "../graphics/const";
 import { lcs2ccs, ccs2lcs, angleInCCS } from "../graphics/utils";
@@ -132,7 +132,7 @@ export class ConnectorReconnectController extends Controller {
     const newEnd = this.connectionPoint ? this.end : null;
     // transform shape
     const tr = editor.transform;
-    const diagram = editor.diagram as Diagram;
+    const diagram = editor.doc as Document;
     tr.startTransaction("reconnect");
     tr.setPath(shape, this.ghost);
     tr.atomicAssignRef(shape, isHead ? "head" : "tail", newEnd);

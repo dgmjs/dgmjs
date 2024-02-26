@@ -51,7 +51,7 @@ interface Script {
 }
 
 type ConstraintFn = (
-  diagram: Diagram,
+  diagram: Document,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,
@@ -680,17 +680,17 @@ class Shape extends Obj {
 }
 
 /**
- * Diagram
+ * Document
  */
-class Diagram extends Shape {
+class Document extends Shape {
   version: number;
 
   constructor() {
     super();
-    this.type = "Diagram";
+    this.type = "Document";
     this.version = 1;
 
-    // diagram cannot be controllable
+    // document cannot be controllable
     this.enable = false;
   }
 
@@ -734,9 +734,9 @@ class Diagram extends Shape {
   }
 
   /**
-   * Return actual diagram bounding box in GCS
+   * Return actual document bounding box in GCS
    */
-  getDiagramBoundingBox(canvas: Canvas): number[][] {
+  getDocBoundingBox(canvas: Canvas): number[][] {
     return this.children.length > 0
       ? this.traverseSequence()
           .filter((s) => s !== this)
@@ -755,14 +755,14 @@ class Diagram extends Shape {
   }
 
   /**
-   * Diagram do not contain a point
+   * Document do not contain a point
    */
   containsPoint(canvas: Canvas, point: number[]): boolean {
     return false;
   }
 
   /**
-   * Diagram do not overlap with anything
+   * Document do not overlap with anything
    */
   overlapRect(rect: number[][]): boolean {
     return false;
@@ -1948,7 +1948,7 @@ export {
   LineEndType,
   AlignmentKind,
   Shape,
-  Diagram,
+  Document,
   Box,
   Line,
   Rectangle,

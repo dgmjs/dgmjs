@@ -1,5 +1,5 @@
 import {
-  Diagram,
+  Document,
   Editor,
   Shape,
   ShapeValues,
@@ -34,9 +34,9 @@ function App() {
     const localData = localStorage.getItem("local-data");
     if (localData) {
       window.editor.store.fromJSON(JSON.parse(localData));
-      window.editor.setDiagram(window.editor.store.root as Diagram);
+      window.editor.setDoc(window.editor.store.doc as Document);
     }
-    demoStore.setDiagram(window.editor.store.root as Diagram);
+    demoStore.setDoc(window.editor.store.doc as Document);
 
     window.addEventListener("resize", () => {
       window.editor.fit();
@@ -89,10 +89,7 @@ function App() {
         <Options />
       </div>
       <PaletteToolbar />
-      <ShapeSidebar
-        diagram={demoStore.diagram}
-        onSelect={handleSidebarSelect}
-      />
+      <ShapeSidebar doc={demoStore.doc} onSelect={handleSidebarSelect} />
       <PropertySidebar
         shapes={demoStore.selection}
         onChange={handleValuesChange}

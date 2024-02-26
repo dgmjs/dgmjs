@@ -13,7 +13,7 @@
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Shape, Line, Connector, RouteType, Diagram } from "../shapes";
+import { Shape, Line, Connector, RouteType, Document } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import { Cursor, LINE_STRATIFY_ANGLE_THRESHOLD } from "../graphics/const";
 import { lcs2ccs, ccs2lcs, angleInCCS } from "../graphics/utils";
@@ -117,7 +117,7 @@ export class LineAddPointController extends Controller {
 
     // transform shape
     const tr = editor.transform;
-    const diagram = editor.diagram as Diagram;
+    const diagram = editor.doc as Document;
     tr.startTransaction("repath");
     tr.setPath(shape, newPath);
     tr.resolveAllConstraints(diagram, canvas);

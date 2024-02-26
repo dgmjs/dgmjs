@@ -12,7 +12,7 @@
  */
 
 import { useEffect, useRef } from "react";
-import { Shape, Diagram, renderOnCanvas } from "@dgmjs/core";
+import { Shape, Document, renderOnCanvas } from "@dgmjs/core";
 import { useDemoStore } from "@/demo-store";
 
 export type ShapeClickEvent = (shape: Shape) => void;
@@ -114,7 +114,7 @@ function PrototypeShape({
 }
 
 interface LibraryViewProps {
-  diagram: Diagram;
+  doc: Document;
   shapeWidth?: number;
   shapeHeight?: number;
   shapeMargin?: number;
@@ -126,7 +126,7 @@ interface LibraryViewProps {
 }
 
 export function LibraryView({
-  diagram,
+  doc,
   shapeWidth = 36,
   shapeHeight = 36,
   shapeMargin = 2,
@@ -140,8 +140,8 @@ export function LibraryView({
 
   return (
     <div className="flex flex-wrap gap-0.5">
-      {diagram.children.map(
-        (shape) =>
+      {doc.children.map(
+        (shape: any) =>
           (shape as Shape).proto && (
             <PrototypeShape
               key={shape.id}

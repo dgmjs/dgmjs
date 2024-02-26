@@ -29,7 +29,7 @@ import { FrameFactoryHandler } from "./handlers/frame-handler";
 import {
   Box,
   Connector,
-  Diagram,
+  Document,
   Ellipse,
   Embed,
   Frame,
@@ -45,7 +45,8 @@ export function basicSetup(options?: EditorOptions): EditorOptions {
   return {
     instantiators: {
       Shape: () => new Shape(),
-      Diagram: () => new Diagram(),
+      Diagram: () => new Document(), // for backward compatibility
+      Document: () => new Document(),
       Box: () => new Box(),
       Line: () => new Line(),
       Rectangle: () => new Rectangle(),

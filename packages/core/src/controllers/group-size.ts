@@ -11,7 +11,7 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { Box, Diagram, Shape } from "../shapes";
+import { Box, Document, Shape } from "../shapes";
 import type { Editor } from "../editor";
 import { lcs2ccs } from "../graphics/utils";
 import { BoxSizeController } from "./box-size";
@@ -26,7 +26,7 @@ export class GroupSizeController extends BoxSizeController {
    */
   finalize(editor: Editor, shape: Box) {
     const canvas = editor.canvas;
-    const diagram = editor.diagram as Diagram;
+    const diagram = editor.doc as Document;
     const ghostCCS = this.ghost.map((p) => lcs2ccs(canvas, shape, p));
     const width = this.ghost[2][0] - this.ghost[0][0];
     const height = this.ghost[2][1] - this.ghost[0][1];

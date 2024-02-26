@@ -12,7 +12,7 @@
  */
 
 import { z } from "zod";
-import { Shape, constraintManager, Diagram, Box } from "../shapes";
+import { Shape, constraintManager, Document, Box } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import { Transform } from "../transform/transform";
 
@@ -27,7 +27,7 @@ const schema = z.object({
  * Inherit styles from parent
  */
 function constraint(
-  diagram: Diagram,
+  diagram: Document,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,
@@ -35,7 +35,7 @@ function constraint(
 ) {
   let changed = false;
   const parent = shape.parent as Shape;
-  if (parent && !(parent instanceof Diagram)) {
+  if (parent && !(parent instanceof Document)) {
     changed =
       transform.atomicAssign(shape, "opacity", parent.opacity) || changed;
     if (args.stroke) {

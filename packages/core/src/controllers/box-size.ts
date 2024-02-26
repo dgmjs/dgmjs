@@ -13,7 +13,7 @@
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Shape, Box, Sizable, Line, Diagram } from "../shapes";
+import { Shape, Box, Sizable, Line, Document } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import {
   CONTROL_POINT_APOTHEM,
@@ -443,7 +443,7 @@ export class BoxSizeController extends Controller {
 
     // transform shapes
     const tr = editor.transform;
-    const diagram = editor.diagram as Diagram;
+    const diagram = editor.doc as Document;
     tr.startTransaction("resize");
     tr.moveShapes(diagram, [shape], x1 - shape.left, y1 - shape.top);
     tr.resize(shape, w, h);

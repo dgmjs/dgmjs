@@ -159,7 +159,7 @@ export function findConnectionPoint(
 ): [Shape | null, number[] | null, number] {
   const canvas = editor.canvas;
   let end: Shape | null =
-    editor.diagram?.getShapeAt(canvas, point, line ? [line] : []) ?? null;
+    editor.doc?.getShapeAt(canvas, point, line ? [line] : []) ?? null;
   let cp: number[] | null = null;
   let cpIndex = -1;
   // prevent connecting to the one of edge's descendant
@@ -167,7 +167,7 @@ export function findConnectionPoint(
     end = null;
   }
   // find from node's connection points
-  editor.diagram?.traverse((shape) => {
+  editor.doc?.traverse((shape) => {
     const s = shape as Shape;
     if (
       !cp &&
@@ -200,7 +200,7 @@ export function findConnectionPoint(
   });
   // find from outlines
   if (!cp) {
-    editor.diagram?.traverse((shape) => {
+    editor.doc?.traverse((shape) => {
       const s = shape as Shape;
       if (
         !cp &&

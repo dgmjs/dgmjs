@@ -18,7 +18,7 @@ import {
   Line,
   Shape,
   RouteType,
-  Diagram,
+  Document,
   Connector,
   LineType,
 } from "../shapes";
@@ -346,11 +346,11 @@ export class Transform extends EventEmitter {
   /**
    * Mutation to add a shape to diagram
    */
-  addShapeToDiagram(diagram: Diagram, shape: Shape): boolean {
+  addShapeToDoc(diagram: Document, shape: Shape): boolean {
     let changed = false;
     changed = this.atomicInsert(shape) || changed;
     changed =
-      this.atomicInsertToArray(diagram as Diagram, "children", shape) ||
+      this.atomicInsertToArray(diagram as Document, "children", shape) ||
       changed;
     changed = this.atomicAssignRef(shape, "parent", diagram) || changed;
     return changed;
@@ -735,7 +735,7 @@ export class Transform extends EventEmitter {
    * A set of mutations to move shapes
    */
   moveShapes(
-    diagram: Diagram,
+    diagram: Document,
     shapes: Shape[],
     dx: number,
     dy: number,
@@ -794,7 +794,7 @@ export class Transform extends EventEmitter {
   /**
    * A set of mutations to delete a shape
    */
-  deleteSingleShape(diagram: Diagram, shape: Shape): boolean {
+  deleteSingleShape(diagram: Document, shape: Shape): boolean {
     let changed = false;
     if (this.store.has(shape)) {
       // set null to all edges connected to the shape
@@ -820,7 +820,7 @@ export class Transform extends EventEmitter {
   /**
    * A set of mutations to delete shapes
    */
-  deleteShapes(diagram: Diagram, shapes: Shape[]): boolean {
+  deleteShapes(diagram: Document, shapes: Shape[]): boolean {
     let changed = false;
     shapes.forEach((s) => {
       changed = this.deleteSingleShape(diagram, s) || changed;
@@ -892,7 +892,7 @@ export class Transform extends EventEmitter {
    * A set of mutations to resolve a shape's constraints
    */
   resolveSingleConstraints(
-    diagram: Diagram,
+    diagram: Document,
     shape: Shape,
     canvas: Canvas
   ): boolean {
@@ -911,7 +911,7 @@ export class Transform extends EventEmitter {
   /**
    * A set of mutations to resolve all constraints
    */
-  resolveAllConstraints(diagram: Diagram, canvas: Canvas): boolean {
+  resolveAllConstraints(diagram: Document, canvas: Canvas): boolean {
     let changed = false;
     for (let i = 0; i < 10; i++) {
       diagram.traverse((s) => {

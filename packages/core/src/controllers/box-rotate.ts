@@ -13,7 +13,7 @@
 
 import type { Canvas, CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Shape, Box, Line, Diagram } from "../shapes";
+import { Shape, Box, Line, Document } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import { Cursor, CONTROL_POINT_APOTHEM, ANGLE_STEP } from "../graphics/const";
 import { lcs2ccs } from "../graphics/utils";
@@ -128,7 +128,7 @@ export class BoxRotateController extends Controller {
 
     // transform shapes
     const tr = editor.transform;
-    const diagram = editor.diagram as Diagram;
+    const diagram = editor.doc as Document;
     tr.startTransaction("rotate");
     tr.atomicAssign(shape, "rotate", angle);
     tr.resolveAllConstraints(diagram, editor.canvas);

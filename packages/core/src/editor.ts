@@ -13,7 +13,7 @@
 
 import { EventEmitter } from "events";
 import { Canvas, CanvasPointerEvent } from "./graphics/graphics";
-import { Connector, Diagram, Shape, Text, Box } from "./shapes";
+import { Connector, Document, Shape, Text, Box } from "./shapes";
 import {
   Cursor,
   Color,
@@ -58,7 +58,7 @@ class Editor extends EventEmitter {
   transform: Transform;
   clipboard: Clipboard;
   selection: SelectionManager;
-  diagram: Diagram | null;
+  doc: Document | null;
 
   factory: ShapeFactory;
   actions: Actions;
@@ -110,7 +110,7 @@ class Editor extends EventEmitter {
     this.factory = new ShapeFactory(this);
     this.actions = new Actions(this);
     this.keymap = new KeymapManager(this);
-    this.diagram = null;
+    this.doc = null;
 
     this.platform = this.detectPlatform();
     this.parent = editorHolder;
@@ -157,9 +157,9 @@ class Editor extends EventEmitter {
   }
 
   initializeState() {
-    const diagram = new Diagram();
-    this.store.setRoot(diagram);
-    this.diagram = diagram;
+    const diagram = new Document();
+    this.store.setDoc(diagram);
+    this.doc = diagram;
     this.transform.on("transaction", () => this.repaint());
     this.selection.on("change", () => this.repaint());
     this.factory.on("create", (shape: Shape) => {
@@ -279,11 +279,11 @@ class Editor extends EventEmitter {
       const p = this.canvas.globalCoordTransformRev([event.x, event.y]);
       const x = p[0];
       const y = p[1];
-      if (this.diagram) {
+      if (this.doc) {
         // allows double click on a disable shape (e.g. a text inside another shape)
         const pred = (s: Obj) =>
           (s as Shape).visible && (s as Shape).containsPoint(this.canvas, p);
-        const shape: Shape | null = this.diagram.findDepthFirst(
+        const shape: Shape | null = this.doc.findDepthFirst(
           pred
         ) as Shape | null;
         // create a text on canvas
@@ -385,10 +385,10 @@ class Editor extends EventEmitter {
   }
 
   /**
-   * Set diagram
+   * Set document
    */
-  setDiagram(diagram: Diagram) {
-    this.diagram = diagram;
+  setDoc(doc: Document) {
+    this.doc = doc;
     this.selection.deselectAll();
     this.repaint();
   }
@@ -544,13 +544,13 @@ class Editor extends EventEmitter {
   }
 
   /**
-   * Fit diagram to screen and move to center
+   * Fit doc to screen and move to center
    */
   fitToScreen(scaleDelta: number = 0) {
-    if (this.diagram) {
-      // diagram size in GCS
-      const diagram = this.diagram;
-      const box = diagram.getDiagramBoundingBox(this.canvas);
+    if (this.doc) {
+      // doc size in GCS
+      const doc = this.doc;
+      const box = doc.getDocBoundingBox(this.canvas);
       const center = geometry.center(box);
       const dw = geometry.width(box);
       const dh = geometry.height(box);
@@ -722,10 +722,10 @@ class Editor extends EventEmitter {
    * Repaint diagram
    */
   repaint(drawSelection: boolean = true) {
-    if (this.diagram) {
+    if (this.doc) {
       this.clearBackground(this.canvas);
       this.drawGrid(this.canvas);
-      this.diagram.render(this.canvas);
+      this.doc.render(this.canvas);
       if (drawSelection) this.drawSelection();
     } else {
       this.clearBackground(this.canvas);

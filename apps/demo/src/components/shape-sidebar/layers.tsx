@@ -12,7 +12,7 @@
  */
 
 import React from "react";
-import { Diagram, Shape } from "@dgmjs/core";
+import { Document, Shape } from "@dgmjs/core";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TreeNode, Tree } from "@/components/common/tree";
 import {
@@ -58,7 +58,7 @@ const ShapeTreeNode: React.FC<ShapeTreeNodeProps> = ({
       item={
         <div className="flex flex-row items-center h-8">
           <div className="h-4 w-4 mr-2">
-            {shape.type === "Diagram" && <ShapesIcon size={16} />}
+            {shape.type === "Document" && <ShapesIcon size={16} />}
             {shape.type === "Rectangle" && <SquareIcon size={16} />}
             {shape.type === "Ellipse" && <CircleIcon size={16} />}
             {shape.type === "Text" && <TypeIcon size={16} />}
@@ -80,7 +80,7 @@ const ShapeTreeNode: React.FC<ShapeTreeNodeProps> = ({
         if (onSelect) onSelect(shape);
       }}
     >
-      {shape?.children?.toReversed().map((child) => (
+      {shape?.children?.toReversed().map((child: any) => (
         <ShapeTreeNode
           key={child.id}
           level={level + 1}
@@ -114,17 +114,17 @@ const ShapeTree: React.FC<ShapeTreeProps> = ({
 };
 
 export interface LayerProps {
-  diagram: Diagram | null;
+  doc: Document | null;
   onSelect?: (selection: Shape[]) => void;
 }
 
-export const Layers: React.FC<LayerProps> = ({ diagram, onSelect }) => {
+export const Layers: React.FC<LayerProps> = ({ doc, onSelect }) => {
   const selections = useDemoStore((state) => state.selection);
 
   return (
     <ScrollArea className="h-full w-full">
       <ShapeTree
-        shapes={diagram ? [diagram] : []}
+        shapes={doc ? [doc] : []}
         selections={selections}
         onSelect={(shape) => {
           if (onSelect) onSelect([shape]);

@@ -1,4 +1,4 @@
-import { Diagram, type Shape } from "../shapes";
+import { Document, type Shape } from "../shapes";
 import * as geometry from "../graphics/geometry";
 import { Canvas, CanvasPointerEvent } from "../graphics/graphics";
 import { colors } from "../colors";
@@ -16,8 +16,8 @@ export function renderOnCanvas(
 ) {
   // get bounding box
   // const box =
-  //   shape instanceof Diagram
-  //     ? shape.getDiagramBoundingBox(window.app.editor.canvas)
+  //   shape instanceof Document
+  //     ? shape.getDocBoundingBox(window.app.editor.canvas)
   //     : geometry.boundingRect(
   //         shape
   //           .traverseSequence()
@@ -55,7 +55,7 @@ export function renderOnCanvas(
   canvas.origin = [-box[0][0] + margin / scale, -box[0][1] + margin / scale];
   canvas.scale = scale;
   canvas.save();
-  if (!(shape instanceof Diagram)) canvas.globalTransform();
+  if (!(shape instanceof Document)) canvas.globalTransform();
   shape.render(canvas);
   canvas.restore();
 }

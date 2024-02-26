@@ -166,7 +166,7 @@ export class ConnectorFactoryHandler extends Handler {
   }
 
   drawHovering(editor: Editor, e: CanvasPointerEvent) {
-    if (editor.diagram) {
+    if (editor.doc) {
       this.drawTailConnectionHovering(editor, e);
     }
   }

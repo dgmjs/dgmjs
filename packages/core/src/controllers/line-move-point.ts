@@ -12,7 +12,7 @@
  */
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
-import { Shape, Line, Connector, RouteType, Diagram } from "../shapes";
+import { Shape, Line, Connector, RouteType, Document } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import {
   Cursor,
@@ -148,7 +148,7 @@ export class LineMovePointController extends Controller {
     const newPath = this.ghost.map((p) => [p[0] + delta[0], p[1] + delta[1]]);
 
     // transform shape
-    const diagram = editor.diagram as Diagram;
+    const diagram = editor.doc as Document;
     const tr = editor.transform;
     tr.startTransaction("repath");
     tr.setPath(shape, newPath);

@@ -12,7 +12,7 @@
  */
 
 import * as geometry from "../graphics/geometry";
-import { Shape, Box, Diagram } from "../shapes";
+import { Shape, Box, Document } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import { lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
@@ -106,7 +106,7 @@ export class BoxMoveAnchoredController extends Controller {
     const length = Math.round(geometry.distance(shapeCenter, anchorPoint));
     // transform shape
     const tr = editor.transform;
-    const diagram = editor.diagram as Diagram;
+    const diagram = editor.doc as Document;
     tr.startTransaction("move-anchor");
     tr.moveAnchor(shape, angle, length);
     tr.resolveAllConstraints(diagram, canvas);

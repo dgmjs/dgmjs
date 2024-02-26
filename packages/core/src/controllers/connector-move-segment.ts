@@ -13,7 +13,7 @@
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { RouteType, Shape, Connector, Line, Diagram } from "../shapes";
+import { RouteType, Shape, Connector, Line, Document } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import { Cursor, LINE_SELECTION_THRESHOLD } from "../graphics/const";
 import { lcs2ccs, ccs2lcs, angleInCCS } from "../graphics/utils";
@@ -145,7 +145,7 @@ export class ConnectorMoveSegmentController extends Controller {
     const newPath = this.ghost.map((p) => [p[0] + delta[0], p[1] + delta[1]]);
     // transform shape
     const tr = editor.transform;
-    const diagram = editor.diagram as Diagram;
+    const diagram = editor.doc as Document;
     tr.startTransaction("repath");
     tr.setPath(shape, newPath);
     tr.resolveAllConstraints(diagram, canvas);

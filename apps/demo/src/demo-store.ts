@@ -1,4 +1,4 @@
-import { Diagram, Shape } from "@dgmjs/core";
+import { Document, Shape } from "@dgmjs/core";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
@@ -7,14 +7,14 @@ export interface DemoState {
   origin: number[];
   theme: "light" | "dark";
   activeHandler: string | null;
-  diagram: Diagram | null;
+  doc: Document | null;
   selection: Shape[];
-  libraries: Diagram[];
+  libraries: Document[];
   setScale: (scale: number) => void;
   setOrigin: (origin: [number, number]) => void;
   setTheme: (theme: "light" | "dark") => void;
   setActiveHandler: (handlerId: string | null) => void;
-  setDiagram: (diagram: Diagram | null) => void;
+  setDoc: (doc: Document | null) => void;
   setSelection: (selections: Shape[]) => void;
 }
 
@@ -25,7 +25,7 @@ export const useDemoStore = create<DemoState>()(
       origin: [0, 0],
       theme: "light",
       activeHandler: "Select",
-      diagram: null,
+      doc: null,
       selection: [],
       libraries: [],
       setScale: (scale) => set((state) => ({ scale })),
@@ -38,7 +38,7 @@ export const useDemoStore = create<DemoState>()(
       },
       setActiveHandler: (handlerId) =>
         set((state) => ({ activeHandler: handlerId })),
-      setDiagram: (diagram) => set((state) => ({ diagram })),
+      setDoc: (diagram) => set((state) => ({ doc: diagram })),
       setSelection: (selections) => set((state) => ({ selection: selections })),
     }),
     { name: "DemoStore" }

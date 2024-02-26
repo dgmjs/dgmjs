@@ -12,7 +12,7 @@
  */
 
 import { z } from "zod";
-import { constraintManager, Shape, Diagram } from "../shapes";
+import { constraintManager, Shape, Document } from "../shapes";
 import type { Canvas } from "../graphics/graphics";
 import type { Transform } from "../transform/transform";
 
@@ -57,7 +57,7 @@ const schema = z.object({
  * Align to parent
  */
 function constraint(
-  diagram: Diagram,
+  diagram: Document,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,
@@ -65,7 +65,7 @@ function constraint(
 ) {
   let changed = false;
   const parent = shape.parent;
-  if (parent instanceof Shape && !(parent instanceof Diagram)) {
+  if (parent instanceof Shape && !(parent instanceof Document)) {
     let horz = args.horz;
     let vert = args.vert;
     const l = parent.left;

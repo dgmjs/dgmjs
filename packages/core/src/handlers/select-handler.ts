@@ -78,7 +78,7 @@ export class SelectHandler extends Handler {
    */
   getShapeAt(editor: Editor, e: CanvasPointerEvent): Shape | null {
     const canvas = editor.canvas;
-    if (editor.diagram) {
+    if (editor.doc) {
       let p = canvas.globalCoordTransformRev([e.x, e.y]);
       // find in selected shapes' manipulators
       for (let s of editor.selection.getShapes()) {
@@ -88,7 +88,7 @@ export class SelectHandler extends Handler {
         }
       }
       // find in diagram
-      return editor.diagram.getShapeAt(canvas, p);
+      return editor.doc.getShapeAt(canvas, p);
     }
     return null;
   }
@@ -132,19 +132,18 @@ export class SelectHandler extends Handler {
     editor.repaint(false); // do not draw selections
     this.activeManipulator = null;
     let cursor: [string, number] = [Cursor.DEFAULT, 0];
-    if (editor.diagram) {
+    if (editor.doc) {
       if (editor.selection.getShapes().length > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) {
-          const handled = manipulator.pointerDown(editor, editor.diagram, e);
+          const handled = manipulator.pointerDown(editor, editor.doc, e);
           if (handled) this.activeManipulator = manipulator;
-          if (manipulator.mouseIn(editor, editor.diagram, e)) {
-            cursor =
-              manipulator.mouseCursor(editor, editor.diagram, e) ?? cursor;
+          if (manipulator.mouseIn(editor, editor.doc, e)) {
+            cursor = manipulator.mouseCursor(editor, editor.doc, e) ?? cursor;
           }
         }
       }
-      editor.diagram.traverse((shape) => {
+      editor.doc.traverse((shape) => {
         const s = shape as Shape;
         const manipulator = manipulatorManager.get(s.type);
         if (manipulator) {
@@ -177,7 +176,7 @@ export class SelectHandler extends Handler {
       if (handled) return;
     }
 
-    if (editor.diagram) {
+    if (editor.doc) {
       // selecting area
       if (this.dragging) {
         const p1 = canvas.globalCoordTransform(this.dragStartPoint);
@@ -191,7 +190,7 @@ export class SelectHandler extends Handler {
         canvas.strokeRect(rect[0][0], rect[0][1], rect[1][0], rect[1][1]);
 
         // hovering shapes overlaps selecting area
-        for (let shape of editor.diagram.children) {
+        for (let shape of editor.doc.children) {
           const s = shape as Shape;
           let box = geometry.normalizeRect([this.dragStartPoint, p]);
           if (s.overlapRect(box)) {
@@ -204,7 +203,7 @@ export class SelectHandler extends Handler {
         editor.triggerDrag(null, p);
       } else if (!e.leftButtonDown) {
         // other shape hovering
-        const shape = editor.diagram.getShapeAt(canvas, p);
+        const shape = editor.doc.getShapeAt(canvas, p);
         if (shape && !editor.selection.isSelected(shape)) {
           guide.drawHovering(editor, shape, e);
         }
@@ -217,19 +216,18 @@ export class SelectHandler extends Handler {
     // delegates to manipulators
     this.activeManipulator = null;
     let cursor: [string, number] = [Cursor.DEFAULT, 0];
-    if (editor.diagram) {
+    if (editor.doc) {
       if (editor.selection.getShapes().length > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) {
-          const handled = manipulator.pointerMove(editor, editor.diagram, e);
+          const handled = manipulator.pointerMove(editor, editor.doc, e);
           if (handled) this.activeManipulator = manipulator;
-          if (manipulator.mouseIn(editor, editor.diagram, e)) {
-            cursor =
-              manipulator.mouseCursor(editor, editor.diagram, e) ?? cursor;
+          if (manipulator.mouseIn(editor, editor.doc, e)) {
+            cursor = manipulator.mouseCursor(editor, editor.doc, e) ?? cursor;
           }
         }
       }
-      editor.diagram.traverse((shape) => {
+      editor.doc.traverse((shape) => {
         const s = shape as Shape;
         const manipulator = manipulatorManager.get(s.type);
         if (manipulator) {
@@ -272,19 +270,18 @@ export class SelectHandler extends Handler {
     // delegates to manipulators
     this.activeManipulator = null;
     let cursor: [string, number] = [Cursor.DEFAULT, 0];
-    if (editor.diagram) {
+    if (editor.doc) {
       if (editor.selection.getShapes().length > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) {
-          if (manipulator.mouseIn(editor, editor.diagram, e)) {
-            cursor =
-              manipulator.mouseCursor(editor, editor.diagram, e) ?? cursor;
+          if (manipulator.mouseIn(editor, editor.doc, e)) {
+            cursor = manipulator.mouseCursor(editor, editor.doc, e) ?? cursor;
           }
-          const handled = manipulator.pointerUp(editor, editor.diagram, e);
+          const handled = manipulator.pointerUp(editor, editor.doc, e);
           if (handled) this.activeManipulator = manipulator;
         }
       }
-      editor.diagram.traverse((shape) => {
+      editor.doc.traverse((shape) => {
         const s = shape as Shape;
         const manipulator = manipulatorManager.get(s.type);
         if (manipulator) {
@@ -331,14 +328,14 @@ export class SelectHandler extends Handler {
       editor.repaint();
     }
     // delegates to manipulators
-    if (editor.diagram) {
+    if (editor.doc) {
       if (editor.selection.getShapes().length === 1) {
         const shape = editor.selection.getShapes()[0];
         const manipulator = manipulatorManager.get(shape.type);
         if (manipulator) manipulator.keyDown(editor, shape, e);
       } else if (editor.selection.getShapes().length > 1) {
         const manipulator = manipulatorManager.get("selections");
-        if (manipulator) manipulator.keyDown(editor, editor.diagram, e);
+        if (manipulator) manipulator.keyDown(editor, editor.doc, e);
       }
     }
   }
@@ -358,13 +355,13 @@ export class SelectHandler extends Handler {
    * Draw ghost for the selected shape
    */
   drawSelection(editor: Editor) {
-    if (editor.diagram) {
+    if (editor.doc) {
       // delegates to manipulators
       if (editor.selection.getShapes().length > 1) {
         const manipulator = manipulatorManager.get("selections");
-        if (manipulator) manipulator.draw(editor, editor.diagram);
+        if (manipulator) manipulator.draw(editor, editor.doc);
       }
-      editor.diagram.traverse((shape) => {
+      editor.doc.traverse((shape) => {
         const s = shape as Shape;
         const manipulator = manipulatorManager.get(s.type);
         if (manipulator && editor.selection.isSelected(s)) {

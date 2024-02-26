@@ -12,7 +12,7 @@
  */
 
 import * as geometry from "../graphics/geometry";
-import { Shape, Box, Line, Diagram } from "../shapes";
+import { Shape, Box, Line, Document } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import { Cursor, MAGNET_THRESHOLD } from "../graphics/const";
 import { ccs2lcs, lcs2ccs } from "../graphics/utils";
@@ -147,7 +147,7 @@ export class BoxMoveAnchorPositionController extends Controller {
     const canvas = editor.canvas;
     // transform shape
     const tr = editor.transform;
-    const diagram = editor.diagram as Diagram;
+    const diagram = editor.doc as Document;
     tr.startTransaction("move-anchor");
     tr.atomicAssign(shape, "anchorPosition", this.anchorPosition);
     tr.resolveAllConstraints(diagram, canvas);
