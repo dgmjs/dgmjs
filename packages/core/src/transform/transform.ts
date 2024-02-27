@@ -123,7 +123,6 @@ export class Transform extends EventEmitter {
    */
   cancelTransaction() {
     if (this.tx) {
-      console.log("cancelTransaction", this.tx);
       for (let i = this.tx.mutations.length - 1; i >= 0; i--) {
         const mut = this.tx.mutations[i];
         this.unapplyMutation(mut);

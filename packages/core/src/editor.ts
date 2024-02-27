@@ -1260,7 +1260,8 @@ class Controller2 {
       this.dragStartPoint = [-1, -1];
       this.accumulatedDX = 0;
       this.accumulatedDY = 0;
-      console.log("esc");
+      this.dx = 0;
+      this.dy = 0;
       editor.transform.cancelTransaction();
       editor.repaint();
       return true;
