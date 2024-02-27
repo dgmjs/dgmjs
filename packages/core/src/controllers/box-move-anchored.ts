@@ -13,7 +13,7 @@
 
 import * as geometry from "../graphics/geometry";
 import { Shape, Box, Document } from "../shapes";
-import { Controller, Editor, Manipulator } from "../editor";
+import { Controller, Controller2, Editor, Manipulator } from "../editor";
 import { lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
@@ -156,5 +156,98 @@ export class BoxMoveAnchoredController extends Controller {
     guide.drawDottedLine(canvas, centerCCS, anchorPointCCS);
     // draw snap
     this.snap.draw(editor, shape, this.ghost);
+  }
+}
+
+/**
+ * BoxMoveAnchoredController2
+ */
+export class BoxMoveAnchoredController2 extends Controller2 {
+  /**
+   * Snap support for controller
+   */
+  snap: Snap;
+
+  constructor(manipulator: Manipulator) {
+    super(manipulator);
+    this.snap = new Snap();
+  }
+
+  /**
+   * Indicates the controller is active or not
+   */
+  active(editor: Editor, shape: Shape): boolean {
+    return (
+      editor.selection.size() === 1 &&
+      editor.selection.isSelected(shape) &&
+      shape instanceof Box &&
+      shape.anchored
+    );
+  }
+
+  /**
+   * Returns mouse cursor for the controller
+   * @returns cursor [type, angle]
+   */
+  mouseCursor(
+    editor: Editor,
+    shape: Shape,
+    e: CanvasPointerEvent
+  ): [string, number] {
+    return [Cursor.MOVE, 0];
+  }
+
+  initialize(editor: Editor, shape: Shape): void {
+    // this.ghost = shape.getEnclosure();
+    editor.transform.startTransaction("move-anchor");
+  }
+
+  /**
+   * Update ghost
+   */
+  update(editor: Editor, shape: Shape) {
+    const canvas = editor.canvas;
+    const anchorPoint = geometry.positionOnPath(
+      (shape.parent as Shape).getOutline() ?? [],
+      (shape as Box).anchorPosition
+    );
+    const shapeCenter = shape.getCenter();
+    shapeCenter[0] += this.dx;
+    shapeCenter[1] += this.dy;
+    const angle = geometry.angle(anchorPoint, shapeCenter);
+    const length = geometry.distance(shapeCenter, anchorPoint);
+    // transform shape
+    const tr = editor.transform;
+    const diagram = editor.doc as Document;
+    tr.moveAnchor(shape as Box, angle, length);
+    tr.resolveAllConstraints(diagram, canvas);
+  }
+
+  /**
+   * Finalize shape by ghost
+   */
+  finalize(editor: Editor, shape: Box) {
+    editor.transform.endTransaction();
+  }
+
+  /**
+   * Draw controller
+   */
+  draw(editor: Editor, shape: Box) {
+    const canvas = editor.canvas;
+    const enclosure = shape.getEnclosure();
+    const center = geometry.mid(enclosure[0], enclosure[2]);
+    const centerCCS = lcs2ccs(canvas, shape, center);
+    const anchorPoint = geometry.positionOnPath(
+      (shape.parent as Shape).getOutline() ?? [],
+      shape.anchorPosition
+    );
+    const anchorPointCCS = lcs2ccs(
+      canvas,
+      (shape.parent as Shape) ?? shape,
+      anchorPoint
+    );
+    guide.drawPolylineInLCS(canvas, shape, enclosure);
+    guide.drawDottedLine(canvas, centerCCS, anchorPointCCS);
   }
 }

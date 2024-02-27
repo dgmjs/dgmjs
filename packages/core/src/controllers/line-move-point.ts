@@ -286,8 +286,7 @@ export class LineMovePointController2 extends Controller2 {
       this.dragStartPoint
     );
     this.controlPath = geometry.pathCopy((shape as Line).path);
-    const tr = editor.transform;
-    tr.startTransaction("repath");
+    editor.transform.startTransaction("repath");
   }
 
   /**
@@ -335,8 +334,7 @@ export class LineMovePointController2 extends Controller2 {
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Line) {
-    const tr = editor.transform;
-    tr.endTransaction();
+    editor.transform.endTransaction();
   }
 
   /**

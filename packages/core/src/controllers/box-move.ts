@@ -238,8 +238,7 @@ export class BoxMoveController2 extends Controller2 {
   }
 
   initialize(editor: Editor, shape: Shape): void {
-    const tr = editor.transform;
-    tr.startTransaction("move");
+    editor.transform.startTransaction("move");
   }
 
   /**
@@ -284,8 +283,7 @@ export class BoxMoveController2 extends Controller2 {
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Shape) {
-    const tr = editor.transform;
-    tr.endTransaction();
+    editor.transform.endTransaction();
   }
 
   /**
