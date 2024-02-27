@@ -320,13 +320,6 @@ export class SelectHandler extends Handler {
       let handled = extra.keyDown(this, editor, e);
       if (handled) return;
     }
-
-    if (e.key === "Escape") {
-      this.dragging = false;
-      this.dragStartPoint = [-1, -1];
-      editor.selection.deselectAll();
-      editor.repaint();
-    }
     // delegates to manipulators
     if (editor.doc) {
       if (editor.selection.getShapes().length === 1) {
@@ -337,6 +330,12 @@ export class SelectHandler extends Handler {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) manipulator.keyDown(editor, editor.doc, e);
       }
+    }
+    if (e.key === "Escape") {
+      this.dragging = false;
+      this.dragStartPoint = [-1, -1];
+      editor.selection.deselectAll();
+      editor.repaint();
     }
   }
 

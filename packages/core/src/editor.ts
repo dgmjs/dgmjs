@@ -367,14 +367,14 @@ class Editor extends EventEmitter {
     this.keymap.bind(this.options.keymap ?? {});
     // handle global key events
     this.canvasElement.addEventListener("keydown", (e) => {
+      if (this.activeHandler) {
+        this.activeHandler.keyDown(this, e);
+      }
       if (e.key === "Escape" && this.defaultHandlerId) {
         this.setActiveHandler(this.defaultHandlerId);
       }
       if (e.key === "Enter") {
         // ...
-      }
-      if (this.activeHandler) {
-        this.activeHandler.keyDown(this, e);
       }
     });
     this.canvasElement.addEventListener("keyup", (e) => {
@@ -1260,6 +1260,8 @@ class Controller2 {
       this.dragStartPoint = [-1, -1];
       this.accumulatedDX = 0;
       this.accumulatedDY = 0;
+      console.log("esc");
+      editor.transform.cancelTransaction();
       editor.repaint();
       return true;
     }

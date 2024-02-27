@@ -16,7 +16,10 @@ import {
   ConnectorReconnectController,
   ConnectorReconnectController2,
 } from "../controllers/connector-reconnect";
-import { ConnectorMoveSegmentController } from "../controllers/connector-move-segment";
+import {
+  ConnectorMoveSegmentController,
+  ConnectorMoveSegmentController2,
+} from "../controllers/connector-move-segment";
 import {
   ConnectorMoveController,
   ConnectorMoveController2,
@@ -39,7 +42,7 @@ class ConnectorManipulator extends Manipulator {
     this.controllers.push(new ConnectorReconnectController2(this));
     this.controllers.push(new LineMovePointController2(this, true));
     this.controllers.push(new LineAddPointController2(this));
-    this.controllers.push(new ConnectorMoveSegmentController(this));
+    this.controllers.push(new ConnectorMoveSegmentController2(this));
     this.controllers.push(new ConnectorMoveController2(this));
   }
 }
