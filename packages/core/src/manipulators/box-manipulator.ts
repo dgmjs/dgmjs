@@ -14,7 +14,7 @@
 import { SizingPosition } from "../graphics/const";
 import { Manipulator, manipulatorManager } from "../editor";
 import { BoxRotateController } from "../controllers/box-rotate";
-import { BoxSizeController } from "../controllers/box-size";
+import { BoxSizeController, BoxSizeController2 } from "../controllers/box-size";
 import { BoxMoveController, BoxMoveController2 } from "../controllers/box-move";
 import { BoxMoveAnchoredController } from "../controllers/box-move-anchored";
 import { BoxMoveAnchorPositionController } from "../controllers/box-move-anchor-position";
@@ -34,7 +34,7 @@ class BoxManipulator extends Manipulator {
       new BoxSizeController(this, SizingPosition.RIGHT_TOP)
     );
     this.controllers.push(
-      new BoxSizeController(this, SizingPosition.RIGHT_BOTTOM)
+      new BoxSizeController2(this, SizingPosition.RIGHT_BOTTOM)
     );
     this.controllers.push(
       new BoxSizeController(this, SizingPosition.LEFT_BOTTOM)

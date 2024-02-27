@@ -262,12 +262,9 @@ export class LineMovePointController2 extends Controller2 {
     if (this.dragging) return true;
     const p = ccs2lcs(editor.canvas, shape, [e.x, e.y]);
     const idx = findControlPoint(editor, shape as Line, p);
-    const r = this.exceptEndPoints
+    return this.exceptEndPoints
       ? idx > 0 && idx < (shape as Line).path.length - 1
       : idx >= 0;
-
-    console.log("r", r);
-    return r;
   }
 
   /**
