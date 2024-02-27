@@ -22,7 +22,10 @@ import {
   BoxMoveAnchoredController,
   BoxMoveAnchoredController2,
 } from "../controllers/box-move-anchored";
-import { BoxMoveAnchorPositionController } from "../controllers/box-move-anchor-position";
+import {
+  BoxMoveAnchorPositionController,
+  BoxMoveAnchorPositionController2,
+} from "../controllers/box-move-anchor-position";
 import { BoxSizeController, BoxSizeController2 } from "../controllers/box-size";
 
 /**
@@ -57,7 +60,7 @@ class TextManipulator extends Manipulator {
     );
     this.controllers.push(new BoxRotateController2(this));
     this.controllers.push(new BoxMoveAnchoredController2(this));
-    this.controllers.push(new BoxMoveAnchorPositionController(this));
+    this.controllers.push(new BoxMoveAnchorPositionController2(this));
     this.controllers.push(new BoxMoveController2(this));
   }
 }

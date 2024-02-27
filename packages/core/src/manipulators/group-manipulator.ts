@@ -13,9 +13,12 @@
 
 import { SizingPosition } from "../graphics/const";
 import { Manipulator, manipulatorManager } from "../editor";
-import { BoxRotateController } from "../controllers/box-rotate";
+import {
+  BoxRotateController,
+  BoxRotateController2,
+} from "../controllers/box-rotate";
 import { GroupSizeController } from "../controllers/group-size";
-import { BoxMoveController } from "../controllers/box-move";
+import { BoxMoveController, BoxMoveController2 } from "../controllers/box-move";
 
 /**
  * GroupManipulator
@@ -35,8 +38,8 @@ class GroupManipulator extends Manipulator {
     this.controllers.push(
       new GroupSizeController(this, SizingPosition.LEFT_BOTTOM, true)
     );
-    this.controllers.push(new BoxRotateController(this));
-    this.controllers.push(new BoxMoveController(this));
+    this.controllers.push(new BoxRotateController2(this));
+    this.controllers.push(new BoxMoveController2(this));
   }
 }
 
