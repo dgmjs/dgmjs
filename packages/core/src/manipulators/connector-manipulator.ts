@@ -12,26 +12,11 @@
  */
 
 import { Manipulator, manipulatorManager } from "../editor";
-import {
-  ConnectorReconnectController,
-  ConnectorReconnectController2,
-} from "../controllers/connector-reconnect";
-import {
-  ConnectorMoveSegmentController,
-  ConnectorMoveSegmentController2,
-} from "../controllers/connector-move-segment";
-import {
-  ConnectorMoveController,
-  ConnectorMoveController2,
-} from "../controllers/connector-move";
-import {
-  LineMovePointController,
-  LineMovePointController2,
-} from "../controllers/line-move-point";
-import {
-  LineAddPointController,
-  LineAddPointController2,
-} from "../controllers/line-add-point";
+import { ConnectorReconnectController } from "../controllers/connector-reconnect";
+import { ConnectorMoveSegmentController } from "../controllers/connector-move-segment";
+import { ConnectorMoveController } from "../controllers/connector-move";
+import { LineMovePointController } from "../controllers/line-move-point";
+import { LineAddPointController } from "../controllers/line-add-point";
 
 /**
  * ConnectorManipulator
@@ -39,11 +24,11 @@ import {
 class ConnectorManipulator extends Manipulator {
   constructor() {
     super();
-    this.controllers.push(new ConnectorReconnectController2(this));
-    this.controllers.push(new LineMovePointController2(this, true));
-    this.controllers.push(new LineAddPointController2(this));
-    this.controllers.push(new ConnectorMoveSegmentController2(this));
-    this.controllers.push(new ConnectorMoveController2(this));
+    this.controllers.push(new ConnectorReconnectController(this));
+    this.controllers.push(new LineMovePointController(this, true));
+    this.controllers.push(new LineAddPointController(this));
+    this.controllers.push(new ConnectorMoveSegmentController(this));
+    this.controllers.push(new ConnectorMoveController(this));
   }
 }
 

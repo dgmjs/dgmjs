@@ -12,10 +12,7 @@
  */
 
 import { Manipulator, manipulatorManager } from "../editor";
-import {
-  SelectionsMoveController,
-  SelectionsMoveController2,
-} from "../controllers/selections-move";
+import { SelectionsMoveController } from "../controllers/selections-move";
 
 /**
  * SelectionsManipulator
@@ -23,7 +20,7 @@ import {
 class SelectionsManipulator extends Manipulator {
   constructor() {
     super();
-    this.controllers.push(new SelectionsMoveController2(this));
+    this.controllers.push(new SelectionsMoveController(this));
   }
 }
 

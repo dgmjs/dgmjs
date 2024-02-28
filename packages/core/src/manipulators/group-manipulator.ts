@@ -13,13 +13,9 @@
 
 import { SizingPosition } from "../graphics/const";
 import { Manipulator, manipulatorManager } from "../editor";
-import {
-  BoxRotateController,
-  BoxRotateController2,
-} from "../controllers/box-rotate";
-// import { GroupSizeController } from "../controllers/group-size";
-import { BoxMoveController, BoxMoveController2 } from "../controllers/box-move";
-import { BoxSizeController2 } from "../controllers/box-size";
+import { BoxRotateController } from "../controllers/box-rotate";
+import { BoxMoveController } from "../controllers/box-move";
+import { BoxSizeController } from "../controllers/box-size";
 
 /**
  * GroupManipulator
@@ -28,19 +24,19 @@ class GroupManipulator extends Manipulator {
   constructor() {
     super();
     this.controllers.push(
-      new BoxSizeController2(this, SizingPosition.LEFT_TOP, true, true)
+      new BoxSizeController(this, SizingPosition.LEFT_TOP, true, true)
     );
     this.controllers.push(
-      new BoxSizeController2(this, SizingPosition.RIGHT_TOP, true, true)
+      new BoxSizeController(this, SizingPosition.RIGHT_TOP, true, true)
     );
     this.controllers.push(
-      new BoxSizeController2(this, SizingPosition.RIGHT_BOTTOM, true, true)
+      new BoxSizeController(this, SizingPosition.RIGHT_BOTTOM, true, true)
     );
     this.controllers.push(
-      new BoxSizeController2(this, SizingPosition.LEFT_BOTTOM, true, true)
+      new BoxSizeController(this, SizingPosition.LEFT_BOTTOM, true, true)
     );
-    this.controllers.push(new BoxRotateController2(this));
-    this.controllers.push(new BoxMoveController2(this));
+    this.controllers.push(new BoxRotateController(this));
+    this.controllers.push(new BoxMoveController(this));
   }
 }
 
