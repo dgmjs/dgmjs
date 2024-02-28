@@ -1,6 +1,6 @@
 # dgmjs
 
-An extensible diagramming framework for the web
+An extensible diagramming library for the web
 
 ## Build and publish
 
@@ -14,6 +14,13 @@ npm publish
 
 ```sh
 npm run dev -w apps/demo
+```
+
+## Dev mode
+
+```sh
+npm run watch -w @dgmjs/core
+npm run dev -w demo
 ```
 
 ## License

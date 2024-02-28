@@ -11,7 +11,7 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { constraintManager, Box, Shape, Diagram } from "../shapes";
+import { constraintManager, Box, Shape, Document } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { z } from "zod";
@@ -33,7 +33,7 @@ const schema = z.object({
  * Set size
  */
 function constraint(
-  diagram: Diagram,
+  diagram: Document,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,
@@ -62,7 +62,7 @@ function constraint(
         args.height === "text" ||
         args.height === "text-min")
     ) {
-      const textSize = measureText(canvas, shape);
+      const textSize = measureText(canvas, shape, shape.text);
       if (args.width === "text")
         width = textSize.minWidth + shape.padding[1] + shape.padding[3];
       if (args.width === "text-min")

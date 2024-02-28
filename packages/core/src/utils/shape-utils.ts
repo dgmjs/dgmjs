@@ -12,7 +12,7 @@
  */
 
 import { unique } from "../std/lambda";
-import { Connector, type Diagram, type Shape } from "../shapes";
+import { Connector, type Document, type Shape } from "../shapes";
 
 /**
  * Returns all descendants of the given set of objects including the given
@@ -31,7 +31,7 @@ export function getAllDescendant(objs: Shape[]): Shape[] {
 /**
  * Returns all connectors connected to the any of the set of objects
  */
-export function getAllConnectorsTo(diagram: Diagram, objs: Shape[]): Shape[] {
+export function getAllConnectorsTo(diagram: Document, objs: Shape[]): Shape[] {
   const edges: Shape[] = [];
   diagram?.traverse((o) => {
     if (
@@ -50,7 +50,7 @@ export function getAllConnectorsTo(diagram: Diagram, objs: Shape[]): Shape[] {
  * The results are the candidates to be changed when the given objects due to
  * the constraints (edge, align children, ...)
  */
-export function getAllRelevants(diagram: Diagram, objs: Shape[]): Shape[] {
+export function getAllRelevants(diagram: Document, objs: Shape[]): Shape[] {
   let size = 0;
   let set = unique(objs);
   while (set.length > size) {

@@ -1,7 +1,7 @@
 import { generateId } from "../std/id";
 import type { Obj } from "./obj";
 
-type InstantiatorFun = () => Obj;
+export type InstantiatorFun = () => Obj;
 
 /**
  * Object instantiator
@@ -9,8 +9,8 @@ type InstantiatorFun = () => Obj;
 export class Instantiator {
   fnMap: Record<string, InstantiatorFun>;
 
-  constructor() {
-    this.fnMap = {};
+  constructor(instantiators?: Record<string, InstantiatorFun>) {
+    this.fnMap = instantiators ?? {};
   }
 
   register(type: string, fn: InstantiatorFun) {

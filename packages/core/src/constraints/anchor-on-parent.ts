@@ -12,7 +12,7 @@
  */
 
 import { z } from "zod";
-import { constraintManager, Box, Line, Shape, Diagram } from "../shapes";
+import { constraintManager, Box, Line, Shape, Document } from "../shapes";
 import * as geometry from "../graphics/geometry";
 import { Canvas } from "../graphics/graphics";
 import { Transform } from "../transform/transform";
@@ -26,14 +26,14 @@ const schema = z.object({});
  * @param {object} args
  */
 function constraint(
-  diagram: Diagram,
+  diagram: Document,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,
   args: z.infer<typeof schema>
 ) {
   let changed = false;
-  if (shape instanceof Box && !(shape.parent instanceof Diagram)) {
+  if (shape instanceof Box && !(shape.parent instanceof Document)) {
     const anchorPoint = geometry.positionOnPath(
       (shape.parent as Shape).getOutline() ?? [],
       shape.anchorPosition

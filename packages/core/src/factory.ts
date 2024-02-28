@@ -1,14 +1,18 @@
 import { EventEmitter } from "events";
 import type { Editor } from "./editor";
 import {
+  AlignmentKind,
   Connector,
   Ellipse,
+  Embed,
+  Frame,
   Image,
   Line,
   LineType,
   Rectangle,
   RouteType,
   Shape,
+  Sizable,
   Text,
 } from "./shapes";
 import { fileToImageElement } from "./utils/image-utils";
@@ -51,6 +55,8 @@ export class ShapeFactory extends EventEmitter {
     }
     rectangle.width = w;
     rectangle.height = h;
+    rectangle.horzAlign = AlignmentKind.CENTER;
+    rectangle.vertAlign = AlignmentKind.MIDDLE;
     this.insertShape(rectangle);
     return rectangle;
   }
@@ -70,6 +76,8 @@ export class ShapeFactory extends EventEmitter {
     }
     ellipse.width = w;
     ellipse.height = h;
+    ellipse.horzAlign = AlignmentKind.CENTER;
+    ellipse.vertAlign = AlignmentKind.MIDDLE;
     this.insertShape(ellipse);
     return ellipse;
   }
@@ -79,16 +87,8 @@ export class ShapeFactory extends EventEmitter {
    */
   createText(rect: number[][], initialText: string = ""): Text {
     const text = new Text();
-    text.text = {
-      type: "doc",
-      content: [
-        {
-          type: "paragraph",
-          attrs: { textAlign: "left" },
-          content: [{ type: "text", text: initialText }],
-        },
-      ],
-    };
+    text.richText = false;
+    text.text = initialText;
     text.constraints.push({
       id: "set-size",
       width: "text",
@@ -102,6 +102,8 @@ export class ShapeFactory extends EventEmitter {
     let h = geometry.height(rect);
     text.width = w;
     text.height = h;
+    text.horzAlign = AlignmentKind.LEFT;
+    text.vertAlign = AlignmentKind.TOP;
     this.insertShape(text);
     return text;
   }
@@ -115,18 +117,12 @@ export class ShapeFactory extends EventEmitter {
     initialText: string = ""
   ): Text {
     const text = new Text();
-    text.text = {
-      type: "doc",
-      content: [
-        {
-          type: "paragraph",
-          attrs: { textAlign: "left" },
-          content: [{ type: "text", text: initialText }],
-        },
-      ],
-    };
+    text.richText = false;
+    text.text = initialText;
     text.strokeColor = "$transparent";
     text.fillColor = "$transparent";
+    text.horzAlign = AlignmentKind.LEFT;
+    text.vertAlign = AlignmentKind.TOP;
     text.anchored = true;
     text.anchorPosition = anchorPosition;
     text.constraints.push({ id: "anchor-on-parent" });
@@ -162,6 +158,7 @@ export class ShapeFactory extends EventEmitter {
     image.height = h;
     image.left = rect[0][0] - w / 2;
     image.top = rect[0][1] - h / 2;
+    image.sizable = Sizable.RATIO;
     this.insertShape(image);
     return image;
   }
@@ -189,6 +186,7 @@ export class ShapeFactory extends EventEmitter {
     image.height = size[1];
     image.left = position[0] - size[0] / 2;
     image.top = position[1] - size[1] / 2;
+    image.sizable = Sizable.RATIO;
     this.insertShape(image);
     return image;
   }
@@ -259,5 +257,41 @@ export class ShapeFactory extends EventEmitter {
     connector.height = geometry.height(rect);
     this.insertShape(connector);
     return connector;
+  }
+
+  createFrame(rect: number[][]): Frame {
+    const frame = new Frame();
+    frame.left = rect[0][0];
+    frame.top = rect[0][1];
+    let w = geometry.width(rect);
+    let h = geometry.height(rect);
+    if (geometry.distance(rect[0], rect[1]) <= SHAPE_MIN_SIZE) {
+      w = 100;
+      h = 100;
+    }
+    frame.width = w;
+    frame.height = h;
+    frame.horzAlign = AlignmentKind.CENTER;
+    frame.vertAlign = AlignmentKind.MIDDLE;
+    this.insertShape(frame);
+    return frame;
+  }
+
+  createEmbed(rect: number[][]): Embed {
+    const embed = new Embed();
+    embed.left = rect[0][0];
+    embed.top = rect[0][1];
+    let w = geometry.width(rect);
+    let h = geometry.height(rect);
+    if (geometry.distance(rect[0], rect[1]) <= SHAPE_MIN_SIZE) {
+      w = 100;
+      h = 100;
+    }
+    embed.width = w;
+    embed.height = h;
+    embed.horzAlign = AlignmentKind.CENTER;
+    embed.vertAlign = AlignmentKind.MIDDLE;
+    this.insertShape(embed);
+    return embed;
   }
 }

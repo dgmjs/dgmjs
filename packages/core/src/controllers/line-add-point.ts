@@ -13,7 +13,7 @@
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Shape, Line, Connector, RouteType, Diagram } from "../shapes";
+import { Shape, Line, Connector, RouteType, Document } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import { Cursor, LINE_STRATIFY_ANGLE_THRESHOLD } from "../graphics/const";
 import { lcs2ccs, ccs2lcs, angleInCCS } from "../graphics/utils";
@@ -32,14 +32,20 @@ export class LineAddPointController extends Controller {
   snap: Snap;
 
   /**
-   * Ghost polygon
+   * current control point
    */
-  ghost: number[][];
+  controlPoint: number;
+
+  /**
+   * current control path
+   */
+  controlPath: number[][];
 
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.snap = new Snap();
-    this.ghost = [];
+    this.controlPoint = -1;
+    this.controlPath = [];
   }
 
   /**
@@ -47,8 +53,8 @@ export class LineAddPointController extends Controller {
    */
   active(editor: Editor, shape: Shape): boolean {
     let value =
-      editor.state.selections.size() === 1 &&
-      editor.state.selections.isSelected(shape) &&
+      editor.selection.size() === 1 &&
+      editor.selection.isSelected(shape) &&
       shape instanceof Line &&
       shape.pathEditable;
     if (shape instanceof Connector && shape.routeType === RouteType.RECTILINEAR)
@@ -78,50 +84,49 @@ export class LineAddPointController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
-    this.ghost = geometry.pathCopy((shape as Line).path);
+    this.controlPath = geometry.pathCopy((shape as Line).path);
+    this.controlPoint = findSegmentControlPoint(
+      editor,
+      shape as Line,
+      this.dragStartPoint
+    );
+    editor.transform.startTransaction("repath");
   }
 
   /**
    * Update ghost
    */
   update(editor: Editor, shape: Shape) {
-    const cp = findSegmentControlPoint(
-      editor,
-      shape as Line,
-      this.dragStartPoint
+    let newPath = geometry.pathCopy(this.controlPath);
+    newPath.splice(
+      this.controlPoint + 1,
+      0,
+      geometry.mid(newPath[this.controlPoint], newPath[this.controlPoint + 1])
     );
-    let newPath = geometry.pathCopy((shape as Line).path);
-    newPath.splice(cp + 1, 0, geometry.mid(newPath[cp], newPath[cp + 1]));
-    // snap ghost
-    let p = [newPath[cp + 1][0] + this.dx, newPath[cp + 1][1] + this.dy];
-    this.snap.init();
-    this.snap.toPath(editor, shape as Connector, [p[0]], [p[1]]);
-    this.snap.toGrid(editor, p);
-    this.snap.apply(this);
-    newPath[cp + 1][0] += this.dx;
-    newPath[cp + 1][1] += this.dy;
+    newPath[this.controlPoint + 1][0] += this.dx;
+    newPath[this.controlPoint + 1][1] += this.dy;
     // update ghost by simplified routing
-    this.ghost = reduceObliquePath(newPath, LINE_STRATIFY_ANGLE_THRESHOLD);
+    newPath = reduceObliquePath(newPath, LINE_STRATIFY_ANGLE_THRESHOLD);
+
+    const canvas = editor.canvas;
+    const newPathCCS = newPath.map((p) => lcs2ccs(canvas, shape, p));
+
+    // find best-fit [dx, dy]
+    const delta = fitPathInCSS(canvas, shape as Line, newPath, newPathCCS);
+    newPath = newPath.map((p) => [p[0] + delta[0], p[1] + delta[1]]);
+
+    // transform shape
+    const tr = editor.transform;
+    const doc = editor.doc as Document;
+    tr.setPath(shape, newPath);
+    tr.resolveAllConstraints(doc, canvas);
   }
 
   /**
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Line) {
-    const canvas = editor.canvas;
-    const ghostCCS = this.ghost.map((p) => lcs2ccs(canvas, shape, p));
-
-    // find best-fit [dx, dy]
-    const delta = fitPathInCSS(canvas, shape, this.ghost, ghostCCS);
-    const newPath = this.ghost.map((p) => [p[0] + delta[0], p[1] + delta[1]]);
-
-    // transform shape
-    const tr = editor.state.transform;
-    const diagram = editor.state.diagram as Diagram;
-    tr.startTransaction("repath");
-    tr.setPath(shape, newPath);
-    tr.resolveAllConstraints(diagram, canvas);
-    tr.endTransaction();
+    editor.transform.endTransaction();
   }
 
   /**
@@ -151,22 +156,22 @@ export class LineAddPointController extends Controller {
    * Draw ghost while dragging
    */
   drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent): void {
-    super.drawDragging(editor, shape, e);
-    const canvas = editor.canvas;
-    const path = this.ghost;
-    // draw ghost
-    guide.drawPolylineInLCS(
-      canvas,
-      shape,
-      this.ghost,
-      (shape as Line).lineType,
-      geometry.isClosed(this.ghost)
-    );
-    for (let i = 1; i < path.length - 1; i++) {
-      const p = lcs2ccs(canvas, shape, path[i]);
-      guide.drawControlPoint(canvas, p, 1);
-    }
-    // draw snap
-    this.snap.draw(editor, shape, this.ghost);
+    // super.drawDragging(editor, shape, e);
+    // const canvas = editor.canvas;
+    // const path = this.ghost;
+    // // draw ghost
+    // guide.drawPolylineInLCS(
+    //   canvas,
+    //   shape,
+    //   this.ghost,
+    //   (shape as Line).lineType,
+    //   geometry.isClosed(this.ghost)
+    // );
+    // for (let i = 1; i < path.length - 1; i++) {
+    //   const p = lcs2ccs(canvas, shape, path[i]);
+    //   guide.drawControlPoint(canvas, p, 1);
+    // }
+    // // draw snap
+    // this.snap.draw(editor, shape, this.ghost);
   }
 }

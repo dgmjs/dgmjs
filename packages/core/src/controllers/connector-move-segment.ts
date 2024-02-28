@@ -13,9 +13,9 @@
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { RouteType, Shape, Connector, Line, Diagram } from "../shapes";
+import { RouteType, Shape, Connector, Line, Document } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
-import { Cursor, LINE_SELECTION_THRESHOLD } from "../graphics/const";
+import { Cursor } from "../graphics/const";
 import { lcs2ccs, ccs2lcs, angleInCCS } from "../graphics/utils";
 import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
@@ -23,7 +23,7 @@ import { findSegmentControlPoint, fitPathInCSS } from "./utils";
 import { magnetSegment, adjustRectilinearRoute } from "../utils/route-utils";
 
 /**
- * MoveSegment Controller
+ * Connector MoveSegment Controller
  */
 export class ConnectorMoveSegmentController extends Controller {
   /**
@@ -36,10 +36,13 @@ export class ConnectorMoveSegmentController extends Controller {
    */
   ghost: number[][];
 
+  controlSegment: number;
+
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.snap = new Snap();
     this.ghost = [];
+    this.controlSegment = -1;
   }
 
   /**
@@ -47,8 +50,8 @@ export class ConnectorMoveSegmentController extends Controller {
    */
   active(editor: Editor, shape: Shape): boolean {
     return (
-      editor.state.selections.size() === 1 &&
-      editor.state.selections.isSelected(shape) &&
+      editor.selection.size() === 1 &&
+      editor.selection.isSelected(shape) &&
       shape instanceof Connector &&
       shape.routeType === RouteType.RECTILINEAR
     );
@@ -89,31 +92,29 @@ export class ConnectorMoveSegmentController extends Controller {
 
   initialize(editor: Editor, shape: Shape): void {
     this.ghost = geometry.pathCopy((shape as Line).path);
+    this.controlSegment = findSegmentControlPoint(
+      editor,
+      shape as Line,
+      this.dragStartPoint,
+      false
+    );
+    editor.transform.startTransaction("repath");
   }
 
   /**
    * Update ghost
    */
   update(editor: Editor, shape: Connector) {
-    let newPath = geometry.pathCopy(shape.path);
+    let newPath = geometry.pathCopy(this.ghost);
+
     // find the dragging segment
-    let segment = findSegmentControlPoint(
-      editor,
-      shape as Line,
-      this.dragStartPoint,
-      false
+    let isHorz = geometry.isHorz(
+      newPath[this.controlSegment],
+      newPath[this.controlSegment + 1]
     );
-    let isHorz = geometry.isHorz(newPath[segment], newPath[segment + 1]);
-    const p1 = newPath[segment];
-    const p2 = newPath[segment + 1];
-    // snap path
-    let p = isHorz ? [0, p1[1] + this.dy] : [p1[0] + this.dx, 0];
-    let xs = isHorz ? [] : [p[0]];
-    let ys = isHorz ? [p[1]] : [];
-    this.snap.init();
-    this.snap.toPath(editor, shape, xs, ys);
-    this.snap.toGrid(editor, p);
-    this.snap.apply(this);
+    const p1 = newPath[this.controlSegment];
+    const p2 = newPath[this.controlSegment + 1];
+
     // update the ghost
     if (isHorz) {
       p1[1] += this.dy;
@@ -122,34 +123,38 @@ export class ConnectorMoveSegmentController extends Controller {
       p1[0] += this.dx;
       p2[0] += this.dx;
     }
+
     // magnet the segment to other segments
-    newPath = magnetSegment(newPath, segment);
+    newPath = magnetSegment(newPath, this.controlSegment);
+
     // update ghost
-    this.ghost = adjustRectilinearRoute(
+    newPath = adjustRectilinearRoute(
       newPath,
       shape.head,
       shape.headCP,
       shape.tail,
       shape.tailCP
     );
+
+    const canvas = editor.canvas;
+    const ghostCCS = newPath.map((p) => lcs2ccs(canvas, shape, p));
+    // find best-fit [dx, dy]
+    const delta = fitPathInCSS(canvas, shape, newPath, ghostCCS);
+    newPath = newPath.map((p) => [p[0] + delta[0], p[1] + delta[1]]);
+    // transform shape
+    const tr = editor.transform;
+    const doc = editor.doc as Document;
+    // tr.startTransaction("repath");
+    tr.setPath(shape, newPath);
+    tr.resolveAllConstraints(doc, canvas);
+    // tr.endTransaction();
   }
 
   /**
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Line) {
-    const canvas = editor.canvas;
-    const ghostCCS = this.ghost.map((p) => lcs2ccs(canvas, shape, p));
-    // find best-fit [dx, dy]
-    const delta = fitPathInCSS(canvas, shape, this.ghost, ghostCCS);
-    const newPath = this.ghost.map((p) => [p[0] + delta[0], p[1] + delta[1]]);
-    // transform shape
-    const tr = editor.state.transform;
-    const diagram = editor.state.diagram as Diagram;
-    tr.startTransaction("repath");
-    tr.setPath(shape, newPath);
-    tr.resolveAllConstraints(diagram, canvas);
-    tr.endTransaction();
+    editor.transform.endTransaction();
   }
 
   /**
@@ -178,20 +183,20 @@ export class ConnectorMoveSegmentController extends Controller {
    * Draw ghost while dragging
    */
   drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent): void {
-    super.drawDragging(editor, shape, e);
-    const canvas = editor.canvas;
-    const path = this.ghost;
-    // draw ghost
-    guide.drawPolylineInLCS(
-      canvas,
-      shape,
-      this.ghost,
-      (shape as Line).lineType,
-      geometry.isClosed(this.ghost)
-    );
-    let pathCCS = path.map((p) => lcs2ccs(canvas, shape, p));
-    guide.drawDottedPolyline(canvas, pathCCS);
-    // draw snap
-    this.snap.draw(editor, shape, this.ghost);
+    // super.drawDragging(editor, shape, e);
+    // const canvas = editor.canvas;
+    // const path = this.ghost;
+    // // draw ghost
+    // guide.drawPolylineInLCS(
+    //   canvas,
+    //   shape,
+    //   this.ghost,
+    //   (shape as Line).lineType,
+    //   geometry.isClosed(this.ghost)
+    // );
+    // let pathCCS = path.map((p) => lcs2ccs(canvas, shape, p));
+    // guide.drawDottedPolyline(canvas, pathCCS);
+    // // draw snap
+    // this.snap.draw(editor, shape, this.ghost);
   }
 }

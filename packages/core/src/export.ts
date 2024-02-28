@@ -1,4 +1,4 @@
-import type { Diagram } from "./shapes";
+import type { Document } from "./shapes";
 import { Canvas } from "./graphics/graphics";
 import * as geometry from "./graphics/geometry";
 import fileSaverPkg from "file-saver";
@@ -20,18 +20,15 @@ export type ExportImageOptions = {
 /**
  * Create and return a new canvas element with diagram rendered
  */
-function getImageCanvas(diagram: Diagram, options: ExportImageOptions) {
+function getImageCanvas(diagram: Document, options: ExportImageOptions) {
   const { scale, dark, fillBackground } = options;
   const theme = dark ? "dark" : "light";
   const colorVariables = colors[theme];
 
   // make a new canvas element for making image data
   const canvasElement = document.createElement("canvas");
-  const canvas = new Canvas(
-    canvasElement.getContext("2d") as CanvasRenderingContext2D,
-    scale
-  );
-  let boundingBox = diagram.getDiagramBoundingBox(canvas);
+  const canvas = new Canvas(canvasElement, scale);
+  let boundingBox = diagram.getDocBoundingBox(canvas);
 
   // initialize new canvas
   boundingBox = geometry.expandRect(boundingBox, DEFAULT_MARGIN);
@@ -61,7 +58,7 @@ function getImageCanvas(diagram: Diagram, options: ExportImageOptions) {
  * Get Base64-encoded image data of diagram
  */
 export async function getImageDataUrl(
-  diagram: Diagram,
+  diagram: Document,
   options: Partial<ExportImageOptions>
 ): Promise<string> {
   const canvas = getImageCanvas(diagram, {
@@ -78,7 +75,7 @@ export async function getImageDataUrl(
  * Get Blob image data of diagram
  */
 export async function getImageBlob(
-  diagram: Diagram,
+  diagram: Document,
   options: Partial<ExportImageOptions>
 ): Promise<Blob | null> {
   const canvas = getImageCanvas(diagram, {
@@ -100,7 +97,7 @@ export async function getImageBlob(
  */
 export async function getSVGImageData(
   canvas: Canvas,
-  diagram: Diagram,
+  diagram: Document,
   options: Partial<ExportImageOptions>,
   styleInSVG?: string
 ): Promise<string> {
@@ -116,13 +113,18 @@ export async function getSVGImageData(
 
   // Make a new SVG canvas for making SVG image data
   const boundingBox = geometry.expandRect(
-    diagram.getDiagramBoundingBox(canvas),
+    diagram.getDocBoundingBox(canvas),
     margin
   );
   const w = geometry.width(boundingBox);
   const h = geometry.height(boundingBox);
   const ctx = new Context(w * scale, h * scale);
-  const svgCanvas = new Canvas(ctx, 1);
+  const pseudoCanvas: HTMLCanvasElement = {
+    getContext: (contextId: string) => {
+      if (contextId === "2d") return ctx;
+    },
+  } as HTMLCanvasElement;
+  const svgCanvas = new Canvas(pseudoCanvas, 1);
 
   // Initialize new SVG Canvas
   svgCanvas.origin = [-boundingBox[0][0], -boundingBox[0][1]];
@@ -162,7 +164,7 @@ export async function getSVGImageData(
  */
 export async function exportImageAsFile(
   canvas: Canvas,
-  diagram: Diagram,
+  diagram: Document,
   fileName: string,
   options: Partial<ExportImageOptions>,
   styleInSVG?: string
@@ -191,7 +193,7 @@ export async function exportImageAsFile(
  */
 export async function copyToClipboard(
   canvas: Canvas,
-  diagram: Diagram,
+  diagram: Document,
   options: Partial<ExportImageOptions>
 ) {
   switch (options.format) {

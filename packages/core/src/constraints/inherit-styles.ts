@@ -12,7 +12,7 @@
  */
 
 import { z } from "zod";
-import { Shape, constraintManager, Diagram, Box } from "../shapes";
+import { Shape, constraintManager, Document, Box } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import { Transform } from "../transform/transform";
 
@@ -27,7 +27,7 @@ const schema = z.object({
  * Inherit styles from parent
  */
 function constraint(
-  diagram: Diagram,
+  diagram: Document,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,
@@ -35,10 +35,10 @@ function constraint(
 ) {
   let changed = false;
   const parent = shape.parent as Shape;
-  if (parent && !(parent instanceof Diagram)) {
+  if (parent && !(parent instanceof Document)) {
     changed =
       transform.atomicAssign(shape, "opacity", parent.opacity) || changed;
-    if (args.stroke !== false) {
+    if (args.stroke) {
       changed =
         transform.atomicAssign(shape, "strokeColor", parent.strokeColor) ||
         changed;
@@ -51,13 +51,13 @@ function constraint(
       changed =
         transform.atomicAssign(shape, "roughness", parent.roughness) || changed;
     }
-    if (args.fill !== false) {
+    if (args.fill) {
       changed =
         transform.atomicAssign(shape, "fillColor", parent.fillColor) || changed;
       changed =
         transform.atomicAssign(shape, "fillStyle", parent.fillStyle) || changed;
     }
-    if (args.font !== false) {
+    if (args.font) {
       changed =
         transform.atomicAssign(shape, "fontColor", parent.fontColor) || changed;
       changed =
@@ -71,7 +71,7 @@ function constraint(
         transform.atomicAssign(shape, "fontWeight", parent.fontWeight) ||
         changed;
     }
-    if (args.textAlignment !== false && parent instanceof Box) {
+    if (args.textAlignment && parent instanceof Box) {
       changed =
         transform.atomicAssign(shape, "horzAlign", parent.horzAlign) || changed;
       changed =

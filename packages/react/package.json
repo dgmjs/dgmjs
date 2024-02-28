@@ -1,0 +1,49 @@
+{
+  "name": "@dgmjs/react",
+  "version": "0.8.2",
+  "description": "React components wrapping @dgmjs/core",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "watch": "tsup --watch",
+    "test": "jest"
+  },
+  "author": "",
+  "license": "DGM License",
+  "dependencies": {
+    "@dgmjs/core": "*",
+    "@tiptap/extension-bold": "^2.2.3",
+    "@tiptap/extension-bullet-list": "^2.2.3",
+    "@tiptap/extension-document": "^2.2.3",
+    "@tiptap/extension-dropcursor": "^2.2.3",
+    "@tiptap/extension-font-family": "^2.2.3",
+    "@tiptap/extension-hard-break": "^2.2.3",
+    "@tiptap/extension-history": "^2.2.3",
+    "@tiptap/extension-italic": "^2.2.3",
+    "@tiptap/extension-list-item": "^2.2.3",
+    "@tiptap/extension-ordered-list": "^2.2.3",
+    "@tiptap/extension-paragraph": "^2.2.3",
+    "@tiptap/extension-strike": "^2.2.3",
+    "@tiptap/extension-text": "^2.2.3",
+    "@tiptap/extension-text-align": "^2.2.3",
+    "@tiptap/extension-text-style": "^2.2.3",
+    "@tiptap/extension-underline": "^2.2.3",
+    "@tiptap/react": "^2.2.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3"
+  }
+}

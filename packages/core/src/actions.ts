@@ -15,7 +15,7 @@ import type { Editor } from "./editor";
 import {
   Box,
   Group,
-  Diagram,
+  Document,
   type Shape,
   Line,
   type ShapeValues,
@@ -37,30 +37,30 @@ export class Actions {
    * Undo
    */
   undo() {
-    this.editor.state.transform.undo();
+    this.editor.transform.undo();
   }
 
   /**
    * Redo
    */
   redo() {
-    this.editor.state.transform.redo();
+    this.editor.transform.redo();
   }
 
   /**
-   * Insert a shape into diagram or another shape
+   * Insert a shape into document or another shape
    */
   insert(shape: Shape, parent?: Shape) {
-    const tr = this.editor.state.transform;
-    const diagram = this.editor.state.diagram as Diagram;
+    const tr = this.editor.transform;
+    const doc = this.editor.doc as Document;
     tr.startTransaction("insert");
     if (parent) {
       tr.atomicInsert(shape);
       tr.changeParent(shape, parent);
     } else {
-      tr.addShapeToDiagram(diagram, shape);
+      tr.addShapeToDoc(doc, shape);
     }
-    tr.resolveAllConstraints(diagram, this.editor.canvas);
+    tr.resolveAllConstraints(doc, this.editor.canvas);
     tr.endTransaction();
   }
 
@@ -68,15 +68,19 @@ export class Actions {
    * Update shape properties
    */
   update(values: ShapeValues, shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.state.selections.getSelections();
-    const diagram = this.editor.state.diagram as Diagram;
-    const tr = this.editor.state.transform;
+    shapes = shapes ?? this.editor.selection.getShapes();
+    const diagram = this.editor.doc as Document;
+    const tr = this.editor.transform;
     tr.startTransaction("update");
     for (let key in values) {
       if (key === "routeType") {
         shapes.forEach((s) => {
           if (s instanceof Connector)
             tr.changeRouteType(s, (values as any)[key]);
+        });
+      } else if (key === "richText") {
+        shapes.forEach((s) => {
+          if (s instanceof Box) tr.setRichText(s, (values as any)[key]);
         });
       } else if (key === "horzAlign") {
         shapes.forEach((s) => {
@@ -108,22 +112,22 @@ export class Actions {
    * Delete selected shapes
    */
   delete_(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.state.selections.getSelections();
-    const diagram = this.editor.state.diagram as Diagram;
-    const tr = this.editor.state.transform;
+    shapes = shapes ?? this.editor.selection.getShapes();
+    const diagram = this.editor.doc as Document;
+    const tr = this.editor.transform;
     tr.startTransaction("delete");
     tr.deleteShapes(diagram, shapes);
     tr.resolveAllConstraints(diagram, this.editor.canvas);
     tr.endTransaction();
-    this.editor.state.selections.deselectAll();
+    this.editor.selection.deselectAll();
   }
 
   /**
    * Copy selected shapes
    */
   copy(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.state.selections.getSelections();
-    const clipboard = this.editor.state.clipboard;
+    shapes = shapes ?? this.editor.selection.getShapes();
+    const clipboard = this.editor.clipboard;
     clipboard.clearBuffer();
     clipboard.putObjects(shapes, clipboard.buffer);
   }
@@ -132,25 +136,25 @@ export class Actions {
    * Cut selected shapes
    */
   cut(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.state.selections.getSelections();
-    const diagram = this.editor.state.diagram as Diagram;
-    const tr = this.editor.state.transform;
-    const clipboard = this.editor.state.clipboard;
+    shapes = shapes ?? this.editor.selection.getShapes();
+    const diagram = this.editor.doc as Document;
+    const tr = this.editor.transform;
+    const clipboard = this.editor.clipboard;
     clipboard.clearBuffer();
     clipboard.putObjects(shapes, clipboard.buffer);
     tr.startTransaction("cut");
     tr.deleteShapes(diagram, shapes);
     tr.endTransaction();
-    this.editor.state.selections.deselectAll();
+    this.editor.selection.deselectAll();
   }
 
   /**
    * Paste
    */
-  paste(diagram?: Diagram) {
-    diagram = diagram ?? (this.editor.state.diagram as Diagram);
-    const clipboard = this.editor.state.clipboard;
-    const tr = this.editor.state.transform;
+  paste(diagram?: Document) {
+    diagram = diagram ?? (this.editor.doc as Document);
+    const clipboard = this.editor.clipboard;
+    const tr = this.editor.transform;
     const center = this.editor.getCenter();
     if (clipboard.hasObjects()) {
       const shapes = clipboard.getObjects(clipboard.buffer) as Shape[];
@@ -164,11 +168,11 @@ export class Actions {
       tr.startTransaction("paste");
       shapes.toReversed().forEach((shape) => {
         tr.atomicInsert(shape);
-        tr.changeParent(shape, diagram as Diagram);
+        tr.changeParent(shape, diagram as Document);
       });
       tr.moveShapes(diagram, shapes, dx, dy);
       tr.endTransaction();
-      this.editor.state.selections.select(shapes);
+      this.editor.selection.select(shapes);
     }
   }
 
@@ -176,10 +180,10 @@ export class Actions {
    * Duplicate selected shapes
    */
   duplicate(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.state.selections.getSelections();
-    const tr = this.editor.state.transform;
-    const diagram = this.editor.state.diagram as Diagram;
-    const clipboard = this.editor.state.clipboard;
+    shapes = shapes ?? this.editor.selection.getShapes();
+    const tr = this.editor.transform;
+    const diagram = this.editor.doc as Document;
+    const clipboard = this.editor.clipboard;
     const buffer: any[] = [];
     clipboard.putObjects(shapes, buffer);
     if (buffer.length > 0) {
@@ -191,7 +195,7 @@ export class Actions {
       });
       tr.moveShapes(diagram, copied, 30, 30);
       tr.endTransaction();
-      this.editor.state.selections.select(copied);
+      this.editor.selection.select(copied);
     }
   }
 
@@ -199,10 +203,10 @@ export class Actions {
    * Move selected shapes
    */
   move(dx: number, dy: number, shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.state.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
-      const tr = this.editor.state.transform;
-      const diagram = this.editor.state.diagram as Diagram;
+      const tr = this.editor.transform;
+      const diagram = this.editor.doc as Document;
       tr.startTransaction("move-right");
       if (shapes.every((s) => s instanceof Box && s.anchored)) {
         for (let s of shapes) {
@@ -233,18 +237,16 @@ export class Actions {
    * Group selected shapes
    */
   group(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.state.selections.getSelections();
-    const box = this.editor.state.selections.getBoundingRect(
-      this.editor.canvas
-    );
-    const diagram = this.editor.state.diagram as Diagram;
+    shapes = shapes ?? this.editor.selection.getShapes();
+    const box = this.editor.selection.getBoundingRect(this.editor.canvas);
+    const diagram = this.editor.doc as Document;
     // filter all descendants of one of grouping shapes
     let filteredShapes: Shape[] = [];
     for (let s of shapes) {
       if (!shapes.some((s) => s.isDescendant(s))) filteredShapes.push(s);
     }
     if (filteredShapes.length > 1) {
-      const tr = this.editor.state.transform;
+      const tr = this.editor.transform;
       const group = new Group();
       group.left = box[0][0];
       group.top = box[0][1];
@@ -252,7 +254,7 @@ export class Actions {
       group.height = geometry.height(box);
       tr.startTransaction("group");
       tr.atomicInsert(group);
-      tr.changeParent(group, this.editor.state.diagram as Diagram);
+      tr.changeParent(group, this.editor.doc as Document);
       diagram
         ?.traverseSequence()
         .reverse()
@@ -263,7 +265,7 @@ export class Actions {
         });
       tr.resolveAllConstraints(diagram, this.editor.canvas);
       tr.endTransaction();
-      this.editor.state.selections.select([group]);
+      this.editor.selection.select([group]);
     }
   }
 
@@ -271,11 +273,11 @@ export class Actions {
    * Ungroup selected shapes
    */
   ungroup(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.state.selections.getSelections();
-    const diagram = this.editor.state.diagram as Diagram;
+    shapes = shapes ?? this.editor.selection.getShapes();
+    const diagram = this.editor.doc as Document;
     const children: Shape[] = [];
     if (shapes.some((s) => s instanceof Group)) {
-      const tr = this.editor.state.transform;
+      const tr = this.editor.transform;
       tr.startTransaction("ungroup");
       for (let s of shapes) {
         if (s instanceof Group) {
@@ -289,7 +291,7 @@ export class Actions {
       }
       tr.resolveAllConstraints(diagram, this.editor.canvas);
       tr.endTransaction();
-      this.editor.state.selections.select(children);
+      this.editor.selection.select(children);
     }
   }
 
@@ -297,10 +299,10 @@ export class Actions {
    * Bring selected shapes to front
    */
   bringToFront(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.state.selections.getSelections();
-    const diagram = this.editor.state.diagram as Diagram;
+    shapes = shapes ?? this.editor.selection.getShapes();
+    const diagram = this.editor.doc as Document;
     if (shapes.length > 0) {
-      const tr = this.editor.state.transform;
+      const tr = this.editor.transform;
       tr.startTransaction("bring-to-front");
       for (let s of shapes) {
         tr.bringToFront(s);
@@ -314,10 +316,10 @@ export class Actions {
    * Send selected shapes to back
    */
   sendToBack(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.state.selections.getSelections();
-    const diagram = this.editor.state.diagram as Diagram;
+    shapes = shapes ?? this.editor.selection.getShapes();
+    const diagram = this.editor.doc as Document;
     if (shapes.length > 0) {
-      const tr = this.editor.state.transform;
+      const tr = this.editor.transform;
       tr.startTransaction("send-to-back");
       for (let s of shapes) {
         tr.sendToBack(s);
@@ -331,10 +333,10 @@ export class Actions {
    * Bring selected shapes forward
    */
   bringForward(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.state.selections.getSelections();
-    const diagram = this.editor.state.diagram as Diagram;
+    shapes = shapes ?? this.editor.selection.getShapes();
+    const diagram = this.editor.doc as Document;
     if (shapes.length > 0) {
-      const tr = this.editor.state.transform;
+      const tr = this.editor.transform;
       tr.startTransaction("bring-forward");
       for (let s of shapes) {
         tr.bringForward(s);
@@ -348,10 +350,10 @@ export class Actions {
    * Send selected shapes backward
    */
   sendBackward(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.state.selections.getSelections();
-    const diagram = this.editor.state.diagram as Diagram;
+    shapes = shapes ?? this.editor.selection.getShapes();
+    const diagram = this.editor.doc as Document;
     if (shapes.length > 0) {
-      const tr = this.editor.state.transform;
+      const tr = this.editor.transform;
       tr.startTransaction("send-backward");
       for (let s of shapes) {
         tr.sendBackward(s);
@@ -365,10 +367,10 @@ export class Actions {
    * Align selected shapes to left
    */
   alignLeft(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.state.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
-      const tr = this.editor.state.transform;
-      const diagram = this.editor.state.diagram as Diagram;
+      const tr = this.editor.transform;
+      const diagram = this.editor.doc as Document;
       tr.startTransaction("align-left");
       const ls = shapes.map((s) => s.getBoundingRect()[0][0]);
       const left = Math.min(...ls);
@@ -390,10 +392,10 @@ export class Actions {
    * Align selected shapes to right
    */
   alignRight(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.state.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
-      const tr = this.editor.state.transform;
-      const diagram = this.editor.state.diagram as Diagram;
+      const tr = this.editor.transform;
+      const diagram = this.editor.doc as Document;
       tr.startTransaction("align-right");
       const rs = shapes.map((s) => s.getBoundingRect()[1][0]);
       const right = Math.max(...rs);
@@ -415,10 +417,10 @@ export class Actions {
    * Align selected shapes to horizontally center
    */
   alignCenter(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.state.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
-      const tr = this.editor.state.transform;
-      const diagram = this.editor.state.diagram as Diagram;
+      const tr = this.editor.transform;
+      const diagram = this.editor.doc as Document;
       tr.startTransaction("align-center");
       const ls = shapes.map((s) => s.getBoundingRect()[0][0]);
       const rs = shapes.map((s) => s.getBoundingRect()[1][0]);
@@ -445,10 +447,10 @@ export class Actions {
    * Align selected shapes to top
    */
   alignTop(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.state.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
-      const tr = this.editor.state.transform;
-      const diagram = this.editor.state.diagram as Diagram;
+      const tr = this.editor.transform;
+      const diagram = this.editor.doc as Document;
       tr.startTransaction("align-top");
       const ts = shapes.map((s) => s.getBoundingRect()[0][1]);
       const top = Math.min(...ts);
@@ -470,10 +472,10 @@ export class Actions {
    * Align selected shapes to bottom
    */
   alignBottom(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.state.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
-      const tr = this.editor.state.transform;
-      const diagram = this.editor.state.diagram as Diagram;
+      const tr = this.editor.transform;
+      const diagram = this.editor.doc as Document;
       tr.startTransaction("align-bottom");
       const bs = shapes.map((s) => s.getBoundingRect()[1][1]);
       const bottom = Math.max(...bs);
@@ -495,10 +497,10 @@ export class Actions {
    * Align selected shapes to vertically middle
    */
   alignMiddle(shapes?: Shape[]) {
-    shapes = shapes ?? this.editor.state.selections.getSelections();
+    shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
-      const tr = this.editor.state.transform;
-      const diagram = this.editor.state.diagram as Diagram;
+      const tr = this.editor.transform;
+      const diagram = this.editor.doc as Document;
       tr.startTransaction("align-middle");
       const ts = shapes.map((s) => s.getBoundingRect()[0][1]);
       const bs = shapes.map((s) => s.getBoundingRect()[1][1]);
@@ -522,13 +524,13 @@ export class Actions {
   }
 
   /**
-   * Create a new diagarm
+   * Create a new document
    */
-  newDiagram(): Diagram {
-    const diagram = new Diagram();
-    this.editor.state.store.setRoot(diagram);
-    this.editor.setDiagram(diagram);
-    return diagram;
+  newDoc(): Document {
+    const doc = new Document();
+    this.editor.store.setDoc(doc);
+    this.editor.setDoc(doc);
+    return doc;
   }
 
   /**
@@ -536,10 +538,10 @@ export class Actions {
    */
   loadFromJSON(json: any) {
     if (json) {
-      this.editor.state.selections.deselectAll();
-      this.editor.state.store.fromJSON(json);
-      if (this.editor.state.store.root instanceof Diagram) {
-        this.editor.setDiagram(this.editor.state.store.root);
+      this.editor.selection.deselectAll();
+      this.editor.store.fromJSON(json);
+      if (this.editor.store.doc instanceof Document) {
+        this.editor.setDoc(this.editor.store.doc);
       }
     }
   }

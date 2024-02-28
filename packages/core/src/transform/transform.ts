@@ -18,14 +18,14 @@ import {
   Line,
   Shape,
   RouteType,
-  Diagram,
+  Document,
   Connector,
   LineType,
 } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { CONNECTION_POINT_APOTHEM } from "../graphics/const";
-import { convertTextToDoc } from "../utils/text-utils";
+import { convertDocToText, convertTextToDoc } from "../utils/text-utils";
 import {
   moveEndPoint,
   adjustObliqueRoute,
@@ -99,11 +99,14 @@ export class Transform extends EventEmitter {
    * Start a transaction
    */
   startTransaction(name: string) {
+    if (this.tx && this.tx.mutations.length > 0) {
+      this.endTransaction();
+    }
     this.tx = new Transaction(name);
   }
 
   /**
-   * End a transaction
+   * End the transaction
    */
   endTransaction() {
     if (!this.tx) throw new Error("No transaction started");
@@ -113,6 +116,19 @@ export class Transform extends EventEmitter {
       this.redoHistory.clear();
     }
     this.tx = null;
+  }
+
+  /**
+   * Cancel the transaction
+   */
+  cancelTransaction() {
+    if (this.tx) {
+      for (let i = this.tx.mutations.length - 1; i >= 0; i--) {
+        const mut = this.tx.mutations[i];
+        this.unapplyMutation(mut);
+      }
+      this.tx = null;
+    }
   }
 
   /**
@@ -346,11 +362,11 @@ export class Transform extends EventEmitter {
   /**
    * Mutation to add a shape to diagram
    */
-  addShapeToDiagram(diagram: Diagram, shape: Shape): boolean {
+  addShapeToDoc(diagram: Document, shape: Shape): boolean {
     let changed = false;
     changed = this.atomicInsert(shape) || changed;
     changed =
-      this.atomicInsertToArray(diagram as Diagram, "children", shape) ||
+      this.atomicInsertToArray(diagram as Document, "children", shape) ||
       changed;
     changed = this.atomicAssignRef(shape, "parent", diagram) || changed;
     return changed;
@@ -497,12 +513,37 @@ export class Transform extends EventEmitter {
   }
 
   /**
+   * A set of mutations to change rich text or not
+   */
+  setRichText(node: Box, richText: boolean): boolean {
+    let changed = false;
+    if (richText) {
+      let doc = structuredClone(
+        richText && typeof node.text === "string"
+          ? convertTextToDoc(node.text)
+          : node.text
+      );
+      changed = this.atomicAssign(node, "text", doc) || changed;
+    } else {
+      let str =
+        !richText && typeof node.text !== "string"
+          ? convertDocToText(node.text)
+          : node.text;
+      changed = this.atomicAssign(node, "text", str) || changed;
+    }
+    changed = this.atomicAssign(node, "richText", richText) || changed;
+    return changed;
+  }
+
+  /**
    * A set of mutations to change horz align
    */
   setHorzAlign(node: Box, horzAlign: string): boolean {
     let changed = false;
     let doc = structuredClone(
-      typeof node.text === "string" ? convertTextToDoc(node.text) : node.text
+      node.richText && typeof node.text === "string"
+        ? convertTextToDoc(node.text)
+        : node.text
     );
     node.visitNodes(doc, (docNode) => {
       if (docNode.attrs && docNode.attrs.textAlign)
@@ -519,7 +560,9 @@ export class Transform extends EventEmitter {
   setFontSize(node: Box, fontSize: number): boolean {
     let changed = false;
     let doc = structuredClone(
-      typeof node.text === "string" ? convertTextToDoc(node.text) : node.text
+      node.richText && typeof node.text === "string"
+        ? convertTextToDoc(node.text)
+        : node.text
     );
     node.visitNodes(doc, (docNode) => {
       if (Array.isArray(docNode.marks)) {
@@ -542,7 +585,9 @@ export class Transform extends EventEmitter {
   setFontFamily(node: Box, fontFamily: string): boolean {
     let changed = false;
     let doc = structuredClone(
-      typeof node.text === "string" ? convertTextToDoc(node.text) : node.text
+      node.richText && typeof node.text === "string"
+        ? convertTextToDoc(node.text)
+        : node.text
     );
     node.visitNodes(doc, (docNode) => {
       if (Array.isArray(docNode.marks)) {
@@ -565,7 +610,9 @@ export class Transform extends EventEmitter {
   setFontColor(node: Box, fontColor: string): boolean {
     let changed = false;
     let doc = structuredClone(
-      typeof node.text === "string" ? convertTextToDoc(node.text) : node.text
+      node.richText && typeof node.text === "string"
+        ? convertTextToDoc(node.text)
+        : node.text
     );
     node.visitNodes(doc, (docNode) => {
       if (Array.isArray(docNode.marks)) {
@@ -704,7 +751,7 @@ export class Transform extends EventEmitter {
    * A set of mutations to move shapes
    */
   moveShapes(
-    diagram: Diagram,
+    diagram: Document,
     shapes: Shape[],
     dx: number,
     dy: number,
@@ -763,7 +810,7 @@ export class Transform extends EventEmitter {
   /**
    * A set of mutations to delete a shape
    */
-  deleteSingleShape(diagram: Diagram, shape: Shape): boolean {
+  deleteSingleShape(diagram: Document, shape: Shape): boolean {
     let changed = false;
     if (this.store.has(shape)) {
       // set null to all edges connected to the shape
@@ -789,7 +836,7 @@ export class Transform extends EventEmitter {
   /**
    * A set of mutations to delete shapes
    */
-  deleteShapes(diagram: Diagram, shapes: Shape[]): boolean {
+  deleteShapes(diagram: Document, shapes: Shape[]): boolean {
     let changed = false;
     shapes.forEach((s) => {
       changed = this.deleteSingleShape(diagram, s) || changed;
@@ -861,7 +908,7 @@ export class Transform extends EventEmitter {
    * A set of mutations to resolve a shape's constraints
    */
   resolveSingleConstraints(
-    diagram: Diagram,
+    diagram: Document,
     shape: Shape,
     canvas: Canvas
   ): boolean {
@@ -880,9 +927,13 @@ export class Transform extends EventEmitter {
   /**
    * A set of mutations to resolve all constraints
    */
-  resolveAllConstraints(diagram: Diagram, canvas: Canvas): boolean {
+  resolveAllConstraints(
+    diagram: Document,
+    canvas: Canvas,
+    maxIteration: number = 3
+  ): boolean {
     let changed = false;
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < maxIteration; i++) {
       diagram.traverse((s) => {
         changed =
           this.resolveSingleConstraints(diagram, s as Shape, canvas) || changed;

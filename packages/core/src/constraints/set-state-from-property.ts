@@ -11,7 +11,7 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { Diagram, Shape, constraintManager } from "../shapes";
+import { Document, Shape, constraintManager } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import { z } from "zod";
 import { Transform } from "../transform/transform";
@@ -38,7 +38,7 @@ const schema = z.object({
  * - property {string} A boolean-type property name
  */
 function constraint(
-  diagram: Diagram,
+  diagram: Document,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,

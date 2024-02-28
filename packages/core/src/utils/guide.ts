@@ -224,8 +224,8 @@ function drawControlPoint(
   switch (type) {
     case 0: {
       // rect
-      canvas.fillRect(p1[0], p1[1], p2[0], p2[1]);
-      canvas.strokeRect(p1[0], p1[1], p2[0], p2[1]);
+      canvas.fillRoundRect(p1[0], p1[1], p2[0], p2[1], 4);
+      canvas.strokeRoundRect(p1[0], p1[1], p2[0], p2[1], 4);
       break;
     }
     case 1: {

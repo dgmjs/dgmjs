@@ -15,16 +15,19 @@ import { assert } from "./std/assert";
 import { Canvas } from "./graphics/graphics";
 import {
   CONNECTION_POINT_APOTHEM,
+  Color,
   DEFAULT_FONT_SIZE,
   LINE_SELECTION_THRESHOLD,
+  SYSTEM_FONT,
+  SYSTEM_FONT_SIZE,
 } from "./graphics/const";
 import * as geometry from "./graphics/geometry";
 import * as utils from "./graphics/utils";
 import { ZodSchema } from "zod";
 import {
   convertTextToDoc,
-  preprocessNode,
-  renderNode,
+  drawRichText,
+  drawPlainText,
 } from "./utils/text-utils";
 import { Transform } from "./transform/transform";
 import { evalScript } from "./mal/mal";
@@ -48,7 +51,7 @@ interface Script {
 }
 
 type ConstraintFn = (
-  diagram: Diagram,
+  diagram: Document,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,
@@ -204,6 +207,10 @@ class Shape extends Obj {
     this.properties = [];
     this.scripts = [];
   }
+
+  initialze(canvas: Canvas) {}
+
+  finalize(canvas: Canvas) {}
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
@@ -486,6 +493,35 @@ class Shape extends Obj {
   }
 
   /**
+   * Return a bounding box in canvas element.
+   *
+   * [Note] If you want to place DOM elements over the canvas, use this method
+   * and don't forget to apply transform scale to the DOM element.
+   */
+  getRectInDOM(canvas: Canvas): {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+  } {
+    const rect = this.getBoundingRect().map((p) => {
+      let tp = canvas.globalCoordTransform(p);
+      return [tp[0] / canvas.ratio, tp[1] / canvas.ratio];
+    });
+    const scale = canvas.scale;
+    let width = geometry.width(rect) * (1 / scale);
+    let height = geometry.height(rect) * (1 / scale);
+    const left = rect[0][0] - (width * (1 - scale)) / 2;
+    const top = rect[0][1] - (height * (1 - scale)) / 2;
+    return {
+      left,
+      top,
+      width,
+      height,
+    };
+  }
+
+  /**
    * Return a enclosure
    */
   getEnclosure(): number[][] {
@@ -644,17 +680,17 @@ class Shape extends Obj {
 }
 
 /**
- * Diagram
+ * Document
  */
-class Diagram extends Shape {
+class Document extends Shape {
   version: number;
 
   constructor() {
     super();
-    this.type = "Diagram";
+    this.type = "Document";
     this.version = 1;
 
-    // diagram cannot be controllable
+    // document cannot be controllable
     this.enable = false;
   }
 
@@ -698,9 +734,9 @@ class Diagram extends Shape {
   }
 
   /**
-   * Return actual diagram bounding box in GCS
+   * Return actual document bounding box in GCS
    */
-  getDiagramBoundingBox(canvas: Canvas): number[][] {
+  getDocBoundingBox(canvas: Canvas): number[][] {
     return this.children.length > 0
       ? this.traverseSequence()
           .filter((s) => s !== this)
@@ -719,14 +755,14 @@ class Diagram extends Shape {
   }
 
   /**
-   * Diagram do not contain a point
+   * Document do not contain a point
    */
   containsPoint(canvas: Canvas, point: number[]): boolean {
     return false;
   }
 
   /**
-   * Diagram do not overlap with anything
+   * Document do not overlap with anything
    */
   overlapRect(rect: number[][]): boolean {
     return false;
@@ -768,6 +804,11 @@ class Box extends Shape {
   anchorPosition: number;
 
   /**
+   * Rich text or plain text
+   */
+  richText: boolean;
+
+  /**
    * Text editable
    */
   textEditable: boolean;
@@ -800,7 +841,7 @@ class Box extends Shape {
    *   ]
    * }
    */
-  text: string | any;
+  text: any;
 
   /**
    * Word wrap
@@ -843,14 +884,12 @@ class Box extends Shape {
     this.anchorAngle = 0;
     this.anchorLength = 0;
     this.anchorPosition = 0.5;
+    this.richText = false;
     this.textEditable = true;
-    this.text = {
-      type: "doc",
-      content: [{ type: "paragraph", attrs: { textAlign: "left" } }],
-    };
+    this.text = "";
     this.wordWrap = false;
-    this.horzAlign = AlignmentKind.LEFT;
-    this.vertAlign = AlignmentKind.TOP;
+    this.horzAlign = AlignmentKind.CENTER;
+    this.vertAlign = AlignmentKind.MIDDLE;
     this.lineHeight = 1.2;
     this.paragraphSpacing = 0;
     this._renderText = true;
@@ -864,6 +903,7 @@ class Box extends Shape {
     json.anchorAngle = this.anchorAngle;
     json.anchorLength = this.anchorLength;
     json.anchorPosition = this.anchorPosition;
+    json.richText = this.richText;
     json.textEditable = this.textEditable;
     json.text = structuredClone(this.text);
     json.wordWrap = this.wordWrap;
@@ -882,6 +922,7 @@ class Box extends Shape {
     this.anchorAngle = json.anchorAngle ?? this.anchorAngle;
     this.anchorLength = json.anchorLength ?? this.anchorLength;
     this.anchorPosition = json.anchorPosition ?? this.anchorPosition;
+    this.richText = json.richText ?? typeof json.text !== "string"; // for backward compatibility
     this.textEditable = json.textEditable ?? this.textEditable;
     this.text = json.text ?? this.text;
     this.wordWrap = json.wordWrap ?? this.wordWrap;
@@ -917,29 +958,11 @@ class Box extends Shape {
 
   renderText(canvas: Canvas): void {
     if (this._renderText) {
-      let doc = preprocessNode(
-        canvas,
-        typeof this.text === "string" ? convertTextToDoc(this.text) : this.text,
-        this,
-        this.wordWrap,
-        this.innerWidth,
-        1.5
-      );
-      // subtract last paragraph's spacing margin
-      const height = doc._height - this.paragraphSpacing * this.fontSize;
-      let top = this.innerTop;
-      switch (this.vertAlign) {
-        case "top":
-          top = this.innerTop;
-          break;
-        case "middle":
-          top = this.innerTop + (this.innerHeight - height) / 2;
-          break;
-        case "bottom":
-          top = this.innerBottom - height;
-          break;
+      if (this.richText) {
+        drawRichText(canvas, this);
+      } else {
+        drawPlainText(canvas, this);
       }
-      renderNode(canvas, doc, this, this.innerLeft, top, this.innerWidth, 1.5);
     }
   }
 
@@ -1494,16 +1517,11 @@ class Text extends Box {
     this.type = "Text";
     this.fillColor = "$transparent";
     this.strokeColor = "$transparent";
+    this.horzAlign = AlignmentKind.LEFT;
+    this.vertAlign = AlignmentKind.TOP;
   }
 
   renderDefault(canvas: Canvas): void {
-    canvas.fillRoundRect(
-      this.left,
-      this.top,
-      this.right,
-      this.bottom,
-      this.corners
-    );
     this.renderText(canvas);
   }
 }
@@ -1524,6 +1542,7 @@ class Image extends Box {
     this.imageWidth = 0;
     this.imageHeight = 0;
     this._image = null;
+    this.sizable = Sizable.RATIO;
   }
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
@@ -1547,6 +1566,19 @@ class Image extends Box {
       this._image.src = this.imageData;
     }
     if (this._image && this._image.complete) {
+      canvas.save();
+      canvas.fillColor = Color.TRANSPARENT;
+      canvas.strokeColor = Color.TRANSPARENT;
+      canvas.alpha = 1;
+      canvas.roughness = 0;
+      canvas.fillRoundRect(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.corners
+      );
+      canvas.context.clip();
       canvas.drawImage(
         this._image,
         this.left,
@@ -1554,6 +1586,7 @@ class Image extends Box {
         this.width,
         this.height
       );
+      canvas.restore();
     }
   }
 }
@@ -1680,6 +1713,103 @@ class Connector extends Line {
 }
 
 /**
+ * Frame
+ */
+class Frame extends Box {
+  constructor() {
+    super();
+    this.type = "Frame";
+    this.name = "Frame";
+    this.containable = true;
+  }
+
+  render(canvas: Canvas) {
+    if (this.visible) {
+      canvas.save();
+      this.assignStyles(canvas);
+      this.localTransform(canvas);
+      // const script = this.getScript(ScriptType.RENDER);
+      // if (script) {
+      //   try {
+      //     evalScript({ canvas: canvas, shape: this }, script);
+      //   } catch (err) {
+      //     console.log("[Script Error]", err);
+      //   }
+      // } else {
+      //   this.renderDefault(canvas);
+      // }
+      canvas.storeState();
+      canvas.fillColor = Color.BACKGROUND;
+      canvas.fillStyle = FillStyle.SOLID;
+      canvas.strokeColor = Color.FOREGROUND;
+      canvas.strokePattern = [];
+      canvas.strokeWidth = 1 / canvas.scale;
+      canvas.fontColor = Color.FOREGROUND;
+      const fontSize = SYSTEM_FONT_SIZE / canvas.scale;
+      canvas.font = utils.toCssFont("normal", 400, fontSize, SYSTEM_FONT);
+      canvas.alpha = 1;
+      canvas.roughness = 0;
+
+      canvas.fillText(this.left, this.top - fontSize / 2, this.name);
+      canvas.roundRect(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.corners
+      );
+      canvas.context.clip();
+      canvas.restoreState();
+      this.children.forEach((s) => (s as Shape).render(canvas));
+      canvas.restore();
+    }
+  }
+}
+
+/**
+ * Embed
+ */
+class Embed extends Box {
+  iframe: HTMLIFrameElement | null;
+
+  constructor() {
+    super();
+    this.type = "Embed";
+    this.iframe = null;
+  }
+
+  initialze(canvas: Canvas): void {
+    if (!this.iframe) {
+      this.iframe = document.createElement("iframe");
+      this.iframe.style.position = "absolute";
+      this.iframe.style.pointerEvents = "none";
+      this.iframe.src =
+        "https://www.youtube.com/embed/MTdbhePtCco?si=6-6HWSoOtx0qAmM6"; // "https://dgm.sh/home";
+      canvas.element.parentElement?.appendChild(this.iframe);
+    }
+  }
+
+  finalize(canvas: Canvas): void {
+    if (this.iframe) {
+      this.iframe.remove();
+      this.iframe = null;
+    }
+  }
+
+  renderDefault(canvas: Canvas): void {
+    const rect = this.getRectInDOM(canvas);
+    const scale = canvas.scale;
+    if (this.iframe) {
+      this.iframe.style.left = `${rect.left}px`;
+      this.iframe.style.top = `${rect.top}px`;
+      this.iframe.style.width = `${rect.width}px`;
+      this.iframe.style.height = `${rect.height}px`;
+      this.iframe.style.transform = `scale(${scale})`;
+    }
+  }
+}
+
+/**
  * Constraint Manager
  */
 class ConstraintManager {
@@ -1801,6 +1931,7 @@ interface ShapeValues {
   tailEndType?: string;
   padding?: number[];
   corners?: number[];
+  richText?: boolean;
   textEditable?: boolean;
   text?: any;
   wordWrap?: boolean;
@@ -1824,7 +1955,7 @@ export {
   LineEndType,
   AlignmentKind,
   Shape,
-  Diagram,
+  Document,
   Box,
   Line,
   Rectangle,
@@ -1833,6 +1964,8 @@ export {
   Image,
   Group,
   Connector,
+  Frame,
+  Embed,
   constraintManager,
   type ShapeValues,
 };

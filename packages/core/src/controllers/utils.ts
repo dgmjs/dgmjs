@@ -11,24 +11,28 @@ import { CONNECTION_POINT_APOTHEM, MAGNET_THRESHOLD } from "../graphics/const";
  * Find node's position where is the bestfits to the given enclosure.
  * @param canvas
  * @param shape
- * @param enclosureInCSS outline in CCS
+ * @param initialLeft
+ * @param initialTop
+ * @param initialWidth
+ * @param initialHeight
+ * @param targetEnclosureInCSS outline in CCS
  * @returns return [dx, dy] to move the shape
  */
 export function fitEnclosureInCSS(
   canvas: Canvas,
   shape: Shape,
-  left: number,
-  top: number,
-  width: number,
-  height: number,
-  enclosureInCSS: number[][]
+  initialLeft: number,
+  initialTop: number,
+  initialWidth: number,
+  initialHeight: number,
+  targetEnclosureInCSS: number[][]
 ): number[] {
   // save shape states
   let memento = shape.toJSON(false, true);
-  shape.left = left;
-  shape.top = top;
-  shape.width = width;
-  shape.height = height;
+  shape.left = initialLeft;
+  shape.top = initialTop;
+  shape.width = initialWidth;
+  shape.height = initialHeight;
   let initialState = shape.toJSON(false, true);
   const objective = (vec: number[]) => {
     shape.fromJSON(initialState);
@@ -37,7 +41,7 @@ export function fitEnclosureInCSS(
     shape.top = shape.top + vec[1];
     let o = shape.getEnclosure().map((p) => lcs2ccs(canvas, shape, p));
     // error value is sum of squared distance for each points
-    let e = enclosureInCSS
+    let e = targetEnclosureInCSS
       .map((p, i) => Math.pow(geometry.distance(p, o[i]), 2))
       .reduce((a, b) => a + b);
     return e;
@@ -159,7 +163,7 @@ export function findConnectionPoint(
 ): [Shape | null, number[] | null, number] {
   const canvas = editor.canvas;
   let end: Shape | null =
-    editor.state.diagram?.getShapeAt(canvas, point, line ? [line] : []) ?? null;
+    editor.doc?.getShapeAt(canvas, point, line ? [line] : []) ?? null;
   let cp: number[] | null = null;
   let cpIndex = -1;
   // prevent connecting to the one of edge's descendant
@@ -167,7 +171,7 @@ export function findConnectionPoint(
     end = null;
   }
   // find from node's connection points
-  editor.state.diagram?.traverse((shape) => {
+  editor.doc?.traverse((shape) => {
     const s = shape as Shape;
     if (
       !cp &&
@@ -200,7 +204,7 @@ export function findConnectionPoint(
   });
   // find from outlines
   if (!cp) {
-    editor.state.diagram?.traverse((shape) => {
+    editor.doc?.traverse((shape) => {
       const s = shape as Shape;
       if (
         !cp &&

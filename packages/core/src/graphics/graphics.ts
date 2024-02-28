@@ -187,6 +187,7 @@ function pathToString(path: SVGPath): string {
  * Canvas
  */
 class Canvas {
+  element: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
   colorVariables: Record<string, string>;
   generator: RoughGenerator;
@@ -205,7 +206,10 @@ class Canvas {
   origin: number[];
   scale: number;
 
-  constructor(context: CanvasRenderingContext2D, pixelRatio: number) {
+  constructor(element: HTMLCanvasElement, pixelRatio: number) {
+    this.element = element;
+    const context = this.element.getContext("2d");
+    if (!context) throw new Error("Failed to create context2d");
     this.context = context;
     this.colorVariables = {
       background: "#ffffff",
@@ -493,6 +497,7 @@ class Canvas {
         fillStyle: this.fillStyle,
         fillLineDash: [],
         stroke: this.resolveColor("$transparent"),
+        strokeWidth: this.strokeWidth,
       });
       roughDraw(this.context, rd);
     } else {
@@ -541,7 +546,7 @@ class Canvas {
           y + rs[0]
         } Q${x},${y} ${x + rs[0]},${y} Z`,
         {
-          seed: w + h,
+          seed: x + y + w + h,
           roughness: this.roughness,
           stroke: this.resolveColor(this.strokeColor),
           strokeWidth: this.strokeWidth,
@@ -602,6 +607,7 @@ class Canvas {
           fillStyle: this.fillStyle,
           fillLineDash: [],
           stroke: this.resolveColor("$transparent"),
+          strokeWidth: this.strokeWidth,
         }
       );
       roughDraw(this.context, rd);
@@ -704,6 +710,7 @@ class Canvas {
         fillStyle: this.fillStyle,
         fillLineDash: [],
         stroke: this.resolveColor("$transparent"),
+        strokeWidth: this.strokeWidth,
       });
       roughDraw(this.context, rd);
     } else {
@@ -967,6 +974,7 @@ class Canvas {
         fillStyle: this.fillStyle,
         fillLineDash: [],
         stroke: this.resolveColor("$transparent"),
+        strokeWidth: this.strokeWidth,
       });
       roughDraw(this.context, rd);
     } else {
@@ -1050,6 +1058,7 @@ class Canvas {
         fillStyle: this.fillStyle,
         fillLineDash: [],
         stroke: this.resolveColor("$transparent"),
+        strokeWidth: this.strokeWidth,
       });
       roughDraw(this.context, rd);
     } else {
@@ -1134,6 +1143,7 @@ class Canvas {
         fillStyle: this.fillStyle,
         fillLineDash: [],
         stroke: this.resolveColor("$transparent"),
+        strokeWidth: this.strokeWidth,
       });
       roughDraw(this.context, rd);
     } else {
@@ -1202,6 +1212,7 @@ class Canvas {
         fillStyle: this.fillStyle,
         fillLineDash: [],
         stroke: this.resolveColor("$transparent"),
+        strokeWidth: this.strokeWidth,
       });
       roughDraw(this.context, rd);
     } else {
@@ -1254,8 +1265,18 @@ class Canvas {
   /**
    * Get Text Metric
    * Ref: https://developer.mozilla.org/en-US/docs/Web/API/TextMetrics
-   * Note: *ascent, *descent values are distance from baseline
-   * Therefore height = ascent + descent.
+   *
+   * Values:
+   * - ascent: Distance from the baseline to the top of the box.
+   * - descent: Distance from the baseline to the bottom of the box.
+   * - actualAscent: Distance from the baseline to the top of the font
+   *   (varies for each character: "." is a small value, "|" is a large value).
+   * - actualDescent: Distance from the baseline to the bottom of the font
+   *   (varies for each character).
+   *
+   * Hints:
+   * - ascent + descent = height
+   * - ascent + descent > actualAscent + actualDescent
    */
   textMetric(text: string): CanvasTextMetric {
     this.context.font = this.font;

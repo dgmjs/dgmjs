@@ -12,7 +12,7 @@
  */
 
 import { z } from "zod";
-import { Box, Diagram, Shape, constraintManager } from "../shapes";
+import { Box, Document, Shape, constraintManager } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import { Transform } from "../transform/transform";
 
@@ -47,7 +47,7 @@ const schema = z.object({
  */
 function setHorzAlign(
   tr: Transform,
-  diagram: Diagram,
+  diagram: Document,
   shape: Box,
   relativeTo: Box,
   align:
@@ -123,7 +123,7 @@ function setHorzAlign(
  */
 function setVertAlign(
   tr: Transform,
-  diagram: Diagram,
+  diagram: Document,
   shape: Box,
   relativeTo: Box,
   align:
@@ -205,7 +205,7 @@ function setVertAlign(
  * - args.fillLast {boolean} fill space with last child
  */
 function constraint(
-  diagram: Diagram,
+  diagram: Document,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,

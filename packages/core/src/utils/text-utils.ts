@@ -57,7 +57,8 @@ export function convertTextToDoc(text: string): any {
   const lines = text.split("\n");
   lines.forEach((line, i) => {
     if (i > 0) doc.content[0].content.push({ type: "hardBreak" });
-    doc.content[0].content.push({ type: "text", text: line });
+    if (line.length > 0)
+      doc.content[0].content.push({ type: "text", text: line });
   });
   return doc;
 }
@@ -72,7 +73,8 @@ export function convertDocToText(node: any): string {
       if (Array.isArray(node.content)) {
         return node.content
           .map((child: any) => convertDocToText(child))
-          .join("");
+          .join("")
+          .trim();
       }
       return "";
     case "bulletList":
@@ -175,9 +177,9 @@ export function getTextNodeFont(
  *   inline = text
  *   text = <TERMINAL>
  *
- * @returns preprocessed node
+ * @returns preprocessed doc node
  */
-export function preprocessNode(
+export function preprocessDocNode(
   canvas: Canvas,
   node: any,
   shape: Box,
@@ -197,7 +199,7 @@ export function preprocessNode(
       let block = { ...node, _height: 0, _width: 0, _minWidth: 0 };
       if (Array.isArray(node.content)) {
         block.content = node.content.map((child: any, i: number) => {
-          let processed = preprocessNode(
+          let processed = preprocessDocNode(
             canvas,
             child,
             shape,
@@ -211,6 +213,9 @@ export function preprocessNode(
           if (block.type === "orderedList") {
             processed._list = "ordered";
             processed._order = i + 1;
+          }
+          if (block.type === "doc" && i === node.content.length - 1) {
+            processed._height -= shape.paragraphSpacing * shape.fontSize;
           }
           if (processed.type === "listItem") {
             processed._width += listIndent * shape.fontSize;
@@ -373,9 +378,9 @@ export function preprocessNode(
 }
 
 /**
- * Render preprocessed document nodes
+ * Draw preprocessed document nodes
  */
-export function renderNode(
+export function drawDocNode(
   canvas: Canvas,
   node: any,
   shape: Text,
@@ -392,7 +397,7 @@ export function renderNode(
         let y = top;
         for (let i = 0; i < node.content.length; i++) {
           let block = node.content[i];
-          renderNode(canvas, block, shape, left, y, width, listIndent);
+          drawDocNode(canvas, block, shape, left, y, width, listIndent);
           y += block._height;
         }
       }
@@ -439,7 +444,7 @@ export function renderNode(
         let y = top;
         for (let i = 0; i < node.content.length; i++) {
           let block = node.content[i];
-          renderNode(
+          drawDocNode(
             canvas,
             block,
             shape,
@@ -458,7 +463,7 @@ export function renderNode(
         let y = top;
         for (let i = 0; i < node.content.length; i++) {
           let line = node.content[i];
-          renderNode(canvas, line, shape, left, y, width, listIndent);
+          drawDocNode(canvas, line, shape, left, y, width, listIndent);
           y += line._height;
         }
       }
@@ -489,7 +494,7 @@ export function renderNode(
           let inline = node.content[i];
           inline._gap = node._last ? 0 : inline._gap || 0;
           inline._width += inline._gap;
-          renderNode(
+          drawDocNode(
             canvas,
             inline,
             shape,
@@ -544,24 +549,183 @@ export function renderNode(
   }
 }
 
+function getLastLine(node: any): any {
+  if (Array.isArray(node.content) && node.content.length > 0) {
+    let last = node.content[node.content.length - 1];
+    if (last.type === "line" && last._last) {
+      return last;
+    }
+    return getLastLine(last);
+  } else {
+    node._width = node._width || 0;
+    node._height = node._height || 0;
+    node._ascent = node._ascent || 0;
+    node._descent = node._descent || 0;
+    return node;
+  }
+}
+
 /**
  * Measure text size
  */
 export function measureText(
   canvas: Canvas,
-  shape: Text
-): { width: number; height: number; minWidth: number } {
-  const doc = preprocessNode(
+  shape: Text,
+  text: string | any
+): {
+  width: number;
+  height: number;
+  minWidth: number;
+  lineHeight: number;
+  preprocessedDoc?: any;
+} {
+  if (shape.richText) {
+    const doc = preprocessDocNode(
+      canvas,
+      typeof text === "string" ? convertTextToDoc(text) : text,
+      shape,
+      shape.wordWrap, // word wrap
+      shape.width,
+      1.5
+    );
+    const textWidth = doc._width;
+    // adjust last line height
+    const lastLine = getLastLine(doc);
+    const fontHeight = lastLine._ascent + lastLine._descent;
+    const gap = (lastLine._height - fontHeight) / 2;
+    const lastLineHeight = Math.max(lastLine._height, fontHeight + gap);
+    const textHeight = doc._height - lastLine._height + lastLineHeight;
+    return {
+      width: textWidth,
+      height: textHeight,
+      minWidth: doc._minWidth,
+      lineHeight: shape.fontSize * shape.lineHeight,
+      preprocessedDoc: doc,
+    };
+  } else {
+    const plain = typeof text !== "string" ? convertDocToText(text) : text;
+    const lines = plain.split("\n");
+    shape.assignStyles(canvas);
+    const textWidth = Math.max(...lines.map((l) => canvas.textMetric(l).width));
+    // adjust last line height
+    const fontMetric = canvas.textMetric("|"); // any character is possible
+    const gap = (shape.fontSize * shape.lineHeight - fontMetric.height) / 2;
+    const lineHeight = shape.fontSize * shape.lineHeight;
+    const lastLineHeight = Math.max(lineHeight, fontMetric.height + gap);
+    const textHeight = (lines.length - 1) * lineHeight + lastLineHeight;
+    return {
+      width: shape.width,
+      height: textHeight,
+      minWidth: textWidth,
+      lineHeight: lineHeight,
+    };
+  }
+}
+
+export function drawRichText(canvas: Canvas, shape: Box) {
+  canvas.storeState();
+  // let doc = preprocessDocNode(
+  //   canvas,
+  //   typeof shape.text === "string" ? convertTextToDoc(shape.text) : shape.text,
+  //   shape,
+  //   shape.wordWrap,
+  //   shape.innerWidth,
+  //   1.5
+  // );
+
+  // const textValue =
+  //   typeof shape.text === "string" ? convertTextToDoc(shape.text) : shape.text;
+  const textMetric = measureText(canvas, shape, shape.text);
+  let top = shape.innerTop;
+  switch (shape.vertAlign) {
+    case "top":
+      top = shape.innerTop;
+      break;
+    case "middle":
+      top = shape.innerTop + (shape.innerHeight - textMetric.height) / 2;
+      break;
+    case "bottom":
+      top = shape.innerBottom - textMetric.height;
+      break;
+  }
+  drawDocNode(
     canvas,
-    typeof shape.text === "string" ? convertTextToDoc(shape.text) : shape.text,
+    textMetric.preprocessedDoc,
     shape,
-    shape.wordWrap, // word wrap
-    shape.width,
+    shape.innerLeft,
+    top,
+    shape.innerWidth,
     1.5
   );
-  const textWidth = doc._width;
-  // const textWidth = shape.wordWrap ? 0 : doc._width;
-  // subtract last paragraph's spacing margin
-  const textHeight = doc._height - shape.paragraphSpacing * shape.fontSize;
-  return { width: textWidth, height: textHeight, minWidth: doc._minWidth };
+  canvas.restoreState();
+}
+
+/**
+ * Draw plain text inside a box
+ *
+ * How to draw a text line:
+ *
+ *     + -------------- +
+ *     |                | G
+ *     |  ------- +      +
+ *  LH |  TEXT    | H    ____________ BL
+ *     |  ------- +
+ *     |
+ *     + --------+
+ *
+ * Legends:
+ * - LH (Line Height) = fontSize * lineHeight
+ * - H (Text Height) = metric.ascent + metric.descent (= metric.height)
+ * - G (Gap) = (LH - H) / 2
+ * - BL (Baseline) = G + metric.ascent
+ *
+ * To draw a text on (x, y)
+ * - canvas.fillText(x, y + BL)
+ */
+export function drawPlainText(canvas: Canvas, shape: Box) {
+  canvas.storeState();
+  const text: string =
+    typeof shape.text !== "string" ? convertDocToText(shape.text) : shape.text;
+
+  const lines = text.split("\n");
+  const lineHeight = shape.fontSize * shape.lineHeight;
+  // const height = lines.length * lineHeight;
+
+  const textMetric = measureText(canvas, shape, text);
+
+  let top = shape.innerTop;
+  switch (shape.vertAlign) {
+    case "top":
+      top = shape.innerTop;
+      break;
+    case "middle":
+      top = shape.innerTop + (shape.innerHeight - textMetric.height) / 2;
+      break;
+    case "bottom":
+      top = shape.innerBottom - textMetric.height;
+      break;
+  }
+  shape.assignStyles(canvas);
+  if (lines.length > 0) {
+    let x = shape.innerLeft;
+    let y = top;
+    for (let i = 0; i < lines.length; i++) {
+      const m = canvas.textMetric(lines[i]);
+      switch (shape.horzAlign) {
+        case "left":
+          x = shape.innerLeft;
+          break;
+        case "center":
+          x = shape.innerLeft + (shape.innerWidth - m.width) / 2;
+          break;
+        case "right":
+          x = shape.innerRight - m.width;
+          break;
+      }
+      const gap = (lineHeight - m.height) / 2;
+      canvas.fillText(x, y + gap + m.ascent, lines[i]);
+      y = y + lineHeight;
+    }
+  }
+  canvas.restoreState();
 }

@@ -1,22 +1,20 @@
-import { useEffect } from "react";
 import {
-  Box,
-  Connector,
+  Document,
   Editor,
+  Shape,
   ShapeValues,
+  Transaction,
   basicSetup,
-  constants,
-  convertDocToText,
-  geometry,
 } from "@dgmjs/core";
-import { Palette } from "./components/palette";
-import { useDemoStore } from "./store";
+import { PaletteToolbar } from "./components/palette-toolbar";
+import { useDemoStore } from "./demo-store";
 import { Options } from "./components/options";
 import { Menus } from "./components/menus";
-import { PropertySidebar } from "./components/property-sidebar/property-sidebar";
+import { PropertySidebar } from "./components/property-sidebar";
 import fontJson from "./fonts.json";
 import { Font, fetchFonts, insertFontsToDocument } from "./font-manager";
-import { TextEditor } from "./components/text-editor/text-editor";
+import { ShapeSidebar } from "./components/shape-sidebar";
+import { EditorWrapper } from "./editor";
 
 declare global {
   interface Window {
@@ -27,119 +25,75 @@ declare global {
 function App() {
   const demoStore = useDemoStore();
 
-  const setupEditor = async () => {
+  const handleMount = async (editor: Editor) => {
+    window.editor = editor;
     insertFontsToDocument(fontJson as Font[]);
     await fetchFonts(fontJson as Font[]);
-    if (!window.editor) {
-      const options = basicSetup();
-      const editor = new Editor(
-        document.querySelector("#editor-holder") as HTMLElement,
-        options
-      );
-      editor.setActiveHandler("Select");
-      editor.fit();
-      editor.setShowGrid(true);
-      editor.state.selections.on("select", (shapes) => {
-        demoStore.setSelections([...shapes]);
-      });
-      editor.on("handlerChange", (handlerId) => {
-        demoStore.setActiveHandler(handlerId);
-      });
-      editor.factory.on("create", (shape) => {
-        editor.setActiveHandler("Select");
-      });
-      editor.on("dblClick", (shape, x, y) => {
-        editor.state.selections.deselectAll();
-        demoStore.setSelections([]);
-        if (!shape) {
-          const textShape = editor.factory.createText([
-            [x, y],
-            [x, y],
-          ]);
-          setTimeout(() => {
-            demoStore.setEditingText(textShape);
-          }, 0);
-        } else if (shape instanceof Image) {
-          // nothing to do
-        } else if (shape instanceof Box) {
-          if (shape.textEditable) {
-            demoStore.setEditingText(shape);
-          }
-        } else if (shape instanceof Connector) {
-          const outline = shape.getOutline();
-          const nearest = geometry.findNearestOnPath(
-            [x, y],
-            outline,
-            constants.CONNECTION_POINT_APOTHEM * 2
-          );
-          const position = geometry.getPositionOnPath(outline, nearest);
-          const textShape = editor.factory.createTextOnConnector(
-            shape,
-            position
-          );
-          setTimeout(() => {
-            demoStore.setEditingText(textShape);
-          }, 0);
-        }
-      });
-      editor.repaint();
-      window.editor = editor;
 
-      window.addEventListener("resize", () => {
-        window.editor.fit();
-      });
+    // load from local storage
+    const localData = localStorage.getItem("local-data");
+    if (localData) {
+      window.editor.store.fromJSON(JSON.parse(localData));
+      window.editor.setDoc(window.editor.store.doc as Document);
     }
+    demoStore.setDoc(window.editor.store.doc as Document);
+
+    window.addEventListener("resize", () => {
+      window.editor.fit();
+    });
   };
 
-  useEffect(() => {
-    setupEditor();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleSelectionChange = (selection: Shape[]) => {
+    demoStore.setSelection([...selection]);
+  };
+
+  const handleActiveHandlerChange = (handlerId: string) => {
+    demoStore.setActiveHandler(handlerId);
+  };
+
+  const handleShapeCreate = (shape: Shape) => {
+    window.editor.setActiveHandler("Select");
+  };
+
+  const handleTransaction = (tx: Transaction) => {
+    const data = window.editor.store.toJSON();
+    localStorage.setItem("local-data", JSON.stringify(data));
+  };
+
+  const handleSidebarSelect = (selection: Shape[]) => {
+    window.editor.selection.select(selection);
+  };
 
   const handleValuesChange = (values: ShapeValues) => {
-    const shapes = window.editor.state.selections.getSelections();
+    const shapes = window.editor.selection.getShapes();
     window.editor.actions.update(values);
-    demoStore.setSelections([...shapes]);
-  };
-
-  const handleEditingTextChange = (values: ShapeValues) => {
-    if (demoStore.editingText) {
-      const textValue = convertDocToText(values.text).trim();
-      const textShape = demoStore.editingText;
-      // if text is empty, delete text
-      if (
-        textShape instanceof Text &&
-        textShape.enable &&
-        textValue.length === 0
-      ) {
-        window.editor.actions.delete_([textShape]);
-      } else {
-        window.editor.actions.update(values, [textShape]);
-      }
-    }
+    demoStore.setSelection([...shapes]);
   };
 
   return (
     <div className="absolute inset-0 h-[calc(100dvh)] select-none">
-      <div
-        className="absolute top-10 bottom-0 left-0 right-64"
-        id="editor-holder"
+      <EditorWrapper
+        className="absolute inset-0"
+        theme={demoStore.theme}
+        options={basicSetup()}
+        showGrid={true}
+        onMount={handleMount}
+        onSelectionChange={handleSelectionChange}
+        onActiveHandlerChange={handleActiveHandlerChange}
+        onShapeCreate={handleShapeCreate}
+        onTransaction={handleTransaction}
       />
       <div className="absolute top-0 inset-x-0 h-10 border-b flex items-center justify-between bg-background">
         <Menus />
-        <Palette />
+
         <Options />
       </div>
+      <PaletteToolbar />
+      <ShapeSidebar doc={demoStore.doc} onSelect={handleSidebarSelect} />
       <PropertySidebar
-        shapes={demoStore.selections}
+        shapes={demoStore.selection}
         onChange={handleValuesChange}
       />
-      {demoStore.editingText instanceof Box && (
-        <TextEditor
-          text={demoStore.editingText}
-          onChange={handleEditingTextChange}
-        />
-      )}
     </div>
   );
 }

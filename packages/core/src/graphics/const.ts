@@ -23,6 +23,7 @@ const CONNECTION_POINT_APOTHEM = 4; // px
 const ANGLE_STEP = 5;
 const SHAPE_MIN_SIZE = 3;
 const SYSTEM_FONT = "Inter";
+const SYSTEM_FONT_SIZE = 14;
 const DEFAULT_FONT_SIZE = 16;
 
 // Cursor SVG Data is a string of URL-encoded SVG with {{angle}} parameter.
@@ -58,6 +59,7 @@ const Mouse = Object.freeze({
 const Color = Object.freeze({
   BACKGROUND: "$background",
   FOREGROUND: "$foreground",
+  TRANSPARENT: "$transparent",
   CANVAS: "$slate1", // #F5F5F5
   BLACK: "#000000",
   WHITE: "#FFFFFF",
@@ -71,7 +73,7 @@ const Color = Object.freeze({
   ORANGE: "#FFC800",
   PINK: "#FFAFAF",
   YELLOW: "#FFFF00",
-  SELECTION: "$blue9", // #4497f7
+  SELECTION: "$blue10",
   GRID: "$slate4",
 });
 
@@ -103,6 +105,7 @@ export {
   ANGLE_STEP,
   SHAPE_MIN_SIZE,
   SYSTEM_FONT,
+  SYSTEM_FONT_SIZE,
   DEFAULT_FONT_SIZE,
   Cursor,
   Mouse,

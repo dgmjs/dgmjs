@@ -23,10 +23,41 @@ import {
   LineFactoryHandler,
   FreehandFactoryHandler,
   ImageFactoryHandler,
+  EmbedFactoryHandler,
 } from "./handlers";
+import { FrameFactoryHandler } from "./handlers/frame-handler";
+import {
+  Box,
+  Connector,
+  Document,
+  Ellipse,
+  Embed,
+  Frame,
+  Group,
+  Image,
+  Line,
+  Rectangle,
+  Shape,
+  Text,
+} from "./shapes";
 
 export function basicSetup(options?: EditorOptions): EditorOptions {
   return {
+    instantiators: {
+      Shape: () => new Shape(),
+      Diagram: () => new Document(), // for backward compatibility
+      Document: () => new Document(),
+      Box: () => new Box(),
+      Line: () => new Line(),
+      Rectangle: () => new Rectangle(),
+      Ellipse: () => new Ellipse(),
+      Text: () => new Text(),
+      Image: () => new Image(),
+      Connector: () => new Connector(),
+      Group: () => new Group(),
+      Frame: () => new Frame(),
+      Embed: () => new Embed(),
+    },
     handlers: [
       new SelectHandler("Select", [new SelectHandlerConnectorExtraBehavior()]),
       new HandHandler("Hand"),
@@ -37,6 +68,8 @@ export function basicSetup(options?: EditorOptions): EditorOptions {
       new LineFactoryHandler("Line"),
       new FreehandFactoryHandler("Freehand"),
       new ImageFactoryHandler("Image"),
+      new FrameFactoryHandler("Frame"),
+      new EmbedFactoryHandler("Embed"),
     ],
     keymap: {
       "mod-z": (editor) => editor.actions.undo(),
@@ -46,7 +79,7 @@ export function basicSetup(options?: EditorOptions): EditorOptions {
       "mod-d": (editor) => editor.actions.duplicate(),
       "mod-v": (editor) => editor.actions.paste(),
       delete: (editor) => editor.actions.delete_(),
-      "mod-a": (editor) => editor.state.selections.selectAll(),
+      "mod-a": (editor) => editor.selection.selectAll(),
       "mod-[": (editor) => editor.actions.bringForward(),
       "mod-]": (editor) => editor.actions.sendBackward(),
       "mod-alt-[": (editor) => editor.actions.bringToFront(),
@@ -68,6 +101,9 @@ export function basicSetup(options?: EditorOptions): EditorOptions {
       "mod-left": (editor) => editor.scroll(-editor.gridSize[0], 0),
       "mod-right": (editor) => editor.scroll(editor.gridSize[0], 0),
     },
+    allowAutoScroll: true,
+    allowCreateTextOnCanvas: true,
+    allowCreateTextOnConnector: true,
     ...(options ?? {}),
   };
 }

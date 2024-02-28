@@ -28,7 +28,7 @@ import * as guide from "../utils/guide";
 function getGuideBoxes(editor: Editor, shape: Shape): Box[] {
   const canvas = editor.canvas;
   return (
-    (editor.state.diagram?.children.filter(
+    (editor.doc?.children.filter(
       (s) => s !== shape && s instanceof Box && angleInCCS(canvas, s) === 0
     ) as Box[]) ?? []
   );
@@ -46,7 +46,7 @@ function getBoxesInRow(editor: Editor, shape: Shape, box: number[][]): Box[] {
   const t = box[0][1];
   const b = box[1][1];
   return (
-    (editor.state.diagram?.children.filter(
+    (editor.doc?.children.filter(
       (s) =>
         s !== shape &&
         s instanceof Box &&
@@ -75,7 +75,7 @@ function getBoxesInColumn(
   const l = box[0][0];
   const r = box[1][0];
   return (
-    (editor.state.diagram?.children.filter(
+    (editor.doc?.children.filter(
       (s) =>
         s !== shape &&
         s instanceof Box &&
@@ -369,7 +369,7 @@ class Snap {
             [Math.round(p[1].left - p[0].right), p[0], p[1]] as [
               number,
               Box,
-              Box,
+              Box
             ]
         )
         .filter((p) => p[0] > 0);
@@ -384,7 +384,7 @@ class Snap {
             [Math.round(p[1].left - p[0].right), p[0], p[1]] as [
               number,
               Box,
-              Box,
+              Box
             ]
         )
         .filter((p) => p[0] > 0);
@@ -415,7 +415,7 @@ class Snap {
             [Math.round(p[1].top - p[0].bottom), p[0], p[1]] as [
               number,
               Box,
-              Box,
+              Box
             ]
         )
         .filter((p) => p[0] > 0);
@@ -430,7 +430,7 @@ class Snap {
             [Math.round(p[1].top - p[0].bottom), p[0], p[1]] as [
               number,
               Box,
-              Box,
+              Box
             ]
         )
         .filter((p) => p[0] > 0);

@@ -1,0 +1,95 @@
+[
+  {
+    "category": "sans",
+    "family": "Inter",
+    "style": "normal",
+    "weight": 300,
+    "src": "/fonts/Inter-Light.ttf"
+  },
+  {
+    "category": "sans",
+    "family": "Inter",
+    "style": "normal",
+    "weight": 400,
+    "src": "/fonts/Inter-Regular.ttf"
+  },
+  {
+    "category": "sans",
+    "family": "Inter",
+    "style": "normal",
+    "weight": 500,
+    "src": "/fonts/Inter-Medium.ttf"
+  },
+  {
+    "category": "sans",
+    "family": "Inter",
+    "style": "normal",
+    "weight": 700,
+    "src": "/fonts/Inter-Bold.ttf"
+  },
+  {
+    "category": "sans",
+    "family": "Inter",
+    "style": "normal",
+    "weight": 800,
+    "src": "/fonts/Inter-ExtraBold.ttf"
+  },
+  {
+    "category": "serif",
+    "family": "Source Serif Pro",
+    "style": "normal",
+    "weight": 400,
+    "src": "/fonts/SourceSerifPro-Regular.ttf"
+  },
+  {
+    "category": "serif",
+    "family": "Source Serif Pro",
+    "style": "normal",
+    "weight": 700,
+    "src": "/fonts/SourceSerifPro-Bold.ttf"
+  },
+  {
+    "category": "mono",
+    "family": "IBM Plex Mono",
+    "style": "normal",
+    "weight": 400,
+    "src": "/fonts/IBMPlexMono-Regular.ttf"
+  },
+  {
+    "category": "mono",
+    "family": "IBM Plex Mono",
+    "style": "italic",
+    "weight": 400,
+    "src": "/fonts/IBMPlexMono-Italic.ttf"
+  },
+  {
+    "category": "mono",
+    "family": "IBM Plex Mono",
+    "style": "normal",
+    "weight": 700,
+    "src": "/fonts/IBMPlexMono-Bold.ttf"
+  },
+  {
+    "category": "mono",
+    "family": "IBM Plex Mono",
+    "style": "italic",
+    "weight": 700,
+    "src": "/fonts/IBMPlexMono-BoldItalic.ttf"
+  },
+  {
+    "category": "hand",
+    "family": "Gloria Hallelujah",
+    "style": "normal",
+    "weight": 400,
+    "src": "/fonts/GloriaHallelujah-Regular.ttf"
+  },
+  {
+    "category": "hand",
+    "family": "Gloria Hallelujah",
+    "style": "normal",
+    "weight": 400,
+    "src": "/fonts/NanumHimnaeraneunmalbodan-Regular.ttf",
+    "sizeAdjust": "130%",
+    "unicodeRange": "U+AC00-D7A3"
+  }
+]
