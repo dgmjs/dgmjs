@@ -34,18 +34,10 @@ import { BoxSizeController, BoxSizeController2 } from "../controllers/box-size";
 class TextManipulator extends Manipulator {
   constructor() {
     super();
-    this.controllers.push(
-      new BoxSizeController2(this, SizingPosition.TOP, true)
-    );
-    this.controllers.push(
-      new BoxSizeController2(this, SizingPosition.RIGHT, true)
-    );
-    this.controllers.push(
-      new BoxSizeController2(this, SizingPosition.BOTTOM, true)
-    );
-    this.controllers.push(
-      new BoxSizeController2(this, SizingPosition.LEFT, true)
-    );
+    this.controllers.push(new BoxSizeController2(this, SizingPosition.TOP));
+    this.controllers.push(new BoxSizeController2(this, SizingPosition.RIGHT));
+    this.controllers.push(new BoxSizeController2(this, SizingPosition.BOTTOM));
+    this.controllers.push(new BoxSizeController2(this, SizingPosition.LEFT));
     this.controllers.push(
       new BoxSizeController2(this, SizingPosition.LEFT_TOP, true)
     );

@@ -559,25 +559,21 @@ export class BoxSizeController2 extends Controller2 {
       case SizingPosition.TOP:
         value =
           value &&
-          !this.doScale &&
           (shape.sizable === Sizable.VERT || shape.sizable === Sizable.FREE);
         break;
       case SizingPosition.RIGHT:
         value =
           value &&
-          !this.doScale &&
           (shape.sizable === Sizable.HORZ || shape.sizable === Sizable.FREE);
         break;
       case SizingPosition.BOTTOM:
         value =
           value &&
-          !this.doScale &&
           (shape.sizable === Sizable.VERT || shape.sizable === Sizable.FREE);
         break;
       case SizingPosition.LEFT:
         value =
           value &&
-          !this.doScale &&
           (shape.sizable === Sizable.HORZ || shape.sizable === Sizable.FREE);
         break;
       case SizingPosition.LEFT_TOP:
@@ -967,21 +963,22 @@ export class BoxSizeController2 extends Controller2 {
    * Draw ghost while dragging
    */
   drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
-    // super.drawDragging(editor, shape, e);
-    // // draw ghost
-    // const canvas = editor.canvas;
-    // drawPolylineInLCS(canvas, shape, this.ghost);
+    super.drawDragging(editor, shape, e);
+    // draw ghost
+    const canvas = editor.canvas;
+    const ghost = shape.getEnclosure();
+    drawPolylineInLCS(canvas, shape, ghost);
     // const cp = lcs2ccs(
     //   canvas,
     //   shape,
     //   geometry.mid(this.ghost[0], this.ghost[2])
     // );
-    // // draw size guide
+    // draw size guide
     // const w = Math.round(geometry.distance(this.ghost[0], this.ghost[1]) + 1);
     // const h = Math.round(geometry.distance(this.ghost[1], this.ghost[2]) + 1);
     // const text = `${w} ✕ ${h}`;
     // drawText(canvas, cp, text);
-    // // draw snap
+    // draw snap
     // this.snap.draw(editor, shape, this.ghost);
   }
 }

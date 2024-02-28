@@ -352,23 +352,24 @@ export class BoxMoveAnchorPositionController2 extends Controller2 {
    * Draw ghost while dragging
    */
   drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
-    // super.drawDragging(editor, shape, e);
-    // const canvas = editor.canvas;
-    // // draw ghost
-    // guide.drawPolylineInLCS(canvas, shape, this.ghost);
-    // // drag anchor point
-    // if (!this.outOfPath) {
-    //   const center = geometry.mid(this.ghost[0], this.ghost[2]);
-    //   const centerCCS = lcs2ccs(canvas, shape, center);
-    //   const anchorPointCCS = lcs2ccs(
-    //     canvas,
-    //     (shape.parent as Shape) ?? shape,
-    //     this.anchorPoint
-    //   );
-    //   guide.drawDottedLine(canvas, centerCCS, anchorPointCCS);
-    //   guide.drawControlPoint(canvas, anchorPointCCS, 5);
-    // }
-    // // draw snap
+    super.drawDragging(editor, shape, e);
+    const canvas = editor.canvas;
+    // draw ghost
+    const ghost = shape.getEnclosure();
+    guide.drawPolylineInLCS(canvas, shape, ghost);
+    // drag anchor point
+    if (!this.outOfPath) {
+      const center = geometry.mid(ghost[0], ghost[2]);
+      const centerCCS = lcs2ccs(canvas, shape, center);
+      const anchorPointCCS = lcs2ccs(
+        canvas,
+        (shape.parent as Shape) ?? shape,
+        this.anchorPoint
+      );
+      guide.drawDottedLine(canvas, centerCCS, anchorPointCCS);
+      guide.drawControlPoint(canvas, anchorPointCCS, 5);
+    }
+    // draw snap
     // this.snap.draw(editor, shape, this.ghost);
   }
 }
