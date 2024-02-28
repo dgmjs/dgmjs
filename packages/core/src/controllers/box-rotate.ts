@@ -269,4 +269,25 @@ export class BoxRotateController2 extends Controller2 {
     const cp = this.getControlPoint(canvas, shape);
     guide.drawControlPoint(canvas, cp, 1, 0);
   }
+
+  /**
+   * Draw controller
+   */
+  drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
+    // const canvas = editor.canvas;
+    // // draw ghost
+    // guide.drawPolylineInLCS(canvas, shape, this.ghost);
+    // const cp = lcs2ccs(
+    //   canvas,
+    //   shape,
+    //   geometry.mid(this.ghost[0], this.ghost[2])
+    // );
+    // const text =
+    //   geometry
+    //     .normalizeAngle(Math.round(shape.rotate + this.delta))
+    //     .toString() + "°";
+    // guide.drawText(canvas, cp, text);
+    // // draw snap
+    // this.snap.draw(editor, shape, this.ghost);
+  }
 }

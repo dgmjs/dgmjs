@@ -358,4 +358,34 @@ export class LineMovePointController2 extends Controller2 {
       guide.drawControlPoint(canvas, p, 5);
     }
   }
+
+  /**
+   * Draw ghost while dragging
+   */
+  drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent): void {
+    // super.drawDragging(editor, shape, e);
+    // const canvas = editor.canvas;
+    // const path = this.ghost;
+    // // draw ghost
+    // guide.drawPolylineInLCS(
+    //   canvas,
+    //   shape,
+    //   this.ghost,
+    //   (shape as Line).lineType,
+    //   geometry.isClosed(this.ghost)
+    // );
+    // let pathCCS = path.map((p) => lcs2ccs(canvas, shape, p));
+    // guide.drawDottedPolyline(canvas, pathCCS);
+    // // draw control points
+    // const startPoint = this.exceptEndPoints ? 1 : 0;
+    // const endPoint = this.exceptEndPoints ? path.length - 2 : path.length - 1;
+    // if (endPoint >= startPoint) {
+    //   for (let i = startPoint; i <= endPoint; i++) {
+    //     const p = lcs2ccs(canvas, shape, path[i]);
+    //     guide.drawControlPoint(canvas, p, 1);
+    //   }
+    // }
+    // // draw snap
+    // this.snap.draw(editor, shape, this.ghost);
+  }
 }

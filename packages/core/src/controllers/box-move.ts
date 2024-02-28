@@ -300,4 +300,16 @@ export class BoxMoveController2 extends Controller2 {
       drawPolylineInLCS(canvas, shape, shape.getEnclosure());
     }
   }
+
+  drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent): void {
+    super.drawDragging(editor, shape, e);
+    const canvas = editor.canvas;
+    // hovering containable
+    const dp = shape.localCoordTransform(canvas, this.dragPoint, true);
+    const container = editor.doc?.getShapeAt(canvas, dp, [shape]);
+    if (container && container !== shape && container.canContain(shape)) {
+      const manipulator = manipulatorManager.get(container.type);
+      if (manipulator) manipulator.drawHovering(editor, container, e);
+    }
+  }
 }

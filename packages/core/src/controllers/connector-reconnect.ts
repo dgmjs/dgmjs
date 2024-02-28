@@ -215,10 +215,8 @@ export class ConnectorReconnectController2 extends Controller2 {
   snap: Snap;
 
   /**
-   * Ghost polygon
+   * control point
    */
-  ghost: number[][];
-
   controlPoint: number;
 
   /**
@@ -226,20 +224,19 @@ export class ConnectorReconnectController2 extends Controller2 {
    */
   controlPath: number[][];
 
-  end: Shape | null;
-  connectionPoint: number[] | null;
-  connectionPointIndex: number;
+  // end: Shape | null;
+  // connectionPoint: number[] | null;
+  // connectionPointIndex: number;
 
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.snap = new Snap();
-    this.ghost = [];
     this.controlPoint = -1;
     this.controlPath = [];
 
-    this.end = null;
-    this.connectionPoint = null;
-    this.connectionPointIndex = -1;
+    // this.end = null;
+    // this.connectionPoint = null;
+    // this.connectionPointIndex = -1;
   }
 
   /**
@@ -341,33 +338,29 @@ export class ConnectorReconnectController2 extends Controller2 {
    * Draw controller
    */
   drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
-    // const canvas = editor.canvas;
-    // // draw ghost
-    // guide.drawPolylineInLCS(
-    //   canvas,
-    //   shape,
-    //   this.ghost,
-    //   (shape as Line).lineType,
-    //   geometry.isClosed(this.ghost)
-    // );
-    // // draw connection hovering
-    // if (this.end && this.end !== shape && this.end.connectable) {
-    //   // draw shape hovering
-    //   const manipulator = manipulatorManager.get(this.end.type);
-    //   if (manipulator) manipulator.drawHovering(editor, this.end, e);
-    //   // draw connection points (cross-mark)
-    //   guide.drawConnectionPoints(canvas, this.end);
-    //   // draw connection point hovering
-    //   if (this.connectionPoint) {
-    //     guide.drawConnectionPointHovering(
-    //       canvas,
-    //       this.end,
-    //       this.connectionPoint,
-    //       this.connectionPointIndex
-    //     );
-    //   }
-    // }
-    // // draw snap
+    const canvas = editor.canvas;
+    // draw connection hovering
+    const isHead = this.controlPoint > 0;
+    const end = isHead ? (shape as Connector).head : (shape as Connector).tail;
+    const endPoint = (shape as Connector).path[this.controlPoint];
+    const cxpIndex = isHead
+      ? (shape as Connector).headCP
+      : (shape as Connector).tailCP;
+    const cxp = end?.getConnectionPoints()[cxpIndex];
+    if (end && end !== shape && end.connectable) {
+      // draw shape hovering
+      const manipulator = manipulatorManager.get(end.type);
+      if (manipulator) manipulator.drawHovering(editor, end, e);
+      // draw connection points (cross-mark)
+      guide.drawConnectionPoints(canvas, end);
+      // draw connection point hovering
+      if (cxp) {
+        guide.drawConnectionPointHovering(canvas, end, cxp, cxpIndex);
+      } else {
+        guide.drawControlPoint(canvas, lcs2ccs(canvas, shape, endPoint), 5);
+      }
+    }
+    // draw snap
     // this.snap.draw(editor, shape, this.ghost);
   }
 }

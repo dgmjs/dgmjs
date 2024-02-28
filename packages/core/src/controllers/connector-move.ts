@@ -267,4 +267,22 @@ export class ConnectorMoveController2 extends Controller2 {
   finalize(editor: Editor, shape: Shape) {
     editor.transform.endTransaction();
   }
+
+  /**
+   * Draw controller
+   */
+  drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
+    // super.drawDragging(editor, shape, e);
+    // const canvas = editor.canvas;
+    // // draw ghost
+    // guide.drawPolylineInLCS(
+    //   canvas,
+    //   shape,
+    //   this.ghost,
+    //   (shape as Line).lineType,
+    //   geometry.isClosed(this.ghost)
+    // );
+    // // draw snap
+    // this.snap.draw(editor, shape, this.ghost);
+  }
 }

@@ -962,4 +962,26 @@ export class BoxSizeController2 extends Controller2 {
     const angle = angleInCCS(canvas, shape);
     drawControlPoint(canvas, p, 0, angle);
   }
+
+  /**
+   * Draw ghost while dragging
+   */
+  drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
+    // super.drawDragging(editor, shape, e);
+    // // draw ghost
+    // const canvas = editor.canvas;
+    // drawPolylineInLCS(canvas, shape, this.ghost);
+    // const cp = lcs2ccs(
+    //   canvas,
+    //   shape,
+    //   geometry.mid(this.ghost[0], this.ghost[2])
+    // );
+    // // draw size guide
+    // const w = Math.round(geometry.distance(this.ghost[0], this.ghost[1]) + 1);
+    // const h = Math.round(geometry.distance(this.ghost[1], this.ghost[2]) + 1);
+    // const text = `${w} ✕ ${h}`;
+    // drawText(canvas, cp, text);
+    // // draw snap
+    // this.snap.draw(editor, shape, this.ghost);
+  }
 }
