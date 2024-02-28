@@ -927,9 +927,13 @@ export class Transform extends EventEmitter {
   /**
    * A set of mutations to resolve all constraints
    */
-  resolveAllConstraints(diagram: Document, canvas: Canvas): boolean {
+  resolveAllConstraints(
+    diagram: Document,
+    canvas: Canvas,
+    maxIteration: number = 3
+  ): boolean {
     let changed = false;
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < maxIteration; i++) {
       diagram.traverse((s) => {
         changed =
           this.resolveSingleConstraints(diagram, s as Shape, canvas) || changed;
