@@ -19,6 +19,7 @@ import {
 } from "../controllers/box-rotate";
 import { GroupSizeController } from "../controllers/group-size";
 import { BoxMoveController, BoxMoveController2 } from "../controllers/box-move";
+import { BoxSizeController2 } from "../controllers/box-size";
 
 /**
  * GroupManipulator
@@ -27,16 +28,16 @@ class GroupManipulator extends Manipulator {
   constructor() {
     super();
     this.controllers.push(
-      new GroupSizeController(this, SizingPosition.LEFT_TOP, true)
+      new BoxSizeController2(this, SizingPosition.LEFT_TOP, true, true)
     );
     this.controllers.push(
-      new GroupSizeController(this, SizingPosition.RIGHT_TOP, true)
+      new BoxSizeController2(this, SizingPosition.RIGHT_TOP, true, true)
     );
     this.controllers.push(
-      new GroupSizeController(this, SizingPosition.RIGHT_BOTTOM, true)
+      new BoxSizeController2(this, SizingPosition.RIGHT_BOTTOM, true, true)
     );
     this.controllers.push(
-      new GroupSizeController(this, SizingPosition.LEFT_BOTTOM, true)
+      new BoxSizeController2(this, SizingPosition.LEFT_BOTTOM, true, true)
     );
     this.controllers.push(new BoxRotateController2(this));
     this.controllers.push(new BoxMoveController2(this));

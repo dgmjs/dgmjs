@@ -30,7 +30,7 @@ import {
 import { Snap } from "../manipulators/snap";
 import { fitEnclosureInCSS } from "./utils";
 
-const MIN_SIZE = CONTROL_POINT_APOTHEM * 4;
+const MIN_SIZE = CONTROL_POINT_APOTHEM * 2;
 
 /**
  * Size Controller
@@ -520,22 +520,31 @@ export class BoxSizeController2 extends Controller2 {
   doScale: boolean;
 
   /**
+   * Scale children
+   */
+  doScaleChildren: boolean;
+
+  /**
    * Temporal memory for shape's enclosure
    */
   initialEnclosure: number[][];
-  initialShapeMemento: any;
+  initialShapeMemo: any;
+  initialChildrenMemo: Record<string, any>;
 
   constructor(
     manipulator: Manipulator,
     position: string,
-    doScale: boolean = false
+    doScale: boolean = false,
+    doScaleChildren: boolean = false
   ) {
     super(manipulator);
     this.snap = new Snap();
     this.controlPosition = position;
     this.doScale = doScale;
+    this.doScaleChildren = doScaleChildren;
     this.initialEnclosure = [];
-    this.initialShapeMemento = null;
+    this.initialShapeMemo = null;
+    this.initialChildrenMemo = {};
   }
 
   /**
@@ -688,7 +697,11 @@ export class BoxSizeController2 extends Controller2 {
   initialize(editor: Editor, shape: Shape): void {
     editor.transform.startTransaction("resize");
     this.initialEnclosure = shape.getEnclosure();
-    this.initialShapeMemento = shape.toJSON(false, true);
+    this.initialShapeMemo = shape.toJSON(false, true);
+    this.initialChildrenMemo = {};
+    shape.traverse(
+      (s) => (this.initialChildrenMemo[s.id] = s.toJSON(false, true))
+    );
   }
 
   /**
@@ -696,21 +709,24 @@ export class BoxSizeController2 extends Controller2 {
    */
   update(editor: Editor, shape: Shape) {
     const canvas = editor.canvas;
-    const memento = shape.toJSON(false, true);
-    shape.fromJSON(this.initialShapeMemento);
 
-    // compute dx, dy in initial shape's LCS
+    // remember current shape states
+    const memo = shape.toJSON(false, true);
+    shape.fromJSON(this.initialShapeMemo);
+
+    // compute (dx, dy) in initial shape's LCS
     const dragPoint = ccs2lcs(canvas, shape, this.dragPointCCS);
     let dx = dragPoint[0] - this.dragStartPoint[0];
     let dy = dragPoint[1] - this.dragStartPoint[1];
 
+    // initialize control enclosure
     const controlEnclosure = geometry.pathCopy(this.initialEnclosure);
     const box = geometry.boundingRect(controlEnclosure);
     const w = geometry.width(box);
     const h = geometry.height(box);
     const r = h / w;
 
-    // update control enclosure
+    // update control enclosure based on mouse movement (dx, dy)
     switch (this.controlPosition) {
       case SizingPosition.TOP:
         if (h - dy < MIN_SIZE) dy = -(MIN_SIZE - h);
@@ -848,58 +864,86 @@ export class BoxSizeController2 extends Controller2 {
         break;
     }
 
-    // compute resized control enclosure
+    // find best-fit to control enclosure and adjust position
     const controlEnclosureCCS = controlEnclosure.map((p) =>
       lcs2ccs(canvas, shape, p)
     );
-    const left = controlEnclosure[0][0];
-    const top = controlEnclosure[0][1];
-    const width = controlEnclosure[2][0] - controlEnclosure[0][0];
-    const height = controlEnclosure[2][1] - controlEnclosure[0][1];
-    const ratio = width / shape.width;
-
-    // find best-fit [dx, dy]
     const delta = fitEnclosureInCSS(
       editor.canvas,
       shape,
-      left,
-      top,
-      width,
-      height,
+      controlEnclosure[0][0],
+      controlEnclosure[0][1],
+      controlEnclosure[2][0] - controlEnclosure[0][0],
+      controlEnclosure[2][1] - controlEnclosure[0][1],
       controlEnclosureCCS
     );
+    controlEnclosure.forEach((p) => {
+      p[0] += delta[0];
+      p[1] += delta[1];
+    });
 
-    // compute position and size
-    const x1 = controlEnclosure[0][0] + delta[0];
-    const y1 = controlEnclosure[0][1] + delta[1];
-    const x2 = controlEnclosure[2][0] + delta[0];
-    const y2 = controlEnclosure[2][1] + delta[1];
-    let newW = x2 - x1;
-    let newH = y2 - y1;
-    const minW = CONTROL_POINT_APOTHEM * 2 * canvas.px;
-    const minH = CONTROL_POINT_APOTHEM * 2 * canvas.px;
-    if (newW < minW) newW = minW;
-    if (newH < minH) newH = minH;
+    // compute final target position and size
+    const targetLeft = controlEnclosure[0][0];
+    const targetTop = controlEnclosure[0][1];
+    const targetRight = controlEnclosure[2][0];
+    const targetBottom = controlEnclosure[2][1];
+    const targetWidth = targetRight - targetLeft;
+    const targetHeight = targetBottom - targetTop;
+    const ratioX = targetWidth / shape.width;
+    const ratioY = targetHeight / shape.height;
 
-    // restore shape
-    shape.fromJSON(memento);
+    // restore shape states
+    shape.fromJSON(memo);
 
     // transform shapes
     const tr = editor.transform;
     const doc = editor.doc as Document;
-    tr.resize(shape, newW, newH);
-    tr.moveShapes(doc, [shape], x1 - shape.left, y1 - shape.top);
+    tr.resize(shape, targetWidth, targetHeight);
+    tr.moveShapes(doc, [shape], targetLeft - shape.left, targetTop - shape.top);
+
+    // do scale (font and padding)
     if (this.doScale) {
       tr.atomicAssign(
         shape,
         "fontSize",
-        this.initialShapeMemento.fontSize * ratio
+        this.initialShapeMemo.fontSize * ratioX
       );
       tr.atomicAssign(
         shape,
         "padding",
-        this.initialShapeMemento.padding.map((v: number) => v * ratio)
+        this.initialShapeMemo.padding.map((v: number) => v * ratioX)
       );
+    }
+
+    // do scale children
+    if (this.doScaleChildren) {
+      const ol = targetLeft;
+      const ot = targetTop;
+      shape.traverse((s) => {
+        if (s !== shape && s instanceof Shape) {
+          const m = this.initialChildrenMemo[s.id];
+          const l = ol + (m.left - this.initialShapeMemo.left) * ratioX;
+          const t = ot + (m.top - this.initialShapeMemo.top) * ratioY;
+          const r =
+            ol + (m.left + m.width - this.initialShapeMemo.left) * ratioX;
+          const b =
+            ot + (m.top + m.height - this.initialShapeMemo.top) * ratioY;
+          const w = r - l;
+          const h = b - t;
+          tr.move(s, l - s.left, t - s.top);
+          tr.resize(s, w, h);
+          if (this.doScale) {
+            tr.atomicAssign(s, "fontSize", m.fontSize * ratioX);
+            if (s instanceof Box) {
+              tr.atomicAssign(
+                s,
+                "padding",
+                m.padding.map((v: number) => v * ratioX)
+              );
+            }
+          }
+        }
+      });
     }
     tr.resolveAllConstraints(doc, canvas);
   }
