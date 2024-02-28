@@ -13,7 +13,7 @@
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { RouteType, Shape, Line, Connector, Document } from "../shapes";
+import { Shape, Line, Connector, Document } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { Cursor } from "../graphics/const";
 import { lcs2ccs, ccs2lcs, angleInCCS } from "../graphics/utils";
@@ -22,7 +22,7 @@ import { Snap } from "../manipulators/snap";
 import { findConnectionPoint, findControlPoint } from "./utils";
 
 /**
- * Reconnect Controller
+ * Connector Reconnect Controller
  */
 export class ConnectorReconnectController extends Controller {
   /**
@@ -31,21 +31,28 @@ export class ConnectorReconnectController extends Controller {
   snap: Snap;
 
   /**
-   * Ghost polygon
+   * control point
    */
-  ghost: number[][];
+  controlPoint: number;
 
-  end: Shape | null;
-  connectionPoint: number[] | null;
-  connectionPointIndex: number;
+  /**
+   * current control path
+   */
+  controlPath: number[][];
+
+  // end: Shape | null;
+  // connectionPoint: number[] | null;
+  // connectionPointIndex: number;
 
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.snap = new Snap();
-    this.ghost = [];
-    this.end = null;
-    this.connectionPoint = null;
-    this.connectionPointIndex = -1;
+    this.controlPoint = -1;
+    this.controlPath = [];
+
+    // this.end = null;
+    // this.connectionPoint = null;
+    // this.connectionPointIndex = -1;
   }
 
   /**
@@ -81,68 +88,47 @@ export class ConnectorReconnectController extends Controller {
     return [Cursor.POINTER, 0];
   }
 
+  initialize(editor: Editor, shape: Shape): void {
+    this.controlPoint = findControlPoint(
+      editor,
+      shape as Line,
+      this.dragStartPoint
+    );
+    this.controlPath = geometry.pathCopy((shape as Line).path);
+    editor.transform.startTransaction("reconnect");
+  }
+
   /**
    * Update ghost
    */
   update(editor: Editor, shape: Shape) {
-    const ctrlp = findControlPoint(editor, shape as Line, this.dragStartPoint);
-    let newPath = geometry.pathCopy((shape as Line).path);
-    const isHead = ctrlp > 0;
-    let i1 = isHead ? ctrlp - 1 : ctrlp + 1;
-    let i2 = ctrlp;
-    let seg = ctrlp === 0 ? 0 : ctrlp - 1;
-    let isHorz = geometry.isHorz(newPath[seg], newPath[seg + 1]);
-    // obtain a connection point
-    let point = [newPath[i2][0] + this.dx, newPath[i2][1] + this.dy];
+    // update the path
+    let newPath = geometry.pathCopy(this.controlPath);
+    newPath[this.controlPoint][0] += this.dx;
+    newPath[this.controlPoint][1] += this.dy;
+    const isHead = this.controlPoint > 0;
+
     let [end, cp, cpIndex] = findConnectionPoint(
       editor,
       shape as Connector,
-      point
+      newPath[this.controlPoint]
     );
-    this.end = end;
-    this.connectionPoint = cp;
-    this.connectionPointIndex = cpIndex;
-    if (cp) {
-      this.dx = cp[0] - newPath[i2][0];
-      this.dy = cp[1] - newPath[i2][1];
-    }
-    // update path
-    if ((shape as Connector).routeType === RouteType.RECTILINEAR) {
-      if (isHorz) {
-        newPath[i1][1] += this.dy;
-      } else {
-        newPath[i1][0] += this.dx;
-      }
-      newPath[i2][0] += this.dx;
-      newPath[i2][1] += this.dy;
-    } else {
-      newPath[i2][0] += this.dx;
-      newPath[i2][1] += this.dy;
-    }
-    // update ghost
-    this.ghost = newPath;
+    const newEnd = cp ? end : null;
+
+    // transform shape
+    const tr = editor.transform;
+    const diagram = editor.doc as Document;
+    tr.setPath(shape, newPath);
+    tr.atomicAssignRef(shape, isHead ? "head" : "tail", newEnd);
+    tr.atomicAssign(shape, isHead ? "headCP" : "tailCP", cpIndex);
+    tr.resolveAllConstraints(diagram, editor.canvas);
   }
 
   /**
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Connector) {
-    const cp = findControlPoint(editor, shape, this.dragStartPoint);
-    const isHead = cp > 0;
-    const newEnd = this.connectionPoint ? this.end : null;
-    // transform shape
-    const tr = editor.transform;
-    const diagram = editor.doc as Document;
-    tr.startTransaction("reconnect");
-    tr.setPath(shape, this.ghost);
-    tr.atomicAssignRef(shape, isHead ? "head" : "tail", newEnd);
-    tr.atomicAssign(
-      shape,
-      isHead ? "headCP" : "tailCP",
-      this.connectionPointIndex
-    );
-    tr.resolveAllConstraints(diagram, editor.canvas);
-    tr.endTransaction();
+    editor.transform.endTransaction();
   }
 
   /**
@@ -169,32 +155,28 @@ export class ConnectorReconnectController extends Controller {
    */
   drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     const canvas = editor.canvas;
-    // draw ghost
-    guide.drawPolylineInLCS(
-      canvas,
-      shape,
-      this.ghost,
-      (shape as Line).lineType,
-      geometry.isClosed(this.ghost)
-    );
     // draw connection hovering
-    if (this.end && this.end !== shape && this.end.connectable) {
+    const isHead = this.controlPoint > 0;
+    const end = isHead ? (shape as Connector).head : (shape as Connector).tail;
+    const endPoint = (shape as Connector).path[this.controlPoint];
+    const cxpIndex = isHead
+      ? (shape as Connector).headCP
+      : (shape as Connector).tailCP;
+    const cxp = end?.getConnectionPoints()[cxpIndex];
+    if (end && end !== shape && end.connectable) {
       // draw shape hovering
-      const manipulator = manipulatorManager.get(this.end.type);
-      if (manipulator) manipulator.drawHovering(editor, this.end, e);
+      const manipulator = manipulatorManager.get(end.type);
+      if (manipulator) manipulator.drawHovering(editor, end, e);
       // draw connection points (cross-mark)
-      guide.drawConnectionPoints(canvas, this.end);
+      guide.drawConnectionPoints(canvas, end);
       // draw connection point hovering
-      if (this.connectionPoint) {
-        guide.drawConnectionPointHovering(
-          canvas,
-          this.end,
-          this.connectionPoint,
-          this.connectionPointIndex
-        );
+      if (cxp) {
+        guide.drawConnectionPointHovering(canvas, end, cxp, cxpIndex);
+      } else {
+        guide.drawControlPoint(canvas, lcs2ccs(canvas, shape, endPoint), 5);
       }
     }
     // draw snap
-    this.snap.draw(editor, shape, this.ghost);
+    // this.snap.draw(editor, shape, this.ghost);
   }
 }

@@ -12,7 +12,7 @@
  */
 
 import * as geometry from "../graphics/geometry";
-import { Shape, Box, Line, Document } from "../shapes";
+import { Shape, Box, Document } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import { Cursor, MAGNET_THRESHOLD } from "../graphics/const";
 import { ccs2lcs, lcs2ccs } from "../graphics/utils";
@@ -107,6 +107,8 @@ export class BoxMoveAnchorPositionController extends Controller {
       (shape as Box).anchorPosition
     );
     this.outOfPath = false;
+
+    editor.transform.startTransaction("move-anchor");
   }
 
   /**
@@ -137,21 +139,20 @@ export class BoxMoveAnchorPositionController extends Controller {
       this.outOfPath = true;
     }
     // update ghost
-    this.ghost = newEnclosure.map((p) => [p[0] + this.dx, p[1] + this.dy]);
+    this.ghost = newEnclosure.map((p) => [p[0] + this.dx0, p[1] + this.dy0]);
+
+    // transform shape
+    const tr = editor.transform;
+    const doc = editor.doc as Document;
+    tr.atomicAssign(shape, "anchorPosition", this.anchorPosition);
+    tr.resolveAllConstraints(doc, canvas);
   }
 
   /**
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Box) {
-    const canvas = editor.canvas;
-    // transform shape
-    const tr = editor.transform;
-    const diagram = editor.doc as Document;
-    tr.startTransaction("move-anchor");
-    tr.atomicAssign(shape, "anchorPosition", this.anchorPosition);
-    tr.resolveAllConstraints(diagram, canvas);
-    tr.endTransaction();
+    editor.transform.endTransaction();
   }
 
   /**
@@ -178,10 +179,11 @@ export class BoxMoveAnchorPositionController extends Controller {
     super.drawDragging(editor, shape, e);
     const canvas = editor.canvas;
     // draw ghost
-    guide.drawPolylineInLCS(canvas, shape, this.ghost);
+    const ghost = shape.getEnclosure();
+    guide.drawPolylineInLCS(canvas, shape, ghost);
     // drag anchor point
     if (!this.outOfPath) {
-      const center = geometry.mid(this.ghost[0], this.ghost[2]);
+      const center = geometry.mid(ghost[0], ghost[2]);
       const centerCCS = lcs2ccs(canvas, shape, center);
       const anchorPointCCS = lcs2ccs(
         canvas,
@@ -192,6 +194,6 @@ export class BoxMoveAnchorPositionController extends Controller {
       guide.drawControlPoint(canvas, anchorPointCCS, 5);
     }
     // draw snap
-    this.snap.draw(editor, shape, this.ghost);
+    // this.snap.draw(editor, shape, this.ghost);
   }
 }

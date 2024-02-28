@@ -99,11 +99,14 @@ export class Transform extends EventEmitter {
    * Start a transaction
    */
   startTransaction(name: string) {
+    if (this.tx && this.tx.mutations.length > 0) {
+      this.endTransaction();
+    }
     this.tx = new Transaction(name);
   }
 
   /**
-   * End a transaction
+   * End the transaction
    */
   endTransaction() {
     if (!this.tx) throw new Error("No transaction started");
@@ -113,6 +116,19 @@ export class Transform extends EventEmitter {
       this.redoHistory.clear();
     }
     this.tx = null;
+  }
+
+  /**
+   * Cancel the transaction
+   */
+  cancelTransaction() {
+    if (this.tx) {
+      for (let i = this.tx.mutations.length - 1; i >= 0; i--) {
+        const mut = this.tx.mutations[i];
+        this.unapplyMutation(mut);
+      }
+      this.tx = null;
+    }
   }
 
   /**
@@ -911,9 +927,13 @@ export class Transform extends EventEmitter {
   /**
    * A set of mutations to resolve all constraints
    */
-  resolveAllConstraints(diagram: Document, canvas: Canvas): boolean {
+  resolveAllConstraints(
+    diagram: Document,
+    canvas: Canvas,
+    maxIteration: number = 3
+  ): boolean {
     let changed = false;
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < maxIteration; i++) {
       diagram.traverse((s) => {
         changed =
           this.resolveSingleConstraints(diagram, s as Shape, canvas) || changed;

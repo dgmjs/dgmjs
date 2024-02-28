@@ -367,14 +367,14 @@ class Editor extends EventEmitter {
     this.keymap.bind(this.options.keymap ?? {});
     // handle global key events
     this.canvasElement.addEventListener("keydown", (e) => {
+      if (this.activeHandler) {
+        this.activeHandler.keyDown(this, e);
+      }
       if (e.key === "Escape" && this.defaultHandlerId) {
         this.setActiveHandler(this.defaultHandlerId);
       }
       if (e.key === "Enter") {
         // ...
-      }
-      if (this.activeHandler) {
-        this.activeHandler.keyDown(this, e);
       }
     });
     this.canvasElement.addEventListener("keyup", (e) => {
@@ -895,27 +895,63 @@ class Controller {
   dragStartPoint: number[];
 
   /**
-   * Drag point in shape's LCS
+   * Drag start point in shape's CCS
+   */
+  dragStartPointCCS: number[];
+
+  /**
+   * Previous drag point in shape's LCS
+   */
+  dragPrevPoint: number[];
+
+  /**
+   * Previous drag point in shape's CCS
+   */
+  dragPrevPointCCS: number[];
+
+  /**
+   * Current drag point in shape's LCS
    */
   dragPoint: number[];
 
   /**
-   * Drag x-distance in shape's LCS
+   * Current drag point in shape's CCS
+   */
+  dragPointCCS: number[];
+
+  /**
+   * X-distance from dragStartPoint to dragPoint in shape's LCS
    */
   dx: number;
 
   /**
-   * Drag y-distance in shape's LCS
+   * Y-distance from dragStartPoint to dragPoint in shape's LCS
    */
   dy: number;
+
+  /**
+   * X-distance from dragPrevPoint to dragPoint in shape's LCS
+   */
+  dx0: number;
+
+  /**
+   * Y-distance from dragPrevPoint to dragPoint in shape's LCS
+   */
+  dy0: number;
 
   constructor(manipulator: Manipulator) {
     this.manipulator = manipulator;
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
+    this.dragStartPointCCS = [-1, -1];
+    this.dragPrevPoint = [-1, -1];
+    this.dragPrevPointCCS = [-1, -1];
     this.dragPoint = [-1, -1];
+    this.dragPointCCS = [-1, -1];
     this.dx = 0;
     this.dy = 0;
+    this.dx0 = 0;
+    this.dy0 = 0;
   }
 
   /**
@@ -983,15 +1019,19 @@ class Controller {
    */
   pointerDown(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
     const canvas = editor.canvas;
-    this.initialize(editor, shape);
     if (e.button === Mouse.BUTTON1 && this.mouseIn(editor, shape, e)) {
       this.dragging = true;
-      this.dragStartPoint = geometry.quantize(
-        utils.ccs2lcs(canvas, shape, [e.x, e.y])
-      );
+      this.dragStartPoint = utils.ccs2lcs(canvas, shape, [e.x, e.y]);
+      this.dragPrevPoint = geometry.copy(this.dragStartPoint);
       this.dragPoint = geometry.copy(this.dragStartPoint);
+      this.dragStartPointCCS = [e.x, e.y];
+      this.dragPrevPointCCS = [e.x, e.y];
+      this.dragPointCCS = [e.x, e.y];
       this.dx = 0;
       this.dy = 0;
+      this.dx0 = 0;
+      this.dy0 = 0;
+      this.initialize(editor, shape);
       this.update(editor, shape);
       this.drawDragging(editor, shape, e);
       editor.triggerDragStart(this, this.dragStartPoint);
@@ -1008,11 +1048,14 @@ class Controller {
     const canvas = editor.canvas;
     let handled = false;
     if (this.dragging) {
-      this.dragPoint = geometry.quantize(
-        utils.ccs2lcs(canvas, shape, [e.x, e.y])
-      );
+      this.dragPrevPoint = geometry.copy(this.dragPoint);
+      this.dragPoint = utils.ccs2lcs(canvas, shape, [e.x, e.y]);
+      this.dragPrevPointCCS = geometry.copy(this.dragPointCCS);
+      this.dragPointCCS = [e.x, e.y];
       this.dx = this.dragPoint[0] - this.dragStartPoint[0];
       this.dy = this.dragPoint[1] - this.dragStartPoint[1];
+      this.dx0 = this.dragPoint[0] - this.dragPrevPoint[0];
+      this.dy0 = this.dragPoint[1] - this.dragPrevPoint[1];
       this.update(editor, shape);
       this.drawDragging(editor, shape, e);
       editor.triggerDrag(this, this.dragPoint);
@@ -1028,14 +1071,17 @@ class Controller {
   pointerUp(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
     let handled = false;
     if (e.button === Mouse.BUTTON1 && this.dragging) {
-      if (this.dx !== 0 || this.dy !== 0) {
-        this.finalize(editor, shape);
-      }
       this.dragging = false;
+      this.dragPrevPoint = [-1, -1];
       this.dragStartPoint = [-1, -1];
+      this.dragStartPointCCS = [-1, -1];
+      this.dragPrevPointCCS = [-1, -1];
       this.dx = 0;
       this.dy = 0;
+      this.dx0 = 0;
+      this.dy0 = 0;
       handled = true;
+      this.finalize(editor, shape);
       editor.triggerDragEnd(this, this.dragPoint);
     }
     return handled;
@@ -1051,6 +1097,9 @@ class Controller {
       this.dragStartPoint = [-1, -1];
       this.dx = 0;
       this.dy = 0;
+      this.dx0 = 0;
+      this.dy0 = 0;
+      editor.transform.cancelTransaction();
       editor.repaint();
       return true;
     }

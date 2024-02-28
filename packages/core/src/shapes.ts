@@ -1522,13 +1522,6 @@ class Text extends Box {
   }
 
   renderDefault(canvas: Canvas): void {
-    canvas.fillRoundRect(
-      this.left,
-      this.top,
-      this.right,
-      this.bottom,
-      this.corners
-    );
     this.renderText(canvas);
   }
 }

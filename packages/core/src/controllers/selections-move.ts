@@ -12,7 +12,6 @@
  */
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
-import * as geometry from "../graphics/geometry";
 import { Shape, Document } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { Color, Cursor } from "../graphics/const";
@@ -75,7 +74,8 @@ export class SelectionsMoveController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
-    this.ghost = editor.selection.getEnclosure(editor.canvas);
+    // this.ghost = editor.selection.getEnclosure(editor.canvas);
+    editor.transform.startTransaction("move");
   }
 
   /**
@@ -84,24 +84,10 @@ export class SelectionsMoveController extends Controller {
    */
   update(editor: Editor, shape: Shape) {
     let ghost = editor.selection.getEnclosure(editor.canvas);
-    // snap ghost
-    let bx = geometry.boundingRect(ghost);
-    let xs = [bx[0][0] + this.dx, bx[1][0] + this.dx];
-    let ys = [bx[0][1] + this.dy, bx[1][1] + this.dy];
-    this.snap.init();
-    this.snap.toOutline(editor, shape, xs, ys);
-    this.snap.toGrid(editor, [bx[0][0] + this.dx, bx[0][1] + this.dy]);
-    this.snap.apply(this);
     // update ghost
-    ghost = ghost.map((p) => [p[0] + this.dx, p[1] + this.dy]);
+    ghost = ghost.map((p) => [p[0] + this.dx0, p[1] + this.dy0]);
     this.ghost = ghost;
-  }
 
-  /**
-   * Finalize shape by ghost
-   * @param shape (is a diagram in group manipulator)
-   */
-  finalize(editor: Editor, shape: Shape) {
     const canvas = editor.canvas;
     let dp = shape.localCoordTransform(canvas, this.dragPoint, false);
     const selections = editor.selection.getShapes();
@@ -116,10 +102,34 @@ export class SelectionsMoveController extends Controller {
       container = editor.doc;
 
     const tr = editor.transform;
-    tr.startTransaction("move");
-    tr.moveShapes(diagram, selections, this.dx, this.dy, container);
+    tr.moveShapes(diagram, selections, this.dx0, this.dy0, container);
     tr.resolveAllConstraints(diagram, canvas);
-    tr.endTransaction();
+  }
+
+  /**
+   * Finalize shape by ghost
+   * @param shape (is a diagram in group manipulator)
+   */
+  finalize(editor: Editor, shape: Shape) {
+    // const canvas = editor.canvas;
+    // let dp = shape.localCoordTransform(canvas, this.dragPoint, false);
+    // const selections = editor.selection.getShapes();
+    // const diagram = editor.doc as Document;
+
+    // // determine container
+    // // (container shouldn't be itself of a descendant of target)
+    // let container = editor.doc?.getShapeAt(canvas, dp, selections);
+    // const r = selections.find((sh) => sh.find((s) => s.id === container?.id));
+    // if (r) container = null;
+    // if (!(container && selections.every((s) => container?.canContain(s))))
+    //   container = editor.doc;
+
+    // const tr = editor.transform;
+    // tr.startTransaction("move");
+    // tr.moveShapes(diagram, selections, this.dx, this.dy, container);
+    // tr.resolveAllConstraints(diagram, canvas);
+    // tr.endTransaction();
+    editor.transform.endTransaction();
   }
 
   /**
