@@ -528,8 +528,11 @@ export class BoxSizeController2 extends Controller2 {
    * Temporal memory for shape's enclosure
    */
   initialEnclosure: number[][];
-  initialShapeMemo: any;
-  initialChildrenMemo: Record<string, any>;
+
+  /**
+   * Initial snapshot of shapes states
+   */
+  initialSnapshot: Record<string, any>;
 
   constructor(
     manipulator: Manipulator,
@@ -543,8 +546,7 @@ export class BoxSizeController2 extends Controller2 {
     this.doScale = doScale;
     this.doScaleChildren = doScaleChildren;
     this.initialEnclosure = [];
-    this.initialShapeMemo = null;
-    this.initialChildrenMemo = {};
+    this.initialSnapshot = {};
   }
 
   /**
@@ -697,11 +699,8 @@ export class BoxSizeController2 extends Controller2 {
   initialize(editor: Editor, shape: Shape): void {
     editor.transform.startTransaction("resize");
     this.initialEnclosure = shape.getEnclosure();
-    this.initialShapeMemo = shape.toJSON(false, true);
-    this.initialChildrenMemo = {};
-    shape.traverse(
-      (s) => (this.initialChildrenMemo[s.id] = s.toJSON(false, true))
-    );
+    this.initialSnapshot = {};
+    shape.traverse((s) => (this.initialSnapshot[s.id] = s.toJSON(false, true)));
   }
 
   /**
@@ -712,7 +711,8 @@ export class BoxSizeController2 extends Controller2 {
 
     // remember current shape states
     const memo = shape.toJSON(false, true);
-    shape.fromJSON(this.initialShapeMemo);
+    const initialShape = this.initialSnapshot[shape.id];
+    shape.fromJSON(initialShape);
 
     // compute (dx, dy) in initial shape's LCS
     const dragPoint = ccs2lcs(canvas, shape, this.dragPointCCS);
@@ -903,15 +903,11 @@ export class BoxSizeController2 extends Controller2 {
 
     // do scale (font and padding)
     if (this.doScale) {
-      tr.atomicAssign(
-        shape,
-        "fontSize",
-        this.initialShapeMemo.fontSize * ratioX
-      );
+      tr.atomicAssign(shape, "fontSize", initialShape.fontSize * ratioX);
       tr.atomicAssign(
         shape,
         "padding",
-        this.initialShapeMemo.padding.map((v: number) => v * ratioX)
+        initialShape.padding.map((v: number) => v * ratioX)
       );
     }
 
@@ -921,13 +917,11 @@ export class BoxSizeController2 extends Controller2 {
       const ot = targetTop;
       shape.traverse((s) => {
         if (s !== shape && s instanceof Shape) {
-          const m = this.initialChildrenMemo[s.id];
-          const l = ol + (m.left - this.initialShapeMemo.left) * ratioX;
-          const t = ot + (m.top - this.initialShapeMemo.top) * ratioY;
-          const r =
-            ol + (m.left + m.width - this.initialShapeMemo.left) * ratioX;
-          const b =
-            ot + (m.top + m.height - this.initialShapeMemo.top) * ratioY;
+          const m = this.initialSnapshot[s.id];
+          const l = ol + (m.left - initialShape.left) * ratioX;
+          const t = ot + (m.top - initialShape.top) * ratioY;
+          const r = ol + (m.left + m.width - initialShape.left) * ratioX;
+          const b = ot + (m.top + m.height - initialShape.top) * ratioY;
           const w = r - l;
           const h = b - t;
           tr.move(s, l - s.left, t - s.top);

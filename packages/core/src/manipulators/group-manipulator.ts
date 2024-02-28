@@ -17,7 +17,7 @@ import {
   BoxRotateController,
   BoxRotateController2,
 } from "../controllers/box-rotate";
-import { GroupSizeController } from "../controllers/group-size";
+// import { GroupSizeController } from "../controllers/group-size";
 import { BoxMoveController, BoxMoveController2 } from "../controllers/box-move";
 import { BoxSizeController2 } from "../controllers/box-size";
 
