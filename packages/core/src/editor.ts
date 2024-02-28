@@ -1083,9 +1083,19 @@ class Controller2 {
   dragStartPoint: number[];
 
   /**
+   * Drag start point in shape's CCS
+   */
+  dragStartPointCCS: number[];
+
+  /**
    * Previous drag point in shape's LCS
    */
   dragPrevPoint: number[];
+
+  /**
+   * Previous drag point in shape's CCS
+   */
+  dragPrevPointCCS: number[];
 
   /**
    * Current drag point in shape's LCS
@@ -1093,35 +1103,43 @@ class Controller2 {
   dragPoint: number[];
 
   /**
+   * Current drag point in shape's CCS
+   */
+  dragPointCCS: number[];
+
+  /**
    * X-distance from dragStartPoint to dragPoint in shape's LCS
-   */
-  accumulatedDX: number;
-
-  /**
-   * Y-distance from dragStartPoint to dragPoint in shape's LCS
-   */
-  accumulatedDY: number;
-
-  /**
-   * X-distance from dragPrevPoint to dragPoint in shape's LCS
    */
   dx: number;
 
   /**
-   * Y-distance from dragPrevPoint to dragPoint in shape's LCS
+   * Y-distance from dragStartPoint to dragPoint in shape's LCS
    */
   dy: number;
+
+  /**
+   * X-distance from dragPrevPoint to dragPoint in shape's LCS
+   */
+  dx0: number;
+
+  /**
+   * Y-distance from dragPrevPoint to dragPoint in shape's LCS
+   */
+  dy0: number;
 
   constructor(manipulator: Manipulator) {
     this.manipulator = manipulator;
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
+    this.dragStartPointCCS = [-1, -1];
     this.dragPrevPoint = [-1, -1];
+    this.dragPrevPointCCS = [-1, -1];
     this.dragPoint = [-1, -1];
-    this.accumulatedDX = 0;
-    this.accumulatedDY = 0;
+    this.dragPointCCS = [-1, -1];
     this.dx = 0;
     this.dy = 0;
+    this.dx0 = 0;
+    this.dy0 = 0;
   }
 
   /**
@@ -1194,10 +1212,13 @@ class Controller2 {
       this.dragStartPoint = utils.ccs2lcs(canvas, shape, [e.x, e.y]);
       this.dragPrevPoint = geometry.copy(this.dragStartPoint);
       this.dragPoint = geometry.copy(this.dragStartPoint);
-      this.accumulatedDX = 0;
-      this.accumulatedDY = 0;
-      this.dx = this.dragPoint[0] - this.dragPrevPoint[0];
-      this.dy = this.dragPoint[1] - this.dragPrevPoint[1];
+      this.dragStartPointCCS = [e.x, e.y];
+      this.dragPrevPointCCS = [e.x, e.y];
+      this.dragPointCCS = [e.x, e.y];
+      this.dx = 0;
+      this.dy = 0;
+      this.dx0 = 0;
+      this.dy0 = 0;
       this.initialize(editor, shape);
       this.update(editor, shape);
       this.drawDragging(editor, shape, e);
@@ -1217,10 +1238,12 @@ class Controller2 {
     if (this.dragging) {
       this.dragPrevPoint = geometry.copy(this.dragPoint);
       this.dragPoint = utils.ccs2lcs(canvas, shape, [e.x, e.y]);
-      this.accumulatedDX = this.dragPoint[0] - this.dragStartPoint[0];
-      this.accumulatedDY = this.dragPoint[1] - this.dragStartPoint[1];
-      this.dx = this.dragPoint[0] - this.dragPrevPoint[0];
-      this.dy = this.dragPoint[1] - this.dragPrevPoint[1];
+      this.dragPrevPointCCS = geometry.copy(this.dragPointCCS);
+      this.dragPointCCS = [e.x, e.y];
+      this.dx = this.dragPoint[0] - this.dragStartPoint[0];
+      this.dy = this.dragPoint[1] - this.dragStartPoint[1];
+      this.dx0 = this.dragPoint[0] - this.dragPrevPoint[0];
+      this.dy0 = this.dragPoint[1] - this.dragPrevPoint[1];
       this.update(editor, shape);
       this.drawDragging(editor, shape, e);
       editor.triggerDrag(this, this.dragPoint);
@@ -1239,10 +1262,12 @@ class Controller2 {
       this.dragging = false;
       this.dragPrevPoint = [-1, -1];
       this.dragStartPoint = [-1, -1];
-      this.accumulatedDX = 0;
-      this.accumulatedDY = 0;
+      this.dragStartPointCCS = [-1, -1];
+      this.dragPrevPointCCS = [-1, -1];
       this.dx = 0;
       this.dy = 0;
+      this.dx0 = 0;
+      this.dy0 = 0;
       handled = true;
       this.finalize(editor, shape);
       editor.triggerDragEnd(this, this.dragPoint);
@@ -1258,10 +1283,10 @@ class Controller2 {
     if (this.dragging && e.key === "Escape") {
       this.dragging = false;
       this.dragStartPoint = [-1, -1];
-      this.accumulatedDX = 0;
-      this.accumulatedDY = 0;
       this.dx = 0;
       this.dy = 0;
+      this.dx0 = 0;
+      this.dy0 = 0;
       editor.transform.cancelTransaction();
       editor.repaint();
       return true;

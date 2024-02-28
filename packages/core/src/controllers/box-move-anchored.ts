@@ -212,8 +212,8 @@ export class BoxMoveAnchoredController2 extends Controller2 {
       (shape as Box).anchorPosition
     );
     const shapeCenter = shape.getCenter();
-    shapeCenter[0] += this.dx;
-    shapeCenter[1] += this.dy;
+    shapeCenter[0] += this.dx0;
+    shapeCenter[1] += this.dy0;
     const angle = geometry.angle(anchorPoint, shapeCenter);
     const length = geometry.distance(shapeCenter, anchorPoint);
     // transform shape

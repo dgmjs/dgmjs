@@ -315,7 +315,7 @@ export class BoxMoveAnchorPositionController2 extends Controller2 {
       this.outOfPath = true;
     }
     // update ghost
-    this.ghost = newEnclosure.map((p) => [p[0] + this.dx, p[1] + this.dy]);
+    this.ghost = newEnclosure.map((p) => [p[0] + this.dx0, p[1] + this.dy0]);
 
     // transform shape
     const tr = editor.transform;

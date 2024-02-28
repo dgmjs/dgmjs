@@ -291,11 +291,11 @@ export class ConnectorMoveSegmentController2 extends Controller2 {
 
     // update the ghost
     if (isHorz) {
-      p1[1] += this.accumulatedDY;
-      p2[1] += this.accumulatedDY;
+      p1[1] += this.dy;
+      p2[1] += this.dy;
     } else {
-      p1[0] += this.accumulatedDX;
-      p2[0] += this.accumulatedDX;
+      p1[0] += this.dx;
+      p2[0] += this.dx;
     }
 
     // magnet the segment to other segments

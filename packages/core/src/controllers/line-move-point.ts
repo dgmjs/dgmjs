@@ -296,8 +296,8 @@ export class LineMovePointController2 extends Controller2 {
     let newPath = geometry.pathCopy(this.controlPath);
 
     // update the path
-    newPath[this.controlPoint][0] += this.accumulatedDX;
-    newPath[this.controlPoint][1] += this.accumulatedDY;
+    newPath[this.controlPoint][0] += this.dx;
+    newPath[this.controlPoint][1] += this.dy;
 
     // magnet first point to last point
     if (

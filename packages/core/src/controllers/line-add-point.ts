@@ -252,8 +252,8 @@ export class LineAddPointController2 extends Controller2 {
       0,
       geometry.mid(newPath[this.controlPoint], newPath[this.controlPoint + 1])
     );
-    newPath[this.controlPoint + 1][0] += this.accumulatedDX;
-    newPath[this.controlPoint + 1][1] += this.accumulatedDY;
+    newPath[this.controlPoint + 1][0] += this.dx;
+    newPath[this.controlPoint + 1][1] += this.dy;
     // update ghost by simplified routing
     newPath = reduceObliquePath(newPath, LINE_STRATIFY_ANGLE_THRESHOLD);
 

@@ -20,7 +20,7 @@ import {
   Cursor,
   SizingPosition,
 } from "../graphics/const";
-import { lcs2ccs, angleInCCS } from "../graphics/utils";
+import { lcs2ccs, angleInCCS, ccs2lcs } from "../graphics/utils";
 import {
   drawControlPoint,
   drawPolylineInLCS,
@@ -519,6 +519,12 @@ export class BoxSizeController2 extends Controller2 {
    */
   doScale: boolean;
 
+  /**
+   * Temporal memory for shape's enclosure
+   */
+  initialEnclosure: number[][];
+  initialShapeMemento: any;
+
   constructor(
     manipulator: Manipulator,
     position: string,
@@ -528,6 +534,8 @@ export class BoxSizeController2 extends Controller2 {
     this.snap = new Snap();
     this.controlPosition = position;
     this.doScale = doScale;
+    this.initialEnclosure = [];
+    this.initialShapeMemento = null;
   }
 
   /**
@@ -679,13 +687,24 @@ export class BoxSizeController2 extends Controller2 {
 
   initialize(editor: Editor, shape: Shape): void {
     editor.transform.startTransaction("resize");
+    this.initialEnclosure = shape.getEnclosure();
+    this.initialShapeMemento = shape.toJSON(false, true);
   }
 
   /**
    * Update ghost
    */
   update(editor: Editor, shape: Shape) {
-    const controlEnclosure = shape.getEnclosure();
+    const canvas = editor.canvas;
+    const memento = shape.toJSON(false, true);
+    shape.fromJSON(this.initialShapeMemento);
+
+    // compute dx, dy in initial shape's LCS
+    const dragPoint = ccs2lcs(canvas, shape, this.dragPointCCS);
+    let dx = dragPoint[0] - this.dragStartPoint[0];
+    let dy = dragPoint[1] - this.dragStartPoint[1];
+
+    const controlEnclosure = geometry.pathCopy(this.initialEnclosure);
     const box = geometry.boundingRect(controlEnclosure);
     const w = geometry.width(box);
     const h = geometry.height(box);
@@ -694,143 +713,147 @@ export class BoxSizeController2 extends Controller2 {
     // update control enclosure
     switch (this.controlPosition) {
       case SizingPosition.TOP:
-        if (h - this.dy < MIN_SIZE) this.dy = -(MIN_SIZE - h);
-        controlEnclosure[0][1] += this.dy;
-        controlEnclosure[1][1] += this.dy;
-        controlEnclosure[4][1] += this.dy;
+        if (h - dy < MIN_SIZE) dy = -(MIN_SIZE - h);
+        controlEnclosure[0][1] += dy;
+        controlEnclosure[1][1] += dy;
+        controlEnclosure[4][1] += dy;
         if (this.doScale || shape.sizable === Sizable.RATIO) {
-          controlEnclosure[1][0] += -this.dy / r;
-          controlEnclosure[2][0] += -this.dy / r;
+          controlEnclosure[1][0] += -dy / r;
+          controlEnclosure[2][0] += -dy / r;
         }
         break;
       case SizingPosition.RIGHT:
-        if (w + this.dx < MIN_SIZE) this.dx = MIN_SIZE - w;
-        controlEnclosure[1][0] += this.dx;
-        controlEnclosure[2][0] += this.dx;
+        if (w + dx < MIN_SIZE) dx = MIN_SIZE - w;
+        controlEnclosure[1][0] += dx;
+        controlEnclosure[2][0] += dx;
         if (this.doScale || shape.sizable === Sizable.RATIO) {
-          controlEnclosure[2][1] += this.dx * r;
-          controlEnclosure[3][1] += this.dx * r;
+          controlEnclosure[2][1] += dx * r;
+          controlEnclosure[3][1] += dx * r;
         }
         break;
       case SizingPosition.BOTTOM:
-        if (h + this.dy < MIN_SIZE) this.dy = MIN_SIZE - h;
-        controlEnclosure[2][1] += this.dy;
-        controlEnclosure[3][1] += this.dy;
+        if (h + dy < MIN_SIZE) dy = MIN_SIZE - h;
+        controlEnclosure[2][1] += dy;
+        controlEnclosure[3][1] += dy;
         if (this.doScale || shape.sizable === Sizable.RATIO) {
-          controlEnclosure[1][0] += this.dy / r;
-          controlEnclosure[2][0] += this.dy / r;
+          controlEnclosure[1][0] += dy / r;
+          controlEnclosure[2][0] += dy / r;
         }
         break;
       case SizingPosition.LEFT:
-        if (w - this.dx < MIN_SIZE) this.dx = -(MIN_SIZE - w);
-        controlEnclosure[0][0] += this.dx;
-        controlEnclosure[3][0] += this.dx;
-        controlEnclosure[4][0] += this.dx;
+        if (w - dx < MIN_SIZE) dx = -(MIN_SIZE - w);
+        controlEnclosure[0][0] += dx;
+        controlEnclosure[3][0] += dx;
+        controlEnclosure[4][0] += dx;
         if (this.doScale || shape.sizable === Sizable.RATIO) {
-          controlEnclosure[2][1] += -this.dx * r;
-          controlEnclosure[3][1] += -this.dx * r;
+          controlEnclosure[2][1] += -dx * r;
+          controlEnclosure[3][1] += -dx * r;
         }
         break;
       case SizingPosition.LEFT_TOP:
-        if (w - this.dx < MIN_SIZE) this.dx = -(MIN_SIZE - w);
-        if (h - this.dy < MIN_SIZE) this.dy = -(MIN_SIZE - h);
+        if (w - dx < MIN_SIZE) dx = -(MIN_SIZE - w);
+        if (h - dy < MIN_SIZE) dy = -(MIN_SIZE - h);
         if (this.doScale || shape.sizable === Sizable.RATIO) {
-          if (this.dx * r > this.dy / r) {
-            this.dy = this.dx * r;
+          if (dx * r > dy / r) {
+            dy = dx * r;
           } else {
-            this.dx = this.dy / r;
+            dx = dy / r;
           }
-          if (w - this.dx < MIN_SIZE) {
-            this.dx = -(MIN_SIZE - w);
-            this.dy = -this.dx * r;
+          if (w - dx < MIN_SIZE) {
+            dx = -(MIN_SIZE - w);
+            dy = -dx * r;
           }
-          if (h - this.dy < MIN_SIZE) {
-            this.dy = -(MIN_SIZE - h);
-            this.dx = -this.dy / r;
+          if (h - dy < MIN_SIZE) {
+            dy = -(MIN_SIZE - h);
+            dx = -dy / r;
           }
         }
-        controlEnclosure[0][0] += this.dx;
-        controlEnclosure[0][1] += this.dy;
-        controlEnclosure[4][0] += this.dx;
-        controlEnclosure[4][1] += this.dy;
-        controlEnclosure[1][1] += this.dy;
-        controlEnclosure[3][0] += this.dx;
+        controlEnclosure[0][0] += dx;
+        controlEnclosure[0][1] += dy;
+        controlEnclosure[4][0] += dx;
+        controlEnclosure[4][1] += dy;
+        controlEnclosure[1][1] += dy;
+        controlEnclosure[3][0] += dx;
         break;
       case SizingPosition.RIGHT_TOP:
-        if (w + this.dx < MIN_SIZE) this.dx = MIN_SIZE - w;
-        if (h - this.dy < MIN_SIZE) this.dy = -(MIN_SIZE - h);
+        if (w + dx < MIN_SIZE) dx = MIN_SIZE - w;
+        if (h - dy < MIN_SIZE) dy = -(MIN_SIZE - h);
         if (this.doScale || shape.sizable === Sizable.RATIO) {
-          if (this.dx * r > this.dy / r) {
-            this.dy = -this.dx * r;
+          if (dx * r > dy / r) {
+            dy = -dx * r;
           } else {
-            this.dx = -this.dy / r;
+            dx = -dy / r;
           }
-          if (w + this.dx < MIN_SIZE) {
-            this.dx = MIN_SIZE - w;
-            this.dy = -this.dx * r;
+          if (w + dx < MIN_SIZE) {
+            dx = MIN_SIZE - w;
+            dy = -dx * r;
           }
-          if (h - this.dy < MIN_SIZE) {
-            this.dy = -(MIN_SIZE - h);
-            this.dx = -this.dy / r;
+          if (h - dy < MIN_SIZE) {
+            dy = -(MIN_SIZE - h);
+            dx = -dy / r;
           }
         }
-        controlEnclosure[1][0] += this.dx;
-        controlEnclosure[1][1] += this.dy;
-        controlEnclosure[0][1] += this.dy;
-        controlEnclosure[2][0] += this.dx;
-        controlEnclosure[4][1] += this.dy;
+        controlEnclosure[1][0] += dx;
+        controlEnclosure[1][1] += dy;
+        controlEnclosure[0][1] += dy;
+        controlEnclosure[2][0] += dx;
+        controlEnclosure[4][1] += dy;
         break;
       case SizingPosition.RIGHT_BOTTOM:
-        if (w + this.dx < MIN_SIZE) this.dx = MIN_SIZE - w;
-        if (h + this.dy < MIN_SIZE) this.dy = MIN_SIZE - h;
+        if (w + dx < MIN_SIZE) dx = MIN_SIZE - w;
+        if (h + dy < MIN_SIZE) dy = MIN_SIZE - h;
         if (this.doScale || shape.sizable === Sizable.RATIO) {
-          if (this.dx * r > this.dy / r) {
-            this.dy = this.dx * r;
+          if (dx * r > dy / r) {
+            dy = dx * r;
           } else {
-            this.dx = this.dy / r;
+            dx = dy / r;
           }
-          if (w + this.dx < MIN_SIZE) {
-            this.dx = MIN_SIZE - w;
-            this.dy = this.dx * r;
+          if (w + dx < MIN_SIZE) {
+            dx = MIN_SIZE - w;
+            dy = dx * r;
           }
-          if (h + this.dy < MIN_SIZE) {
-            this.dy = MIN_SIZE - h;
-            this.dx = this.dy / r;
+          if (h + dy < MIN_SIZE) {
+            dy = MIN_SIZE - h;
+            dx = dy / r;
           }
         }
-        controlEnclosure[2][0] += this.dx;
-        controlEnclosure[2][1] += this.dy;
-        controlEnclosure[1][0] += this.dx;
-        controlEnclosure[3][1] += this.dy;
+        controlEnclosure[2][0] += dx;
+        controlEnclosure[2][1] += dy;
+        controlEnclosure[1][0] += dx;
+        controlEnclosure[3][1] += dy;
         break;
       case SizingPosition.LEFT_BOTTOM:
-        if (w - this.dx < MIN_SIZE) this.dx = -(MIN_SIZE - w);
-        if (h + this.dy < MIN_SIZE) this.dy = MIN_SIZE - h;
+        if (w - dx < MIN_SIZE) dx = -(MIN_SIZE - w);
+        if (h + dy < MIN_SIZE) dy = MIN_SIZE - h;
         if (this.doScale || shape.sizable === Sizable.RATIO) {
-          if (this.dx * r > this.dy / r) {
-            this.dy = -this.dx * r;
+          if (dx * r > dy / r) {
+            dy = -dx * r;
           } else {
-            this.dx = -this.dy / r;
+            dx = -dy / r;
           }
-          if (w - this.dx < MIN_SIZE) {
-            this.dx = -(MIN_SIZE - w);
-            this.dy = -this.dx * r;
+          if (w - dx < MIN_SIZE) {
+            dx = -(MIN_SIZE - w);
+            dy = -dx * r;
           }
-          if (h + this.dy < MIN_SIZE) {
-            this.dy = MIN_SIZE - h;
-            this.dx = -this.dy / r;
+          if (h + dy < MIN_SIZE) {
+            dy = MIN_SIZE - h;
+            dx = -dy / r;
           }
         }
-        controlEnclosure[3][0] += this.dx;
-        controlEnclosure[3][1] += this.dy;
-        controlEnclosure[2][1] += this.dy;
-        controlEnclosure[0][0] += this.dx;
-        controlEnclosure[4][0] += this.dx;
+        controlEnclosure[3][0] += dx;
+        controlEnclosure[3][1] += dy;
+        controlEnclosure[2][1] += dy;
+        controlEnclosure[0][0] += dx;
+        controlEnclosure[4][0] += dx;
         break;
     }
 
-    const canvas = editor.canvas;
-    const ghostCCS = controlEnclosure.map((p) => lcs2ccs(canvas, shape, p));
+    // compute resized control enclosure
+    const controlEnclosureCCS = controlEnclosure.map((p) =>
+      lcs2ccs(canvas, shape, p)
+    );
+    const left = controlEnclosure[0][0];
+    const top = controlEnclosure[0][1];
     const width = controlEnclosure[2][0] - controlEnclosure[0][0];
     const height = controlEnclosure[2][1] - controlEnclosure[0][1];
     const ratio = width / shape.width;
@@ -839,14 +862,14 @@ export class BoxSizeController2 extends Controller2 {
     const delta = fitEnclosureInCSS(
       editor.canvas,
       shape,
-      controlEnclosure[0][0],
-      controlEnclosure[0][1],
+      left,
+      top,
       width,
       height,
-      ghostCCS
+      controlEnclosureCCS
     );
 
-    // compute size
+    // compute position and size
     const x1 = controlEnclosure[0][0] + delta[0];
     const y1 = controlEnclosure[0][1] + delta[1];
     const x2 = controlEnclosure[2][0] + delta[0];
@@ -858,17 +881,24 @@ export class BoxSizeController2 extends Controller2 {
     if (newW < minW) newW = minW;
     if (newH < minH) newH = minH;
 
+    // restore shape
+    shape.fromJSON(memento);
+
     // transform shapes
     const tr = editor.transform;
     const doc = editor.doc as Document;
-    tr.moveShapes(doc, [shape], x1 - shape.left, y1 - shape.top);
     tr.resize(shape, newW, newH);
+    tr.moveShapes(doc, [shape], x1 - shape.left, y1 - shape.top);
     if (this.doScale) {
-      tr.atomicAssign(shape, "fontSize", shape.fontSize * ratio);
+      tr.atomicAssign(
+        shape,
+        "fontSize",
+        this.initialShapeMemento.fontSize * ratio
+      );
       tr.atomicAssign(
         shape,
         "padding",
-        (shape as Box).padding.map((v) => v * ratio)
+        this.initialShapeMemento.padding.map((v: number) => v * ratio)
       );
     }
     tr.resolveAllConstraints(doc, canvas);

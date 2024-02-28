@@ -237,25 +237,22 @@ export class ConnectorMoveController2 extends Controller2 {
       targetShape.movable === Movable.VERT ||
       targetShape.movable === Movable.NONE
     )
-      this.accumulatedDX = 0;
+      this.dx = 0;
     if (
       targetShape.movable === Movable.HORZ ||
       targetShape.movable === Movable.NONE
     )
-      this.accumulatedDY = 0;
+      this.dy = 0;
 
     // update ghost
-    let newPath = this.controlPath.map((p) => [
-      p[0] + this.accumulatedDX,
-      p[1] + this.accumulatedDY,
-    ]);
+    let newPath = this.controlPath.map((p) => [p[0] + this.dx, p[1] + this.dy]);
 
     // apply movable property
     const canvas = editor.canvas;
     const doc = editor.doc as Document;
 
     // transform shape
-    if (this.accumulatedDX !== 0 || this.accumulatedDY !== 0) {
+    if (this.dx !== 0 || this.dy !== 0) {
       const tr = editor.transform;
       tr.setPath(shape, newPath);
       tr.atomicAssignRef(shape, "head", null);

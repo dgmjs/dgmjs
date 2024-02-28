@@ -291,8 +291,8 @@ export class ConnectorReconnectController2 extends Controller2 {
   update(editor: Editor, shape: Shape) {
     // update the path
     let newPath = geometry.pathCopy(this.controlPath);
-    newPath[this.controlPoint][0] += this.accumulatedDX;
-    newPath[this.controlPoint][1] += this.accumulatedDY;
+    newPath[this.controlPoint][0] += this.dx;
+    newPath[this.controlPoint][1] += this.dy;
     const isHead = this.controlPoint > 0;
 
     let [end, cp, cpIndex] = findConnectionPoint(

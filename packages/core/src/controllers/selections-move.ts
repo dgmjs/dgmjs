@@ -246,7 +246,7 @@ export class SelectionsMoveController2 extends Controller2 {
   update(editor: Editor, shape: Shape) {
     let ghost = editor.selection.getEnclosure(editor.canvas);
     // update ghost
-    ghost = ghost.map((p) => [p[0] + this.dx, p[1] + this.dy]);
+    ghost = ghost.map((p) => [p[0] + this.dx0, p[1] + this.dy0]);
     this.ghost = ghost;
 
     const canvas = editor.canvas;
@@ -263,7 +263,7 @@ export class SelectionsMoveController2 extends Controller2 {
       container = editor.doc;
 
     const tr = editor.transform;
-    tr.moveShapes(diagram, selections, this.dx, this.dy, container);
+    tr.moveShapes(diagram, selections, this.dx0, this.dy0, container);
     tr.resolveAllConstraints(diagram, canvas);
   }
 
