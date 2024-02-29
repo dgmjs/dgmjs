@@ -171,7 +171,8 @@ export class ConnectorReconnectController extends Controller {
       guide.drawConnectionPoints(canvas, end);
       // draw connection point hovering
       if (cxp) {
-        guide.drawConnectionPointHovering(canvas, end, cxp, cxpIndex);
+        const cxpCCS = lcs2ccs(canvas, end, cxp);
+        guide.drawControlPoint(canvas, cxpCCS, 6);
       } else {
         guide.drawControlPoint(canvas, lcs2ccs(canvas, shape, endPoint), 5);
       }
