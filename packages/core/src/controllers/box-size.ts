@@ -248,9 +248,9 @@ export class BoxSizeController extends Controller {
 
     // initialize control enclosure
     const controlEnclosure = geometry.pathCopy(this.initialEnclosure);
-    const box = geometry.boundingRect(controlEnclosure);
-    const w = geometry.width(box);
-    const h = geometry.height(box);
+    const initialRect = geometry.boundingRect(controlEnclosure);
+    const w = geometry.width(initialRect);
+    const h = geometry.height(initialRect);
     const r = h / w;
 
     // update control enclosure based on mouse movement (dx, dy)
@@ -416,8 +416,11 @@ export class BoxSizeController extends Controller {
     const targetBottom = controlEnclosure[2][1];
     const targetWidth = targetRight - targetLeft;
     const targetHeight = targetBottom - targetTop;
-    const ratioX = targetWidth / shape.width;
-    const ratioY = targetHeight / shape.height;
+    const targetRect = [
+      [targetLeft, targetTop],
+      [targetRight, targetBottom],
+    ];
+    const ratio = targetWidth / shape.width;
 
     // restore shape states
     shape.fromJSON(memo);
@@ -425,42 +428,71 @@ export class BoxSizeController extends Controller {
     // transform shapes
     const tr = editor.transform;
     const doc = editor.doc as Document;
+
     tr.resize(shape, targetWidth, targetHeight);
     tr.moveShapes(doc, [shape], targetLeft - shape.left, targetTop - shape.top);
 
-    // do scale (font and padding)
+    // do scale (font, padding and path)
     if (this.doScale) {
-      tr.atomicAssign(shape, "fontSize", initialShape.fontSize * ratioX);
-      tr.atomicAssign(
-        shape,
-        "padding",
-        initialShape.padding.map((v: number) => v * ratioX)
-      );
+      tr.atomicAssign(shape, "fontSize", initialShape.fontSize * ratio);
+      if (shape instanceof Box) {
+        tr.atomicAssign(
+          shape,
+          "padding",
+          initialShape.padding.map((v: number) => v * ratio)
+        );
+      }
+      if (shape instanceof Line) {
+        const newPath = geometry.projectPoints(
+          initialShape.path,
+          initialRect,
+          targetRect
+        );
+        tr.atomicAssign(shape, "path", newPath);
+      }
     }
 
     // do scale children
     if (this.doScaleChildren) {
-      const ol = targetLeft;
-      const ot = targetTop;
       shape.traverse((s) => {
         if (s !== shape && s instanceof Shape) {
-          const m = this.initialSnapshot[s.id];
-          const l = ol + (m.left - initialShape.left) * ratioX;
-          const t = ot + (m.top - initialShape.top) * ratioY;
-          const r = ol + (m.left + m.width - initialShape.left) * ratioX;
-          const b = ot + (m.top + m.height - initialShape.top) * ratioY;
+          const initialChild = this.initialSnapshot[s.id];
+          const initialChildRect = [
+            [initialChild.left, initialChild.top],
+            [
+              initialChild.left + initialChild.width,
+              initialChild.top + initialChild.height,
+            ],
+          ];
+          const targetChildRect = geometry.projectPoints(
+            initialChildRect,
+            initialRect,
+            targetRect
+          );
+          const l = targetChildRect[0][0];
+          const t = targetChildRect[0][1];
+          const r = targetChildRect[1][0];
+          const b = targetChildRect[1][1];
           const w = r - l;
           const h = b - t;
           tr.move(s, l - s.left, t - s.top);
           tr.resize(s, w, h);
           if (this.doScale) {
-            tr.atomicAssign(s, "fontSize", m.fontSize * ratioX);
+            tr.atomicAssign(s, "fontSize", initialChild.fontSize * ratio);
             if (s instanceof Box) {
               tr.atomicAssign(
                 s,
                 "padding",
-                m.padding.map((v: number) => v * ratioX)
+                initialChild.padding.map((v: number) => v * ratio)
               );
+            }
+            if (s instanceof Line) {
+              const newPath = geometry.projectPoints(
+                initialChild.path,
+                initialChildRect,
+                targetChildRect
+              );
+              tr.atomicAssign(s, "path", newPath);
             }
           }
         }

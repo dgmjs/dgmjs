@@ -472,10 +472,10 @@ export class Transform extends EventEmitter {
    * Mutation to resize a shape (width, height, path)
    */
   resize(shape: Shape, width: number, height: number): boolean {
-    const rect = shape.getBoundingRect();
     let changed = false;
     changed = this.atomicAssign(shape, "width", width) || changed;
     changed = this.atomicAssign(shape, "height", height) || changed;
+    const rect = shape.getBoundingRect();
     const rect2 = [rect[0], [rect[0][0] + width, rect[0][1] + height]];
     if (shape instanceof Line) {
       const ps = geometry.projectPoints(shape.path, rect, rect2);
