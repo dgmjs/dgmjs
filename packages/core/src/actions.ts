@@ -58,7 +58,7 @@ export class Actions {
       tr.atomicInsert(shape);
       tr.changeParent(shape, parent);
     } else {
-      tr.addShapeToDoc(doc, shape);
+      tr.addShape(shape, doc);
     }
     tr.resolveAllConstraints(doc, this.editor.canvas);
     tr.endTransaction();

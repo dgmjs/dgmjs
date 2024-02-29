@@ -360,15 +360,12 @@ export class Transform extends EventEmitter {
   // ---------------------------------------------------------------------------
 
   /**
-   * Mutation to add a shape to diagram
+   * Mutation to add a shape to doc
    */
-  addShapeToDoc(diagram: Document, shape: Shape): boolean {
+  addShape(shape: Shape, parent: Shape): boolean {
     let changed = false;
     changed = this.atomicInsert(shape) || changed;
-    changed =
-      this.atomicInsertToArray(diagram as Document, "children", shape) ||
-      changed;
-    changed = this.atomicAssignRef(shape, "parent", diagram) || changed;
+    changed = this.changeParent(shape, parent) || changed;
     return changed;
   }
 
