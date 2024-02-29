@@ -1,6 +1,7 @@
 import {
   Document,
   Editor,
+  FillStyle,
   Shape,
   ShapeValues,
   Transaction,
@@ -29,6 +30,14 @@ function App() {
     window.editor = editor;
     insertFontsToDocument(fontJson as Font[]);
     await fetchFonts(fontJson as Font[]);
+
+    window.editor.factory.on("shapeInitialize", (shape: Shape) => {
+      console.log("shape", shape);
+      shape.strokeWidth = 2;
+      shape.roughness = 1;
+      shape.fillColor = "$lime9";
+      shape.fillStyle = FillStyle.HACHURE;
+    });
 
     // load from local storage
     const localData = localStorage.getItem("local-data");
