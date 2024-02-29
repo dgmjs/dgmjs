@@ -11,7 +11,7 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { generateId } from "../std/id";
+import { generateId, hashStringToNumber } from "../std/id";
 import { Transform } from "../transform/transform";
 import { Store } from "./store";
 import type { Obj } from "./obj";

@@ -972,7 +972,8 @@ class Box extends Shape {
       this.top,
       this.right,
       this.bottom,
-      this.corners
+      this.corners,
+      this.getSeed()
     );
     this.renderText(canvas);
   }
@@ -1217,19 +1218,19 @@ class Line extends Shape {
     if (this.isClosed()) {
       switch (this.lineType) {
         case LineType.STRAIGHT:
-          canvas.polygon(path);
+          canvas.polygon(path, this.getSeed());
           break;
         case LineType.CURVE:
-          canvas.curve(path);
+          canvas.curve(path, this.getSeed());
           break;
       }
     } else {
       switch (this.lineType) {
         case LineType.STRAIGHT:
-          canvas.polyline(path);
+          canvas.polyline(path, this.getSeed());
           break;
         case LineType.CURVE:
-          canvas.strokeCurve(path);
+          canvas.strokeCurve(path, this.getSeed());
           break;
       }
     }
@@ -1296,32 +1297,42 @@ class Line extends Shape {
     canvas.fillStyle = FillStyle.SOLID;
     switch (edgeEndType) {
       case LineEndType.ARROW:
-        canvas.polyline([grid[3][1], grid[0][3], grid[3][5]]);
+        canvas.polyline([grid[3][1], grid[0][3], grid[3][5]], this.getSeed());
         return grid[0][3];
       case LineEndType.SOLID_ARROW:
-        canvas.polygon([grid[3][1], grid[0][3], grid[3][5]]);
+        canvas.polygon([grid[3][1], grid[0][3], grid[3][5]], this.getSeed());
         return grid[0][3];
       case LineEndType.TRIANGLE:
-        canvas.strokePolygon([grid[7][0], grid[0][3], grid[7][6]]);
+        canvas.strokePolygon(
+          [grid[7][0], grid[0][3], grid[7][6]],
+          this.getSeed()
+        );
         return grid[7][3];
       case LineEndType.TRIANGLE_FILLED:
-        canvas.polygon([grid[7][0], grid[0][3], grid[7][6]]);
+        canvas.polygon([grid[7][0], grid[0][3], grid[7][6]], this.getSeed());
         return grid[7][3];
       case LineEndType.DIAMOND:
-        canvas.strokePolygon([grid[0][3], grid[3][1], grid[6][3], grid[3][5]]);
+        canvas.strokePolygon(
+          [grid[0][3], grid[3][1], grid[6][3], grid[3][5]],
+          this.getSeed()
+        );
         return grid[6][3];
       case LineEndType.DIAMOND_FILLED:
-        canvas.polygon([grid[0][3], grid[3][1], grid[6][3], grid[3][5]]);
+        canvas.polygon(
+          [grid[0][3], grid[3][1], grid[6][3], grid[3][5]],
+          this.getSeed()
+        );
         return grid[6][3];
       case LineEndType.PLUS:
-        canvas.polyline([grid[2][1], grid[2][5]]);
+        canvas.polyline([grid[2][1], grid[2][5]], this.getSeed());
         return grid[0][3];
       case LineEndType.CIRCLE:
         canvas.strokeEllipse(
           grid[2][3][0] - gap * 2,
           grid[2][3][1] - gap * 2,
           grid[2][3][0] + gap * 2,
-          grid[2][3][1] + gap * 2
+          grid[2][3][1] + gap * 2,
+          this.getSeed()
         );
         return grid[4][3];
       case LineEndType.CIRCLE_PLUS:
@@ -1329,7 +1340,8 @@ class Line extends Shape {
           grid[2][3][0] - gap * 2,
           grid[2][3][1] - gap * 2,
           grid[2][3][0] + gap * 2,
-          grid[2][3][1] + gap * 2
+          grid[2][3][1] + gap * 2,
+          this.getSeed()
         );
         canvas.polyline([grid[2][1], grid[2][5]]);
         return grid[0][3];
@@ -1338,53 +1350,57 @@ class Line extends Shape {
           grid[2][3][0] - gap * 2,
           grid[2][3][1] - gap * 2,
           grid[2][3][0] + gap * 2,
-          grid[2][3][1] + gap * 2
+          grid[2][3][1] + gap * 2,
+          this.getSeed()
         );
         return grid[4][3];
       case LineEndType.CROWFOOT_ONE:
-        canvas.polyline([grid[2][1], grid[2][5]]);
+        canvas.polyline([grid[2][1], grid[2][5]], this.getSeed());
         return grid[0][3];
       case LineEndType.CROWFOOT_ONLY_ONE:
-        canvas.polyline([grid[4][1], grid[4][5]]);
-        canvas.polyline([grid[2][1], grid[2][5]]);
+        canvas.polyline([grid[4][1], grid[4][5]], this.getSeed());
+        canvas.polyline([grid[2][1], grid[2][5]], this.getSeed());
         return grid[0][3];
       case LineEndType.CROWFOOT_MANY:
-        canvas.polyline([grid[0][1], grid[4][3], grid[0][5]]);
+        canvas.polyline([grid[0][1], grid[4][3], grid[0][5]], this.getSeed());
         return grid[0][3];
       case LineEndType.CROWFOOT_ONE_MANY:
-        canvas.polyline([grid[4][1], grid[4][5]]);
-        canvas.polyline([grid[0][1], grid[4][3], grid[0][5]]);
+        canvas.polyline([grid[4][1], grid[4][5]], this.getSeed());
+        canvas.polyline([grid[0][1], grid[4][3], grid[0][5]], this.getSeed());
         return grid[0][3];
       case LineEndType.CROWFOOT_ZERO_ONE:
-        canvas.polyline([grid[2][1], grid[2][5]]);
-        canvas.polyline([grid[0][3], grid[4][3]]);
+        canvas.polyline([grid[2][1], grid[2][5]], this.getSeed());
+        canvas.polyline([grid[0][3], grid[4][3]], this.getSeed());
         canvas.strokeEllipse(
           grid[6][3][0] - gap * 2,
           grid[6][3][1] - gap * 2,
           grid[6][3][0] + gap * 2,
-          grid[6][3][1] + gap * 2
+          grid[6][3][1] + gap * 2,
+          this.getSeed()
         );
         return grid[8][3];
       case LineEndType.CROWFOOT_ZERO_MANY:
-        canvas.polyline([grid[0][1], grid[4][3], grid[0][5]]);
-        canvas.polyline([grid[0][3], grid[4][3]]);
+        canvas.polyline([grid[0][1], grid[4][3], grid[0][5]], this.getSeed());
+        canvas.polyline([grid[0][3], grid[4][3]], this.getSeed());
         canvas.strokeEllipse(
           grid[6][3][0] - gap * 2,
           grid[6][3][1] - gap * 2,
           grid[6][3][0] + gap * 2,
-          grid[6][3][1] + gap * 2
+          grid[6][3][1] + gap * 2,
+          this.getSeed()
         );
         return grid[8][3];
       case LineEndType.CROSS:
-        canvas.polyline([grid[1][2], grid[3][4]]);
-        canvas.polyline([grid[3][2], grid[1][4]]);
+        canvas.polyline([grid[1][2], grid[3][4]], this.getSeed());
+        canvas.polyline([grid[3][2], grid[1][4]], this.getSeed());
         return grid[0][3];
       case LineEndType.DOT:
         canvas.ellipse(
           grid[1][3][0] - gap,
           grid[1][3][1] - gap,
           grid[1][3][0] + gap,
-          grid[1][3][1] + gap
+          grid[1][3][1] + gap,
+          this.getSeed()
         );
         return grid[0][3];
       default:
@@ -1471,7 +1487,13 @@ class Ellipse extends Box {
   }
 
   renderDefault(canvas: Canvas): void {
-    canvas.ellipse(this.left, this.top, this.right, this.bottom);
+    canvas.ellipse(
+      this.left,
+      this.top,
+      this.right,
+      this.bottom,
+      this.getSeed()
+    );
     this.renderText(canvas);
   }
 
@@ -1569,7 +1591,8 @@ class Image extends Box {
         this.top,
         this.right,
         this.bottom,
-        this.corners
+        this.corners,
+        this.getSeed()
       );
       canvas.context.clip();
       canvas.drawImage(
@@ -1749,7 +1772,8 @@ class Frame extends Box {
         this.top,
         this.right,
         this.bottom,
-        this.corners
+        this.corners,
+        this.getSeed()
       );
       canvas.context.clip();
       canvas.restoreState();
