@@ -494,6 +494,14 @@ class Editor extends EventEmitter {
   }
 
   /**
+   * Get bounding rect in GCS
+   */
+  getBoundingRect(): number[][] {
+    const rect: number[][] = [[0, 0], this.getSize()];
+    return rect.map((p) => this.canvas.globalCoordTransformRev(p));
+  }
+
+  /**
    * Set origin point
    */
   setOrigin(x: number, y: number) {

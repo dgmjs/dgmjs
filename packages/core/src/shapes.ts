@@ -1583,7 +1583,10 @@ class Image extends Box {
     if (this._image && this._image.complete) {
       canvas.save();
       canvas.fillColor = Color.TRANSPARENT;
+      canvas.fillStyle = FillStyle.SOLID;
       canvas.strokeColor = Color.TRANSPARENT;
+      canvas.strokeWidth = 1;
+      canvas.strokePattern = [];
       canvas.alpha = 1;
       canvas.roughness = 0;
       canvas.fillRoundRect(

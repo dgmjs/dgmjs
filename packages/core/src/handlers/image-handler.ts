@@ -11,104 +11,54 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import * as geometry from "../graphics/geometry";
 import { Editor, Handler } from "../editor";
 import { fileOpen } from "browser-fs-access";
-import { CanvasPointerEvent } from "../graphics/graphics";
-import { Color, Cursor, Mouse } from "../graphics/const";
+import { Document, Image } from "../shapes";
+import { geometry } from "..";
 
 /**
  * Image Factory Handler
  */
 export class ImageFactoryHandler extends Handler {
-  dragging: boolean;
-  dragStartPoint: number[];
-  dragPoint: number[];
-
-  constructor(id: string) {
-    super(id);
-    this.dragging = false;
-    this.dragStartPoint = [-1, -1];
-    this.dragPoint = [-1, -1];
-  }
-
-  /**
-   * pointerDown
-   * @override
-   */
-  pointerDown(editor: Editor, e: CanvasPointerEvent) {
-    if (e.button === Mouse.BUTTON1) {
-      const canvas = editor.canvas;
-      this.dragging = true;
-      this.dragStartPoint = canvas.globalCoordTransformRev([e.x, e.y]);
-      this.dragPoint = geometry.copy(this.dragStartPoint);
-      this.drawDragging(editor, e);
+  computeProperSize(editor: Editor, image: Image): number[] {
+    const rect = editor.getBoundingRect();
+    const sw = geometry.width(rect) * 0.7;
+    const sh = geometry.height(rect) * 0.7;
+    const w = image.imageWidth;
+    const h = image.imageHeight;
+    if (w > sw || h > sh) {
+      const ratio = Math.min(sw / w, sh / h);
+      return [w * ratio, h * ratio];
     }
-  }
-
-  /**
-   * pointerMove
-   * @override
-   */
-  pointerMove(editor: Editor, e: CanvasPointerEvent) {
-    editor.repaint();
-    if (this.dragging) {
-      const canvas = editor.canvas;
-      this.dragPoint = canvas.globalCoordTransformRev([e.x, e.y]);
-      this.drawDragging(editor, e);
-    } else {
-      this.drawHovering(editor, e);
-    }
-  }
-
-  /**
-   * pointerUp
-   * @override
-   */
-  pointerUp(editor: Editor, e: CanvasPointerEvent) {
-    if (e.button === Mouse.BUTTON1 && this.dragging) {
-      const r = geometry.normalizeRect([this.dragStartPoint, this.dragPoint]);
-      const asyncFn = async () => {
-        try {
-          const file = await fileOpen([
-            {
-              description: "Image files",
-              mimeTypes: ["image/png", "image/jpeg", "image/svg+xml"],
-              extensions: [".png", ".jpeg", ".jpg", ".svg"],
-              multiple: false,
-            },
-          ]);
-          editor.factory.createImage(file, r);
-        } catch (err) {
-          // user cancelled
-        }
-      };
-      asyncFn();
-      this.dragging = false;
-      this.dragStartPoint = [-1, -1];
-    }
+    return [w, h];
   }
 
   onActivate(editor: Editor): void {
-    editor.setCursor(Cursor.CROSSHAIR);
-  }
-
-  onDeactivate(editor: Editor): void {
-    editor.setCursor(Cursor.DEFAULT);
-  }
-
-  drawHovering(editor: Editor, e: CanvasPointerEvent) {}
-
-  drawDragging(editor: Editor, e: CanvasPointerEvent) {
-    const canvas = editor.canvas;
-    const p1 = canvas.globalCoordTransform(this.dragStartPoint);
-    const p2 = canvas.globalCoordTransform(this.dragPoint);
-    const rect = geometry.normalizeRect([p1, p2]);
-    canvas.strokeColor = Color.SELECTION;
-    canvas.strokeWidth = canvas.px;
-    canvas.strokePattern = [];
-    canvas.roughness = 0;
-    canvas.alpha = 1;
-    canvas.strokeRect(rect[0][0], rect[0][1], rect[1][0], rect[1][1]);
+    const asyncFn = async () => {
+      try {
+        const file = await fileOpen([
+          {
+            description: "Image files",
+            mimeTypes: ["image/png", "image/jpeg", "image/svg+xml"],
+            extensions: [".png", ".jpeg", ".jpg", ".svg"],
+            multiple: false,
+          },
+        ]);
+        const center = editor.getCenter();
+        const shape = await editor.factory.createImage(file, [center, center]);
+        const doc = editor.doc as Document;
+        const size = this.computeProperSize(editor, shape);
+        editor.transform.startTransaction("create");
+        editor.transform.addShape(shape, doc);
+        editor.transform.resize(shape, size[0], size[1]);
+        editor.transform.move(shape, -size[0] / 2, -size[1] / 2);
+        editor.transform.resolveAllConstraints(doc, editor.canvas);
+        editor.transform.endTransaction();
+        editor.factory.triggerCreate(shape);
+      } catch (err) {
+        // user cancelled
+      }
+    };
+    asyncFn();
   }
 }

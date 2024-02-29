@@ -67,7 +67,10 @@ export class EmbedFactoryHandler extends Handler {
   pointerUp(editor: Editor, e: CanvasPointerEvent) {
     if (e.button === Mouse.BUTTON1 && this.dragging) {
       const r = geometry.normalizeRect([this.dragStartPoint, this.dragPoint]);
-      editor.factory.createEmbed(r);
+      const shape = editor.factory.createEmbed(r);
+      editor.actions.insert(shape);
+      editor.factory.triggerCreate(shape);
+
       this.dragging = false;
       this.dragStartPoint = [-1, -1];
     }

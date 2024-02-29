@@ -104,7 +104,10 @@ export const DGMPlainTextInplaceEditor: React.FC<
 
   const applyChanges = () => {
     if (state.textShape) {
-      if (state.textValue.trim().length === 0) {
+      if (
+        state.textShape instanceof Text &&
+        state.textValue.trim().length === 0
+      ) {
         editor.actions.delete_([state.textShape]);
       } else {
         editor.actions.update({ text: state.textValue }, [state.textShape]);

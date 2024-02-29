@@ -67,7 +67,9 @@ export class FrameFactoryHandler extends Handler {
   pointerUp(editor: Editor, e: CanvasPointerEvent) {
     if (e.button === Mouse.BUTTON1 && this.dragging) {
       const r = geometry.normalizeRect([this.dragStartPoint, this.dragPoint]);
-      editor.factory.createFrame(r);
+      const shape = editor.factory.createFrame(r);
+      editor.actions.insert(shape);
+      editor.factory.triggerCreate(shape);
       this.dragging = false;
       this.dragStartPoint = [-1, -1];
     }

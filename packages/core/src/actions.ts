@@ -54,12 +54,7 @@ export class Actions {
     const tr = this.editor.transform;
     const doc = this.editor.doc as Document;
     tr.startTransaction("insert");
-    if (parent) {
-      tr.atomicInsert(shape);
-      tr.changeParent(shape, parent);
-    } else {
-      tr.addShape(shape, doc);
-    }
+    tr.addShape(shape, parent ?? doc);
     tr.resolveAllConstraints(doc, this.editor.canvas);
     tr.endTransaction();
   }

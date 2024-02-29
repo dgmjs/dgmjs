@@ -163,7 +163,7 @@ export const DGMRichTextInplaceEditor: React.FC<
   const applyChanges = () => {
     if (tiptapEditor && state.textShape) {
       const textString = convertDocToText(tiptapEditor.getJSON());
-      if (textString.trim().length === 0) {
+      if (state.textShape instanceof Text && textString.trim().length === 0) {
         editor.actions.delete_([state.textShape]);
       } else {
         editor.actions.update({ text: tiptapEditor.getJSON() }, [
