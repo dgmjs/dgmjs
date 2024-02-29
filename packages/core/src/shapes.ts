@@ -1440,13 +1440,6 @@ class Line extends Shape {
   }
 
   /**
-   * Return a bounding box.
-   */
-  // getBoundingRect(): number[][] {
-  //   return geometry.boundingRect(this.path);
-  // }
-
-  /**
    * Determines whether this shape overlaps a given rect
    */
   overlapRect(rect: number[][]): boolean {
