@@ -8,13 +8,17 @@ import { Document, Rectangle, Shape } from "../shapes";
  * Rectangle Factory Handler
  */
 export class RectangleFactoryHandler extends Handler {
-  dragging: boolean;
-  dragStartPoint: number[];
-  dragPoint: number[];
-  shape: Rectangle | null;
+  dragging: boolean = false;
+  dragStartPoint: number[] = [-1, -1];
+  dragPoint: number[] = [-1, -1];
+  shape: Rectangle | null = null;
 
   constructor(id: string) {
     super(id);
+    this.reset();
+  }
+
+  reset(): void {
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
     this.dragPoint = [-1, -1];
@@ -54,15 +58,13 @@ export class RectangleFactoryHandler extends Handler {
 
   finalize(editor: Editor, e: CanvasPointerEvent): void {
     const MIN_SIZE = 2;
-    if (
-      this.shape &&
-      this.shape?.width < MIN_SIZE &&
-      this.shape?.height < MIN_SIZE
-    ) {
-      editor.transform.cancelTransaction();
-    } else {
-      editor.transform.endTransaction();
-      editor.factory.triggerCreate(this.shape as Shape);
+    if (this.shape) {
+      if (this.shape?.width < MIN_SIZE && this.shape?.height < MIN_SIZE) {
+        editor.transform.cancelTransaction();
+      } else {
+        editor.transform.endTransaction();
+        editor.factory.triggerCreate(this.shape as Shape);
+      }
     }
   }
 
@@ -107,16 +109,15 @@ export class RectangleFactoryHandler extends Handler {
     if (e.button === Mouse.BUTTON1 && this.dragging) {
       this.finalize(editor, e);
       editor.repaint();
-      this.dragging = false;
-      this.dragStartPoint = [-1, -1];
+      this.reset();
     }
   }
 
   keyDown(editor: Editor, e: KeyboardEvent): boolean {
     if (e.key === "Escape" && this.dragging) {
       editor.transform.cancelTransaction();
-      this.dragging = false;
       editor.repaint();
+      this.reset();
     }
     return false;
   }

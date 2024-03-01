@@ -54,15 +54,13 @@ export class EllipseFactoryHandler extends Handler {
 
   finalize(editor: Editor, e: CanvasPointerEvent): void {
     const MIN_SIZE = 2;
-    if (
-      this.shape &&
-      this.shape?.width < MIN_SIZE &&
-      this.shape?.height < MIN_SIZE
-    ) {
-      editor.transform.cancelTransaction();
-    } else {
-      editor.transform.endTransaction();
-      editor.factory.triggerCreate(this.shape as Shape);
+    if (this.shape) {
+      if (this.shape?.width < MIN_SIZE && this.shape?.height < MIN_SIZE) {
+        editor.transform.cancelTransaction();
+      } else {
+        editor.transform.endTransaction();
+        editor.factory.triggerCreate(this.shape as Shape);
+      }
     }
   }
 

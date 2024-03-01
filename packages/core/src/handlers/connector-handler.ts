@@ -118,11 +118,13 @@ export class ConnectorFactoryHandler extends Handler {
 
   finalize(editor: Editor, e: CanvasPointerEvent): void {
     const MIN_SIZE = 2;
-    if (geometry.pathLength((this.shape as Connector).path) < MIN_SIZE) {
-      editor.transform.cancelTransaction();
-    } else {
-      editor.transform.endTransaction();
-      editor.factory.triggerCreate(this.shape as Shape);
+    if (this.shape) {
+      if (geometry.pathLength((this.shape as Connector).path) < MIN_SIZE) {
+        editor.transform.cancelTransaction();
+      } else {
+        editor.transform.endTransaction();
+        editor.factory.triggerCreate(this.shape);
+      }
     }
   }
 

@@ -14,26 +14,73 @@
 import { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { Editor, Handler } from "../editor";
-import { Mouse, Color, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
-import * as guide from "../utils/guide";
+import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
+import { Document, Line } from "../shapes";
+import simplifyPath from "simplify-path";
 
 /**
  * Freehand Factory Handler
  */
 export class FreehandFactoryHandler extends Handler {
-  dragging: boolean;
-  dragStartPoint: number[];
-  dragPoint: number[];
-  draggingPoints: number[][];
-  closed: boolean;
+  dragging: boolean = false;
+  dragStartPoint: number[] = [-1, -1];
+  dragPoint: number[] = [-1, -1];
+  draggingPoints: number[][] = [];
+  closed: boolean = false;
+  shape: Line | null = null;
 
   constructor(id: string) {
     super(id);
+    this.reset();
+  }
+
+  reset(): void {
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
     this.dragPoint = [-1, -1];
     this.draggingPoints = [];
     this.closed = false;
+    this.shape = null;
+  }
+
+  initialize(editor: Editor, e: CanvasPointerEvent): void {
+    this.draggingPoints.push(this.dragStartPoint);
+    this.shape = editor.factory.createFreehand(this.draggingPoints, false);
+    const doc = editor.doc as Document;
+    editor.transform.startTransaction("create");
+    editor.transform.addShape(this.shape, doc);
+  }
+
+  update(editor: Editor, e: CanvasPointerEvent): void {
+    this.draggingPoints.push(this.dragPoint);
+    this.closed =
+      geometry.distance(
+        this.draggingPoints[0],
+        this.draggingPoints[this.draggingPoints.length - 1]
+      ) <= MAGNET_THRESHOLD;
+    const newPath = simplifyPath(this.draggingPoints, 5);
+    if (this.closed) {
+      newPath[newPath.length - 1] = geometry.copy(newPath[0]);
+    }
+    if (this.shape) {
+      editor.transform.setPath(this.shape, newPath);
+      editor.transform.resolveAllConstraints(
+        editor.doc as Document,
+        editor.canvas
+      );
+    }
+  }
+
+  finalize(editor: Editor, e: CanvasPointerEvent): void {
+    if (this.shape) {
+      const MIN_SIZE = 2;
+      if (geometry.pathLength(this.draggingPoints) < MIN_SIZE) {
+        editor.transform.cancelTransaction();
+      } else {
+        editor.transform.endTransaction();
+        editor.factory.triggerCreate(this.shape);
+      }
+    }
   }
 
   /**
@@ -46,8 +93,8 @@ export class FreehandFactoryHandler extends Handler {
       this.dragging = true;
       this.dragStartPoint = canvas.globalCoordTransformRev([e.x, e.y]);
       this.dragPoint = geometry.copy(this.dragStartPoint);
-      this.drawDragging(editor, e);
-      this.draggingPoints.push(this.dragStartPoint);
+      this.initialize(editor, e);
+      editor.repaint();
     }
   }
 
@@ -56,19 +103,13 @@ export class FreehandFactoryHandler extends Handler {
    * @override
    */
   pointerMove(editor: Editor, e: CanvasPointerEvent) {
-    editor.repaint();
     if (this.dragging) {
       const canvas = editor.canvas;
       this.dragPoint = canvas.globalCoordTransformRev([e.x, e.y]);
-      this.draggingPoints.push(this.dragPoint);
-      this.closed =
-        geometry.distance(
-          this.draggingPoints[0],
-          this.draggingPoints[this.draggingPoints.length - 1]
-        ) <= MAGNET_THRESHOLD;
-      this.drawDragging(editor, e);
+      this.update(editor, e);
+      editor.repaint();
     } else {
-      this.drawHovering(editor, e);
+      editor.repaint();
     }
   }
 
@@ -78,13 +119,19 @@ export class FreehandFactoryHandler extends Handler {
    */
   pointerUp(editor: Editor, e: CanvasPointerEvent) {
     if (e.button === Mouse.BUTTON1 && this.dragging) {
-      if (this.draggingPoints.length > 1) {
-        editor.factory.createFreehand(this.draggingPoints, this.closed);
-      }
-      this.dragging = false;
-      this.dragStartPoint = [-1, -1];
-      this.draggingPoints = [];
+      this.finalize(editor, e);
+      editor.repaint();
+      this.reset();
     }
+  }
+
+  keyDown(editor: Editor, e: KeyboardEvent): boolean {
+    if (e.key === "Escape" && this.dragging) {
+      editor.transform.cancelTransaction();
+      editor.repaint();
+      this.reset();
+    }
+    return false;
   }
 
   onActivate(editor: Editor): void {
@@ -93,21 +140,5 @@ export class FreehandFactoryHandler extends Handler {
 
   onDeactivate(editor: Editor): void {
     editor.setCursor(Cursor.DEFAULT);
-  }
-
-  drawHovering(editor: Editor, e: CanvasPointerEvent) {}
-
-  drawDragging(editor: Editor, e: CanvasPointerEvent) {
-    const canvas = editor.canvas;
-    const ps = this.draggingPoints.map((p) => canvas.globalCoordTransform(p));
-    canvas.strokeColor = Color.SELECTION;
-    canvas.strokeWidth = canvas.px;
-    canvas.strokePattern = [];
-    canvas.roughness = 0;
-    canvas.alpha = 1;
-    canvas.polyline(ps);
-    if (this.closed) {
-      guide.drawControlPoint(canvas, ps[0], 5);
-    }
   }
 }
