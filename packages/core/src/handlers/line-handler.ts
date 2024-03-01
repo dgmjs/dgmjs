@@ -128,7 +128,7 @@ export class LineFactoryHandler extends Handler {
    * @override
    */
   pointerUp(editor: Editor, e: CanvasPointerEvent) {
-    if (e.button === Mouse.BUTTON1) {
+    if (e.button === Mouse.BUTTON1 && this.dragging) {
       if (!this.draggingMoved) this.multiPointMode = true;
       if (!this.multiPointMode) {
         this.points.push(geometry.copy(this.dragPoint));
