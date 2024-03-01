@@ -168,7 +168,7 @@ export class ConnectorReconnectController extends Controller {
       const manipulator = manipulatorManager.get(end.type);
       if (manipulator) manipulator.drawHovering(editor, end, e);
       // draw connection points (cross-mark)
-      guide.drawConnectionPoints(canvas, end);
+      guide.drawConnectionPointMarks(canvas, end);
       // draw connection point hovering
       if (cxp) {
         const cxpCCS = lcs2ccs(canvas, end, cxp);

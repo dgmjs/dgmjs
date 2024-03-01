@@ -119,7 +119,7 @@ export class SelectHandlerConnectorExtraBehavior extends SelectHandlerExtraBehav
   ): boolean {
     if (e.key === "Escape") {
       this.onConnection = false;
-      this.connectorHandler.initialize();
+      this.connectorHandler.reset();
       editor.repaint();
     }
     return false;

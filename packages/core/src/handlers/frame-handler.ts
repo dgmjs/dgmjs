@@ -90,6 +90,7 @@ export class FrameFactoryHandler extends Handler {
       this.dragStartPoint = canvas.globalCoordTransformRev([e.x, e.y]);
       this.dragPoint = geometry.copy(this.dragStartPoint);
       this.initialize(editor, e);
+      editor.repaint();
       this.drawDragging(editor, e);
     }
   }
@@ -104,8 +105,10 @@ export class FrameFactoryHandler extends Handler {
       const canvas = editor.canvas;
       this.dragPoint = canvas.globalCoordTransformRev([e.x, e.y]);
       this.update(editor, e);
+      editor.repaint();
       this.drawDragging(editor, e);
     } else {
+      editor.repaint();
       this.drawHovering(editor, e);
     }
   }
@@ -117,6 +120,7 @@ export class FrameFactoryHandler extends Handler {
   pointerUp(editor: Editor, e: CanvasPointerEvent) {
     if (e.button === Mouse.BUTTON1 && this.dragging) {
       this.finalize(editor, e);
+      editor.repaint();
       this.dragging = false;
       this.dragStartPoint = [-1, -1];
     }

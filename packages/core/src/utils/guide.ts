@@ -425,6 +425,6 @@ export {
   inControlPoint,
   drawPolylineInLCS,
   drawHovering,
-  drawConnectionPoints,
+  drawConnectionPoints as drawConnectionPointMarks,
   drawConnectionPointHovering,
 };
