@@ -292,6 +292,8 @@ class Editor extends EventEmitter {
             [x, y],
             [x, y],
           ]);
+          this.actions.insert(textShape);
+          this.factory.triggerCreate(textShape);
         }
         // create a text on connector
         if (
@@ -305,7 +307,9 @@ class Editor extends EventEmitter {
             CONNECTION_POINT_APOTHEM * 2
           );
           const position = geometry.getPositionOnPath(outline, nearest);
-          const textShape = this.factory.createTextOnConnector(shape, position);
+          const textShape = this.factory.createAnchoredText(position);
+          this.actions.insert(textShape, shape);
+          this.factory.triggerCreate(textShape);
         }
         // trigger double click event
         this.triggerDblClick(shape, [x, y]);

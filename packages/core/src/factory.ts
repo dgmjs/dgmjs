@@ -97,13 +97,9 @@ export class ShapeFactory extends EventEmitter {
   }
 
   /**
-   * Create a text on connector
+   * Create an anchored text
    */
-  createTextOnConnector(
-    anchorOn: Connector,
-    anchorPosition: number,
-    initialText: string = ""
-  ): Text {
+  createAnchoredText(anchorPosition: number, initialText: string = ""): Text {
     const text = new Text();
     text.richText = false;
     text.text = initialText;
