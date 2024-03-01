@@ -8,13 +8,17 @@ import { Cursor, Mouse } from "../graphics/const";
  * Ellipse Factory Handler
  */
 export class EllipseFactoryHandler extends Handler {
-  dragging: boolean;
-  dragStartPoint: number[];
-  dragPoint: number[];
-  shape: Ellipse | null;
+  dragging: boolean = false;
+  dragStartPoint: number[] = [-1, -1];
+  dragPoint: number[] = [-1, -1];
+  shape: Ellipse | null = null;
 
   constructor(id: string) {
     super(id);
+    this.reset();
+  }
+
+  reset(): void {
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
     this.dragPoint = [-1, -1];
@@ -106,16 +110,15 @@ export class EllipseFactoryHandler extends Handler {
     if (e.button === Mouse.BUTTON1 && this.dragging) {
       this.finalize(editor, e);
       editor.repaint();
-      this.dragging = false;
-      this.dragStartPoint = [-1, -1];
+      this.reset();
     }
   }
 
   keyDown(editor: Editor, e: KeyboardEvent): boolean {
     if (e.key === "Escape" && this.dragging) {
       editor.transform.cancelTransaction();
-      this.dragging = false;
       editor.repaint();
+      this.reset();
     }
     return false;
   }

@@ -20,14 +20,18 @@ import { Mouse, Cursor } from "../graphics/const";
  * Hand Handler
  */
 export class HandHandler extends Handler {
-  dragging: boolean;
-  dragStartPoint: number[];
-  dragPoint: number[];
-  dx: number;
-  dy: number;
+  dragging: boolean = false;
+  dragStartPoint: number[] = [-1, -1];
+  dragPoint: number[] = [-1, -1];
+  dx: number = 0;
+  dy: number = 0;
 
   constructor(id: string) {
     super(id);
+    this.reset();
+  }
+
+  reset(): void {
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
     this.dragPoint = [-1, -1];
@@ -70,10 +74,7 @@ export class HandHandler extends Handler {
   pointerUp(editor: Editor, e: CanvasPointerEvent) {
     if (e.button === Mouse.BUTTON1 && this.dragging) {
       editor.setCursor(Cursor.GRAB);
-      this.dragging = false;
-      this.dragStartPoint = [-1, -1];
-      this.dx = 0;
-      this.dy = 0;
+      this.reset();
     }
   }
 

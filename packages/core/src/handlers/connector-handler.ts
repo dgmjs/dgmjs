@@ -23,29 +23,20 @@ import * as guide from "../utils/guide";
  * Connector Factory Handler
  */
 export class ConnectorFactoryHandler extends Handler {
-  dragging: boolean;
-  dragStartPoint: number[];
-  dragPoint: number[];
-  tailEnd: Shape | null;
-  tailCP: number[] | null;
-  tailCPIndex: number;
-  headEnd: Shape | null;
-  headCP: number[] | null;
-  headCPIndex: number;
-  shape: Connector | null;
+  dragging: boolean = false;
+  dragStartPoint: number[] = [-1, -1];
+  dragPoint: number[] = [-1, -1];
+  tailEnd: Shape | null = null;
+  tailCP: number[] | null = null;
+  tailCPIndex: number = -1;
+  headEnd: Shape | null = null;
+  headCP: number[] | null = null;
+  headCPIndex: number = -1;
+  shape: Connector | null = null;
 
   constructor(id: string) {
     super(id);
-    this.dragging = false;
-    this.dragStartPoint = [-1, -1];
-    this.dragPoint = [-1, -1];
-    this.tailEnd = null;
-    this.tailCP = null;
-    this.tailCPIndex = -1;
-    this.headEnd = null;
-    this.headCP = null;
-    this.headCPIndex = -1;
-    this.shape = null;
+    this.reset();
   }
 
   reset(): void {
@@ -58,6 +49,7 @@ export class ConnectorFactoryHandler extends Handler {
     this.headEnd = null;
     this.headCP = null;
     this.headCPIndex = -1;
+    this.shape = null;
   }
 
   initialize(editor: Editor, e: CanvasPointerEvent): void {
@@ -174,16 +166,17 @@ export class ConnectorFactoryHandler extends Handler {
     if (e.button === Mouse.BUTTON1 && this.dragging) {
       this.finalize(editor, e);
       editor.repaint();
-      this.dragging = false;
-      this.dragStartPoint = [-1, -1];
-      this.dragPoint = [-1, -1];
-      this.tailEnd = null;
-      this.tailCP = null;
-      this.tailCPIndex = -1;
-      this.headEnd = null;
-      this.headCP = null;
-      this.headCPIndex = -1;
+      this.reset();
     }
+  }
+
+  keyDown(editor: Editor, e: KeyboardEvent): boolean {
+    if (e.key === "Escape" && this.dragging) {
+      editor.transform.cancelTransaction();
+      editor.repaint();
+      this.reset();
+    }
+    return false;
   }
 
   onActivate(editor: Editor): void {
