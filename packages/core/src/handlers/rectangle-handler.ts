@@ -53,8 +53,17 @@ export class RectangleFactoryHandler extends Handler {
   }
 
   finalize(editor: Editor, e: CanvasPointerEvent): void {
-    editor.transform.endTransaction();
-    editor.factory.triggerCreate(this.shape as Shape);
+    const MIN_SIZE = 2;
+    if (
+      this.shape &&
+      this.shape?.width < MIN_SIZE &&
+      this.shape?.height < MIN_SIZE
+    ) {
+      editor.transform.cancelTransaction();
+    } else {
+      editor.transform.endTransaction();
+      editor.factory.triggerCreate(this.shape as Shape);
+    }
   }
 
   /**
@@ -67,8 +76,8 @@ export class RectangleFactoryHandler extends Handler {
       this.dragging = true;
       this.dragStartPoint = canvas.globalCoordTransformRev([e.x, e.y]);
       this.dragPoint = geometry.copy(this.dragStartPoint);
-      this.drawDragging(editor, e);
       this.initialize(editor, e);
+      this.drawDragging(editor, e);
     }
   }
 
@@ -81,8 +90,8 @@ export class RectangleFactoryHandler extends Handler {
     if (this.dragging) {
       const canvas = editor.canvas;
       this.dragPoint = canvas.globalCoordTransformRev([e.x, e.y]);
-      this.drawDragging(editor, e);
       this.update(editor, e);
+      this.drawDragging(editor, e);
     } else {
       this.drawHovering(editor, e);
     }
