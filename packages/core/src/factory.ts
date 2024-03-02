@@ -210,7 +210,7 @@ export class ShapeFactory extends EventEmitter {
     freehand.top = rect[0][1];
     freehand.width = geometry.width(rect);
     freehand.height = geometry.height(rect);
-    freehand.pathEditable = path.length < 3;
+    freehand.pathEditable = false;
     this.emit("shapeInitialize", freehand);
     return freehand;
   }
