@@ -444,6 +444,16 @@ export class BoxSizeController extends Controller {
     tr.resize(shape, targetWidth, targetHeight);
     tr.moveShapes(doc, [shape], targetLeft - shape.left, targetTop - shape.top);
 
+    // resize path
+    if (shape instanceof Line) {
+      const newPath = geometry.projectPoints(
+        initialShape.path,
+        initialRect,
+        targetRect
+      );
+      tr.atomicAssign(shape, "path", newPath);
+    }
+
     // do scale (font, padding and path)
     if (this.doScale) {
       tr.atomicAssign(shape, "fontSize", initialShape.fontSize * ratio);
@@ -453,14 +463,6 @@ export class BoxSizeController extends Controller {
           "padding",
           initialShape.padding.map((v: number) => v * ratio)
         );
-      }
-      if (shape instanceof Line) {
-        const newPath = geometry.projectPoints(
-          initialShape.path,
-          initialRect,
-          targetRect
-        );
-        tr.atomicAssign(shape, "path", newPath);
       }
     }
 
@@ -489,6 +491,14 @@ export class BoxSizeController extends Controller {
           const h = b - t;
           tr.move(s, l - s.left, t - s.top);
           tr.resize(s, w, h);
+          if (s instanceof Line) {
+            const newPath = geometry.projectPoints(
+              initialChild.path,
+              initialChildRect,
+              targetChildRect
+            );
+            tr.atomicAssign(s, "path", newPath);
+          }
           if (this.doScale) {
             tr.atomicAssign(s, "fontSize", initialChild.fontSize * ratio);
             if (s instanceof Box) {
@@ -497,14 +507,6 @@ export class BoxSizeController extends Controller {
                 "padding",
                 initialChild.padding.map((v: number) => v * ratio)
               );
-            }
-            if (s instanceof Line) {
-              const newPath = geometry.projectPoints(
-                initialChild.path,
-                initialChildRect,
-                targetChildRect
-              );
-              tr.atomicAssign(s, "path", newPath);
             }
           }
         }

@@ -28,18 +28,10 @@ class LineManipulator extends Manipulator {
     this.controllers.push(new LineMovePointController(this));
     this.controllers.push(new LineAddPointController(this));
     this.controllers.push(new BoxRotateController(this));
-    this.controllers.push(
-      new BoxSizeController(this, SizingPosition.TOP, true)
-    );
-    this.controllers.push(
-      new BoxSizeController(this, SizingPosition.RIGHT, true)
-    );
-    this.controllers.push(
-      new BoxSizeController(this, SizingPosition.BOTTOM, true)
-    );
-    this.controllers.push(
-      new BoxSizeController(this, SizingPosition.LEFT, true)
-    );
+    this.controllers.push(new BoxSizeController(this, SizingPosition.TOP));
+    this.controllers.push(new BoxSizeController(this, SizingPosition.RIGHT));
+    this.controllers.push(new BoxSizeController(this, SizingPosition.BOTTOM));
+    this.controllers.push(new BoxSizeController(this, SizingPosition.LEFT));
     this.controllers.push(
       new BoxSizeController(this, SizingPosition.LEFT_TOP, true)
     );
