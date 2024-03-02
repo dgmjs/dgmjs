@@ -84,37 +84,47 @@ export class BoxSizeController extends Controller {
    * Indicates the controller is active or not
    */
   active(editor: Editor, shape: Shape): boolean {
+    const MIN1 = CONTROL_POINT_APOTHEM * 8;
+    const MIN2 = CONTROL_POINT_APOTHEM * 4;
     let value =
       editor.selection.size() === 1 && editor.selection.isSelected(shape);
     switch (this.controlPosition) {
       case SizingPosition.TOP:
         value =
           value &&
+          shape.width > MIN1 &&
           (shape.sizable === Sizable.VERT || shape.sizable === Sizable.FREE);
         break;
       case SizingPosition.RIGHT:
         value =
           value &&
+          shape.height > MIN1 &&
           (shape.sizable === Sizable.HORZ || shape.sizable === Sizable.FREE);
         break;
       case SizingPosition.BOTTOM:
         value =
           value &&
+          shape.width > MIN1 &&
           (shape.sizable === Sizable.VERT || shape.sizable === Sizable.FREE);
         break;
       case SizingPosition.LEFT:
         value =
           value &&
+          shape.height > MIN1 &&
           (shape.sizable === Sizable.HORZ || shape.sizable === Sizable.FREE);
         break;
       case SizingPosition.LEFT_TOP:
         value =
           value &&
+          shape.width > MIN2 &&
+          shape.height > MIN2 &&
           (shape.sizable === Sizable.FREE || shape.sizable === Sizable.RATIO);
         break;
       case SizingPosition.RIGHT_TOP:
         value =
           value &&
+          shape.width > MIN2 &&
+          shape.height > MIN2 &&
           (shape.sizable === Sizable.FREE || shape.sizable === Sizable.RATIO);
         break;
       case SizingPosition.RIGHT_BOTTOM:
@@ -125,6 +135,8 @@ export class BoxSizeController extends Controller {
       case SizingPosition.LEFT_BOTTOM:
         value =
           value &&
+          shape.width > MIN2 &&
+          shape.height > MIN2 &&
           (shape.sizable === Sizable.FREE || shape.sizable === Sizable.RATIO);
         break;
     }
