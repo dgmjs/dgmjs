@@ -14,7 +14,7 @@
 import * as geometry from "../graphics/geometry";
 import { Color, CONTROL_POINT_APOTHEM, SYSTEM_FONT } from "../graphics/const";
 import { Canvas, CanvasPointerEvent } from "../graphics/graphics";
-import { toCssFont, lcs2ccs, angleInCCS } from "../graphics/utils";
+import { toCssFont, lcs2ccs } from "../graphics/utils";
 import { FillStyle, LineType, Shape } from "../shapes";
 import { Editor, manipulatorManager } from "../editor";
 
@@ -382,34 +382,6 @@ function drawHovering(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
   if (manipulator) manipulator.drawHovering(editor, shape, e);
 }
 
-function drawConnectionPoints(canvas: Canvas, shape: Shape) {
-  if (shape.connectable) {
-    const xps = shape.getConnectionPoints();
-    if (Array.isArray(xps) && xps.length > 0) {
-      let angle = angleInCCS(canvas, shape);
-      xps.forEach((xp) => {
-        const p = lcs2ccs(canvas, shape as Shape, xp);
-        drawControlPoint(canvas, p, 3, angle);
-      });
-    }
-  }
-}
-
-function drawConnectionPointHovering(
-  canvas: Canvas,
-  shape: Shape,
-  connectionPoint: number[],
-  connectionPointIndex: number
-) {
-  const cxpCCS = canvas.globalCoordTransform(connectionPoint);
-  drawControlPoint(canvas, cxpCCS, 5);
-  if (connectionPointIndex > -1 && shape.connectable) {
-    drawControlPoint(canvas, cxpCCS, 6);
-  } else {
-    drawControlPoint(canvas, cxpCCS, 5);
-  }
-}
-
 export {
   drawText,
   drawHorzline,
@@ -425,6 +397,4 @@ export {
   inControlPoint,
   drawPolylineInLCS,
   drawHovering,
-  drawConnectionPoints as drawConnectionPointMarks,
-  drawConnectionPointHovering,
 };

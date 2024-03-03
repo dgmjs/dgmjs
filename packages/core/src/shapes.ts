@@ -61,7 +61,6 @@ type ConstraintFn = (
 const ScriptType = Object.freeze({
   RENDER: "render",
   OUTLINE: "outline",
-  CONNECTION_POINTS: "connection-points",
 });
 
 const Movable = Object.freeze({
@@ -443,28 +442,6 @@ class Shape extends Obj {
       }
     }
     return this.getOutlineDefault();
-  }
-
-  /**
-   * Return default connection points
-   */
-  getConnectionPointsDefault(): number[][] {
-    return [];
-  }
-
-  /**
-   * Return connection points.
-   */
-  getConnectionPoints(): number[][] {
-    const script = this.getScript(ScriptType.CONNECTION_POINTS);
-    if (script) {
-      try {
-        return evalScript({ shape: this }, script);
-      } catch (err) {
-        console.log("[Script Error]", err);
-      }
-    }
-    return this.getConnectionPointsDefault();
   }
 
   /**
@@ -1098,22 +1075,6 @@ class Box extends Shape {
   }
 
   /**
-   * Return a set of connection points
-   */
-  getConnectionPointsDefault(): number[][] {
-    return [
-      [this.left, this.top],
-      [Math.round((this.left + this.right) / 2), this.top],
-      [this.right, this.top],
-      [this.right, Math.round((this.top + this.bottom) / 2)],
-      [this.right, this.bottom],
-      [Math.round((this.left + this.right) / 2), this.bottom],
-      [this.left, this.bottom],
-      [this.left, Math.round((this.top + this.bottom) / 2)],
-    ];
-  }
-
-  /**
    * Return the anchor vector based on this.anchorPosition. The anchor vector
    * provides the start point and end point to derive the base angle. The shape
    * will be rotated as the angle of (base angle + anchor angle) at start point.
@@ -1503,18 +1464,6 @@ class Ellipse extends Box {
       Math.max(Math.round((this.width + this.height) / 5), 30) // num of points
     );
     return points;
-  }
-
-  /**
-   * Return a set of connection points
-   */
-  getConnectionPointsDefault(): number[][] {
-    return [
-      [(this.left + this.right) / 2, this.top],
-      [this.right, (this.top + this.bottom) / 2],
-      [(this.left + this.right) / 2, this.bottom],
-      [this.left, (this.top + this.bottom) / 2],
-    ];
   }
 }
 
