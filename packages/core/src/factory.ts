@@ -10,7 +10,6 @@ import {
   Line,
   LineType,
   Rectangle,
-  RouteType,
   Shape,
   Sizable,
   Text,
@@ -227,7 +226,6 @@ export class ShapeFactory extends EventEmitter {
   ): Connector {
     const connector = new Connector();
     connector.lineType = LineType.CURVE;
-    connector.routeType = RouteType.OBLIQUE;
     connector.constraints = [{ id: "adjust-route" }];
     connector.tail = tail;
     connector.tailAnchor = tailAnchor;

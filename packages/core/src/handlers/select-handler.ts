@@ -18,58 +18,18 @@ import { Editor, Handler, Manipulator, manipulatorManager } from "../editor";
 import { Mouse, Color, Cursor } from "../graphics/const";
 import * as guide from "../utils/guide";
 
-export class SelectHandlerExtraBehavior {
-  pointerDown(
-    selectHandler: SelectHandler,
-    editor: Editor,
-    e: CanvasPointerEvent
-  ): boolean {
-    return false;
-  }
-  pointerMove(
-    selectHandler: SelectHandler,
-    editor: Editor,
-    e: CanvasPointerEvent
-  ): boolean {
-    return false;
-  }
-  pointerUp(
-    selectHandler: SelectHandler,
-    editor: Editor,
-    e: CanvasPointerEvent
-  ): boolean {
-    return false;
-  }
-  keyDown(
-    selectHandler: SelectHandler,
-    editor: Editor,
-    e: KeyboardEvent
-  ): boolean {
-    return false;
-  }
-  keyUp(
-    selectHandler: SelectHandler,
-    editor: Editor,
-    e: KeyboardEvent
-  ): boolean {
-    return false;
-  }
-}
-
 /**
  * Select Handler
  */
 export class SelectHandler extends Handler {
   dragging: boolean;
   dragStartPoint: number[];
-  extraBehaviors: SelectHandlerExtraBehavior[];
   activeManipulator: Manipulator | null;
 
-  constructor(id: string, extras?: SelectHandlerExtraBehavior[]) {
+  constructor(id: string) {
     super(id);
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
-    this.extraBehaviors = extras ?? [];
     this.activeManipulator = null;
   }
 
@@ -87,7 +47,7 @@ export class SelectHandler extends Handler {
           return s;
         }
       }
-      // find in diagram
+      // find in document
       return editor.doc.getShapeAt(canvas, p);
     }
     return null;
@@ -97,12 +57,6 @@ export class SelectHandler extends Handler {
    * handle pointer down event
    */
   pointerDown(editor: Editor, e: CanvasPointerEvent) {
-    // handle extra behaviors
-    for (let extra of this.extraBehaviors) {
-      let handled = extra.pointerDown(this, editor, e);
-      if (handled) return;
-    }
-
     const canvas = editor.canvas;
     if (e.button === Mouse.BUTTON1) {
       const shape = this.getShapeAt(editor, e);
@@ -169,12 +123,6 @@ export class SelectHandler extends Handler {
     const canvas = editor.canvas;
     const p = canvas.globalCoordTransformRev([e.x, e.y]);
     editor.repaint(false); // do not draw selections
-
-    // handle extra behaviors
-    for (let extra of this.extraBehaviors) {
-      let handled = extra.pointerMove(this, editor, e);
-      if (handled) return;
-    }
 
     if (editor.doc) {
       // selecting area
@@ -250,12 +198,6 @@ export class SelectHandler extends Handler {
    * handle pointer up event
    */
   pointerUp(editor: Editor, e: CanvasPointerEvent) {
-    // handle extra behaviors
-    for (let extra of this.extraBehaviors) {
-      let handled = extra.pointerUp(this, editor, e);
-      if (handled) return;
-    }
-
     const canvas = editor.canvas;
     const p = canvas.globalCoordTransformRev([e.x, e.y]);
     // select area
@@ -315,11 +257,6 @@ export class SelectHandler extends Handler {
    * keyDown
    */
   keyDown(editor: Editor, e: KeyboardEvent) {
-    // handle extra behaviors
-    for (let extra of this.extraBehaviors) {
-      let handled = extra.keyDown(this, editor, e);
-      if (handled) return;
-    }
     // delegates to manipulators
     if (editor.doc) {
       if (editor.selection.getShapes().length === 1) {
@@ -342,13 +279,7 @@ export class SelectHandler extends Handler {
   /**
    * keyUp
    */
-  keyUp(editor: Editor, e: KeyboardEvent) {
-    // handle extra behaviors
-    for (let extra of this.extraBehaviors) {
-      let handled = extra.keyUp(this, editor, e);
-      if (handled) return;
-    }
-  }
+  keyUp(editor: Editor, e: KeyboardEvent) {}
 
   /**
    * Draw ghost for the selected shape

@@ -47,7 +47,7 @@ export interface EditorOptions {
 }
 
 /**
- * The diagram editor
+ * The editor
  */
 class Editor extends EventEmitter {
   options: EditorOptions;
@@ -157,9 +157,9 @@ class Editor extends EventEmitter {
   }
 
   initializeState() {
-    const diagram = new Document();
-    this.store.setDoc(diagram);
-    this.doc = diagram;
+    const doc = new Document();
+    this.store.setDoc(doc);
+    this.doc = doc;
     this.transform.on("transaction", () => this.repaint());
     this.selection.on("change", () => this.repaint());
     this.factory.on("create", (shape: Shape) => {

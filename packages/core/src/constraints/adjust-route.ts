@@ -22,7 +22,7 @@ const schema = z.object({});
  * Adjust route path of connector
  */
 function constraint(
-  diagram: Document,
+  doc: Document,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,

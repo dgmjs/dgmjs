@@ -12,7 +12,7 @@
  */
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
-import { Shape, Line, Connector, RouteType, Document } from "../shapes";
+import { Shape, Line, Document } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import {
   Cursor,
@@ -24,7 +24,7 @@ import * as guide from "../utils/guide";
 import * as geometry from "../graphics/geometry";
 import { Snap } from "../manipulators/snap";
 import { findControlPoint } from "./utils";
-import { reduceObliquePath } from "../utils/route-utils";
+import { reducePath } from "../utils/route-utils";
 
 /**
  * MovePoint Controller
@@ -67,8 +67,6 @@ export class LineMovePointController extends Controller {
       editor.selection.isSelected(shape) &&
       shape instanceof Line &&
       shape.pathEditable;
-    if (shape instanceof Connector && shape.routeType === RouteType.RECTILINEAR)
-      value = false;
     return value;
   }
 
@@ -137,7 +135,7 @@ export class LineMovePointController extends Controller {
     }
 
     // update ghost by simplified routing
-    newPath = reduceObliquePath(newPath, LINE_STRATIFY_ANGLE_THRESHOLD);
+    newPath = reducePath(newPath, LINE_STRATIFY_ANGLE_THRESHOLD);
 
     // transform shape
     const canvas = editor.canvas;

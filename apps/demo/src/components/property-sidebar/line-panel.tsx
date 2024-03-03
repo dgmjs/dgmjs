@@ -14,21 +14,14 @@
 import React from "react";
 import { Panel } from "../common/panel";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Connector, Line, LineType, RouteType } from "@dgmjs/core";
-import {
-  LineCurveIcon,
-  LineStraightIcon,
-  RouteObliqueIcon,
-  RouteRectilinearIcon,
-} from "@/components/icons";
+import { Line, LineType } from "@dgmjs/core";
+import { LineCurveIcon, LineStraightIcon } from "@/components/icons";
 import { SelectArrowhead } from "./fields/select-arrowhead";
 import { ShapeEditorProps } from "@/types";
 import { merge } from "@/utils";
 
 export const LinePanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
-  const isConnector = shapes.every((s) => s instanceof Connector);
   const lineType = merge(shapes.map((s) => (s as Line).lineType));
-  const routeType = merge(shapes.map((s) => (s as Connector).routeType));
   const headEndType = merge(shapes.map((s) => (s as Line).headEndType));
   const tailEndType = merge(shapes.map((s) => (s as Line).tailEndType));
 
@@ -69,22 +62,6 @@ export const LinePanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
               <LineCurveIcon size={16} />
             </ToggleGroupItem>
           </ToggleGroup>
-          {isConnector && (
-            <ToggleGroup
-              type="single"
-              value={routeType}
-              onValueChange={(value) => {
-                if (onChange && value) onChange({ routeType: value });
-              }}
-            >
-              <ToggleGroupItem size="sm" value={RouteType.OBLIQUE}>
-                <RouteObliqueIcon size={16} />
-              </ToggleGroupItem>
-              <ToggleGroupItem size="sm" value={RouteType.RECTILINEAR}>
-                <RouteRectilinearIcon size={16} />
-              </ToggleGroupItem>
-            </ToggleGroup>
-          )}
         </div>
       </div>
     </Panel>

@@ -31,9 +31,9 @@ export function getAllDescendant(objs: Shape[]): Shape[] {
 /**
  * Returns all connectors connected to the any of the set of objects
  */
-export function getAllConnectorsTo(diagram: Document, objs: Shape[]): Shape[] {
+export function getAllConnectorsTo(doc: Document, objs: Shape[]): Shape[] {
   const edges: Shape[] = [];
-  diagram?.traverse((o) => {
+  doc?.traverse((o) => {
     if (
       o instanceof Connector &&
       (objs.includes(o.head as Shape) || objs.includes(o.tail as Shape))
@@ -50,14 +50,14 @@ export function getAllConnectorsTo(diagram: Document, objs: Shape[]): Shape[] {
  * The results are the candidates to be changed when the given objects due to
  * the constraints (edge, align children, ...)
  */
-export function getAllRelevants(diagram: Document, objs: Shape[]): Shape[] {
+export function getAllRelevants(doc: Document, objs: Shape[]): Shape[] {
   let size = 0;
   let set = unique(objs);
   while (set.length > size) {
     set = unique([
       ...set,
       ...getAllDescendant(set),
-      ...getAllConnectorsTo(diagram, set),
+      ...getAllConnectorsTo(doc, set),
     ]);
     size = set.length;
   }

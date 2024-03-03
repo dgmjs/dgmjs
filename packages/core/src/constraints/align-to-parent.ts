@@ -57,7 +57,7 @@ const schema = z.object({
  * Align to parent
  */
 function constraint(
-  diagram: Document,
+  doc: Document,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,
@@ -193,7 +193,7 @@ function constraint(
     }
     dx += args.horzOffset || 0;
     dy += args.vertOffset || 0;
-    changed = transform.moveShapes(diagram, [shape], dx, dy);
+    changed = transform.moveShapes(doc, [shape], dx, dy);
     if (width > -1 || height > -1) {
       changed =
         transform.resize(

@@ -120,11 +120,11 @@ export class ConnectorReconnectController extends Controller {
     const isHead = this.controlPoint > 0;
     // transform shape
     const tr = editor.transform;
-    const diagram = editor.doc as Document;
+    const doc = editor.doc as Document;
     tr.setPath(shape, newPath);
     tr.atomicAssignRef(shape, isHead ? "head" : "tail", newEnd);
     tr.atomicAssign(shape, isHead ? "headAnchor" : "tailAnchor", anchor);
-    tr.resolveAllConstraints(diagram, editor.canvas);
+    tr.resolveAllConstraints(doc, editor.canvas);
   }
 
   /**

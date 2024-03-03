@@ -13,14 +13,14 @@
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Shape, Line, Connector, RouteType, Document } from "../shapes";
+import { Shape, Line, Connector, Document } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import { Cursor, LINE_STRATIFY_ANGLE_THRESHOLD } from "../graphics/const";
 import { lcs2ccs, ccs2lcs, angleInCCS } from "../graphics/utils";
 import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { findSegmentControlPoint, fitPathInCSS } from "./utils";
-import { reduceObliquePath } from "../utils/route-utils";
+import { reducePath } from "../utils/route-utils";
 
 /**
  * LineAddPointController
@@ -57,8 +57,6 @@ export class LineAddPointController extends Controller {
       editor.selection.isSelected(shape) &&
       shape instanceof Line &&
       shape.pathEditable;
-    if (shape instanceof Connector && shape.routeType === RouteType.RECTILINEAR)
-      value = false;
     return value;
   }
 
@@ -106,7 +104,7 @@ export class LineAddPointController extends Controller {
     newPath[this.controlPoint + 1][0] += this.dx;
     newPath[this.controlPoint + 1][1] += this.dy;
     // update ghost by simplified routing
-    newPath = reduceObliquePath(newPath, LINE_STRATIFY_ANGLE_THRESHOLD);
+    newPath = reducePath(newPath, LINE_STRATIFY_ANGLE_THRESHOLD);
 
     const canvas = editor.canvas;
     const newPathCCS = newPath.map((p) => lcs2ccs(canvas, shape, p));

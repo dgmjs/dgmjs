@@ -14,7 +14,6 @@
 import { type EditorOptions } from "./editor";
 import {
   SelectHandler,
-  SelectHandlerConnectorExtraBehavior,
   HandHandler,
   RectangleFactoryHandler,
   EllipseFactoryHandler,
@@ -59,7 +58,7 @@ export function basicSetup(options?: EditorOptions): EditorOptions {
       Embed: () => new Embed(),
     },
     handlers: [
-      new SelectHandler("Select", [new SelectHandlerConnectorExtraBehavior()]),
+      new SelectHandler("Select"),
       new HandHandler("Hand"),
       new RectangleFactoryHandler("Rectangle"),
       new EllipseFactoryHandler("Ellipse"),

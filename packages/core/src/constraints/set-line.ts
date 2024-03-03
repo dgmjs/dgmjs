@@ -25,7 +25,7 @@ const schema = z.object({
  * Set line
  */
 function constraint(
-  diagram: Document,
+  doc: Document,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,

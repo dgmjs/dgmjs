@@ -33,7 +33,7 @@ const schema = z.object({
  * Set size
  */
 function constraint(
-  diagram: Document,
+  doc: Document,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,

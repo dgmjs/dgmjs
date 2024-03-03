@@ -51,7 +51,7 @@ interface Script {
 }
 
 type ConstraintFn = (
-  diagram: Document,
+  doc: Document,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,
@@ -84,11 +84,6 @@ const FillStyle = Object.freeze({
   SOLID: "solid",
   HACHURE: "hachure",
   CROSS_HATCH: "cross-hatch",
-});
-
-const RouteType = Object.freeze({
-  OBLIQUE: "oblique",
-  RECTILINEAR: "rectilinear",
 });
 
 const LineType = Object.freeze({
@@ -719,7 +714,7 @@ class Document extends Shape {
   }
 
   /**
-   * Returns a bounding box containing all shapes in the diagram
+   * Returns a bounding box containing all shapes in the doc
    */
   getBoundingRect(): number[][] {
     return this.children.length > 0
@@ -1648,21 +1643,6 @@ class Connector extends Line {
    */
   tailAnchor: number[];
 
-  /**
-   * The index of connection point at head end
-   */
-  headCP: number;
-
-  /**
-   * The index of connection point at tail end
-   */
-  tailCP: number;
-
-  /**
-   * Path routing type
-   */
-  routeType: string;
-
   constructor() {
     super();
     this.type = "Connector";
@@ -1670,9 +1650,6 @@ class Connector extends Line {
     this.tail = null;
     this.headAnchor = [0.5, 0.5];
     this.tailAnchor = [0.5, 0.5];
-    this.headCP = -1;
-    this.tailCP = -1;
-    this.routeType = RouteType.OBLIQUE;
   }
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
@@ -1681,9 +1658,6 @@ class Connector extends Line {
     json.tail = this.tail ? this.tail.id : null;
     json.headAnchor = this.headAnchor;
     json.tailAnchor = this.tailAnchor;
-    json.headCP = this.headCP;
-    json.tailCP = this.tailCP;
-    json.routeType = this.routeType;
     if (keepRefs) {
       json.head = this.head;
       json.tail = this.tail;
@@ -1697,9 +1671,6 @@ class Connector extends Line {
     this.tail = json.tail ?? this.tail;
     this.headAnchor = json.headAnchor ?? this.headAnchor;
     this.tailAnchor = json.tailAnchor ?? this.tailAnchor;
-    this.headCP = json.headCP ?? this.headCP;
-    this.tailCP = json.tailCP ?? this.tailCP;
-    this.routeType = json.routeType ?? this.routeType;
   }
 
   resolveRefs(idMap: Record<string, Shape>) {
@@ -1746,26 +1717,6 @@ class Connector extends Line {
       ];
     }
     return this.path[0];
-  }
-
-  /**
-   * Returns head connection point
-   */
-  getHeadConnectionPoint(): number[] | null {
-    if (this.headCP >= 0 && this.head) {
-      return this.head.getConnectionPoints()[this.headCP];
-    }
-    return null;
-  }
-
-  /**
-   * Returns tail connection point
-   */
-  getTailConnectionPoint(): number[] | null {
-    if (this.tailCP >= 0 && this.tail) {
-      return this.tail.getConnectionPoints()[this.tailCP];
-    }
-    return null;
   }
 
   /**
@@ -1998,7 +1949,6 @@ interface ShapeValues {
   roughness?: number;
   lineType?: string;
   pathEditable?: boolean;
-  routeType?: string;
   headEndType?: string;
   tailEndType?: string;
   padding?: number[];
@@ -2022,7 +1972,6 @@ export {
   Movable,
   Sizable,
   FillStyle,
-  RouteType,
   LineType,
   LineEndType,
   AlignmentKind,

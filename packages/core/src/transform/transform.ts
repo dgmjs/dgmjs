@@ -17,7 +17,6 @@ import {
   Box,
   Line,
   Shape,
-  RouteType,
   Document,
   Connector,
   LineType,
@@ -26,12 +25,7 @@ import { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { CONNECTION_POINT_APOTHEM } from "../graphics/const";
 import { convertDocToText, convertTextToDoc } from "../utils/text-utils";
-import {
-  moveEndPoint,
-  adjustObliqueRoute,
-  adjustRectilinearRoute,
-  adjustRoute,
-} from "../utils/route-utils";
+import { moveEndPoint, adjustRoute } from "../utils/route-utils";
 import type { Obj } from "../core/obj";
 import { getAllConnectorsTo, getAllDescendant } from "../utils/shape-utils";
 
@@ -640,7 +634,7 @@ export class Transform extends EventEmitter {
     point: number[]
   ): boolean {
     const newPath = geometry.pathCopy(connector.path);
-    moveEndPoint(newPath, connector.routeType, isHead, point);
+    moveEndPoint(newPath, isHead, point);
     return this.atomicAssignPath(connector, "path", newPath);
   }
 
@@ -668,85 +662,9 @@ export class Transform extends EventEmitter {
    */
   adjustRoute(connector: Connector): boolean {
     let changed = false;
-    switch (connector.routeType) {
-      case RouteType.RECTILINEAR: {
-        const newPath = adjustRectilinearRoute(
-          connector.path,
-          connector.head,
-          connector.headCP,
-          connector.tail,
-          connector.tailCP
-        );
-        changed = this.setPath(connector, newPath) || changed;
-        break;
-      }
-      case RouteType.OBLIQUE: {
-        // const newPath = adjustObliqueRoute(
-        //   connector.path,
-        //   connector.head,
-        //   connector.headCP,
-        //   connector.tail,
-        //   connector.tailCP
-        // );
-        const newPath = adjustRoute(
-          connector
-          // connector.path,
-          // connector.head,
-          // connector.getHeadAnchorPoint(),
-          // connector.tail,
-          // connector.getTailAnchorPoint()
-        );
-        changed = this.setPath(connector, newPath) || changed;
-        break;
-      }
-    }
+    const newPath = adjustRoute(connector);
+    changed = this.setPath(connector, newPath) || changed;
     return changed;
-  }
-
-  /**
-   * Mutation for change connector's route type
-   */
-  changeRouteType(connector: Connector, routeType: string): boolean {
-    if (connector.routeType !== routeType) {
-      let changed = false;
-      let path = connector.path;
-      let lineType = connector.lineType;
-      if (connector.routeType === RouteType.RECTILINEAR) {
-        if (routeType === RouteType.OBLIQUE) {
-          path = [path[0], path[path.length - 1]];
-        }
-      } else {
-        if (routeType === RouteType.RECTILINEAR) {
-          const box = geometry.boundingRect(connector.path);
-          const w = geometry.width(box);
-          const h = geometry.height(box);
-
-          // line is horizontal if width is larger then height
-          // or edge's tail point on node's left-side or right-side
-          let horz = w > h;
-          if (connector.tail instanceof Box) {
-            const outpath = geometry.rectToPolygon(
-              connector.tail.getBoundingRect()
-            );
-            const seg = geometry.getNearSegment(
-              connector.path[0],
-              outpath,
-              CONNECTION_POINT_APOTHEM * 2
-            );
-            horz = seg === 1 || seg === 3;
-          }
-
-          // change path based on horz or vert
-          path = geometry.generatePath(path[0], path[path.length - 1], true);
-          lineType = LineType.STRAIGHT;
-        }
-      }
-      changed = this.atomicAssign(connector, "routeType", routeType) || changed;
-      changed = this.atomicAssign(connector, "lineType", lineType) || changed;
-      changed = this.setPath(connector, path) || changed;
-      return changed;
-    }
-    return false;
   }
 
   // ---------------------------------------------------------------------------
@@ -757,7 +675,7 @@ export class Transform extends EventEmitter {
    * A set of mutations to move shapes
    */
   moveShapes(
-    diagram: Document,
+    doc: Document,
     shapes: Shape[],
     dx: number,
     dy: number,
@@ -779,7 +697,7 @@ export class Transform extends EventEmitter {
     });
 
     // move ends of edges which is not in targets
-    let edges = getAllConnectorsTo(diagram, targets).filter(
+    let edges = getAllConnectorsTo(doc, targets).filter(
       (s) => !targets.includes(s)
     );
     edges.forEach((s) => {
@@ -816,11 +734,11 @@ export class Transform extends EventEmitter {
   /**
    * A set of mutations to delete a shape
    */
-  deleteSingleShape(diagram: Document, shape: Shape): boolean {
+  deleteSingleShape(doc: Document, shape: Shape): boolean {
     let changed = false;
     if (this.store.has(shape)) {
       // set null to all edges connected to the shape
-      const edges = getAllConnectorsTo(diagram, [shape]) as Connector[];
+      const edges = getAllConnectorsTo(doc, [shape]) as Connector[];
       for (let edge of edges) {
         if (edge.head === shape)
           changed = this.atomicAssignRef(edge, "head", null) || changed;
@@ -842,10 +760,10 @@ export class Transform extends EventEmitter {
   /**
    * A set of mutations to delete shapes
    */
-  deleteShapes(diagram: Document, shapes: Shape[]): boolean {
+  deleteShapes(doc: Document, shapes: Shape[]): boolean {
     let changed = false;
     shapes.forEach((s) => {
-      changed = this.deleteSingleShape(diagram, s) || changed;
+      changed = this.deleteSingleShape(doc, s) || changed;
     });
     return changed;
   }
@@ -914,7 +832,7 @@ export class Transform extends EventEmitter {
    * A set of mutations to resolve a shape's constraints
    */
   resolveSingleConstraints(
-    diagram: Document,
+    doc: Document,
     shape: Shape,
     canvas: Canvas
   ): boolean {
@@ -922,7 +840,7 @@ export class Transform extends EventEmitter {
     shape.constraints.forEach((c) => {
       try {
         const fn = constraintManager.get(c.id);
-        changed = fn(diagram, shape, canvas, this, c) || changed;
+        changed = fn(doc, shape, canvas, this, c) || changed;
       } catch (err) {
         console.log(err);
       }
@@ -934,15 +852,15 @@ export class Transform extends EventEmitter {
    * A set of mutations to resolve all constraints
    */
   resolveAllConstraints(
-    diagram: Document,
+    doc: Document,
     canvas: Canvas,
     maxIteration: number = 3
   ): boolean {
     let changed = false;
     for (let i = 0; i < maxIteration; i++) {
-      diagram.traverse((s) => {
+      doc.traverse((s) => {
         changed =
-          this.resolveSingleConstraints(diagram, s as Shape, canvas) || changed;
+          this.resolveSingleConstraints(doc, s as Shape, canvas) || changed;
       });
       if (!changed) return false;
       changed = false;

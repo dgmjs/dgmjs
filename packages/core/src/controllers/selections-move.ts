@@ -80,7 +80,7 @@ export class SelectionsMoveController extends Controller {
 
   /**
    * Update ghost
-   * @param shape (is a diagram in group manipulator)
+   * @param shape (is a document in group manipulator)
    */
   update(editor: Editor, shape: Shape) {
     let ghost = editor.selection.getEnclosure(editor.canvas);
@@ -91,7 +91,7 @@ export class SelectionsMoveController extends Controller {
     const canvas = editor.canvas;
     let dp = shape.localCoordTransform(canvas, this.dragPoint, false);
     const selections = editor.selection.getShapes();
-    const diagram = editor.doc as Document;
+    const doc = editor.doc as Document;
 
     // determine container
     // (container shouldn't be itself of a descendant of target)
@@ -102,19 +102,19 @@ export class SelectionsMoveController extends Controller {
       container = editor.doc;
 
     const tr = editor.transform;
-    tr.moveShapes(diagram, selections, this.dx0, this.dy0, container);
-    tr.resolveAllConstraints(diagram, canvas);
+    tr.moveShapes(doc, selections, this.dx0, this.dy0, container);
+    tr.resolveAllConstraints(doc, canvas);
   }
 
   /**
    * Finalize shape by ghost
-   * @param shape (is a diagram in group manipulator)
+   * @param shape (is a document in group manipulator)
    */
   finalize(editor: Editor, shape: Shape) {
     // const canvas = editor.canvas;
     // let dp = shape.localCoordTransform(canvas, this.dragPoint, false);
     // const selections = editor.selection.getShapes();
-    // const diagram = editor.doc as Document;
+    // const doc = editor.doc as Document;
 
     // // determine container
     // // (container shouldn't be itself of a descendant of target)
@@ -126,15 +126,15 @@ export class SelectionsMoveController extends Controller {
 
     // const tr = editor.transform;
     // tr.startTransaction("move");
-    // tr.moveShapes(diagram, selections, this.dx, this.dy, container);
-    // tr.resolveAllConstraints(diagram, canvas);
+    // tr.moveShapes(doc, selections, this.dx, this.dy, container);
+    // tr.resolveAllConstraints(doc, canvas);
     // tr.endTransaction();
     editor.transform.endTransaction();
   }
 
   /**
    * Draw ghost for the selected shapes
-   * @param shape (is a diagram in group manipulator)
+   * @param shape (is a document in group manipulator)
    */
   draw(editor: Editor, shape: Shape) {
     if (shape instanceof Document) {
