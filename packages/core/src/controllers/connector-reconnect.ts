@@ -14,12 +14,12 @@
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { Shape, Connector, Document } from "../shapes";
-import { Controller, Editor, Manipulator } from "../editor";
+import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { Cursor } from "../graphics/const";
-import { lcs2ccs, angleInCCS } from "../graphics/utils";
+import { lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
-import { findAnchor } from "./utils";
+import { findConnectionAnchor } from "./utils";
 
 /**
  * Connector Reconnect Controller
@@ -107,7 +107,7 @@ export class ConnectorReconnectController extends Controller {
    */
   update(editor: Editor, shape: Shape) {
     // find an end and anchor
-    const [newEnd, anchor] = findAnchor(
+    const [newEnd, anchor] = findConnectionAnchor(
       editor,
       shape as Connector,
       this.dragPoint
@@ -142,14 +142,13 @@ export class ConnectorReconnectController extends Controller {
       const canvas = editor.canvas;
       const tailAnchorPoint = shape.getTailAnchorPoint();
       const headAnchorPoint = shape.getHeadAnchorPoint();
-      const angle = angleInCCS(canvas, shape);
       const p1 = lcs2ccs(canvas, shape, tailAnchorPoint);
       const p2 = lcs2ccs(canvas, shape, headAnchorPoint);
       const pathCCS = shape.path.map((p) => lcs2ccs(canvas, shape, p));
       guide.drawDottedLine(canvas, p1, pathCCS[0]);
       guide.drawDottedLine(canvas, p2, pathCCS[pathCCS.length - 1]);
-      guide.drawControlPoint(canvas, p1, shape.tail ? 5 : 1, angle);
-      guide.drawControlPoint(canvas, p2, shape.head ? 5 : 1, angle);
+      guide.drawControlPoint(canvas, p1, shape.tail ? 5 : 1);
+      guide.drawControlPoint(canvas, p2, shape.head ? 5 : 1);
     }
   }
 
@@ -158,6 +157,17 @@ export class ConnectorReconnectController extends Controller {
    */
   drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     this.draw(editor, shape);
+    if (shape instanceof Connector) {
+      const isHead = this.controlPoint > 0;
+      if (!isHead && shape.tail && shape.tail.connectable) {
+        const manipulator = manipulatorManager.get(shape.tail.type);
+        if (manipulator) manipulator.drawHovering(editor, shape.tail, e);
+      }
+      if (isHead && shape.head && shape.head.connectable) {
+        const manipulator = manipulatorManager.get(shape.head.type);
+        if (manipulator) manipulator.drawHovering(editor, shape.head, e);
+      }
+    }
     // draw snap
     // this.snap.draw(editor, shape, this.ghost);
   }

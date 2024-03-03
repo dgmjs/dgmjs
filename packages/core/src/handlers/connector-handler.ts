@@ -16,8 +16,9 @@ import * as geometry from "../graphics/geometry";
 import { Connector, Document, Shape } from "../shapes";
 import { Editor, Handler, manipulatorManager } from "../editor";
 import { Cursor, Mouse } from "../graphics/const";
-import { findConnectionPoint } from "../controllers/utils";
+import { findConnectionAnchor } from "../controllers/utils";
 import * as guide from "../utils/guide";
+import { lcs2ccs } from "../graphics/utils";
 
 /**
  * Connector Factory Handler
@@ -27,11 +28,9 @@ export class ConnectorFactoryHandler extends Handler {
   dragStartPoint: number[] = [-1, -1];
   dragPoint: number[] = [-1, -1];
   tailEnd: Shape | null = null;
-  tailCP: number[] | null = null;
-  tailCPIndex: number = -1;
+  tailAnchor: number[] = [0.5, 0.5];
   headEnd: Shape | null = null;
-  headCP: number[] | null = null;
-  headCPIndex: number = -1;
+  headAnchor: number[] = [0.5, 0.5];
   shape: Connector | null = null;
 
   constructor(id: string) {
@@ -44,68 +43,54 @@ export class ConnectorFactoryHandler extends Handler {
     this.dragStartPoint = [-1, -1];
     this.dragPoint = [-1, -1];
     this.tailEnd = null;
-    this.tailCP = null;
-    this.tailCPIndex = -1;
+    this.tailAnchor = [0.5, 0.5];
     this.headEnd = null;
-    this.headCP = null;
-    this.headCPIndex = -1;
+    this.headAnchor = [0.5, 0.5];
     this.shape = null;
   }
 
   initialize(editor: Editor, e: CanvasPointerEvent): void {
-    const [end, cp, cpIndex] = findConnectionPoint(
+    const [end, anchor] = findConnectionAnchor(
       editor,
       null,
       this.dragStartPoint
     );
     this.tailEnd = end;
-    this.tailCP = cp;
-    this.tailCPIndex = cpIndex;
+    this.tailAnchor = anchor;
     this.shape = editor.factory.createConnector(
       this.tailEnd,
-      this.tailCPIndex,
+      this.tailAnchor,
       this.headEnd,
-      this.headCPIndex,
+      this.headAnchor,
       [this.dragStartPoint, this.dragPoint]
     );
+    this.shape.path = [this.dragStartPoint, this.dragPoint];
     const doc = editor.doc as Document;
     editor.transform.startTransaction("create");
     editor.transform.addShape(this.shape, doc);
   }
 
   update(editor: Editor, e: CanvasPointerEvent): void {
-    if (this.tailEnd) {
-      this.tailCP = (this.shape as Connector).path[0];
-    }
-    const [end, cp, cpIndex] = findConnectionPoint(
+    const [end, anchor] = findConnectionAnchor(
       editor,
       this.shape,
       this.dragPoint
     );
-    this.headEnd = cp ? end : null;
-    this.headCP = cp;
-    this.headCPIndex = cpIndex;
+    this.headEnd = end;
+    this.headAnchor = anchor;
     const newPath = geometry.pathCopy((this.shape as Connector).path);
-    newPath[1] = this.headCP ?? geometry.copy(this.dragPoint);
+    newPath[1] = this.dragPoint;
     editor.transform.setPath(this.shape as Shape, newPath);
     editor.transform.atomicAssignRef(this.shape as Shape, "head", this.headEnd);
     editor.transform.atomicAssign(
       this.shape as Shape,
-      "headCP",
-      this.headCPIndex
+      "headAnchor",
+      this.headAnchor
     );
     editor.transform.resolveAllConstraints(
       editor.doc as Document,
       editor.canvas
     );
-
-    // update connection points
-    if (this.tailEnd) {
-      this.tailCP = (this.shape as Connector).path[0];
-    }
-    if (this.headEnd) {
-      this.headCP = (this.shape as Connector).path[1];
-    }
   }
 
   finalize(editor: Editor, e: CanvasPointerEvent): void {
@@ -148,11 +133,6 @@ export class ConnectorFactoryHandler extends Handler {
       editor.repaint();
       this.drawDragging(editor, e);
     } else {
-      const p = canvas.globalCoordTransformRev([e.x, e.y]);
-      const [end, cp, cpIndex] = findConnectionPoint(editor, null, p);
-      this.tailEnd = end;
-      this.tailCP = cp;
-      this.tailCPIndex = cpIndex;
       editor.repaint();
       this.drawHovering(editor, e);
     }
@@ -187,52 +167,40 @@ export class ConnectorFactoryHandler extends Handler {
     editor.setCursor(Cursor.DEFAULT);
   }
 
-  drawTailConnectionHovering(editor: Editor, e: CanvasPointerEvent) {
-    const canvas = editor.canvas;
+  drawTailHovering(editor: Editor, e: CanvasPointerEvent) {
     if (this.tailEnd && this.tailEnd.connectable) {
-      // draw shape hovering
       const manipulator = manipulatorManager.get(this.tailEnd.type);
       if (manipulator) manipulator.drawHovering(editor, this.tailEnd, e);
-      // draw connection points (cross-mark)
-      guide.drawConnectionPointMarks(canvas, this.tailEnd);
-      // draw connection point hovering
-      if (this.tailCP) {
-        guide.drawConnectionPointHovering(
-          canvas,
-          this.tailEnd,
-          this.tailCP,
-          this.tailCPIndex
-        );
-      }
     }
   }
 
-  drawHeadConnectionHovering(editor: Editor, e: CanvasPointerEvent) {
-    const canvas = editor.canvas;
+  drawHeadHovering(editor: Editor, e: CanvasPointerEvent) {
     if (this.headEnd && this.headEnd.connectable) {
-      // draw shape hovering
       const manipulator = manipulatorManager.get(this.headEnd.type);
       if (manipulator) manipulator.drawHovering(editor, this.headEnd, e);
-      // draw connection points (cross-mark)
-      guide.drawConnectionPointMarks(canvas, this.headEnd);
-      // draw connection point hovering
-      if (this.headCP) {
-        guide.drawConnectionPointHovering(
-          canvas,
-          this.headEnd,
-          this.headCP,
-          this.headCPIndex
-        );
-      }
     }
   }
 
   drawHovering(editor: Editor, e: CanvasPointerEvent) {
-    this.drawTailConnectionHovering(editor, e);
+    this.drawTailHovering(editor, e);
   }
 
   drawDragging(editor: Editor, e: CanvasPointerEvent) {
-    this.drawTailConnectionHovering(editor, e);
-    this.drawHeadConnectionHovering(editor, e);
+    this.drawTailHovering(editor, e);
+    this.drawHeadHovering(editor, e);
+    if (this.shape instanceof Connector) {
+      const canvas = editor.canvas;
+      const tailAnchorPoint = this.shape.getTailAnchorPoint();
+      const headAnchorPoint = this.shape.getHeadAnchorPoint();
+      const p1 = lcs2ccs(canvas, this.shape, tailAnchorPoint);
+      const p2 = lcs2ccs(canvas, this.shape, headAnchorPoint);
+      const pathCCS = this.shape.path.map((p) =>
+        lcs2ccs(canvas, this.shape!, p)
+      );
+      guide.drawDottedLine(canvas, p1, pathCCS[0]);
+      guide.drawDottedLine(canvas, p2, pathCCS[pathCCS.length - 1]);
+      guide.drawControlPoint(canvas, p1, this.shape.tail ? 5 : 1);
+      guide.drawControlPoint(canvas, p2, this.shape.head ? 5 : 1);
+    }
   }
 }

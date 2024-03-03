@@ -100,21 +100,23 @@ export function fitPathInCSS(
 }
 
 /**
- * Find anchor where point in
+ * Find connection anchor where point in
  *
  * @param editor
  * @param connector
  * @param point
  * @returns [end, anchor]
  */
-export function findAnchor(
+export function findConnectionAnchor(
   editor: Editor,
-  connector: Connector,
+  connector: Connector | null,
   point: number[]
 ): [Shape | null, number[]] {
   const canvas = editor.canvas;
-  let end = editor.doc?.getShapeAt(canvas, point, [connector]) ?? null;
+  let end =
+    editor.doc?.getShapeAt(canvas, point, connector ? [connector] : []) ?? null;
   let anchor = [0.5, 0.5];
+  if (!end?.connectable) end = null;
   if (end instanceof Line) {
     const p = geometry.findNearestOnPath(
       point,

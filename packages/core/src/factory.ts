@@ -220,9 +220,9 @@ export class ShapeFactory extends EventEmitter {
    */
   createConnector(
     tail: Shape | null,
-    tailCP: number,
+    tailAnchor: number[],
     head: Shape | null,
-    headCP: number,
+    headAnchor: number[],
     points: number[][]
   ): Connector {
     const connector = new Connector();
@@ -230,9 +230,9 @@ export class ShapeFactory extends EventEmitter {
     connector.routeType = RouteType.OBLIQUE;
     connector.constraints = [{ id: "adjust-route" }];
     connector.tail = tail;
-    connector.tailCP = tailCP;
+    connector.tailAnchor = tailAnchor;
     connector.head = head;
-    connector.headCP = headCP;
+    connector.headAnchor = headAnchor;
     connector.path = points;
     const rect = geometry.boundingRect(connector.path);
     connector.left = rect[0][0];
