@@ -68,7 +68,7 @@ export class BoxMoveAnchoredController extends Controller {
    */
   update(editor: Editor, shape: Shape) {
     const canvas = editor.canvas;
-    const anchorPoint = geometry.positionOnPath(
+    const anchorPoint = geometry.getPointOnPath(
       (shape.parent as Shape).getOutline() ?? [],
       (shape as Box).anchorPosition
     );
@@ -99,7 +99,7 @@ export class BoxMoveAnchoredController extends Controller {
     const enclosure = shape.getEnclosure();
     const center = geometry.mid(enclosure[0], enclosure[2]);
     const centerCCS = lcs2ccs(canvas, shape, center);
-    const anchorPoint = geometry.positionOnPath(
+    const anchorPoint = geometry.getPointOnPath(
       (shape.parent as Shape).getOutline() ?? [],
       shape.anchorPosition
     );
@@ -122,7 +122,7 @@ export class BoxMoveAnchoredController extends Controller {
     const ghost = shape.getEnclosure();
     const center = geometry.mid(ghost[0], ghost[2]);
     const centerCCS = lcs2ccs(canvas, shape, center);
-    const anchorPoint = geometry.positionOnPath(
+    const anchorPoint = geometry.getPointOnPath(
       (shape.parent as Shape).getOutline() ?? [],
       (shape as Box).anchorPosition
     );

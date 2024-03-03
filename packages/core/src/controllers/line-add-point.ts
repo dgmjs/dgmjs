@@ -145,7 +145,7 @@ export class LineAddPointController extends Controller {
         const p2pos =
           i === path.length - 2 ? 1 : geometry.getPositionOnPath(outline, p2);
         const midpos = (p1pos + p2pos) / 2;
-        const mid = geometry.positionOnPath(outline, midpos);
+        const mid = geometry.getPointOnPath(outline, midpos);
         const midCCS = lcs2ccs(canvas, shape, mid);
         guide.drawControlPoint(canvas, midCCS, 4, angle);
       }

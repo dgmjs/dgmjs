@@ -77,7 +77,7 @@ export class BoxMoveAnchorPositionController extends Controller {
     if (this.dragging) return true;
     const canvas = editor.canvas;
     const p = [e.x, e.y];
-    const anchorPoint = geometry.positionOnPath(
+    const anchorPoint = geometry.getPointOnPath(
       (shape.parent as Shape).getOutline(),
       (shape as Box).anchorPosition
     );
@@ -102,7 +102,7 @@ export class BoxMoveAnchorPositionController extends Controller {
   initialize(editor: Editor, shape: Shape): void {
     this.ghost = shape.getEnclosure();
     this.anchorPosition = (shape as Box).anchorPosition;
-    this.anchorPoint = geometry.positionOnPath(
+    this.anchorPoint = geometry.getPointOnPath(
       (shape.parent as Shape).getOutline() ?? [],
       (shape as Box).anchorPosition
     );
@@ -125,14 +125,17 @@ export class BoxMoveAnchorPositionController extends Controller {
       outline,
       MAGNET_THRESHOLD
     );
-    if (geometry.distance(anchorPoint, dragLCS) <= MAGNET_THRESHOLD) {
+    if (
+      anchorPoint &&
+      geometry.distance(anchorPoint, dragLCS) <= MAGNET_THRESHOLD
+    ) {
       this.anchorPosition = geometry.getPositionOnPath(outline, anchorPoint);
       this.anchorPoint = anchorPoint;
       this.outOfPath = false;
     } else {
       // set to original position if drag point is too far from the path
       this.anchorPosition = (shape as Box).anchorPosition;
-      this.anchorPoint = geometry.positionOnPath(
+      this.anchorPoint = geometry.getPointOnPath(
         outline,
         (shape as Box).anchorPosition
       );
@@ -160,7 +163,7 @@ export class BoxMoveAnchorPositionController extends Controller {
    */
   draw(editor: Editor, shape: Box) {
     const canvas = editor.canvas;
-    const anchorPoint = geometry.positionOnPath(
+    const anchorPoint = geometry.getPointOnPath(
       (shape.parent as Shape).getOutline() ?? [],
       shape.anchorPosition
     );

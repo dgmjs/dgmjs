@@ -206,7 +206,7 @@ export class Actions {
       if (shapes.every((s) => s instanceof Box && s.anchored)) {
         for (let s of shapes) {
           if (s instanceof Box && s.anchored) {
-            const anchorPoint = geometry.positionOnPath(
+            const anchorPoint = geometry.getPointOnPath(
               (s.parent as Shape).getOutline() ?? [],
               s.anchorPosition
             );

@@ -34,7 +34,7 @@ function constraint(
 ) {
   let changed = false;
   if (shape instanceof Box && !(shape.parent instanceof Document)) {
-    const anchorPoint = geometry.positionOnPath(
+    const anchorPoint = geometry.getPointOnPath(
       (shape.parent as Shape).getOutline() ?? [],
       shape.anchorPosition
     );

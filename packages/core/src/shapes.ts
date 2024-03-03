@@ -1139,7 +1139,7 @@ class Box extends Shape {
     let endPoint = [0, 0];
     if (target instanceof Line) {
       const outline = target.getOutline();
-      const anchorPoint = geometry.positionOnPath(outline, this.anchorPosition);
+      const anchorPoint = geometry.getPointOnPath(outline, this.anchorPosition);
       const segment = geometry.getNearSegment(
         anchorPoint,
         outline,
@@ -1639,6 +1639,16 @@ class Connector extends Line {
   tail: Shape | null;
 
   /**
+   * Head's anchor position
+   */
+  headAnchor: number[];
+
+  /**
+   * Tail's anchor position
+   */
+  tailAnchor: number[];
+
+  /**
    * The index of connection point at head end
    */
   headCP: number;
@@ -1658,6 +1668,8 @@ class Connector extends Line {
     this.type = "Connector";
     this.head = null;
     this.tail = null;
+    this.headAnchor = [0.5, 0.5];
+    this.tailAnchor = [0.5, 0.5];
     this.headCP = -1;
     this.tailCP = -1;
     this.routeType = RouteType.OBLIQUE;
@@ -1667,6 +1679,8 @@ class Connector extends Line {
     const json = super.toJSON(recursive, keepRefs);
     json.head = this.head ? this.head.id : null;
     json.tail = this.tail ? this.tail.id : null;
+    json.headAnchor = this.headAnchor;
+    json.tailAnchor = this.tailAnchor;
     json.headCP = this.headCP;
     json.tailCP = this.tailCP;
     json.routeType = this.routeType;
@@ -1681,6 +1695,8 @@ class Connector extends Line {
     super.fromJSON(json);
     this.head = json.head ?? this.head;
     this.tail = json.tail ?? this.tail;
+    this.headAnchor = json.headAnchor ?? this.headAnchor;
+    this.tailAnchor = json.tailAnchor ?? this.tailAnchor;
     this.headCP = json.headCP ?? this.headCP;
     this.tailCP = json.tailCP ?? this.tailCP;
     this.routeType = json.routeType ?? this.routeType;
@@ -1694,6 +1710,42 @@ class Connector extends Line {
     if (typeof this.head === "string" && idMap[this.head]) {
       this.head = idMap[this.head];
     }
+  }
+
+  /**
+   * Return head anchor point
+   */
+  getHeadAnchorPoint(): number[] {
+    if (this.head instanceof Line) {
+      return geometry.getPointOnPath(this.head.path, this.headAnchor[0]);
+    } else if (this.head) {
+      const box = this.head?.getBoundingRect();
+      const w = geometry.width(box);
+      const h = geometry.height(box);
+      return [
+        box[0][0] + w * this.headAnchor[0],
+        box[0][1] + h * this.headAnchor[1],
+      ];
+    }
+    return this.path[this.path.length - 1];
+  }
+
+  /**
+   * Return tail anchor point
+   */
+  getTailAnchorPoint(): number[] {
+    if (this.tail instanceof Line) {
+      return geometry.getPointOnPath(this.tail.path, this.tailAnchor[0]);
+    } else if (this.tail) {
+      const box = this.tail.getBoundingRect();
+      const w = geometry.width(box);
+      const h = geometry.height(box);
+      return [
+        box[0][0] + w * this.tailAnchor[0],
+        box[0][1] + h * this.tailAnchor[1],
+      ];
+    }
+    return this.path[0];
   }
 
   /**

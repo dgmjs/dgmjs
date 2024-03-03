@@ -306,7 +306,9 @@ class Editor extends EventEmitter {
             outline,
             CONNECTION_POINT_APOTHEM * 2
           );
-          const position = geometry.getPositionOnPath(outline, nearest);
+          const position = nearest
+            ? geometry.getPositionOnPath(outline, nearest)
+            : 0.5;
           const textShape = this.factory.createAnchoredText(position);
           this.actions.insert(textShape, shape);
           this.factory.triggerCreate(textShape);

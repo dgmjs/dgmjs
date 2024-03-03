@@ -17,7 +17,7 @@ import {
 } from "../graphics/const";
 import * as geometry from "../graphics/geometry";
 import type { Canvas } from "../graphics/graphics";
-import { Box, Line, RouteType, Shape } from "../shapes";
+import { Box, Connector, Line, RouteType, Shape } from "../shapes";
 
 function setTailEnd(path: number[][], point: number[]) {
   path[0][0] = point[0];
@@ -295,7 +295,7 @@ export function adjustObliqueRoute(
         if (jp) setTailEnd(newPath, jp);
       } else if (tail instanceof Line) {
         let jp = getTailJunction(newPath, tail);
-        if (!jp) jp = geometry.positionOnPath(tail.path, 0.5);
+        if (!jp) jp = geometry.getPointOnPath(tail.path, 0.5);
         if (jp) setTailEnd(newPath, jp);
       }
     }
@@ -317,7 +317,7 @@ export function adjustObliqueRoute(
         if (jp) setHeadEnd(newPath, jp);
       } else if (head instanceof Line) {
         let jp = getHeadJunction(newPath, head);
-        if (!jp) jp = geometry.positionOnPath(head.path, 0.5);
+        if (!jp) jp = geometry.getPointOnPath(head.path, 0.5);
         if (jp) setHeadEnd(newPath, jp);
       }
     }
@@ -381,4 +381,70 @@ export function adjustRectilinearRoute(
     return newPath;
   }
   return path;
+}
+
+/**
+ * Adjust route
+ */
+export function adjustRoute(connector: Connector): number[][] {
+  // 1. reduce the path
+  // 2. attach tail point
+  //   2.1 let tp = tail anchor point
+  //       (check anchor point inside outline of shape,
+  //        otherwise enforce to be inside e.g. centroid of polygon)
+  //   2.2 let p = path[1] point
+  //   2.3 get interaction point between (tp <-- p) and shape outline
+  //       (allow backward infinite)
+  //   2.4 set path[0] to the interaction point
+  // 3. attach head point (same with tail point)
+
+  if (connector.path.length >= 2) {
+    // reduce path
+    const newPath = reduceObliquePath(
+      geometry.pathCopy(connector.path),
+      LINE_STRATIFY_ANGLE_THRESHOLD
+    );
+    // attach tail point
+    if (connector.tail) {
+      const tp = connector.getTailAnchorPoint();
+      if (connector.tail instanceof Line) {
+        newPath[0][0] = tp[0];
+        newPath[0][1] = tp[1];
+      } else if (connector.tail) {
+        const p = newPath[1];
+        const outline = connector.tail
+          .getOutline()
+          .map((p) =>
+            connector.tail!.localCoordTransform(null as any, p, true)
+          );
+        const jp = geometry.pathIntersect(outline, [p, tp], true, false);
+        if (jp) {
+          newPath[0][0] = jp[0];
+          newPath[0][1] = jp[1];
+        }
+      }
+    }
+    // attach head point
+    if (connector.head) {
+      const hp = connector.getHeadAnchorPoint();
+      if (connector.head instanceof Line) {
+        newPath[newPath.length - 1][0] = hp[0];
+        newPath[newPath.length - 1][1] = hp[1];
+      } else {
+        const p = newPath[newPath.length - 2];
+        const outline = connector.head
+          .getOutline()
+          .map((p) =>
+            connector.head!.localCoordTransform(null as any, p, true)
+          );
+        const jp = geometry.pathIntersect(outline, [p, hp], true, false);
+        if (jp) {
+          newPath[newPath.length - 1][0] = jp[0];
+          newPath[newPath.length - 1][1] = jp[1];
+        }
+      }
+    }
+    return newPath;
+  }
+  return connector.path;
 }

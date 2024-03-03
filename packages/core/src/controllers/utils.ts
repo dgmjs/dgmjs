@@ -1,11 +1,15 @@
 import type { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import type { Line, Shape } from "../shapes";
+import { Connector, Line, Shape } from "../shapes";
 import { angleInCCS, lcs2ccs } from "../graphics/utils";
 import optjs from "optimization-js";
 import type { Editor } from "../editor";
 import { inControlPoint } from "../utils/guide";
-import { CONNECTION_POINT_APOTHEM, MAGNET_THRESHOLD } from "../graphics/const";
+import {
+  CONNECTION_POINT_APOTHEM,
+  CONTROL_POINT_APOTHEM,
+  MAGNET_THRESHOLD,
+} from "../graphics/const";
 
 /**
  * Find node's position where is the bestfits to the given enclosure.
@@ -96,6 +100,46 @@ export function fitPathInCSS(
 }
 
 /**
+ * Find anchor where point in
+ *
+ * @param editor
+ * @param connector
+ * @param point
+ * @returns [end, anchor]
+ */
+export function findAnchor(
+  editor: Editor,
+  connector: Connector,
+  point: number[]
+): [Shape | null, number[]] {
+  const canvas = editor.canvas;
+  let end = editor.doc?.getShapeAt(canvas, point, [connector]) ?? null;
+  let anchor = [0.5, 0.5];
+  if (end instanceof Line) {
+    const p = geometry.findNearestOnPath(
+      point,
+      end.path,
+      CONTROL_POINT_APOTHEM * 2
+    );
+    if (p) {
+      const position = geometry.getPositionOnPath(end.path, p);
+      anchor = [position, 1 - position];
+    } else {
+      end = null;
+      anchor = [0.5, 0.5];
+    }
+  } else if (end) {
+    const box = end.getBoundingRect();
+    const l = box[0][0];
+    const t = box[0][1];
+    const w = geometry.width(box);
+    const h = geometry.height(box);
+    anchor = [(point[0] - l) / w, (point[1] - t) / h];
+  }
+  return [end, anchor];
+}
+
+/**
  * Find control point where point in
  * @returns index of control point
  */
@@ -140,7 +184,7 @@ export function findSegmentControlPoint(
       const p2pos =
         i === path.length - 2 ? 1 : geometry.getPositionOnPath(outline, p2);
       const midpos = (p1pos + p2pos) / 2;
-      const mid = geometry.positionOnPath(outline, midpos);
+      const mid = geometry.getPointOnPath(outline, midpos);
       const cp = mid;
       const cpCCS = lcs2ccs(canvas, line, cp);
       if (inControlPoint(canvas, pCCS, cpCCS, angle)) return i;

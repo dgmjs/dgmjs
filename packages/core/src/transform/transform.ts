@@ -30,6 +30,7 @@ import {
   moveEndPoint,
   adjustObliqueRoute,
   adjustRectilinearRoute,
+  adjustRoute,
 } from "../utils/route-utils";
 import type { Obj } from "../core/obj";
 import { getAllConnectorsTo, getAllDescendant } from "../utils/shape-utils";
@@ -680,12 +681,20 @@ export class Transform extends EventEmitter {
         break;
       }
       case RouteType.OBLIQUE: {
-        const newPath = adjustObliqueRoute(
-          connector.path,
-          connector.head,
-          connector.headCP,
-          connector.tail,
-          connector.tailCP
+        // const newPath = adjustObliqueRoute(
+        //   connector.path,
+        //   connector.head,
+        //   connector.headCP,
+        //   connector.tail,
+        //   connector.tailCP
+        // );
+        const newPath = adjustRoute(
+          connector
+          // connector.path,
+          // connector.head,
+          // connector.getHeadAnchorPoint(),
+          // connector.tail,
+          // connector.getTailAnchorPoint()
         );
         changed = this.setPath(connector, newPath) || changed;
         break;
