@@ -14,7 +14,7 @@
 import { assert } from "./std/assert";
 import { Canvas } from "./graphics/graphics";
 import {
-  CONNECTION_POINT_APOTHEM,
+  CONTROL_POINT_APOTHEM,
   Color,
   DEFAULT_FONT_SIZE,
   LINE_SELECTION_THRESHOLD,
@@ -1099,7 +1099,7 @@ class Box extends Shape {
       const segment = geometry.getNearSegment(
         anchorPoint,
         outline,
-        CONNECTION_POINT_APOTHEM * 2
+        CONTROL_POINT_APOTHEM * 2
       );
       startPoint = anchorPoint;
       endPoint = outline[segment + 1];

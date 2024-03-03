@@ -5,11 +5,7 @@ import { angleInCCS, lcs2ccs } from "../graphics/utils";
 import optjs from "optimization-js";
 import type { Editor } from "../editor";
 import { inControlPoint } from "../utils/guide";
-import {
-  CONNECTION_POINT_APOTHEM,
-  CONTROL_POINT_APOTHEM,
-  MAGNET_THRESHOLD,
-} from "../graphics/const";
+import { CONTROL_POINT_APOTHEM } from "../graphics/const";
 
 /**
  * Find node's position where is the bestfits to the given enclosure.

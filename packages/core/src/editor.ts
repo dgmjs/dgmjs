@@ -14,12 +14,7 @@
 import { EventEmitter } from "events";
 import { Canvas, CanvasPointerEvent } from "./graphics/graphics";
 import { Connector, Document, Shape, Text, Box } from "./shapes";
-import {
-  Cursor,
-  Color,
-  Mouse,
-  CONNECTION_POINT_APOTHEM,
-} from "./graphics/const";
+import { Cursor, Color, Mouse, CONTROL_POINT_APOTHEM } from "./graphics/const";
 import { assert } from "./std/assert";
 import * as geometry from "./graphics/geometry";
 import * as utils from "./graphics/utils";
@@ -304,7 +299,7 @@ class Editor extends EventEmitter {
           const nearest = geometry.findNearestOnPath(
             [x, y],
             outline,
-            CONNECTION_POINT_APOTHEM * 2
+            CONTROL_POINT_APOTHEM * 2
           );
           const position = nearest
             ? geometry.getPositionOnPath(outline, nearest)

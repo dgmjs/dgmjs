@@ -19,11 +19,9 @@ import {
   Shape,
   Document,
   Connector,
-  LineType,
 } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { CONNECTION_POINT_APOTHEM } from "../graphics/const";
 import { convertDocToText, convertTextToDoc } from "../utils/text-utils";
 import { moveEndPoint, adjustRoute } from "../utils/route-utils";
 import type { Obj } from "../core/obj";
