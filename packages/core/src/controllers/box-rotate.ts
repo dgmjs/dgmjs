@@ -38,6 +38,7 @@ export class BoxRotateController extends Controller {
    * Indicates the controller is active or not
    */
   active(editor: Editor, shape: Shape): boolean {
+    if (this.dragging) return true;
     let value =
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&

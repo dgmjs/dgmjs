@@ -43,6 +43,7 @@ export class SelectionsMoveController extends Controller {
    * Indicates the controller is active or not
    */
   active(editor: Editor, shape: Shape): boolean {
+    if (this.dragging) return true;
     return editor.selection.size() > 1;
   }
 

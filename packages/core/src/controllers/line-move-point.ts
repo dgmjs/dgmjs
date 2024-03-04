@@ -62,12 +62,13 @@ export class LineMovePointController extends Controller {
    * Indicates the controller is active or not
    */
   active(editor: Editor, shape: Shape): boolean {
-    let value =
+    if (this.dragging) return true;
+    return (
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
       shape instanceof Line &&
-      shape.pathEditable;
-    return value;
+      shape.pathEditable
+    );
   }
 
   /**
