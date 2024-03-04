@@ -39,6 +39,7 @@ export class BoxMoveController extends Controller {
     return (
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
+      shape.movable !== Movable.NONE &&
       !(shape as Box).anchored
     );
   }
