@@ -45,6 +45,7 @@ export class ConnectorMoveController extends Controller {
     return (
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
+      shape.movable !== Movable.NONE &&
       shape instanceof Connector
     );
   }

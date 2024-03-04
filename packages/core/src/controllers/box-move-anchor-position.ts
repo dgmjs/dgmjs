@@ -12,7 +12,7 @@
  */
 
 import * as geometry from "../graphics/geometry";
-import { Shape, Box, Document } from "../shapes";
+import { Shape, Box, Document, Movable } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import { Cursor, MAGNET_THRESHOLD } from "../graphics/const";
 import { ccs2lcs, lcs2ccs } from "../graphics/utils";
@@ -66,6 +66,7 @@ export class BoxMoveAnchorPositionController extends Controller {
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
       shape instanceof Box &&
+      shape.movable !== Movable.NONE &&
       shape.anchored
     );
   }
