@@ -45,6 +45,7 @@ function App() {
       window.editor.setDoc(window.editor.store.doc as Document);
     }
     demoStore.setDoc(window.editor.store.doc as Document);
+    window.editor.fitToScreen();
 
     window.addEventListener("resize", () => {
       window.editor.fit();

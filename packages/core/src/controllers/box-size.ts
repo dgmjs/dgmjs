@@ -82,7 +82,6 @@ export class BoxSizeController extends Controller {
    * Indicates the controller is active or not
    */
   active(editor: Editor, shape: Shape): boolean {
-    if (this.dragging) return true;
     const MIN1 = CONTROL_POINT_APOTHEM * 8;
     const MIN2 = CONTROL_POINT_APOTHEM * 4;
     let value =

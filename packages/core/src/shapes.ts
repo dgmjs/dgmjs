@@ -1605,8 +1605,8 @@ class Connector extends Line {
     const json = super.toJSON(recursive, keepRefs);
     json.head = this.head ? this.head.id : null;
     json.tail = this.tail ? this.tail.id : null;
-    json.headAnchor = this.headAnchor;
-    json.tailAnchor = this.tailAnchor;
+    json.headAnchor = structuredClone(this.headAnchor);
+    json.tailAnchor = structuredClone(this.tailAnchor);
     if (keepRefs) {
       json.head = this.head;
       json.tail = this.tail;

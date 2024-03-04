@@ -36,12 +36,11 @@ export class BoxMoveController extends Controller {
    * Indicates the controller is active or not
    */
   active(editor: Editor, shape: Shape): boolean {
-    if (this.dragging) return true;
-    let value =
+    return (
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
-      !(shape as Box).anchored;
-    return value;
+      !(shape as Box).anchored
+    );
   }
 
   /**
