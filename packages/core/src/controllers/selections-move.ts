@@ -50,7 +50,6 @@ export class SelectionsMoveController extends Controller {
    * Returns true if mouse cursor is inside the controller
    */
   mouseIn(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
-    if (this.dragging) return true;
     if (shape instanceof Document) {
       const canvas = editor.canvas;
       const p = canvas.globalCoordTransformRev([e.x, e.y]);

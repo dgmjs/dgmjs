@@ -62,7 +62,6 @@ export class ConnectorReconnectController extends Controller {
    * Returns true if mouse cursor is inside the controller
    */
   mouseIn(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
-    if (this.dragging) return true;
     if (shape instanceof Connector) {
       const p = [e.x, e.y];
       const tpCCS = lcs2ccs(editor.canvas, shape, shape.getTailAnchorPoint());

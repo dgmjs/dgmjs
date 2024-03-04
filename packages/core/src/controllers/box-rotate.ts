@@ -64,7 +64,6 @@ export class BoxRotateController extends Controller {
    * Returns true if mouse cursor is inside the controller
    */
   mouseIn(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
-    if (this.dragging) return true;
     const canvas = editor.canvas;
     const p = [e.x, e.y];
     const cp = this.getControlPoint(canvas, shape);

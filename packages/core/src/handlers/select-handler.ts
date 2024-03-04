@@ -87,7 +87,7 @@ export class SelectHandler extends Handler {
     this.activeManipulator = null;
     let cursor: [string, number] = [Cursor.DEFAULT, 0];
     if (editor.doc) {
-      if (editor.selection.getShapes().length > 1) {
+      if (editor.selection.size() > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) {
           const handled = manipulator.pointerDown(editor, editor.doc, e);

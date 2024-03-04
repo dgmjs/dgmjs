@@ -1028,6 +1028,7 @@ class Controller {
    */
   pointerDown(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
     const canvas = editor.canvas;
+    let handled = false;
     if (e.button === Mouse.BUTTON1 && this.mouseIn(editor, shape, e)) {
       this.dragging = true;
       this.dragStartPoint = utils.ccs2lcs(canvas, shape, [e.x, e.y]);
@@ -1040,13 +1041,13 @@ class Controller {
       this.dy = 0;
       this.dx0 = 0;
       this.dy0 = 0;
+      handled = true;
       this.initialize(editor, shape);
       this.update(editor, shape);
       this.drawDragging(editor, shape, e);
       editor.triggerDragStart(this, this.dragStartPoint);
-      return true;
     }
-    return false;
+    return handled;
   }
 
   /**
@@ -1065,10 +1066,10 @@ class Controller {
       this.dy = this.dragPoint[1] - this.dragStartPoint[1];
       this.dx0 = this.dragPoint[0] - this.dragPrevPoint[0];
       this.dy0 = this.dragPoint[1] - this.dragPrevPoint[1];
+      handled = true;
       this.update(editor, shape);
       this.drawDragging(editor, shape, e);
       editor.triggerDrag(this, this.dragPoint);
-      return true;
     }
     return handled;
   }
@@ -1182,7 +1183,7 @@ class Manipulator {
   pointerDown(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
     let handled = false;
     for (let cp of this.controllers) {
-      if (cp.active(editor, shape)) {
+      if (cp.active(editor, shape) && cp.mouseIn(editor, shape, e)) {
         handled = cp.pointerDown(editor, shape, e);
         if (handled) {
           this.draggingController = cp;

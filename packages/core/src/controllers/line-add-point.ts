@@ -64,7 +64,6 @@ export class LineAddPointController extends Controller {
    * Returns true if mouse cursor is inside the controller
    */
   mouseIn(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
-    if (this.dragging) return true;
     const p = ccs2lcs(editor.canvas, shape, [e.x, e.y]);
     return findSegmentControlPoint(editor, shape as Line, p) >= 0;
   }

@@ -79,6 +79,47 @@ export class BoxSizeController extends Controller {
   }
 
   /**
+   * Returns the point of the position of the controller
+   */
+  getControlPosition(editor: Editor, shape: Shape, position: string): number[] {
+    const enclosure = shape.getEnclosure();
+    const offset = 0; //CONTROL_POINT_APOTHEM / editor.canvas.scale;
+    if (enclosure && enclosure.length > 0) {
+      switch (position) {
+        case SizingPosition.TOP: {
+          const cp = geometry.mid(enclosure[0], enclosure[1]);
+          return [cp[0], cp[1] - offset];
+        }
+        case SizingPosition.RIGHT: {
+          const cp = geometry.mid(enclosure[1], enclosure[2]);
+          return [cp[0] + offset, cp[1]];
+        }
+        case SizingPosition.BOTTOM: {
+          const cp = geometry.mid(enclosure[3], enclosure[2]);
+          return [cp[0], cp[1] + offset];
+        }
+        case SizingPosition.LEFT: {
+          const cp = geometry.mid(enclosure[0], enclosure[3]);
+          return [cp[0] - offset, cp[1]];
+        }
+        case SizingPosition.LEFT_TOP: {
+          return [enclosure[0][0] - offset, enclosure[0][1] - offset];
+        }
+        case SizingPosition.RIGHT_TOP: {
+          return [enclosure[1][0] + offset, enclosure[1][1] - offset];
+        }
+        case SizingPosition.RIGHT_BOTTOM: {
+          return [enclosure[2][0] + offset, enclosure[2][1] + offset];
+        }
+        case SizingPosition.LEFT_BOTTOM: {
+          return [enclosure[3][0] - offset, enclosure[3][1] + offset];
+        }
+      }
+    }
+    return [-1, -1];
+  }
+
+  /**
    * Indicates the controller is active or not
    */
   active(editor: Editor, shape: Shape): boolean {
@@ -146,51 +187,9 @@ export class BoxSizeController extends Controller {
   }
 
   /**
-   * Returns the point of the position of the controller
-   */
-  getControlPosition(editor: Editor, shape: Shape, position: string): number[] {
-    const enclosure = shape.getEnclosure();
-    const offset = 0; //CONTROL_POINT_APOTHEM / editor.canvas.scale;
-    if (enclosure && enclosure.length > 0) {
-      switch (position) {
-        case SizingPosition.TOP: {
-          const cp = geometry.mid(enclosure[0], enclosure[1]);
-          return [cp[0], cp[1] - offset];
-        }
-        case SizingPosition.RIGHT: {
-          const cp = geometry.mid(enclosure[1], enclosure[2]);
-          return [cp[0] + offset, cp[1]];
-        }
-        case SizingPosition.BOTTOM: {
-          const cp = geometry.mid(enclosure[3], enclosure[2]);
-          return [cp[0], cp[1] + offset];
-        }
-        case SizingPosition.LEFT: {
-          const cp = geometry.mid(enclosure[0], enclosure[3]);
-          return [cp[0] - offset, cp[1]];
-        }
-        case SizingPosition.LEFT_TOP: {
-          return [enclosure[0][0] - offset, enclosure[0][1] - offset];
-        }
-        case SizingPosition.RIGHT_TOP: {
-          return [enclosure[1][0] + offset, enclosure[1][1] - offset];
-        }
-        case SizingPosition.RIGHT_BOTTOM: {
-          return [enclosure[2][0] + offset, enclosure[2][1] + offset];
-        }
-        case SizingPosition.LEFT_BOTTOM: {
-          return [enclosure[3][0] - offset, enclosure[3][1] + offset];
-        }
-      }
-    }
-    return [-1, -1];
-  }
-
-  /**
    * Returns true if mouse cursor is inside the controller
    */
   mouseIn(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
-    if (this.dragging) return true;
     const canvas = editor.canvas;
     const p = [e.x, e.y];
     const cp = lcs2ccs(

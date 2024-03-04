@@ -74,7 +74,6 @@ export class BoxMoveAnchorPositionController extends Controller {
    * Returns true if mouse cursor is inside the controller
    */
   mouseIn(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
-    if (this.dragging) return true;
     const canvas = editor.canvas;
     const p = [e.x, e.y];
     const anchorPoint = geometry.getPointOnPath(
@@ -83,8 +82,6 @@ export class BoxMoveAnchorPositionController extends Controller {
     );
     const anchorPointCCS = lcs2ccs(canvas, shape.parent as Shape, anchorPoint);
     return guide.inControlPoint(canvas, p, anchorPointCCS);
-
-    // return false;
   }
 
   /**
