@@ -14,7 +14,7 @@
 import { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { Shape } from "../shapes";
-import { Editor, Handler, Manipulator, manipulatorManager } from "../editor";
+import { Editor, Handler, manipulatorManager } from "../editor";
 import { Mouse, Color, Cursor } from "../graphics/const";
 import * as guide from "../utils/guide";
 
@@ -24,13 +24,11 @@ import * as guide from "../utils/guide";
 export class SelectHandler extends Handler {
   dragging: boolean;
   dragStartPoint: number[];
-  activeManipulator: Manipulator | null;
 
   constructor(id: string) {
     super(id);
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
-    this.activeManipulator = null;
   }
 
   /**
@@ -84,30 +82,27 @@ export class SelectHandler extends Handler {
 
     // delegates to manipulators
     editor.repaint(false); // do not draw selections
-    this.activeManipulator = null;
     let cursor: [string, number] = [Cursor.DEFAULT, 0];
     if (editor.doc) {
       if (editor.selection.size() > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) {
-          const handled = manipulator.pointerDown(editor, editor.doc, e);
-          if (handled) this.activeManipulator = manipulator;
+          manipulator.pointerDown(editor, editor.doc, e);
           if (manipulator.mouseIn(editor, editor.doc, e)) {
             cursor = manipulator.mouseCursor(editor, editor.doc, e) ?? cursor;
           }
         }
       }
-      editor.doc.traverse((shape) => {
-        const s = shape as Shape;
+      if (editor.selection.size() === 1) {
+        const s = editor.selection.getShapes()[0];
         const manipulator = manipulatorManager.get(s.type);
         if (manipulator) {
-          const handled = manipulator.pointerDown(editor, s, e);
-          if (handled) this.activeManipulator = manipulator;
+          manipulator.pointerDown(editor, s, e);
           if (manipulator.mouseIn(editor, s, e)) {
             cursor = manipulator.mouseCursor(editor, s, e) ?? cursor;
           }
         }
-      });
+      }
     }
     if (Array.isArray(cursor) && cursor.length > 1) {
       editor.setCursor(cursor[0], cursor[1]);
@@ -162,30 +157,27 @@ export class SelectHandler extends Handler {
     editor.drawSelection();
 
     // delegates to manipulators
-    this.activeManipulator = null;
     let cursor: [string, number] = [Cursor.DEFAULT, 0];
     if (editor.doc) {
       if (editor.selection.getShapes().length > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) {
-          const handled = manipulator.pointerMove(editor, editor.doc, e);
-          if (handled) this.activeManipulator = manipulator;
+          manipulator.pointerMove(editor, editor.doc, e);
           if (manipulator.mouseIn(editor, editor.doc, e)) {
             cursor = manipulator.mouseCursor(editor, editor.doc, e) ?? cursor;
           }
         }
       }
-      editor.doc.traverse((shape) => {
-        const s = shape as Shape;
+      if (editor.selection.size() === 1) {
+        const s = editor.selection.getShapes()[0];
         const manipulator = manipulatorManager.get(s.type);
         if (manipulator) {
-          const handled = manipulator.pointerMove(editor, s, e);
-          if (handled) this.activeManipulator = manipulator;
+          manipulator.pointerMove(editor, s, e);
           if (manipulator.mouseIn(editor, s, e)) {
             cursor = manipulator.mouseCursor(editor, s, e) ?? cursor;
           }
         }
-      });
+      }
     }
     if (Array.isArray(cursor) && cursor.length > 1) {
       editor.setCursor(cursor[0], cursor[1]);
@@ -210,7 +202,6 @@ export class SelectHandler extends Handler {
       );
     }
     // delegates to manipulators
-    this.activeManipulator = null;
     let cursor: [string, number] = [Cursor.DEFAULT, 0];
     if (editor.doc) {
       if (editor.selection.getShapes().length > 1) {
@@ -219,21 +210,19 @@ export class SelectHandler extends Handler {
           if (manipulator.mouseIn(editor, editor.doc, e)) {
             cursor = manipulator.mouseCursor(editor, editor.doc, e) ?? cursor;
           }
-          const handled = manipulator.pointerUp(editor, editor.doc, e);
-          if (handled) this.activeManipulator = manipulator;
+          manipulator.pointerUp(editor, editor.doc, e);
         }
       }
-      editor.doc.traverse((shape) => {
-        const s = shape as Shape;
+      if (editor.selection.size() === 1) {
+        const s = editor.selection.getShapes()[0];
         const manipulator = manipulatorManager.get(s.type);
         if (manipulator) {
           if (manipulator.mouseIn(editor, s, e)) {
             cursor = manipulator.mouseCursor(editor, s, e) ?? cursor;
           }
-          const handled = manipulator.pointerUp(editor, s, e);
-          if (handled) this.activeManipulator = manipulator;
+          manipulator.pointerUp(editor, s, e);
         }
-      });
+      }
     }
     if (Array.isArray(cursor) && cursor.length > 1) {
       editor.setCursor(cursor[0], cursor[1]);
@@ -250,7 +239,6 @@ export class SelectHandler extends Handler {
 
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
-    this.activeManipulator = null;
   }
 
   /**

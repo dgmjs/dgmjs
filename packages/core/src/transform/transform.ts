@@ -863,7 +863,7 @@ export class Transform extends EventEmitter {
       if (!changed) return false;
       changed = false;
     }
-    console.warn(`Constraints are not resolved within 10 times`);
+    console.warn(`Constraints are not resolved within ${maxIteration} times`);
     return true;
   }
 }

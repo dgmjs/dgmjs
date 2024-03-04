@@ -1204,14 +1204,8 @@ class Manipulator {
       return false;
     }
     let handled = false;
-    for (let cp of this.controllers) {
-      if (cp.active(editor, shape)) {
-        handled = cp.pointerMove(editor, shape, e);
-        if (handled) {
-          this.draggingController = cp;
-          break;
-        }
-      }
+    if (this.draggingController) {
+      handled = this.draggingController.pointerMove(editor, shape, e);
     }
     return handled;
   }
@@ -1222,11 +1216,8 @@ class Manipulator {
    */
   pointerUp(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
     let handled = false;
-    for (let cp of this.controllers) {
-      if (cp.active(editor, shape)) {
-        handled = cp.pointerUp(editor, shape, e);
-        if (handled) break;
-      }
+    if (this.draggingController) {
+      handled = this.draggingController.pointerUp(editor, shape, e);
     }
     this.draggingController = null;
     return handled;
