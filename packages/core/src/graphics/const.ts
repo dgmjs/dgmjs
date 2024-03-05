@@ -82,7 +82,7 @@ const StrokePattern = Object.freeze({
   DASHED: [6, 4],
 });
 
-const SizingPosition = Object.freeze({
+const ControllerPosition = Object.freeze({
   TOP: "t",
   RIGHT: "r",
   BOTTOM: "b",
@@ -109,6 +109,6 @@ export {
   Mouse,
   Color,
   StrokePattern,
-  SizingPosition,
+  ControllerPosition,
   FontSizes,
 };

@@ -11,7 +11,7 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { SizingPosition } from "../graphics/const";
+import { ControllerPosition } from "../graphics/const";
 import { Manipulator, manipulatorManager } from "../editor";
 import { BoxRotateController } from "../controllers/box-rotate";
 import { BoxSizeController } from "../controllers/box-size";
@@ -28,21 +28,25 @@ class LineManipulator extends Manipulator {
     this.controllers.push(new LineMovePointController(this));
     this.controllers.push(new LineAddPointController(this));
     this.controllers.push(new BoxRotateController(this));
-    this.controllers.push(new BoxSizeController(this, SizingPosition.TOP));
-    this.controllers.push(new BoxSizeController(this, SizingPosition.RIGHT));
-    this.controllers.push(new BoxSizeController(this, SizingPosition.BOTTOM));
-    this.controllers.push(new BoxSizeController(this, SizingPosition.LEFT));
+    this.controllers.push(new BoxSizeController(this, ControllerPosition.TOP));
     this.controllers.push(
-      new BoxSizeController(this, SizingPosition.LEFT_TOP, true)
+      new BoxSizeController(this, ControllerPosition.RIGHT)
     );
     this.controllers.push(
-      new BoxSizeController(this, SizingPosition.RIGHT_TOP, true)
+      new BoxSizeController(this, ControllerPosition.BOTTOM)
+    );
+    this.controllers.push(new BoxSizeController(this, ControllerPosition.LEFT));
+    this.controllers.push(
+      new BoxSizeController(this, ControllerPosition.LEFT_TOP, true)
     );
     this.controllers.push(
-      new BoxSizeController(this, SizingPosition.RIGHT_BOTTOM, true)
+      new BoxSizeController(this, ControllerPosition.RIGHT_TOP, true)
     );
     this.controllers.push(
-      new BoxSizeController(this, SizingPosition.LEFT_BOTTOM, true)
+      new BoxSizeController(this, ControllerPosition.RIGHT_BOTTOM, true)
+    );
+    this.controllers.push(
+      new BoxSizeController(this, ControllerPosition.LEFT_BOTTOM, true)
     );
     this.controllers.push(new BoxMoveController(this));
   }

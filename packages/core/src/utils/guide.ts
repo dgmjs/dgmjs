@@ -18,6 +18,16 @@ import { toCssFont, lcs2ccs } from "../graphics/utils";
 import { FillStyle, LineType, Shape } from "../shapes";
 import { Editor, manipulatorManager } from "../editor";
 
+export const ControlPointType = Object.freeze({
+  RECT: 0,
+  CIRCLE: 1,
+  RECT_WITH_PLUS: 2,
+  CROSS: 3,
+  CIRCLE_WITH_PLUS: 4,
+  FILLED_CIRCLE: 5,
+  FILLED_CIRCLE_WITH_OUTERLINE: 6,
+});
+
 /**
  * Draw text at a given point in CCS
  * @param canvas
@@ -222,20 +232,17 @@ function drawControlPoint(
   canvas.rotate(rotate);
   canvas.translate(-p[0], -p[1]);
   switch (type) {
-    case 0: {
-      // rect
+    case ControlPointType.RECT: {
       canvas.fillRoundRect(p1[0], p1[1], p2[0], p2[1], 4);
       canvas.strokeRoundRect(p1[0], p1[1], p2[0], p2[1], 4);
       break;
     }
-    case 1: {
-      // circle
+    case ControlPointType.CIRCLE: {
       canvas.fillEllipse(p1[0], p1[1], p2[0], p2[1]);
       canvas.strokeEllipse(p1[0], p1[1], p2[0], p2[1]);
       break;
     }
-    case 2: {
-      // rect with plus
+    case ControlPointType.RECT_WITH_PLUS: {
       canvas.fillRect(p1[0], p1[1], p2[0], p2[1]);
       canvas.strokeRect(p1[0], p1[1], p2[0], p2[1]);
       const r2 = r - 3;
@@ -243,15 +250,13 @@ function drawControlPoint(
       canvas.line(p[0] - r2, p[1], p[0] + r2, p[1]);
       break;
     }
-    case 3: {
-      // cross
+    case ControlPointType.CROSS: {
       const L = 3 * canvas.px;
       canvas.line(p[0] - L, p[1] - L, p[0] + L, p[1] + L);
       canvas.line(p[0] + L, p[1] - L, p[0] - L, p[1] + L);
       break;
     }
-    case 4: {
-      // circle with plus
+    case ControlPointType.CIRCLE_WITH_PLUS: {
       canvas.fillEllipse(p1[0], p1[1], p2[0], p2[1]);
       canvas.strokeEllipse(p1[0], p1[1], p2[0], p2[1]);
       const r2 = r - 3;
@@ -259,14 +264,12 @@ function drawControlPoint(
       canvas.line(p[0] - r2, p[1], p[0] + r2, p[1]);
       break;
     }
-    case 5: {
-      // filled circle
+    case ControlPointType.FILLED_CIRCLE: {
       canvas.fillColor = canvas.strokeColor;
       canvas.fillEllipse(p1[0], p1[1], p2[0], p2[1]);
       break;
     }
-    case 6: {
-      // filled circle with outer line
+    case ControlPointType.FILLED_CIRCLE_WITH_OUTERLINE: {
       canvas.fillColor = canvas.strokeColor;
       canvas.fillEllipse(p1[0], p1[1], p2[0], p2[1]);
       const gap = canvas.px * 2;

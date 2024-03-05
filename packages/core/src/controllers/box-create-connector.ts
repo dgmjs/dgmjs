@@ -13,12 +13,11 @@
 
 import type { Canvas, CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Shape, Box, Line, Document } from "../shapes";
+import { Shape, Box } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import {
   Cursor,
   CONTROL_POINT_APOTHEM,
-  ANGLE_STEP,
   ControllerPosition,
 } from "../graphics/const";
 import { lcs2ccs } from "../graphics/utils";
@@ -26,18 +25,36 @@ import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { getControllerPosition } from "./utils";
 
+interface BoxCreateConnectorControllerOptions {
+  position: string;
+  distance: number;
+}
+
 /**
- * Box Rotate Controller
+ * Box Create Connector Controller
  */
-export class BoxRotateController extends Controller {
+export class BoxCreateConnectorController extends Controller {
+  /**
+   * Options of the controller
+   */
+  options: BoxCreateConnectorControllerOptions;
+
   /**
    * Snap support for controller
    */
   snap: Snap;
 
-  constructor(manipulator: Manipulator) {
+  constructor(
+    manipulator: Manipulator,
+    options?: Partial<BoxCreateConnectorControllerOptions>
+  ) {
     super(manipulator);
     this.snap = new Snap();
+    this.options = {
+      position: ControllerPosition.BOTTOM,
+      distance: CONTROL_POINT_APOTHEM * 6,
+      ...options,
+    };
   }
 
   /**
@@ -47,11 +64,7 @@ export class BoxRotateController extends Controller {
     let value =
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
-      shape.rotatable;
-    // don't allow rotating a single line
-    if (shape instanceof Line && shape.path.length === 2) value = false;
-    // don't allow resizing when path editable
-    if (shape instanceof Line && shape.pathEditable) value = false;
+      shape.connectable;
     return value;
   }
 
@@ -62,8 +75,8 @@ export class BoxRotateController extends Controller {
     const cp = getControllerPosition(
       canvas,
       shape,
-      ControllerPosition.TOP,
-      CONTROL_POINT_APOTHEM * 4
+      this.options.position,
+      this.options.distance
     );
     return lcs2ccs(canvas, shape, cp);
   }
@@ -87,39 +100,39 @@ export class BoxRotateController extends Controller {
     shape: Shape,
     e: CanvasPointerEvent
   ): [string, number] {
-    return [Cursor.ROTATE, 0];
+    return [Cursor.POINTER, 0];
   }
 
   /**
    * Initialize ghost
    */
   initialize(editor: Editor, shape: Shape): void {
-    editor.transform.startTransaction("rotate");
+    // editor.transform.startTransaction("rotate");
   }
 
   /**
    * Update ghost
    */
   update(editor: Editor, shape: Shape) {
-    const enclosure = shape.getEnclosure();
-    const center = geometry.mid(enclosure[0], enclosure[2]);
-    const angle0 = geometry.angle(enclosure[2], enclosure[1]);
-    const angle1 = geometry.angle(center, this.dragPoint);
-    const d = geometry.normalizeAngle(angle1 - angle0);
-    const delta = Math.round(d / ANGLE_STEP) * ANGLE_STEP;
-    let angle = Math.round(geometry.normalizeAngle(shape.rotate + delta));
-    // transform shapes
-    const tr = editor.transform;
-    const doc = editor.doc as Document;
-    tr.atomicAssign(shape, "rotate", angle);
-    tr.resolveAllConstraints(doc, editor.canvas);
+    // const enclosure = shape.getEnclosure();
+    // const center = geometry.mid(enclosure[0], enclosure[2]);
+    // const angle0 = geometry.angle(enclosure[2], enclosure[1]);
+    // const angle1 = geometry.angle(center, this.dragPoint);
+    // const d = geometry.normalizeAngle(angle1 - angle0);
+    // const delta = Math.round(d / ANGLE_STEP) * ANGLE_STEP;
+    // let angle = Math.round(geometry.normalizeAngle(shape.rotate + delta));
+    // // transform shapes
+    // const tr = editor.transform;
+    // const doc = editor.doc as Document;
+    // tr.atomicAssign(shape, "rotate", angle);
+    // tr.resolveAllConstraints(doc, editor.canvas);
   }
 
   /**
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Box) {
-    editor.transform.endTransaction();
+    // editor.transform.endTransaction();
   }
 
   /**
@@ -128,28 +141,11 @@ export class BoxRotateController extends Controller {
   draw(editor: Editor, shape: Shape) {
     const canvas = editor.canvas;
     const cp = this.getControlPoint(canvas, shape);
-    guide.drawControlPoint(canvas, cp, 1, 0);
+    guide.drawControlPoint(canvas, cp, guide.ControlPointType.FILLED_CIRCLE, 0);
   }
 
   /**
    * Draw controller
    */
-  drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
-    const canvas = editor.canvas;
-    // draw ghost
-    const ghost = shape.getEnclosure();
-    guide.drawPolylineInLCS(canvas, shape, ghost);
-    // const cp = lcs2ccs(
-    //   canvas,
-    //   shape,
-    //   geometry.mid(this.ghost[0], this.ghost[2])
-    // );
-    // const text =
-    //   geometry
-    //     .normalizeAngle(Math.round(shape.rotate + this.delta))
-    //     .toString() + "°";
-    // guide.drawText(canvas, cp, text);
-    // draw snap
-    // this.snap.draw(editor, shape, this.ghost);
-  }
+  drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent) {}
 }

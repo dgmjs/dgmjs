@@ -5,7 +5,7 @@ import { angleInCCS, lcs2ccs } from "../graphics/utils";
 import optjs from "optimization-js";
 import type { Editor } from "../editor";
 import { inControlPoint } from "../utils/guide";
-import { CONTROL_POINT_APOTHEM } from "../graphics/const";
+import { CONTROL_POINT_APOTHEM, ControllerPosition } from "../graphics/const";
 
 /**
  * Find node's position where is the bestfits to the given enclosure.
@@ -189,4 +189,50 @@ export function findSegmentControlPoint(
     }
   }
   return -1;
+}
+
+/**
+ * Returns the point of the position of the controller
+ */
+export function getControllerPosition(
+  canvas: Canvas,
+  shape: Shape,
+  position: string,
+  distance: number = 0
+): number[] {
+  const delta = distance / canvas.scale;
+  const enclosure = shape.getEnclosure();
+  if (enclosure && enclosure.length > 0) {
+    switch (position) {
+      case ControllerPosition.TOP: {
+        const cp = geometry.mid(enclosure[0], enclosure[1]);
+        return [cp[0], cp[1] - delta];
+      }
+      case ControllerPosition.RIGHT: {
+        const cp = geometry.mid(enclosure[1], enclosure[2]);
+        return [cp[0] + delta, cp[1]];
+      }
+      case ControllerPosition.BOTTOM: {
+        const cp = geometry.mid(enclosure[3], enclosure[2]);
+        return [cp[0], cp[1] + delta];
+      }
+      case ControllerPosition.LEFT: {
+        const cp = geometry.mid(enclosure[0], enclosure[3]);
+        return [cp[0] - delta, cp[1]];
+      }
+      case ControllerPosition.LEFT_TOP: {
+        return [enclosure[0][0] - delta, enclosure[0][1] - delta];
+      }
+      case ControllerPosition.RIGHT_TOP: {
+        return [enclosure[1][0] + delta, enclosure[1][1] - delta];
+      }
+      case ControllerPosition.RIGHT_BOTTOM: {
+        return [enclosure[2][0] + delta, enclosure[2][1] + delta];
+      }
+      case ControllerPosition.LEFT_BOTTOM: {
+        return [enclosure[3][0] - delta, enclosure[3][1] + delta];
+      }
+    }
+  }
+  return [-1, -1];
 }

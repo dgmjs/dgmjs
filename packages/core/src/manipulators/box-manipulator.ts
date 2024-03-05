@@ -11,13 +11,14 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { SizingPosition } from "../graphics/const";
+import { ControllerPosition } from "../graphics/const";
 import { Manipulator, manipulatorManager } from "../editor";
 import { BoxRotateController } from "../controllers/box-rotate";
 import { BoxSizeController } from "../controllers/box-size";
 import { BoxMoveController } from "../controllers/box-move";
 import { BoxMoveAnchoredController } from "../controllers/box-move-anchored";
 import { BoxMoveAnchorPositionController } from "../controllers/box-move-anchor-position";
+import { BoxCreateConnectorController } from "../controllers/box-create-connector";
 
 /**
  * BoxManipulator
@@ -25,24 +26,45 @@ import { BoxMoveAnchorPositionController } from "../controllers/box-move-anchor-
 class BoxManipulator extends Manipulator {
   constructor() {
     super();
-    this.controllers.push(new BoxSizeController(this, SizingPosition.TOP));
-    this.controllers.push(new BoxSizeController(this, SizingPosition.RIGHT));
-    this.controllers.push(new BoxSizeController(this, SizingPosition.BOTTOM));
-    this.controllers.push(new BoxSizeController(this, SizingPosition.LEFT));
-    this.controllers.push(new BoxSizeController(this, SizingPosition.LEFT_TOP));
+    this.controllers.push(new BoxSizeController(this, ControllerPosition.TOP));
     this.controllers.push(
-      new BoxSizeController(this, SizingPosition.RIGHT_TOP)
+      new BoxSizeController(this, ControllerPosition.RIGHT)
     );
     this.controllers.push(
-      new BoxSizeController(this, SizingPosition.RIGHT_BOTTOM)
+      new BoxSizeController(this, ControllerPosition.BOTTOM)
+    );
+    this.controllers.push(new BoxSizeController(this, ControllerPosition.LEFT));
+    this.controllers.push(
+      new BoxSizeController(this, ControllerPosition.LEFT_TOP)
     );
     this.controllers.push(
-      new BoxSizeController(this, SizingPosition.LEFT_BOTTOM)
+      new BoxSizeController(this, ControllerPosition.RIGHT_TOP)
+    );
+    this.controllers.push(
+      new BoxSizeController(this, ControllerPosition.RIGHT_BOTTOM)
+    );
+    this.controllers.push(
+      new BoxSizeController(this, ControllerPosition.LEFT_BOTTOM)
     );
     this.controllers.push(new BoxRotateController(this));
     this.controllers.push(new BoxMoveAnchoredController(this));
     this.controllers.push(new BoxMoveAnchorPositionController(this));
     this.controllers.push(new BoxMoveController(this));
+    this.controllers.push(
+      new BoxCreateConnectorController(this, {
+        position: ControllerPosition.BOTTOM,
+      })
+    );
+    this.controllers.push(
+      new BoxCreateConnectorController(this, {
+        position: ControllerPosition.LEFT,
+      })
+    );
+    this.controllers.push(
+      new BoxCreateConnectorController(this, {
+        position: ControllerPosition.RIGHT,
+      })
+    );
   }
 }
 
