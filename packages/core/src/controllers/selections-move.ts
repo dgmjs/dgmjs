@@ -89,8 +89,7 @@ export class SelectionsMoveController extends Controller {
     if (!(container && selections.every((s) => container?.canContain(s))))
       container = editor.doc;
 
-    console.log(this.dxStepGCS, this.dyStepGCS);
-
+    // move shapes
     const tr = editor.transform;
     const doc = editor.doc as Document;
     tr.moveShapes(doc, selections, this.dxStepGCS, this.dyStepGCS, container);

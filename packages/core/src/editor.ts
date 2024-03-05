@@ -1247,7 +1247,6 @@ class Manipulator {
   pointerMove(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
     if (this.mouseIn(editor, shape, e) && !editor.selection.isSelected(shape)) {
       this.drawHovering(editor, shape, e);
-      return false;
     }
     let handled = false;
     if (this.draggingController) {
