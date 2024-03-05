@@ -74,8 +74,8 @@ export class BoxMoveAnchoredController extends Controller {
       (shape as Box).anchorPosition
     );
     const shapeCenter = shape.getCenter();
-    shapeCenter[0] += this.dx0;
-    shapeCenter[1] += this.dy0;
+    shapeCenter[0] += this.dxStep;
+    shapeCenter[1] += this.dyStep;
     const angle = geometry.angle(anchorPoint, shapeCenter);
     const length = geometry.distance(shapeCenter, anchorPoint);
     // transform shape

@@ -78,13 +78,12 @@ export class BoxCreateConnectorController extends Controller {
    * Get coord of the control point in CCS
    */
   getControlPoint(canvas: Canvas, shape: Shape): number[] {
-    const cp = getControllerPosition(
+    return getControllerPosition(
       canvas,
       shape,
       this.options.position,
       this.options.distance
     );
-    return lcs2ccs(canvas, shape, cp);
   }
 
   /**
@@ -93,8 +92,8 @@ export class BoxCreateConnectorController extends Controller {
   mouseIn(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
     const canvas = editor.canvas;
     const p = [e.x, e.y];
-    const cp = this.getControlPoint(canvas, shape);
-    return guide.inControlPoint(canvas, p, cp, 0);
+    const cpCCS = lcs2ccs(canvas, shape, this.getControlPoint(canvas, shape));
+    return guide.inControlPoint(canvas, p, cpCCS, 0);
   }
 
   /**
@@ -118,7 +117,7 @@ export class BoxCreateConnectorController extends Controller {
       [0.5, 0.5],
       null,
       [0.5, 0.5],
-      [this.dragStartPoint, this.dragPoint]
+      [this.dragStartPointGCS, this.dragPointGCS]
     );
     const doc = editor.doc as Document;
     editor.transform.startTransaction("create");
@@ -135,11 +134,11 @@ export class BoxCreateConnectorController extends Controller {
       const [newEnd, anchor] = findConnectionAnchor(
         editor,
         this.connector,
-        this.dragPoint
+        this.dragPointGCS
       );
       const tr = editor.transform;
       const doc = editor.doc as Document;
-      tr.setPath(this.connector, [this.dragStartPoint, this.dragPoint]);
+      tr.setPath(this.connector, [this.dragStartPointGCS, this.dragPointGCS]);
       tr.atomicAssignRef(this.connector, "head", newEnd);
       tr.atomicAssign(this.connector, "headAnchor", anchor);
       tr.resolveAllConstraints(doc, editor.canvas);
@@ -158,8 +157,13 @@ export class BoxCreateConnectorController extends Controller {
    */
   draw(editor: Editor, shape: Shape) {
     const canvas = editor.canvas;
-    const cp = this.getControlPoint(canvas, shape);
-    guide.drawControlPoint(canvas, cp, guide.ControlPointType.FILLED_CIRCLE, 0);
+    const cpCCS = lcs2ccs(canvas, shape, this.getControlPoint(canvas, shape));
+    guide.drawControlPoint(
+      canvas,
+      cpCCS,
+      guide.ControlPointType.FILLED_CIRCLE,
+      0
+    );
   }
 
   /**
@@ -170,13 +174,15 @@ export class BoxCreateConnectorController extends Controller {
       const canvas = editor.canvas;
       const tailAnchorPoint = this.connector.getTailAnchorPoint();
       const headAnchorPoint = this.connector.getHeadAnchorPoint();
-      const p1 = lcs2ccs(canvas, this.connector, tailAnchorPoint);
-      const p2 = lcs2ccs(canvas, this.connector, headAnchorPoint);
-      const pathCCS = this.connector.path.map((p) => lcs2ccs(canvas, shape, p));
-      guide.drawDottedLine(canvas, p1, pathCCS[0]);
-      guide.drawDottedLine(canvas, p2, pathCCS[pathCCS.length - 1]);
-      guide.drawControlPoint(canvas, p1, this.connector.tail ? 5 : 1);
-      guide.drawControlPoint(canvas, p2, this.connector.head ? 5 : 1);
+      const tp = lcs2ccs(canvas, shape, tailAnchorPoint);
+      const hp = lcs2ccs(canvas, this.connector, headAnchorPoint);
+      const pathCCS = this.connector.path.map((p) =>
+        lcs2ccs(canvas, this.connector!, p)
+      );
+      guide.drawDottedLine(canvas, tp, pathCCS[0]);
+      guide.drawDottedLine(canvas, hp, pathCCS[pathCCS.length - 1]);
+      guide.drawControlPoint(canvas, tp, this.connector.tail ? 5 : 1);
+      guide.drawControlPoint(canvas, hp, this.connector.head ? 5 : 1);
     }
   }
 }
