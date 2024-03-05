@@ -13,7 +13,7 @@
 
 import type { Canvas, CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Shape, Box } from "../shapes";
+import { Shape, Box, Connector, Document } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import {
   Cursor,
@@ -23,7 +23,7 @@ import {
 import { lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
-import { getControllerPosition } from "./utils";
+import { findConnectionAnchor, getControllerPosition } from "./utils";
 
 interface BoxCreateConnectorControllerOptions {
   position: string;
@@ -40,6 +40,11 @@ export class BoxCreateConnectorController extends Controller {
   options: BoxCreateConnectorControllerOptions;
 
   /**
+   * connector to be created
+   */
+  connector: Connector | null;
+
+  /**
    * Snap support for controller
    */
   snap: Snap;
@@ -50,6 +55,7 @@ export class BoxCreateConnectorController extends Controller {
   ) {
     super(manipulator);
     this.snap = new Snap();
+    this.connector = null;
     this.options = {
       position: ControllerPosition.BOTTOM,
       distance: CONTROL_POINT_APOTHEM * 6,
@@ -107,32 +113,44 @@ export class BoxCreateConnectorController extends Controller {
    * Initialize ghost
    */
   initialize(editor: Editor, shape: Shape): void {
-    // editor.transform.startTransaction("rotate");
+    this.connector = editor.factory.createConnector(
+      shape,
+      [0.5, 0.5],
+      null,
+      [0.5, 0.5],
+      [this.dragStartPoint, this.dragPoint]
+    );
+    const doc = editor.doc as Document;
+    editor.transform.startTransaction("create");
+    editor.transform.addShape(this.connector, doc);
+    editor.transform.resolveAllConstraints(doc, editor.canvas);
   }
 
   /**
    * Update ghost
    */
   update(editor: Editor, shape: Shape) {
-    // const enclosure = shape.getEnclosure();
-    // const center = geometry.mid(enclosure[0], enclosure[2]);
-    // const angle0 = geometry.angle(enclosure[2], enclosure[1]);
-    // const angle1 = geometry.angle(center, this.dragPoint);
-    // const d = geometry.normalizeAngle(angle1 - angle0);
-    // const delta = Math.round(d / ANGLE_STEP) * ANGLE_STEP;
-    // let angle = Math.round(geometry.normalizeAngle(shape.rotate + delta));
-    // // transform shapes
-    // const tr = editor.transform;
-    // const doc = editor.doc as Document;
-    // tr.atomicAssign(shape, "rotate", angle);
-    // tr.resolveAllConstraints(doc, editor.canvas);
+    if (this.connector) {
+      // find an end and anchor
+      const [newEnd, anchor] = findConnectionAnchor(
+        editor,
+        this.connector,
+        this.dragPoint
+      );
+      const tr = editor.transform;
+      const doc = editor.doc as Document;
+      tr.setPath(this.connector, [this.dragStartPoint, this.dragPoint]);
+      tr.atomicAssignRef(this.connector, "head", newEnd);
+      tr.atomicAssign(this.connector, "headAnchor", anchor);
+      tr.resolveAllConstraints(doc, editor.canvas);
+    }
   }
 
   /**
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Box) {
-    // editor.transform.endTransaction();
+    editor.transform.endTransaction();
   }
 
   /**
@@ -147,5 +165,18 @@ export class BoxCreateConnectorController extends Controller {
   /**
    * Draw controller
    */
-  drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent) {}
+  drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
+    if (this.connector) {
+      const canvas = editor.canvas;
+      const tailAnchorPoint = this.connector.getTailAnchorPoint();
+      const headAnchorPoint = this.connector.getHeadAnchorPoint();
+      const p1 = lcs2ccs(canvas, this.connector, tailAnchorPoint);
+      const p2 = lcs2ccs(canvas, this.connector, headAnchorPoint);
+      const pathCCS = this.connector.path.map((p) => lcs2ccs(canvas, shape, p));
+      guide.drawDottedLine(canvas, p1, pathCCS[0]);
+      guide.drawDottedLine(canvas, p2, pathCCS[pathCCS.length - 1]);
+      guide.drawControlPoint(canvas, p1, this.connector.tail ? 5 : 1);
+      guide.drawControlPoint(canvas, p2, this.connector.head ? 5 : 1);
+    }
+  }
 }

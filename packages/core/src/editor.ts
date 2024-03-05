@@ -1044,6 +1044,7 @@ class Controller {
       handled = true;
       this.initialize(editor, shape);
       this.update(editor, shape);
+      editor.repaint();
       this.drawDragging(editor, shape, e);
       editor.triggerDragStart(this, this.dragStartPoint);
     }
@@ -1068,6 +1069,7 @@ class Controller {
       this.dy0 = this.dragPoint[1] - this.dragPrevPoint[1];
       handled = true;
       this.update(editor, shape);
+      editor.repaint();
       this.drawDragging(editor, shape, e);
       editor.triggerDrag(this, this.dragPoint);
     }
@@ -1092,6 +1094,7 @@ class Controller {
       this.dy0 = 0;
       handled = true;
       this.finalize(editor, shape);
+      editor.repaint();
       editor.triggerDragEnd(this, this.dragPoint);
     }
     return handled;
