@@ -233,8 +233,8 @@ function drawControlPoint(
   canvas.translate(-p[0], -p[1]);
   switch (type) {
     case ControlPointType.RECT: {
-      canvas.fillRoundRect(p1[0], p1[1], p2[0], p2[1], 4);
-      canvas.strokeRoundRect(p1[0], p1[1], p2[0], p2[1], 4);
+      canvas.fillRoundRect(p1[0], p1[1], p2[0], p2[1], 0);
+      canvas.strokeRoundRect(p1[0], p1[1], p2[0], p2[1], 0);
       break;
     }
     case ControlPointType.CIRCLE: {

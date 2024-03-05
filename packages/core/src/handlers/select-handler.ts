@@ -173,7 +173,7 @@ export class SelectHandler extends Handler {
         const manipulator = manipulatorManager.get(s.type);
         if (manipulator) {
           manipulator.pointerMove(editor, s, e);
-          if (manipulator.mouseIn(editor, s, e)) {
+          if (manipulator.mouseIn(editor, s, e) || manipulator.isDragging()) {
             cursor = manipulator.mouseCursor(editor, s, e) ?? cursor;
           }
         }

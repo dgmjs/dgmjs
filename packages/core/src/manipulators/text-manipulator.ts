@@ -18,6 +18,7 @@ import { BoxMoveController } from "../controllers/box-move";
 import { BoxMoveAnchoredController } from "../controllers/box-move-anchored";
 import { BoxMoveAnchorPositionController } from "../controllers/box-move-anchor-position";
 import { BoxSizeController } from "../controllers/box-size";
+import { BoxCreateConnectorController } from "../controllers/box-create-connector";
 
 /**
  * TextManipulator
@@ -45,6 +46,26 @@ class TextManipulator extends Manipulator {
     this.controllers.push(new BoxMoveAnchoredController(this));
     this.controllers.push(new BoxMoveAnchorPositionController(this));
     this.controllers.push(new BoxMoveController(this));
+    this.controllers.push(
+      new BoxCreateConnectorController(this, {
+        position: ControllerPosition.TOP,
+      })
+    );
+    this.controllers.push(
+      new BoxCreateConnectorController(this, {
+        position: ControllerPosition.BOTTOM,
+      })
+    );
+    this.controllers.push(
+      new BoxCreateConnectorController(this, {
+        position: ControllerPosition.LEFT,
+      })
+    );
+    this.controllers.push(
+      new BoxCreateConnectorController(this, {
+        position: ControllerPosition.RIGHT,
+      })
+    );
   }
 }
 manipulatorManager.define("Text", new TextManipulator());

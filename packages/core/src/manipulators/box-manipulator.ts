@@ -52,6 +52,11 @@ class BoxManipulator extends Manipulator {
     this.controllers.push(new BoxMoveController(this));
     this.controllers.push(
       new BoxCreateConnectorController(this, {
+        position: ControllerPosition.TOP,
+      })
+    );
+    this.controllers.push(
+      new BoxCreateConnectorController(this, {
         position: ControllerPosition.BOTTOM,
       })
     );

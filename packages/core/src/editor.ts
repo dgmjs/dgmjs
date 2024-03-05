@@ -1172,6 +1172,10 @@ class Manipulator {
     shape: Shape,
     e: CanvasPointerEvent
   ): [string, number] | null {
+    // dragging controller has higher priority
+    for (let c of this.controllers) {
+      if (c.dragging) return c.mouseCursor(editor, shape, e);
+    }
     for (let c of this.controllers) {
       if (c.active(editor, shape) && c.mouseIn(editor, shape, e))
         return c.mouseCursor(editor, shape, e);
