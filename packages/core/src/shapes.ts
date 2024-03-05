@@ -80,6 +80,7 @@ const Sizable = Object.freeze({
 });
 
 const FillStyle = Object.freeze({
+  NONE: "none",
   SOLID: "solid",
   HACHURE: "hachure",
   CROSS_HATCH: "cross-hatch",
@@ -513,13 +514,33 @@ class Shape extends Obj {
     const outline = this.getOutline().map((p) =>
       this.localCoordTransform(canvas, p, true)
     );
-    return geometry.inPolygon(point, outline);
+    if (this.fillStyle === FillStyle.NONE) {
+      return (
+        geometry.getNearSegment(
+          point,
+          outline,
+          LINE_SELECTION_THRESHOLD * canvas.px
+        ) > -1
+      );
+    } else {
+      return geometry.inPolygon(point, outline);
+    }
   }
 
   /**
    * Determines whether this shape overlaps a given rect
    */
-  overlapRect(rect: number[][]): boolean {
+  overlapRect(canvas: Canvas, rect: number[][]): boolean {
+    if (this.fillStyle === FillStyle.NONE) {
+      const outline = this.getOutline().map((p) =>
+        this.localCoordTransform(canvas, p, true)
+      );
+      for (let i = 0; i < outline.length - 1; i++) {
+        if (geometry.lineOverlapRect([outline[i], outline[i + 1]], rect))
+          return true;
+      }
+      return false;
+    }
     return geometry.overlapRect(rect, this.getBoundingRect());
   }
 
@@ -736,7 +757,7 @@ class Document extends Shape {
   /**
    * Document do not overlap with anything
    */
-  overlapRect(rect: number[][]): boolean {
+  overlapRect(canvas: Canvas, rect: number[][]): boolean {
     return false;
   }
 }
@@ -939,7 +960,17 @@ class Box extends Shape {
   }
 
   renderDefault(canvas: Canvas): void {
-    canvas.roundRect(
+    if (this.fillStyle !== FillStyle.NONE) {
+      canvas.fillRoundRect(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.corners,
+        this.getSeed()
+      );
+    }
+    canvas.strokeRoundRect(
       this.left,
       this.top,
       this.right,
@@ -1171,7 +1202,7 @@ class Line extends Shape {
       path[0] = tp;
       path[path.length - 1] = hp;
     }
-    if (this.isClosed()) {
+    if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
       switch (this.lineType) {
         case LineType.STRAIGHT:
           canvas.polygon(path, this.getSeed());
@@ -1379,7 +1410,7 @@ class Line extends Shape {
    * Determines whether this shape contains a point in GCS
    */
   containsPoint(canvas: Canvas, point: number[]): boolean {
-    if (this.isClosed()) {
+    if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
       const outline = this.getOutline().map((p) =>
         this.localCoordTransform(canvas, p, true)
       );
@@ -1399,6 +1430,17 @@ class Line extends Shape {
   }
 
   /**
+   * Determines whether this shape overlaps a given rect
+   */
+  overlapRect(canvas: Canvas, rect: number[][]): boolean {
+    for (let i = 0; i < this.path.length - 1; i++) {
+      if (geometry.lineOverlapRect([this.path[i], this.path[i + 1]], rect))
+        return true;
+    }
+    return false;
+  }
+
+  /**
    * Return default outline
    */
   getOutlineDefault(): number[][] {
@@ -1409,17 +1451,6 @@ class Line extends Shape {
           : geometry.pathCopy(this.path);
     }
     return geometry.pathCopy(this.path);
-  }
-
-  /**
-   * Determines whether this shape overlaps a given rect
-   */
-  overlapRect(rect: number[][]): boolean {
-    for (let i = 0; i < this.path.length - 1; i++) {
-      if (geometry.lineOverlapRect([this.path[i], this.path[i + 1]], rect))
-        return true;
-    }
-    return false;
   }
 }
 
@@ -1443,7 +1474,16 @@ class Ellipse extends Box {
   }
 
   renderDefault(canvas: Canvas): void {
-    canvas.ellipse(
+    if (this.fillStyle !== FillStyle.NONE) {
+      canvas.fillEllipse(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.getSeed()
+      );
+    }
+    canvas.strokeEllipse(
       this.left,
       this.top,
       this.right,

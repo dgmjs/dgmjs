@@ -20,6 +20,7 @@ export { default as LineStraightIcon } from "./line-straight";
 export { default as LineCurveIcon } from "./line-curve";
 export { default as LineHeightIcon } from "./line-height";
 export { default as ParagraphSpacingIcon } from "./paragraph-spacing";
+export { default as FillNoneIcon } from "./fill-none";
 export { default as FillSolidIcon } from "./fill-solid";
 export { default as FillHachureIcon } from "./fill-hachure";
 export { default as FillCrossHatchIcon } from "./fill-cross-hatch";
