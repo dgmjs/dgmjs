@@ -90,26 +90,26 @@ export class BoxSizeController extends Controller {
       case ControllerPosition.TOP:
         value =
           value &&
-          shape.width > MIN1 &&
-          (shape.sizable === Sizable.VERT || shape.sizable === Sizable.FREE);
+          (shape.sizable === Sizable.VERT ||
+            (shape.sizable === Sizable.FREE && shape.width > MIN1));
         break;
       case ControllerPosition.RIGHT:
         value =
           value &&
-          shape.height > MIN1 &&
-          (shape.sizable === Sizable.HORZ || shape.sizable === Sizable.FREE);
+          (shape.sizable === Sizable.HORZ ||
+            (shape.sizable === Sizable.FREE && shape.height > MIN1));
         break;
       case ControllerPosition.BOTTOM:
         value =
           value &&
-          shape.width > MIN1 &&
-          (shape.sizable === Sizable.VERT || shape.sizable === Sizable.FREE);
+          (shape.sizable === Sizable.VERT ||
+            (shape.sizable === Sizable.FREE && shape.width > MIN1));
         break;
       case ControllerPosition.LEFT:
         value =
           value &&
-          shape.height > MIN1 &&
-          (shape.sizable === Sizable.HORZ || shape.sizable === Sizable.FREE);
+          (shape.sizable === Sizable.HORZ ||
+            (shape.sizable === Sizable.FREE && shape.height > MIN1));
         break;
       case ControllerPosition.LEFT_TOP:
         value =
