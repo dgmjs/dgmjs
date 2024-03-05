@@ -16,6 +16,20 @@ import { Shape } from "../shapes";
 import * as geometry from "./geometry";
 
 /**
+ * Transform global coord to canvas coord (GCS --> CCS)
+ */
+function gcs2ccs(canvas: Canvas, point: number[]): number[] {
+  return canvas.globalCoordTransform(point);
+}
+
+/**
+ * Transform canvas coord to global coord (CCS --> GCS)
+ */
+function ccs2gcs(canvas: Canvas, point: number[]): number[] {
+  return canvas.globalCoordTransformRev(point);
+}
+
+/**
  * Transform local coord to canvas coord (LCS --> CCS)
  */
 function lcs2ccs(canvas: Canvas, shape: Shape, point: number[]): number[] {
@@ -98,6 +112,8 @@ function toCssFont(
 }
 
 export {
+  gcs2ccs,
+  ccs2gcs,
   lcs2ccs,
   ccs2lcs,
   lcs2gcs,
