@@ -24,16 +24,32 @@ class GroupManipulator extends Manipulator {
   constructor() {
     super();
     this.controllers.push(
-      new BoxSizeController(this, ControllerPosition.LEFT_TOP, true, true)
+      new BoxSizeController(this, {
+        position: ControllerPosition.LEFT_TOP,
+        doScale: true,
+        doScaleChildren: true,
+      })
     );
     this.controllers.push(
-      new BoxSizeController(this, ControllerPosition.RIGHT_TOP, true, true)
+      new BoxSizeController(this, {
+        position: ControllerPosition.RIGHT_TOP,
+        doScale: true,
+        doScaleChildren: true,
+      })
     );
     this.controllers.push(
-      new BoxSizeController(this, ControllerPosition.RIGHT_BOTTOM, true, true)
+      new BoxSizeController(this, {
+        position: ControllerPosition.RIGHT_BOTTOM,
+        doScale: true,
+        doScaleChildren: true,
+      })
     );
     this.controllers.push(
-      new BoxSizeController(this, ControllerPosition.LEFT_BOTTOM, true, true)
+      new BoxSizeController(this, {
+        position: ControllerPosition.LEFT_BOTTOM,
+        doScale: true,
+        doScaleChildren: true,
+      })
     );
     this.controllers.push(new BoxRotateController(this));
     this.controllers.push(new BoxMoveController(this));

@@ -12,7 +12,6 @@
  */
 
 import type { Canvas, CanvasPointerEvent } from "../graphics/graphics";
-import * as geometry from "../graphics/geometry";
 import { Shape, Box, Connector, Document } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import {
@@ -58,7 +57,7 @@ export class BoxCreateConnectorController extends Controller {
     this.connector = null;
     this.options = {
       position: ControllerPosition.BOTTOM,
-      distance: CONTROL_POINT_APOTHEM * 6,
+      distance: CONTROL_POINT_APOTHEM * 4,
       ...options,
     };
   }

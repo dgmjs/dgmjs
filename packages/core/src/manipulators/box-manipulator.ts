@@ -26,25 +26,29 @@ import { BoxCreateConnectorController } from "../controllers/box-create-connecto
 class BoxManipulator extends Manipulator {
   constructor() {
     super();
-    this.controllers.push(new BoxSizeController(this, ControllerPosition.TOP));
     this.controllers.push(
-      new BoxSizeController(this, ControllerPosition.RIGHT)
+      new BoxSizeController(this, { position: ControllerPosition.TOP })
     );
     this.controllers.push(
-      new BoxSizeController(this, ControllerPosition.BOTTOM)
-    );
-    this.controllers.push(new BoxSizeController(this, ControllerPosition.LEFT));
-    this.controllers.push(
-      new BoxSizeController(this, ControllerPosition.LEFT_TOP)
+      new BoxSizeController(this, { position: ControllerPosition.RIGHT })
     );
     this.controllers.push(
-      new BoxSizeController(this, ControllerPosition.RIGHT_TOP)
+      new BoxSizeController(this, { position: ControllerPosition.BOTTOM })
     );
     this.controllers.push(
-      new BoxSizeController(this, ControllerPosition.RIGHT_BOTTOM)
+      new BoxSizeController(this, { position: ControllerPosition.LEFT })
     );
     this.controllers.push(
-      new BoxSizeController(this, ControllerPosition.LEFT_BOTTOM)
+      new BoxSizeController(this, { position: ControllerPosition.LEFT_TOP })
+    );
+    this.controllers.push(
+      new BoxSizeController(this, { position: ControllerPosition.RIGHT_TOP })
+    );
+    this.controllers.push(
+      new BoxSizeController(this, { position: ControllerPosition.RIGHT_BOTTOM })
+    );
+    this.controllers.push(
+      new BoxSizeController(this, { position: ControllerPosition.LEFT_BOTTOM })
     );
     this.controllers.push(new BoxRotateController(this));
     this.controllers.push(new BoxMoveAnchoredController(this));

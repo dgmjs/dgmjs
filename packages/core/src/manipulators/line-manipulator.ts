@@ -28,25 +28,41 @@ class LineManipulator extends Manipulator {
     this.controllers.push(new LineMovePointController(this));
     this.controllers.push(new LineAddPointController(this));
     this.controllers.push(new BoxRotateController(this));
-    this.controllers.push(new BoxSizeController(this, ControllerPosition.TOP));
     this.controllers.push(
-      new BoxSizeController(this, ControllerPosition.RIGHT)
+      new BoxSizeController(this, { position: ControllerPosition.TOP })
     );
     this.controllers.push(
-      new BoxSizeController(this, ControllerPosition.BOTTOM)
-    );
-    this.controllers.push(new BoxSizeController(this, ControllerPosition.LEFT));
-    this.controllers.push(
-      new BoxSizeController(this, ControllerPosition.LEFT_TOP, true)
+      new BoxSizeController(this, { position: ControllerPosition.RIGHT })
     );
     this.controllers.push(
-      new BoxSizeController(this, ControllerPosition.RIGHT_TOP, true)
+      new BoxSizeController(this, { position: ControllerPosition.BOTTOM })
     );
     this.controllers.push(
-      new BoxSizeController(this, ControllerPosition.RIGHT_BOTTOM, true)
+      new BoxSizeController(this, { position: ControllerPosition.LEFT })
     );
     this.controllers.push(
-      new BoxSizeController(this, ControllerPosition.LEFT_BOTTOM, true)
+      new BoxSizeController(this, {
+        position: ControllerPosition.LEFT_TOP,
+        doScale: true,
+      })
+    );
+    this.controllers.push(
+      new BoxSizeController(this, {
+        position: ControllerPosition.RIGHT_TOP,
+        doScale: true,
+      })
+    );
+    this.controllers.push(
+      new BoxSizeController(this, {
+        position: ControllerPosition.RIGHT_BOTTOM,
+        doScale: true,
+      })
+    );
+    this.controllers.push(
+      new BoxSizeController(this, {
+        position: ControllerPosition.LEFT_BOTTOM,
+        doScale: true,
+      })
     );
     this.controllers.push(new BoxMoveController(this));
   }

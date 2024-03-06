@@ -24,7 +24,9 @@ class ConnectorManipulator extends Manipulator {
   constructor() {
     super();
     this.controllers.push(new ConnectorReconnectController(this));
-    this.controllers.push(new LineMovePointController(this, true));
+    this.controllers.push(
+      new LineMovePointController(this, { exceptEndPoints: true })
+    );
     this.controllers.push(new LineAddPointController(this));
     this.controllers.push(new ConnectorMoveController(this));
   }

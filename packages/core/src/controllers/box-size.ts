@@ -29,29 +29,25 @@ import {
 import { Snap } from "../manipulators/snap";
 import { fitEnclosureInCSS, getControllerPosition } from "./utils";
 
+interface BoxSizeControllerOptions {
+  position: string;
+  doScale: boolean;
+  doScaleChildren: boolean;
+}
+
 /**
  * Box Size Controller
  */
 export class BoxSizeController extends Controller {
   /**
+   * Options of the controller
+   */
+  options: BoxSizeControllerOptions;
+
+  /**
    * Snap support for controller
    */
   snap: Snap;
-
-  /**
-   * The position of controller
-   */
-  controlPosition: string;
-
-  /**
-   * Scale fontSize and padding
-   */
-  doScale: boolean;
-
-  /**
-   * Scale children
-   */
-  doScaleChildren: boolean;
 
   /**
    * Temporal memory for shape's enclosure
@@ -65,15 +61,16 @@ export class BoxSizeController extends Controller {
 
   constructor(
     manipulator: Manipulator,
-    position: string,
-    doScale: boolean = false,
-    doScaleChildren: boolean = false
+    options: Partial<BoxSizeControllerOptions>
   ) {
     super(manipulator);
+    this.options = {
+      position: ControllerPosition.RIGHT_BOTTOM,
+      doScale: false,
+      doScaleChildren: false,
+      ...options,
+    };
     this.snap = new Snap();
-    this.controlPosition = position;
-    this.doScale = doScale;
-    this.doScaleChildren = doScaleChildren;
     this.initialEnclosure = [];
     this.initialSnapshot = {};
   }
@@ -86,7 +83,7 @@ export class BoxSizeController extends Controller {
     const MIN2 = CONTROL_POINT_APOTHEM * 4;
     let value =
       editor.selection.size() === 1 && editor.selection.isSelected(shape);
-    switch (this.controlPosition) {
+    switch (this.options.position) {
       case ControllerPosition.TOP:
         value =
           value &&
@@ -154,7 +151,7 @@ export class BoxSizeController extends Controller {
     const cp = lcs2ccs(
       canvas,
       shape,
-      getControllerPosition(canvas, shape, this.controlPosition)
+      getControllerPosition(canvas, shape, this.options.position)
     );
     const angle = angleInCCS(canvas, shape);
     return inControlPoint(canvas, p, cp, angle);
@@ -172,7 +169,7 @@ export class BoxSizeController extends Controller {
     const canvas = editor.canvas;
     let angle = angleInCCS(canvas, shape);
     angle = Math.round(angle);
-    switch (this.controlPosition) {
+    switch (this.options.position) {
       case ControllerPosition.LEFT:
       case ControllerPosition.RIGHT:
         angle += 90;
@@ -222,12 +219,12 @@ export class BoxSizeController extends Controller {
     const r = h / w;
 
     // update control enclosure based on mouse movement (dx, dy)
-    switch (this.controlPosition) {
+    switch (this.options.position) {
       case ControllerPosition.TOP:
         controlEnclosure[0][1] += dy;
         controlEnclosure[1][1] += dy;
         controlEnclosure[4][1] += dy;
-        if (this.doScale || shape.sizable === Sizable.RATIO) {
+        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
           controlEnclosure[1][0] += -dy / r;
           controlEnclosure[2][0] += -dy / r;
         }
@@ -235,7 +232,7 @@ export class BoxSizeController extends Controller {
       case ControllerPosition.RIGHT:
         controlEnclosure[1][0] += dx;
         controlEnclosure[2][0] += dx;
-        if (this.doScale || shape.sizable === Sizable.RATIO) {
+        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
           controlEnclosure[2][1] += dx * r;
           controlEnclosure[3][1] += dx * r;
         }
@@ -243,7 +240,7 @@ export class BoxSizeController extends Controller {
       case ControllerPosition.BOTTOM:
         controlEnclosure[2][1] += dy;
         controlEnclosure[3][1] += dy;
-        if (this.doScale || shape.sizable === Sizable.RATIO) {
+        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
           controlEnclosure[1][0] += dy / r;
           controlEnclosure[2][0] += dy / r;
         }
@@ -252,13 +249,13 @@ export class BoxSizeController extends Controller {
         controlEnclosure[0][0] += dx;
         controlEnclosure[3][0] += dx;
         controlEnclosure[4][0] += dx;
-        if (this.doScale || shape.sizable === Sizable.RATIO) {
+        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
           controlEnclosure[2][1] += -dx * r;
           controlEnclosure[3][1] += -dx * r;
         }
         break;
       case ControllerPosition.LEFT_TOP:
-        if (this.doScale || shape.sizable === Sizable.RATIO) {
+        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
           if (dx * r > dy / r) {
             dy = dx * r;
           } else {
@@ -273,7 +270,7 @@ export class BoxSizeController extends Controller {
         controlEnclosure[3][0] += dx;
         break;
       case ControllerPosition.RIGHT_TOP:
-        if (this.doScale || shape.sizable === Sizable.RATIO) {
+        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
           if (dx * r > dy / r) {
             dy = -dx * r;
           } else {
@@ -287,7 +284,7 @@ export class BoxSizeController extends Controller {
         controlEnclosure[4][1] += dy;
         break;
       case ControllerPosition.RIGHT_BOTTOM:
-        if (this.doScale || shape.sizable === Sizable.RATIO) {
+        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
           if (dx * r > dy / r) {
             dy = dx * r;
           } else {
@@ -300,7 +297,7 @@ export class BoxSizeController extends Controller {
         controlEnclosure[3][1] += dy;
         break;
       case ControllerPosition.LEFT_BOTTOM:
-        if (this.doScale || shape.sizable === Sizable.RATIO) {
+        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
           if (dx * r > dy / r) {
             dy = -dx * r;
           } else {
@@ -372,7 +369,7 @@ export class BoxSizeController extends Controller {
     }
 
     // do scale (font, padding and path)
-    if (this.doScale) {
+    if (this.options.doScale) {
       tr.atomicAssign(shape, "fontSize", initialShape.fontSize * ratio);
       if (shape instanceof Box) {
         tr.atomicAssign(
@@ -384,7 +381,7 @@ export class BoxSizeController extends Controller {
     }
 
     // do scale children
-    if (this.doScaleChildren) {
+    if (this.options.doScaleChildren) {
       shape.traverse((s) => {
         if (s !== shape && s instanceof Shape) {
           const initialChild = this.initialSnapshot[s.id];
@@ -416,7 +413,7 @@ export class BoxSizeController extends Controller {
             );
             tr.atomicAssign(s, "path", newPath);
           }
-          if (this.doScale) {
+          if (this.options.doScale) {
             tr.atomicAssign(s, "fontSize", initialChild.fontSize * ratio);
             if (s instanceof Box) {
               tr.atomicAssign(
@@ -447,7 +444,7 @@ export class BoxSizeController extends Controller {
     const p = lcs2ccs(
       canvas,
       shape,
-      getControllerPosition(canvas, shape, this.controlPosition)
+      getControllerPosition(canvas, shape, this.options.position)
     );
     const angle = angleInCCS(canvas, shape);
     drawControlPoint(canvas, p, 0, angle);
