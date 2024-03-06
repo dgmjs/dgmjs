@@ -1676,7 +1676,7 @@ class Connector extends Line {
    * Return head anchor point
    */
   getHeadAnchorPoint(): number[] {
-    if (this.head instanceof Line) {
+    if (this.head instanceof Line && !this.head.isClosed()) {
       return geometry.getPointOnPath(this.head.path, this.headAnchor[0]);
     } else if (this.head) {
       const box = this.head?.getBoundingRect();
@@ -1694,7 +1694,7 @@ class Connector extends Line {
    * Return tail anchor point
    */
   getTailAnchorPoint(): number[] {
-    if (this.tail instanceof Line) {
+    if (this.tail instanceof Line && !this.tail.isClosed()) {
       return geometry.getPointOnPath(this.tail.path, this.tailAnchor[0]);
     } else if (this.tail) {
       const box = this.tail.getBoundingRect();

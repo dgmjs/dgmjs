@@ -69,7 +69,7 @@ export function adjustRoute(connector: Connector): number[][] {
     // attach tail point
     if (connector.tail) {
       const tp = connector.getTailAnchorPoint();
-      if (connector.tail instanceof Line) {
+      if (connector.tail instanceof Line && !connector.tail.isClosed()) {
         newPath[0][0] = tp[0];
         newPath[0][1] = tp[1];
       } else if (connector.tail) {
@@ -89,7 +89,7 @@ export function adjustRoute(connector: Connector): number[][] {
     // attach head point
     if (connector.head) {
       const hp = connector.getHeadAnchorPoint();
-      if (connector.head instanceof Line) {
+      if (connector.head instanceof Line && !connector.head.isClosed()) {
         newPath[newPath.length - 1][0] = hp[0];
         newPath[newPath.length - 1][1] = hp[1];
       } else {

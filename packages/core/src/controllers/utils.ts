@@ -113,7 +113,7 @@ export function findConnectionAnchor(
     editor.doc?.getShapeAt(canvas, point, connector ? [connector] : []) ?? null;
   let anchor = [0.5, 0.5];
   if (!end?.connectable) end = null;
-  if (end instanceof Line) {
+  if (end instanceof Line && !end.isClosed()) {
     const p = geometry.findNearestOnPath(
       point,
       end.path,
