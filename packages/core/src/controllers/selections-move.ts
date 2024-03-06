@@ -16,7 +16,6 @@ import { Shape, Document } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { Color, Cursor } from "../graphics/const";
 import { Snap } from "../manipulators/snap";
-import { drawPolylineInLCS } from "../utils/guide";
 import { lcs2ccs } from "../graphics/utils";
 
 /**
@@ -28,15 +27,9 @@ export class SelectionsMoveController extends Controller {
    */
   snap: Snap;
 
-  /**
-   * Ghost polygon
-   */
-  ghost: number[][];
-
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.snap = new Snap();
-    this.ghost = [];
   }
 
   /**
@@ -50,7 +43,6 @@ export class SelectionsMoveController extends Controller {
    * Returns true if mouse cursor is inside the controller
    */
   mouseIn(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
-    if (this.dragging) return true;
     if (shape instanceof Document) {
       const canvas = editor.canvas;
       const p = canvas.globalCoordTransformRev([e.x, e.y]);
@@ -74,67 +66,47 @@ export class SelectionsMoveController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
-    // this.ghost = editor.selection.getEnclosure(editor.canvas);
     editor.transform.startTransaction("move");
   }
 
   /**
-   * Update ghost
-   * @param shape (is a diagram in group manipulator)
+   * Update
+   * @param shape (is a document in group manipulator)
    */
   update(editor: Editor, shape: Shape) {
-    let ghost = editor.selection.getEnclosure(editor.canvas);
-    // update ghost
-    ghost = ghost.map((p) => [p[0] + this.dx0, p[1] + this.dy0]);
-    this.ghost = ghost;
-
     const canvas = editor.canvas;
-    let dp = shape.localCoordTransform(canvas, this.dragPoint, false);
     const selections = editor.selection.getShapes();
-    const diagram = editor.doc as Document;
 
     // determine container
     // (container shouldn't be itself of a descendant of target)
-    let container = editor.doc?.getShapeAt(canvas, dp, selections);
+    let container = editor.doc?.getShapeAt(
+      canvas,
+      this.dragPointGCS,
+      selections
+    );
     const r = selections.find((sh) => sh.find((s) => s.id === container?.id));
     if (r) container = null;
     if (!(container && selections.every((s) => container?.canContain(s))))
       container = editor.doc;
 
+    // move shapes
     const tr = editor.transform;
-    tr.moveShapes(diagram, selections, this.dx0, this.dy0, container);
-    tr.resolveAllConstraints(diagram, canvas);
+    const doc = editor.doc as Document;
+    tr.moveShapes(doc, selections, this.dxStepGCS, this.dyStepGCS, container);
+    tr.resolveAllConstraints(doc, canvas);
   }
 
   /**
    * Finalize shape by ghost
-   * @param shape (is a diagram in group manipulator)
+   * @param shape (is a document in group manipulator)
    */
   finalize(editor: Editor, shape: Shape) {
-    // const canvas = editor.canvas;
-    // let dp = shape.localCoordTransform(canvas, this.dragPoint, false);
-    // const selections = editor.selection.getShapes();
-    // const diagram = editor.doc as Document;
-
-    // // determine container
-    // // (container shouldn't be itself of a descendant of target)
-    // let container = editor.doc?.getShapeAt(canvas, dp, selections);
-    // const r = selections.find((sh) => sh.find((s) => s.id === container?.id));
-    // if (r) container = null;
-    // if (!(container && selections.every((s) => container?.canContain(s))))
-    //   container = editor.doc;
-
-    // const tr = editor.transform;
-    // tr.startTransaction("move");
-    // tr.moveShapes(diagram, selections, this.dx, this.dy, container);
-    // tr.resolveAllConstraints(diagram, canvas);
-    // tr.endTransaction();
     editor.transform.endTransaction();
   }
 
   /**
    * Draw ghost for the selected shapes
-   * @param shape (is a diagram in group manipulator)
+   * @param shape (is a document in group manipulator)
    */
   draw(editor: Editor, shape: Shape) {
     if (shape instanceof Document) {
@@ -164,12 +136,12 @@ export class SelectionsMoveController extends Controller {
    */
   drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     const canvas = editor.canvas;
-    // draw ghost
-    drawPolylineInLCS(canvas, shape, this.ghost);
-    // hovering containable
-    const dp = shape.localCoordTransform(canvas, this.dragPoint, true);
     const selections = editor.selection.getShapes();
-    const container = editor.doc?.getShapeAt(canvas, dp, selections);
+    const container = editor.doc?.getShapeAt(
+      canvas,
+      this.dragPointGCS,
+      selections
+    );
     if (
       container &&
       container !== shape &&
@@ -180,6 +152,6 @@ export class SelectionsMoveController extends Controller {
       if (manipulator) manipulator.drawHovering(editor, container, e);
     }
     // draw snap
-    this.snap.draw(editor, shape, this.ghost);
+    // this.snap.draw(editor, shape, this.ghost);
   }
 }

@@ -38,7 +38,7 @@ export const useDemoStore = create<DemoState>()(
       },
       setActiveHandler: (handlerId) =>
         set((state) => ({ activeHandler: handlerId })),
-      setDoc: (diagram) => set((state) => ({ doc: diagram })),
+      setDoc: (doc) => set((state) => ({ doc: doc })),
       setSelection: (selections) => set((state) => ({ selection: selections })),
     }),
     { name: "DemoStore" }

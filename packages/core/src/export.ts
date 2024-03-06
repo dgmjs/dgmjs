@@ -18,9 +18,9 @@ export type ExportImageOptions = {
 };
 
 /**
- * Create and return a new canvas element with diagram rendered
+ * Create and return a new canvas element with document rendered
  */
-function getImageCanvas(diagram: Document, options: ExportImageOptions) {
+function getImageCanvas(doc: Document, options: ExportImageOptions) {
   const { scale, dark, fillBackground } = options;
   const theme = dark ? "dark" : "light";
   const colorVariables = colors[theme];
@@ -28,7 +28,7 @@ function getImageCanvas(diagram: Document, options: ExportImageOptions) {
   // make a new canvas element for making image data
   const canvasElement = document.createElement("canvas");
   const canvas = new Canvas(canvasElement, scale);
-  let boundingBox = diagram.getDocBoundingBox(canvas);
+  let boundingBox = doc.getDocBoundingBox(canvas);
 
   // initialize new canvas
   boundingBox = geometry.expandRect(boundingBox, DEFAULT_MARGIN);
@@ -49,19 +49,19 @@ function getImageCanvas(diagram: Document, options: ExportImageOptions) {
     canvas.context.fillRect(0, 0, canvasElement.width, canvasElement.height);
   }
 
-  // draw diagram to the new canvas
-  diagram.render(canvas);
+  // draw doc to the new canvas
+  doc.render(canvas);
   return canvasElement;
 }
 
 /**
- * Get Base64-encoded image data of diagram
+ * Get Base64-encoded image data of doc
  */
 export async function getImageDataUrl(
-  diagram: Document,
+  doc: Document,
   options: Partial<ExportImageOptions>
 ): Promise<string> {
-  const canvas = getImageCanvas(diagram, {
+  const canvas = getImageCanvas(doc, {
     scale: 1,
     dark: false,
     fillBackground: true,
@@ -72,13 +72,13 @@ export async function getImageDataUrl(
 }
 
 /**
- * Get Blob image data of diagram
+ * Get Blob image data of doc
  */
 export async function getImageBlob(
-  diagram: Document,
+  doc: Document,
   options: Partial<ExportImageOptions>
 ): Promise<Blob | null> {
-  const canvas = getImageCanvas(diagram, {
+  const canvas = getImageCanvas(doc, {
     scale: 1,
     dark: false,
     fillBackground: true,
@@ -93,11 +93,11 @@ export async function getImageBlob(
 }
 
 /**
- * Get SVG image data of diagram
+ * Get SVG image data of doc
  */
 export async function getSVGImageData(
   canvas: Canvas,
-  diagram: Document,
+  doc: Document,
   options: Partial<ExportImageOptions>,
   styleInSVG?: string
 ): Promise<string> {
@@ -113,7 +113,7 @@ export async function getSVGImageData(
 
   // Make a new SVG canvas for making SVG image data
   const boundingBox = geometry.expandRect(
-    diagram.getDocBoundingBox(canvas),
+    doc.getDocBoundingBox(canvas),
     margin
   );
   const w = geometry.width(boundingBox);
@@ -140,8 +140,8 @@ export async function getSVGImageData(
     svgCanvas.context.fillRect(0, 0, svgCanvasWidth, svgCanvasHeight);
   }
 
-  // Draw diagram to the new canvas
-  diagram.render(svgCanvas);
+  // Draw doc to the new canvas
+  doc.render(svgCanvas);
 
   // TODO: add fonts in defs (temporal impls)
   const svg: SVGSVGElement = ctx.getSvg();
@@ -160,25 +160,25 @@ export async function getSVGImageData(
 }
 
 /**
- * Export diagram image as a file
+ * Export doc image as a file
  */
 export async function exportImageAsFile(
   canvas: Canvas,
-  diagram: Document,
+  doc: Document,
   fileName: string,
   options: Partial<ExportImageOptions>,
   styleInSVG?: string
 ) {
   switch (options.format) {
     case "image/png": {
-      const data = await getImageBlob(diagram, options);
+      const data = await getImageBlob(doc, options);
       if (data) {
         saveAs(data, fileName);
       }
       break;
     }
     case "image/svg+xml": {
-      const data = await getSVGImageData(canvas, diagram, options, styleInSVG);
+      const data = await getSVGImageData(canvas, doc, options, styleInSVG);
       if (data) {
         const blob = new Blob([data], { type: "image/svg+xml" });
         saveAs(blob, fileName);
@@ -189,16 +189,16 @@ export async function exportImageAsFile(
 }
 
 /**
- * Copy diagram image to clipboard
+ * Copy doc image to clipboard
  */
 export async function copyToClipboard(
   canvas: Canvas,
-  diagram: Document,
+  doc: Document,
   options: Partial<ExportImageOptions>
 ) {
   switch (options.format) {
     case "image/png": {
-      const data = await getImageBlob(diagram, options);
+      const data = await getImageBlob(doc, options);
       if (data) {
         navigator.clipboard.write([
           new ClipboardItem({

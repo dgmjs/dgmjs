@@ -92,7 +92,7 @@ export const DGMEditor: React.FC<DGMEditorProps> = ({
       // initialize
       editorRef.current = editor;
       editor.fit();
-      editor.setActiveHandler("Select");
+      editor.activateDefaultHandler();
       editor.repaint();
       if (onMount) onMount(editor);
     }

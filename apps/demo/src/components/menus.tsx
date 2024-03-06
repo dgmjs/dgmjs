@@ -13,13 +13,62 @@
 
 import { MenuIcon } from "lucide-react";
 import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { fileOpen } from "browser-fs-access";
+import { useDemoStore } from "@/demo-store";
+import { Document } from "@dgmjs/core";
 
 export function Menus() {
+  const { setDoc } = useDemoStore();
+
+  const handleNew = () => {
+    window.editor.actions.newDoc();
+    setDoc(window.editor.store.doc as Document);
+  };
+
+  const handleOpen = async () => {
+    try {
+      const fileWithHandle = await fileOpen([
+        {
+          description: "DGM files",
+          mimeTypes: ["application/json"],
+          extensions: [".dgm"],
+          multiple: false,
+        },
+      ]);
+      if (fileWithHandle && fileWithHandle.handle) {
+        const file = await fileWithHandle.handle.getFile();
+        const data = await file.text();
+        const json = JSON.parse(data);
+        window.editor.actions.loadFromJSON(json);
+        setDoc(window.editor.store.doc as Document);
+        window.editor.fitToScreen();
+        window.editor.repaint();
+      }
+    } catch {
+      // user canceled
+      return;
+    }
+  };
+
   return (
     <div className="flex justify-center items-center h-8 px-1">
-      <Button variant="ghost" className="h-8 w-8 p-0">
-        <MenuIcon size={16} />
-      </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-8 w-8 p-0">
+            <MenuIcon size={16} />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem onSelect={handleNew}>New</DropdownMenuItem>
+          <DropdownMenuItem onSelect={handleOpen}>Open...</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }

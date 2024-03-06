@@ -27,7 +27,7 @@ const schema = z.object({
  * Inherit styles from parent
  */
 function constraint(
-  diagram: Document,
+  doc: Document,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,

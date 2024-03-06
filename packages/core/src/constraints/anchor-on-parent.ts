@@ -26,7 +26,7 @@ const schema = z.object({});
  * @param {object} args
  */
 function constraint(
-  diagram: Document,
+  doc: Document,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,
@@ -34,7 +34,7 @@ function constraint(
 ) {
   let changed = false;
   if (shape instanceof Box && !(shape.parent instanceof Document)) {
-    const anchorPoint = geometry.positionOnPath(
+    const anchorPoint = geometry.getPointOnPath(
       (shape.parent as Shape).getOutline() ?? [],
       shape.anchorPosition
     );
@@ -47,7 +47,7 @@ function constraint(
     const top = shapeCenter[1] - shape.height / 2;
     const dx = left - shape.left;
     const dy = top - shape.top;
-    changed = transform.moveShapes(diagram, [shape], dx, dy);
+    changed = transform.moveShapes(doc, [shape], dx, dy);
   }
   return changed;
 }

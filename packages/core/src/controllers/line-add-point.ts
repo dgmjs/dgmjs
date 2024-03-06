@@ -13,14 +13,14 @@
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Shape, Line, Connector, RouteType, Document } from "../shapes";
+import { Shape, Line, Connector, Document } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import { Cursor, LINE_STRATIFY_ANGLE_THRESHOLD } from "../graphics/const";
 import { lcs2ccs, ccs2lcs, angleInCCS } from "../graphics/utils";
 import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { findSegmentControlPoint, fitPathInCSS } from "./utils";
-import { reduceObliquePath } from "../utils/route-utils";
+import { reducePath } from "../utils/route-utils";
 
 /**
  * LineAddPointController
@@ -52,21 +52,18 @@ export class LineAddPointController extends Controller {
    * Indicates the controller is active or not
    */
   active(editor: Editor, shape: Shape): boolean {
-    let value =
+    return (
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
       shape instanceof Line &&
-      shape.pathEditable;
-    if (shape instanceof Connector && shape.routeType === RouteType.RECTILINEAR)
-      value = false;
-    return value;
+      shape.pathEditable
+    );
   }
 
   /**
    * Returns true if mouse cursor is inside the controller
    */
   mouseIn(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
-    if (this.dragging) return true;
     const p = ccs2lcs(editor.canvas, shape, [e.x, e.y]);
     return findSegmentControlPoint(editor, shape as Line, p) >= 0;
   }
@@ -106,7 +103,7 @@ export class LineAddPointController extends Controller {
     newPath[this.controlPoint + 1][0] += this.dx;
     newPath[this.controlPoint + 1][1] += this.dy;
     // update ghost by simplified routing
-    newPath = reduceObliquePath(newPath, LINE_STRATIFY_ANGLE_THRESHOLD);
+    newPath = reducePath(newPath, LINE_STRATIFY_ANGLE_THRESHOLD);
 
     const canvas = editor.canvas;
     const newPathCCS = newPath.map((p) => lcs2ccs(canvas, shape, p));
@@ -145,7 +142,7 @@ export class LineAddPointController extends Controller {
         const p2pos =
           i === path.length - 2 ? 1 : geometry.getPositionOnPath(outline, p2);
         const midpos = (p1pos + p2pos) / 2;
-        const mid = geometry.positionOnPath(outline, midpos);
+        const mid = geometry.getPointOnPath(outline, midpos);
         const midCCS = lcs2ccs(canvas, shape, mid);
         guide.drawControlPoint(canvas, midCCS, 4, angle);
       }

@@ -45,6 +45,7 @@ function App() {
       window.editor.setDoc(window.editor.store.doc as Document);
     }
     demoStore.setDoc(window.editor.store.doc as Document);
+    window.editor.fitToScreen();
 
     window.addEventListener("resize", () => {
       window.editor.fit();
@@ -57,10 +58,6 @@ function App() {
 
   const handleActiveHandlerChange = (handlerId: string) => {
     demoStore.setActiveHandler(handlerId);
-  };
-
-  const handleShapeCreate = (shape: Shape) => {
-    window.editor.setActiveHandler("Select");
   };
 
   const handleTransaction = (tx: Transaction) => {
@@ -88,7 +85,6 @@ function App() {
         onMount={handleMount}
         onSelectionChange={handleSelectionChange}
         onActiveHandlerChange={handleActiveHandlerChange}
-        onShapeCreate={handleShapeCreate}
         onTransaction={handleTransaction}
       />
       <div className="absolute top-0 inset-x-0 h-10 border-b flex items-center justify-between bg-background">

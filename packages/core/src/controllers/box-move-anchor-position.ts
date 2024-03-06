@@ -12,7 +12,7 @@
  */
 
 import * as geometry from "../graphics/geometry";
-import { Shape, Box, Document } from "../shapes";
+import { Shape, Box, Document, Movable } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import { Cursor, MAGNET_THRESHOLD } from "../graphics/const";
 import { ccs2lcs, lcs2ccs } from "../graphics/utils";
@@ -66,6 +66,7 @@ export class BoxMoveAnchorPositionController extends Controller {
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
       shape instanceof Box &&
+      shape.movable !== Movable.NONE &&
       shape.anchored
     );
   }
@@ -74,17 +75,14 @@ export class BoxMoveAnchorPositionController extends Controller {
    * Returns true if mouse cursor is inside the controller
    */
   mouseIn(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
-    if (this.dragging) return true;
     const canvas = editor.canvas;
     const p = [e.x, e.y];
-    const anchorPoint = geometry.positionOnPath(
+    const anchorPoint = geometry.getPointOnPath(
       (shape.parent as Shape).getOutline(),
       (shape as Box).anchorPosition
     );
     const anchorPointCCS = lcs2ccs(canvas, shape.parent as Shape, anchorPoint);
     return guide.inControlPoint(canvas, p, anchorPointCCS);
-
-    // return false;
   }
 
   /**
@@ -102,7 +100,7 @@ export class BoxMoveAnchorPositionController extends Controller {
   initialize(editor: Editor, shape: Shape): void {
     this.ghost = shape.getEnclosure();
     this.anchorPosition = (shape as Box).anchorPosition;
-    this.anchorPoint = geometry.positionOnPath(
+    this.anchorPoint = geometry.getPointOnPath(
       (shape.parent as Shape).getOutline() ?? [],
       (shape as Box).anchorPosition
     );
@@ -125,21 +123,27 @@ export class BoxMoveAnchorPositionController extends Controller {
       outline,
       MAGNET_THRESHOLD
     );
-    if (geometry.distance(anchorPoint, dragLCS) <= MAGNET_THRESHOLD) {
+    if (
+      anchorPoint &&
+      geometry.distance(anchorPoint, dragLCS) <= MAGNET_THRESHOLD
+    ) {
       this.anchorPosition = geometry.getPositionOnPath(outline, anchorPoint);
       this.anchorPoint = anchorPoint;
       this.outOfPath = false;
     } else {
       // set to original position if drag point is too far from the path
       this.anchorPosition = (shape as Box).anchorPosition;
-      this.anchorPoint = geometry.positionOnPath(
+      this.anchorPoint = geometry.getPointOnPath(
         outline,
         (shape as Box).anchorPosition
       );
       this.outOfPath = true;
     }
     // update ghost
-    this.ghost = newEnclosure.map((p) => [p[0] + this.dx0, p[1] + this.dy0]);
+    this.ghost = newEnclosure.map((p) => [
+      p[0] + this.dxStep,
+      p[1] + this.dyStep,
+    ]);
 
     // transform shape
     const tr = editor.transform;
@@ -160,7 +164,7 @@ export class BoxMoveAnchorPositionController extends Controller {
    */
   draw(editor: Editor, shape: Box) {
     const canvas = editor.canvas;
-    const anchorPoint = geometry.positionOnPath(
+    const anchorPoint = geometry.getPointOnPath(
       (shape.parent as Shape).getOutline() ?? [],
       shape.anchorPosition
     );

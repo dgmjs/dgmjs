@@ -12,7 +12,7 @@
  */
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
-import { Shape, Line, Connector, RouteType, Document } from "../shapes";
+import { Shape, Line, Document } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import {
   Cursor,
@@ -24,21 +24,25 @@ import * as guide from "../utils/guide";
 import * as geometry from "../graphics/geometry";
 import { Snap } from "../manipulators/snap";
 import { findControlPoint } from "./utils";
-import { reduceObliquePath } from "../utils/route-utils";
+import { reducePath } from "../utils/route-utils";
+
+interface LineMovePointControllerOptions {
+  exceptEndPoints: boolean;
+}
 
 /**
  * MovePoint Controller
  */
 export class LineMovePointController extends Controller {
   /**
+   * Options of the controller
+   */
+  options: LineMovePointControllerOptions;
+
+  /**
    * Snap support for controller
    */
   snap: Snap;
-
-  /**
-   * except head-end and tail-end points
-   */
-  exceptEndPoints: boolean;
 
   /**
    * current control point
@@ -50,10 +54,13 @@ export class LineMovePointController extends Controller {
    */
   controlPath: number[][];
 
-  constructor(manipulator: Manipulator, exceptEndPoints: boolean = false) {
+  constructor(
+    manipulator: Manipulator,
+    options?: Partial<LineMovePointControllerOptions>
+  ) {
     super(manipulator);
+    this.options = { exceptEndPoints: false, ...options };
     this.snap = new Snap();
-    this.exceptEndPoints = exceptEndPoints;
     this.controlPoint = 0;
     this.controlPath = [];
   }
@@ -62,24 +69,21 @@ export class LineMovePointController extends Controller {
    * Indicates the controller is active or not
    */
   active(editor: Editor, shape: Shape): boolean {
-    let value =
+    return (
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
       shape instanceof Line &&
-      shape.pathEditable;
-    if (shape instanceof Connector && shape.routeType === RouteType.RECTILINEAR)
-      value = false;
-    return value;
+      shape.pathEditable
+    );
   }
 
   /**
    * Returns true if mouse cursor is inside the controller
    */
   mouseIn(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
-    if (this.dragging) return true;
     const p = ccs2lcs(editor.canvas, shape, [e.x, e.y]);
     const idx = findControlPoint(editor, shape as Line, p);
-    return this.exceptEndPoints
+    return this.options.exceptEndPoints
       ? idx > 0 && idx < (shape as Line).path.length - 1
       : idx >= 0;
   }
@@ -137,7 +141,7 @@ export class LineMovePointController extends Controller {
     }
 
     // update ghost by simplified routing
-    newPath = reduceObliquePath(newPath, LINE_STRATIFY_ANGLE_THRESHOLD);
+    newPath = reducePath(newPath, LINE_STRATIFY_ANGLE_THRESHOLD);
 
     // transform shape
     const canvas = editor.canvas;
@@ -161,8 +165,10 @@ export class LineMovePointController extends Controller {
     const canvas = editor.canvas;
     const path = (shape as Line).path;
     // draw control points
-    const startPoint = this.exceptEndPoints ? 1 : 0;
-    const endPoint = this.exceptEndPoints ? path.length - 2 : path.length - 1;
+    const startPoint = this.options.exceptEndPoints ? 1 : 0;
+    const endPoint = this.options.exceptEndPoints
+      ? path.length - 2
+      : path.length - 1;
     if (endPoint >= startPoint) {
       for (let i = startPoint; i <= endPoint; i++) {
         const p = lcs2ccs(canvas, shape, path[i]);
@@ -194,8 +200,8 @@ export class LineMovePointController extends Controller {
     // let pathCCS = path.map((p) => lcs2ccs(canvas, shape, p));
     // guide.drawDottedPolyline(canvas, pathCCS);
     // // draw control points
-    // const startPoint = this.exceptEndPoints ? 1 : 0;
-    // const endPoint = this.exceptEndPoints ? path.length - 2 : path.length - 1;
+    // const startPoint = this.options.exceptEndPoints ? 1 : 0;
+    // const endPoint = this.options.exceptEndPoints ? path.length - 2 : path.length - 1;
     // if (endPoint >= startPoint) {
     //   for (let i = startPoint; i <= endPoint; i++) {
     //     const p = lcs2ccs(canvas, shape, path[i]);

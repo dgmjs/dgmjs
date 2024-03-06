@@ -64,16 +64,11 @@ export class Actions {
    */
   update(values: ShapeValues, shapes?: Shape[]) {
     shapes = shapes ?? this.editor.selection.getShapes();
-    const diagram = this.editor.doc as Document;
+    const doc = this.editor.doc as Document;
     const tr = this.editor.transform;
     tr.startTransaction("update");
     for (let key in values) {
-      if (key === "routeType") {
-        shapes.forEach((s) => {
-          if (s instanceof Connector)
-            tr.changeRouteType(s, (values as any)[key]);
-        });
-      } else if (key === "richText") {
+      if (key === "richText") {
         shapes.forEach((s) => {
           if (s instanceof Box) tr.setRichText(s, (values as any)[key]);
         });
@@ -99,7 +94,7 @@ export class Actions {
         });
       }
     }
-    tr.resolveAllConstraints(diagram, this.editor.canvas);
+    tr.resolveAllConstraints(doc, this.editor.canvas);
     tr.endTransaction();
   }
 
@@ -108,11 +103,11 @@ export class Actions {
    */
   delete_(shapes?: Shape[]) {
     shapes = shapes ?? this.editor.selection.getShapes();
-    const diagram = this.editor.doc as Document;
+    const doc = this.editor.doc as Document;
     const tr = this.editor.transform;
     tr.startTransaction("delete");
-    tr.deleteShapes(diagram, shapes);
-    tr.resolveAllConstraints(diagram, this.editor.canvas);
+    tr.deleteShapes(doc, shapes);
+    tr.resolveAllConstraints(doc, this.editor.canvas);
     tr.endTransaction();
     this.editor.selection.deselectAll();
   }
@@ -132,13 +127,13 @@ export class Actions {
    */
   cut(shapes?: Shape[]) {
     shapes = shapes ?? this.editor.selection.getShapes();
-    const diagram = this.editor.doc as Document;
+    const doc = this.editor.doc as Document;
     const tr = this.editor.transform;
     const clipboard = this.editor.clipboard;
     clipboard.clearBuffer();
     clipboard.putObjects(shapes, clipboard.buffer);
     tr.startTransaction("cut");
-    tr.deleteShapes(diagram, shapes);
+    tr.deleteShapes(doc, shapes);
     tr.endTransaction();
     this.editor.selection.deselectAll();
   }
@@ -146,8 +141,8 @@ export class Actions {
   /**
    * Paste
    */
-  paste(diagram?: Document) {
-    diagram = diagram ?? (this.editor.doc as Document);
+  paste(doc?: Document) {
+    doc = doc ?? (this.editor.doc as Document);
     const clipboard = this.editor.clipboard;
     const tr = this.editor.transform;
     const center = this.editor.getCenter();
@@ -163,9 +158,9 @@ export class Actions {
       tr.startTransaction("paste");
       shapes.toReversed().forEach((shape) => {
         tr.atomicInsert(shape);
-        tr.changeParent(shape, diagram as Document);
+        tr.changeParent(shape, doc as Document);
       });
-      tr.moveShapes(diagram, shapes, dx, dy);
+      tr.moveShapes(doc, shapes, dx, dy);
       tr.endTransaction();
       this.editor.selection.select(shapes);
     }
@@ -177,7 +172,7 @@ export class Actions {
   duplicate(shapes?: Shape[]) {
     shapes = shapes ?? this.editor.selection.getShapes();
     const tr = this.editor.transform;
-    const diagram = this.editor.doc as Document;
+    const doc = this.editor.doc as Document;
     const clipboard = this.editor.clipboard;
     const buffer: any[] = [];
     clipboard.putObjects(shapes, buffer);
@@ -186,9 +181,9 @@ export class Actions {
       tr.startTransaction("duplicate");
       copied.toReversed().forEach((shape) => {
         tr.atomicInsert(shape);
-        tr.changeParent(shape, diagram);
+        tr.changeParent(shape, doc);
       });
-      tr.moveShapes(diagram, copied, 30, 30);
+      tr.moveShapes(doc, copied, 30, 30);
       tr.endTransaction();
       this.editor.selection.select(copied);
     }
@@ -201,12 +196,12 @@ export class Actions {
     shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
       const tr = this.editor.transform;
-      const diagram = this.editor.doc as Document;
+      const doc = this.editor.doc as Document;
       tr.startTransaction("move-right");
       if (shapes.every((s) => s instanceof Box && s.anchored)) {
         for (let s of shapes) {
           if (s instanceof Box && s.anchored) {
-            const anchorPoint = geometry.positionOnPath(
+            const anchorPoint = geometry.getPointOnPath(
               (s.parent as Shape).getOutline() ?? [],
               s.anchorPosition
             );
@@ -221,9 +216,9 @@ export class Actions {
           }
         }
       } else {
-        tr.moveShapes(diagram, shapes, dx, dy);
+        tr.moveShapes(doc, shapes, dx, dy);
       }
-      tr.resolveAllConstraints(diagram, this.editor.canvas);
+      tr.resolveAllConstraints(doc, this.editor.canvas);
       tr.endTransaction();
     }
   }
@@ -234,7 +229,7 @@ export class Actions {
   group(shapes?: Shape[]) {
     shapes = shapes ?? this.editor.selection.getShapes();
     const box = this.editor.selection.getBoundingRect(this.editor.canvas);
-    const diagram = this.editor.doc as Document;
+    const doc = this.editor.doc as Document;
     // filter all descendants of one of grouping shapes
     let filteredShapes: Shape[] = [];
     for (let s of shapes) {
@@ -250,7 +245,7 @@ export class Actions {
       tr.startTransaction("group");
       tr.atomicInsert(group);
       tr.changeParent(group, this.editor.doc as Document);
-      diagram
+      doc
         ?.traverseSequence()
         .reverse()
         .forEach((s) => {
@@ -258,7 +253,7 @@ export class Actions {
             tr.changeParent(s, group);
           }
         });
-      tr.resolveAllConstraints(diagram, this.editor.canvas);
+      tr.resolveAllConstraints(doc, this.editor.canvas);
       tr.endTransaction();
       this.editor.selection.select([group]);
     }
@@ -269,7 +264,7 @@ export class Actions {
    */
   ungroup(shapes?: Shape[]) {
     shapes = shapes ?? this.editor.selection.getShapes();
-    const diagram = this.editor.doc as Document;
+    const doc = this.editor.doc as Document;
     const children: Shape[] = [];
     if (shapes.some((s) => s instanceof Group)) {
       const tr = this.editor.transform;
@@ -281,10 +276,10 @@ export class Actions {
             children.push(child as Shape);
             tr.changeParent(child, s.parent as Shape);
           }
-          tr.deleteSingleShape(diagram, s);
+          tr.deleteSingleShape(doc, s);
         }
       }
-      tr.resolveAllConstraints(diagram, this.editor.canvas);
+      tr.resolveAllConstraints(doc, this.editor.canvas);
       tr.endTransaction();
       this.editor.selection.select(children);
     }
@@ -295,14 +290,14 @@ export class Actions {
    */
   bringToFront(shapes?: Shape[]) {
     shapes = shapes ?? this.editor.selection.getShapes();
-    const diagram = this.editor.doc as Document;
+    const doc = this.editor.doc as Document;
     if (shapes.length > 0) {
       const tr = this.editor.transform;
       tr.startTransaction("bring-to-front");
       for (let s of shapes) {
         tr.bringToFront(s);
       }
-      tr.resolveAllConstraints(diagram, this.editor.canvas);
+      tr.resolveAllConstraints(doc, this.editor.canvas);
       tr.endTransaction();
     }
   }
@@ -312,14 +307,14 @@ export class Actions {
    */
   sendToBack(shapes?: Shape[]) {
     shapes = shapes ?? this.editor.selection.getShapes();
-    const diagram = this.editor.doc as Document;
+    const doc = this.editor.doc as Document;
     if (shapes.length > 0) {
       const tr = this.editor.transform;
       tr.startTransaction("send-to-back");
       for (let s of shapes) {
         tr.sendToBack(s);
       }
-      tr.resolveAllConstraints(diagram, this.editor.canvas);
+      tr.resolveAllConstraints(doc, this.editor.canvas);
       tr.endTransaction();
     }
   }
@@ -329,14 +324,14 @@ export class Actions {
    */
   bringForward(shapes?: Shape[]) {
     shapes = shapes ?? this.editor.selection.getShapes();
-    const diagram = this.editor.doc as Document;
+    const doc = this.editor.doc as Document;
     if (shapes.length > 0) {
       const tr = this.editor.transform;
       tr.startTransaction("bring-forward");
       for (let s of shapes) {
         tr.bringForward(s);
       }
-      tr.resolveAllConstraints(diagram, this.editor.canvas);
+      tr.resolveAllConstraints(doc, this.editor.canvas);
       tr.endTransaction();
     }
   }
@@ -346,14 +341,14 @@ export class Actions {
    */
   sendBackward(shapes?: Shape[]) {
     shapes = shapes ?? this.editor.selection.getShapes();
-    const diagram = this.editor.doc as Document;
+    const doc = this.editor.doc as Document;
     if (shapes.length > 0) {
       const tr = this.editor.transform;
       tr.startTransaction("send-backward");
       for (let s of shapes) {
         tr.sendBackward(s);
       }
-      tr.resolveAllConstraints(diagram, this.editor.canvas);
+      tr.resolveAllConstraints(doc, this.editor.canvas);
       tr.endTransaction();
     }
   }
@@ -365,20 +360,20 @@ export class Actions {
     shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
       const tr = this.editor.transform;
-      const diagram = this.editor.doc as Document;
+      const doc = this.editor.doc as Document;
       tr.startTransaction("align-left");
       const ls = shapes.map((s) => s.getBoundingRect()[0][0]);
       const left = Math.min(...ls);
       for (const s of shapes) {
         if (s instanceof Box) {
           const dx = left - s.left;
-          tr.moveShapes(diagram, [s], dx, 0);
+          tr.moveShapes(doc, [s], dx, 0);
         } else if (s instanceof Line) {
           const dx = left - Math.min(...s.path.map((p) => p[0]));
-          tr.moveShapes(diagram, [s], dx, 0);
+          tr.moveShapes(doc, [s], dx, 0);
         }
       }
-      tr.resolveAllConstraints(diagram, this.editor.canvas);
+      tr.resolveAllConstraints(doc, this.editor.canvas);
       tr.endTransaction();
     }
   }
@@ -390,20 +385,20 @@ export class Actions {
     shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
       const tr = this.editor.transform;
-      const diagram = this.editor.doc as Document;
+      const doc = this.editor.doc as Document;
       tr.startTransaction("align-right");
       const rs = shapes.map((s) => s.getBoundingRect()[1][0]);
       const right = Math.max(...rs);
       for (const s of shapes) {
         if (s instanceof Box) {
           const dx = right - s.right;
-          tr.moveShapes(diagram, [s], dx, 0);
+          tr.moveShapes(doc, [s], dx, 0);
         } else if (s instanceof Line) {
           const dx = right - Math.max(...s.path.map((p) => p[0]));
-          tr.moveShapes(diagram, [s], dx, 0);
+          tr.moveShapes(doc, [s], dx, 0);
         }
       }
-      tr.resolveAllConstraints(diagram, this.editor.canvas);
+      tr.resolveAllConstraints(doc, this.editor.canvas);
       tr.endTransaction();
     }
   }
@@ -415,7 +410,7 @@ export class Actions {
     shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
       const tr = this.editor.transform;
-      const diagram = this.editor.doc as Document;
+      const doc = this.editor.doc as Document;
       tr.startTransaction("align-center");
       const ls = shapes.map((s) => s.getBoundingRect()[0][0]);
       const rs = shapes.map((s) => s.getBoundingRect()[1][0]);
@@ -425,15 +420,15 @@ export class Actions {
       for (const s of shapes) {
         if (s instanceof Box) {
           const dx = center - Math.round((s.left + s.right) / 2);
-          tr.moveShapes(diagram, [s], dx, 0);
+          tr.moveShapes(doc, [s], dx, 0);
         } else if (s instanceof Line) {
           const l = Math.min(...s.path.map((p) => p[0]));
           const r = Math.max(...s.path.map((p) => p[0]));
           const dx = center - Math.round((l + r) / 2);
-          tr.moveShapes(diagram, [s], dx, 0);
+          tr.moveShapes(doc, [s], dx, 0);
         }
       }
-      tr.resolveAllConstraints(diagram, this.editor.canvas);
+      tr.resolveAllConstraints(doc, this.editor.canvas);
       tr.endTransaction();
     }
   }
@@ -445,20 +440,20 @@ export class Actions {
     shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
       const tr = this.editor.transform;
-      const diagram = this.editor.doc as Document;
+      const doc = this.editor.doc as Document;
       tr.startTransaction("align-top");
       const ts = shapes.map((s) => s.getBoundingRect()[0][1]);
       const top = Math.min(...ts);
       for (const s of shapes) {
         if (s instanceof Box) {
           const dy = top - s.top;
-          tr.moveShapes(diagram, [s], 0, dy);
+          tr.moveShapes(doc, [s], 0, dy);
         } else if (s instanceof Line) {
           const dy = top - Math.min(...s.path.map((p) => p[1]));
-          tr.moveShapes(diagram, [s], 0, dy);
+          tr.moveShapes(doc, [s], 0, dy);
         }
       }
-      tr.resolveAllConstraints(diagram, this.editor.canvas);
+      tr.resolveAllConstraints(doc, this.editor.canvas);
       tr.endTransaction();
     }
   }
@@ -470,20 +465,20 @@ export class Actions {
     shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
       const tr = this.editor.transform;
-      const diagram = this.editor.doc as Document;
+      const doc = this.editor.doc as Document;
       tr.startTransaction("align-bottom");
       const bs = shapes.map((s) => s.getBoundingRect()[1][1]);
       const bottom = Math.max(...bs);
       for (const s of shapes) {
         if (s instanceof Box) {
           const dy = bottom - s.bottom;
-          tr.moveShapes(diagram, [s], 0, dy);
+          tr.moveShapes(doc, [s], 0, dy);
         } else if (s instanceof Line) {
           const dy = bottom - Math.max(...s.path.map((p) => p[1]));
-          tr.moveShapes(diagram, [s], 0, dy);
+          tr.moveShapes(doc, [s], 0, dy);
         }
       }
-      tr.resolveAllConstraints(diagram, this.editor.canvas);
+      tr.resolveAllConstraints(doc, this.editor.canvas);
       tr.endTransaction();
     }
   }
@@ -495,7 +490,7 @@ export class Actions {
     shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
       const tr = this.editor.transform;
-      const diagram = this.editor.doc as Document;
+      const doc = this.editor.doc as Document;
       tr.startTransaction("align-middle");
       const ts = shapes.map((s) => s.getBoundingRect()[0][1]);
       const bs = shapes.map((s) => s.getBoundingRect()[1][1]);
@@ -505,15 +500,15 @@ export class Actions {
       for (const s of shapes) {
         if (s instanceof Box) {
           const dy = middle - Math.round((s.top + s.bottom) / 2);
-          tr.moveShapes(diagram, [s], 0, dy);
+          tr.moveShapes(doc, [s], 0, dy);
         } else if (s instanceof Line) {
           const t = Math.min(...s.path.map((p) => p[1]));
           const b = Math.max(...s.path.map((p) => p[1]));
           const dy = middle - Math.round((t + b) / 2);
-          tr.moveShapes(diagram, [s], 0, dy);
+          tr.moveShapes(doc, [s], 0, dy);
         }
       }
-      tr.resolveAllConstraints(diagram, this.editor.canvas);
+      tr.resolveAllConstraints(doc, this.editor.canvas);
       tr.endTransaction();
     }
   }

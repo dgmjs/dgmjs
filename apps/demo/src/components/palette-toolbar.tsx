@@ -37,7 +37,7 @@ function PaletteItem({ handlerId, children }: PaletteItemProps) {
 
   const handleToggleChange = (pressed: boolean) => {
     if (pressed) {
-      window.editor.setActiveHandler(handlerId);
+      window.editor.activateHandler(handlerId);
     }
   };
 

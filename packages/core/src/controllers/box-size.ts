@@ -18,7 +18,7 @@ import { Controller, Editor, Manipulator } from "../editor";
 import {
   CONTROL_POINT_APOTHEM,
   Cursor,
-  SizingPosition,
+  ControllerPosition,
 } from "../graphics/const";
 import { lcs2ccs, angleInCCS, ccs2lcs } from "../graphics/utils";
 import {
@@ -27,33 +27,27 @@ import {
   inControlPoint,
 } from "../utils/guide";
 import { Snap } from "../manipulators/snap";
-import { fitEnclosureInCSS } from "./utils";
+import { fitEnclosureInCSS, getControllerPosition } from "./utils";
 
-const MIN_SIZE = CONTROL_POINT_APOTHEM * 2;
+interface BoxSizeControllerOptions {
+  position: string;
+  doScale: boolean;
+  doScaleChildren: boolean;
+}
 
 /**
  * Box Size Controller
  */
 export class BoxSizeController extends Controller {
   /**
+   * Options of the controller
+   */
+  options: BoxSizeControllerOptions;
+
+  /**
    * Snap support for controller
    */
   snap: Snap;
-
-  /**
-   * The position of controller
-   */
-  controlPosition: string;
-
-  /**
-   * Scale fontSize and padding
-   */
-  doScale: boolean;
-
-  /**
-   * Scale children
-   */
-  doScaleChildren: boolean;
 
   /**
    * Temporal memory for shape's enclosure
@@ -67,15 +61,16 @@ export class BoxSizeController extends Controller {
 
   constructor(
     manipulator: Manipulator,
-    position: string,
-    doScale: boolean = false,
-    doScaleChildren: boolean = false
+    options: Partial<BoxSizeControllerOptions>
   ) {
     super(manipulator);
+    this.options = {
+      position: ControllerPosition.RIGHT_BOTTOM,
+      doScale: false,
+      doScaleChildren: false,
+      ...options,
+    };
     this.snap = new Snap();
-    this.controlPosition = position;
-    this.doScale = doScale;
-    this.doScaleChildren = doScaleChildren;
     this.initialEnclosure = [];
     this.initialSnapshot = {};
   }
@@ -88,51 +83,51 @@ export class BoxSizeController extends Controller {
     const MIN2 = CONTROL_POINT_APOTHEM * 4;
     let value =
       editor.selection.size() === 1 && editor.selection.isSelected(shape);
-    switch (this.controlPosition) {
-      case SizingPosition.TOP:
+    switch (this.options.position) {
+      case ControllerPosition.TOP:
         value =
           value &&
-          shape.width > MIN1 &&
-          (shape.sizable === Sizable.VERT || shape.sizable === Sizable.FREE);
+          (shape.sizable === Sizable.VERT ||
+            (shape.sizable === Sizable.FREE && shape.width > MIN1));
         break;
-      case SizingPosition.RIGHT:
+      case ControllerPosition.RIGHT:
         value =
           value &&
-          shape.height > MIN1 &&
-          (shape.sizable === Sizable.HORZ || shape.sizable === Sizable.FREE);
+          (shape.sizable === Sizable.HORZ ||
+            (shape.sizable === Sizable.FREE && shape.height > MIN1));
         break;
-      case SizingPosition.BOTTOM:
+      case ControllerPosition.BOTTOM:
         value =
           value &&
-          shape.width > MIN1 &&
-          (shape.sizable === Sizable.VERT || shape.sizable === Sizable.FREE);
+          (shape.sizable === Sizable.VERT ||
+            (shape.sizable === Sizable.FREE && shape.width > MIN1));
         break;
-      case SizingPosition.LEFT:
+      case ControllerPosition.LEFT:
         value =
           value &&
-          shape.height > MIN1 &&
-          (shape.sizable === Sizable.HORZ || shape.sizable === Sizable.FREE);
+          (shape.sizable === Sizable.HORZ ||
+            (shape.sizable === Sizable.FREE && shape.height > MIN1));
         break;
-      case SizingPosition.LEFT_TOP:
-        value =
-          value &&
-          shape.width > MIN2 &&
-          shape.height > MIN2 &&
-          (shape.sizable === Sizable.FREE || shape.sizable === Sizable.RATIO);
-        break;
-      case SizingPosition.RIGHT_TOP:
+      case ControllerPosition.LEFT_TOP:
         value =
           value &&
           shape.width > MIN2 &&
           shape.height > MIN2 &&
           (shape.sizable === Sizable.FREE || shape.sizable === Sizable.RATIO);
         break;
-      case SizingPosition.RIGHT_BOTTOM:
+      case ControllerPosition.RIGHT_TOP:
+        value =
+          value &&
+          shape.width > MIN2 &&
+          shape.height > MIN2 &&
+          (shape.sizable === Sizable.FREE || shape.sizable === Sizable.RATIO);
+        break;
+      case ControllerPosition.RIGHT_BOTTOM:
         value =
           value &&
           (shape.sizable === Sizable.FREE || shape.sizable === Sizable.RATIO);
         break;
-      case SizingPosition.LEFT_BOTTOM:
+      case ControllerPosition.LEFT_BOTTOM:
         value =
           value &&
           shape.width > MIN2 &&
@@ -148,57 +143,15 @@ export class BoxSizeController extends Controller {
   }
 
   /**
-   * Returns the point of the position of the controller
-   */
-  getControlPosition(editor: Editor, shape: Shape, position: string): number[] {
-    const enclosure = shape.getEnclosure();
-    const offset = 0; //CONTROL_POINT_APOTHEM / editor.canvas.scale;
-    if (enclosure && enclosure.length > 0) {
-      switch (position) {
-        case SizingPosition.TOP: {
-          const cp = geometry.mid(enclosure[0], enclosure[1]);
-          return [cp[0], cp[1] - offset];
-        }
-        case SizingPosition.RIGHT: {
-          const cp = geometry.mid(enclosure[1], enclosure[2]);
-          return [cp[0] + offset, cp[1]];
-        }
-        case SizingPosition.BOTTOM: {
-          const cp = geometry.mid(enclosure[3], enclosure[2]);
-          return [cp[0], cp[1] + offset];
-        }
-        case SizingPosition.LEFT: {
-          const cp = geometry.mid(enclosure[0], enclosure[3]);
-          return [cp[0] - offset, cp[1]];
-        }
-        case SizingPosition.LEFT_TOP: {
-          return [enclosure[0][0] - offset, enclosure[0][1] - offset];
-        }
-        case SizingPosition.RIGHT_TOP: {
-          return [enclosure[1][0] + offset, enclosure[1][1] - offset];
-        }
-        case SizingPosition.RIGHT_BOTTOM: {
-          return [enclosure[2][0] + offset, enclosure[2][1] + offset];
-        }
-        case SizingPosition.LEFT_BOTTOM: {
-          return [enclosure[3][0] - offset, enclosure[3][1] + offset];
-        }
-      }
-    }
-    return [-1, -1];
-  }
-
-  /**
    * Returns true if mouse cursor is inside the controller
    */
   mouseIn(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
-    if (this.dragging) return true;
     const canvas = editor.canvas;
     const p = [e.x, e.y];
     const cp = lcs2ccs(
       canvas,
       shape,
-      this.getControlPosition(editor, shape, this.controlPosition)
+      getControllerPosition(canvas, shape, this.options.position)
     );
     const angle = angleInCCS(canvas, shape);
     return inControlPoint(canvas, p, cp, angle);
@@ -216,17 +169,17 @@ export class BoxSizeController extends Controller {
     const canvas = editor.canvas;
     let angle = angleInCCS(canvas, shape);
     angle = Math.round(angle);
-    switch (this.controlPosition) {
-      case SizingPosition.LEFT:
-      case SizingPosition.RIGHT:
+    switch (this.options.position) {
+      case ControllerPosition.LEFT:
+      case ControllerPosition.RIGHT:
         angle += 90;
         break;
-      case SizingPosition.LEFT_TOP:
-      case SizingPosition.RIGHT_BOTTOM:
+      case ControllerPosition.LEFT_TOP:
+      case ControllerPosition.RIGHT_BOTTOM:
         angle += 135;
         break;
-      case SizingPosition.RIGHT_TOP:
-      case SizingPosition.LEFT_BOTTOM:
+      case ControllerPosition.RIGHT_TOP:
+      case ControllerPosition.LEFT_BOTTOM:
         angle += 45;
         break;
     }
@@ -259,68 +212,54 @@ export class BoxSizeController extends Controller {
     let dy = dragPoint[1] - this.dragStartPoint[1];
 
     // initialize control enclosure
-    const controlEnclosure = geometry.pathCopy(this.initialEnclosure);
+    let controlEnclosure = geometry.pathCopy(this.initialEnclosure);
     const initialRect = geometry.boundingRect(controlEnclosure);
     const w = geometry.width(initialRect);
     const h = geometry.height(initialRect);
     const r = h / w;
 
     // update control enclosure based on mouse movement (dx, dy)
-    switch (this.controlPosition) {
-      case SizingPosition.TOP:
-        if (h - dy < MIN_SIZE) dy = -(MIN_SIZE - h);
+    switch (this.options.position) {
+      case ControllerPosition.TOP:
         controlEnclosure[0][1] += dy;
         controlEnclosure[1][1] += dy;
         controlEnclosure[4][1] += dy;
-        if (this.doScale || shape.sizable === Sizable.RATIO) {
+        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
           controlEnclosure[1][0] += -dy / r;
           controlEnclosure[2][0] += -dy / r;
         }
         break;
-      case SizingPosition.RIGHT:
-        if (w + dx < MIN_SIZE) dx = MIN_SIZE - w;
+      case ControllerPosition.RIGHT:
         controlEnclosure[1][0] += dx;
         controlEnclosure[2][0] += dx;
-        if (this.doScale || shape.sizable === Sizable.RATIO) {
+        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
           controlEnclosure[2][1] += dx * r;
           controlEnclosure[3][1] += dx * r;
         }
         break;
-      case SizingPosition.BOTTOM:
-        if (h + dy < MIN_SIZE) dy = MIN_SIZE - h;
+      case ControllerPosition.BOTTOM:
         controlEnclosure[2][1] += dy;
         controlEnclosure[3][1] += dy;
-        if (this.doScale || shape.sizable === Sizable.RATIO) {
+        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
           controlEnclosure[1][0] += dy / r;
           controlEnclosure[2][0] += dy / r;
         }
         break;
-      case SizingPosition.LEFT:
-        if (w - dx < MIN_SIZE) dx = -(MIN_SIZE - w);
+      case ControllerPosition.LEFT:
         controlEnclosure[0][0] += dx;
         controlEnclosure[3][0] += dx;
         controlEnclosure[4][0] += dx;
-        if (this.doScale || shape.sizable === Sizable.RATIO) {
+        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
           controlEnclosure[2][1] += -dx * r;
           controlEnclosure[3][1] += -dx * r;
         }
         break;
-      case SizingPosition.LEFT_TOP:
-        if (w - dx < MIN_SIZE) dx = -(MIN_SIZE - w);
-        if (h - dy < MIN_SIZE) dy = -(MIN_SIZE - h);
-        if (this.doScale || shape.sizable === Sizable.RATIO) {
+      case ControllerPosition.LEFT_TOP:
+        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
           if (dx * r > dy / r) {
             dy = dx * r;
           } else {
             dx = dy / r;
-          }
-          if (w - dx < MIN_SIZE) {
-            dx = -(MIN_SIZE - w);
-            dy = -dx * r;
-          }
-          if (h - dy < MIN_SIZE) {
-            dy = -(MIN_SIZE - h);
-            dx = -dy / r;
           }
         }
         controlEnclosure[0][0] += dx;
@@ -330,21 +269,11 @@ export class BoxSizeController extends Controller {
         controlEnclosure[1][1] += dy;
         controlEnclosure[3][0] += dx;
         break;
-      case SizingPosition.RIGHT_TOP:
-        if (w + dx < MIN_SIZE) dx = MIN_SIZE - w;
-        if (h - dy < MIN_SIZE) dy = -(MIN_SIZE - h);
-        if (this.doScale || shape.sizable === Sizable.RATIO) {
+      case ControllerPosition.RIGHT_TOP:
+        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
           if (dx * r > dy / r) {
             dy = -dx * r;
           } else {
-            dx = -dy / r;
-          }
-          if (w + dx < MIN_SIZE) {
-            dx = MIN_SIZE - w;
-            dy = -dx * r;
-          }
-          if (h - dy < MIN_SIZE) {
-            dy = -(MIN_SIZE - h);
             dx = -dy / r;
           }
         }
@@ -354,21 +283,11 @@ export class BoxSizeController extends Controller {
         controlEnclosure[2][0] += dx;
         controlEnclosure[4][1] += dy;
         break;
-      case SizingPosition.RIGHT_BOTTOM:
-        if (w + dx < MIN_SIZE) dx = MIN_SIZE - w;
-        if (h + dy < MIN_SIZE) dy = MIN_SIZE - h;
-        if (this.doScale || shape.sizable === Sizable.RATIO) {
+      case ControllerPosition.RIGHT_BOTTOM:
+        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
           if (dx * r > dy / r) {
             dy = dx * r;
           } else {
-            dx = dy / r;
-          }
-          if (w + dx < MIN_SIZE) {
-            dx = MIN_SIZE - w;
-            dy = dx * r;
-          }
-          if (h + dy < MIN_SIZE) {
-            dy = MIN_SIZE - h;
             dx = dy / r;
           }
         }
@@ -377,21 +296,11 @@ export class BoxSizeController extends Controller {
         controlEnclosure[1][0] += dx;
         controlEnclosure[3][1] += dy;
         break;
-      case SizingPosition.LEFT_BOTTOM:
-        if (w - dx < MIN_SIZE) dx = -(MIN_SIZE - w);
-        if (h + dy < MIN_SIZE) dy = MIN_SIZE - h;
-        if (this.doScale || shape.sizable === Sizable.RATIO) {
+      case ControllerPosition.LEFT_BOTTOM:
+        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
           if (dx * r > dy / r) {
             dy = -dx * r;
           } else {
-            dx = -dy / r;
-          }
-          if (w - dx < MIN_SIZE) {
-            dx = -(MIN_SIZE - w);
-            dy = -dx * r;
-          }
-          if (h + dy < MIN_SIZE) {
-            dy = MIN_SIZE - h;
             dx = -dy / r;
           }
         }
@@ -402,6 +311,11 @@ export class BoxSizeController extends Controller {
         controlEnclosure[4][0] += dx;
         break;
     }
+
+    // normalize control enclosure
+    controlEnclosure = geometry.rectToPolygon(
+      geometry.normalizeRect(geometry.boundingRect(controlEnclosure))
+    );
 
     // find best-fit to control enclosure and adjust position
     const controlEnclosureCCS = controlEnclosure.map((p) =>
@@ -455,7 +369,7 @@ export class BoxSizeController extends Controller {
     }
 
     // do scale (font, padding and path)
-    if (this.doScale) {
+    if (this.options.doScale) {
       tr.atomicAssign(shape, "fontSize", initialShape.fontSize * ratio);
       if (shape instanceof Box) {
         tr.atomicAssign(
@@ -467,7 +381,7 @@ export class BoxSizeController extends Controller {
     }
 
     // do scale children
-    if (this.doScaleChildren) {
+    if (this.options.doScaleChildren) {
       shape.traverse((s) => {
         if (s !== shape && s instanceof Shape) {
           const initialChild = this.initialSnapshot[s.id];
@@ -499,7 +413,7 @@ export class BoxSizeController extends Controller {
             );
             tr.atomicAssign(s, "path", newPath);
           }
-          if (this.doScale) {
+          if (this.options.doScale) {
             tr.atomicAssign(s, "fontSize", initialChild.fontSize * ratio);
             if (s instanceof Box) {
               tr.atomicAssign(
@@ -530,7 +444,7 @@ export class BoxSizeController extends Controller {
     const p = lcs2ccs(
       canvas,
       shape,
-      this.getControlPosition(editor, shape, this.controlPosition)
+      getControllerPosition(canvas, shape, this.options.position)
     );
     const angle = angleInCCS(canvas, shape);
     drawControlPoint(canvas, p, 0, angle);
@@ -545,17 +459,5 @@ export class BoxSizeController extends Controller {
     const canvas = editor.canvas;
     const ghost = shape.getEnclosure();
     drawPolylineInLCS(canvas, shape, ghost);
-    // const cp = lcs2ccs(
-    //   canvas,
-    //   shape,
-    //   geometry.mid(this.ghost[0], this.ghost[2])
-    // );
-    // draw size guide
-    // const w = Math.round(geometry.distance(this.ghost[0], this.ghost[1]) + 1);
-    // const h = Math.round(geometry.distance(this.ghost[1], this.ghost[2]) + 1);
-    // const text = `${w} ✕ ${h}`;
-    // drawText(canvas, cp, text);
-    // draw snap
-    // this.snap.draw(editor, shape, this.ghost);
   }
 }

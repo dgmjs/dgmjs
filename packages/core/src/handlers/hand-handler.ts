@@ -13,7 +13,7 @@
 
 import { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Editor, Handler } from "../editor";
+import { Editor, Handler, HandlerOptions } from "../editor";
 import { Mouse, Cursor } from "../graphics/const";
 
 /**
@@ -25,11 +25,6 @@ export class HandHandler extends Handler {
   dragPoint: number[] = [-1, -1];
   dx: number = 0;
   dy: number = 0;
-
-  constructor(id: string) {
-    super(id);
-    this.reset();
-  }
 
   reset(): void {
     this.dragging = false;
@@ -75,6 +70,7 @@ export class HandHandler extends Handler {
     if (e.button === Mouse.BUTTON1 && this.dragging) {
       editor.setCursor(Cursor.GRAB);
       this.reset();
+      this.done(editor);
     }
   }
 

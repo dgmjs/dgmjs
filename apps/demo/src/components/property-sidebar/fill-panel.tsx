@@ -19,6 +19,7 @@ import { FillStyle } from "@dgmjs/core";
 import {
   FillCrossHatchIcon,
   FillHachureIcon,
+  FillNoneIcon,
   FillSolidIcon,
 } from "@/components/icons";
 import { SimpleTooltip } from "../common/simple-tooltip";
@@ -47,6 +48,11 @@ export const FillPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
             if (onChange && value) onChange({ fillStyle: value });
           }}
         >
+          <SimpleTooltip content="Solid">
+            <ToggleGroupItem size="sm" value={FillStyle.NONE}>
+              <FillNoneIcon size={16} />
+            </ToggleGroupItem>
+          </SimpleTooltip>
           <SimpleTooltip content="Solid">
             <ToggleGroupItem size="sm" value={FillStyle.SOLID}>
               <FillSolidIcon size={16} />

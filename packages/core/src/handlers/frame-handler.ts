@@ -12,7 +12,7 @@
  */
 
 import * as geometry from "../graphics/geometry";
-import { Editor, Handler } from "../editor";
+import { Editor, Handler, HandlerOptions } from "../editor";
 import { CanvasPointerEvent } from "../graphics/graphics";
 import { Cursor, Mouse } from "../graphics/const";
 import { Document, Frame, Shape } from "../shapes";
@@ -25,11 +25,6 @@ export class FrameFactoryHandler extends Handler {
   dragStartPoint: number[] = [-1, -1];
   dragPoint: number[] = [-1, -1];
   shape: Frame | null = null;
-
-  constructor(id: string) {
-    super(id);
-    this.reset();
-  }
 
   reset(): void {
     this.dragging = false;
@@ -123,6 +118,7 @@ export class FrameFactoryHandler extends Handler {
       this.finalize(editor, e);
       editor.repaint();
       this.reset();
+      this.done(editor);
     }
   }
 
@@ -131,6 +127,7 @@ export class FrameFactoryHandler extends Handler {
       editor.transform.cancelTransaction();
       editor.repaint();
       this.reset();
+      this.done(editor);
     }
     return false;
   }

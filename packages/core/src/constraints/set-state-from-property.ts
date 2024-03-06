@@ -38,7 +38,7 @@ const schema = z.object({
  * - property {string} A boolean-type property name
  */
 function constraint(
-  diagram: Document,
+  doc: Document,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,

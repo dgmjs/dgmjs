@@ -36,11 +36,12 @@ export class BoxMoveController extends Controller {
    * Indicates the controller is active or not
    */
   active(editor: Editor, shape: Shape): boolean {
-    let value =
+    return (
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
-      !(shape as Box).anchored;
-    return value;
+      shape.movable !== Movable.NONE &&
+      !(shape as Box).anchored
+    );
   }
 
   /**
@@ -73,12 +74,12 @@ export class BoxMoveController extends Controller {
       targetShape.movable === Movable.VERT ||
       targetShape.movable === Movable.NONE
     )
-      this.dx0 = 0;
+      this.dxStepGCS = 0;
     if (
       targetShape.movable === Movable.HORZ ||
       targetShape.movable === Movable.NONE
     )
-      this.dy0 = 0;
+      this.dyStepGCS = 0;
 
     // determine container
     // (container shouldn't be itself of a descendant of target)
@@ -93,7 +94,13 @@ export class BoxMoveController extends Controller {
     // update
     const tr = editor.transform;
     const doc = editor.doc as Document;
-    tr.moveShapes(doc, [targetShape], this.dx0, this.dy0, container);
+    tr.moveShapes(
+      doc,
+      [targetShape],
+      this.dxStepGCS,
+      this.dyStepGCS,
+      container
+    );
     tr.resolveAllConstraints(doc, canvas);
   }
 

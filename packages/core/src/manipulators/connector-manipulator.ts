@@ -13,7 +13,6 @@
 
 import { Manipulator, manipulatorManager } from "../editor";
 import { ConnectorReconnectController } from "../controllers/connector-reconnect";
-import { ConnectorMoveSegmentController } from "../controllers/connector-move-segment";
 import { ConnectorMoveController } from "../controllers/connector-move";
 import { LineMovePointController } from "../controllers/line-move-point";
 import { LineAddPointController } from "../controllers/line-add-point";
@@ -25,9 +24,10 @@ class ConnectorManipulator extends Manipulator {
   constructor() {
     super();
     this.controllers.push(new ConnectorReconnectController(this));
-    this.controllers.push(new LineMovePointController(this, true));
+    this.controllers.push(
+      new LineMovePointController(this, { exceptEndPoints: true })
+    );
     this.controllers.push(new LineAddPointController(this));
-    this.controllers.push(new ConnectorMoveSegmentController(this));
     this.controllers.push(new ConnectorMoveController(this));
   }
 }

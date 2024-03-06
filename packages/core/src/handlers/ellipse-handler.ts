@@ -13,11 +13,6 @@ export class EllipseFactoryHandler extends Handler {
   dragPoint: number[] = [-1, -1];
   shape: Ellipse | null = null;
 
-  constructor(id: string) {
-    super(id);
-    this.reset();
-  }
-
   reset(): void {
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
@@ -111,6 +106,7 @@ export class EllipseFactoryHandler extends Handler {
       this.finalize(editor, e);
       editor.repaint();
       this.reset();
+      this.done(editor);
     }
   }
 
@@ -119,6 +115,7 @@ export class EllipseFactoryHandler extends Handler {
       editor.transform.cancelTransaction();
       editor.repaint();
       this.reset();
+      this.done(editor);
     }
     return false;
   }

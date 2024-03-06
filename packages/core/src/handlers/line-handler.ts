@@ -30,11 +30,6 @@ export class LineFactoryHandler extends Handler {
   multiPointMode: boolean = false;
   shape: Line | null = null;
 
-  constructor(id: string) {
-    super(id);
-    this.reset();
-  }
-
   reset() {
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
@@ -134,6 +129,7 @@ export class LineFactoryHandler extends Handler {
         this.points.push(geometry.copy(this.dragPoint));
         this.finalize(editor, e);
         this.reset();
+        this.done(editor);
         editor.repaint();
       }
     }
@@ -144,6 +140,7 @@ export class LineFactoryHandler extends Handler {
       editor.transform.cancelTransaction();
       editor.repaint();
       this.reset();
+      this.done(editor);
     }
     return false;
   }

@@ -184,7 +184,6 @@ classDiagram
   Box <|-- Ellipse
   class Connector {
     head, tail
-    routeType
   }
   Line <|-- Connector
 ```

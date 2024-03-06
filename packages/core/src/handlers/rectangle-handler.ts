@@ -13,11 +13,6 @@ export class RectangleFactoryHandler extends Handler {
   dragPoint: number[] = [-1, -1];
   shape: Rectangle | null = null;
 
-  constructor(id: string) {
-    super(id);
-    this.reset();
-  }
-
   reset(): void {
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
@@ -110,6 +105,7 @@ export class RectangleFactoryHandler extends Handler {
       this.finalize(editor, e);
       editor.repaint();
       this.reset();
+      this.done(editor);
     }
   }
 
@@ -118,6 +114,7 @@ export class RectangleFactoryHandler extends Handler {
       editor.transform.cancelTransaction();
       editor.repaint();
       this.reset();
+      this.done(editor);
     }
     return false;
   }

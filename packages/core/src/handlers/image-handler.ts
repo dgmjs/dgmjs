@@ -55,6 +55,7 @@ export class ImageFactoryHandler extends Handler {
         editor.transform.resolveAllConstraints(doc, editor.canvas);
         editor.transform.endTransaction();
         editor.factory.triggerCreate(shape);
+        this.done(editor);
       } catch (err) {
         // user cancelled
       }

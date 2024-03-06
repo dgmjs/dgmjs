@@ -532,7 +532,13 @@ export function drawDocNode(
       if (node.marks?.some((m: any) => m.type === "underline")) {
         canvas.strokeColor = canvas.fontColor;
         canvas.strokeWidth = shape.fontSize * 0.1;
-        canvas.line(left, top + 2, left + node._width, top + 2);
+        canvas.line(
+          left,
+          top + 2,
+          left + node._width,
+          top + 2,
+          shape.getSeed()
+        );
       }
       if (node.marks?.some((m: any) => m.type === "strike")) {
         canvas.strokeColor = canvas.fontColor;
@@ -541,7 +547,8 @@ export function drawDocNode(
           left,
           top - node._ascent / 3,
           left + node._width,
-          top - node._ascent / 3
+          top - node._ascent / 3,
+          shape.getSeed()
         );
       }
       break;

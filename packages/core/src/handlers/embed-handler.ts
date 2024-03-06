@@ -20,12 +20,11 @@ import { Color, Cursor, Mouse } from "../graphics/const";
  * Embed Factory Handler
  */
 export class EmbedFactoryHandler extends Handler {
-  dragging: boolean;
-  dragStartPoint: number[];
-  dragPoint: number[];
+  dragging: boolean = false;
+  dragStartPoint: number[] = [-1, -1];
+  dragPoint: number[] = [-1, -1];
 
-  constructor(id: string) {
-    super(id);
+  reset() {
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
     this.dragPoint = [-1, -1];
@@ -70,9 +69,8 @@ export class EmbedFactoryHandler extends Handler {
       const shape = editor.factory.createEmbed(r);
       editor.actions.insert(shape);
       editor.factory.triggerCreate(shape);
-
-      this.dragging = false;
-      this.dragStartPoint = [-1, -1];
+      this.reset();
+      this.done(editor);
     }
   }
 
