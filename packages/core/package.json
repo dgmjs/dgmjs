@@ -1,6 +1,6 @@
 {
   "name": "@dgmjs/core",
-  "version": "0.11.3",
+  "version": "0.11.4",
   "description": "An extensible diagramming library for the web",
   "type": "module",
   "main": "./dist/index.js",

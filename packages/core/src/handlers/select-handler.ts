@@ -14,7 +14,7 @@
 import { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { Shape } from "../shapes";
-import { Editor, Handler, manipulatorManager } from "../editor";
+import { Editor, Handler, HandlerOptions, manipulatorManager } from "../editor";
 import { Mouse, Color, Cursor } from "../graphics/const";
 import * as guide from "../utils/guide";
 
@@ -22,11 +22,10 @@ import * as guide from "../utils/guide";
  * Select Handler
  */
 export class SelectHandler extends Handler {
-  dragging: boolean;
-  dragStartPoint: number[];
+  dragging: boolean = false;
+  dragStartPoint: number[] = [-1, -1];
 
-  constructor(id: string) {
-    super(id);
+  reset(): void {
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
   }

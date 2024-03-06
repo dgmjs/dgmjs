@@ -60,10 +60,6 @@ function App() {
     demoStore.setActiveHandler(handlerId);
   };
 
-  const handleShapeCreate = (shape: Shape) => {
-    window.editor.setActiveHandler("Select");
-  };
-
   const handleTransaction = (tx: Transaction) => {
     const data = window.editor.store.toJSON();
     localStorage.setItem("local-data", JSON.stringify(data));
@@ -89,7 +85,6 @@ function App() {
         onMount={handleMount}
         onSelectionChange={handleSelectionChange}
         onActiveHandlerChange={handleActiveHandlerChange}
-        onShapeCreate={handleShapeCreate}
         onTransaction={handleTransaction}
       />
       <div className="absolute top-0 inset-x-0 h-10 border-b flex items-center justify-between bg-background">

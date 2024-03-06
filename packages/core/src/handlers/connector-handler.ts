@@ -33,12 +33,7 @@ export class ConnectorFactoryHandler extends Handler {
   headAnchor: number[] = [0.5, 0.5];
   shape: Connector | null = null;
 
-  constructor(id: string) {
-    super(id);
-    this.reset();
-  }
-
-  reset(): void {
+  reset() {
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
     this.dragPoint = [-1, -1];
@@ -147,6 +142,7 @@ export class ConnectorFactoryHandler extends Handler {
       this.finalize(editor, e);
       editor.repaint();
       this.reset();
+      this.done(editor);
     }
   }
 
@@ -155,6 +151,7 @@ export class ConnectorFactoryHandler extends Handler {
       editor.transform.cancelTransaction();
       editor.repaint();
       this.reset();
+      this.done(editor);
     }
     return false;
   }

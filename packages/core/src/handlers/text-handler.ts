@@ -21,10 +21,9 @@ import { Text } from "../shapes";
  * Text Factory Handler
  */
 export class TextFactoryHandler extends Handler {
-  shape: Text | null;
+  shape: Text | null = null;
 
-  constructor(id: string) {
-    super(id);
+  reset(): void {
     this.shape = null;
   }
 
@@ -40,6 +39,7 @@ export class TextFactoryHandler extends Handler {
       this.shape = editor.factory.createText(r);
       editor.actions.insert(this.shape);
       editor.factory.triggerCreate(this.shape);
+      this.done(editor);
     }
   }
 

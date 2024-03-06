@@ -13,7 +13,7 @@
 
 import { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Editor, Handler } from "../editor";
+import { Editor, Handler, HandlerOptions } from "../editor";
 import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
 import { Document, Line } from "../shapes";
 import simplifyPath from "simplify-path";
@@ -28,11 +28,6 @@ export class FreehandFactoryHandler extends Handler {
   draggingPoints: number[][] = [];
   closed: boolean = false;
   shape: Line | null = null;
-
-  constructor(id: string) {
-    super(id);
-    this.reset();
-  }
 
   reset(): void {
     this.dragging = false;
@@ -122,6 +117,7 @@ export class FreehandFactoryHandler extends Handler {
       this.finalize(editor, e);
       editor.repaint();
       this.reset();
+      this.done(editor);
     }
   }
 
@@ -130,6 +126,7 @@ export class FreehandFactoryHandler extends Handler {
       editor.transform.cancelTransaction();
       editor.repaint();
       this.reset();
+      this.done(editor);
     }
     return false;
   }

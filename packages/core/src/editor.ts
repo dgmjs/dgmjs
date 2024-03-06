@@ -32,13 +32,14 @@ import { SelectionManager } from "./selection-manager";
 import { Clipboard } from "./core/clipboard";
 
 export interface EditorOptions {
-  instantiators?: Record<string, InstantiatorFun>;
-  handlers?: Handler[];
-  keymap?: KeyMap;
-  allowAutoScroll?: boolean;
-  allowCreateTextOnCanvas?: boolean;
-  allowCreateTextOnConnector?: boolean;
-  onReady?: (editor: Editor) => void;
+  instantiators: Record<string, InstantiatorFun>;
+  handlers: Handler[];
+  defaultHandlerId: string | null;
+  keymap: KeyMap;
+  allowAutoScroll: boolean;
+  allowCreateTextOnCanvas: boolean;
+  allowCreateTextOnConnector: boolean;
+  onReady: (editor: Editor) => void;
 }
 
 /**
@@ -71,7 +72,6 @@ class Editor extends EventEmitter {
   handlers: Record<string, Handler>;
   activeHandlerId: string | null;
   activeHandler: Handler | null;
-  defaultHandlerId: string | null;
   leftButtonDown: boolean;
   downX: number;
   downY: number;
@@ -83,11 +83,17 @@ class Editor extends EventEmitter {
   /**
    * constructor
    */
-  constructor(editorHolder: HTMLElement, options: EditorOptions) {
+  constructor(editorHolder: HTMLElement, options: Partial<EditorOptions>) {
     super();
     this.options = {
+      instantiators: {},
+      handlers: [],
+      defaultHandlerId: "",
+      keymap: {},
+      allowAutoScroll: true,
       allowCreateTextOnCanvas: true,
       allowCreateTextOnConnector: true,
+      onReady: () => {},
       ...options,
     };
     this.instantiator = new Instantiator(options.instantiators);
@@ -125,7 +131,6 @@ class Editor extends EventEmitter {
     this.addHandlers(this.options.handlers ?? []);
     this.activeHandlerId = null;
     this.activeHandler = null;
-    this.defaultHandlerId = null;
     this.leftButtonDown = false; // To check mouse left button down in mouse move event.
     this.downX = 0;
     this.downY = 0;
@@ -371,8 +376,8 @@ class Editor extends EventEmitter {
       if (this.activeHandler) {
         this.activeHandler.keyDown(this, e);
       }
-      if (e.key === "Escape" && this.defaultHandlerId) {
-        this.setActiveHandler(this.defaultHandlerId);
+      if (e.key === "Escape" && this.options.defaultHandlerId) {
+        this.activateHandler(this.options.defaultHandlerId);
       }
       if (e.key === "Enter") {
         // ...
@@ -618,18 +623,18 @@ class Editor extends EventEmitter {
    */
   addHandlers(handlers: Handler[]) {
     handlers.forEach((handler, index) => {
-      this.addHandler(handler, index === 0);
+      this.addHandler(handler);
     });
+    if (!this.options.defaultHandlerId && handlers.length > 0) {
+      this.options.defaultHandlerId = handlers[0].id;
+    }
   }
 
   /**
    * Add a handler
    */
-  addHandler(handler: Handler, isDefault: boolean = false) {
+  addHandler(handler: Handler) {
     this.handlers[handler.id] = handler;
-    if (isDefault) {
-      this.defaultHandlerId = handler.id;
-    }
   }
 
   /**
@@ -654,15 +659,24 @@ class Editor extends EventEmitter {
   }
 
   /**
-   * Set active handler by id
+   * Activate a handler by id
    */
-  setActiveHandler(id: string) {
+  activateHandler(id: string) {
     if (this.activeHandlerId !== id) {
       if (this.activeHandler) this.activeHandler.onDeactivate(this);
       this.activeHandlerId = id;
       this.activeHandler = this.handlers[this.activeHandlerId];
       this.activeHandler.onActivate(this);
       this.emit("activeHandlerChange", this.activeHandlerId);
+    }
+  }
+
+  /**
+   * Activate the default handler
+   */
+  activateDefaultHandler() {
+    if (this.options.defaultHandlerId) {
+      this.activateHandler(this.options.defaultHandlerId);
     }
   }
 
@@ -833,14 +847,52 @@ class ManipulatorManager {
   }
 }
 
+interface HandlerOptions {
+  lock: boolean;
+}
+
 /**
  * Handler
  */
 class Handler {
   id: string;
+  options: HandlerOptions;
 
-  constructor(id: string) {
+  constructor(id: string, options?: Partial<HandlerOptions>) {
     this.id = id;
+    this.options = {
+      lock: false,
+      ...options,
+    };
+    this.reset();
+  }
+
+  /**
+   * Reset the states of handler
+   */
+  reset() {}
+
+  /**
+   * Get lock
+   */
+  getLock(): boolean {
+    return this.options.lock;
+  }
+
+  /**
+   * Set lock
+   */
+  setLock(lock: boolean) {
+    this.options.lock = lock;
+  }
+
+  /**
+   * Call this method when the handler is done
+   */
+  done(editor: Editor) {
+    if (!this.options.lock) {
+      editor.activateDefaultHandler();
+    }
   }
 
   /**
@@ -1337,4 +1389,11 @@ class Manipulator {
 
 const manipulatorManager = ManipulatorManager.getInstance();
 
-export { Editor, Handler, Manipulator, Controller, manipulatorManager };
+export {
+  Editor,
+  type HandlerOptions,
+  Handler,
+  Manipulator,
+  Controller,
+  manipulatorManager,
+};

@@ -40,7 +40,9 @@ import {
   Text,
 } from "./shapes";
 
-export function basicSetup(options?: EditorOptions): EditorOptions {
+export function basicSetup(
+  options?: Partial<EditorOptions>
+): Partial<EditorOptions> {
   return {
     instantiators: {
       Shape: () => new Shape(),
@@ -59,17 +61,18 @@ export function basicSetup(options?: EditorOptions): EditorOptions {
     },
     handlers: [
       new SelectHandler("Select"),
-      new HandHandler("Hand"),
+      new HandHandler("Hand", { lock: true }),
       new RectangleFactoryHandler("Rectangle"),
       new EllipseFactoryHandler("Ellipse"),
       new TextFactoryHandler("Text"),
       new ConnectorFactoryHandler("Connector"),
       new LineFactoryHandler("Line"),
-      new FreehandFactoryHandler("Freehand"),
+      new FreehandFactoryHandler("Freehand", { lock: true }),
       new ImageFactoryHandler("Image"),
       new FrameFactoryHandler("Frame"),
       new EmbedFactoryHandler("Embed"),
     ],
+    defaultHandlerId: "Select",
     keymap: {
       "mod-z": (editor) => editor.actions.undo(),
       "mod-y": (editor) => editor.actions.redo(),
