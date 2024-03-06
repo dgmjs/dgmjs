@@ -51,6 +51,8 @@ export { default as LineEndCrowfootZeroOneIcon } from "./line-end-crowfoot-zero-
 export { default as LineEndCrowfootZeroManyIcon } from "./line-end-crowfoot-zero-many";
 export { default as LineEndCrossIcon } from "./line-end-cross";
 export { default as LineEndDotIcon } from "./line-end-dot";
+export { default as LineEndBarIcon } from "./line-end-bar";
+export { default as LineEndSquareIcon } from "./line-end-square";
 export { default as AlignSendToBackIcon } from "./align-send-to-back";
 export { default as AlignSendBackwardIcon } from "./align-send-backward";
 export { default as AlignBringToFrontIcon } from "./align-bring-to-front";

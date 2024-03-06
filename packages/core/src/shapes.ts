@@ -111,6 +111,8 @@ const LineEndType = Object.freeze({
   CROWFOOT_ZERO_MANY: "crowfoot-zero-many",
   CROSS: "cross",
   DOT: "dot",
+  BAR: "bar",
+  SQUARE: "square",
 });
 
 const AlignmentKind = Object.freeze({
@@ -1390,6 +1392,18 @@ class Line extends Shape {
           this.getSeed()
         );
         return grid[0][3];
+      case LineEndType.BAR:
+        canvas.polyline([grid[0][1], grid[0][5]], this.getSeed());
+        return grid[0][3];
+      case LineEndType.SQUARE:
+        canvas.strokeRect(
+          grid[2][3][0] - gap * 2,
+          grid[2][3][1] - gap * 2,
+          grid[2][3][0] + gap * 2,
+          grid[2][3][1] + gap * 2,
+          this.getSeed()
+        );
+        return grid[4][3];
       default:
         return grid[0][3];
     }

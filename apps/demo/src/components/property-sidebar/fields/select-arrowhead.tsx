@@ -33,6 +33,8 @@ import {
   LineEndTriangleFilledIcon,
   LineEndTriangleIcon,
   LineEndCrowfootOneManyIcon,
+  LineEndBarIcon,
+  LineEndSquareIcon,
 } from "@/components/icons";
 import {
   Popover,
@@ -89,6 +91,10 @@ function ArrowheadIcon({
       return <LineEndCrossIcon size={16} className={className} />;
     case LineEndType.DOT:
       return <LineEndDotIcon size={16} className={className} />;
+    case LineEndType.BAR:
+      return <LineEndBarIcon size={16} className={className} />;
+    case LineEndType.SQUARE:
+      return <LineEndSquareIcon size={16} className={className} />;
     default:
       return <LineEndFlatIcon size={16} className={className} />;
   }
