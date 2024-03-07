@@ -1646,6 +1646,16 @@ class Connector extends Line {
    */
   tailAnchor: number[];
 
+  /**
+   * Marginal space to head
+   */
+  headMargin: number;
+
+  /**
+   * Marginal space to tail
+   */
+  tailMargin: number;
+
   constructor() {
     super();
     this.type = "Connector";
@@ -1653,6 +1663,8 @@ class Connector extends Line {
     this.tail = null;
     this.headAnchor = [0.5, 0.5];
     this.tailAnchor = [0.5, 0.5];
+    this.headMargin = 0;
+    this.tailMargin = 0;
   }
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
@@ -1661,6 +1673,8 @@ class Connector extends Line {
     json.tail = this.tail ? this.tail.id : null;
     json.headAnchor = structuredClone(this.headAnchor);
     json.tailAnchor = structuredClone(this.tailAnchor);
+    json.headMargin = this.headMargin;
+    json.tailMargin = this.tailMargin;
     if (keepRefs) {
       json.head = this.head;
       json.tail = this.tail;
@@ -1674,6 +1688,8 @@ class Connector extends Line {
     this.tail = json.tail ?? this.tail;
     this.headAnchor = json.headAnchor ?? this.headAnchor;
     this.tailAnchor = json.tailAnchor ?? this.tailAnchor;
+    this.headMargin = json.headMargin ?? this.headMargin;
+    this.tailMargin = json.tailMargin ?? this.tailMargin;
   }
 
   resolveRefs(idMap: Record<string, Shape>) {
@@ -1954,6 +1970,8 @@ interface ShapeValues {
   pathEditable?: boolean;
   headEndType?: string;
   tailEndType?: string;
+  headMargin?: number;
+  tailMargin?: number;
   padding?: number[];
   corners?: number[];
   richText?: boolean;

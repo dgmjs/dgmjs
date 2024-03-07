@@ -13,7 +13,7 @@ export interface DGMEditorProps
     React.HTMLAttributes<HTMLDivElement>,
     "onScroll" | "onDragStart" | "onDrag" | "onDragEnd"
   > {
-  options?: EditorOptions;
+  options?: Partial<EditorOptions>;
   showGrid?: boolean;
   onMount?: (editor: CoreEditor) => void;
   onSelectionChange?: (selections: Shape[]) => void;

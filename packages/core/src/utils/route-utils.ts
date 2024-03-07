@@ -69,11 +69,10 @@ export function adjustRoute(connector: Connector): number[][] {
     // attach tail point
     if (connector.tail) {
       const tp = connector.getTailAnchorPoint();
+      const p = newPath[1];
       if (connector.tail instanceof Line && !connector.tail.isClosed()) {
-        newPath[0][0] = tp[0];
-        newPath[0][1] = tp[1];
+        newPath[0] = geometry.getPointAtDistance(tp, p, connector.tailMargin);
       } else if (connector.tail) {
-        const p = newPath[1];
         const outline = connector.tail
           .getOutline()
           .map((p) =>
@@ -81,19 +80,21 @@ export function adjustRoute(connector: Connector): number[][] {
           );
         const jp = geometry.pathIntersect(outline, [p, tp], true, false);
         if (jp) {
-          newPath[0][0] = jp[0];
-          newPath[0][1] = jp[1];
+          newPath[0] = geometry.getPointAtDistance(jp, p, connector.tailMargin);
         }
       }
     }
     // attach head point
     if (connector.head) {
       const hp = connector.getHeadAnchorPoint();
+      const p = newPath[newPath.length - 2];
       if (connector.head instanceof Line && !connector.head.isClosed()) {
-        newPath[newPath.length - 1][0] = hp[0];
-        newPath[newPath.length - 1][1] = hp[1];
+        newPath[newPath.length - 1] = geometry.getPointAtDistance(
+          hp,
+          p,
+          connector.headMargin
+        );
       } else {
-        const p = newPath[newPath.length - 2];
         const outline = connector.head
           .getOutline()
           .map((p) =>
@@ -101,8 +102,11 @@ export function adjustRoute(connector: Connector): number[][] {
           );
         const jp = geometry.pathIntersect(outline, [p, hp], true, false);
         if (jp) {
-          newPath[newPath.length - 1][0] = jp[0];
-          newPath[newPath.length - 1][1] = jp[1];
+          newPath[newPath.length - 1] = geometry.getPointAtDistance(
+            jp,
+            p,
+            connector.headMargin
+          );
         }
       }
     }

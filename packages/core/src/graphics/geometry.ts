@@ -764,6 +764,25 @@ function curvePathPoints(path: number[][]): number[][] {
 }
 
 /**
+ * Returns a point that is a specified distance away from a starting point in
+ * the direction towards an end point.
+ */
+function getPointAtDistance(
+  point1: number[],
+  point2: number[],
+  distance: number
+): number[] {
+  let dx = point2[0] - point1[0];
+  let dy = point2[1] - point1[1];
+  let len = Math.sqrt(dx * dx + dy * dy);
+  let unitX = dx / len;
+  let unitY = dy / len;
+  let x = point1[0] + distance * unitX;
+  let y = point1[1] + distance * unitY;
+  return [x, y];
+}
+
+/**
  * Return a point which is positioned on the line.
  * If position is 0, returns the start point and if position is 1, returns the end point
  * @param point1 line start point
@@ -976,6 +995,7 @@ export {
   curvePathPoints,
   pathLength,
   equalsPath,
+  getPointAtDistance,
   getPointOnLine,
   getPointOnPath,
   getPositionOnLine,
