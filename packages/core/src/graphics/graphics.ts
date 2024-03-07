@@ -430,7 +430,7 @@ class Canvas {
     y1: number,
     x2: number,
     y2: number,
-    seed: number = 0
+    seed: number = 1
   ): Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
@@ -462,7 +462,7 @@ class Canvas {
     y1: number,
     x2: number,
     y2: number,
-    seed: number = 0
+    seed: number = 1
   ): Canvas {
     const x = x1 < x2 ? x1 : x2;
     const y = y1 < y2 ? y1 : y2;
@@ -498,7 +498,7 @@ class Canvas {
     y1: number,
     x2: number,
     y2: number,
-    seed: number = 0
+    seed: number = 1
   ): Canvas {
     const x = x1 < x2 ? x1 : x2;
     const y = y1 < y2 ? y1 : y2;
@@ -532,7 +532,7 @@ class Canvas {
     y1: number,
     x2: number,
     y2: number,
-    seed: number = 0
+    seed: number = 1
   ): Canvas {
     this.fillRect(x1, y1, x2, y2, seed);
     this.strokeRect(x1, y1, x2, y2, seed);
@@ -548,7 +548,7 @@ class Canvas {
     x2: number,
     y2: number,
     radius: number | number[],
-    seed: number = 0
+    seed: number = 1
   ): Canvas {
     const x = x1 < x2 ? x1 : x2;
     const y = y1 < y2 ? y1 : y2;
@@ -605,7 +605,7 @@ class Canvas {
     x2: number,
     y2: number,
     radius: number | number[],
-    seed: number = 0
+    seed: number = 1
   ): Canvas {
     const x = x1 < x2 ? x1 : x2;
     const y = y1 < y2 ? y1 : y2;
@@ -663,7 +663,7 @@ class Canvas {
     x2: number,
     y2: number,
     radius: number | number[],
-    seed: number = 0
+    seed: number = 1
   ): Canvas {
     this.fillRoundRect(x1, y1, x2, y2, radius, seed);
     this.strokeRoundRect(x1, y1, x2, y2, radius, seed);
@@ -678,7 +678,7 @@ class Canvas {
     y1: number,
     x2: number,
     y2: number,
-    seed: number = 0
+    seed: number = 1
   ): Canvas {
     const x = x1 < x2 ? x1 : x2;
     const y = y1 < y2 ? y1 : y2;
@@ -725,7 +725,7 @@ class Canvas {
     y1: number,
     x2: number,
     y2: number,
-    seed: number = 0
+    seed: number = 1
   ): Canvas {
     const x = x1 < x2 ? x1 : x2;
     const y = y1 < y2 ? y1 : y2;
@@ -773,7 +773,7 @@ class Canvas {
     y1: number,
     x2: number,
     y2: number,
-    seed: number = 0
+    seed: number = 1
   ): Canvas {
     this.fillEllipse(x1, y1, x2, y2, seed);
     this.strokeEllipse(x1, y1, x2, y2, seed);
@@ -783,7 +783,7 @@ class Canvas {
   /**
    * Draw polyline
    */
-  polyline(path: number[][], seed: number = 0): Canvas {
+  polyline(path: number[][], seed: number = 1): Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
     this.context.globalAlpha = this.alpha;
@@ -816,7 +816,7 @@ class Canvas {
   /**
    * Draw rounded rect line
    */
-  roundRectLine(path: number[][], seed: number = 0): Canvas {
+  roundRectLine(path: number[][], seed: number = 1): Canvas {
     const ROUND_RADIUS = 8;
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
@@ -976,7 +976,7 @@ class Canvas {
   /**
    * Draw curved lines
    */
-  strokeCurve(path: number[][], seed: number = 0): Canvas {
+  strokeCurve(path: number[][], seed: number = 1): Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
     this.context.globalAlpha = this.alpha;
@@ -1007,7 +1007,7 @@ class Canvas {
   /**
    * Draw filled curved lines
    */
-  fillCurve(path: number[][], seed: number = 0): Canvas {
+  fillCurve(path: number[][], seed: number = 1): Canvas {
     this.context.fillStyle = this.resolveColor(this.fillColor);
     this.context.globalAlpha = this.alpha;
     this.context.lineWidth = this.strokeWidth;
@@ -1047,7 +1047,7 @@ class Canvas {
   /**
    * Draw a curved lines with fill and stroke
    */
-  curve(path: number[][], seed: number = 0): Canvas {
+  curve(path: number[][], seed: number = 1): Canvas {
     this.fillCurve(path, seed);
     this.strokeCurve(path, seed);
     return this;
@@ -1056,7 +1056,7 @@ class Canvas {
   /**
    * Draw polygon
    */
-  strokePolygon(path: number[][], seed: number = 0): Canvas {
+  strokePolygon(path: number[][], seed: number = 1): Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
     this.context.globalAlpha = this.alpha;
@@ -1091,7 +1091,7 @@ class Canvas {
   /**
    * Draw filled polygon
    */
-  fillPolygon(path: number[][], seed: number = 0): Canvas {
+  fillPolygon(path: number[][], seed: number = 1): Canvas {
     this.context.fillStyle = this.resolveColor(this.fillColor);
     this.context.globalAlpha = this.alpha;
     this.context.lineWidth = this.strokeWidth;
@@ -1124,7 +1124,7 @@ class Canvas {
   /**
    * Draw a polygon with fill and stroke
    */
-  polygon(path: number[][], seed: number = 0): Canvas {
+  polygon(path: number[][], seed: number = 1): Canvas {
     this.fillPolygon(path, seed);
     this.strokePolygon(path, seed);
     return this;
@@ -1139,7 +1139,7 @@ class Canvas {
     r: number,
     startAngle: number,
     endAngle: number,
-    seed: number = 0
+    seed: number = 1
   ): Canvas {
     let sa = geometry.toRadian(startAngle);
     let ea = geometry.toRadian(endAngle);
@@ -1175,7 +1175,7 @@ class Canvas {
     r: number,
     startAngle: number,
     endAngle: number,
-    seed: number = 0
+    seed: number = 1
   ): Canvas {
     const sa = geometry.toRadian(geometry.normalizeAngle(startAngle));
     const ea = geometry.toRadian(geometry.normalizeAngle(endAngle));
@@ -1211,7 +1211,7 @@ class Canvas {
     r: number,
     startAngle: number,
     endAngle: number,
-    seed: number = 0
+    seed: number = 1
   ): Canvas {
     this.fillArc(x, y, r, startAngle, endAngle, seed);
     this.strokeArc(x, y, r, startAngle, endAngle, seed);
@@ -1221,7 +1221,7 @@ class Canvas {
   /**
    * Draw a path
    */
-  strokePath(path: SVGPath, seed: number = 0): Canvas {
+  strokePath(path: SVGPath, seed: number = 1): Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
     this.context.globalAlpha = this.alpha;
@@ -1247,7 +1247,7 @@ class Canvas {
   /**
    * Draw filled path
    */
-  fillPath(path: SVGPath, seed: number = 0): Canvas {
+  fillPath(path: SVGPath, seed: number = 1): Canvas {
     this.context.fillStyle = this.resolveColor(this.fillColor);
     this.context.globalAlpha = this.alpha;
     this.context.lineWidth = this.strokeWidth;
@@ -1274,7 +1274,7 @@ class Canvas {
   /**
    * Draw a path with fill and stroke
    */
-  path(path: SVGPath, seed: number = 0): Canvas {
+  path(path: SVGPath, seed: number = 1): Canvas {
     this.fillPath(path, seed);
     this.strokePath(path, seed);
     return this;
