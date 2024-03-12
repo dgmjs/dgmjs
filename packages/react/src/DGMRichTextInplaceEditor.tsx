@@ -5,6 +5,7 @@ import {
   Text,
   measureText,
   convertDocToText,
+  Document,
 } from "@dgmjs/core";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { moveToAboveOrBelow, textVertAlignToAlignItems } from "./utils";
@@ -102,17 +103,10 @@ export const DGMRichTextInplaceEditor: React.FC<
   const tiptapEditor = useEditor({
     extensions,
     content: /* textString.length > 0 ? editingText?.text : */ "",
-    onTransaction: (tr) => {
-      // expand editor width if text width is larger than current width
+    onUpdate: (editor) => {
       if (editor && tiptapEditor && state.textShape) {
-        const rect = getTextRect(state.textShape, tiptapEditor.getJSON());
-        setState((state) => ({
-          ...state,
-          width: Math.max(state.textShape?.width || 0, rect.width),
-          height: Math.max(state.textShape?.height || 0, rect.height),
-          textWidth: rect.width,
-          textHeight: rect.height,
-        }));
+        const textValue = tiptapEditor.getJSON();
+        update(state.textShape, textValue);
       }
     },
   });
@@ -123,52 +117,70 @@ export const DGMRichTextInplaceEditor: React.FC<
       textShape._renderText = false;
       editor.repaint();
 
+      // start transaction
+      editor.transform.startTransaction("text-edit");
+      editor.transform.resolveAllConstraints(
+        editor.doc as Document,
+        editor.canvas
+      );
+
       // update states
-      const rect = getTextRect(textShape, textShape.text);
-      setState({
-        textShape,
-        padding: textShape.padding,
-        alignItems: textVertAlignToAlignItems(textShape.vertAlign),
-        textAlign: textShape.horzAlign,
-        lineHeight: textShape.lineHeight,
-        paragraphSpacing: textShape.paragraphSpacing,
-        fontFamily: textShape.fontFamily,
-        fontSize: textShape.fontSize,
-        color: editor.canvas.resolveColor(textShape.fontColor),
-        scale: editor.getScale(),
-        left: rect.left,
-        top: rect.top,
-        width: Math.max(textShape.width, rect.width),
-        height: Math.max(textShape.height, rect.height),
-        textWidth: rect.width,
-        textHeight: rect.height,
-      });
+      update(textShape, textShape.text);
 
       tiptapEditor?.commands.setContent(textShape.text);
       tiptapEditor?.commands.focus();
       tiptapEditor?.commands.selectAll();
 
       setTimeout(() => {
-        setToolbarPosition({
-          left: rect.left,
-          top: rect.top,
-          width: textShape.width,
-          height: textShape.height,
-        });
         if (onOpen) onOpen(textShape as Box);
       }, 0);
     }
   };
 
-  const applyChanges = () => {
+  const update = (textShape: Box, textValue: any) => {
+    // mutate text shape
+    editor.transform.atomicAssign(textShape, "text", textValue);
+    editor.transform.resolveAllConstraints(
+      editor.doc as Document,
+      editor.canvas
+    );
+
+    // update states
+    const rect = getTextRect(textShape, textValue);
+    setState({
+      textShape,
+      padding: textShape.padding,
+      alignItems: textVertAlignToAlignItems(textShape.vertAlign),
+      textAlign: textShape.horzAlign,
+      lineHeight: textShape.lineHeight,
+      paragraphSpacing: textShape.paragraphSpacing,
+      fontFamily: textShape.fontFamily,
+      fontSize: textShape.fontSize,
+      color: editor.canvas.resolveColor(textShape.fontColor),
+      scale: editor.getScale(),
+      left: rect.left,
+      top: rect.top,
+      width: Math.max(textShape.width, rect.width),
+      height: Math.max(textShape.height, rect.height),
+      textWidth: rect.width,
+      textHeight: rect.height,
+    });
+
+    // update toolbar position
+    setToolbarPosition({
+      left: rect.left,
+      top: rect.top,
+      width: textShape.width,
+      height: textShape.height,
+    });
+  };
+
+  const close = () => {
     if (tiptapEditor && state.textShape) {
+      editor.transform.endTransaction();
       const textString = convertDocToText(tiptapEditor.getJSON());
       if (state.textShape instanceof Text && textString.trim().length === 0) {
         editor.actions.delete_([state.textShape]);
-      } else {
-        editor.actions.update({ text: tiptapEditor.getJSON() }, [
-          state.textShape,
-        ]);
       }
       state.textShape._renderText = true;
       editor.repaint();
@@ -177,7 +189,7 @@ export const DGMRichTextInplaceEditor: React.FC<
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === "Escape") applyChanges();
+    if (event.key === "Escape") close();
   };
 
   useEffect(() => {
@@ -218,7 +230,7 @@ export const DGMRichTextInplaceEditor: React.FC<
               position: "fixed",
               inset: 0,
             }}
-            onPointerDown={applyChanges}
+            onPointerDown={close}
           />
           <div
             style={{
