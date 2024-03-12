@@ -1229,14 +1229,14 @@ class Line extends Shape {
    * Draw line end types.
    * All line-ends are drawn based on the point grid as below:
    *
-   *         0 1 2 3 4 5 6
-   * 0       • • • • • • •
-   * 1       • • • • • • •
-   * 2       • • • • • • •
-   * 3  HEAD •-•-•-•-•-•-•------------------ TAIL
-   * 4       • • • • • • •
-   * 5       • • • • • • •
-   * 6       • • • • • • •
+   *         0 1 2 3 4 5 6 7 8 9 10
+   * 0       • • • • • • • • • • •
+   * 1       • • • • • • • • • • •
+   * 2       • • • • • • • • • • •
+   * 3  HEAD •-•-•-•-•-•-•-•-•-•-•---------- TAIL
+   * 4       • • • • • • • • • • •
+   * 5       • • • • • • • • • • •
+   * 6       • • • • • • • • • • •
    *
    * @returns an end point the path should be drawn to
    */
@@ -1289,16 +1289,22 @@ class Line extends Shape {
         canvas.polyline([grid[3][1], grid[0][3], grid[3][5]], this.getSeed());
         return grid[0][3];
       case LineEndType.SOLID_ARROW:
-        canvas.polygon([grid[3][1], grid[0][3], grid[3][5]], this.getSeed());
+        canvas.polygon(
+          [grid[3][3], grid[3][1], grid[0][3], grid[3][5], grid[3][3]],
+          this.getSeed()
+        );
         return grid[0][3];
       case LineEndType.TRIANGLE:
         canvas.strokePolygon(
-          [grid[7][0], grid[0][3], grid[7][6]],
+          [grid[7][3], grid[7][0], grid[0][3], grid[7][6], grid[7][3]],
           this.getSeed()
         );
         return grid[7][3];
       case LineEndType.TRIANGLE_FILLED:
-        canvas.polygon([grid[7][0], grid[0][3], grid[7][6]], this.getSeed());
+        canvas.polygon(
+          [grid[7][3], grid[7][0], grid[0][3], grid[7][6], grid[7][3]],
+          this.getSeed()
+        );
         return grid[7][3];
       case LineEndType.DIAMOND:
         canvas.strokePolygon(

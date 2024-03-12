@@ -434,6 +434,7 @@ class Canvas {
   ): Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
+    this.context.lineCap = "round";
     this.context.globalAlpha = this.alpha;
     if (this.roughness > 0) {
       const rd = this.generator.line(x1, y1, x2, y2, {
@@ -470,6 +471,7 @@ class Canvas {
     const h = Math.abs(y2 - y1);
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
+    this.context.lineCap = "round";
     this.context.globalAlpha = this.alpha;
     this.context.setLineDash(this.strokePattern);
     if (this.roughness > 0) {
@@ -559,6 +561,7 @@ class Canvas {
       : [radius, radius, radius, radius];
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
+    this.context.lineCap = "round";
     this.context.globalAlpha = this.alpha;
     this.context.setLineDash(this.strokePattern);
     if (this.roughness > 0) {
@@ -693,6 +696,7 @@ class Canvas {
     const ym = y + h / 2.0;
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
+    this.context.lineCap = "round";
     this.context.globalAlpha = this.alpha;
     this.context.setLineDash(this.strokePattern);
     if (this.roughness > 0) {
@@ -786,6 +790,7 @@ class Canvas {
   polyline(path: number[][], seed: number = 1): Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
+    this.context.lineCap = "round";
     this.context.globalAlpha = this.alpha;
     this.context.setLineDash(this.strokePattern);
     if (this.roughness > 0) {
@@ -979,6 +984,7 @@ class Canvas {
   strokeCurve(path: number[][], seed: number = 1): Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
+    this.context.lineCap = "round";
     this.context.globalAlpha = this.alpha;
     if (this.roughness > 0) {
       const rd = this.generator.curve(path as Point[], {
@@ -1059,6 +1065,7 @@ class Canvas {
   strokePolygon(path: number[][], seed: number = 1): Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
+    this.context.lineCap = "round";
     this.context.globalAlpha = this.alpha;
     this.context.setLineDash(this.strokePattern);
     if (this.roughness > 0) {
@@ -1145,6 +1152,7 @@ class Canvas {
     let ea = geometry.toRadian(endAngle);
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
+    this.context.lineCap = "round";
     this.context.globalAlpha = this.alpha;
     this.context.setLineDash(this.strokePattern);
     if (this.roughness > 0) {
@@ -1224,6 +1232,7 @@ class Canvas {
   strokePath(path: SVGPath, seed: number = 1): Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
+    this.context.lineCap = "round";
     this.context.globalAlpha = this.alpha;
     this.context.setLineDash(this.strokePattern);
     if (this.roughness > 0) {
