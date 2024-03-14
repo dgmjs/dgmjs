@@ -35,6 +35,7 @@ import {
   Group,
   Image,
   Line,
+  Page,
   Rectangle,
   Shape,
   Text,
@@ -47,6 +48,7 @@ export function basicSetup(
     instantiators: {
       Shape: () => new Shape(),
       Document: () => new Document(),
+      Page: () => new Page(),
       Box: () => new Box(),
       Line: () => new Line(),
       Rectangle: () => new Rectangle(),

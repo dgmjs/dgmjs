@@ -147,7 +147,7 @@ export class BoxMoveAnchorPositionController extends Controller {
 
     // transform shape
     const tr = editor.transform;
-    const doc = editor.doc as Document;
+    const doc = editor.currentPage as Document;
     tr.atomicAssign(shape, "anchorPosition", this.anchorPosition);
     tr.resolveAllConstraints(doc, canvas);
   }

@@ -106,7 +106,7 @@ export class SelectionManager extends EventEmitter {
       [x2, y2],
     ]);
     this.shapes = [];
-    this.editor.doc?.traverse((s) => {
+    this.editor.currentPage?.traverse((s) => {
       if (
         (s as Shape).visible &&
         (s as Shape).enable &&
@@ -124,7 +124,7 @@ export class SelectionManager extends EventEmitter {
    */
   selectAll() {
     this.shapes = [];
-    this.editor.doc?.traverse((s) => {
+    this.editor.currentPage?.traverse((s) => {
       if ((s as Shape).visible && (s as Shape).enable) {
         this.shapes.push(s as Shape);
       }

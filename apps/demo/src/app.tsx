@@ -41,10 +41,10 @@ function App() {
     // load from local storage
     const localData = localStorage.getItem("local-data");
     if (localData) {
-      window.editor.store.fromJSON(JSON.parse(localData));
-      window.editor.setDoc(window.editor.store.doc as Document);
+      window.editor.actions.loadFromJSON(JSON.parse(localData));
     }
     demoStore.setDoc(window.editor.store.doc as Document);
+    demoStore.setCurrentPage(window.editor.currentPage);
     window.editor.fitToScreen();
 
     window.addEventListener("resize", () => {
@@ -93,7 +93,10 @@ function App() {
         <Options />
       </div>
       <PaletteToolbar />
-      <ShapeSidebar doc={demoStore.doc} onSelect={handleSidebarSelect} />
+      <ShapeSidebar
+        page={demoStore.currentPage}
+        onSelect={handleSidebarSelect}
+      />
       <PropertySidebar
         shapes={demoStore.selection}
         onChange={handleValuesChange}

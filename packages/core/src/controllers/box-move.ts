@@ -85,15 +85,15 @@ export class BoxMoveController extends Controller {
     // (container shouldn't be itself of a descendant of target)
     const canvas = editor.canvas;
     let p2 = targetShape.localCoordTransform(canvas, this.dragPoint, false);
-    let container = editor.doc?.getShapeAt(canvas, p2, [shape]);
+    let container = editor.currentPage?.getShapeAt(canvas, p2, [shape]);
     const r = targetShape.find((s) => s.id === container?.id);
     if (r) container = null;
     if (!(container && container.canContain(targetShape)))
-      container = editor.doc;
+      container = editor.currentPage;
 
     // update
     const tr = editor.transform;
-    const doc = editor.doc as Document;
+    const doc = editor.currentPage as Document;
     tr.moveShapes(
       doc,
       [targetShape],
@@ -131,7 +131,7 @@ export class BoxMoveController extends Controller {
     const canvas = editor.canvas;
     // hovering containable
     const dp = shape.localCoordTransform(canvas, this.dragPoint, true);
-    const container = editor.doc?.getShapeAt(canvas, dp, [shape]);
+    const container = editor.currentPage?.getShapeAt(canvas, dp, [shape]);
     if (container && container !== shape && container.canContain(shape)) {
       const manipulator = manipulatorManager.get(container.type);
       if (manipulator) manipulator.drawHovering(editor, container, e);

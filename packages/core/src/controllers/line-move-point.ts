@@ -145,7 +145,7 @@ export class LineMovePointController extends Controller {
 
     // transform shape
     const canvas = editor.canvas;
-    const doc = editor.doc as Document;
+    const doc = editor.currentPage as Document;
     const tr = editor.transform;
     tr.setPath(shape, newPath);
     tr.resolveAllConstraints(doc, canvas);

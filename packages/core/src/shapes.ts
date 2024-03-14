@@ -51,7 +51,7 @@ interface Script {
 }
 
 type ConstraintFn = (
-  doc: Document,
+  page: Page,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,
@@ -677,16 +677,13 @@ class Shape extends Obj {
 /**
  * Document
  */
-class Document extends Shape {
+class Document extends Obj {
   version: number;
 
   constructor() {
     super();
     this.type = "Document";
     this.version = 1;
-
-    // document cannot be controllable
-    this.enable = false;
   }
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
@@ -698,6 +695,17 @@ class Document extends Shape {
   fromJSON(json: any) {
     super.fromJSON(json);
     this.version = json.version ?? this.version;
+  }
+}
+
+/**
+ * Page
+ */
+class Page extends Shape {
+  constructor() {
+    super();
+    this.type = "Page";
+    this.enable = false; // page cannot be controllable
   }
 
   /**
@@ -731,7 +739,7 @@ class Document extends Shape {
   /**
    * Return actual document bounding box in GCS
    */
-  getDocBoundingBox(canvas: Canvas): number[][] {
+  getPageBoundingBox(canvas: Canvas): number[][] {
     return this.children.length > 0
       ? this.traverseSequence()
           .filter((s) => s !== this)
@@ -2004,6 +2012,7 @@ export {
   AlignmentKind,
   Shape,
   Document,
+  Page,
   Box,
   Line,
   Rectangle,

@@ -12,7 +12,7 @@
  */
 
 import { z } from "zod";
-import { constraintManager, Box, Line, Shape, Document } from "../shapes";
+import { constraintManager, Box, Shape, Page } from "../shapes";
 import * as geometry from "../graphics/geometry";
 import { Canvas } from "../graphics/graphics";
 import { Transform } from "../transform/transform";
@@ -26,7 +26,7 @@ const schema = z.object({});
  * @param {object} args
  */
 function constraint(
-  doc: Document,
+  page: Page,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,
@@ -47,7 +47,7 @@ function constraint(
     const top = shapeCenter[1] - shape.height / 2;
     const dx = left - shape.left;
     const dy = top - shape.top;
-    changed = transform.moveShapes(doc, [shape], dx, dy);
+    changed = transform.moveShapes(page, [shape], dx, dy);
   }
   return changed;
 }

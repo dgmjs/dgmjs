@@ -353,7 +353,7 @@ export class BoxSizeController extends Controller {
 
     // transform shapes
     const tr = editor.transform;
-    const doc = editor.doc as Document;
+    const doc = editor.currentPage as Document;
 
     tr.resize(shape, targetWidth, targetHeight);
     tr.moveShapes(doc, [shape], targetLeft - shape.left, targetTop - shape.top);

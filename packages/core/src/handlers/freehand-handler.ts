@@ -13,9 +13,9 @@
 
 import { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Editor, Handler, HandlerOptions } from "../editor";
+import { Editor, Handler } from "../editor";
 import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
-import { Document, Line } from "../shapes";
+import { Line } from "../shapes";
 import simplifyPath from "simplify-path";
 
 /**
@@ -39,14 +39,17 @@ export class FreehandFactoryHandler extends Handler {
   }
 
   initialize(editor: Editor, e: CanvasPointerEvent): void {
-    this.draggingPoints.push(this.dragStartPoint);
-    this.shape = editor.factory.createFreehand(this.draggingPoints, false);
-    const doc = editor.doc as Document;
-    editor.transform.startTransaction("create");
-    editor.transform.addShape(this.shape, doc);
+    const page = editor.currentPage;
+    if (page) {
+      this.draggingPoints.push(this.dragStartPoint);
+      this.shape = editor.factory.createFreehand(this.draggingPoints, false);
+      editor.transform.startTransaction("create");
+      editor.transform.addShape(this.shape, page);
+    }
   }
 
   update(editor: Editor, e: CanvasPointerEvent): void {
+    const page = editor.currentPage;
     this.draggingPoints.push(this.dragPoint);
     this.closed =
       geometry.distance(
@@ -57,12 +60,9 @@ export class FreehandFactoryHandler extends Handler {
     if (this.closed) {
       newPath[newPath.length - 1] = geometry.copy(newPath[0]);
     }
-    if (this.shape) {
+    if (page && this.shape) {
       editor.transform.setPath(this.shape, newPath);
-      editor.transform.resolveAllConstraints(
-        editor.doc as Document,
-        editor.canvas
-      );
+      editor.transform.resolveAllConstraints(page, editor.canvas);
     }
   }
 

@@ -5,7 +5,6 @@ import {
   Text,
   measureText,
   convertDocToText,
-  Document,
 } from "@dgmjs/core";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { moveToAboveOrBelow, textVertAlignToAlignItems } from "./utils";
@@ -112,17 +111,14 @@ export const DGMRichTextInplaceEditor: React.FC<
   });
 
   const open = (textShape: Box) => {
-    if (textShape) {
+    if (editor.currentPage && textShape) {
       // disable shape's text rendering
       textShape._renderText = false;
       editor.repaint();
 
       // start transaction
       editor.transform.startTransaction("text-edit");
-      editor.transform.resolveAllConstraints(
-        editor.doc as Document,
-        editor.canvas
-      );
+      editor.transform.resolveAllConstraints(editor.currentPage, editor.canvas);
 
       // update states
       update(textShape, textShape.text);
@@ -138,41 +134,40 @@ export const DGMRichTextInplaceEditor: React.FC<
   };
 
   const update = (textShape: Box, textValue: any) => {
-    // mutate text shape
-    editor.transform.atomicAssign(textShape, "text", textValue);
-    editor.transform.resolveAllConstraints(
-      editor.doc as Document,
-      editor.canvas
-    );
+    if (editor.currentPage) {
+      // mutate text shape
+      editor.transform.atomicAssign(textShape, "text", textValue);
+      editor.transform.resolveAllConstraints(editor.currentPage, editor.canvas);
 
-    // update states
-    const rect = getTextRect(textShape, textValue);
-    setState({
-      textShape,
-      padding: textShape.padding,
-      alignItems: textVertAlignToAlignItems(textShape.vertAlign),
-      textAlign: textShape.horzAlign,
-      lineHeight: textShape.lineHeight,
-      paragraphSpacing: textShape.paragraphSpacing,
-      fontFamily: textShape.fontFamily,
-      fontSize: textShape.fontSize,
-      color: editor.canvas.resolveColor(textShape.fontColor),
-      scale: editor.getScale(),
-      left: rect.left,
-      top: rect.top,
-      width: Math.max(textShape.width, rect.width),
-      height: Math.max(textShape.height, rect.height),
-      textWidth: rect.width,
-      textHeight: rect.height,
-    });
+      // update states
+      const rect = getTextRect(textShape, textValue);
+      setState({
+        textShape,
+        padding: textShape.padding,
+        alignItems: textVertAlignToAlignItems(textShape.vertAlign),
+        textAlign: textShape.horzAlign,
+        lineHeight: textShape.lineHeight,
+        paragraphSpacing: textShape.paragraphSpacing,
+        fontFamily: textShape.fontFamily,
+        fontSize: textShape.fontSize,
+        color: editor.canvas.resolveColor(textShape.fontColor),
+        scale: editor.getScale(),
+        left: rect.left,
+        top: rect.top,
+        width: Math.max(textShape.width, rect.width),
+        height: Math.max(textShape.height, rect.height),
+        textWidth: rect.width,
+        textHeight: rect.height,
+      });
 
-    // update toolbar position
-    setToolbarPosition({
-      left: rect.left,
-      top: rect.top,
-      width: textShape.width,
-      height: textShape.height,
-    });
+      // update toolbar position
+      setToolbarPosition({
+        left: rect.left,
+        top: rect.top,
+        width: textShape.width,
+        height: textShape.height,
+      });
+    }
   };
 
   const close = () => {

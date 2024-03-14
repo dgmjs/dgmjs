@@ -13,7 +13,7 @@
 
 import { Editor, Handler } from "../editor";
 import { fileOpen } from "browser-fs-access";
-import { Document, Image } from "../shapes";
+import { Image } from "../shapes";
 import { geometry } from "..";
 
 /**
@@ -36,26 +36,31 @@ export class ImageFactoryHandler extends Handler {
   onActivate(editor: Editor): void {
     const asyncFn = async () => {
       try {
-        const file = await fileOpen([
-          {
-            description: "Image files",
-            mimeTypes: ["image/png", "image/jpeg", "image/svg+xml"],
-            extensions: [".png", ".jpeg", ".jpg", ".svg"],
-            multiple: false,
-          },
-        ]);
-        const center = editor.getCenter();
-        const shape = await editor.factory.createImage(file, [center, center]);
-        const doc = editor.doc as Document;
-        const size = this.computeProperSize(editor, shape);
-        editor.transform.startTransaction("create");
-        editor.transform.addShape(shape, doc);
-        editor.transform.resize(shape, size[0], size[1]);
-        editor.transform.move(shape, -size[0] / 2, -size[1] / 2);
-        editor.transform.resolveAllConstraints(doc, editor.canvas);
-        editor.transform.endTransaction();
-        editor.factory.triggerCreate(shape);
-        this.done(editor);
+        const page = editor.currentPage;
+        if (page) {
+          const file = await fileOpen([
+            {
+              description: "Image files",
+              mimeTypes: ["image/png", "image/jpeg", "image/svg+xml"],
+              extensions: [".png", ".jpeg", ".jpg", ".svg"],
+              multiple: false,
+            },
+          ]);
+          const center = editor.getCenter();
+          const shape = await editor.factory.createImage(file, [
+            center,
+            center,
+          ]);
+          const size = this.computeProperSize(editor, shape);
+          editor.transform.startTransaction("create");
+          editor.transform.addShape(shape, page);
+          editor.transform.resize(shape, size[0], size[1]);
+          editor.transform.move(shape, -size[0] / 2, -size[1] / 2);
+          editor.transform.resolveAllConstraints(page, editor.canvas);
+          editor.transform.endTransaction();
+          editor.factory.triggerCreate(shape);
+          this.done(editor);
+        }
       } catch (err) {
         // user cancelled
       }

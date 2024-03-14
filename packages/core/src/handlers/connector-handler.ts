@@ -13,7 +13,7 @@
 
 import { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Connector, Document, Shape } from "../shapes";
+import { Connector, Shape } from "../shapes";
 import { Editor, Handler, manipulatorManager } from "../editor";
 import { Cursor, Mouse } from "../graphics/const";
 import { findConnectionAnchor } from "../controllers/utils";
@@ -45,47 +45,53 @@ export class ConnectorFactoryHandler extends Handler {
   }
 
   initialize(editor: Editor, e: CanvasPointerEvent): void {
-    const [end, anchor] = findConnectionAnchor(
-      editor,
-      null,
-      this.dragStartPoint
-    );
-    this.tailEnd = end;
-    this.tailAnchor = anchor;
-    this.shape = editor.factory.createConnector(
-      this.tailEnd,
-      this.tailAnchor,
-      this.headEnd,
-      this.headAnchor,
-      [this.dragStartPoint, this.dragPoint]
-    );
-    this.shape.path = [this.dragStartPoint, this.dragPoint];
-    const doc = editor.doc as Document;
-    editor.transform.startTransaction("create");
-    editor.transform.addShape(this.shape, doc);
+    const page = editor.currentPage;
+    if (page) {
+      const [end, anchor] = findConnectionAnchor(
+        editor,
+        null,
+        this.dragStartPoint
+      );
+      this.tailEnd = end;
+      this.tailAnchor = anchor;
+      this.shape = editor.factory.createConnector(
+        this.tailEnd,
+        this.tailAnchor,
+        this.headEnd,
+        this.headAnchor,
+        [this.dragStartPoint, this.dragPoint]
+      );
+      this.shape.path = [this.dragStartPoint, this.dragPoint];
+      editor.transform.startTransaction("create");
+      editor.transform.addShape(this.shape, page);
+    }
   }
 
   update(editor: Editor, e: CanvasPointerEvent): void {
-    const [end, anchor] = findConnectionAnchor(
-      editor,
-      this.shape,
-      this.dragPoint
-    );
-    this.headEnd = end;
-    this.headAnchor = anchor;
-    const newPath = geometry.pathCopy((this.shape as Connector).path);
-    newPath[1] = this.dragPoint;
-    editor.transform.setPath(this.shape as Shape, newPath);
-    editor.transform.atomicAssignRef(this.shape as Shape, "head", this.headEnd);
-    editor.transform.atomicAssign(
-      this.shape as Shape,
-      "headAnchor",
-      this.headAnchor
-    );
-    editor.transform.resolveAllConstraints(
-      editor.doc as Document,
-      editor.canvas
-    );
+    const page = editor.currentPage;
+    if (page) {
+      const [end, anchor] = findConnectionAnchor(
+        editor,
+        this.shape,
+        this.dragPoint
+      );
+      this.headEnd = end;
+      this.headAnchor = anchor;
+      const newPath = geometry.pathCopy((this.shape as Connector).path);
+      newPath[1] = this.dragPoint;
+      editor.transform.setPath(this.shape as Shape, newPath);
+      editor.transform.atomicAssignRef(
+        this.shape as Shape,
+        "head",
+        this.headEnd
+      );
+      editor.transform.atomicAssign(
+        this.shape as Shape,
+        "headAnchor",
+        this.headAnchor
+      );
+      editor.transform.resolveAllConstraints(page, editor.canvas);
+    }
   }
 
   finalize(editor: Editor, e: CanvasPointerEvent): void {

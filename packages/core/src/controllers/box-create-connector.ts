@@ -118,7 +118,7 @@ export class BoxCreateConnectorController extends Controller {
       [0.5, 0.5],
       [this.dragStartPointGCS, this.dragPointGCS]
     );
-    const doc = editor.doc as Document;
+    const doc = editor.currentPage as Document;
     editor.transform.startTransaction("create");
     editor.transform.addShape(this.connector, doc);
     editor.transform.resolveAllConstraints(doc, editor.canvas);
@@ -136,7 +136,7 @@ export class BoxCreateConnectorController extends Controller {
         this.dragPointGCS
       );
       const tr = editor.transform;
-      const doc = editor.doc as Document;
+      const doc = editor.currentPage as Document;
       tr.setPath(this.connector, [this.dragStartPointGCS, this.dragPointGCS]);
       tr.atomicAssignRef(this.connector, "head", newEnd);
       tr.atomicAssign(this.connector, "headAnchor", anchor);

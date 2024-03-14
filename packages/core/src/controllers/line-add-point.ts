@@ -114,7 +114,7 @@ export class LineAddPointController extends Controller {
 
     // transform shape
     const tr = editor.transform;
-    const doc = editor.doc as Document;
+    const doc = editor.currentPage as Document;
     tr.setPath(shape, newPath);
     tr.resolveAllConstraints(doc, canvas);
   }

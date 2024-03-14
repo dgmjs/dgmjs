@@ -79,7 +79,7 @@ export class SelectionsMoveController extends Controller {
 
     // determine container
     // (container shouldn't be itself of a descendant of target)
-    let container = editor.doc?.getShapeAt(
+    let container = editor.currentPage?.getShapeAt(
       canvas,
       this.dragPointGCS,
       selections
@@ -87,11 +87,11 @@ export class SelectionsMoveController extends Controller {
     const r = selections.find((sh) => sh.find((s) => s.id === container?.id));
     if (r) container = null;
     if (!(container && selections.every((s) => container?.canContain(s))))
-      container = editor.doc;
+      container = editor.currentPage;
 
     // move shapes
     const tr = editor.transform;
-    const doc = editor.doc as Document;
+    const doc = editor.currentPage as Document;
     tr.moveShapes(doc, selections, this.dxStepGCS, this.dyStepGCS, container);
     tr.resolveAllConstraints(doc, canvas);
   }
@@ -137,7 +137,7 @@ export class SelectionsMoveController extends Controller {
   drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     const canvas = editor.canvas;
     const selections = editor.selection.getShapes();
-    const container = editor.doc?.getShapeAt(
+    const container = editor.currentPage?.getShapeAt(
       canvas,
       this.dragPointGCS,
       selections

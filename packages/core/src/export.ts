@@ -1,4 +1,4 @@
-import type { Document } from "./shapes";
+import type { Page } from "./shapes";
 import { Canvas } from "./graphics/graphics";
 import * as geometry from "./graphics/geometry";
 import fileSaverPkg from "file-saver";
@@ -20,7 +20,7 @@ export type ExportImageOptions = {
 /**
  * Create and return a new canvas element with document rendered
  */
-function getImageCanvas(doc: Document, options: ExportImageOptions) {
+function getImageCanvas(page: Page, options: ExportImageOptions) {
   const { scale, dark, fillBackground } = options;
   const theme = dark ? "dark" : "light";
   const colorVariables = colors[theme];
@@ -28,7 +28,7 @@ function getImageCanvas(doc: Document, options: ExportImageOptions) {
   // make a new canvas element for making image data
   const canvasElement = document.createElement("canvas");
   const canvas = new Canvas(canvasElement, scale);
-  let boundingBox = doc.getDocBoundingBox(canvas);
+  let boundingBox = page.getPageBoundingBox(canvas);
 
   // initialize new canvas
   boundingBox = geometry.expandRect(boundingBox, DEFAULT_MARGIN);
@@ -50,7 +50,7 @@ function getImageCanvas(doc: Document, options: ExportImageOptions) {
   }
 
   // draw doc to the new canvas
-  doc.render(canvas);
+  page.render(canvas);
   return canvasElement;
 }
 
@@ -58,10 +58,10 @@ function getImageCanvas(doc: Document, options: ExportImageOptions) {
  * Get Base64-encoded image data of doc
  */
 export async function getImageDataUrl(
-  doc: Document,
+  page: Page,
   options: Partial<ExportImageOptions>
 ): Promise<string> {
-  const canvas = getImageCanvas(doc, {
+  const canvas = getImageCanvas(page, {
     scale: 1,
     dark: false,
     fillBackground: true,
@@ -75,10 +75,10 @@ export async function getImageDataUrl(
  * Get Blob image data of doc
  */
 export async function getImageBlob(
-  doc: Document,
+  page: Page,
   options: Partial<ExportImageOptions>
 ): Promise<Blob | null> {
-  const canvas = getImageCanvas(doc, {
+  const canvas = getImageCanvas(page, {
     scale: 1,
     dark: false,
     fillBackground: true,
@@ -97,7 +97,7 @@ export async function getImageBlob(
  */
 export async function getSVGImageData(
   canvas: Canvas,
-  doc: Document,
+  page: Page,
   options: Partial<ExportImageOptions>,
   styleInSVG?: string
 ): Promise<string> {
@@ -113,7 +113,7 @@ export async function getSVGImageData(
 
   // Make a new SVG canvas for making SVG image data
   const boundingBox = geometry.expandRect(
-    doc.getDocBoundingBox(canvas),
+    page.getPageBoundingBox(canvas),
     margin
   );
   const w = geometry.width(boundingBox);
@@ -141,7 +141,7 @@ export async function getSVGImageData(
   }
 
   // Draw doc to the new canvas
-  doc.render(svgCanvas);
+  page.render(svgCanvas);
 
   // TODO: add fonts in defs (temporal impls)
   const svg: SVGSVGElement = ctx.getSvg();
@@ -164,21 +164,21 @@ export async function getSVGImageData(
  */
 export async function exportImageAsFile(
   canvas: Canvas,
-  doc: Document,
+  page: Page,
   fileName: string,
   options: Partial<ExportImageOptions>,
   styleInSVG?: string
 ) {
   switch (options.format) {
     case "image/png": {
-      const data = await getImageBlob(doc, options);
+      const data = await getImageBlob(page, options);
       if (data) {
         saveAs(data, fileName);
       }
       break;
     }
     case "image/svg+xml": {
-      const data = await getSVGImageData(canvas, doc, options, styleInSVG);
+      const data = await getSVGImageData(canvas, page, options, styleInSVG);
       if (data) {
         const blob = new Blob([data], { type: "image/svg+xml" });
         saveAs(blob, fileName);
@@ -193,12 +193,12 @@ export async function exportImageAsFile(
  */
 export async function copyToClipboard(
   canvas: Canvas,
-  doc: Document,
+  page: Page,
   options: Partial<ExportImageOptions>
 ) {
   switch (options.format) {
     case "image/png": {
-      const data = await getImageBlob(doc, options);
+      const data = await getImageBlob(page, options);
       if (data) {
         navigator.clipboard.write([
           new ClipboardItem({

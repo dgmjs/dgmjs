@@ -12,10 +12,10 @@
  */
 
 import * as geometry from "../graphics/geometry";
-import { Editor, Handler, HandlerOptions } from "../editor";
+import { Editor, Handler } from "../editor";
 import { CanvasPointerEvent } from "../graphics/graphics";
 import { Cursor, Mouse } from "../graphics/const";
-import { Document, Frame, Shape } from "../shapes";
+import { Frame, Shape } from "../shapes";
 
 /**
  * Frame Factory Handler
@@ -34,17 +34,20 @@ export class FrameFactoryHandler extends Handler {
   }
 
   initialize(editor: Editor, e: CanvasPointerEvent): void {
-    this.shape = editor.factory.createFrame([
-      this.dragStartPoint,
-      this.dragPoint,
-    ]);
-    const doc = editor.doc as Document;
-    editor.transform.startTransaction("create");
-    editor.transform.addShape(this.shape, doc);
+    const page = editor.currentPage;
+    if (page) {
+      this.shape = editor.factory.createFrame([
+        this.dragStartPoint,
+        this.dragPoint,
+      ]);
+      editor.transform.startTransaction("create");
+      editor.transform.addShape(this.shape, page);
+    }
   }
 
   update(editor: Editor, e: CanvasPointerEvent): void {
-    if (this.shape) {
+    const page = editor.currentPage;
+    if (page && this.shape) {
       const rect = geometry.normalizeRect([
         this.dragStartPoint,
         this.dragPoint,
@@ -57,10 +60,7 @@ export class FrameFactoryHandler extends Handler {
         "height",
         geometry.height(rect)
       );
-      editor.transform.resolveAllConstraints(
-        editor.doc as Document,
-        editor.canvas
-      );
+      editor.transform.resolveAllConstraints(page, editor.canvas);
     }
   }
 

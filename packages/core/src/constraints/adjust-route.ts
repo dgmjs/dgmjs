@@ -12,7 +12,7 @@
  */
 
 import { z } from "zod";
-import { Shape, constraintManager, Connector, Document } from "../shapes";
+import { Shape, constraintManager, Connector, Page } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import { Transform } from "../transform/transform";
 
@@ -22,7 +22,7 @@ const schema = z.object({});
  * Adjust route path of connector
  */
 function constraint(
-  doc: Document,
+  page: Page,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,

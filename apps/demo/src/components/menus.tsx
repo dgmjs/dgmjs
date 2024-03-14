@@ -24,7 +24,7 @@ import { useDemoStore } from "@/demo-store";
 import { Document } from "@dgmjs/core";
 
 export function Menus() {
-  const { setDoc } = useDemoStore();
+  const { setDoc, setCurrentPage } = useDemoStore();
 
   const handleNew = () => {
     window.editor.actions.newDoc();
@@ -47,6 +47,7 @@ export function Menus() {
         const json = JSON.parse(data);
         window.editor.actions.loadFromJSON(json);
         setDoc(window.editor.store.doc as Document);
+        setCurrentPage(window.editor.currentPage);
         window.editor.fitToScreen();
         window.editor.repaint();
       }

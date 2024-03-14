@@ -1,4 +1,4 @@
-import { Document, Shape } from "@dgmjs/core";
+import { Document, Page, Shape } from "@dgmjs/core";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
@@ -8,6 +8,7 @@ export interface DemoState {
   theme: "light" | "dark";
   activeHandler: string | null;
   doc: Document | null;
+  currentPage: Page | null;
   selection: Shape[];
   libraries: Document[];
   setScale: (scale: number) => void;
@@ -15,6 +16,7 @@ export interface DemoState {
   setTheme: (theme: "light" | "dark") => void;
   setActiveHandler: (handlerId: string | null) => void;
   setDoc: (doc: Document | null) => void;
+  setCurrentPage: (page: Page | null) => void;
   setSelection: (selections: Shape[]) => void;
 }
 
@@ -26,6 +28,7 @@ export const useDemoStore = create<DemoState>()(
       theme: "light",
       activeHandler: "Select",
       doc: null,
+      currentPage: null,
       selection: [],
       libraries: [],
       setScale: (scale) => set((state) => ({ scale })),
@@ -39,6 +42,7 @@ export const useDemoStore = create<DemoState>()(
       setActiveHandler: (handlerId) =>
         set((state) => ({ activeHandler: handlerId })),
       setDoc: (doc) => set((state) => ({ doc: doc })),
+      setCurrentPage: (page) => set((state) => ({ currentPage: page })),
       setSelection: (selections) => set((state) => ({ selection: selections })),
     }),
     { name: "DemoStore" }

@@ -12,18 +12,18 @@
  */
 
 import React from "react";
-import { Document, Shape } from "@dgmjs/core";
+import { Page, Shape } from "@dgmjs/core";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Layers } from "./layers";
 import { Libraries } from "./libraries";
 
 export interface ShapeSidebarProps {
-  doc: Document | null;
+  page: Page | null;
   onSelect?: (selection: Shape[]) => void;
 }
 
 export const ShapeSidebar: React.FC<ShapeSidebarProps> = ({
-  doc,
+  page,
   onSelect,
 }) => {
   return (
@@ -46,7 +46,7 @@ export const ShapeSidebar: React.FC<ShapeSidebarProps> = ({
           value="layers"
           className="absolute bottom-0 left-0 right-0 top-12"
         >
-          <Layers doc={doc} onSelect={onSelect} />
+          <Layers page={page} onSelect={onSelect} />
         </TabsContent>
       </Tabs>
     </div>
