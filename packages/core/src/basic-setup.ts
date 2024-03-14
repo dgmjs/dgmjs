@@ -46,7 +46,6 @@ export function basicSetup(
   return {
     instantiators: {
       Shape: () => new Shape(),
-      Diagram: () => new Document(), // for backward compatibility
       Document: () => new Document(),
       Box: () => new Box(),
       Line: () => new Line(),

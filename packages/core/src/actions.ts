@@ -22,6 +22,8 @@ import {
   Connector,
 } from "./shapes";
 import * as geometry from "./graphics/geometry";
+import { convertToLatestVersion } from "./utils/document-compatibility";
+import { late } from "zod";
 
 /**
  * Editor actions
@@ -529,7 +531,8 @@ export class Actions {
   loadFromJSON(json: any) {
     if (json) {
       this.editor.selection.deselectAll();
-      this.editor.store.fromJSON(json);
+      const latestVersionJson = convertToLatestVersion(json);
+      this.editor.store.fromJSON(latestVersionJson);
       if (this.editor.store.doc instanceof Document) {
         this.editor.setDoc(this.editor.store.doc);
       }
