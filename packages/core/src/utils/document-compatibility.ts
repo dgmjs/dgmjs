@@ -20,6 +20,8 @@ export function convertToLatestVersion(json: any): any {
       id: pageId,
       type: "Page",
       parent: json.id,
+      name: json.name,
+      description: json.description,
       children: [
         ...json.children.map((child: any) => ({ ...child, parent: pageId })),
       ],
