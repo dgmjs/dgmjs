@@ -36,7 +36,7 @@ export const PropertySidebar: React.FC<ShapeEditorProps> = ({
   onChange,
 }) => {
   return (
-    <div className="absolute bottom-4 right-4 top-12 w-64 border bg-background p-3 rounded">
+    <div className="absolute inset-y-0 right-0 w-56 bg-background border-l p-2">
       <Tabs defaultValue="basic" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="basic">Basic</TabsTrigger>

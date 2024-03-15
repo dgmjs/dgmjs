@@ -44,7 +44,6 @@ function App() {
     if (localData) {
       window.editor.actions.loadFromJSON(JSON.parse(localData));
     }
-    console.log("doc", window.editor.store.doc);
     demoStore.setDoc(window.editor.store.doc as Document);
     demoStore.setCurrentPage(window.editor.currentPage);
     window.editor.fitToScreen();
@@ -52,6 +51,12 @@ function App() {
     window.addEventListener("resize", () => {
       window.editor.fit();
     });
+
+    // forward key event to editor
+    // window.addEventListener("keydown", (e) => {
+    //   const event = new KeyboardEvent("keydown", { ...e });
+    //   editor.canvasElement.dispatchEvent(event);
+    // });
   };
 
   const handleSelectionChange = (selection: Shape[]) => {
@@ -85,7 +90,7 @@ function App() {
   return (
     <div className="absolute inset-0 h-[calc(100dvh)] select-none">
       <EditorWrapper
-        className="absolute inset-0"
+        className="absolute inset-y-0 left-56 right-56"
         theme={demoStore.theme}
         options={basicSetup()}
         showGrid={true}
@@ -94,9 +99,8 @@ function App() {
         onActiveHandlerChange={handleActiveHandlerChange}
         onTransaction={handleTransaction}
       />
-      <div className="absolute top-0 inset-x-0 h-10 border-b flex items-center justify-between bg-background">
+      <div className="absolute top-2 left-60 right-60 h-10 border flex items-center justify-between bg-background">
         <Menus />
-
         <Options />
       </div>
       <PaletteToolbar />

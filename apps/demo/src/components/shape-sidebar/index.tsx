@@ -34,7 +34,7 @@ export const ShapeSidebar: React.FC<ShapeSidebarProps> = ({
   return (
     <div
       id="shape-sidebar"
-      className="absolute bottom-4 left-4 top-12 w-64 border bg-background p-3 rounded"
+      className="absolute inset-y-0 left-0 w-56 border-r bg-background p-2"
     >
       <Tabs defaultValue="pages" className="w-full">
         <TabsList className="grid w-full grid-cols-3">
