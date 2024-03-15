@@ -2,6 +2,7 @@ import {
   Document,
   Editor,
   FillStyle,
+  Page,
   Shape,
   ShapeValues,
   Transaction,
@@ -43,6 +44,7 @@ function App() {
     if (localData) {
       window.editor.actions.loadFromJSON(JSON.parse(localData));
     }
+    console.log("doc", window.editor.store.doc);
     demoStore.setDoc(window.editor.store.doc as Document);
     demoStore.setCurrentPage(window.editor.currentPage);
     window.editor.fitToScreen();
@@ -75,6 +77,11 @@ function App() {
     demoStore.setSelection([...shapes]);
   };
 
+  const handlePageSelect = (page: Page) => {
+    window.editor.setCurrentPage(page);
+    demoStore.setCurrentPage(page);
+  };
+
   return (
     <div className="absolute inset-0 h-[calc(100dvh)] select-none">
       <EditorWrapper
@@ -94,8 +101,10 @@ function App() {
       </div>
       <PaletteToolbar />
       <ShapeSidebar
-        page={demoStore.currentPage}
+        doc={demoStore.doc!}
+        currentPage={demoStore.currentPage}
         onSelect={handleSidebarSelect}
+        onPageSelect={handlePageSelect}
       />
       <PropertySidebar
         shapes={demoStore.selection}

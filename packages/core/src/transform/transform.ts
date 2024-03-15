@@ -349,11 +349,60 @@ export class Transform extends EventEmitter {
   }
 
   // ---------------------------------------------------------------------------
+  //                         MUTATIONS FOR PAGES
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Mutation to add a page to doc
+   */
+  addPage(page: Page): boolean {
+    let changed = false;
+    changed = this.atomicInsert(page) || changed;
+    changed = this.changeParent(page, this.store.doc!) || changed;
+    return changed;
+  }
+
+  /**
+   * Mutation to remove a page from doc
+   */
+  removePage(page: Page): boolean {
+    let changed = false;
+    if (page && page.parent) {
+      changed =
+        this.atomicRemoveFromArray(page.parent, "children", page) || changed;
+      changed = this.atomicAssignRef(page.parent, "parent", null) || changed;
+      changed = this.atomicDelete(page) || changed;
+    }
+    return changed;
+  }
+
+  /**
+   * Mutation to reorder a page in doc
+   */
+  reorderPage(page: Page, position: number): boolean {
+    let changed = false;
+    if (
+      page &&
+      page.parent &&
+      position >= 0 &&
+      position < page.parent.children.length
+    ) {
+      changed = this.atomicReorderInArray(
+        page.parent,
+        "children",
+        page,
+        position
+      );
+    }
+    return changed;
+  }
+
+  // ---------------------------------------------------------------------------
   //                     MUTATIONS FOR GENERAL SHAPE
   // ---------------------------------------------------------------------------
 
   /**
-   * Mutation to add a shape to doc
+   * Mutation to add a shape to a parent
    */
   addShape(shape: Shape, parent: Shape): boolean {
     let changed = false;

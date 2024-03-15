@@ -49,6 +49,58 @@ export class Actions {
   }
 
   /**
+   * Add a page
+   */
+  addPage(): Page {
+    const page = new Page();
+    page.name = `Page ${this.editor.store.doc!.children.length + 1}`;
+    const tr = this.editor.transform;
+    tr.startTransaction("add-page");
+    tr.addPage(page);
+    tr.resolveAllConstraints(page, this.editor.canvas);
+    tr.endTransaction();
+    return page;
+  }
+
+  /**
+   * Remove a page
+   */
+  removePage(page: Page) {
+    const tr = this.editor.transform;
+    tr.startTransaction("remove-page");
+    tr.removePage(page);
+    tr.endTransaction();
+  }
+
+  /**
+   * Reorder a page
+   */
+  reorderPage(page: Page, position: number) {
+    const tr = this.editor.transform;
+    tr.startTransaction("remove-page");
+    tr.reorderPage(page, position);
+    tr.endTransaction();
+  }
+
+  /**
+   * Duplicate a page
+   */
+  duplcatePage(page: Page, position: number) {
+    const clipboard = this.editor.clipboard;
+    const buffer: any[] = [];
+    clipboard.putObjects([page], buffer);
+    if (buffer.length > 0) {
+      const copied = clipboard.getObjects(buffer)[0] as Page;
+      const tr = this.editor.transform;
+      tr.startTransaction("duplicate-page");
+      tr.addPage(copied);
+      tr.reorderPage(copied, position);
+      tr.endTransaction();
+      this.editor.setCurrentPage(copied);
+    }
+  }
+
+  /**
    * Insert a shape into document or another shape
    */
   insert(shape: Shape, parent?: Shape) {
@@ -178,7 +230,7 @@ export class Actions {
   }
 
   /**
-   * Duplicate selected shapes
+   * Duplicate shapes
    */
   duplicate(shapes?: Shape[]) {
     const page = this.editor.currentPage;

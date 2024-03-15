@@ -11,7 +11,7 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { MenuIcon } from "lucide-react";
+import { MenuIcon, PlusIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -57,6 +57,12 @@ export function Menus() {
     }
   };
 
+  const handleAddPage = () => {
+    const page = window.editor.actions.addPage();
+    window.editor.setCurrentPage(page);
+    setCurrentPage(page);
+  };
+
   return (
     <div className="flex justify-center items-center h-8 px-1">
       <DropdownMenu>
@@ -70,6 +76,9 @@ export function Menus() {
           <DropdownMenuItem onSelect={handleOpen}>Open...</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      <Button variant="ghost" className="h-8 w-8 p-0" onClick={handleAddPage}>
+        <PlusIcon size={16} />
+      </Button>
     </div>
   );
 }
