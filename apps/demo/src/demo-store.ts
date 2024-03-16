@@ -3,6 +3,7 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
 export interface DemoState {
+  timestamp: number;
   scale: number;
   origin: number[];
   theme: "light" | "dark";
@@ -11,6 +12,7 @@ export interface DemoState {
   currentPage: Page | null;
   selection: Shape[];
   libraries: Document[];
+  setTimestamp: (timestamp: number) => void;
   setScale: (scale: number) => void;
   setOrigin: (origin: [number, number]) => void;
   setTheme: (theme: "light" | "dark") => void;
@@ -23,6 +25,7 @@ export interface DemoState {
 export const useDemoStore = create<DemoState>()(
   devtools(
     (set) => ({
+      timestamp: Date.now(),
       scale: 1,
       origin: [0, 0],
       theme: "light",
@@ -31,6 +34,7 @@ export const useDemoStore = create<DemoState>()(
       currentPage: null,
       selection: [],
       libraries: [],
+      setTimestamp: (timestamp) => set((state) => ({ timestamp })),
       setScale: (scale) => set((state) => ({ scale })),
       setOrigin: (origin) => set((state) => ({ origin })),
       setTheme: (theme) => {

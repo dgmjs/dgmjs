@@ -1,4 +1,4 @@
-import { Document, type Shape } from "../shapes";
+import { Document, Page, type Shape } from "../shapes";
 import * as geometry from "../graphics/geometry";
 import { Canvas, CanvasPointerEvent } from "../graphics/graphics";
 import { colors } from "../colors";
@@ -8,11 +8,11 @@ import { colors } from "../colors";
  */
 export function renderOnCanvas(
   shape: Shape,
-  theme: string,
   canvasElement: HTMLCanvasElement,
-  maxWidth: number = 220,
-  maxHeight: number = 220,
-  margin: number = 8
+  darkMode: boolean = false,
+  width: number = 220,
+  height: number = 220,
+  scaleAdjust: number = 1
 ) {
   // get bounding box
   // const box =
@@ -30,20 +30,21 @@ export function renderOnCanvas(
       .map((s) => (s as Shape).getBoundingRect())
       .flat()
   );
+  const bw = geometry.width(box);
+  const bh = geometry.height(box);
 
   // get scaled size
-  const size = geometry.fitScaledownTo(
-    [geometry.width(box), geometry.height(box)],
-    [maxWidth, maxHeight]
-  );
+  const size = geometry.fitScaledownTo([bw, bh], [width, height]);
   let w = size[0];
   let h = size[1];
-  let scale = size[2];
+  let scale = size[2] * scaleAdjust;
 
   // set canvas size
   const px = window.devicePixelRatio ?? 1;
-  const cw = w + margin * 2;
-  const ch = h + margin * 2;
+  const cw = w;
+  const ch = h;
+  const ox = -box[0][0] + (w / scale - bw) / 2;
+  const oy = -box[0][1] + (h / scale - bh) / 2;
   canvasElement.setAttribute("width", (cw * px).toString());
   canvasElement.setAttribute("height", (ch * px).toString());
   canvasElement.style.width = `${cw}px`;
@@ -51,12 +52,13 @@ export function renderOnCanvas(
 
   // draw shape on canvas
   const canvas = new Canvas(canvasElement, px);
-  canvas.colorVariables = colors[theme];
-  canvas.origin = [-box[0][0] + margin / scale, -box[0][1] + margin / scale];
+  canvas.colorVariables = colors[darkMode ? "dark" : "light"];
+  canvas.origin = [ox, oy];
   canvas.scale = scale;
   canvas.save();
-  if (!(shape instanceof Document)) canvas.globalTransform();
+  if (!(shape instanceof Page)) canvas.globalTransform();
   shape.render(canvas);
+
   canvas.restore();
 }
 
