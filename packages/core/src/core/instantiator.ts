@@ -1,4 +1,4 @@
-import { generateId, hashStringToNumber } from "../std/id";
+import { generateId } from "../std/id";
 import type { Obj } from "./obj";
 
 export type InstantiatorFun = () => Obj;

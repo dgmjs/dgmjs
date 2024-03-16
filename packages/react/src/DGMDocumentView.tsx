@@ -1,28 +1,23 @@
-import { Shape, renderOnCanvas } from "@dgmjs/core";
-import {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
+import { Store } from "@dgmjs/core";
+import { Page } from "@dgmjs/core";
+import { shapeInstantiator } from "@dgmjs/core";
+import { renderOnCanvas } from "@dgmjs/core";
+import { forwardRef, useEffect, useRef } from "react";
 
-export interface DGMShapeViewProps
+export interface DGMDocumentViewProps
   extends React.HTMLAttributes<HTMLDivElement> {
-  shapes: Shape[];
+  documentJson: any;
+  pageIndex: number;
   heightRatio?: number;
   darkMode?: boolean;
   scaleAdjust?: number;
 }
 
-export interface DGMShapeViewHandle {
-  repaint: () => void;
-}
-
-export const DGMShapeView = forwardRef<DGMShapeViewHandle, DGMShapeViewProps>(
+export const DGMDocumentView = forwardRef<HTMLDivElement, DGMDocumentViewProps>(
   (
     {
-      shapes = [],
+      documentJson = {},
+      pageIndex = 0,
       heightRatio = 0.75, // 4:3
       darkMode = false,
       scaleAdjust = 1,
@@ -34,24 +29,30 @@ export const DGMShapeView = forwardRef<DGMShapeViewHandle, DGMShapeViewProps>(
   ) => {
     const wrapperRef = useRef<HTMLDivElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const [size, setSize] = useState([0, 0]);
 
     const repaint = (width: number, height: number) => {
-      if (canvasRef.current) {
-        renderOnCanvas(
-          shapes,
-          canvasRef.current,
-          darkMode,
-          width,
-          height,
-          scaleAdjust
-        );
+      if (documentJson && canvasRef.current) {
+        const store = new Store(shapeInstantiator);
+        store.fromJSON(documentJson);
+        const doc = store.doc!;
+        if (
+          doc &&
+          Array.isArray(doc.children) &&
+          pageIndex >= 0 &&
+          pageIndex < doc.children.length
+        ) {
+          const page = doc.children[pageIndex] as Page;
+          renderOnCanvas(
+            [page],
+            canvasRef.current,
+            darkMode,
+            width,
+            height,
+            scaleAdjust
+          );
+        }
       }
     };
-
-    useImperativeHandle(ref, () => ({
-      repaint: () => repaint(size[0], size[1]),
-    }));
 
     useEffect(() => {
       const observer = new ResizeObserver((entries) => {
@@ -59,7 +60,6 @@ export const DGMShapeView = forwardRef<DGMShapeViewHandle, DGMShapeViewProps>(
           const rect = entry.contentRect;
           const { width } = rect;
           const height = Math.round(width * heightRatio);
-          setSize([width, height]);
           if (wrapperRef.current) {
             wrapperRef.current.style.height = `${height}px`;
           }
@@ -67,7 +67,7 @@ export const DGMShapeView = forwardRef<DGMShapeViewHandle, DGMShapeViewProps>(
         }
       });
       wrapperRef.current && observer.observe(wrapperRef.current);
-    }, [darkMode, shapes]);
+    }, [darkMode, documentJson]);
 
     return (
       <div
@@ -87,4 +87,4 @@ export const DGMShapeView = forwardRef<DGMShapeViewHandle, DGMShapeViewProps>(
   }
 );
 
-DGMShapeView.displayName = "DGMShapeView";
+DGMDocumentView.displayName = "DGMDocumentView";

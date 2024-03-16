@@ -32,6 +32,7 @@ import {
 import { Transform } from "./transform/transform";
 import { evalScript } from "./mal/mal";
 import { Obj } from "./core/obj";
+import { Instantiator } from "./core/instantiator";
 
 interface Constraint {
   id: string;
@@ -1945,6 +1946,22 @@ class ConstraintManager {
 
 const constraintManager = ConstraintManager.getInstance();
 
+const shapeInstantiator = new Instantiator({
+  Shape: () => new Shape(),
+  Document: () => new Document(),
+  Page: () => new Page(),
+  Box: () => new Box(),
+  Line: () => new Line(),
+  Rectangle: () => new Rectangle(),
+  Ellipse: () => new Ellipse(),
+  Text: () => new Text(),
+  Image: () => new Image(),
+  Connector: () => new Connector(),
+  Group: () => new Group(),
+  Frame: () => new Frame(),
+  Embed: () => new Embed(),
+});
+
 interface ShapeValues {
   name?: string;
   description?: string;
@@ -2024,5 +2041,6 @@ export {
   Frame,
   Embed,
   constraintManager,
+  shapeInstantiator,
   type ShapeValues,
 };

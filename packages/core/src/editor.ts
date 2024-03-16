@@ -13,7 +13,7 @@
 
 import { EventEmitter } from "events";
 import { Canvas, CanvasPointerEvent } from "./graphics/graphics";
-import { Connector, Document, Shape, Text, Box, Page } from "./shapes";
+import { Connector, Document, Shape, Page, shapeInstantiator } from "./shapes";
 import { Cursor, Color, Mouse, CONTROL_POINT_APOTHEM } from "./graphics/const";
 import { assert } from "./std/assert";
 import * as geometry from "./graphics/geometry";
@@ -25,15 +25,12 @@ import { Actions } from "./actions";
 import { KeyMap, KeymapManager } from "./keymap-manager";
 import { AutoScroller } from "./utils/auto-scroller";
 import { createPointerEvent, createTouchEvent } from "./utils/canvas-utils";
-import { Instantiator, InstantiatorFun } from "./core/instantiator";
 import { Store } from "./core/store";
 import { Transform } from "./transform/transform";
 import { SelectionManager } from "./selection-manager";
 import { Clipboard } from "./core/clipboard";
-import { convertToLatestVersion } from "./utils/document-compatibility";
 
 export interface EditorOptions {
-  instantiators: Record<string, InstantiatorFun>;
   handlers: Handler[];
   defaultHandlerId: string | null;
   keymap: KeyMap;
@@ -50,7 +47,6 @@ class Editor extends EventEmitter {
   options: EditorOptions;
   platform: string;
 
-  instantiator: Instantiator;
   store: Store;
   transform: Transform;
   clipboard: Clipboard;
@@ -87,7 +83,6 @@ class Editor extends EventEmitter {
   constructor(editorHolder: HTMLElement, options: Partial<EditorOptions>) {
     super();
     this.options = {
-      instantiators: {},
       handlers: [],
       defaultHandlerId: "",
       keymap: {},
@@ -97,8 +92,7 @@ class Editor extends EventEmitter {
       onReady: () => {},
       ...options,
     };
-    this.instantiator = new Instantiator(options.instantiators);
-    this.store = new Store(this.instantiator, {
+    this.store = new Store(shapeInstantiator, {
       objInitializer: (o) => {
         if (o instanceof Shape) o.initialze(this.canvas);
       },
