@@ -27,7 +27,7 @@ export function Menus() {
   const { setDoc, setCurrentPage } = useDemoStore();
 
   const handleNew = () => {
-    window.editor.actions.newDoc();
+    window.editor.newDoc();
     setDoc(window.editor.store.doc as Document);
   };
 
@@ -45,7 +45,7 @@ export function Menus() {
         const file = await fileWithHandle.handle.getFile();
         const data = await file.text();
         const json = JSON.parse(data);
-        window.editor.actions.loadFromJSON(json);
+        window.editor.loadFromJSON(json);
         setDoc(window.editor.store.doc as Document);
         setCurrentPage(window.editor.currentPage);
         window.editor.fitToScreen();

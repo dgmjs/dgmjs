@@ -30,6 +30,7 @@ import { Store } from "./core/store";
 import { Transform } from "./transform/transform";
 import { SelectionManager } from "./selection-manager";
 import { Clipboard } from "./core/clipboard";
+import { convertToLatestVersion } from "./utils/document-compatibility";
 
 export interface EditorOptions {
   instantiators: Record<string, InstantiatorFun>;
@@ -141,6 +142,7 @@ class Editor extends EventEmitter {
     this.initializeState();
     this.initializeCanvas();
     this.initializeKeymap();
+    this.newDoc();
     if (this.options.onReady) this.options.onReady(this);
   }
 
@@ -157,7 +159,6 @@ class Editor extends EventEmitter {
   }
 
   initializeState() {
-    this.actions.newDoc();
     this.transform.on("transaction", () => this.repaint());
     this.selection.on("change", () => this.repaint());
     this.factory.on("create", (shape: Shape) => {
@@ -392,9 +393,11 @@ class Editor extends EventEmitter {
    * Set current page
    */
   setCurrentPage(page: Page) {
-    this.currentPage = page;
-    this.selection.deselectAll();
-    this.repaint();
+    if (this.currentPage !== page) {
+      this.currentPage = page;
+      this.repaint();
+      this.emit("currentPageChange", page);
+    }
   }
 
   /**
@@ -759,6 +762,37 @@ class Editor extends EventEmitter {
   setCursor(cursor: string, angle: number = 0) {
     const cssCursor = cursor.replace("{{angle}}", angle.toString());
     this.canvasElement.style.cursor = cssCursor;
+  }
+
+  /**
+   * Create a new document
+   */
+  newDoc(): Document {
+    const doc = new Document();
+    const page = new Page();
+    doc.children.push(page);
+    page.parent = doc;
+    this.store.setDoc(doc);
+    this.setCurrentPage(doc.children[0] as Page);
+    return doc;
+  }
+
+  /**
+   * Load from JSON
+   */
+  loadFromJSON(json: any) {
+    if (json) {
+      this.selection.deselectAll();
+      const latestVersionJson = convertToLatestVersion(json);
+      this.store.fromJSON(latestVersionJson);
+      if (
+        this.store.doc instanceof Document &&
+        this.store.doc.children.length > 0 &&
+        this.store.doc.children[0] instanceof Page
+      ) {
+        this.setCurrentPage(this.store.doc.children[0] as Page);
+      }
+    }
   }
 
   triggerDblClick(shape: Shape | null, point: number[]) {

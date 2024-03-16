@@ -5,6 +5,7 @@ import {
   Transaction,
   basicSetup,
   CanvasPointerEvent,
+  Page,
 } from "@dgmjs/core";
 import { useEffect, useRef } from "react";
 
@@ -17,6 +18,7 @@ export interface DGMEditorProps
   showGrid?: boolean;
   onMount?: (editor: Editor) => void;
   onSelectionChange?: (selections: Shape[]) => void;
+  onCurrentPageChange?: (page: Page) => void;
   onActiveHandlerChange?: (handlerId: string) => void;
   onShapeCreate?: (shape: Shape) => void;
   onTransaction?: (tx: Transaction) => void;
@@ -33,6 +35,7 @@ export const DGMEditor: React.FC<DGMEditorProps> = ({
   showGrid = false,
   onMount,
   onSelectionChange,
+  onCurrentPageChange,
   onActiveHandlerChange,
   onShapeCreate,
   onTransaction,
@@ -57,6 +60,9 @@ export const DGMEditor: React.FC<DGMEditorProps> = ({
       // events forwarding
       editor.selection.on("change", (shapes: Shape[]) => {
         if (onSelectionChange) onSelectionChange(shapes);
+      });
+      editor.on("currentPageChange", (page: Page) => {
+        if (onCurrentPageChange) onCurrentPageChange(page);
       });
       editor.on("activeHandlerChange", (handlerId: string) => {
         if (onActiveHandlerChange) onActiveHandlerChange(handlerId);

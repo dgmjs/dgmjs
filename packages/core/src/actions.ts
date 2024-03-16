@@ -12,17 +12,8 @@
  */
 
 import type { Editor } from "./editor";
-import {
-  Box,
-  Group,
-  Document,
-  type Shape,
-  Line,
-  type ShapeValues,
-  Page,
-} from "./shapes";
+import { Box, Group, type Shape, Line, type ShapeValues, Page } from "./shapes";
 import * as geometry from "./graphics/geometry";
-import { convertToLatestVersion } from "./utils/document-compatibility";
 
 /**
  * Editor actions
@@ -600,37 +591,6 @@ export class Actions {
         }
         tr.resolveAllConstraints(page, this.editor.canvas);
         tr.endTransaction();
-      }
-    }
-  }
-
-  /**
-   * Create a new document
-   */
-  newDoc(): Document {
-    const doc = new Document();
-    const page = new Page();
-    doc.children.push(page);
-    page.parent = doc;
-    this.editor.store.setDoc(doc);
-    this.editor.currentPage = doc.children[0] as Page;
-    return doc;
-  }
-
-  /**
-   * Load from JSON
-   */
-  loadFromJSON(json: any) {
-    if (json) {
-      this.editor.selection.deselectAll();
-      const latestVersionJson = convertToLatestVersion(json);
-      this.editor.store.fromJSON(latestVersionJson);
-      if (
-        this.editor.store.doc instanceof Document &&
-        this.editor.store.doc.children.length > 0 &&
-        this.editor.store.doc.children[0] instanceof Page
-      ) {
-        this.editor.setCurrentPage(this.editor.store.doc.children[0] as Page);
       }
     }
   }

@@ -42,7 +42,7 @@ function App() {
     // load from local storage
     const localData = localStorage.getItem("local-data");
     if (localData) {
-      window.editor.actions.loadFromJSON(JSON.parse(localData));
+      window.editor.loadFromJSON(JSON.parse(localData));
     }
     demoStore.setDoc(window.editor.store.doc as Document);
     demoStore.setCurrentPage(window.editor.currentPage);
@@ -82,8 +82,7 @@ function App() {
     demoStore.setSelection([...shapes]);
   };
 
-  const handlePageSelect = (page: Page) => {
-    window.editor.setCurrentPage(page);
+  const handleCurrentPageChange = (page: Page) => {
     demoStore.setCurrentPage(page);
   };
 
@@ -96,6 +95,7 @@ function App() {
         showGrid={true}
         onMount={handleMount}
         onSelectionChange={handleSelectionChange}
+        onCurrentPageChange={handleCurrentPageChange}
         onActiveHandlerChange={handleActiveHandlerChange}
         onTransaction={handleTransaction}
       />
@@ -108,7 +108,9 @@ function App() {
         doc={demoStore.doc!}
         currentPage={demoStore.currentPage}
         onSelect={handleSidebarSelect}
-        onPageSelect={handlePageSelect}
+        onPageSelect={(page) => {
+          window.editor.setCurrentPage(page);
+        }}
       />
       <PropertySidebar
         shapes={demoStore.selection}
