@@ -783,8 +783,7 @@ class Editor extends EventEmitter {
   loadFromJSON(json: any) {
     if (json) {
       this.selection.deselectAll();
-      const latestVersionJson = convertToLatestVersion(json);
-      this.store.fromJSON(latestVersionJson);
+      this.store.fromJSON(json);
       if (
         this.store.doc instanceof Document &&
         this.store.doc.children.length > 0 &&
