@@ -12,7 +12,7 @@
  */
 
 import type { Canvas, CanvasPointerEvent } from "../graphics/graphics";
-import { Shape, Box, Connector, Document } from "../shapes";
+import { Shape, Box, Connector } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import {
   Cursor,
@@ -118,10 +118,10 @@ export class BoxCreateConnectorController extends Controller {
       [0.5, 0.5],
       [this.dragStartPointGCS, this.dragPointGCS]
     );
-    const doc = editor.currentPage as Document;
+    const page = editor.currentPage!;
     editor.transform.startTransaction("create");
-    editor.transform.addShape(this.connector, doc);
-    editor.transform.resolveAllConstraints(doc, editor.canvas);
+    editor.transform.addShape(this.connector, page);
+    editor.transform.resolveAllConstraints(page, editor.canvas);
   }
 
   /**
@@ -136,11 +136,11 @@ export class BoxCreateConnectorController extends Controller {
         this.dragPointGCS
       );
       const tr = editor.transform;
-      const doc = editor.currentPage as Document;
+      const page = editor.currentPage!;
       tr.setPath(this.connector, [this.dragStartPointGCS, this.dragPointGCS]);
       tr.atomicAssignRef(this.connector, "head", newEnd);
       tr.atomicAssign(this.connector, "headAnchor", anchor);
-      tr.resolveAllConstraints(doc, editor.canvas);
+      tr.resolveAllConstraints(page, editor.canvas);
     }
   }
 

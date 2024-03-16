@@ -13,7 +13,7 @@
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Shape, Box, Sizable, Line, Document } from "../shapes";
+import { Shape, Box, Sizable, Line } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import {
   CONTROL_POINT_APOTHEM,
@@ -353,10 +353,15 @@ export class BoxSizeController extends Controller {
 
     // transform shapes
     const tr = editor.transform;
-    const doc = editor.currentPage as Document;
+    const page = editor.currentPage!;
 
     tr.resize(shape, targetWidth, targetHeight);
-    tr.moveShapes(doc, [shape], targetLeft - shape.left, targetTop - shape.top);
+    tr.moveShapes(
+      page,
+      [shape],
+      targetLeft - shape.left,
+      targetTop - shape.top
+    );
 
     // resize path
     if (shape instanceof Line) {
@@ -426,7 +431,7 @@ export class BoxSizeController extends Controller {
         }
       });
     }
-    tr.resolveAllConstraints(doc, canvas);
+    tr.resolveAllConstraints(page, canvas);
   }
 
   /**

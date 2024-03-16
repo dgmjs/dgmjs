@@ -12,7 +12,7 @@
  */
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
-import { Shape, Document } from "../shapes";
+import { Shape, Page } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { Color, Cursor } from "../graphics/const";
 import { Snap } from "../manipulators/snap";
@@ -43,7 +43,7 @@ export class SelectionsMoveController extends Controller {
    * Returns true if mouse cursor is inside the controller
    */
   mouseIn(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
-    if (shape instanceof Document) {
+    if (shape instanceof Page) {
       const canvas = editor.canvas;
       const p = canvas.globalCoordTransformRev([e.x, e.y]);
       for (let s of editor.selection.getShapes()) {
@@ -71,7 +71,7 @@ export class SelectionsMoveController extends Controller {
 
   /**
    * Update
-   * @param shape (is a document in group manipulator)
+   * @param shape (is a page in group manipulator)
    */
   update(editor: Editor, shape: Shape) {
     const canvas = editor.canvas;
@@ -91,14 +91,14 @@ export class SelectionsMoveController extends Controller {
 
     // move shapes
     const tr = editor.transform;
-    const doc = editor.currentPage as Document;
-    tr.moveShapes(doc, selections, this.dxStepGCS, this.dyStepGCS, container);
-    tr.resolveAllConstraints(doc, canvas);
+    const page = editor.currentPage!;
+    tr.moveShapes(page, selections, this.dxStepGCS, this.dyStepGCS, container);
+    tr.resolveAllConstraints(page, canvas);
   }
 
   /**
    * Finalize shape by ghost
-   * @param shape (is a document in group manipulator)
+   * @param shape (is a page in group manipulator)
    */
   finalize(editor: Editor, shape: Shape) {
     editor.transform.endTransaction();
@@ -106,10 +106,10 @@ export class SelectionsMoveController extends Controller {
 
   /**
    * Draw ghost for the selected shapes
-   * @param shape (is a document in group manipulator)
+   * @param shape (is a page in group manipulator)
    */
   draw(editor: Editor, shape: Shape) {
-    if (shape instanceof Document) {
+    if (shape instanceof Page) {
       const canvas = editor.canvas;
       let ghostCCS = editor.selection
         .getEnclosure(editor.canvas)

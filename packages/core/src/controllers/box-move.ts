@@ -12,7 +12,7 @@
  */
 
 import { CanvasPointerEvent } from "../graphics/graphics";
-import { Shape, Box, Document, Movable, Line } from "../shapes";
+import { Shape, Box, Movable, Line, Page } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { drawPolylineInLCS } from "../utils/guide";
 import { Snap } from "../manipulators/snap";
@@ -69,7 +69,7 @@ export class BoxMoveController extends Controller {
       targetShape = targetShape.findParent(
         (s) => (s as Shape).movable !== Movable.PARENT
       ) as Shape;
-    if (!targetShape || targetShape instanceof Document) return;
+    if (!targetShape || targetShape instanceof Page) return;
     if (
       targetShape.movable === Movable.VERT ||
       targetShape.movable === Movable.NONE
@@ -93,15 +93,15 @@ export class BoxMoveController extends Controller {
 
     // update
     const tr = editor.transform;
-    const doc = editor.currentPage as Document;
+    const page = editor.currentPage!;
     tr.moveShapes(
-      doc,
+      page,
       [targetShape],
       this.dxStepGCS,
       this.dyStepGCS,
       container
     );
-    tr.resolveAllConstraints(doc, canvas);
+    tr.resolveAllConstraints(page, canvas);
   }
 
   /**
