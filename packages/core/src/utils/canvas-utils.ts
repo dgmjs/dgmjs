@@ -1,4 +1,4 @@
-import { Document, Page, type Shape } from "../shapes";
+import { Page, type Shape } from "../shapes";
 import * as geometry from "../graphics/geometry";
 import { Canvas, CanvasPointerEvent } from "../graphics/graphics";
 import { colors } from "../colors";
@@ -7,26 +7,18 @@ import { colors } from "../colors";
  * Render the shape on the canvas element
  */
 export function renderOnCanvas(
-  shape: Shape,
+  shapes: Shape[],
   canvasElement: HTMLCanvasElement,
   darkMode: boolean = false,
-  width: number = 220,
-  height: number = 220,
+  width: number = 200,
+  height: number = 150,
   scaleAdjust: number = 1
 ) {
-  // get bounding box
-  // const box =
-  //   shape instanceof Document
-  //     ? shape.getDocBoundingBox(window.app.editor.canvas)
-  //     : geometry.boundingRect(
-  //         shape
-  //           .traverseSequence()
-  //           .map((s) => s.getBoundingRect())
-  //           .flat()
-  //       );
+  // get bounding box of given shapes and all their children
   const box = geometry.boundingRect(
-    shape
-      .traverseSequence()
+    shapes
+      .map((s) => s.traverseSequence() as Shape[])
+      .flat()
       .map((s) => (s as Shape).getBoundingRect())
       .flat()
   );
@@ -56,8 +48,10 @@ export function renderOnCanvas(
   canvas.origin = [ox, oy];
   canvas.scale = scale;
   canvas.save();
-  if (!(shape instanceof Page)) canvas.globalTransform();
-  shape.render(canvas);
+  if (shapes.every((s) => !(s instanceof Page))) canvas.globalTransform();
+  shapes.forEach((shape) => {
+    shape.render(canvas);
+  });
 
   canvas.restore();
 }

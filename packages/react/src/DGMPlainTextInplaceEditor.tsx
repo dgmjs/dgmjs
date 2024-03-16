@@ -1,4 +1,4 @@
-import { Editor, Shape, Box, Text, measureText, Document } from "@dgmjs/core";
+import { Editor, Shape, Box, Text, measureText } from "@dgmjs/core";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { textVertAlignToAlignItems } from "./utils";
 

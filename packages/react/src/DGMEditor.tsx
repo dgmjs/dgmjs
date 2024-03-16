@@ -1,5 +1,5 @@
 import {
-  Editor as CoreEditor,
+  Editor,
   EditorOptions,
   Shape,
   Transaction,
@@ -15,7 +15,7 @@ export interface DGMEditorProps
   > {
   options?: Partial<EditorOptions>;
   showGrid?: boolean;
-  onMount?: (editor: CoreEditor) => void;
+  onMount?: (editor: Editor) => void;
   onSelectionChange?: (selections: Shape[]) => void;
   onActiveHandlerChange?: (handlerId: string) => void;
   onShapeCreate?: (shape: Shape) => void;
@@ -45,11 +45,11 @@ export const DGMEditor: React.FC<DGMEditorProps> = ({
   ...others
 }) => {
   const editorHolderRef = useRef<HTMLDivElement>(null);
-  const editorRef = useRef<CoreEditor | null>(null);
+  const editorRef = useRef<Editor | null>(null);
 
   useEffect(() => {
     if (!editorRef.current) {
-      const editor = new CoreEditor(
+      const editor = new Editor(
         editorHolderRef.current!,
         basicSetup({ ...options })
       );
@@ -96,6 +96,10 @@ export const DGMEditor: React.FC<DGMEditorProps> = ({
       editor.repaint();
       if (onMount) onMount(editor);
     }
+
+    return () => {
+      // TODO: dispose (remove listeners)
+    };
   }, []);
 
   useEffect(() => {

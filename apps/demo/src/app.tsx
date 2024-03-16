@@ -39,11 +39,6 @@ function App() {
       shape.fillStyle = FillStyle.HACHURE;
     });
 
-    window.editor.transform.on("transaction", (tx: Transaction) => {
-      console.log("tr", tx);
-      demoStore.setDoc(window.editor.store.doc as Document);
-    });
-
     // load from local storage
     const localData = localStorage.getItem("local-data");
     if (localData) {
