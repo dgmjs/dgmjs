@@ -39,7 +39,7 @@ const PageView: React.FC<PageViewProps> = ({
           ref={shapeViewRef}
           shapes={[page as Page]}
           scaleAdjust={0.8}
-          className="w-full border rounded flex items-center justify-center"
+          className="w-full border rounded"
         />
       </div>
       <div className="flex flex-col items-center">

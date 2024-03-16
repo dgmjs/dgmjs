@@ -26,6 +26,7 @@ export const DGMShapeView = forwardRef<DGMShapeViewHandle, DGMShapeViewProps>(
       heightRatio = 0.75, // 4:3
       darkMode = false,
       scaleAdjust = 1,
+      style,
       ...others
     },
     ref
@@ -68,7 +69,16 @@ export const DGMShapeView = forwardRef<DGMShapeViewHandle, DGMShapeViewProps>(
     }, [darkMode, shapes]);
 
     return (
-      <div ref={wrapperRef} {...others}>
+      <div
+        ref={wrapperRef}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          ...style,
+        }}
+        {...others}
+      >
         <canvas ref={canvasRef} style={{ width: "100%" }} />
       </div>
     );
