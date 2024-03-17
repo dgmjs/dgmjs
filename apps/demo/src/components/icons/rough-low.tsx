@@ -1,4 +1,3 @@
-import * as React from "react";
 import type { IconProps } from "./types";
 
 const SvgRoughLow = ({ size = 24, strokeWidth = 2, ...props }: IconProps) => (

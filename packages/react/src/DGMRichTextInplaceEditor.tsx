@@ -189,7 +189,7 @@ export const DGMRichTextInplaceEditor: React.FC<
 
   useEffect(() => {
     if (editor) {
-      editor.on("dblClick", (shape: Shape, point: number[]) => {
+      editor.onDblClick.on(({ shape, point }) => {
         if (
           shape instanceof Box &&
           shape.textEditable &&
@@ -197,7 +197,7 @@ export const DGMRichTextInplaceEditor: React.FC<
         )
           open(shape);
       });
-      editor.factory.on("create", (shape: Shape) => {
+      editor.factory.onCreate.on((shape: Shape) => {
         if (
           shape instanceof Text &&
           shape.textEditable &&

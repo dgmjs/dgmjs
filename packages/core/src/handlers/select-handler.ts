@@ -75,7 +75,10 @@ export class SelectHandler extends Handler {
         editor.selection.deselectAll();
         this.dragging = true;
         this.dragStartPoint = canvas.globalCoordTransformRev([e.x, e.y]);
-        editor.triggerDragStart(null, this.dragStartPoint);
+        editor.onDragStart.emit({
+          controller: null,
+          dragPoint: this.dragStartPoint,
+        });
       }
     }
 
@@ -143,7 +146,7 @@ export class SelectHandler extends Handler {
         }
 
         // propagate drag event
-        editor.triggerDrag(null, p);
+        editor.onDrag.emit({ controller: null, dragPoint: p });
       } else if (!e.leftButtonDown) {
         // other shape hovering
         const shape = editor.currentPage.getShapeAt(canvas, p);
@@ -236,7 +239,7 @@ export class SelectHandler extends Handler {
     editor.repaint();
 
     if (this.dragging) {
-      editor.triggerDragEnd(null, p);
+      editor.onDragEnd.emit({ controller: null, dragPoint: p });
     }
 
     this.dragging = false;

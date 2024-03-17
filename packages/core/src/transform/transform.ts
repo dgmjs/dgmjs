@@ -1,4 +1,3 @@
-import { EventEmitter } from "events";
 import {
   Mutation,
   InsertMutation,
@@ -26,6 +25,7 @@ import { convertDocToText, convertTextToDoc } from "../utils/text-utils";
 import { moveEndPoint, adjustRoute } from "../utils/route-utils";
 import type { Obj } from "../core/obj";
 import { getAllConnectorsTo, getAllDescendant } from "../utils/shape-utils";
+import { TypedEvent } from "../std/typed-event";
 
 // Maximum size of undo/redo stack
 const MAX_STACK_SIZE = 1000;
@@ -35,12 +35,8 @@ const MAX_STACK_SIZE = 1000;
  *
  * 1. All changes should be applied via transform.
  * 2. All mutation methods return true if there is any changes.
- *
- * Triggering events:
- * - 'mutate': (m: Mutation)
- * - 'transaction': (tx: Transaction)
  */
-export class Transform extends EventEmitter {
+export class Transform {
   /**
    * Shape store
    */
@@ -62,14 +58,25 @@ export class Transform extends EventEmitter {
   redoHistory: Stack<Transaction>;
 
   /**
+   * Event emitter for mutation
+   */
+  onMutate: TypedEvent<Mutation> = new TypedEvent();
+
+  /**
+   * Event emitter for transaction
+   */
+  onTransaction: TypedEvent<Transaction> = new TypedEvent();
+
+  /**
    * constructor
    */
   constructor(store: Store) {
-    super();
     this.store = store;
     this.tx = null;
     this.undoHistory = new Stack(MAX_STACK_SIZE);
     this.redoHistory = new Stack(MAX_STACK_SIZE);
+    this.onMutate = new TypedEvent();
+    this.onTransaction = new TypedEvent();
   }
 
   /**
@@ -77,7 +84,7 @@ export class Transform extends EventEmitter {
    */
   applyMutation(m: Mutation) {
     m.apply(this.store);
-    this.emit("mutate", m);
+    this.onMutate.emit(m);
   }
 
   /**
@@ -85,7 +92,7 @@ export class Transform extends EventEmitter {
    */
   unapplyMutation(m: Mutation) {
     m.unapply(this.store);
-    this.emit("mutate", m);
+    this.onMutate.emit(m);
   }
 
   /**
@@ -104,7 +111,7 @@ export class Transform extends EventEmitter {
   endTransaction() {
     if (!this.tx) throw new Error("No transaction started");
     if (this.tx.mutations.length > 0) {
-      this.emit("transaction", this.tx);
+      this.onTransaction.emit(this.tx);
       this.undoHistory.push(this.tx);
       this.redoHistory.clear();
     }
@@ -149,7 +156,7 @@ export class Transform extends EventEmitter {
           const mut = tx.mutations[i];
           this.unapplyMutation(mut);
         }
-        this.emit("transaction", tx);
+        this.onTransaction.emit(tx);
         this.redoHistory.push(tx);
       }
     }
@@ -166,7 +173,7 @@ export class Transform extends EventEmitter {
           const mut = tx.mutations[i];
           this.applyMutation(mut);
         }
-        this.emit("transaction", tx);
+        this.onTransaction.emit(tx);
         this.undoHistory.push(tx);
       }
     }

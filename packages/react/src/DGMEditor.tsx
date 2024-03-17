@@ -58,42 +58,39 @@ export const DGMEditor: React.FC<DGMEditorProps> = ({
       );
 
       // events forwarding
-      editor.selection.on("change", (shapes: Shape[]) => {
+      editor.selection.onChange.on((shapes: Shape[]) => {
         if (onSelectionChange) onSelectionChange(shapes);
       });
-      editor.on("currentPageChange", (page: Page) => {
+      editor.onCurrentPageChange.on((page) => {
         if (onCurrentPageChange) onCurrentPageChange(page);
       });
-      editor.on("activeHandlerChange", (handlerId: string) => {
+      editor.onActiveHandlerChange.on((handlerId) => {
         if (onActiveHandlerChange) onActiveHandlerChange(handlerId);
       });
-      editor.factory.on("create", (shape: Shape) => {
+      editor.factory.onCreate.on((shape: Shape) => {
         if (onShapeCreate) onShapeCreate(shape);
       });
-      editor.transform.on("transaction", (tx: Transaction) => {
+      editor.transform.onTransaction.on((tx: Transaction) => {
         if (onTransaction) onTransaction(tx);
       });
-      editor.on("zoom", (scale: number) => {
+      editor.onZoom.on((scale: number) => {
         if (onZoom) onZoom(scale);
       });
-      editor.on("scroll", (origin: number[]) => {
+      editor.onScroll.on((origin: number[]) => {
         if (onScroll) onScroll(origin);
       });
-      editor.on("dragStart", (dragStartPoint: number[]) => {
-        if (onDragStart) onDragStart(dragStartPoint);
+      editor.onDragStart.on(({ controller, dragPoint }) => {
+        if (onDragStart) onDragStart(dragPoint);
       });
-      editor.on("drag", (dragPoint: number[]) => {
+      editor.onDrag.on(({ controller, dragPoint }) => {
         if (onDrag) onDrag(dragPoint);
       });
-      editor.on("dragEnd", (dragEndPoint: number[]) => {
-        if (onDragEnd) onDragEnd(dragEndPoint);
+      editor.onDragEnd.on(({ controller, dragPoint }) => {
+        if (onDragEnd) onDragEnd(dragPoint);
       });
-      editor.on(
-        "fileDrop",
-        (event: CanvasPointerEvent, dataTransfer: DataTransfer) => {
-          if (onFileDrop) onFileDrop(event, dataTransfer);
-        }
-      );
+      editor.onFileDrop.on(({ event, dataTransfer }) => {
+        if (onFileDrop) onFileDrop(event, dataTransfer);
+      });
 
       // initialize
       editorRef.current = editor;

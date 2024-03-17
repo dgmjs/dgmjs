@@ -11,7 +11,6 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { EventEmitter } from "events";
 import { Canvas, CanvasPointerEvent } from "./graphics/graphics";
 import { Connector, Document, Shape, Page, shapeInstantiator } from "./shapes";
 import { Cursor, Color, Mouse, CONTROL_POINT_APOTHEM } from "./graphics/const";
@@ -29,6 +28,7 @@ import { Store } from "./core/store";
 import { Transform } from "./transform/transform";
 import { SelectionManager } from "./selection-manager";
 import { Clipboard } from "./core/clipboard";
+import { TypedEvent } from "./std/typed-event";
 
 export interface EditorOptions {
   handlers: Handler[];
@@ -40,12 +40,38 @@ export interface EditorOptions {
   onReady: (editor: Editor) => void;
 }
 
+export interface ShapeDblClickEvent {
+  shape: Shape | null;
+  point: number[];
+}
+
+export interface DragEvent {
+  controller: Controller | null;
+  dragPoint: number[];
+}
+
+export interface FileDropEvent {
+  event: CanvasPointerEvent;
+  dataTransfer: DataTransfer;
+}
+
 /**
  * The editor
  */
-class Editor extends EventEmitter {
+class Editor {
   options: EditorOptions;
   platform: string;
+
+  onCurrentPageChange: TypedEvent<Page>;
+  onActiveHandlerChange: TypedEvent<string>;
+  onDblClick: TypedEvent<ShapeDblClickEvent>;
+  onZoom: TypedEvent<number>;
+  onScroll: TypedEvent<number[]>;
+  onDragStart: TypedEvent<DragEvent>;
+  onDrag: TypedEvent<DragEvent>;
+  onDragEnd: TypedEvent<DragEvent>;
+  onFileDrop: TypedEvent<FileDropEvent>;
+  onKeyDown: TypedEvent<KeyboardEvent>;
 
   store: Store;
   transform: Transform;
@@ -81,7 +107,6 @@ class Editor extends EventEmitter {
    * constructor
    */
   constructor(editorHolder: HTMLElement, options: Partial<EditorOptions>) {
-    super();
     this.options = {
       handlers: [],
       defaultHandlerId: "",
@@ -92,6 +117,19 @@ class Editor extends EventEmitter {
       onReady: () => {},
       ...options,
     };
+
+    // initialize event emitters
+    this.onCurrentPageChange = new TypedEvent();
+    this.onActiveHandlerChange = new TypedEvent();
+    this.onDblClick = new TypedEvent();
+    this.onZoom = new TypedEvent();
+    this.onScroll = new TypedEvent();
+    this.onDragStart = new TypedEvent();
+    this.onDrag = new TypedEvent();
+    this.onDragEnd = new TypedEvent();
+    this.onFileDrop = new TypedEvent();
+    this.onKeyDown = new TypedEvent();
+
     this.store = new Store(shapeInstantiator, {
       objInitializer: (o) => {
         if (o instanceof Shape) o.initialze(this.canvas);
@@ -153,9 +191,9 @@ class Editor extends EventEmitter {
   }
 
   initializeState() {
-    this.transform.on("transaction", () => this.repaint());
-    this.selection.on("change", () => this.repaint());
-    this.factory.on("create", (shape: Shape) => {
+    this.transform.onTransaction.on(() => this.repaint());
+    this.selection.onChange.on(() => this.repaint());
+    this.factory.onCreate.on((shape: Shape) => {
       this.selection.select([shape]);
     });
   }
@@ -307,7 +345,7 @@ class Editor extends EventEmitter {
           this.factory.triggerCreate(textShape);
         }
         // trigger double click event
-        this.triggerDblClick(shape, [x, y]);
+        this.onDblClick.emit({ shape, point: [x, y] });
       }
     });
 
@@ -351,14 +389,17 @@ class Editor extends EventEmitter {
       e.preventDefault();
       const event = createPointerEvent(this.canvasElement, this.canvas, e);
       // const files = Array.from(e.dataTransfer?.files ?? []);
-      this.triggerFileDrop(event, e.dataTransfer as DataTransfer);
+      this.onFileDrop.emit({
+        event,
+        dataTransfer: e.dataTransfer as DataTransfer,
+      });
     });
 
     // key down event
     this.canvasElement.addEventListener("keydown", (e) => {
       e.preventDefault();
       this.focus();
-      this.triggerKeyDown(e);
+      this.onKeyDown.emit(e);
     });
   }
 
@@ -390,7 +431,7 @@ class Editor extends EventEmitter {
     if (this.currentPage !== page) {
       this.currentPage = page;
       this.repaint();
-      this.emit("currentPageChange", page);
+      this.onCurrentPageChange.emit(page);
     }
   }
 
@@ -508,7 +549,7 @@ class Editor extends EventEmitter {
   setOrigin(x: number, y: number) {
     this.canvas.origin = [x, y];
     this.repaint();
-    this.triggerScroll(x, y);
+    this.onScroll.emit([x, y]);
   }
 
   /**
@@ -532,7 +573,7 @@ class Editor extends EventEmitter {
     }
     this.canvas.scale = scale;
     this.repaint();
-    this.triggerZoom(this.canvas.scale);
+    this.onZoom.emit(scale);
   }
 
   /**
@@ -662,7 +703,7 @@ class Editor extends EventEmitter {
       this.activeHandlerId = id;
       this.activeHandler = this.handlers[this.activeHandlerId];
       this.activeHandler.onActivate(this);
-      this.emit("activeHandlerChange", this.activeHandlerId);
+      this.onActiveHandlerChange.emit(this.activeHandlerId);
     }
   }
 
@@ -786,38 +827,6 @@ class Editor extends EventEmitter {
         this.setCurrentPage(this.store.doc.children[0] as Page);
       }
     }
-  }
-
-  triggerDblClick(shape: Shape | null, point: number[]) {
-    this.emit("dblClick", shape, point);
-  }
-
-  triggerZoom(scale: number) {
-    this.emit("zoom", scale);
-  }
-
-  triggerScroll(originX: number, originY: number) {
-    this.emit("scroll", [originX, originY]);
-  }
-
-  triggerDragStart(controller: Controller | null, dragStartPoint: number[]) {
-    this.emit("dragStart", controller, dragStartPoint);
-  }
-
-  triggerDrag(controller: Controller | null, dragPoint: number[]) {
-    this.emit("drag", controller, dragPoint);
-  }
-
-  triggerDragEnd(controller: Controller | null, dragEndPoint: number[]) {
-    this.emit("dragEnd", controller, dragEndPoint);
-  }
-
-  triggerFileDrop(event: CanvasPointerEvent, dataTransfer: DataTransfer) {
-    this.emit("fileDrop", event, dataTransfer);
-  }
-
-  triggerKeyDown(e: KeyboardEvent) {
-    this.emit("keyDown", e);
   }
 }
 
@@ -1169,7 +1178,10 @@ class Controller {
       this.update(editor, shape);
       editor.repaint();
       this.drawDragging(editor, shape, e);
-      editor.triggerDragStart(this, this.dragStartPoint);
+      editor.onDragStart.emit({
+        controller: this,
+        dragPoint: this.dragStartPoint,
+      });
     }
     return handled;
   }
@@ -1200,7 +1212,10 @@ class Controller {
       this.update(editor, shape);
       editor.repaint();
       this.drawDragging(editor, shape, e);
-      editor.triggerDrag(this, this.dragPoint);
+      editor.onDrag.emit({
+        controller: this,
+        dragPoint: this.dragPoint,
+      });
     }
     return handled;
   }
@@ -1216,7 +1231,10 @@ class Controller {
       handled = true;
       this.finalize(editor, shape);
       editor.repaint();
-      editor.triggerDragEnd(this, this.dragPoint);
+      editor.onDragEnd.emit({
+        controller: this,
+        dragPoint: this.dragPoint,
+      });
     }
     return handled;
   }

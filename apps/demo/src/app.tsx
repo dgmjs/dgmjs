@@ -32,7 +32,7 @@ function App() {
     insertFontsToDocument(fontJson as Font[]);
     await fetchFonts(fontJson as Font[]);
 
-    window.editor.factory.on("shapeInitialize", (shape: Shape) => {
+    window.editor.factory.onShapeInitialize.on((shape: Shape) => {
       shape.strokeWidth = 2;
       shape.roughness = 1;
       shape.fillColor = "$lime9";
