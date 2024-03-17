@@ -12,7 +12,7 @@
  */
 
 import { z } from "zod";
-import { Box, Document, Shape, constraintManager } from "../shapes";
+import { Box, Page, Shape, constraintManager } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import { Transform } from "../transform/transform";
 
@@ -47,7 +47,7 @@ const schema = z.object({
  */
 function setHorzAlign(
   tr: Transform,
-  doc: Document,
+  page: Page,
   shape: Box,
   relativeTo: Box,
   align:
@@ -108,7 +108,7 @@ function setHorzAlign(
       break;
   }
   dx += offset;
-  changed = tr.moveShapes(doc, [shape], dx, dy);
+  changed = tr.moveShapes(page, [shape], dx, dy);
   if (width > -1) {
     changed =
       tr.resize(shape, width < 0 ? shape.width : width, shape.height) ||
@@ -123,7 +123,7 @@ function setHorzAlign(
  */
 function setVertAlign(
   tr: Transform,
-  doc: Document,
+  page: Page,
   shape: Box,
   relativeTo: Box,
   align:
@@ -186,7 +186,7 @@ function setVertAlign(
       break;
   }
   dy += offset;
-  changed = tr.moveShapes(doc, [shape], dx, dy);
+  changed = tr.moveShapes(page, [shape], dx, dy);
   if (height > -1) {
     changed =
       tr.resize(shape, shape.width, height < 0 ? shape.height : height) ||
@@ -205,7 +205,7 @@ function setVertAlign(
  * - args.fillLast {boolean} fill space with last child
  */
 function constraint(
-  doc: Document,
+  page: Page,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,
@@ -227,7 +227,8 @@ function constraint(
             changed = transform.setTop(child, ty) || changed;
             ty = child.bottom;
             changed =
-              setHorzAlign(transform, doc, child, shape, args.align) || changed;
+              setHorzAlign(transform, page, child, shape, args.align) ||
+              changed;
             // fill last child
             if (args.fillLast && child === arr[arr.length - 1]) {
               const h = shape.innerBottom - child.top;
@@ -247,7 +248,8 @@ function constraint(
             changed = transform.setBottom(child, by) || changed;
             by = child.top - 1;
             changed =
-              setHorzAlign(transform, doc, child, shape, args.align) || changed;
+              setHorzAlign(transform, page, child, shape, args.align) ||
+              changed;
             // fill last child
             if (args.fillLast && child === arr[arr.length - 1]) {
               const h = child.bottom - shape.innerTop;
@@ -268,7 +270,8 @@ function constraint(
             changed = transform.setLeft(child, lx) || changed;
             lx = child.right;
             changed =
-              setVertAlign(transform, doc, child, shape, args.align) || changed;
+              setVertAlign(transform, page, child, shape, args.align) ||
+              changed;
             // fill last child
             if (args.fillLast && child === arr[arr.length - 1]) {
               const w = shape.innerRight - child.left;
@@ -288,7 +291,8 @@ function constraint(
             changed = transform.setRight(child, rx) || changed;
             rx = child.left - 1;
             changed =
-              setVertAlign(transform, doc, child, shape, args.align) || changed;
+              setVertAlign(transform, page, child, shape, args.align) ||
+              changed;
             // fill last child
             if (args.fillLast && child === arr[arr.length - 1]) {
               const w = child.right - shape.innerLeft;

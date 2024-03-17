@@ -11,7 +11,7 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { MenuIcon } from "lucide-react";
+import { MenuIcon, PlusIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -24,10 +24,10 @@ import { useDemoStore } from "@/demo-store";
 import { Document } from "@dgmjs/core";
 
 export function Menus() {
-  const { setDoc } = useDemoStore();
+  const { setDoc, setCurrentPage } = useDemoStore();
 
   const handleNew = () => {
-    window.editor.actions.newDoc();
+    window.editor.newDoc();
     setDoc(window.editor.store.doc as Document);
   };
 
@@ -45,8 +45,9 @@ export function Menus() {
         const file = await fileWithHandle.handle.getFile();
         const data = await file.text();
         const json = JSON.parse(data);
-        window.editor.actions.loadFromJSON(json);
+        window.editor.loadFromJSON(json);
         setDoc(window.editor.store.doc as Document);
+        setCurrentPage(window.editor.currentPage);
         window.editor.fitToScreen();
         window.editor.repaint();
       }
@@ -54,6 +55,12 @@ export function Menus() {
       // user canceled
       return;
     }
+  };
+
+  const handleAddPage = () => {
+    const page = window.editor.actions.addPage();
+    window.editor.setCurrentPage(page);
+    setCurrentPage(page);
   };
 
   return (
@@ -69,6 +76,9 @@ export function Menus() {
           <DropdownMenuItem onSelect={handleOpen}>Open...</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      <Button variant="ghost" className="h-8 w-8 p-0" onClick={handleAddPage}>
+        <PlusIcon size={16} />
+      </Button>
     </div>
   );
 }

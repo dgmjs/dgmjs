@@ -1,4 +1,4 @@
-import { Editor, Shape, Box, Text, measureText, Document } from "@dgmjs/core";
+import { Editor, Shape, Box, Text, measureText } from "@dgmjs/core";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { textVertAlignToAlignItems } from "./utils";
 
@@ -65,17 +65,14 @@ export const DGMPlainTextInplaceEditor: React.FC<
   };
 
   const open = (textShape: Box) => {
-    if (textShape) {
+    if (editor.currentPage && textShape) {
       // disable shape's text rendering
       textShape._renderText = false;
       editor.repaint();
 
       // start transaction
       editor.transform.startTransaction("text-edit");
-      editor.transform.resolveAllConstraints(
-        editor.doc as Document,
-        editor.canvas
-      );
+      editor.transform.resolveAllConstraints(editor.currentPage, editor.canvas);
 
       // update states
       const textValue =
@@ -93,33 +90,32 @@ export const DGMPlainTextInplaceEditor: React.FC<
   };
 
   const update = (textShape: Box, textValue: string) => {
-    // mutate text shape
-    editor.transform.atomicAssign(textShape, "text", textValue);
-    editor.transform.resolveAllConstraints(
-      editor.doc as Document,
-      editor.canvas
-    );
+    if (editor.currentPage) {
+      // mutate text shape
+      editor.transform.atomicAssign(textShape, "text", textValue);
+      editor.transform.resolveAllConstraints(editor.currentPage, editor.canvas);
 
-    // update states
-    const rect = getTextRect(textShape, textValue);
-    setState((state) => ({
-      textShape,
-      textValue,
-      padding: textShape.padding,
-      alignItems: textVertAlignToAlignItems(textShape.vertAlign),
-      textAlign: textShape.horzAlign,
-      lineHeight: textShape.lineHeight,
-      fontFamily: textShape.fontFamily,
-      fontSize: textShape.fontSize,
-      color: editor.canvas.resolveColor(textShape.fontColor),
-      scale: editor.getScale(),
-      left: rect.left,
-      top: rect.top,
-      width: Math.max(textShape.width, rect.width),
-      height: Math.max(textShape.height, rect.height),
-      textWidth: rect.width,
-      textHeight: rect.height,
-    }));
+      // update states
+      const rect = getTextRect(textShape, textValue);
+      setState((state) => ({
+        textShape,
+        textValue,
+        padding: textShape.padding,
+        alignItems: textVertAlignToAlignItems(textShape.vertAlign),
+        textAlign: textShape.horzAlign,
+        lineHeight: textShape.lineHeight,
+        fontFamily: textShape.fontFamily,
+        fontSize: textShape.fontSize,
+        color: editor.canvas.resolveColor(textShape.fontColor),
+        scale: editor.getScale(),
+        left: rect.left,
+        top: rect.top,
+        width: Math.max(textShape.width, rect.width),
+        height: Math.max(textShape.height, rect.height),
+        textWidth: rect.width,
+        textHeight: rect.height,
+      }));
+    }
   };
 
   const close = () => {

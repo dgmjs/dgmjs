@@ -32,6 +32,7 @@ import {
 import { Transform } from "./transform/transform";
 import { evalScript } from "./mal/mal";
 import { Obj } from "./core/obj";
+import { Instantiator } from "./core/instantiator";
 
 interface Constraint {
   id: string;
@@ -51,7 +52,7 @@ interface Script {
 }
 
 type ConstraintFn = (
-  doc: Document,
+  page: Page,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,
@@ -677,16 +678,13 @@ class Shape extends Obj {
 /**
  * Document
  */
-class Document extends Shape {
+class Document extends Obj {
   version: number;
 
   constructor() {
     super();
     this.type = "Document";
     this.version = 1;
-
-    // document cannot be controllable
-    this.enable = false;
   }
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
@@ -698,6 +696,17 @@ class Document extends Shape {
   fromJSON(json: any) {
     super.fromJSON(json);
     this.version = json.version ?? this.version;
+  }
+}
+
+/**
+ * Page
+ */
+class Page extends Shape {
+  constructor() {
+    super();
+    this.type = "Page";
+    this.enable = false; // page cannot be controllable
   }
 
   /**
@@ -731,7 +740,7 @@ class Document extends Shape {
   /**
    * Return actual document bounding box in GCS
    */
-  getDocBoundingBox(canvas: Canvas): number[][] {
+  getPageBoundingBox(canvas: Canvas): number[][] {
     return this.children.length > 0
       ? this.traverseSequence()
           .filter((s) => s !== this)
@@ -1937,6 +1946,22 @@ class ConstraintManager {
 
 const constraintManager = ConstraintManager.getInstance();
 
+const shapeInstantiator = new Instantiator({
+  Shape: () => new Shape(),
+  Document: () => new Document(),
+  Page: () => new Page(),
+  Box: () => new Box(),
+  Line: () => new Line(),
+  Rectangle: () => new Rectangle(),
+  Ellipse: () => new Ellipse(),
+  Text: () => new Text(),
+  Image: () => new Image(),
+  Connector: () => new Connector(),
+  Group: () => new Group(),
+  Frame: () => new Frame(),
+  Embed: () => new Embed(),
+});
+
 interface ShapeValues {
   name?: string;
   description?: string;
@@ -2004,6 +2029,7 @@ export {
   AlignmentKind,
   Shape,
   Document,
+  Page,
   Box,
   Line,
   Rectangle,
@@ -2015,5 +2041,6 @@ export {
   Frame,
   Embed,
   constraintManager,
+  shapeInstantiator,
   type ShapeValues,
 };

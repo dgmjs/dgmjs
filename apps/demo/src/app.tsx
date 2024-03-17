@@ -2,6 +2,7 @@ import {
   Document,
   Editor,
   FillStyle,
+  Page,
   Shape,
   ShapeValues,
   Transaction,
@@ -41,15 +42,21 @@ function App() {
     // load from local storage
     const localData = localStorage.getItem("local-data");
     if (localData) {
-      window.editor.store.fromJSON(JSON.parse(localData));
-      window.editor.setDoc(window.editor.store.doc as Document);
+      window.editor.loadFromJSON(JSON.parse(localData));
     }
     demoStore.setDoc(window.editor.store.doc as Document);
+    demoStore.setCurrentPage(window.editor.currentPage);
     window.editor.fitToScreen();
 
     window.addEventListener("resize", () => {
       window.editor.fit();
     });
+
+    // forward key event to editor
+    // window.addEventListener("keydown", (e) => {
+    //   const event = new KeyboardEvent("keydown", { ...e });
+    //   editor.canvasElement.dispatchEvent(event);
+    // });
   };
 
   const handleSelectionChange = (selection: Shape[]) => {
@@ -75,25 +82,36 @@ function App() {
     demoStore.setSelection([...shapes]);
   };
 
+  const handleCurrentPageChange = (page: Page) => {
+    demoStore.setCurrentPage(page);
+  };
+
   return (
     <div className="absolute inset-0 h-[calc(100dvh)] select-none">
       <EditorWrapper
-        className="absolute inset-0"
+        className="absolute inset-y-0 left-56 right-56"
         theme={demoStore.theme}
         options={basicSetup()}
         showGrid={true}
         onMount={handleMount}
         onSelectionChange={handleSelectionChange}
+        onCurrentPageChange={handleCurrentPageChange}
         onActiveHandlerChange={handleActiveHandlerChange}
         onTransaction={handleTransaction}
       />
-      <div className="absolute top-0 inset-x-0 h-10 border-b flex items-center justify-between bg-background">
+      <div className="absolute top-2 left-60 right-60 h-10 border flex items-center justify-between bg-background">
         <Menus />
-
         <Options />
       </div>
       <PaletteToolbar />
-      <ShapeSidebar doc={demoStore.doc} onSelect={handleSidebarSelect} />
+      <ShapeSidebar
+        doc={demoStore.doc!}
+        currentPage={demoStore.currentPage}
+        onSelect={handleSidebarSelect}
+        onPageSelect={(page) => {
+          window.editor.setCurrentPage(page);
+        }}
+      />
       <PropertySidebar
         shapes={demoStore.selection}
         onChange={handleValuesChange}

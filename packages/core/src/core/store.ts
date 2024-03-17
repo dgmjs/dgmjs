@@ -11,6 +11,7 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
+import { convertToLatestVersion } from "../utils/document-compatibility";
 import { Instantiator } from "./instantiator";
 import type { Obj } from "./obj";
 
@@ -111,7 +112,8 @@ export class Store {
    * Set the root from JSON
    */
   fromJSON(json: any) {
-    this.doc = this.instantiator.createFromJson(json);
+    const latestVersionJson = convertToLatestVersion(json);
+    this.doc = this.instantiator.createFromJson(latestVersionJson);
     if (this.doc) {
       this.idIndex = {};
       this.addToIndex(this.doc);

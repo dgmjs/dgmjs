@@ -31,6 +31,8 @@ import { Button } from "@/components/ui/button";
 import { Empty } from "../common/empty";
 import { useDemoStore } from "@/demo-store";
 
+import { DGMDocumentView } from "@dgmjs/react";
+
 interface LibrariesProps {
   onShapeHover?: (target: HTMLDivElement | null, shape: Shape | null) => void;
 }
@@ -90,6 +92,8 @@ export function Libraries({ onShapeHover }: LibrariesProps) {
     // window.app.commands.execute("shape:insert", shape, p);
   };
 
+  const json = window.editor.store.toJSON();
+
   return (
     <ScrollArea className="h-full w-full">
       {libraries.length === 0 && (
@@ -135,6 +139,14 @@ export function Libraries({ onShapeHover }: LibrariesProps) {
         <Button variant="outline" onClick={handleAddLibrary}>
           Install from File...
         </Button>
+      </div>
+      <div>
+        <DGMDocumentView
+          documentJson={json}
+          pageIndex={0}
+          scaleAdjust={0.9}
+          className="border rounded"
+        />
       </div>
     </ScrollArea>
   );

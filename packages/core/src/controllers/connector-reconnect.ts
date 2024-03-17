@@ -13,7 +13,7 @@
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Shape, Connector, Document } from "../shapes";
+import { Shape, Connector } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { Cursor } from "../graphics/const";
 import { lcs2ccs } from "../graphics/utils";
@@ -119,11 +119,11 @@ export class ConnectorReconnectController extends Controller {
     const isHead = this.controlPoint > 0;
     // transform shape
     const tr = editor.transform;
-    const doc = editor.doc as Document;
+    const page = editor.currentPage!;
     tr.setPath(shape, newPath);
     tr.atomicAssignRef(shape, isHead ? "head" : "tail", newEnd);
     tr.atomicAssign(shape, isHead ? "headAnchor" : "tailAnchor", anchor);
-    tr.resolveAllConstraints(doc, editor.canvas);
+    tr.resolveAllConstraints(page, editor.canvas);
   }
 
   /**

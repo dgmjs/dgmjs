@@ -1,4 +1,4 @@
-import { Editor as CoreEditor } from "@dgmjs/core";
+import { Editor } from "@dgmjs/core";
 import { useState } from "react";
 import { DGMEditor, DGMEditorProps } from "./DGMEditor";
 import { DGMPlainTextInplaceEditor } from "./DGMPlainTextInplaceEditor";
@@ -11,7 +11,7 @@ interface DGMEditorWithInplaceEditorsProps extends DGMEditorProps {
 export const DGMEditorWithInplaceEditors: React.FC<
   DGMEditorWithInplaceEditorsProps
 > = ({ onMount, richTextInplaceEditorToolbar, ...props }) => {
-  const [editor, setEditor] = useState<CoreEditor | null>(null);
+  const [editor, setEditor] = useState<Editor | null>(null);
 
   return (
     <>
@@ -22,9 +22,9 @@ export const DGMEditorWithInplaceEditors: React.FC<
         }}
         {...props}
       >
-        <DGMPlainTextInplaceEditor editor={editor as CoreEditor} />
+        <DGMPlainTextInplaceEditor editor={editor as Editor} />
         <DGMRichTextInplaceEditor
-          editor={editor as CoreEditor}
+          editor={editor as Editor}
           toolbar={richTextInplaceEditorToolbar}
         />
       </DGMEditor>

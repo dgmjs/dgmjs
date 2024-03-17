@@ -12,7 +12,7 @@
  */
 
 import { z } from "zod";
-import { constraintManager, Shape, Document } from "../shapes";
+import { constraintManager, Page, Shape } from "../shapes";
 import type { Canvas } from "../graphics/graphics";
 import type { Transform } from "../transform/transform";
 
@@ -57,7 +57,7 @@ const schema = z.object({
  * Align to parent
  */
 function constraint(
-  doc: Document,
+  page: Page,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,
@@ -193,7 +193,7 @@ function constraint(
     }
     dx += args.horzOffset || 0;
     dy += args.vertOffset || 0;
-    changed = transform.moveShapes(doc, [shape], dx, dy);
+    changed = transform.moveShapes(page, [shape], dx, dy);
     if (width > -1 || height > -1) {
       changed =
         transform.resize(

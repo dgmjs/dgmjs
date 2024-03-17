@@ -13,7 +13,7 @@
 
 import { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Document, Line, Shape } from "../shapes";
+import { Line, Shape } from "../shapes";
 import { Editor, Handler } from "../editor";
 import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
 
@@ -42,21 +42,21 @@ export class LineFactoryHandler extends Handler {
   }
 
   initialize(editor: Editor, e: CanvasPointerEvent): void {
-    this.points = [this.dragStartPoint];
-    this.shape = editor.factory.createLine(this.points, false);
-    const doc = editor.doc as Document;
-    editor.transform.startTransaction("create");
-    editor.transform.addShape(this.shape, doc);
+    const page = editor.currentPage;
+    if (page) {
+      this.points = [this.dragStartPoint];
+      this.shape = editor.factory.createLine(this.points, false);
+      editor.transform.startTransaction("create");
+      editor.transform.addShape(this.shape, page);
+    }
   }
 
   update(editor: Editor, e: CanvasPointerEvent): void {
-    if (this.shape) {
+    const page = editor.currentPage;
+    if (page && this.shape) {
       const newPath = [...this.points, this.dragPoint];
       editor.transform.setPath(this.shape, newPath);
-      editor.transform.resolveAllConstraints(
-        editor.doc as Document,
-        editor.canvas
-      );
+      editor.transform.resolveAllConstraints(page, editor.canvas);
       editor.repaint();
     }
   }

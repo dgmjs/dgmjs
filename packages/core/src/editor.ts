@@ -13,7 +13,7 @@
 
 import { EventEmitter } from "events";
 import { Canvas, CanvasPointerEvent } from "./graphics/graphics";
-import { Connector, Document, Shape, Text, Box } from "./shapes";
+import { Connector, Document, Shape, Page, shapeInstantiator } from "./shapes";
 import { Cursor, Color, Mouse, CONTROL_POINT_APOTHEM } from "./graphics/const";
 import { assert } from "./std/assert";
 import * as geometry from "./graphics/geometry";
@@ -25,14 +25,12 @@ import { Actions } from "./actions";
 import { KeyMap, KeymapManager } from "./keymap-manager";
 import { AutoScroller } from "./utils/auto-scroller";
 import { createPointerEvent, createTouchEvent } from "./utils/canvas-utils";
-import { Instantiator, InstantiatorFun } from "./core/instantiator";
 import { Store } from "./core/store";
 import { Transform } from "./transform/transform";
 import { SelectionManager } from "./selection-manager";
 import { Clipboard } from "./core/clipboard";
 
 export interface EditorOptions {
-  instantiators: Record<string, InstantiatorFun>;
   handlers: Handler[];
   defaultHandlerId: string | null;
   keymap: KeyMap;
@@ -49,12 +47,11 @@ class Editor extends EventEmitter {
   options: EditorOptions;
   platform: string;
 
-  instantiator: Instantiator;
   store: Store;
   transform: Transform;
   clipboard: Clipboard;
   selection: SelectionManager;
-  doc: Document | null;
+  currentPage: Page | null;
 
   factory: ShapeFactory;
   actions: Actions;
@@ -86,7 +83,6 @@ class Editor extends EventEmitter {
   constructor(editorHolder: HTMLElement, options: Partial<EditorOptions>) {
     super();
     this.options = {
-      instantiators: {},
       handlers: [],
       defaultHandlerId: "",
       keymap: {},
@@ -96,8 +92,7 @@ class Editor extends EventEmitter {
       onReady: () => {},
       ...options,
     };
-    this.instantiator = new Instantiator(options.instantiators);
-    this.store = new Store(this.instantiator, {
+    this.store = new Store(shapeInstantiator, {
       objInitializer: (o) => {
         if (o instanceof Shape) o.initialze(this.canvas);
       },
@@ -111,7 +106,7 @@ class Editor extends EventEmitter {
     this.factory = new ShapeFactory(this);
     this.actions = new Actions(this);
     this.keymap = new KeymapManager(this);
-    this.doc = null;
+    this.currentPage = null;
 
     this.platform = this.detectPlatform();
     this.parent = editorHolder;
@@ -141,6 +136,7 @@ class Editor extends EventEmitter {
     this.initializeState();
     this.initializeCanvas();
     this.initializeKeymap();
+    this.newDoc();
     if (this.options.onReady) this.options.onReady(this);
   }
 
@@ -157,9 +153,6 @@ class Editor extends EventEmitter {
   }
 
   initializeState() {
-    const doc = new Document();
-    this.store.setDoc(doc);
-    this.doc = doc;
     this.transform.on("transaction", () => this.repaint());
     this.selection.on("change", () => this.repaint());
     this.factory.on("create", (shape: Shape) => {
@@ -279,11 +272,11 @@ class Editor extends EventEmitter {
       const p = this.canvas.globalCoordTransformRev([event.x, event.y]);
       const x = p[0];
       const y = p[1];
-      if (this.doc) {
+      if (this.currentPage) {
         // allows double click on a disable shape (e.g. a text inside another shape)
         const pred = (s: Obj) =>
           (s as Shape).visible && (s as Shape).containsPoint(this.canvas, p);
-        const shape: Shape | null = this.doc.findDepthFirst(
+        const shape: Shape | null = this.currentPage.findDepthFirst(
           pred
         ) as Shape | null;
         // create a text on canvas
@@ -391,12 +384,14 @@ class Editor extends EventEmitter {
   }
 
   /**
-   * Set document
+   * Set current page
    */
-  setDoc(doc: Document) {
-    this.doc = doc;
-    this.selection.deselectAll();
-    this.repaint();
+  setCurrentPage(page: Page) {
+    if (this.currentPage !== page) {
+      this.currentPage = page;
+      this.repaint();
+      this.emit("currentPageChange", page);
+    }
   }
 
   /**
@@ -561,10 +556,10 @@ class Editor extends EventEmitter {
    * Fit doc to screen and move to center
    */
   fitToScreen(scaleDelta: number = 0) {
-    if (this.doc) {
+    if (this.currentPage) {
       // doc size in GCS
-      const doc = this.doc;
-      const box = doc.getDocBoundingBox(this.canvas);
+      const doc = this.currentPage;
+      const box = doc.getPageBoundingBox(this.canvas);
       const center = geometry.center(box);
       const dw = geometry.width(box);
       const dh = geometry.height(box);
@@ -745,10 +740,10 @@ class Editor extends EventEmitter {
    * Repaint diagram
    */
   repaint(drawSelection: boolean = true) {
-    if (this.doc) {
+    if (this.currentPage) {
       this.clearBackground(this.canvas);
       this.drawGrid(this.canvas);
-      this.doc.render(this.canvas);
+      this.currentPage.render(this.canvas);
       if (drawSelection) this.drawSelection();
     } else {
       this.clearBackground(this.canvas);
@@ -761,6 +756,36 @@ class Editor extends EventEmitter {
   setCursor(cursor: string, angle: number = 0) {
     const cssCursor = cursor.replace("{{angle}}", angle.toString());
     this.canvasElement.style.cursor = cssCursor;
+  }
+
+  /**
+   * Create a new document
+   */
+  newDoc(): Document {
+    const doc = new Document();
+    const page = new Page();
+    doc.children.push(page);
+    page.parent = doc;
+    this.store.setDoc(doc);
+    this.setCurrentPage(doc.children[0] as Page);
+    return doc;
+  }
+
+  /**
+   * Load from JSON
+   */
+  loadFromJSON(json: any) {
+    if (json) {
+      this.selection.deselectAll();
+      this.store.fromJSON(json);
+      if (
+        this.store.doc instanceof Document &&
+        this.store.doc.children.length > 0 &&
+        this.store.doc.children[0] instanceof Page
+      ) {
+        this.setCurrentPage(this.store.doc.children[0] as Page);
+      }
+    }
   }
 
   triggerDblClick(shape: Shape | null, point: number[]) {

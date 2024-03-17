@@ -13,7 +13,7 @@
 
 import type { Canvas, CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Shape, Box, Line, Document } from "../shapes";
+import { Shape, Box, Line } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import {
   Cursor,
@@ -157,9 +157,9 @@ export class BoxRotateController extends Controller {
     let angle = Math.round(geometry.normalizeAngle(shape.rotate + delta));
     // transform shapes
     const tr = editor.transform;
-    const doc = editor.doc as Document;
+    const page = editor.currentPage!;
     tr.atomicAssign(shape, "rotate", angle);
-    tr.resolveAllConstraints(doc, editor.canvas);
+    tr.resolveAllConstraints(page, editor.canvas);
   }
 
   /**

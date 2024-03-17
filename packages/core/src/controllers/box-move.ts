@@ -12,7 +12,7 @@
  */
 
 import { CanvasPointerEvent } from "../graphics/graphics";
-import { Shape, Box, Document, Movable, Line } from "../shapes";
+import { Shape, Box, Movable, Line, Page } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { drawPolylineInLCS } from "../utils/guide";
 import { Snap } from "../manipulators/snap";
@@ -69,7 +69,7 @@ export class BoxMoveController extends Controller {
       targetShape = targetShape.findParent(
         (s) => (s as Shape).movable !== Movable.PARENT
       ) as Shape;
-    if (!targetShape || targetShape instanceof Document) return;
+    if (!targetShape || targetShape instanceof Page) return;
     if (
       targetShape.movable === Movable.VERT ||
       targetShape.movable === Movable.NONE
@@ -85,23 +85,23 @@ export class BoxMoveController extends Controller {
     // (container shouldn't be itself of a descendant of target)
     const canvas = editor.canvas;
     let p2 = targetShape.localCoordTransform(canvas, this.dragPoint, false);
-    let container = editor.doc?.getShapeAt(canvas, p2, [shape]);
+    let container = editor.currentPage?.getShapeAt(canvas, p2, [shape]);
     const r = targetShape.find((s) => s.id === container?.id);
     if (r) container = null;
     if (!(container && container.canContain(targetShape)))
-      container = editor.doc;
+      container = editor.currentPage;
 
     // update
     const tr = editor.transform;
-    const doc = editor.doc as Document;
+    const page = editor.currentPage!;
     tr.moveShapes(
-      doc,
+      page,
       [targetShape],
       this.dxStepGCS,
       this.dyStepGCS,
       container
     );
-    tr.resolveAllConstraints(doc, canvas);
+    tr.resolveAllConstraints(page, canvas);
   }
 
   /**
@@ -131,7 +131,7 @@ export class BoxMoveController extends Controller {
     const canvas = editor.canvas;
     // hovering containable
     const dp = shape.localCoordTransform(canvas, this.dragPoint, true);
-    const container = editor.doc?.getShapeAt(canvas, dp, [shape]);
+    const container = editor.currentPage?.getShapeAt(canvas, dp, [shape]);
     if (container && container !== shape && container.canContain(shape)) {
       const manipulator = manipulatorManager.get(container.type);
       if (manipulator) manipulator.drawHovering(editor, container, e);

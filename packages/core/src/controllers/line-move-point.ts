@@ -12,7 +12,7 @@
  */
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
-import { Shape, Line, Document } from "../shapes";
+import { Shape, Line } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import {
   Cursor,
@@ -145,10 +145,10 @@ export class LineMovePointController extends Controller {
 
     // transform shape
     const canvas = editor.canvas;
-    const doc = editor.doc as Document;
+    const page = editor.currentPage!;
     const tr = editor.transform;
     tr.setPath(shape, newPath);
-    tr.resolveAllConstraints(doc, canvas);
+    tr.resolveAllConstraints(page, canvas);
   }
 
   /**

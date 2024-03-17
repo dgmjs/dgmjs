@@ -17,8 +17,8 @@ import {
   Box,
   Line,
   Shape,
-  Document,
   Connector,
+  Page,
 } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
@@ -349,11 +349,60 @@ export class Transform extends EventEmitter {
   }
 
   // ---------------------------------------------------------------------------
+  //                         MUTATIONS FOR PAGES
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Mutation to add a page to doc
+   */
+  addPage(page: Page): boolean {
+    let changed = false;
+    changed = this.atomicInsert(page) || changed;
+    changed = this.changeParent(page, this.store.doc!) || changed;
+    return changed;
+  }
+
+  /**
+   * Mutation to remove a page from doc
+   */
+  removePage(page: Page): boolean {
+    let changed = false;
+    if (page && page.parent) {
+      changed =
+        this.atomicRemoveFromArray(page.parent, "children", page) || changed;
+      changed = this.atomicAssignRef(page.parent, "parent", null) || changed;
+      changed = this.atomicDelete(page) || changed;
+    }
+    return changed;
+  }
+
+  /**
+   * Mutation to reorder a page in doc
+   */
+  reorderPage(page: Page, position: number): boolean {
+    let changed = false;
+    if (
+      page &&
+      page.parent &&
+      position >= 0 &&
+      position < page.parent.children.length
+    ) {
+      changed = this.atomicReorderInArray(
+        page.parent,
+        "children",
+        page,
+        position
+      );
+    }
+    return changed;
+  }
+
+  // ---------------------------------------------------------------------------
   //                     MUTATIONS FOR GENERAL SHAPE
   // ---------------------------------------------------------------------------
 
   /**
-   * Mutation to add a shape to doc
+   * Mutation to add a shape to a parent
    */
   addShape(shape: Shape, parent: Shape): boolean {
     let changed = false;
@@ -673,7 +722,7 @@ export class Transform extends EventEmitter {
    * A set of mutations to move shapes
    */
   moveShapes(
-    doc: Document,
+    page: Page,
     shapes: Shape[],
     dx: number,
     dy: number,
@@ -695,7 +744,7 @@ export class Transform extends EventEmitter {
     });
 
     // move ends of edges which is not in targets
-    let edges = getAllConnectorsTo(doc, targets).filter(
+    let edges = getAllConnectorsTo(page, targets).filter(
       (s) => !targets.includes(s)
     );
     edges.forEach((s) => {
@@ -732,11 +781,11 @@ export class Transform extends EventEmitter {
   /**
    * A set of mutations to delete a shape
    */
-  deleteSingleShape(doc: Document, shape: Shape): boolean {
+  deleteSingleShape(page: Page, shape: Shape): boolean {
     let changed = false;
     if (this.store.has(shape)) {
       // set null to all edges connected to the shape
-      const edges = getAllConnectorsTo(doc, [shape]) as Connector[];
+      const edges = getAllConnectorsTo(page, [shape]) as Connector[];
       for (let edge of edges) {
         if (edge.head === shape)
           changed = this.atomicAssignRef(edge, "head", null) || changed;
@@ -758,10 +807,10 @@ export class Transform extends EventEmitter {
   /**
    * A set of mutations to delete shapes
    */
-  deleteShapes(doc: Document, shapes: Shape[]): boolean {
+  deleteShapes(page: Page, shapes: Shape[]): boolean {
     let changed = false;
     shapes.forEach((s) => {
-      changed = this.deleteSingleShape(doc, s) || changed;
+      changed = this.deleteSingleShape(page, s) || changed;
     });
     return changed;
   }
@@ -829,16 +878,12 @@ export class Transform extends EventEmitter {
   /**
    * A set of mutations to resolve a shape's constraints
    */
-  resolveSingleConstraints(
-    doc: Document,
-    shape: Shape,
-    canvas: Canvas
-  ): boolean {
+  resolveSingleConstraints(page: Page, shape: Shape, canvas: Canvas): boolean {
     let changed = false;
     shape.constraints.forEach((c) => {
       try {
         const fn = constraintManager.get(c.id);
-        changed = fn(doc, shape, canvas, this, c) || changed;
+        changed = fn(page, shape, canvas, this, c) || changed;
       } catch (err) {
         console.log(err);
       }
@@ -850,15 +895,15 @@ export class Transform extends EventEmitter {
    * A set of mutations to resolve all constraints
    */
   resolveAllConstraints(
-    doc: Document,
+    page: Page,
     canvas: Canvas,
     maxIteration: number = 3
   ): boolean {
     let changed = false;
     for (let i = 0; i < maxIteration; i++) {
-      doc.traverse((s) => {
+      page.traverse((s) => {
         changed =
-          this.resolveSingleConstraints(doc, s as Shape, canvas) || changed;
+          this.resolveSingleConstraints(page, s as Shape, canvas) || changed;
       });
       if (!changed) return false;
       changed = false;

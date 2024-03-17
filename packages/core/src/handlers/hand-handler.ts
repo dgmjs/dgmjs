@@ -13,7 +13,7 @@
 
 import { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Editor, Handler, HandlerOptions } from "../editor";
+import { Editor, Handler } from "../editor";
 import { Mouse, Cursor } from "../graphics/const";
 
 /**

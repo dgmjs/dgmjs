@@ -25,40 +25,11 @@ import {
   EmbedFactoryHandler,
 } from "./handlers";
 import { FrameFactoryHandler } from "./handlers/frame-handler";
-import {
-  Box,
-  Connector,
-  Document,
-  Ellipse,
-  Embed,
-  Frame,
-  Group,
-  Image,
-  Line,
-  Rectangle,
-  Shape,
-  Text,
-} from "./shapes";
 
 export function basicSetup(
   options?: Partial<EditorOptions>
 ): Partial<EditorOptions> {
   return {
-    instantiators: {
-      Shape: () => new Shape(),
-      Diagram: () => new Document(), // for backward compatibility
-      Document: () => new Document(),
-      Box: () => new Box(),
-      Line: () => new Line(),
-      Rectangle: () => new Rectangle(),
-      Ellipse: () => new Ellipse(),
-      Text: () => new Text(),
-      Image: () => new Image(),
-      Connector: () => new Connector(),
-      Group: () => new Group(),
-      Frame: () => new Frame(),
-      Embed: () => new Embed(),
-    },
     handlers: [
       new SelectHandler("Select"),
       new HandHandler("Hand", { lock: true }),
