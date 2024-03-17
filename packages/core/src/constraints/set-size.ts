@@ -11,7 +11,7 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { constraintManager, Box, Shape, Document } from "../shapes";
+import { constraintManager, Box, Shape, Page } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { z } from "zod";
@@ -33,7 +33,7 @@ const schema = z.object({
  * Set size
  */
 function constraint(
-  diagram: Document,
+  page: Page,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,

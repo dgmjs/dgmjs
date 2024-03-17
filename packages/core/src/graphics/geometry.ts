@@ -297,12 +297,12 @@ function findNearestOnPath(
   p: number[],
   path: number[][],
   distance: number
-): number[] {
+): number[] | null {
   const seg = getNearSegment(p, path, distance);
   if (seg > -1) {
     return findNearestOnLine(p, [path[seg], path[seg + 1]]);
   }
-  return path[0];
+  return null;
 }
 
 /**
@@ -764,13 +764,32 @@ function curvePathPoints(path: number[][]): number[][] {
 }
 
 /**
+ * Returns a point that is a specified distance away from a starting point in
+ * the direction towards an end point.
+ */
+function getPointAtDistance(
+  point1: number[],
+  point2: number[],
+  distance: number
+): number[] {
+  let dx = point2[0] - point1[0];
+  let dy = point2[1] - point1[1];
+  let len = Math.sqrt(dx * dx + dy * dy);
+  let unitX = dx / len;
+  let unitY = dy / len;
+  let x = point1[0] + distance * unitX;
+  let y = point1[1] + distance * unitY;
+  return [x, y];
+}
+
+/**
  * Return a point which is positioned on the line.
  * If position is 0, returns the start point and if position is 1, returns the end point
  * @param point1 line start point
  * @param point2 line end point
  * @param position position value (0 ~ 1) on the path
  */
-function positionOnLine(
+function getPointOnLine(
   point1: number[],
   point2: number[],
   position: number
@@ -788,7 +807,7 @@ function positionOnLine(
  * @param path path
  * @param position position value (0 ~ 1) on the path
  */
-function positionOnPath(path: number[][], position: number): number[] {
+function getPointOnPath(path: number[][], position: number): number[] {
   if (position < 0 || position > 1)
     throw new Error("position should be a value between 0 and 1");
   const len = pathLength(path);
@@ -796,7 +815,7 @@ function positionOnPath(path: number[][], position: number): number[] {
   for (let i = 1; i < path.length; i++) {
     const l = distance(path[i - 1], path[i]);
     if (p <= l) {
-      return positionOnLine(path[i - 1], path[i], p / l);
+      return getPointOnLine(path[i - 1], path[i], p / l);
     }
     p = p - l;
   }
@@ -904,6 +923,25 @@ function reduceRectilinearPath(
   return newPath;
 }
 
+/**
+ * Returns a centroid of the given polygon
+ */
+function centroidPolygon(polygon: number[][]): number[] {
+  const l = polygon.length;
+  return polygon.reduce(
+    (center, p, i) => {
+      center[0] += p[0];
+      center[1] += p[1];
+      if (i === l - 1) {
+        center[0] /= l;
+        center[1] /= l;
+      }
+      return center;
+    },
+    [0, 0]
+  );
+}
+
 export {
   copy,
   assign,
@@ -957,10 +995,12 @@ export {
   curvePathPoints,
   pathLength,
   equalsPath,
-  positionOnLine,
-  positionOnPath,
+  getPointAtDistance,
+  getPointOnLine,
+  getPointOnPath,
   getPositionOnLine,
   getPositionOnPath,
   reduceObliquePath,
   reduceRectilinearPath,
+  centroidPolygon,
 };

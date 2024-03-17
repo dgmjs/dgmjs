@@ -12,7 +12,7 @@
  */
 
 import { z } from "zod";
-import { Shape, constraintManager, Document, Box } from "../shapes";
+import { Shape, constraintManager, Box, Page } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import { Transform } from "../transform/transform";
 
@@ -27,7 +27,7 @@ const schema = z.object({
  * Inherit styles from parent
  */
 function constraint(
-  diagram: Document,
+  page: Page,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,

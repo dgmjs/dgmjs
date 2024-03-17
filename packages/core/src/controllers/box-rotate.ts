@@ -13,25 +13,49 @@
 
 import type { Canvas, CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Shape, Box, Line, Document } from "../shapes";
+import { Shape, Box, Line } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
-import { Cursor, CONTROL_POINT_APOTHEM, ANGLE_STEP } from "../graphics/const";
-import { lcs2ccs } from "../graphics/utils";
+import {
+  Cursor,
+  CONTROL_POINT_APOTHEM,
+  ANGLE_STEP,
+  ControllerPosition,
+} from "../graphics/const";
+import { angleInCCS, lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
+import { getControllerPosition } from "./utils";
+
+interface BoxRotateControllerOptions {
+  position: string;
+  distance: number;
+}
 
 /**
  * Box Rotate Controller
  */
 export class BoxRotateController extends Controller {
   /**
+   * Options of the controller
+   */
+  options: BoxRotateControllerOptions;
+
+  /**
    * Snap support for controller
    */
   snap: Snap;
 
-  constructor(manipulator: Manipulator) {
+  constructor(
+    manipulator: Manipulator,
+    options?: Partial<BoxRotateControllerOptions>
+  ) {
     super(manipulator);
     this.snap = new Snap();
+    this.options = {
+      position: ControllerPosition.RIGHT_TOP,
+      distance: CONTROL_POINT_APOTHEM * 3,
+      ...options,
+    };
   }
 
   /**
@@ -53,22 +77,22 @@ export class BoxRotateController extends Controller {
    * Get coord of the control point in CCS
    */
   getControlPoint(canvas: Canvas, shape: Shape): number[] {
-    const dist = (CONTROL_POINT_APOTHEM * 4) / canvas.scale;
-    const enclosure = shape.getEnclosure();
-    const mid = geometry.mid(enclosure[0], enclosure[1]);
-    const cp = [mid[0], mid[1] - dist];
-    return lcs2ccs(canvas, shape, cp);
+    return getControllerPosition(
+      canvas,
+      shape,
+      this.options.position,
+      this.options.distance
+    );
   }
 
   /**
    * Returns true if mouse cursor is inside the controller
    */
   mouseIn(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
-    if (this.dragging) return true;
     const canvas = editor.canvas;
     const p = [e.x, e.y];
-    const cp = this.getControlPoint(canvas, shape);
-    return guide.inControlPoint(canvas, p, cp, 0);
+    const cpCCS = lcs2ccs(canvas, shape, this.getControlPoint(canvas, shape));
+    return guide.inControlPoint(canvas, p, cpCCS, 0);
   }
 
   /**
@@ -80,7 +104,36 @@ export class BoxRotateController extends Controller {
     shape: Shape,
     e: CanvasPointerEvent
   ): [string, number] {
-    return [Cursor.ROTATE, 0];
+    const canvas = editor.canvas;
+    let angle = angleInCCS(canvas, shape);
+    angle = Math.round(angle);
+    switch (this.options.position) {
+      case ControllerPosition.TOP:
+        break;
+      case ControllerPosition.BOTTOM:
+        angle += 180;
+        break;
+      case ControllerPosition.LEFT:
+        angle -= 90;
+        break;
+      case ControllerPosition.RIGHT:
+        angle += 90;
+        break;
+      case ControllerPosition.LEFT_TOP:
+        angle -= 45;
+        break;
+      case ControllerPosition.RIGHT_TOP:
+        angle += 45;
+        break;
+      case ControllerPosition.RIGHT_BOTTOM:
+        angle += 135;
+        break;
+      case ControllerPosition.LEFT_BOTTOM:
+        angle -= 135;
+        break;
+    }
+    angle = geometry.normalizeAngle(angle);
+    return [Cursor.ROTATE, angle];
   }
 
   /**
@@ -95,17 +148,18 @@ export class BoxRotateController extends Controller {
    */
   update(editor: Editor, shape: Shape) {
     const enclosure = shape.getEnclosure();
+    const cp = this.getControlPoint(editor.canvas, shape);
     const center = geometry.mid(enclosure[0], enclosure[2]);
-    const angle0 = geometry.angle(enclosure[2], enclosure[1]);
+    const angle0 = geometry.angle(center, cp);
     const angle1 = geometry.angle(center, this.dragPoint);
     const d = geometry.normalizeAngle(angle1 - angle0);
     const delta = Math.round(d / ANGLE_STEP) * ANGLE_STEP;
     let angle = Math.round(geometry.normalizeAngle(shape.rotate + delta));
     // transform shapes
     const tr = editor.transform;
-    const doc = editor.doc as Document;
+    const page = editor.currentPage!;
     tr.atomicAssign(shape, "rotate", angle);
-    tr.resolveAllConstraints(doc, editor.canvas);
+    tr.resolveAllConstraints(page, editor.canvas);
   }
 
   /**
@@ -120,8 +174,8 @@ export class BoxRotateController extends Controller {
    */
   draw(editor: Editor, shape: Shape) {
     const canvas = editor.canvas;
-    const cp = this.getControlPoint(canvas, shape);
-    guide.drawControlPoint(canvas, cp, 1, 0);
+    const cpCCS = lcs2ccs(canvas, shape, this.getControlPoint(canvas, shape));
+    guide.drawControlPoint(canvas, cpCCS, 1, 0);
   }
 
   /**

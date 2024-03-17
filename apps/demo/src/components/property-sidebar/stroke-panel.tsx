@@ -87,7 +87,7 @@ export const StrokePanel: React.FC<ShapeEditorProps> = ({
         <div className="w-full">
           <Slider
             max={5}
-            step={1}
+            step={0.5}
             min={0}
             value={[roughness || 0]}
             onValueChange={(value) =>

@@ -425,13 +425,20 @@ class Canvas {
   /**
    * Draw a line
    */
-  line(x1: number, y1: number, x2: number, y2: number): Canvas {
+  line(
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    seed: number = 1
+  ): Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
+    this.context.lineCap = "round";
     this.context.globalAlpha = this.alpha;
     if (this.roughness > 0) {
       const rd = this.generator.line(x1, y1, x2, y2, {
-        seed: geometry.distance([x1, y1], [x2, y2]),
+        seed,
         roughness: this.roughness,
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
@@ -451,18 +458,25 @@ class Canvas {
   /**
    * Draw a rect
    */
-  strokeRect(x1: number, y1: number, x2: number, y2: number): Canvas {
+  strokeRect(
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    seed: number = 1
+  ): Canvas {
     const x = x1 < x2 ? x1 : x2;
     const y = y1 < y2 ? y1 : y2;
     const w = Math.abs(x2 - x1);
     const h = Math.abs(y2 - y1);
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
+    this.context.lineCap = "round";
     this.context.globalAlpha = this.alpha;
     this.context.setLineDash(this.strokePattern);
     if (this.roughness > 0) {
       const rd = this.generator.rectangle(x, y, w, h, {
-        seed: w + h,
+        seed,
         roughness: this.roughness,
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
@@ -481,7 +495,13 @@ class Canvas {
   /**
    * Draw a filled rect
    */
-  fillRect(x1: number, y1: number, x2: number, y2: number): Canvas {
+  fillRect(
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    seed: number = 1
+  ): Canvas {
     const x = x1 < x2 ? x1 : x2;
     const y = y1 < y2 ? y1 : y2;
     const w = Math.abs(x2 - x1);
@@ -491,7 +511,7 @@ class Canvas {
     this.context.lineWidth = this.strokeWidth;
     if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const rd = this.generator.rectangle(x, y, w, h, {
-        seed: w + h,
+        seed,
         roughness: this.roughness,
         fill: this.resolveColor(this.fillColor),
         fillStyle: this.fillStyle,
@@ -509,9 +529,15 @@ class Canvas {
   /**
    * Draw a rect with fill and stroke
    */
-  rect(x1: number, y1: number, x2: number, y2: number): Canvas {
-    this.fillRect(x1, y1, x2, y2);
-    this.strokeRect(x1, y1, x2, y2);
+  rect(
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    seed: number = 1
+  ): Canvas {
+    this.fillRect(x1, y1, x2, y2, seed);
+    this.strokeRect(x1, y1, x2, y2, seed);
     return this;
   }
 
@@ -523,7 +549,8 @@ class Canvas {
     y1: number,
     x2: number,
     y2: number,
-    radius: number | number[]
+    radius: number | number[],
+    seed: number = 1
   ): Canvas {
     const x = x1 < x2 ? x1 : x2;
     const y = y1 < y2 ? y1 : y2;
@@ -534,6 +561,7 @@ class Canvas {
       : [radius, radius, radius, radius];
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
+    this.context.lineCap = "round";
     this.context.globalAlpha = this.alpha;
     this.context.setLineDash(this.strokePattern);
     if (this.roughness > 0) {
@@ -546,7 +574,7 @@ class Canvas {
           y + rs[0]
         } Q${x},${y} ${x + rs[0]},${y} Z`,
         {
-          seed: x + y + w + h,
+          seed,
           roughness: this.roughness,
           stroke: this.resolveColor(this.strokeColor),
           strokeWidth: this.strokeWidth,
@@ -579,7 +607,8 @@ class Canvas {
     y1: number,
     x2: number,
     y2: number,
-    radius: number | number[]
+    radius: number | number[],
+    seed: number = 1
   ): Canvas {
     const x = x1 < x2 ? x1 : x2;
     const y = y1 < y2 ? y1 : y2;
@@ -601,7 +630,7 @@ class Canvas {
           y + rs[0]
         } Q${x},${y} ${x + rs[0]},${y} Z`,
         {
-          seed: w + h,
+          seed,
           roughness: this.roughness,
           fill: this.resolveColor(this.fillColor),
           fillStyle: this.fillStyle,
@@ -636,17 +665,24 @@ class Canvas {
     y1: number,
     x2: number,
     y2: number,
-    radius: number | number[]
+    radius: number | number[],
+    seed: number = 1
   ): Canvas {
-    this.fillRoundRect(x1, y1, x2, y2, radius);
-    this.strokeRoundRect(x1, y1, x2, y2, radius);
+    this.fillRoundRect(x1, y1, x2, y2, radius, seed);
+    this.strokeRoundRect(x1, y1, x2, y2, radius, seed);
     return this;
   }
 
   /**
    * Draw an ellipse
    */
-  strokeEllipse(x1: number, y1: number, x2: number, y2: number): Canvas {
+  strokeEllipse(
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    seed: number = 1
+  ): Canvas {
     const x = x1 < x2 ? x1 : x2;
     const y = y1 < y2 ? y1 : y2;
     const w = Math.abs(x2 - x1);
@@ -660,11 +696,12 @@ class Canvas {
     const ym = y + h / 2.0;
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
+    this.context.lineCap = "round";
     this.context.globalAlpha = this.alpha;
     this.context.setLineDash(this.strokePattern);
     if (this.roughness > 0) {
       const rd = this.generator.ellipse(xm, ym, w, h, {
-        seed: w + h,
+        seed,
         roughness: this.roughness,
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
@@ -687,7 +724,13 @@ class Canvas {
   /**
    * Draw a filled ellipse
    */
-  fillEllipse(x1: number, y1: number, x2: number, y2: number): Canvas {
+  fillEllipse(
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    seed: number = 1
+  ): Canvas {
     const x = x1 < x2 ? x1 : x2;
     const y = y1 < y2 ? y1 : y2;
     const w = Math.abs(x2 - x1);
@@ -704,7 +747,7 @@ class Canvas {
     this.context.globalAlpha = this.alpha;
     if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const rd = this.generator.ellipse(xm, ym, w, h, {
-        seed: w + h,
+        seed,
         roughness: this.roughness,
         fill: this.resolveColor(this.fillColor),
         fillStyle: this.fillStyle,
@@ -729,23 +772,30 @@ class Canvas {
   /**
    * Draw an ellipse with fill and stroke
    */
-  ellipse(x1: number, y1: number, x2: number, y2: number): Canvas {
-    this.fillEllipse(x1, y1, x2, y2);
-    this.strokeEllipse(x1, y1, x2, y2);
+  ellipse(
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    seed: number = 1
+  ): Canvas {
+    this.fillEllipse(x1, y1, x2, y2, seed);
+    this.strokeEllipse(x1, y1, x2, y2, seed);
     return this;
   }
 
   /**
    * Draw polyline
    */
-  polyline(path: number[][]): Canvas {
+  polyline(path: number[][], seed: number = 1): Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
+    this.context.lineCap = "round";
     this.context.globalAlpha = this.alpha;
     this.context.setLineDash(this.strokePattern);
     if (this.roughness > 0) {
       const rd = this.generator.linearPath(path as Point[], {
-        seed: geometry.pathLength(path),
+        seed,
         roughness: this.roughness,
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
@@ -771,14 +821,14 @@ class Canvas {
   /**
    * Draw rounded rect line
    */
-  roundRectLine(path: number[][]): Canvas {
+  roundRectLine(path: number[][], seed: number = 1): Canvas {
     const ROUND_RADIUS = 8;
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
     this.context.globalAlpha = this.alpha;
     if (this.roughness > 0) {
       const rd = this.generator.linearPath(path as Point[], {
-        seed: geometry.pathLength(path),
+        seed,
         roughness: this.roughness,
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
@@ -931,13 +981,14 @@ class Canvas {
   /**
    * Draw curved lines
    */
-  strokeCurve(path: number[][]): Canvas {
+  strokeCurve(path: number[][], seed: number = 1): Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
+    this.context.lineCap = "round";
     this.context.globalAlpha = this.alpha;
     if (this.roughness > 0) {
       const rd = this.generator.curve(path as Point[], {
-        seed: geometry.pathLength(path),
+        seed,
         roughness: this.roughness,
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
@@ -962,13 +1013,13 @@ class Canvas {
   /**
    * Draw filled curved lines
    */
-  fillCurve(path: number[][]): Canvas {
+  fillCurve(path: number[][], seed: number = 1): Canvas {
     this.context.fillStyle = this.resolveColor(this.fillColor);
     this.context.globalAlpha = this.alpha;
     this.context.lineWidth = this.strokeWidth;
     if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const rd = this.generator.curve([...path, path[0]] as Point[], {
-        seed: geometry.pathLength(path),
+        seed,
         roughness: this.roughness,
         fill: this.resolveColor(this.fillColor),
         fillStyle: this.fillStyle,
@@ -1002,23 +1053,24 @@ class Canvas {
   /**
    * Draw a curved lines with fill and stroke
    */
-  curve(path: number[][]): Canvas {
-    this.fillCurve(path);
-    this.strokeCurve(path);
+  curve(path: number[][], seed: number = 1): Canvas {
+    this.fillCurve(path, seed);
+    this.strokeCurve(path, seed);
     return this;
   }
 
   /**
    * Draw polygon
    */
-  strokePolygon(path: number[][]): Canvas {
+  strokePolygon(path: number[][], seed: number = 1): Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
+    this.context.lineCap = "round";
     this.context.globalAlpha = this.alpha;
     this.context.setLineDash(this.strokePattern);
     if (this.roughness > 0) {
       const rd = this.generator.polygon(path as Point[], {
-        seed: geometry.pathLength(path),
+        seed,
         roughness: this.roughness,
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
@@ -1046,13 +1098,13 @@ class Canvas {
   /**
    * Draw filled polygon
    */
-  fillPolygon(path: number[][]): Canvas {
+  fillPolygon(path: number[][], seed: number = 1): Canvas {
     this.context.fillStyle = this.resolveColor(this.fillColor);
     this.context.globalAlpha = this.alpha;
     this.context.lineWidth = this.strokeWidth;
     if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const rd = this.generator.polygon(path as Point[], {
-        seed: geometry.pathLength(path),
+        seed,
         roughness: this.roughness,
         fill: this.resolveColor(this.fillColor),
         fillStyle: this.fillStyle,
@@ -1079,9 +1131,9 @@ class Canvas {
   /**
    * Draw a polygon with fill and stroke
    */
-  polygon(path: number[][]): Canvas {
-    this.fillPolygon(path);
-    this.strokePolygon(path);
+  polygon(path: number[][], seed: number = 1): Canvas {
+    this.fillPolygon(path, seed);
+    this.strokePolygon(path, seed);
     return this;
   }
 
@@ -1093,19 +1145,21 @@ class Canvas {
     y: number,
     r: number,
     startAngle: number,
-    endAngle: number
+    endAngle: number,
+    seed: number = 1
   ): Canvas {
     let sa = geometry.toRadian(startAngle);
     let ea = geometry.toRadian(endAngle);
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
+    this.context.lineCap = "round";
     this.context.globalAlpha = this.alpha;
     this.context.setLineDash(this.strokePattern);
     if (this.roughness > 0) {
       // To avoid system stuck due to the bug of roughjs
       if (startAngle === 0 && endAngle === 360) return this;
       const rd = this.generator.arc(x, y, r * 2, r * 2, sa, ea, false, {
-        seed: r,
+        seed,
         roughness: this.roughness,
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
@@ -1128,7 +1182,8 @@ class Canvas {
     y: number,
     r: number,
     startAngle: number,
-    endAngle: number
+    endAngle: number,
+    seed: number = 1
   ): Canvas {
     const sa = geometry.toRadian(geometry.normalizeAngle(startAngle));
     const ea = geometry.toRadian(geometry.normalizeAngle(endAngle));
@@ -1137,7 +1192,7 @@ class Canvas {
     this.context.lineWidth = this.strokeWidth;
     if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const rd = this.generator.arc(x, y, r * 2, r * 2, sa, ea, true, {
-        seed: r,
+        seed,
         roughness: this.roughness,
         fill: this.resolveColor(this.fillColor),
         fillStyle: this.fillStyle,
@@ -1163,25 +1218,27 @@ class Canvas {
     y: number,
     r: number,
     startAngle: number,
-    endAngle: number
+    endAngle: number,
+    seed: number = 1
   ): Canvas {
-    this.fillArc(x, y, r, startAngle, endAngle);
-    this.strokeArc(x, y, r, startAngle, endAngle);
+    this.fillArc(x, y, r, startAngle, endAngle, seed);
+    this.strokeArc(x, y, r, startAngle, endAngle, seed);
     return this;
   }
 
   /**
    * Draw a path
    */
-  strokePath(path: SVGPath): Canvas {
+  strokePath(path: SVGPath, seed: number = 1): Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
+    this.context.lineCap = "round";
     this.context.globalAlpha = this.alpha;
     this.context.setLineDash(this.strokePattern);
     if (this.roughness > 0) {
       const d = pathToString(path);
       const rd = this.generator.path(d, {
-        seed: path.length, // FIXME: this is not a good seed
+        seed,
         roughness: this.roughness,
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
@@ -1199,14 +1256,14 @@ class Canvas {
   /**
    * Draw filled path
    */
-  fillPath(path: SVGPath): Canvas {
+  fillPath(path: SVGPath, seed: number = 1): Canvas {
     this.context.fillStyle = this.resolveColor(this.fillColor);
     this.context.globalAlpha = this.alpha;
     this.context.lineWidth = this.strokeWidth;
     if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const d = pathToString(path);
       const rd = this.generator.path(d, {
-        seed: path.length, // FIXME: this is not a good seed
+        seed,
         roughness: this.roughness,
         fill: this.resolveColor(this.fillColor),
         fillStyle: this.fillStyle,
@@ -1226,9 +1283,9 @@ class Canvas {
   /**
    * Draw a path with fill and stroke
    */
-  path(path: SVGPath): Canvas {
-    this.fillPath(path);
-    this.strokePath(path);
+  path(path: SVGPath, seed: number = 1): Canvas {
+    this.fillPath(path, seed);
+    this.strokePath(path, seed);
     return this;
   }
 

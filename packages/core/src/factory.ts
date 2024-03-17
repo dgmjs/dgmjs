@@ -10,7 +10,6 @@ import {
   Line,
   LineType,
   Rectangle,
-  RouteType,
   Shape,
   Sizable,
   Text,
@@ -31,12 +30,8 @@ export class ShapeFactory extends EventEmitter {
     this.editor = editor;
   }
 
-  /**
-   * Insert a shape into diagram
-   */
-  insertShape(shape: Shape, parent?: Shape) {
-    this.emit("shapeInitialize", shape);
-    this.editor.actions.insert(shape, parent);
+  // TODO: Consider to move to editor.on("create", shape)
+  triggerCreate(shape: Shape) {
     this.emit("create", shape);
   }
 
@@ -49,15 +44,11 @@ export class ShapeFactory extends EventEmitter {
     rectangle.top = rect[0][1];
     let w = geometry.width(rect);
     let h = geometry.height(rect);
-    if (geometry.distance(rect[0], rect[1]) <= SHAPE_MIN_SIZE) {
-      w = 100;
-      h = 100;
-    }
     rectangle.width = w;
     rectangle.height = h;
     rectangle.horzAlign = AlignmentKind.CENTER;
     rectangle.vertAlign = AlignmentKind.MIDDLE;
-    this.insertShape(rectangle);
+    this.emit("shapeInitialize", rectangle);
     return rectangle;
   }
 
@@ -70,15 +61,11 @@ export class ShapeFactory extends EventEmitter {
     ellipse.top = rect[0][1];
     let w = geometry.width(rect);
     let h = geometry.height(rect);
-    if (geometry.distance(rect[0], rect[1]) <= SHAPE_MIN_SIZE) {
-      w = 100;
-      h = 100;
-    }
     ellipse.width = w;
     ellipse.height = h;
     ellipse.horzAlign = AlignmentKind.CENTER;
     ellipse.vertAlign = AlignmentKind.MIDDLE;
-    this.insertShape(ellipse);
+    this.emit("shapeInitialize", ellipse);
     return ellipse;
   }
 
@@ -104,18 +91,14 @@ export class ShapeFactory extends EventEmitter {
     text.height = h;
     text.horzAlign = AlignmentKind.LEFT;
     text.vertAlign = AlignmentKind.TOP;
-    this.insertShape(text);
+    this.emit("shapeInitialize", text);
     return text;
   }
 
   /**
-   * Create a text on connector
+   * Create an anchored text
    */
-  createTextOnConnector(
-    anchorOn: Connector,
-    anchorPosition: number,
-    initialText: string = ""
-  ): Text {
+  createAnchoredText(anchorPosition: number, initialText: string = ""): Text {
     const text = new Text();
     text.richText = false;
     text.text = initialText;
@@ -131,7 +114,7 @@ export class ShapeFactory extends EventEmitter {
       width: "text",
       height: "text",
     });
-    this.insertShape(text, anchorOn);
+    this.emit("shapeInitialize", text);
     return text;
   }
 
@@ -146,20 +129,20 @@ export class ShapeFactory extends EventEmitter {
     image.imageHeight = imageElement.height;
     let w = geometry.width(rect);
     let h = geometry.height(rect);
-    if (geometry.distance(rect[0], rect[1]) <= SHAPE_MIN_SIZE) {
-      const size = geometry.fitScaledownTo(
-        [image.imageWidth, image.imageHeight],
-        [400, 400]
-      );
-      w = size[0];
-      h = size[1];
-    }
+    // if (geometry.distance(rect[0], rect[1]) <= SHAPE_MIN_SIZE) {
+    //   const size = geometry.fitScaledownTo(
+    //     [image.imageWidth, image.imageHeight],
+    //     [400, 400]
+    //   );
+    //   w = size[0];
+    //   h = size[1];
+    // }
     image.width = w;
     image.height = h;
     image.left = rect[0][0] - w / 2;
     image.top = rect[0][1] - h / 2;
     image.sizable = Sizable.RATIO;
-    this.insertShape(image);
+    this.emit("shapeInitialize", image);
     return image;
   }
 
@@ -187,7 +170,7 @@ export class ShapeFactory extends EventEmitter {
     image.left = position[0] - size[0] / 2;
     image.top = position[1] - size[1] / 2;
     image.sizable = Sizable.RATIO;
-    this.insertShape(image);
+    this.emit("shapeInitialize", image);
     return image;
   }
 
@@ -206,7 +189,7 @@ export class ShapeFactory extends EventEmitter {
     line.top = rect[0][1];
     line.width = geometry.width(rect);
     line.height = geometry.height(rect);
-    this.insertShape(line);
+    this.emit("shapeInitialize", line);
     return line;
   }
 
@@ -226,8 +209,8 @@ export class ShapeFactory extends EventEmitter {
     freehand.top = rect[0][1];
     freehand.width = geometry.width(rect);
     freehand.height = geometry.height(rect);
-    freehand.pathEditable = path.length < 3;
-    this.insertShape(freehand);
+    freehand.pathEditable = false;
+    this.emit("shapeInitialize", freehand);
     return freehand;
   }
 
@@ -236,26 +219,25 @@ export class ShapeFactory extends EventEmitter {
    */
   createConnector(
     tail: Shape | null,
-    tailCP: number,
+    tailAnchor: number[],
     head: Shape | null,
-    headCP: number,
+    headAnchor: number[],
     points: number[][]
   ): Connector {
     const connector = new Connector();
     connector.lineType = LineType.CURVE;
-    connector.routeType = RouteType.OBLIQUE;
     connector.constraints = [{ id: "adjust-route" }];
     connector.tail = tail;
-    connector.tailCP = tailCP;
+    connector.tailAnchor = tailAnchor;
     connector.head = head;
-    connector.headCP = headCP;
+    connector.headAnchor = headAnchor;
     connector.path = points;
     const rect = geometry.boundingRect(connector.path);
     connector.left = rect[0][0];
     connector.top = rect[0][1];
     connector.width = geometry.width(rect);
     connector.height = geometry.height(rect);
-    this.insertShape(connector);
+    this.emit("shapeInitialize", connector);
     return connector;
   }
 
@@ -273,7 +255,7 @@ export class ShapeFactory extends EventEmitter {
     frame.height = h;
     frame.horzAlign = AlignmentKind.CENTER;
     frame.vertAlign = AlignmentKind.MIDDLE;
-    this.insertShape(frame);
+    this.emit("shapeInitialize", frame);
     return frame;
   }
 
@@ -291,7 +273,7 @@ export class ShapeFactory extends EventEmitter {
     embed.height = h;
     embed.horzAlign = AlignmentKind.CENTER;
     embed.vertAlign = AlignmentKind.MIDDLE;
-    this.insertShape(embed);
+    this.emit("shapeInitialize", embed);
     return embed;
   }
 }

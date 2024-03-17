@@ -1,11 +1,11 @@
 import type { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import type { Line, Shape } from "../shapes";
+import { Connector, Line, Shape } from "../shapes";
 import { angleInCCS, lcs2ccs } from "../graphics/utils";
 import optjs from "optimization-js";
 import type { Editor } from "../editor";
 import { inControlPoint } from "../utils/guide";
-import { CONNECTION_POINT_APOTHEM, MAGNET_THRESHOLD } from "../graphics/const";
+import { CONTROL_POINT_APOTHEM, ControllerPosition } from "../graphics/const";
 
 /**
  * Find node's position where is the bestfits to the given enclosure.
@@ -96,6 +96,52 @@ export function fitPathInCSS(
 }
 
 /**
+ * Find connection anchor where point in
+ *
+ * @param editor
+ * @param connector
+ * @param point
+ * @returns [end, anchor]
+ */
+export function findConnectionAnchor(
+  editor: Editor,
+  connector: Connector | null,
+  point: number[]
+): [Shape | null, number[]] {
+  const canvas = editor.canvas;
+  let end =
+    editor.currentPage?.getShapeAt(
+      canvas,
+      point,
+      connector ? [connector] : []
+    ) ?? null;
+  let anchor = [0.5, 0.5];
+  if (!end?.connectable) end = null;
+  if (end instanceof Line && !end.isClosed()) {
+    const p = geometry.findNearestOnPath(
+      point,
+      end.path,
+      CONTROL_POINT_APOTHEM * 2
+    );
+    if (p) {
+      const position = geometry.getPositionOnPath(end.path, p);
+      anchor = [position, 1 - position];
+    } else {
+      end = null;
+      anchor = [0.5, 0.5];
+    }
+  } else if (end) {
+    const box = end.getBoundingRect();
+    const l = box[0][0];
+    const t = box[0][1];
+    const w = geometry.width(box);
+    const h = geometry.height(box);
+    anchor = [(point[0] - l) / w, (point[1] - t) / h];
+  }
+  return [end, anchor];
+}
+
+/**
  * Find control point where point in
  * @returns index of control point
  */
@@ -140,7 +186,7 @@ export function findSegmentControlPoint(
       const p2pos =
         i === path.length - 2 ? 1 : geometry.getPositionOnPath(outline, p2);
       const midpos = (p1pos + p2pos) / 2;
-      const mid = geometry.positionOnPath(outline, midpos);
+      const mid = geometry.getPointOnPath(outline, midpos);
       const cp = mid;
       const cpCCS = lcs2ccs(canvas, line, cp);
       if (inControlPoint(canvas, pCCS, cpCCS, angle)) return i;
@@ -150,91 +196,47 @@ export function findSegmentControlPoint(
 }
 
 /**
- * Find a connection point near a given point from all shapes
- * @param editor
- * @param line
- * @param point
- * @returns a triple of [end, cp, cpIndex]
+ * Returns the point of the position of the controller
  */
-export function findConnectionPoint(
-  editor: Editor,
-  line: Line | null,
-  point: number[]
-): [Shape | null, number[] | null, number] {
-  const canvas = editor.canvas;
-  let end: Shape | null =
-    editor.doc?.getShapeAt(canvas, point, line ? [line] : []) ?? null;
-  let cp: number[] | null = null;
-  let cpIndex = -1;
-  // prevent connecting to the one of edge's descendant
-  if (end && line?.isDescendant(end)) {
-    end = null;
-  }
-  // find from node's connection points
-  editor.doc?.traverse((shape) => {
-    const s = shape as Shape;
-    if (
-      !cp &&
-      s.enable &&
-      s.connectable &&
-      s !== line &&
-      !line?.isDescendant(s)
-    ) {
-      const xps = s
-        .getConnectionPoints()
-        .map((p) => s.localCoordTransform(canvas, p, true));
-      if (Array.isArray(xps) && xps.length > 0) {
-        for (let i = 0; i < xps.length; i++) {
-          const xp = xps[i];
-          if (
-            geometry.inSquare(
-              point,
-              xp,
-              (CONNECTION_POINT_APOTHEM + 1) * canvas.px
-            )
-          ) {
-            end = s;
-            cp = xp;
-            cpIndex = i;
-            break;
-          }
-        }
+export function getControllerPosition(
+  canvas: Canvas,
+  shape: Shape,
+  position: string,
+  distance: number = 0
+): number[] {
+  const delta = distance / canvas.scale;
+  const enclosure = shape.getEnclosure();
+  if (enclosure && enclosure.length > 0) {
+    switch (position) {
+      case ControllerPosition.TOP: {
+        const cp = geometry.mid(enclosure[0], enclosure[1]);
+        return [cp[0], cp[1] - delta];
+      }
+      case ControllerPosition.RIGHT: {
+        const cp = geometry.mid(enclosure[1], enclosure[2]);
+        return [cp[0] + delta, cp[1]];
+      }
+      case ControllerPosition.BOTTOM: {
+        const cp = geometry.mid(enclosure[3], enclosure[2]);
+        return [cp[0], cp[1] + delta];
+      }
+      case ControllerPosition.LEFT: {
+        const cp = geometry.mid(enclosure[0], enclosure[3]);
+        return [cp[0] - delta, cp[1]];
+      }
+      case ControllerPosition.LEFT_TOP: {
+        return [enclosure[0][0] - delta, enclosure[0][1] - delta];
+      }
+      case ControllerPosition.RIGHT_TOP: {
+        return [enclosure[1][0] + delta, enclosure[1][1] - delta];
+      }
+      case ControllerPosition.RIGHT_BOTTOM: {
+        return [enclosure[2][0] + delta, enclosure[2][1] + delta];
+      }
+      case ControllerPosition.LEFT_BOTTOM: {
+        return [enclosure[3][0] - delta, enclosure[3][1] + delta];
       }
     }
-  });
-  // find from outlines
-  if (!cp) {
-    editor.doc?.traverse((shape) => {
-      const s = shape as Shape;
-      if (
-        !cp &&
-        s.enable &&
-        s.connectable &&
-        s !== line &&
-        !line?.isDescendant(s)
-      ) {
-        const outline = s
-          .getOutline()
-          .map((p) => s.localCoordTransform(canvas, p, true));
-        const seg = geometry.getNearSegment(
-          point,
-          outline,
-          MAGNET_THRESHOLD * 2
-        );
-        if (seg > -1) {
-          const ip = geometry.findNearestOnLine(point, [
-            outline[seg],
-            outline[seg + 1],
-          ]);
-          if (ip) {
-            end = s;
-            cp = ip;
-          }
-        }
-      }
-    });
   }
-  // prevent connecting to self
-  if (end === line) end = null;
-  return [end, cp, cpIndex];
+  return [-1, -1];
 }

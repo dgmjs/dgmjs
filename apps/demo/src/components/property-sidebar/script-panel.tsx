@@ -11,7 +11,7 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MoreHorizontalIcon, PlusIcon, Settings2Icon } from "lucide-react";
 import { Panel } from "../common/panel";
 import {
@@ -22,19 +22,57 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Empty } from "../common/empty";
 import { ScriptType } from "@dgmjs/core";
-//import { useScriptEditorDialog } from "../dialogs/script-editor-dialog";
 import { Button } from "@/components/ui/button";
 import { ShapeEditorProps } from "@/types";
+import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
+import { TextareaField } from "./fields/textarea-field";
 
 const defaultDrawScript = `(do
   (call shape :draw canvas))`;
+
+function ScriptEditor({
+  script,
+  onChange,
+}: {
+  script: string;
+  onChange: (value: string) => void;
+}) {
+  const [value, setValue] = useState(script);
+
+  useEffect(() => {
+    setValue(script);
+  }, [script]);
+
+  return (
+    <div>
+      <div className="mb-3">
+        <TextareaField
+          cols={40}
+          rows={10}
+          value={value}
+          className="text-sm"
+          onChange={(value) => {
+            setValue(value);
+          }}
+        />
+      </div>
+      <div className="flex gap-2">
+        <Button
+          onClick={() => {
+            if (onChange) onChange(value);
+          }}
+        >
+          Save
+        </Button>
+      </div>
+    </div>
+  );
+}
 
 export const ScriptPanel: React.FC<ShapeEditorProps> = ({
   shapes,
   onChange,
 }) => {
-  // const scriptEditorDialog = useScriptEditorDialog();
-
   const scripts = shapes[0].scripts;
 
   const addScript = (id: string) => {
@@ -78,26 +116,27 @@ export const ScriptPanel: React.FC<ShapeEditorProps> = ({
             {script.id}
           </div>
           <div className="flex items-center">
-            <Button
-              variant="ghost"
-              className="h-8 w-8 p-0 border rounded-none"
-              onClick={async () => {
-                // await scriptEditorDialog.show({
-                //   id: script.id,
-                //   script: script.script,
-                //   onConfirm: async (value: any) => {
-                //     if (onChange) {
-                //       const updated = scripts.map((s, si) =>
-                //         s.id === script.id ? { ...script, script: value } : s
-                //       );
-                //       onChange({ scripts: updated });
-                //     }
-                //   },
-                // });
-              }}
-            >
-              <Settings2Icon size={16} />
-            </Button>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-8 w-8 p-0 border rounded-none"
+                >
+                  <Settings2Icon size={16} />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent side="top" className="w-80">
+                <ScriptEditor
+                  script={script.script}
+                  onChange={(value) => {
+                    const updated = scripts.map((s, si) =>
+                      si === i ? { ...s, script: value } : s
+                    );
+                    if (onChange) onChange({ scripts: updated });
+                  }}
+                />
+              </PopoverContent>
+            </Popover>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <div>

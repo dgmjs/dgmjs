@@ -102,29 +102,45 @@ export const DGMRichTextInplaceEditor: React.FC<
   const tiptapEditor = useEditor({
     extensions,
     content: /* textString.length > 0 ? editingText?.text : */ "",
-    onTransaction: (tr) => {
-      // expand editor width if text width is larger than current width
+    onUpdate: (editor) => {
       if (editor && tiptapEditor && state.textShape) {
-        const rect = getTextRect(state.textShape, tiptapEditor.getJSON());
-        setState((state) => ({
-          ...state,
-          width: Math.max(state.textShape?.width || 0, rect.width),
-          height: Math.max(state.textShape?.height || 0, rect.height),
-          textWidth: rect.width,
-          textHeight: rect.height,
-        }));
+        const textValue = tiptapEditor.getJSON();
+        update(state.textShape, textValue);
       }
     },
   });
 
   const open = (textShape: Box) => {
-    if (textShape) {
+    if (editor.currentPage && textShape) {
       // disable shape's text rendering
       textShape._renderText = false;
       editor.repaint();
 
+      // start transaction
+      editor.transform.startTransaction("text-edit");
+      editor.transform.resolveAllConstraints(editor.currentPage, editor.canvas);
+
       // update states
-      const rect = getTextRect(textShape, textShape.text);
+      update(textShape, textShape.text);
+
+      tiptapEditor?.commands.setContent(textShape.text);
+      tiptapEditor?.commands.focus();
+      tiptapEditor?.commands.selectAll();
+
+      setTimeout(() => {
+        if (onOpen) onOpen(textShape as Box);
+      }, 0);
+    }
+  };
+
+  const update = (textShape: Box, textValue: any) => {
+    if (editor.currentPage) {
+      // mutate text shape
+      editor.transform.atomicAssign(textShape, "text", textValue);
+      editor.transform.resolveAllConstraints(editor.currentPage, editor.canvas);
+
+      // update states
+      const rect = getTextRect(textShape, textValue);
       setState({
         textShape,
         padding: textShape.padding,
@@ -144,31 +160,22 @@ export const DGMRichTextInplaceEditor: React.FC<
         textHeight: rect.height,
       });
 
-      tiptapEditor?.commands.setContent(textShape.text);
-      tiptapEditor?.commands.focus();
-      tiptapEditor?.commands.selectAll();
-
-      setTimeout(() => {
-        setToolbarPosition({
-          left: rect.left,
-          top: rect.top,
-          width: textShape.width,
-          height: textShape.height,
-        });
-        if (onOpen) onOpen(textShape as Box);
-      }, 0);
+      // update toolbar position
+      setToolbarPosition({
+        left: rect.left,
+        top: rect.top,
+        width: textShape.width,
+        height: textShape.height,
+      });
     }
   };
 
-  const applyChanges = () => {
+  const close = () => {
     if (tiptapEditor && state.textShape) {
+      editor.transform.endTransaction();
       const textString = convertDocToText(tiptapEditor.getJSON());
-      if (textString.trim().length === 0) {
+      if (state.textShape instanceof Text && textString.trim().length === 0) {
         editor.actions.delete_([state.textShape]);
-      } else {
-        editor.actions.update({ text: tiptapEditor.getJSON() }, [
-          state.textShape,
-        ]);
       }
       state.textShape._renderText = true;
       editor.repaint();
@@ -177,7 +184,7 @@ export const DGMRichTextInplaceEditor: React.FC<
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === "Escape") applyChanges();
+    if (event.key === "Escape") close();
   };
 
   useEffect(() => {
@@ -218,7 +225,7 @@ export const DGMRichTextInplaceEditor: React.FC<
               position: "fixed",
               inset: 0,
             }}
-            onPointerDown={applyChanges}
+            onPointerDown={close}
           />
           <div
             style={{

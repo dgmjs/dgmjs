@@ -13,39 +13,63 @@
 
 import { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Shape } from "../shapes";
+import { Line, Shape } from "../shapes";
 import { Editor, Handler } from "../editor";
-import { Mouse, Color, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
-import * as guide from "../utils/guide";
+import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
 
 /**
  * Line Factory Handler
  */
 export class LineFactoryHandler extends Handler {
-  dragging: boolean;
-  dragStartPoint: number[];
-  dragPoint: number[];
-  points: number[][];
-  closed: boolean;
-  draggingMoved: boolean;
+  dragging: boolean = false;
+  dragStartPoint: number[] = [-1, -1];
+  dragPoint: number[] = [-1, -1];
+  points: number[][] = [];
+  closed: boolean = false;
+  draggingMoved: boolean = false;
+  multiPointMode: boolean = false;
+  shape: Line | null = null;
 
-  constructor(id: string) {
-    super(id);
+  reset() {
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
     this.dragPoint = [-1, -1];
     this.points = [];
     this.closed = false;
     this.draggingMoved = false;
+    this.multiPointMode = false;
+    this.shape = null;
   }
 
-  init() {
-    this.dragging = false;
-    this.dragStartPoint = [-1, -1];
-    this.dragPoint = [-1, -1];
-    this.points = [];
-    this.closed = false;
-    this.draggingMoved = false;
+  initialize(editor: Editor, e: CanvasPointerEvent): void {
+    const page = editor.currentPage;
+    if (page) {
+      this.points = [this.dragStartPoint];
+      this.shape = editor.factory.createLine(this.points, false);
+      editor.transform.startTransaction("create");
+      editor.transform.addShape(this.shape, page);
+    }
+  }
+
+  update(editor: Editor, e: CanvasPointerEvent): void {
+    const page = editor.currentPage;
+    if (page && this.shape) {
+      const newPath = [...this.points, this.dragPoint];
+      editor.transform.setPath(this.shape, newPath);
+      editor.transform.resolveAllConstraints(page, editor.canvas);
+      editor.repaint();
+    }
+  }
+
+  finalize(editor: Editor, e?: CanvasPointerEvent): void {
+    if (this.shape) {
+      if (geometry.pathLength(this.shape.path) < 2) {
+        editor.transform.cancelTransaction();
+      } else {
+        editor.transform.endTransaction();
+        editor.factory.triggerCreate(this.shape as Shape);
+      }
+    }
   }
 
   /**
@@ -55,14 +79,22 @@ export class LineFactoryHandler extends Handler {
   pointerDown(editor: Editor, e: CanvasPointerEvent) {
     if (e.button === Mouse.BUTTON1) {
       const canvas = editor.canvas;
-      this.dragging = true;
-      this.dragStartPoint = canvas.globalCoordTransformRev([e.x, e.y]);
-      this.dragPoint = geometry.copy(this.dragStartPoint);
-      this.points.push(this.dragPoint);
-      this.drawDragging(editor, e);
-      if (this.closed) {
-        this.doCreate(editor);
+      if (this.multiPointMode) {
+        if (this.closed) {
+          this.finalize(editor, e);
+          this.reset();
+        } else {
+          const p = canvas.globalCoordTransformRev([e.x, e.y]);
+          this.points.push(p);
+        }
+      } else {
+        this.dragging = true;
+        this.dragStartPoint = canvas.globalCoordTransformRev([e.x, e.y]);
+        this.dragPoint = geometry.copy(this.dragStartPoint);
+        this.points.push(this.dragPoint);
+        this.initialize(editor, e);
       }
+      editor.repaint();
     }
   }
 
@@ -71,18 +103,19 @@ export class LineFactoryHandler extends Handler {
    * @override
    */
   pointerMove(editor: Editor, e: CanvasPointerEvent) {
-    editor.repaint();
-    if (this.dragging || this.points.length > 0) {
+    if (this.dragging) {
       const canvas = editor.canvas;
       this.draggingMoved = true;
       this.dragPoint = canvas.globalCoordTransformRev([e.x, e.y]);
       this.closed =
         this.points.length > 2 &&
         geometry.distance(this.points[0], this.dragPoint) <= MAGNET_THRESHOLD;
-      this.drawDragging(editor, e);
-    } else {
-      this.drawHovering(editor, e);
+      if (this.closed) {
+        this.dragPoint = geometry.copy(this.points[0]);
+      }
+      this.update(editor, e);
     }
+    editor.repaint();
   }
 
   /**
@@ -91,54 +124,37 @@ export class LineFactoryHandler extends Handler {
    */
   pointerUp(editor: Editor, e: CanvasPointerEvent) {
     if (e.button === Mouse.BUTTON1 && this.dragging) {
-      if (this.points.length < 2 && this.draggingMoved) {
+      if (!this.draggingMoved) this.multiPointMode = true;
+      if (!this.multiPointMode) {
         this.points.push(geometry.copy(this.dragPoint));
-        this.doCreate(editor);
-      } else {
-        // this.onPointClicked(editor);
+        this.finalize(editor, e);
+        this.reset();
+        this.done(editor);
+        editor.repaint();
       }
-      this.dragging = false;
-      this.draggingMoved = false;
-      this.dragStartPoint = [-1, -1];
     }
   }
 
+  keyDown(editor: Editor, e: KeyboardEvent): boolean {
+    if (e.key === "Escape" && this.dragging) {
+      editor.transform.cancelTransaction();
+      editor.repaint();
+      this.reset();
+      this.done(editor);
+    }
+    return false;
+  }
+
   onActivate(editor: Editor): void {
-    this.init();
+    this.reset();
     editor.setCursor(Cursor.CROSSHAIR);
   }
 
   onDeactivate(editor: Editor): void {
     if (this.points.length > 1) {
-      this.doCreate(editor);
+      // this.finalize(editor);
     }
-    this.init();
+    this.reset();
     editor.setCursor(Cursor.DEFAULT);
-  }
-
-  doCreate(editor: Editor) {
-    const path = geometry.pathCopy(this.points);
-    const closed = this.closed;
-    this.init();
-    editor.factory.createLine(path, closed);
-  }
-
-  drawHovering(editor: Editor, e: CanvasPointerEvent): void {}
-
-  drawDragging(editor: Editor, e: CanvasPointerEvent) {
-    const canvas = editor.canvas;
-    const ps = this.points.map((p) => canvas.globalCoordTransform(p));
-    canvas.strokeColor = Color.SELECTION;
-    canvas.strokeWidth = canvas.px;
-    canvas.strokePattern = [];
-    canvas.roughness = 0;
-    canvas.alpha = 1;
-    canvas.polyline([...ps, canvas.globalCoordTransform(this.dragPoint)]);
-    for (let p of ps) {
-      guide.drawControlPoint(canvas, p, 1);
-    }
-    if (this.closed) {
-      guide.drawControlPoint(canvas, ps[0], 5);
-    }
   }
 }

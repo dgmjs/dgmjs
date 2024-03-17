@@ -24,9 +24,9 @@ export class SelectionManager extends EventEmitter {
   editor: Editor;
   shapes: Shape[];
 
-  constructor(editorState: Editor) {
+  constructor(editor: Editor) {
     super();
-    this.editor = editorState;
+    this.editor = editor;
     this.shapes = [];
   }
 
@@ -100,16 +100,17 @@ export class SelectionManager extends EventEmitter {
    * Select shapes in area
    */
   selectArea(x1: number, y1: number, x2: number, y2: number) {
+    const canvas = this.editor.canvas;
     let r = geometry.normalizeRect([
       [x1, y1],
       [x2, y2],
     ]);
     this.shapes = [];
-    this.editor.doc?.traverse((s) => {
+    this.editor.currentPage?.traverse((s) => {
       if (
         (s as Shape).visible &&
         (s as Shape).enable &&
-        (s as Shape).overlapRect(r) &&
+        (s as Shape).overlapRect(canvas, r) &&
         !this.isSelected(s as Shape)
       ) {
         this.shapes.push(s as Shape);
@@ -123,7 +124,7 @@ export class SelectionManager extends EventEmitter {
    */
   selectAll() {
     this.shapes = [];
-    this.editor.doc?.traverse((s) => {
+    this.editor.currentPage?.traverse((s) => {
       if ((s as Shape).visible && (s as Shape).enable) {
         this.shapes.push(s as Shape);
       }

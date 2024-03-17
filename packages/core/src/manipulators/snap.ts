@@ -14,7 +14,7 @@
 import { Editor, Controller } from "../editor";
 import * as geometry from "../graphics/geometry";
 import { Shape, Box, Line } from "../shapes";
-import { SizingPosition, MAGNET_THRESHOLD } from "../graphics/const";
+import { ControllerPosition, MAGNET_THRESHOLD } from "../graphics/const";
 import { angleInCCS, lcs2ccs, boxInCCS, boxInGCS } from "../graphics/utils";
 import { cartisian } from "../std/lambda";
 import * as guide from "../utils/guide";
@@ -28,7 +28,7 @@ import * as guide from "../utils/guide";
 function getGuideBoxes(editor: Editor, shape: Shape): Box[] {
   const canvas = editor.canvas;
   return (
-    (editor.doc?.children.filter(
+    (editor.currentPage?.children.filter(
       (s) => s !== shape && s instanceof Box && angleInCCS(canvas, s) === 0
     ) as Box[]) ?? []
   );
@@ -46,7 +46,7 @@ function getBoxesInRow(editor: Editor, shape: Shape, box: number[][]): Box[] {
   const t = box[0][1];
   const b = box[1][1];
   return (
-    (editor.doc?.children.filter(
+    (editor.currentPage?.children.filter(
       (s) =>
         s !== shape &&
         s instanceof Box &&
@@ -75,7 +75,7 @@ function getBoxesInColumn(
   const l = box[0][0];
   const r = box[1][0];
   return (
-    (editor.doc?.children.filter(
+    (editor.currentPage?.children.filter(
       (s) =>
         s !== shape &&
         s instanceof Box &&
@@ -288,31 +288,31 @@ class Snap {
         const w = geometry.width(b);
         const h = geometry.height(b);
         switch (sizingPosition) {
-          case SizingPosition.TOP:
+          case ControllerPosition.TOP:
             snapYs.push(box[1][1] - h);
             break;
-          case SizingPosition.RIGHT:
+          case ControllerPosition.RIGHT:
             snapXs.push(box[0][0] + w);
             break;
-          case SizingPosition.BOTTOM:
+          case ControllerPosition.BOTTOM:
             snapYs.push(box[0][1] + h);
             break;
-          case SizingPosition.LEFT:
+          case ControllerPosition.LEFT:
             snapXs.push(box[1][0] - w);
             break;
-          case SizingPosition.LEFT_TOP:
+          case ControllerPosition.LEFT_TOP:
             snapXs.push(box[1][0] - w);
             snapYs.push(box[1][1] - h);
             break;
-          case SizingPosition.RIGHT_TOP:
+          case ControllerPosition.RIGHT_TOP:
             snapXs.push(box[0][0] + w);
             snapYs.push(box[1][1] - h);
             break;
-          case SizingPosition.RIGHT_BOTTOM:
+          case ControllerPosition.RIGHT_BOTTOM:
             snapXs.push(box[0][0] + w);
             snapYs.push(box[0][1] + h);
             break;
-          case SizingPosition.LEFT_BOTTOM:
+          case ControllerPosition.LEFT_BOTTOM:
             snapXs.push(box[1][0] - w);
             snapYs.push(box[0][1] + h);
             break;
@@ -321,28 +321,28 @@ class Snap {
       this.toXY(editor, xs, ys, snapXs, snapYs, "size");
       if (this.x > -1) {
         switch (sizingPosition) {
-          case SizingPosition.RIGHT:
-          case SizingPosition.RIGHT_BOTTOM:
-          case SizingPosition.RIGHT_TOP:
+          case ControllerPosition.RIGHT:
+          case ControllerPosition.RIGHT_BOTTOM:
+          case ControllerPosition.RIGHT_TOP:
             box[1][0] = this.snappedX;
             break;
-          case SizingPosition.LEFT:
-          case SizingPosition.LEFT_TOP:
-          case SizingPosition.LEFT_BOTTOM:
+          case ControllerPosition.LEFT:
+          case ControllerPosition.LEFT_TOP:
+          case ControllerPosition.LEFT_BOTTOM:
             box[0][0] = this.snappedX;
             break;
         }
       }
       if (this.y > -1) {
         switch (sizingPosition) {
-          case SizingPosition.TOP:
-          case SizingPosition.LEFT_TOP:
-          case SizingPosition.RIGHT_TOP:
+          case ControllerPosition.TOP:
+          case ControllerPosition.LEFT_TOP:
+          case ControllerPosition.RIGHT_TOP:
             box[0][1] = this.snappedY;
             break;
-          case SizingPosition.BOTTOM:
-          case SizingPosition.RIGHT_BOTTOM:
-          case SizingPosition.LEFT_BOTTOM:
+          case ControllerPosition.BOTTOM:
+          case ControllerPosition.RIGHT_BOTTOM:
+          case ControllerPosition.LEFT_BOTTOM:
             box[1][1] = this.snappedY;
             break;
         }

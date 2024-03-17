@@ -1,10 +1,11 @@
 import {
-  Editor as CoreEditor,
+  Editor,
   EditorOptions,
   Shape,
   Transaction,
   basicSetup,
   CanvasPointerEvent,
+  Page,
 } from "@dgmjs/core";
 import { useEffect, useRef } from "react";
 
@@ -13,10 +14,11 @@ export interface DGMEditorProps
     React.HTMLAttributes<HTMLDivElement>,
     "onScroll" | "onDragStart" | "onDrag" | "onDragEnd"
   > {
-  options?: EditorOptions;
+  options?: Partial<EditorOptions>;
   showGrid?: boolean;
-  onMount?: (editor: CoreEditor) => void;
+  onMount?: (editor: Editor) => void;
   onSelectionChange?: (selections: Shape[]) => void;
+  onCurrentPageChange?: (page: Page) => void;
   onActiveHandlerChange?: (handlerId: string) => void;
   onShapeCreate?: (shape: Shape) => void;
   onTransaction?: (tx: Transaction) => void;
@@ -33,6 +35,7 @@ export const DGMEditor: React.FC<DGMEditorProps> = ({
   showGrid = false,
   onMount,
   onSelectionChange,
+  onCurrentPageChange,
   onActiveHandlerChange,
   onShapeCreate,
   onTransaction,
@@ -45,11 +48,11 @@ export const DGMEditor: React.FC<DGMEditorProps> = ({
   ...others
 }) => {
   const editorHolderRef = useRef<HTMLDivElement>(null);
-  const editorRef = useRef<CoreEditor | null>(null);
+  const editorRef = useRef<Editor | null>(null);
 
   useEffect(() => {
     if (!editorRef.current) {
-      const editor = new CoreEditor(
+      const editor = new Editor(
         editorHolderRef.current!,
         basicSetup({ ...options })
       );
@@ -57,6 +60,9 @@ export const DGMEditor: React.FC<DGMEditorProps> = ({
       // events forwarding
       editor.selection.on("change", (shapes: Shape[]) => {
         if (onSelectionChange) onSelectionChange(shapes);
+      });
+      editor.on("currentPageChange", (page: Page) => {
+        if (onCurrentPageChange) onCurrentPageChange(page);
       });
       editor.on("activeHandlerChange", (handlerId: string) => {
         if (onActiveHandlerChange) onActiveHandlerChange(handlerId);
@@ -92,10 +98,14 @@ export const DGMEditor: React.FC<DGMEditorProps> = ({
       // initialize
       editorRef.current = editor;
       editor.fit();
-      editor.setActiveHandler("Select");
+      editor.activateDefaultHandler();
       editor.repaint();
       if (onMount) onMount(editor);
     }
+
+    return () => {
+      // TODO: dispose (remove listeners)
+    };
   }, []);
 
   useEffect(() => {

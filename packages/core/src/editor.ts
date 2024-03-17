@@ -13,13 +13,8 @@
 
 import { EventEmitter } from "events";
 import { Canvas, CanvasPointerEvent } from "./graphics/graphics";
-import { Connector, Document, Shape, Text, Box } from "./shapes";
-import {
-  Cursor,
-  Color,
-  Mouse,
-  CONNECTION_POINT_APOTHEM,
-} from "./graphics/const";
+import { Connector, Document, Shape, Page, shapeInstantiator } from "./shapes";
+import { Cursor, Color, Mouse, CONTROL_POINT_APOTHEM } from "./graphics/const";
 import { assert } from "./std/assert";
 import * as geometry from "./graphics/geometry";
 import * as utils from "./graphics/utils";
@@ -30,35 +25,33 @@ import { Actions } from "./actions";
 import { KeyMap, KeymapManager } from "./keymap-manager";
 import { AutoScroller } from "./utils/auto-scroller";
 import { createPointerEvent, createTouchEvent } from "./utils/canvas-utils";
-import { Instantiator, InstantiatorFun } from "./core/instantiator";
 import { Store } from "./core/store";
 import { Transform } from "./transform/transform";
 import { SelectionManager } from "./selection-manager";
 import { Clipboard } from "./core/clipboard";
 
 export interface EditorOptions {
-  instantiators?: Record<string, InstantiatorFun>;
-  handlers?: Handler[];
-  keymap?: KeyMap;
-  allowAutoScroll?: boolean;
-  allowCreateTextOnCanvas?: boolean;
-  allowCreateTextOnConnector?: boolean;
-  onReady?: (editor: Editor) => void;
+  handlers: Handler[];
+  defaultHandlerId: string | null;
+  keymap: KeyMap;
+  allowAutoScroll: boolean;
+  allowCreateTextOnCanvas: boolean;
+  allowCreateTextOnConnector: boolean;
+  onReady: (editor: Editor) => void;
 }
 
 /**
- * The diagram editor
+ * The editor
  */
 class Editor extends EventEmitter {
   options: EditorOptions;
   platform: string;
 
-  instantiator: Instantiator;
   store: Store;
   transform: Transform;
   clipboard: Clipboard;
   selection: SelectionManager;
-  doc: Document | null;
+  currentPage: Page | null;
 
   factory: ShapeFactory;
   actions: Actions;
@@ -76,7 +69,6 @@ class Editor extends EventEmitter {
   handlers: Record<string, Handler>;
   activeHandlerId: string | null;
   activeHandler: Handler | null;
-  defaultHandlerId: string | null;
   leftButtonDown: boolean;
   downX: number;
   downY: number;
@@ -88,15 +80,19 @@ class Editor extends EventEmitter {
   /**
    * constructor
    */
-  constructor(editorHolder: HTMLElement, options: EditorOptions) {
+  constructor(editorHolder: HTMLElement, options: Partial<EditorOptions>) {
     super();
     this.options = {
+      handlers: [],
+      defaultHandlerId: "",
+      keymap: {},
+      allowAutoScroll: true,
       allowCreateTextOnCanvas: true,
       allowCreateTextOnConnector: true,
+      onReady: () => {},
       ...options,
     };
-    this.instantiator = new Instantiator(options.instantiators);
-    this.store = new Store(this.instantiator, {
+    this.store = new Store(shapeInstantiator, {
       objInitializer: (o) => {
         if (o instanceof Shape) o.initialze(this.canvas);
       },
@@ -110,7 +106,7 @@ class Editor extends EventEmitter {
     this.factory = new ShapeFactory(this);
     this.actions = new Actions(this);
     this.keymap = new KeymapManager(this);
-    this.doc = null;
+    this.currentPage = null;
 
     this.platform = this.detectPlatform();
     this.parent = editorHolder;
@@ -130,7 +126,6 @@ class Editor extends EventEmitter {
     this.addHandlers(this.options.handlers ?? []);
     this.activeHandlerId = null;
     this.activeHandler = null;
-    this.defaultHandlerId = null;
     this.leftButtonDown = false; // To check mouse left button down in mouse move event.
     this.downX = 0;
     this.downY = 0;
@@ -141,6 +136,7 @@ class Editor extends EventEmitter {
     this.initializeState();
     this.initializeCanvas();
     this.initializeKeymap();
+    this.newDoc();
     if (this.options.onReady) this.options.onReady(this);
   }
 
@@ -157,9 +153,6 @@ class Editor extends EventEmitter {
   }
 
   initializeState() {
-    const diagram = new Document();
-    this.store.setDoc(diagram);
-    this.doc = diagram;
     this.transform.on("transaction", () => this.repaint());
     this.selection.on("change", () => this.repaint());
     this.factory.on("create", (shape: Shape) => {
@@ -279,11 +272,11 @@ class Editor extends EventEmitter {
       const p = this.canvas.globalCoordTransformRev([event.x, event.y]);
       const x = p[0];
       const y = p[1];
-      if (this.doc) {
+      if (this.currentPage) {
         // allows double click on a disable shape (e.g. a text inside another shape)
         const pred = (s: Obj) =>
           (s as Shape).visible && (s as Shape).containsPoint(this.canvas, p);
-        const shape: Shape | null = this.doc.findDepthFirst(
+        const shape: Shape | null = this.currentPage.findDepthFirst(
           pred
         ) as Shape | null;
         // create a text on canvas
@@ -292,6 +285,8 @@ class Editor extends EventEmitter {
             [x, y],
             [x, y],
           ]);
+          this.actions.insert(textShape);
+          this.factory.triggerCreate(textShape);
         }
         // create a text on connector
         if (
@@ -302,10 +297,14 @@ class Editor extends EventEmitter {
           const nearest = geometry.findNearestOnPath(
             [x, y],
             outline,
-            CONNECTION_POINT_APOTHEM * 2
+            CONTROL_POINT_APOTHEM * 2
           );
-          const position = geometry.getPositionOnPath(outline, nearest);
-          const textShape = this.factory.createTextOnConnector(shape, position);
+          const position = nearest
+            ? geometry.getPositionOnPath(outline, nearest)
+            : 0.5;
+          const textShape = this.factory.createAnchoredText(position);
+          this.actions.insert(textShape, shape);
+          this.factory.triggerCreate(textShape);
         }
         // trigger double click event
         this.triggerDblClick(shape, [x, y]);
@@ -370,8 +369,8 @@ class Editor extends EventEmitter {
       if (this.activeHandler) {
         this.activeHandler.keyDown(this, e);
       }
-      if (e.key === "Escape" && this.defaultHandlerId) {
-        this.setActiveHandler(this.defaultHandlerId);
+      if (e.key === "Escape" && this.options.defaultHandlerId) {
+        this.activateHandler(this.options.defaultHandlerId);
       }
       if (e.key === "Enter") {
         // ...
@@ -385,12 +384,14 @@ class Editor extends EventEmitter {
   }
 
   /**
-   * Set document
+   * Set current page
    */
-  setDoc(doc: Document) {
-    this.doc = doc;
-    this.selection.deselectAll();
-    this.repaint();
+  setCurrentPage(page: Page) {
+    if (this.currentPage !== page) {
+      this.currentPage = page;
+      this.repaint();
+      this.emit("currentPageChange", page);
+    }
   }
 
   /**
@@ -494,6 +495,14 @@ class Editor extends EventEmitter {
   }
 
   /**
+   * Get bounding rect in GCS
+   */
+  getBoundingRect(): number[][] {
+    const rect: number[][] = [[0, 0], this.getSize()];
+    return rect.map((p) => this.canvas.globalCoordTransformRev(p));
+  }
+
+  /**
    * Set origin point
    */
   setOrigin(x: number, y: number) {
@@ -547,10 +556,10 @@ class Editor extends EventEmitter {
    * Fit doc to screen and move to center
    */
   fitToScreen(scaleDelta: number = 0) {
-    if (this.doc) {
+    if (this.currentPage) {
       // doc size in GCS
-      const doc = this.doc;
-      const box = doc.getDocBoundingBox(this.canvas);
+      const doc = this.currentPage;
+      const box = doc.getPageBoundingBox(this.canvas);
       const center = geometry.center(box);
       const dw = geometry.width(box);
       const dh = geometry.height(box);
@@ -609,18 +618,18 @@ class Editor extends EventEmitter {
    */
   addHandlers(handlers: Handler[]) {
     handlers.forEach((handler, index) => {
-      this.addHandler(handler, index === 0);
+      this.addHandler(handler);
     });
+    if (!this.options.defaultHandlerId && handlers.length > 0) {
+      this.options.defaultHandlerId = handlers[0].id;
+    }
   }
 
   /**
    * Add a handler
    */
-  addHandler(handler: Handler, isDefault: boolean = false) {
+  addHandler(handler: Handler) {
     this.handlers[handler.id] = handler;
-    if (isDefault) {
-      this.defaultHandlerId = handler.id;
-    }
   }
 
   /**
@@ -645,15 +654,24 @@ class Editor extends EventEmitter {
   }
 
   /**
-   * Set active handler by id
+   * Activate a handler by id
    */
-  setActiveHandler(id: string) {
+  activateHandler(id: string) {
     if (this.activeHandlerId !== id) {
       if (this.activeHandler) this.activeHandler.onDeactivate(this);
       this.activeHandlerId = id;
       this.activeHandler = this.handlers[this.activeHandlerId];
       this.activeHandler.onActivate(this);
       this.emit("activeHandlerChange", this.activeHandlerId);
+    }
+  }
+
+  /**
+   * Activate the default handler
+   */
+  activateDefaultHandler() {
+    if (this.options.defaultHandlerId) {
+      this.activateHandler(this.options.defaultHandlerId);
     }
   }
 
@@ -722,10 +740,10 @@ class Editor extends EventEmitter {
    * Repaint diagram
    */
   repaint(drawSelection: boolean = true) {
-    if (this.doc) {
+    if (this.currentPage) {
       this.clearBackground(this.canvas);
       this.drawGrid(this.canvas);
-      this.doc.render(this.canvas);
+      this.currentPage.render(this.canvas);
       if (drawSelection) this.drawSelection();
     } else {
       this.clearBackground(this.canvas);
@@ -738,6 +756,36 @@ class Editor extends EventEmitter {
   setCursor(cursor: string, angle: number = 0) {
     const cssCursor = cursor.replace("{{angle}}", angle.toString());
     this.canvasElement.style.cursor = cssCursor;
+  }
+
+  /**
+   * Create a new document
+   */
+  newDoc(): Document {
+    const doc = new Document();
+    const page = new Page();
+    doc.children.push(page);
+    page.parent = doc;
+    this.store.setDoc(doc);
+    this.setCurrentPage(doc.children[0] as Page);
+    return doc;
+  }
+
+  /**
+   * Load from JSON
+   */
+  loadFromJSON(json: any) {
+    if (json) {
+      this.selection.deselectAll();
+      this.store.fromJSON(json);
+      if (
+        this.store.doc instanceof Document &&
+        this.store.doc.children.length > 0 &&
+        this.store.doc.children[0] instanceof Page
+      ) {
+        this.setCurrentPage(this.store.doc.children[0] as Page);
+      }
+    }
   }
 
   triggerDblClick(shape: Shape | null, point: number[]) {
@@ -824,14 +872,52 @@ class ManipulatorManager {
   }
 }
 
+interface HandlerOptions {
+  lock: boolean;
+}
+
 /**
  * Handler
  */
 class Handler {
   id: string;
+  options: HandlerOptions;
 
-  constructor(id: string) {
+  constructor(id: string, options?: Partial<HandlerOptions>) {
     this.id = id;
+    this.options = {
+      lock: false,
+      ...options,
+    };
+    this.reset();
+  }
+
+  /**
+   * Reset the states of handler
+   */
+  reset() {}
+
+  /**
+   * Get lock
+   */
+  getLock(): boolean {
+    return this.options.lock;
+  }
+
+  /**
+   * Set lock
+   */
+  setLock(lock: boolean) {
+    this.options.lock = lock;
+  }
+
+  /**
+   * Call this method when the handler is done
+   */
+  done(editor: Editor) {
+    if (!this.options.lock) {
+      editor.activateDefaultHandler();
+    }
   }
 
   /**
@@ -887,71 +973,117 @@ class Controller {
   /**
    * Indicates whether this controller is dragging or not
    */
-  dragging: boolean;
+  dragging: boolean = false;
 
   /**
    * Drag start point in shape's LCS
    */
-  dragStartPoint: number[];
+  dragStartPoint: number[] = [-1, -1];
+
+  /**
+   * Drag start point in shape's GCS
+   */
+  dragStartPointGCS: number[] = [-1, -1];
 
   /**
    * Drag start point in shape's CCS
    */
-  dragStartPointCCS: number[];
+  dragStartPointCCS: number[] = [-1, -1];
 
   /**
    * Previous drag point in shape's LCS
    */
-  dragPrevPoint: number[];
+  dragPrevPoint: number[] = [-1, -1];
+
+  /**
+   * Previous drag point in shape's GCS
+   */
+  dragPrevPointGCS: number[] = [-1, -1];
 
   /**
    * Previous drag point in shape's CCS
    */
-  dragPrevPointCCS: number[];
+  dragPrevPointCCS: number[] = [-1, -1];
 
   /**
    * Current drag point in shape's LCS
    */
-  dragPoint: number[];
+  dragPoint: number[] = [-1, -1];
+
+  /**
+   * Current drag point in shape's GCS
+   */
+  dragPointGCS: number[] = [-1, -1];
 
   /**
    * Current drag point in shape's CCS
    */
-  dragPointCCS: number[];
+  dragPointCCS: number[] = [-1, -1];
 
   /**
    * X-distance from dragStartPoint to dragPoint in shape's LCS
    */
-  dx: number;
+  dx: number = 0;
 
   /**
    * Y-distance from dragStartPoint to dragPoint in shape's LCS
    */
-  dy: number;
+  dy: number = 0;
 
   /**
    * X-distance from dragPrevPoint to dragPoint in shape's LCS
    */
-  dx0: number;
+  dxStep: number = 0;
 
   /**
    * Y-distance from dragPrevPoint to dragPoint in shape's LCS
    */
-  dy0: number;
+  dyStep: number = 0;
+
+  /**
+   * X-distance from dragStartPoint to dragPoint in GCS
+   */
+  dxGCS: number = 0;
+
+  /**
+   * Y-distance from dragStartPoint to dragPoint in GCS
+   */
+  dyGCS: number = 0;
+
+  /**
+   * X-distance from dragPrevPoint to dragPoint in GCS
+   */
+  dxStepGCS: number = 0;
+
+  /**
+   * Y-distance from dragPrevPoint to dragPoint in GCS
+   */
+  dyStepGCS: number = 0;
 
   constructor(manipulator: Manipulator) {
     this.manipulator = manipulator;
+    this.reset();
+  }
+
+  reset() {
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
+    this.dragStartPointGCS = [-1, -1];
     this.dragStartPointCCS = [-1, -1];
     this.dragPrevPoint = [-1, -1];
+    this.dragPrevPointGCS = [-1, -1];
     this.dragPrevPointCCS = [-1, -1];
     this.dragPoint = [-1, -1];
+    this.dragPointGCS = [-1, -1];
     this.dragPointCCS = [-1, -1];
     this.dx = 0;
     this.dy = 0;
-    this.dx0 = 0;
-    this.dy0 = 0;
+    this.dxStep = 0;
+    this.dyStep = 0;
+    this.dxGCS = 0;
+    this.dyGCS = 0;
+    this.dxStepGCS = 0;
+    this.dyStepGCS = 0;
   }
 
   /**
@@ -1019,25 +1151,27 @@ class Controller {
    */
   pointerDown(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
     const canvas = editor.canvas;
+    let handled = false;
     if (e.button === Mouse.BUTTON1 && this.mouseIn(editor, shape, e)) {
+      this.reset();
       this.dragging = true;
       this.dragStartPoint = utils.ccs2lcs(canvas, shape, [e.x, e.y]);
       this.dragPrevPoint = geometry.copy(this.dragStartPoint);
       this.dragPoint = geometry.copy(this.dragStartPoint);
+      this.dragStartPointGCS = utils.ccs2gcs(canvas, [e.x, e.y]);
+      this.dragPrevPointGCS = geometry.copy(this.dragStartPointGCS);
+      this.dragPointGCS = geometry.copy(this.dragStartPointGCS);
       this.dragStartPointCCS = [e.x, e.y];
-      this.dragPrevPointCCS = [e.x, e.y];
-      this.dragPointCCS = [e.x, e.y];
-      this.dx = 0;
-      this.dy = 0;
-      this.dx0 = 0;
-      this.dy0 = 0;
+      this.dragPrevPointCCS = geometry.copy(this.dragStartPointCCS);
+      this.dragPointCCS = geometry.copy(this.dragStartPointCCS);
+      handled = true;
       this.initialize(editor, shape);
       this.update(editor, shape);
+      editor.repaint();
       this.drawDragging(editor, shape, e);
       editor.triggerDragStart(this, this.dragStartPoint);
-      return true;
     }
-    return false;
+    return handled;
   }
 
   /**
@@ -1050,16 +1184,23 @@ class Controller {
     if (this.dragging) {
       this.dragPrevPoint = geometry.copy(this.dragPoint);
       this.dragPoint = utils.ccs2lcs(canvas, shape, [e.x, e.y]);
+      this.dragPrevPointGCS = geometry.copy(this.dragPointGCS);
+      this.dragPointGCS = utils.ccs2gcs(canvas, [e.x, e.y]);
       this.dragPrevPointCCS = geometry.copy(this.dragPointCCS);
       this.dragPointCCS = [e.x, e.y];
       this.dx = this.dragPoint[0] - this.dragStartPoint[0];
       this.dy = this.dragPoint[1] - this.dragStartPoint[1];
-      this.dx0 = this.dragPoint[0] - this.dragPrevPoint[0];
-      this.dy0 = this.dragPoint[1] - this.dragPrevPoint[1];
+      this.dxStep = this.dragPoint[0] - this.dragPrevPoint[0];
+      this.dyStep = this.dragPoint[1] - this.dragPrevPoint[1];
+      this.dxGCS = this.dragPointGCS[0] - this.dragStartPointGCS[0];
+      this.dyGCS = this.dragPointGCS[1] - this.dragStartPointGCS[1];
+      this.dxStepGCS = this.dragPointGCS[0] - this.dragPrevPointGCS[0];
+      this.dyStepGCS = this.dragPointGCS[1] - this.dragPrevPointGCS[1];
+      handled = true;
       this.update(editor, shape);
+      editor.repaint();
       this.drawDragging(editor, shape, e);
       editor.triggerDrag(this, this.dragPoint);
-      return true;
     }
     return handled;
   }
@@ -1071,17 +1212,10 @@ class Controller {
   pointerUp(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
     let handled = false;
     if (e.button === Mouse.BUTTON1 && this.dragging) {
-      this.dragging = false;
-      this.dragPrevPoint = [-1, -1];
-      this.dragStartPoint = [-1, -1];
-      this.dragStartPointCCS = [-1, -1];
-      this.dragPrevPointCCS = [-1, -1];
-      this.dx = 0;
-      this.dy = 0;
-      this.dx0 = 0;
-      this.dy0 = 0;
+      this.reset();
       handled = true;
       this.finalize(editor, shape);
+      editor.repaint();
       editor.triggerDragEnd(this, this.dragPoint);
     }
     return handled;
@@ -1093,12 +1227,7 @@ class Controller {
    */
   keyDown(editor: Editor, shape: Shape, e: KeyboardEvent): boolean {
     if (this.dragging && e.key === "Escape") {
-      this.dragging = false;
-      this.dragStartPoint = [-1, -1];
-      this.dx = 0;
-      this.dy = 0;
-      this.dx0 = 0;
-      this.dy0 = 0;
+      this.reset();
       editor.transform.cancelTransaction();
       editor.repaint();
       return true;
@@ -1159,6 +1288,10 @@ class Manipulator {
     shape: Shape,
     e: CanvasPointerEvent
   ): [string, number] | null {
+    // dragging controller has higher priority
+    for (let c of this.controllers) {
+      if (c.dragging) return c.mouseCursor(editor, shape, e);
+    }
     for (let c of this.controllers) {
       if (c.active(editor, shape) && c.mouseIn(editor, shape, e))
         return c.mouseCursor(editor, shape, e);
@@ -1173,7 +1306,7 @@ class Manipulator {
   pointerDown(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
     let handled = false;
     for (let cp of this.controllers) {
-      if (cp.active(editor, shape)) {
+      if (cp.active(editor, shape) && cp.mouseIn(editor, shape, e)) {
         handled = cp.pointerDown(editor, shape, e);
         if (handled) {
           this.draggingController = cp;
@@ -1193,14 +1326,8 @@ class Manipulator {
       this.drawHovering(editor, shape, e);
     }
     let handled = false;
-    for (let cp of this.controllers) {
-      if (cp.active(editor, shape)) {
-        handled = cp.pointerMove(editor, shape, e);
-        if (handled) {
-          this.draggingController = cp;
-          break;
-        }
-      }
+    if (this.draggingController) {
+      handled = this.draggingController.pointerMove(editor, shape, e);
     }
     return handled;
   }
@@ -1211,11 +1338,8 @@ class Manipulator {
    */
   pointerUp(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
     let handled = false;
-    for (let cp of this.controllers) {
-      if (cp.active(editor, shape)) {
-        handled = cp.pointerUp(editor, shape, e);
-        if (handled) break;
-      }
+    if (this.draggingController) {
+      handled = this.draggingController.pointerUp(editor, shape, e);
     }
     this.draggingController = null;
     return handled;
@@ -1290,4 +1414,11 @@ class Manipulator {
 
 const manipulatorManager = ManipulatorManager.getInstance();
 
-export { Editor, Handler, Manipulator, Controller, manipulatorManager };
+export {
+  Editor,
+  type HandlerOptions,
+  Handler,
+  Manipulator,
+  Controller,
+  manipulatorManager,
+};

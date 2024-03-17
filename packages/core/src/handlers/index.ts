@@ -6,7 +6,6 @@ import { ImageFactoryHandler } from "./image-handler";
 import { LineFactoryHandler } from "./line-handler";
 import { RectangleFactoryHandler } from "./rectangle-handler";
 import { SelectHandler } from "./select-handler";
-import { SelectHandlerConnectorExtraBehavior } from "./select-handler-extra";
 import { TextFactoryHandler } from "./text-handler";
 import { FrameFactoryHandler } from "./frame-handler";
 import { EmbedFactoryHandler } from "./embed-handler";
@@ -14,7 +13,6 @@ import { EmbedFactoryHandler } from "./embed-handler";
 export {
   HandHandler,
   SelectHandler,
-  SelectHandlerConnectorExtraBehavior,
   RectangleFactoryHandler,
   EllipseFactoryHandler,
   TextFactoryHandler,

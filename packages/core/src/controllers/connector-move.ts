@@ -12,7 +12,7 @@
  */
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
-import { Shape, Line, Movable, Document, Connector } from "../shapes";
+import { Shape, Line, Movable, Connector, Page } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import { Snap } from "../manipulators/snap";
 import * as geometry from "../graphics/geometry";
@@ -45,6 +45,7 @@ export class ConnectorMoveController extends Controller {
     return (
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
+      shape.movable !== Movable.NONE &&
       shape instanceof Connector
     );
   }
@@ -76,7 +77,7 @@ export class ConnectorMoveController extends Controller {
       targetShape = targetShape.findParent(
         (s) => (s as Shape).movable !== Movable.PARENT
       ) as Shape;
-    if (!targetShape || targetShape instanceof Document) return;
+    if (!targetShape || targetShape instanceof Page) return;
     if (
       targetShape.movable === Movable.VERT ||
       targetShape.movable === Movable.NONE
@@ -93,7 +94,7 @@ export class ConnectorMoveController extends Controller {
 
     // apply movable property
     const canvas = editor.canvas;
-    const doc = editor.doc as Document;
+    const page = editor.currentPage!;
 
     // transform shape
     if (this.dx !== 0 || this.dy !== 0) {
@@ -101,7 +102,7 @@ export class ConnectorMoveController extends Controller {
       tr.setPath(shape, newPath);
       tr.atomicAssignRef(shape, "head", null);
       tr.atomicAssignRef(shape, "tail", null);
-      tr.resolveAllConstraints(doc, canvas);
+      tr.resolveAllConstraints(page, canvas);
     }
   }
 

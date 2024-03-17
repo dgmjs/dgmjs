@@ -1,4 +1,4 @@
-import { Document, type Shape } from "../shapes";
+import { Page, type Shape } from "../shapes";
 import * as geometry from "../graphics/geometry";
 import { Canvas, CanvasPointerEvent } from "../graphics/graphics";
 import { colors } from "../colors";
@@ -7,43 +7,36 @@ import { colors } from "../colors";
  * Render the shape on the canvas element
  */
 export function renderOnCanvas(
-  shape: Shape,
-  theme: string,
+  shapes: Shape[],
   canvasElement: HTMLCanvasElement,
-  maxWidth: number = 220,
-  maxHeight: number = 220,
-  margin: number = 8
+  darkMode: boolean = false,
+  width: number = 200,
+  height: number = 150,
+  scaleAdjust: number = 1
 ) {
-  // get bounding box
-  // const box =
-  //   shape instanceof Document
-  //     ? shape.getDocBoundingBox(window.app.editor.canvas)
-  //     : geometry.boundingRect(
-  //         shape
-  //           .traverseSequence()
-  //           .map((s) => s.getBoundingRect())
-  //           .flat()
-  //       );
+  // get bounding box of given shapes and all their children
   const box = geometry.boundingRect(
-    shape
-      .traverseSequence()
+    shapes
+      .map((s) => s.traverseSequence() as Shape[])
+      .flat()
       .map((s) => (s as Shape).getBoundingRect())
       .flat()
   );
+  const bw = geometry.width(box);
+  const bh = geometry.height(box);
 
   // get scaled size
-  const size = geometry.fitScaledownTo(
-    [geometry.width(box), geometry.height(box)],
-    [maxWidth, maxHeight]
-  );
+  const size = geometry.fitScaledownTo([bw, bh], [width, height]);
   let w = size[0];
   let h = size[1];
-  let scale = size[2];
+  let scale = size[2] * scaleAdjust;
 
   // set canvas size
   const px = window.devicePixelRatio ?? 1;
-  const cw = w + margin * 2;
-  const ch = h + margin * 2;
+  const cw = w;
+  const ch = h;
+  const ox = -box[0][0] + (w / scale - bw) / 2;
+  const oy = -box[0][1] + (h / scale - bh) / 2;
   canvasElement.setAttribute("width", (cw * px).toString());
   canvasElement.setAttribute("height", (ch * px).toString());
   canvasElement.style.width = `${cw}px`;
@@ -51,12 +44,15 @@ export function renderOnCanvas(
 
   // draw shape on canvas
   const canvas = new Canvas(canvasElement, px);
-  canvas.colorVariables = colors[theme];
-  canvas.origin = [-box[0][0] + margin / scale, -box[0][1] + margin / scale];
+  canvas.colorVariables = colors[darkMode ? "dark" : "light"];
+  canvas.origin = [ox, oy];
   canvas.scale = scale;
   canvas.save();
-  if (!(shape instanceof Document)) canvas.globalTransform();
-  shape.render(canvas);
+  if (shapes.every((s) => !(s instanceof Page))) canvas.globalTransform();
+  shapes.forEach((shape) => {
+    shape.render(canvas);
+  });
+
   canvas.restore();
 }
 

@@ -65,14 +65,37 @@ export const DGMPlainTextInplaceEditor: React.FC<
   };
 
   const open = (textShape: Box) => {
-    if (textShape) {
+    if (editor.currentPage && textShape) {
       // disable shape's text rendering
       textShape._renderText = false;
       editor.repaint();
 
+      // start transaction
+      editor.transform.startTransaction("text-edit");
+      editor.transform.resolveAllConstraints(editor.currentPage, editor.canvas);
+
       // update states
       const textValue =
         typeof textShape.text === "string" ? textShape.text : "";
+      update(textShape, textValue);
+
+      setTimeout(() => {
+        if (textareaRef.current) {
+          textareaRef.current.focus();
+          textareaRef.current.select();
+          textareaRef.current.scrollTop = 0;
+        }
+      }, 0);
+    }
+  };
+
+  const update = (textShape: Box, textValue: string) => {
+    if (editor.currentPage) {
+      // mutate text shape
+      editor.transform.atomicAssign(textShape, "text", textValue);
+      editor.transform.resolveAllConstraints(editor.currentPage, editor.canvas);
+
+      // update states
       const rect = getTextRect(textShape, textValue);
       setState((state) => ({
         textShape,
@@ -92,22 +115,17 @@ export const DGMPlainTextInplaceEditor: React.FC<
         textWidth: rect.width,
         textHeight: rect.height,
       }));
-      setTimeout(() => {
-        if (textareaRef.current) {
-          textareaRef.current.focus();
-          textareaRef.current.select();
-          textareaRef.current.scrollTop = 0;
-        }
-      }, 0);
     }
   };
 
-  const applyChanges = () => {
+  const close = () => {
     if (state.textShape) {
-      if (state.textValue.trim().length === 0) {
+      editor.transform.endTransaction();
+      if (
+        state.textShape instanceof Text &&
+        state.textValue.trim().length === 0
+      ) {
         editor.actions.delete_([state.textShape]);
-      } else {
-        editor.actions.update({ text: state.textValue }, [state.textShape]);
       }
       state.textShape._renderText = true;
       editor.repaint();
@@ -116,20 +134,14 @@ export const DGMPlainTextInplaceEditor: React.FC<
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === "Escape") applyChanges();
+    if (event.key === "Escape") {
+      close();
+    }
   };
 
   const handleInput = (event: React.FormEvent<HTMLTextAreaElement>) => {
     const textValue = (event.target as HTMLTextAreaElement).value;
-    const size = getTextRect(state.textShape as Box, textValue);
-    setState((state) => ({
-      ...state,
-      textValue,
-      width: Math.max(state.textShape?.width || 0, size.width),
-      height: Math.max(state.textShape?.height || 0, size.height),
-      textWidth: size.width,
-      textHeight: size.height,
-    }));
+    update(state.textShape as Box, textValue);
   };
 
   useEffect(() => {
@@ -164,7 +176,7 @@ export const DGMPlainTextInplaceEditor: React.FC<
               position: "fixed",
               inset: 0,
             }}
-            onPointerDown={applyChanges}
+            onPointerDown={close}
           />
           <div
             style={{

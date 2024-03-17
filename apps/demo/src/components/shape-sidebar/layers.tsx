@@ -12,7 +12,7 @@
  */
 
 import React from "react";
-import { Document, Shape } from "@dgmjs/core";
+import { Page, Shape } from "@dgmjs/core";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TreeNode, Tree } from "@/components/common/tree";
 import {
@@ -24,6 +24,7 @@ import {
   ScanIcon,
   ShapesIcon,
   SquareIcon,
+  StickyNoteIcon,
   TypeIcon,
 } from "lucide-react";
 import { LineIcon } from "@/components/icons";
@@ -59,6 +60,7 @@ const ShapeTreeNode: React.FC<ShapeTreeNodeProps> = ({
         <div className="flex flex-row items-center h-8">
           <div className="h-4 w-4 mr-2">
             {shape.type === "Document" && <ShapesIcon size={16} />}
+            {shape.type === "Page" && <StickyNoteIcon size={16} />}
             {shape.type === "Rectangle" && <SquareIcon size={16} />}
             {shape.type === "Ellipse" && <CircleIcon size={16} />}
             {shape.type === "Text" && <TypeIcon size={16} />}
@@ -114,17 +116,17 @@ const ShapeTree: React.FC<ShapeTreeProps> = ({
 };
 
 export interface LayerProps {
-  doc: Document | null;
+  page: Page | null;
   onSelect?: (selection: Shape[]) => void;
 }
 
-export const Layers: React.FC<LayerProps> = ({ doc, onSelect }) => {
+export const Layers: React.FC<LayerProps> = ({ page, onSelect }) => {
   const selections = useDemoStore((state) => state.selection);
 
   return (
     <ScrollArea className="h-full w-full">
       <ShapeTree
-        shapes={doc ? [doc] : []}
+        shapes={page ? [page] : []}
         selections={selections}
         onSelect={(shape) => {
           if (onSelect) onSelect([shape]);

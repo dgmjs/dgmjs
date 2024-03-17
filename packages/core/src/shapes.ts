@@ -14,7 +14,7 @@
 import { assert } from "./std/assert";
 import { Canvas } from "./graphics/graphics";
 import {
-  CONNECTION_POINT_APOTHEM,
+  CONTROL_POINT_APOTHEM,
   Color,
   DEFAULT_FONT_SIZE,
   LINE_SELECTION_THRESHOLD,
@@ -32,6 +32,7 @@ import {
 import { Transform } from "./transform/transform";
 import { evalScript } from "./mal/mal";
 import { Obj } from "./core/obj";
+import { Instantiator } from "./core/instantiator";
 
 interface Constraint {
   id: string;
@@ -51,7 +52,7 @@ interface Script {
 }
 
 type ConstraintFn = (
-  diagram: Document,
+  page: Page,
   shape: Shape,
   canvas: Canvas,
   transform: Transform,
@@ -61,7 +62,6 @@ type ConstraintFn = (
 const ScriptType = Object.freeze({
   RENDER: "render",
   OUTLINE: "outline",
-  CONNECTION_POINTS: "connection-points",
 });
 
 const Movable = Object.freeze({
@@ -81,14 +81,10 @@ const Sizable = Object.freeze({
 });
 
 const FillStyle = Object.freeze({
+  NONE: "none",
   SOLID: "solid",
   HACHURE: "hachure",
   CROSS_HATCH: "cross-hatch",
-});
-
-const RouteType = Object.freeze({
-  OBLIQUE: "oblique",
-  RECTILINEAR: "rectilinear",
 });
 
 const LineType = Object.freeze({
@@ -116,6 +112,8 @@ const LineEndType = Object.freeze({
   CROWFOOT_ZERO_MANY: "crowfoot-zero-many",
   CROSS: "cross",
   DOT: "dot",
+  BAR: "bar",
+  SQUARE: "square",
 });
 
 const AlignmentKind = Object.freeze({
@@ -451,28 +449,6 @@ class Shape extends Obj {
   }
 
   /**
-   * Return default connection points
-   */
-  getConnectionPointsDefault(): number[][] {
-    return [];
-  }
-
-  /**
-   * Return connection points.
-   */
-  getConnectionPoints(): number[][] {
-    const script = this.getScript(ScriptType.CONNECTION_POINTS);
-    if (script) {
-      try {
-        return evalScript({ shape: this }, script);
-      } catch (err) {
-        console.log("[Script Error]", err);
-      }
-    }
-    return this.getConnectionPointsDefault();
-  }
-
-  /**
    * Return a bounding rect.
    */
   getBoundingRect(): number[][] {
@@ -541,13 +517,33 @@ class Shape extends Obj {
     const outline = this.getOutline().map((p) =>
       this.localCoordTransform(canvas, p, true)
     );
-    return geometry.inPolygon(point, outline);
+    if (this.fillStyle === FillStyle.NONE) {
+      return (
+        geometry.getNearSegment(
+          point,
+          outline,
+          LINE_SELECTION_THRESHOLD * canvas.px
+        ) > -1
+      );
+    } else {
+      return geometry.inPolygon(point, outline);
+    }
   }
 
   /**
    * Determines whether this shape overlaps a given rect
    */
-  overlapRect(rect: number[][]): boolean {
+  overlapRect(canvas: Canvas, rect: number[][]): boolean {
+    if (this.fillStyle === FillStyle.NONE) {
+      const outline = this.getOutline().map((p) =>
+        this.localCoordTransform(canvas, p, true)
+      );
+      for (let i = 0; i < outline.length - 1; i++) {
+        if (geometry.lineOverlapRect([outline[i], outline[i + 1]], rect))
+          return true;
+      }
+      return false;
+    }
     return geometry.overlapRect(rect, this.getBoundingRect());
   }
 
@@ -682,16 +678,13 @@ class Shape extends Obj {
 /**
  * Document
  */
-class Document extends Shape {
+class Document extends Obj {
   version: number;
 
   constructor() {
     super();
     this.type = "Document";
     this.version = 1;
-
-    // document cannot be controllable
-    this.enable = false;
   }
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
@@ -703,6 +696,17 @@ class Document extends Shape {
   fromJSON(json: any) {
     super.fromJSON(json);
     this.version = json.version ?? this.version;
+  }
+}
+
+/**
+ * Page
+ */
+class Page extends Shape {
+  constructor() {
+    super();
+    this.type = "Page";
+    this.enable = false; // page cannot be controllable
   }
 
   /**
@@ -719,7 +723,7 @@ class Document extends Shape {
   }
 
   /**
-   * Returns a bounding box containing all shapes in the diagram
+   * Returns a bounding box containing all shapes in the doc
    */
   getBoundingRect(): number[][] {
     return this.children.length > 0
@@ -736,7 +740,7 @@ class Document extends Shape {
   /**
    * Return actual document bounding box in GCS
    */
-  getDocBoundingBox(canvas: Canvas): number[][] {
+  getPageBoundingBox(canvas: Canvas): number[][] {
     return this.children.length > 0
       ? this.traverseSequence()
           .filter((s) => s !== this)
@@ -764,7 +768,7 @@ class Document extends Shape {
   /**
    * Document do not overlap with anything
    */
-  overlapRect(rect: number[][]): boolean {
+  overlapRect(canvas: Canvas, rect: number[][]): boolean {
     return false;
   }
 }
@@ -967,12 +971,23 @@ class Box extends Shape {
   }
 
   renderDefault(canvas: Canvas): void {
-    canvas.roundRect(
+    if (this.fillStyle !== FillStyle.NONE) {
+      canvas.fillRoundRect(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.corners,
+        this.getSeed()
+      );
+    }
+    canvas.strokeRoundRect(
       this.left,
       this.top,
       this.right,
       this.bottom,
-      this.corners
+      this.corners,
+      this.getSeed()
     );
     this.renderText(canvas);
   }
@@ -1102,22 +1117,6 @@ class Box extends Shape {
   }
 
   /**
-   * Return a set of connection points
-   */
-  getConnectionPointsDefault(): number[][] {
-    return [
-      [this.left, this.top],
-      [Math.round((this.left + this.right) / 2), this.top],
-      [this.right, this.top],
-      [this.right, Math.round((this.top + this.bottom) / 2)],
-      [this.right, this.bottom],
-      [Math.round((this.left + this.right) / 2), this.bottom],
-      [this.left, this.bottom],
-      [this.left, Math.round((this.top + this.bottom) / 2)],
-    ];
-  }
-
-  /**
    * Return the anchor vector based on this.anchorPosition. The anchor vector
    * provides the start point and end point to derive the base angle. The shape
    * will be rotated as the angle of (base angle + anchor angle) at start point.
@@ -1138,11 +1137,11 @@ class Box extends Shape {
     let endPoint = [0, 0];
     if (target instanceof Line) {
       const outline = target.getOutline();
-      const anchorPoint = geometry.positionOnPath(outline, this.anchorPosition);
+      const anchorPoint = geometry.getPointOnPath(outline, this.anchorPosition);
       const segment = geometry.getNearSegment(
         anchorPoint,
         outline,
-        CONNECTION_POINT_APOTHEM * 2
+        CONTROL_POINT_APOTHEM * 2
       );
       startPoint = anchorPoint;
       endPoint = outline[segment + 1];
@@ -1214,22 +1213,22 @@ class Line extends Shape {
       path[0] = tp;
       path[path.length - 1] = hp;
     }
-    if (this.isClosed()) {
+    if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
       switch (this.lineType) {
         case LineType.STRAIGHT:
-          canvas.polygon(path);
+          canvas.polygon(path, this.getSeed());
           break;
         case LineType.CURVE:
-          canvas.curve(path);
+          canvas.curve(path, this.getSeed());
           break;
       }
     } else {
       switch (this.lineType) {
         case LineType.STRAIGHT:
-          canvas.polyline(path);
+          canvas.polyline(path, this.getSeed());
           break;
         case LineType.CURVE:
-          canvas.strokeCurve(path);
+          canvas.strokeCurve(path, this.getSeed());
           break;
       }
     }
@@ -1239,14 +1238,14 @@ class Line extends Shape {
    * Draw line end types.
    * All line-ends are drawn based on the point grid as below:
    *
-   *         0 1 2 3 4 5 6
-   * 0       • • • • • • •
-   * 1       • • • • • • •
-   * 2       • • • • • • •
-   * 3  HEAD •-•-•-•-•-•-•------------------ TAIL
-   * 4       • • • • • • •
-   * 5       • • • • • • •
-   * 6       • • • • • • •
+   *         0 1 2 3 4 5 6 7 8 9 10
+   * 0       • • • • • • • • • • •
+   * 1       • • • • • • • • • • •
+   * 2       • • • • • • • • • • •
+   * 3  HEAD •-•-•-•-•-•-•-•-•-•-•---------- TAIL
+   * 4       • • • • • • • • • • •
+   * 5       • • • • • • • • • • •
+   * 6       • • • • • • • • • • •
    *
    * @returns an end point the path should be drawn to
    */
@@ -1296,32 +1295,48 @@ class Line extends Shape {
     canvas.fillStyle = FillStyle.SOLID;
     switch (edgeEndType) {
       case LineEndType.ARROW:
-        canvas.polyline([grid[3][1], grid[0][3], grid[3][5]]);
+        canvas.polyline([grid[3][1], grid[0][3], grid[3][5]], this.getSeed());
         return grid[0][3];
       case LineEndType.SOLID_ARROW:
-        canvas.polygon([grid[3][1], grid[0][3], grid[3][5]]);
+        canvas.polygon(
+          [grid[3][3], grid[3][1], grid[0][3], grid[3][5], grid[3][3]],
+          this.getSeed()
+        );
         return grid[0][3];
       case LineEndType.TRIANGLE:
-        canvas.strokePolygon([grid[7][0], grid[0][3], grid[7][6]]);
+        canvas.strokePolygon(
+          [grid[7][3], grid[7][0], grid[0][3], grid[7][6], grid[7][3]],
+          this.getSeed()
+        );
         return grid[7][3];
       case LineEndType.TRIANGLE_FILLED:
-        canvas.polygon([grid[7][0], grid[0][3], grid[7][6]]);
+        canvas.polygon(
+          [grid[7][3], grid[7][0], grid[0][3], grid[7][6], grid[7][3]],
+          this.getSeed()
+        );
         return grid[7][3];
       case LineEndType.DIAMOND:
-        canvas.strokePolygon([grid[0][3], grid[3][1], grid[6][3], grid[3][5]]);
+        canvas.strokePolygon(
+          [grid[0][3], grid[3][1], grid[6][3], grid[3][5]],
+          this.getSeed()
+        );
         return grid[6][3];
       case LineEndType.DIAMOND_FILLED:
-        canvas.polygon([grid[0][3], grid[3][1], grid[6][3], grid[3][5]]);
+        canvas.polygon(
+          [grid[0][3], grid[3][1], grid[6][3], grid[3][5]],
+          this.getSeed()
+        );
         return grid[6][3];
       case LineEndType.PLUS:
-        canvas.polyline([grid[2][1], grid[2][5]]);
+        canvas.polyline([grid[2][1], grid[2][5]], this.getSeed());
         return grid[0][3];
       case LineEndType.CIRCLE:
         canvas.strokeEllipse(
           grid[2][3][0] - gap * 2,
           grid[2][3][1] - gap * 2,
           grid[2][3][0] + gap * 2,
-          grid[2][3][1] + gap * 2
+          grid[2][3][1] + gap * 2,
+          this.getSeed()
         );
         return grid[4][3];
       case LineEndType.CIRCLE_PLUS:
@@ -1329,7 +1344,8 @@ class Line extends Shape {
           grid[2][3][0] - gap * 2,
           grid[2][3][1] - gap * 2,
           grid[2][3][0] + gap * 2,
-          grid[2][3][1] + gap * 2
+          grid[2][3][1] + gap * 2,
+          this.getSeed()
         );
         canvas.polyline([grid[2][1], grid[2][5]]);
         return grid[0][3];
@@ -1338,55 +1354,71 @@ class Line extends Shape {
           grid[2][3][0] - gap * 2,
           grid[2][3][1] - gap * 2,
           grid[2][3][0] + gap * 2,
-          grid[2][3][1] + gap * 2
+          grid[2][3][1] + gap * 2,
+          this.getSeed()
         );
         return grid[4][3];
       case LineEndType.CROWFOOT_ONE:
-        canvas.polyline([grid[2][1], grid[2][5]]);
+        canvas.polyline([grid[2][1], grid[2][5]], this.getSeed());
         return grid[0][3];
       case LineEndType.CROWFOOT_ONLY_ONE:
-        canvas.polyline([grid[4][1], grid[4][5]]);
-        canvas.polyline([grid[2][1], grid[2][5]]);
+        canvas.polyline([grid[4][1], grid[4][5]], this.getSeed());
+        canvas.polyline([grid[2][1], grid[2][5]], this.getSeed());
         return grid[0][3];
       case LineEndType.CROWFOOT_MANY:
-        canvas.polyline([grid[0][1], grid[4][3], grid[0][5]]);
+        canvas.polyline([grid[0][1], grid[4][3], grid[0][5]], this.getSeed());
         return grid[0][3];
       case LineEndType.CROWFOOT_ONE_MANY:
-        canvas.polyline([grid[4][1], grid[4][5]]);
-        canvas.polyline([grid[0][1], grid[4][3], grid[0][5]]);
+        canvas.polyline([grid[4][1], grid[4][5]], this.getSeed());
+        canvas.polyline([grid[0][1], grid[4][3], grid[0][5]], this.getSeed());
         return grid[0][3];
       case LineEndType.CROWFOOT_ZERO_ONE:
-        canvas.polyline([grid[2][1], grid[2][5]]);
-        canvas.polyline([grid[0][3], grid[4][3]]);
+        canvas.polyline([grid[2][1], grid[2][5]], this.getSeed());
+        canvas.polyline([grid[0][3], grid[4][3]], this.getSeed());
         canvas.strokeEllipse(
           grid[6][3][0] - gap * 2,
           grid[6][3][1] - gap * 2,
           grid[6][3][0] + gap * 2,
-          grid[6][3][1] + gap * 2
+          grid[6][3][1] + gap * 2,
+          this.getSeed()
         );
         return grid[8][3];
       case LineEndType.CROWFOOT_ZERO_MANY:
-        canvas.polyline([grid[0][1], grid[4][3], grid[0][5]]);
-        canvas.polyline([grid[0][3], grid[4][3]]);
+        canvas.polyline([grid[0][1], grid[4][3], grid[0][5]], this.getSeed());
+        canvas.polyline([grid[0][3], grid[4][3]], this.getSeed());
         canvas.strokeEllipse(
           grid[6][3][0] - gap * 2,
           grid[6][3][1] - gap * 2,
           grid[6][3][0] + gap * 2,
-          grid[6][3][1] + gap * 2
+          grid[6][3][1] + gap * 2,
+          this.getSeed()
         );
         return grid[8][3];
       case LineEndType.CROSS:
-        canvas.polyline([grid[1][2], grid[3][4]]);
-        canvas.polyline([grid[3][2], grid[1][4]]);
+        canvas.polyline([grid[1][2], grid[3][4]], this.getSeed());
+        canvas.polyline([grid[3][2], grid[1][4]], this.getSeed());
         return grid[0][3];
       case LineEndType.DOT:
         canvas.ellipse(
           grid[1][3][0] - gap,
           grid[1][3][1] - gap,
           grid[1][3][0] + gap,
-          grid[1][3][1] + gap
+          grid[1][3][1] + gap,
+          this.getSeed()
         );
         return grid[0][3];
+      case LineEndType.BAR:
+        canvas.polyline([grid[0][1], grid[0][5]], this.getSeed());
+        return grid[0][3];
+      case LineEndType.SQUARE:
+        canvas.strokeRect(
+          grid[2][3][0] - gap * 2,
+          grid[2][3][1] - gap * 2,
+          grid[2][3][0] + gap * 2,
+          grid[2][3][1] + gap * 2,
+          this.getSeed()
+        );
+        return grid[4][3];
       default:
         return grid[0][3];
     }
@@ -1407,7 +1439,7 @@ class Line extends Shape {
    * Determines whether this shape contains a point in GCS
    */
   containsPoint(canvas: Canvas, point: number[]): boolean {
-    if (this.isClosed()) {
+    if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
       const outline = this.getOutline().map((p) =>
         this.localCoordTransform(canvas, p, true)
       );
@@ -1427,6 +1459,17 @@ class Line extends Shape {
   }
 
   /**
+   * Determines whether this shape overlaps a given rect
+   */
+  overlapRect(canvas: Canvas, rect: number[][]): boolean {
+    for (let i = 0; i < this.path.length - 1; i++) {
+      if (geometry.lineOverlapRect([this.path[i], this.path[i + 1]], rect))
+        return true;
+    }
+    return false;
+  }
+
+  /**
    * Return default outline
    */
   getOutlineDefault(): number[][] {
@@ -1437,24 +1480,6 @@ class Line extends Shape {
           : geometry.pathCopy(this.path);
     }
     return geometry.pathCopy(this.path);
-  }
-
-  /**
-   * Return a bounding box.
-   */
-  getBoundingRect(): number[][] {
-    return geometry.boundingRect(this.path);
-  }
-
-  /**
-   * Determines whether this shape overlaps a given rect
-   */
-  overlapRect(rect: number[][]): boolean {
-    for (let i = 0; i < this.path.length - 1; i++) {
-      if (geometry.lineOverlapRect([this.path[i], this.path[i + 1]], rect))
-        return true;
-    }
-    return false;
   }
 }
 
@@ -1478,7 +1503,22 @@ class Ellipse extends Box {
   }
 
   renderDefault(canvas: Canvas): void {
-    canvas.ellipse(this.left, this.top, this.right, this.bottom);
+    if (this.fillStyle !== FillStyle.NONE) {
+      canvas.fillEllipse(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.getSeed()
+      );
+    }
+    canvas.strokeEllipse(
+      this.left,
+      this.top,
+      this.right,
+      this.bottom,
+      this.getSeed()
+    );
     this.renderText(canvas);
   }
 
@@ -1493,18 +1533,6 @@ class Ellipse extends Box {
       Math.max(Math.round((this.width + this.height) / 5), 30) // num of points
     );
     return points;
-  }
-
-  /**
-   * Return a set of connection points
-   */
-  getConnectionPointsDefault(): number[][] {
-    return [
-      [(this.left + this.right) / 2, this.top],
-      [this.right, (this.top + this.bottom) / 2],
-      [(this.left + this.right) / 2, this.bottom],
-      [this.left, (this.top + this.bottom) / 2],
-    ];
   }
 }
 
@@ -1568,7 +1596,10 @@ class Image extends Box {
     if (this._image && this._image.complete) {
       canvas.save();
       canvas.fillColor = Color.TRANSPARENT;
+      canvas.fillStyle = FillStyle.SOLID;
       canvas.strokeColor = Color.TRANSPARENT;
+      canvas.strokeWidth = 1;
+      canvas.strokePattern = [];
       canvas.alpha = 1;
       canvas.roughness = 0;
       canvas.fillRoundRect(
@@ -1576,7 +1607,8 @@ class Image extends Box {
         this.top,
         this.right,
         this.bottom,
-        this.corners
+        this.corners,
+        this.getSeed()
       );
       canvas.context.clip();
       canvas.drawImage(
@@ -1620,37 +1652,44 @@ class Connector extends Line {
   tail: Shape | null;
 
   /**
-   * The index of connection point at head end
+   * Head's anchor position
    */
-  headCP: number;
+  headAnchor: number[];
 
   /**
-   * The index of connection point at tail end
+   * Tail's anchor position
    */
-  tailCP: number;
+  tailAnchor: number[];
 
   /**
-   * Path routing type
+   * Marginal space to head
    */
-  routeType: string;
+  headMargin: number;
+
+  /**
+   * Marginal space to tail
+   */
+  tailMargin: number;
 
   constructor() {
     super();
     this.type = "Connector";
     this.head = null;
     this.tail = null;
-    this.headCP = -1;
-    this.tailCP = -1;
-    this.routeType = RouteType.OBLIQUE;
+    this.headAnchor = [0.5, 0.5];
+    this.tailAnchor = [0.5, 0.5];
+    this.headMargin = 0;
+    this.tailMargin = 0;
   }
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
     json.head = this.head ? this.head.id : null;
     json.tail = this.tail ? this.tail.id : null;
-    json.headCP = this.headCP;
-    json.tailCP = this.tailCP;
-    json.routeType = this.routeType;
+    json.headAnchor = structuredClone(this.headAnchor);
+    json.tailAnchor = structuredClone(this.tailAnchor);
+    json.headMargin = this.headMargin;
+    json.tailMargin = this.tailMargin;
     if (keepRefs) {
       json.head = this.head;
       json.tail = this.tail;
@@ -1662,9 +1701,10 @@ class Connector extends Line {
     super.fromJSON(json);
     this.head = json.head ?? this.head;
     this.tail = json.tail ?? this.tail;
-    this.headCP = json.headCP ?? this.headCP;
-    this.tailCP = json.tailCP ?? this.tailCP;
-    this.routeType = json.routeType ?? this.routeType;
+    this.headAnchor = json.headAnchor ?? this.headAnchor;
+    this.tailAnchor = json.tailAnchor ?? this.tailAnchor;
+    this.headMargin = json.headMargin ?? this.headMargin;
+    this.tailMargin = json.tailMargin ?? this.tailMargin;
   }
 
   resolveRefs(idMap: Record<string, Shape>) {
@@ -1678,23 +1718,39 @@ class Connector extends Line {
   }
 
   /**
-   * Returns head connection point
+   * Return head anchor point
    */
-  getHeadConnectionPoint(): number[] | null {
-    if (this.headCP >= 0 && this.head) {
-      return this.head.getConnectionPoints()[this.headCP];
+  getHeadAnchorPoint(): number[] {
+    if (this.head instanceof Line && !this.head.isClosed()) {
+      return geometry.getPointOnPath(this.head.path, this.headAnchor[0]);
+    } else if (this.head) {
+      const box = this.head?.getBoundingRect();
+      const w = geometry.width(box);
+      const h = geometry.height(box);
+      return [
+        box[0][0] + w * this.headAnchor[0],
+        box[0][1] + h * this.headAnchor[1],
+      ];
     }
-    return null;
+    return this.path[this.path.length - 1];
   }
 
   /**
-   * Returns tail connection point
+   * Return tail anchor point
    */
-  getTailConnectionPoint(): number[] | null {
-    if (this.tailCP >= 0 && this.tail) {
-      return this.tail.getConnectionPoints()[this.tailCP];
+  getTailAnchorPoint(): number[] {
+    if (this.tail instanceof Line && !this.tail.isClosed()) {
+      return geometry.getPointOnPath(this.tail.path, this.tailAnchor[0]);
+    } else if (this.tail) {
+      const box = this.tail.getBoundingRect();
+      const w = geometry.width(box);
+      const h = geometry.height(box);
+      return [
+        box[0][0] + w * this.tailAnchor[0],
+        box[0][1] + h * this.tailAnchor[1],
+      ];
     }
-    return null;
+    return this.path[0];
   }
 
   /**
@@ -1756,7 +1812,8 @@ class Frame extends Box {
         this.top,
         this.right,
         this.bottom,
-        this.corners
+        this.corners,
+        this.getSeed()
       );
       canvas.context.clip();
       canvas.restoreState();
@@ -1889,6 +1946,22 @@ class ConstraintManager {
 
 const constraintManager = ConstraintManager.getInstance();
 
+const shapeInstantiator = new Instantiator({
+  Shape: () => new Shape(),
+  Document: () => new Document(),
+  Page: () => new Page(),
+  Box: () => new Box(),
+  Line: () => new Line(),
+  Rectangle: () => new Rectangle(),
+  Ellipse: () => new Ellipse(),
+  Text: () => new Text(),
+  Image: () => new Image(),
+  Connector: () => new Connector(),
+  Group: () => new Group(),
+  Frame: () => new Frame(),
+  Embed: () => new Embed(),
+});
+
 interface ShapeValues {
   name?: string;
   description?: string;
@@ -1926,9 +1999,10 @@ interface ShapeValues {
   roughness?: number;
   lineType?: string;
   pathEditable?: boolean;
-  routeType?: string;
   headEndType?: string;
   tailEndType?: string;
+  headMargin?: number;
+  tailMargin?: number;
   padding?: number[];
   corners?: number[];
   richText?: boolean;
@@ -1950,12 +2024,12 @@ export {
   Movable,
   Sizable,
   FillStyle,
-  RouteType,
   LineType,
   LineEndType,
   AlignmentKind,
   Shape,
   Document,
+  Page,
   Box,
   Line,
   Rectangle,
@@ -1967,5 +2041,6 @@ export {
   Frame,
   Embed,
   constraintManager,
+  shapeInstantiator,
   type ShapeValues,
 };

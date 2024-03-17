@@ -12,7 +12,7 @@
  */
 
 import * as geometry from "../graphics/geometry";
-import { Shape, Box, Document } from "../shapes";
+import { Shape, Box, Movable } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import { lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
@@ -42,6 +42,7 @@ export class BoxMoveAnchoredController extends Controller {
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
       shape instanceof Box &&
+      shape.movable !== Movable.NONE &&
       shape.anchored
     );
   }
@@ -68,20 +69,20 @@ export class BoxMoveAnchoredController extends Controller {
    */
   update(editor: Editor, shape: Shape) {
     const canvas = editor.canvas;
-    const anchorPoint = geometry.positionOnPath(
+    const anchorPoint = geometry.getPointOnPath(
       (shape.parent as Shape).getOutline() ?? [],
       (shape as Box).anchorPosition
     );
     const shapeCenter = shape.getCenter();
-    shapeCenter[0] += this.dx0;
-    shapeCenter[1] += this.dy0;
+    shapeCenter[0] += this.dxStep;
+    shapeCenter[1] += this.dyStep;
     const angle = geometry.angle(anchorPoint, shapeCenter);
     const length = geometry.distance(shapeCenter, anchorPoint);
     // transform shape
     const tr = editor.transform;
-    const diagram = editor.doc as Document;
+    const page = editor.currentPage!;
     tr.moveAnchor(shape as Box, angle, length);
-    tr.resolveAllConstraints(diagram, canvas);
+    tr.resolveAllConstraints(page, canvas);
   }
 
   /**
@@ -99,7 +100,7 @@ export class BoxMoveAnchoredController extends Controller {
     const enclosure = shape.getEnclosure();
     const center = geometry.mid(enclosure[0], enclosure[2]);
     const centerCCS = lcs2ccs(canvas, shape, center);
-    const anchorPoint = geometry.positionOnPath(
+    const anchorPoint = geometry.getPointOnPath(
       (shape.parent as Shape).getOutline() ?? [],
       shape.anchorPosition
     );
@@ -122,7 +123,7 @@ export class BoxMoveAnchoredController extends Controller {
     const ghost = shape.getEnclosure();
     const center = geometry.mid(ghost[0], ghost[2]);
     const centerCCS = lcs2ccs(canvas, shape, center);
-    const anchorPoint = geometry.positionOnPath(
+    const anchorPoint = geometry.getPointOnPath(
       (shape.parent as Shape).getOutline() ?? [],
       (shape as Box).anchorPosition
     );
