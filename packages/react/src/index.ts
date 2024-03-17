@@ -3,5 +3,5 @@ export { DGMPlainTextInplaceEditor } from "./DGMPlainTextInplaceEditor";
 export { DGMRichTextInplaceEditor } from "./DGMRichTextInplaceEditor";
 export { DGMEditorWithInplaceEditors } from "./DGMEditorWithInplaceEditors";
 export { DGMShapeView, type DGMShapeViewHandle } from "./DGMShapeView";
-export { DGMDocumentView } from "./DGMDocumentView";
+export { DGMPageView, type DGMPageViewHandle } from "./DGMPageView";
 export { Editor as TiptapEditor } from "@tiptap/react";

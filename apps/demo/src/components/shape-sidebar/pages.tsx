@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { Document, Page } from "@dgmjs/core";
-import { DGMShapeView, DGMShapeViewHandle } from "@dgmjs/react";
+import { DGMPageView, DGMShapeViewHandle } from "@dgmjs/react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
@@ -14,11 +14,13 @@ import {
 import { useDemoStore } from "@/demo-store";
 
 interface PageViewProps extends React.HTMLAttributes<HTMLDivElement> {
+  doc: Document;
   page: Page;
   idx: number;
 }
 
 const PageView: React.FC<PageViewProps> = ({
+  doc,
   page,
   idx,
   className,
@@ -37,11 +39,12 @@ const PageView: React.FC<PageViewProps> = ({
       {...others}
     >
       <div>
-        <DGMShapeView
+        <DGMPageView
           ref={shapeViewRef}
-          shapes={[page as Page]}
-          scaleAdjust={0.8}
           className="w-full border rounded"
+          doc={doc}
+          page={page}
+          scaleAdjust={doc.size ? 1 : 0.8}
           darkMode={theme === "dark"}
         />
       </div>
@@ -122,6 +125,7 @@ export const Pages: React.FC<PagesProps> = ({
     <ScrollArea className="h-full w-full">
       {doc?.children.map((page, idx) => (
         <PageView
+          doc={doc}
           key={page.id}
           page={page as Page}
           idx={idx}

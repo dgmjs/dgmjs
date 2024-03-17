@@ -686,7 +686,7 @@ class Document extends Obj {
     super();
     this.type = "Document";
     this.version = 1;
-    this.size = null; // null = infinite, [960, 720] = 4:3, [960, 540] = 16:9
+    this.size = [960, 720]; // null = infinite, [960, 720] = 4:3, [960, 540] = 16:9
   }
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
