@@ -12,7 +12,14 @@
  */
 
 import { Canvas, CanvasPointerEvent } from "./graphics/graphics";
-import { Connector, Document, Shape, Page, shapeInstantiator } from "./shapes";
+import {
+  Connector,
+  Document,
+  Shape,
+  Page,
+  shapeInstantiator,
+  FillStyle,
+} from "./shapes";
 import { Cursor, Color, Mouse, CONTROL_POINT_APOTHEM } from "./graphics/const";
 import { assert } from "./std/assert";
 import * as geometry from "./graphics/geometry";
@@ -86,7 +93,6 @@ class Editor {
   parent: HTMLElement;
   canvasElement: HTMLCanvasElement;
   canvas: Canvas;
-  backgroundColor: string;
   darkMode: boolean;
   gridSize: number[];
   showGrid: boolean;
@@ -154,7 +160,6 @@ class Editor {
     // initialize properties
     this.canvasElement = null as any;
     this.canvas = null as any;
-    this.backgroundColor = Color.CANVAS;
     this.darkMode = false;
     this.gridSize = [8, 8];
     this.showGrid = false;
@@ -443,14 +448,6 @@ class Editor {
   }
 
   /**
-   * Set background color
-   */
-  setBackgroundColor(color: string) {
-    this.backgroundColor = color;
-    this.repaint();
-  }
-
-  /**
    * Set dark mode
    */
   setDarkMode(dark: boolean) {
@@ -721,7 +718,10 @@ class Editor {
    */
   clearBackground(canvas: Canvas) {
     const g = canvas.context;
-    g.fillStyle = this.canvas.resolveColor(this.backgroundColor);
+    const docSize = (this.store.doc as Document).size;
+    g.fillStyle = this.canvas.resolveColor(
+      docSize ? Color.CANVAS : Color.BACKGROUND
+    );
     g.fillRect(0, 0, this.canvasElement.width, this.canvasElement.height);
   }
 
@@ -729,11 +729,25 @@ class Editor {
    * Draw the grid
    */
   drawGrid(canvas: Canvas) {
+    const scale = this.getScale();
+    const docSize = (this.store.doc as Document).size;
+
+    canvas.save();
+    canvas.globalTransform();
+
+    // draw document background
+    if (docSize) {
+      canvas.roughness = 0;
+      canvas.fillStyle = FillStyle.SOLID;
+      canvas.fillColor = this.canvas.resolveColor(Color.BACKGROUND);
+      canvas.fillRect(0, 0, docSize[0], docSize[1]);
+    }
+
+    // draw grid
     if (this.showGrid) {
       const sz = this.getSize();
       const p1 = canvas.globalCoordTransformRev([0, 0]);
       const p2 = canvas.globalCoordTransformRev(sz);
-      const scale = this.getScale();
       let w = this.gridSize[0] * 2;
       let h = this.gridSize[1] * 2;
       let thick = Math.max(Math.round(1 / scale), 1);
@@ -749,8 +763,6 @@ class Editor {
       }
       const wc = Math.floor((p2[0] - p1[0]) / w);
       const wh = Math.floor((p2[1] - p1[1]) / h);
-      canvas.save();
-      canvas.globalTransform();
       canvas.strokeColor = this.canvas.resolveColor(Color.GRID);
       canvas.strokeWidth = thick;
       canvas.strokePattern = [];
@@ -764,8 +776,16 @@ class Editor {
         const y = p1[1] + i * h - (p1[1] % h);
         canvas.line(p1[0], y, p2[0], y);
       }
-      canvas.restore();
     }
+
+    // draw document border
+    if (docSize) {
+      canvas.strokeColor = this.canvas.resolveColor(Color.BORDER);
+      canvas.strokeWidth = 1 / scale;
+      canvas.strokeRect(0, 0, docSize[0], docSize[1]);
+    }
+
+    canvas.restore();
   }
 
   /**
@@ -781,13 +801,11 @@ class Editor {
    * Repaint diagram
    */
   repaint(drawSelection: boolean = true) {
+    this.clearBackground(this.canvas);
     if (this.currentPage) {
-      this.clearBackground(this.canvas);
       this.drawGrid(this.canvas);
       this.currentPage.render(this.canvas);
       if (drawSelection) this.drawSelection();
-    } else {
-      this.clearBackground(this.canvas);
     }
   }
 

@@ -11,6 +11,7 @@ import {
   RefreshCcwIcon,
   XIcon,
 } from "lucide-react";
+import { useDemoStore } from "@/demo-store";
 
 interface PageViewProps extends React.HTMLAttributes<HTMLDivElement> {
   page: Page;
@@ -23,13 +24,14 @@ const PageView: React.FC<PageViewProps> = ({
   className,
   ...others
 }) => {
+  const { theme } = useDemoStore();
   const shapeViewRef = useRef<DGMShapeViewHandle>(null);
 
   return (
     <div
       key={page.id}
       className={cn(
-        "text-sm px-4 py-2 cursor-pointer hover:bg-slate-50 transition-colors",
+        "text-sm px-4 py-2 cursor-pointer hover:bg-muted transition-colors",
         className
       )}
       {...others}
@@ -40,6 +42,7 @@ const PageView: React.FC<PageViewProps> = ({
           shapes={[page as Page]}
           scaleAdjust={0.8}
           className="w-full border rounded"
+          darkMode={theme === "dark"}
         />
       </div>
       <div className="flex flex-col items-center">
@@ -122,7 +125,7 @@ export const Pages: React.FC<PagesProps> = ({
           key={page.id}
           page={page as Page}
           idx={idx}
-          className={cn(page.id === currentPage?.id && "bg-slate-100")}
+          className={cn(page.id === currentPage?.id && "bg-muted")}
           onClick={() => {
             if (onPageSelect) onPageSelect(page as Page);
           }}
