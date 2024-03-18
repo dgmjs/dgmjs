@@ -91,7 +91,9 @@ function App() {
       <EditorWrapper
         className="absolute inset-y-0 left-56 right-56"
         theme={demoStore.theme}
-        options={basicSetup()}
+        options={basicSetup({
+          keymapEventTarget: window,
+        })}
         showGrid={true}
         onMount={handleMount}
         onSelectionChange={handleSelectionChange}

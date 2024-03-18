@@ -323,14 +323,18 @@ export class KeymapManager {
 
   bind(keymap: KeyMap) {
     this.add(keymap);
-    this.editor.canvasElement.addEventListener(
+    const eventTarget =
+      this.editor.options.keymapEventTarget || this.editor.canvasElement;
+    eventTarget.addEventListener(
       "keydown",
       (event) => {
         // Disable Keymap in Input/TextArea/CodeMirror/ProseMirror or Modal Dialog
         if (this.inEditMode() || this.inModalDialog()) {
           // Allow default browser's actions
         } else {
-          let handled = this.handleKey(this.translateKeyboardEvent(event));
+          let handled = this.handleKey(
+            this.translateKeyboardEvent(event as KeyboardEvent)
+          );
           if (handled) {
             event.stopPropagation();
             event.preventDefault();

@@ -74,6 +74,7 @@ export function basicSetup(
       "mod-left": (editor) => editor.scroll(-editor.gridSize[0], 0),
       "mod-right": (editor) => editor.scroll(editor.gridSize[0], 0),
     },
+    keymapEventTarget: null,
     allowAutoScroll: true,
     allowCreateTextOnCanvas: true,
     allowCreateTextOnConnector: true,

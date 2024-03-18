@@ -41,6 +41,7 @@ export interface EditorOptions {
   handlers: Handler[];
   defaultHandlerId: string | null;
   keymap: KeyMap;
+  keymapEventTarget: EventTarget | null;
   allowAutoScroll: boolean;
   allowCreateTextOnCanvas: boolean;
   allowCreateTextOnConnector: boolean;
@@ -117,6 +118,7 @@ class Editor {
       handlers: [],
       defaultHandlerId: "",
       keymap: {},
+      keymapEventTarget: null,
       allowAutoScroll: true,
       allowCreateTextOnCanvas: true,
       allowCreateTextOnConnector: true,
