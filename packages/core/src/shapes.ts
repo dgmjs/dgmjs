@@ -1964,58 +1964,21 @@ const shapeInstantiator = new Instantiator({
   Embed: () => new Embed(),
 });
 
-interface ShapeValues {
-  name?: string;
-  description?: string;
-  proto?: boolean;
-  enable?: boolean;
-  visible?: boolean;
-  movable?: string;
-  sizable?: string;
-  rotatable?: boolean;
-  containable?: boolean;
-  containableFilter?: string;
-  connectable?: boolean;
-  anchored?: boolean;
-  constraints?: Constraint[];
-  properties?: Property[];
-  scripts?: Script[];
-  manipulator?: string;
-  tags?: string[];
-  left?: number;
-  top?: number;
-  width?: number;
-  height?: number;
-  rotate?: number;
-  fillColor?: string;
-  fillStyle?: string;
-  strokeColor?: string;
-  strokeWidth?: number;
-  strokePattern?: number[];
-  fontColor?: string;
-  fontFamily?: string;
-  fontSize?: number;
-  fontStyle?: string;
-  fontWeight?: number;
-  opacity?: number;
-  roughness?: number;
-  lineType?: string;
-  pathEditable?: boolean;
-  headEndType?: string;
-  tailEndType?: string;
-  headMargin?: number;
-  tailMargin?: number;
-  padding?: number[];
-  corners?: number[];
-  richText?: boolean;
-  textEditable?: boolean;
-  text?: any;
-  wordWrap?: boolean;
-  horzAlign?: string;
-  vertAlign?: string;
-  lineHeight?: number;
-  paragraphSpacing?: number;
-}
+type ShapeValues = Partial<
+  Shape &
+    Document &
+    Page &
+    Box &
+    Line &
+    Rectangle &
+    Ellipse &
+    Text &
+    Image &
+    Connector &
+    Group &
+    Frame &
+    Embed
+>;
 
 export {
   type Constraint,
