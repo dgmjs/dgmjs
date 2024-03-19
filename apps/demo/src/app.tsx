@@ -4,7 +4,7 @@ import {
   FillStyle,
   Page,
   Shape,
-  ShapeValues,
+  ObjProps,
   Transaction,
   basicSetup,
 } from "@dgmjs/core";
@@ -76,7 +76,7 @@ function App() {
     window.editor.selection.select(selection);
   };
 
-  const handleValuesChange = (values: ShapeValues) => {
+  const handleValuesChange = (values: ObjProps) => {
     const shapes = window.editor.selection.getShapes();
     window.editor.actions.update(values);
     demoStore.setSelection([...shapes]);

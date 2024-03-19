@@ -12,8 +12,9 @@
  */
 
 import type { Editor } from "./editor";
-import { Box, Group, type Shape, Line, type ShapeValues, Page } from "./shapes";
+import { Box, Group, type Shape, Line, type ObjProps, Page } from "./shapes";
 import * as geometry from "./graphics/geometry";
+import { Obj } from "./core/obj";
 
 /**
  * Editor actions
@@ -106,37 +107,37 @@ export class Actions {
   }
 
   /**
-   * Update shape properties
+   * Update obj properties
    */
-  update(values: ShapeValues, shapes?: Shape[]) {
+  update(values: ObjProps, objs?: Obj[]) {
     const page = this.editor.currentPage;
     if (page) {
-      shapes = shapes ?? this.editor.selection.getShapes();
+      objs = objs ?? this.editor.selection.getShapes();
       const tr = this.editor.transform;
       tr.startTransaction("update");
       for (let key in values) {
         if (key === "richText") {
-          shapes.forEach((s) => {
+          objs.forEach((s) => {
             if (s instanceof Box) tr.setRichText(s, (values as any)[key]);
           });
         } else if (key === "horzAlign") {
-          shapes.forEach((s) => {
+          objs.forEach((s) => {
             if (s instanceof Box) tr.setHorzAlign(s, (values as any)[key]);
           });
         } else if (key === "fontSize") {
-          shapes.forEach((s) => {
+          objs.forEach((s) => {
             if (s instanceof Box) tr.setFontSize(s, (values as any)[key]);
           });
         } else if (key === "fontFamily") {
-          shapes.forEach((s) => {
+          objs.forEach((s) => {
             if (s instanceof Box) tr.setFontFamily(s, (values as any)[key]);
           });
         } else if (key === "fontColor") {
-          shapes.forEach((s) => {
+          objs.forEach((s) => {
             if (s instanceof Box) tr.setFontColor(s, (values as any)[key]);
           });
         } else {
-          shapes.forEach((s) => {
+          objs.forEach((s) => {
             tr.atomicAssign(s, key, (values as any)[key]);
           });
         }
@@ -147,9 +148,9 @@ export class Actions {
   }
 
   /**
-   * Delete selected shapes
+   * Remove selected shapes
    */
-  delete_(shapes?: Shape[]) {
+  remove(shapes?: Shape[]) {
     const page = this.editor.currentPage;
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();

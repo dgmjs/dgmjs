@@ -125,7 +125,7 @@ export const DGMPlainTextInplaceEditor: React.FC<
         state.textShape instanceof Text &&
         state.textValue.trim().length === 0
       ) {
-        editor.actions.delete_([state.textShape]);
+        editor.actions.remove([state.textShape]);
       }
       state.textShape._renderText = true;
       editor.repaint();

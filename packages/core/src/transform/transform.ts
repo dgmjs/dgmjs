@@ -499,18 +499,17 @@ export class Transform {
   }
 
   /**
-   * Mutation to set shape's path (including left, top, width, height)
+   * Mutation to set line's path (including left, top, width, height)
    */
-  setPath(shape: Shape, path: number[][]): boolean {
+  setPath(line: Line, path: number[][]): boolean {
     let changed = false;
     const rect = geometry.boundingRect(path);
-    changed = this.atomicAssignPath(shape, "path", path) || changed;
-    changed = this.atomicAssign(shape, "left", rect[0][0]) || changed;
-    changed = this.atomicAssign(shape, "top", rect[0][1]) || changed;
+    changed = this.atomicAssignPath(line, "path", path) || changed;
+    changed = this.atomicAssign(line, "left", rect[0][0]) || changed;
+    changed = this.atomicAssign(line, "top", rect[0][1]) || changed;
+    changed = this.atomicAssign(line, "width", geometry.width(rect)) || changed;
     changed =
-      this.atomicAssign(shape, "width", geometry.width(rect)) || changed;
-    changed =
-      this.atomicAssign(shape, "height", geometry.height(rect)) || changed;
+      this.atomicAssign(line, "height", geometry.height(rect)) || changed;
     return changed;
   }
 
@@ -549,68 +548,68 @@ export class Transform {
   }
 
   /**
-   * A set of mutations to move an anchored node
+   * A set of mutations to move an anchored box
    */
-  moveAnchor(node: Box, angle: number, length: number): boolean {
+  moveAnchor(box: Box, angle: number, length: number): boolean {
     let changed = false;
-    changed = this.atomicAssign(node, "anchorAngle", angle) || changed;
-    changed = this.atomicAssign(node, "anchorLength", length) || changed;
+    changed = this.atomicAssign(box, "anchorAngle", angle) || changed;
+    changed = this.atomicAssign(box, "anchorLength", length) || changed;
     return changed;
   }
 
   /**
    * A set of mutations to change rich text or not
    */
-  setRichText(node: Box, richText: boolean): boolean {
+  setRichText(box: Box, richText: boolean): boolean {
     let changed = false;
     if (richText) {
       let doc = structuredClone(
-        richText && typeof node.text === "string"
-          ? convertTextToDoc(node.text)
-          : node.text
+        richText && typeof box.text === "string"
+          ? convertTextToDoc(box.text)
+          : box.text
       );
-      changed = this.atomicAssign(node, "text", doc) || changed;
+      changed = this.atomicAssign(box, "text", doc) || changed;
     } else {
       let str =
-        !richText && typeof node.text !== "string"
-          ? convertDocToText(node.text)
-          : node.text;
-      changed = this.atomicAssign(node, "text", str) || changed;
+        !richText && typeof box.text !== "string"
+          ? convertDocToText(box.text)
+          : box.text;
+      changed = this.atomicAssign(box, "text", str) || changed;
     }
-    changed = this.atomicAssign(node, "richText", richText) || changed;
+    changed = this.atomicAssign(box, "richText", richText) || changed;
     return changed;
   }
 
   /**
    * A set of mutations to change horz align
    */
-  setHorzAlign(node: Box, horzAlign: string): boolean {
+  setHorzAlign(box: Box, horzAlign: string): boolean {
     let changed = false;
     let doc = structuredClone(
-      node.richText && typeof node.text === "string"
-        ? convertTextToDoc(node.text)
-        : node.text
+      box.richText && typeof box.text === "string"
+        ? convertTextToDoc(box.text)
+        : box.text
     );
-    node.visitNodes(doc, (docNode) => {
+    box.visitNodes(doc, (docNode) => {
       if (docNode.attrs && docNode.attrs.textAlign)
         docNode.attrs.textAlign = horzAlign;
     });
-    changed = this.atomicAssign(node, "text", doc) || changed;
-    changed = this.atomicAssign(node, "horzAlign", horzAlign) || changed;
+    changed = this.atomicAssign(box, "text", doc) || changed;
+    changed = this.atomicAssign(box, "horzAlign", horzAlign) || changed;
     return changed;
   }
 
   /**
    * A set of mutations to change font size
    */
-  setFontSize(node: Box, fontSize: number): boolean {
+  setFontSize(box: Box, fontSize: number): boolean {
     let changed = false;
     let doc = structuredClone(
-      node.richText && typeof node.text === "string"
-        ? convertTextToDoc(node.text)
-        : node.text
+      box.richText && typeof box.text === "string"
+        ? convertTextToDoc(box.text)
+        : box.text
     );
-    node.visitNodes(doc, (docNode) => {
+    box.visitNodes(doc, (docNode) => {
       if (Array.isArray(docNode.marks)) {
         console.log(docNode);
         docNode.marks.forEach((mark: any) => {
@@ -620,22 +619,22 @@ export class Transform {
         });
       }
     });
-    changed = this.atomicAssign(node, "fontSize", fontSize) || changed;
-    changed = this.atomicAssign(node, "text", doc) || changed;
+    changed = this.atomicAssign(box, "fontSize", fontSize) || changed;
+    changed = this.atomicAssign(box, "text", doc) || changed;
     return changed;
   }
 
   /**
    * A set of mutation to change font family
    */
-  setFontFamily(node: Box, fontFamily: string): boolean {
+  setFontFamily(box: Box, fontFamily: string): boolean {
     let changed = false;
     let doc = structuredClone(
-      node.richText && typeof node.text === "string"
-        ? convertTextToDoc(node.text)
-        : node.text
+      box.richText && typeof box.text === "string"
+        ? convertTextToDoc(box.text)
+        : box.text
     );
-    node.visitNodes(doc, (docNode) => {
+    box.visitNodes(doc, (docNode) => {
       if (Array.isArray(docNode.marks)) {
         console.log(docNode);
         docNode.marks.forEach((mark: any) => {
@@ -645,22 +644,22 @@ export class Transform {
         });
       }
     });
-    changed = this.atomicAssign(node, "fontFamily", fontFamily) || changed;
-    changed = this.atomicAssign(node, "text", doc) || changed;
+    changed = this.atomicAssign(box, "fontFamily", fontFamily) || changed;
+    changed = this.atomicAssign(box, "text", doc) || changed;
     return changed;
   }
 
   /**
    * A set of mutation to change font color
    */
-  setFontColor(node: Box, fontColor: string): boolean {
+  setFontColor(box: Box, fontColor: string): boolean {
     let changed = false;
     let doc = structuredClone(
-      node.richText && typeof node.text === "string"
-        ? convertTextToDoc(node.text)
-        : node.text
+      box.richText && typeof box.text === "string"
+        ? convertTextToDoc(box.text)
+        : box.text
     );
-    node.visitNodes(doc, (docNode) => {
+    box.visitNodes(doc, (docNode) => {
       if (Array.isArray(docNode.marks)) {
         console.log(docNode);
         docNode.marks.forEach((mark: any) => {
@@ -670,8 +669,8 @@ export class Transform {
         });
       }
     });
-    changed = this.atomicAssign(node, "fontColor", fontColor) || changed;
-    changed = this.atomicAssign(node, "text", doc) || changed;
+    changed = this.atomicAssign(box, "fontColor", fontColor) || changed;
+    changed = this.atomicAssign(box, "text", doc) || changed;
     return changed;
   }
 

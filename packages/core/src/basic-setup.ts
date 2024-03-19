@@ -51,7 +51,7 @@ export function basicSetup(
       "mod-c": (editor) => editor.actions.copy(),
       "mod-d": (editor) => editor.actions.duplicate(),
       "mod-v": (editor) => editor.actions.paste(),
-      delete: (editor) => editor.actions.delete_(),
+      delete: (editor) => editor.actions.remove(),
       "mod-a": (editor) => editor.selection.selectAll(),
       "mod-[": (editor) => editor.actions.bringForward(),
       "mod-]": (editor) => editor.actions.sendBackward(),

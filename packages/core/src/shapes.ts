@@ -761,14 +761,14 @@ class Page extends Shape {
   }
 
   /**
-   * Document do not contain a point
+   * Page do not contain a point
    */
   containsPoint(canvas: Canvas, point: number[]): boolean {
     return false;
   }
 
   /**
-   * Document do not overlap with anything
+   * Page do not overlap with anything
    */
   overlapRect(canvas: Canvas, rect: number[][]): boolean {
     return false;
@@ -1964,7 +1964,7 @@ const shapeInstantiator = new Instantiator({
   Embed: () => new Embed(),
 });
 
-type ShapeValues = Partial<
+type ObjProps = Partial<
   Shape &
     Document &
     Page &
@@ -2007,5 +2007,5 @@ export {
   Embed,
   constraintManager,
   shapeInstantiator,
-  type ShapeValues,
+  type ObjProps,
 };
