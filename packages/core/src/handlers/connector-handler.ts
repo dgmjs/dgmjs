@@ -13,7 +13,7 @@
 
 import { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Connector, Shape } from "../shapes";
+import { Connector, Line, Shape } from "../shapes";
 import { Editor, Handler, manipulatorManager } from "../editor";
 import { Cursor, Mouse } from "../graphics/const";
 import { findConnectionAnchor } from "../controllers/utils";
@@ -79,7 +79,7 @@ export class ConnectorFactoryHandler extends Handler {
       this.headAnchor = anchor;
       const newPath = geometry.pathCopy((this.shape as Connector).path);
       newPath[1] = this.dragPoint;
-      editor.transform.setPath(this.shape as Shape, newPath);
+      editor.transform.setPath(this.shape as Line, newPath);
       editor.transform.atomicAssignRef(
         this.shape as Shape,
         "head",
