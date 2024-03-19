@@ -5,6 +5,7 @@ export * as geometry from "./graphics/geometry";
 export * as constants from "./graphics/const";
 export * as utils from "./graphics/utils";
 export { CanvasPointerEvent } from "./graphics/graphics";
+export { Obj } from "./core/obj";
 export { Store } from "./core/store";
 export { Transaction } from "./transform/mutations";
 export * from "./colors";
