@@ -43,12 +43,15 @@ export class Actions {
   /**
    * Add a page
    */
-  addPage(): Page {
+  addPage(position: number): Page {
     const page = new Page();
     page.name = `Page ${this.editor.store.doc!.children.length + 1}`;
     const tr = this.editor.transform;
     tr.startTransaction("add-page");
     tr.addPage(page);
+    if (position >= 0 && position < this.editor.getPages().length) {
+      tr.reorderPage(page, position);
+    }
     tr.resolveAllConstraints(page, this.editor.canvas);
     tr.endTransaction();
     return page;
