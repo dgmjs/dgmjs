@@ -443,6 +443,16 @@ class Editor {
   }
 
   /**
+   * Get pages
+   */
+  getPages(): Page[] {
+    if (this.store.doc) {
+      return this.store.doc.children as Page[];
+    }
+    return [];
+  }
+
+  /**
    * Set focus on this editor
    */
   focus() {
