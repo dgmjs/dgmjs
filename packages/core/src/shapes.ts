@@ -692,12 +692,14 @@ class Document extends Obj {
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
     json.version = this.version;
+    json.size = structuredClone(this.size);
     return json;
   }
 
   fromJSON(json: any) {
     super.fromJSON(json);
     this.version = json.version ?? this.version;
+    this.size = json.size ?? this.size;
   }
 }
 
