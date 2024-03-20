@@ -23,6 +23,7 @@ export interface DGMEditorProps
   onCurrentPageChange?: (page: Page) => void;
   onActiveHandlerChange?: (handlerId: string) => void;
   onShapeCreate?: (shape: Shape) => void;
+  onShapeInitialize?: (shape: Shape) => void;
   onTransaction?: (tx: Transaction) => void;
   onDblClick?: (event: DblClickEvent) => void;
   onZoom?: (scale: number) => void;
@@ -41,6 +42,7 @@ export const DGMEditor: React.FC<DGMEditorProps> = ({
   onCurrentPageChange,
   onActiveHandlerChange,
   onShapeCreate,
+  onShapeInitialize,
   onTransaction,
   onDblClick,
   onZoom,
@@ -73,6 +75,9 @@ export const DGMEditor: React.FC<DGMEditorProps> = ({
       });
       editor.factory.onCreate.on((shape: Shape) => {
         if (onShapeCreate) onShapeCreate(shape);
+      });
+      editor.factory.onShapeInitialize.on((shape: Shape) => {
+        if (onShapeInitialize) onShapeInitialize(shape);
       });
       editor.transform.onTransaction.on((tx: Transaction) => {
         if (onTransaction) onTransaction(tx);

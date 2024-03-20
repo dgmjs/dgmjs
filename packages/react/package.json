@@ -1,6 +1,6 @@
 {
   "name": "@dgmjs/react",
-  "version": "0.12.12",
+  "version": "0.12.13",
   "description": "React components wrapping @dgmjs/core",
   "type": "module",
   "main": "./dist/index.js",
