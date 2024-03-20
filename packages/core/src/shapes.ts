@@ -682,26 +682,26 @@ class Shape extends Obj {
  */
 class Document extends Obj {
   version: number;
-  size: PageSize;
+  pageSize: PageSize;
 
   constructor() {
     super();
     this.type = "Document";
     this.version = 1;
-    this.size = null; // null = infinite, [960, 720] = 4:3, [960, 540] = 16:9
+    this.pageSize = null; // null = infinite, [960, 720] = 4:3, [960, 540] = 16:9
   }
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
     json.version = this.version;
-    json.size = structuredClone(this.size);
+    json.pageSize = structuredClone(this.pageSize);
     return json;
   }
 
   fromJSON(json: any) {
     super.fromJSON(json);
     this.version = json.version ?? this.version;
-    this.size = json.size ?? this.size;
+    this.pageSize = json.pageSize ?? this.pageSize;
   }
 }
 

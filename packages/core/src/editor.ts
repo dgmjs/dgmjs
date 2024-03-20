@@ -730,7 +730,7 @@ class Editor {
    */
   clearBackground(canvas: Canvas) {
     const g = canvas.context;
-    const docSize = (this.store.doc as Document).size;
+    const docSize = (this.store.doc as Document).pageSize;
     g.fillStyle = this.canvas.resolveColor(
       docSize ? Color.CANVAS : Color.BACKGROUND
     );
@@ -742,7 +742,7 @@ class Editor {
    */
   drawGrid(canvas: Canvas) {
     const scale = this.getScale();
-    const docSize = (this.store.doc as Document).size;
+    const docSize = (this.store.doc as Document).pageSize;
 
     canvas.save();
     canvas.globalTransform();

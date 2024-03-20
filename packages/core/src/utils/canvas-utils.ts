@@ -1,4 +1,4 @@
-import { Page, type Shape } from "../shapes";
+import { Page, PageSize, type Shape } from "../shapes";
 import * as geometry from "../graphics/geometry";
 import { Canvas, CanvasPointerEvent } from "../graphics/graphics";
 import { colors } from "../colors";
@@ -15,7 +15,7 @@ export function renderOnCanvas(
   shapes: Shape[],
   canvasElement: HTMLCanvasElement,
   darkMode: boolean = false,
-  docSize: number[] | null = [960, 720],
+  pageSize: PageSize = [960, 720],
   maxCanvasSize: number[] = [200, 150],
   scaleAdjust: number = 1
 ) {
@@ -27,8 +27,8 @@ export function renderOnCanvas(
       .map((s) => (s as Shape).getBoundingRect())
       .flat()
   );
-  const bw = docSize ? docSize[0] : geometry.width(box);
-  const bh = docSize ? docSize[1] : geometry.height(box);
+  const bw = pageSize ? pageSize[0] : geometry.width(box);
+  const bh = pageSize ? pageSize[1] : geometry.height(box);
 
   // get scaled size
   const size = geometry.fitScaledownTo(
@@ -43,8 +43,8 @@ export function renderOnCanvas(
   const px = window.devicePixelRatio ?? 1;
   const cw = w;
   const ch = h;
-  const ox = docSize ? 0 : -box[0][0] + (w / scale - bw) / 2;
-  const oy = docSize ? 0 : -box[0][1] + (h / scale - bh) / 2;
+  const ox = pageSize ? 0 : -box[0][0] + (w / scale - bw) / 2;
+  const oy = pageSize ? 0 : -box[0][1] + (h / scale - bh) / 2;
   canvasElement.setAttribute("width", (cw * px).toString());
   canvasElement.setAttribute("height", (ch * px).toString());
   canvasElement.style.width = `${cw}px`;

@@ -1,4 +1,4 @@
-import { Document, Page, renderOnCanvas } from "@dgmjs/core";
+import { Document, Page, PageSize, renderOnCanvas } from "@dgmjs/core";
 import {
   forwardRef,
   useEffect,
@@ -8,7 +8,7 @@ import {
 } from "react";
 
 export interface DGMPageViewProps extends React.HTMLAttributes<HTMLDivElement> {
-  doc: Document;
+  pageSize: PageSize;
   page: Page;
   darkMode?: boolean;
   scaleAdjust?: number;
@@ -21,7 +21,7 @@ export interface DGMPageViewHandle {
 export const DGMPageView = forwardRef<DGMPageViewHandle, DGMPageViewProps>(
   (
     {
-      doc,
+      pageSize,
       page,
       darkMode = false,
       scaleAdjust = 1,
@@ -33,7 +33,7 @@ export const DGMPageView = forwardRef<DGMPageViewHandle, DGMPageViewProps>(
   ) => {
     const wrapperRef = useRef<HTMLDivElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const heightRatio = doc.size ? doc.size[1] / doc.size[0] : 0.75;
+    const heightRatio = pageSize ? pageSize[1] / pageSize[0] : 0.75;
     const [size, setSize] = useState([0, 0]);
 
     const repaint = (width: number, height: number) => {
@@ -42,7 +42,7 @@ export const DGMPageView = forwardRef<DGMPageViewHandle, DGMPageViewProps>(
           [page],
           canvasRef.current,
           darkMode,
-          doc.size,
+          pageSize,
           [width, height],
           scaleAdjust
         );
@@ -67,7 +67,7 @@ export const DGMPageView = forwardRef<DGMPageViewHandle, DGMPageViewProps>(
         }
       });
       wrapperRef.current && observer.observe(wrapperRef.current);
-    }, [darkMode, doc, page]);
+    }, [darkMode, pageSize, page]);
 
     return (
       <div

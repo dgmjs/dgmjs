@@ -42,9 +42,9 @@ const PageView: React.FC<PageViewProps> = ({
         <DGMPageView
           ref={shapeViewRef}
           className="w-full border rounded"
-          doc={doc}
+          pageSize={doc.pageSize}
           page={page}
-          scaleAdjust={doc.size ? 1 : 0.8}
+          scaleAdjust={doc.pageSize ? 1 : 0.8}
           darkMode={theme === "dark"}
         />
       </div>
