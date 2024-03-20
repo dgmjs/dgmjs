@@ -4,8 +4,10 @@ import {
   Shape,
   Transaction,
   basicSetup,
-  CanvasPointerEvent,
   Page,
+  DragEvent,
+  FileDropEvent,
+  DblClickEvent,
 } from "@dgmjs/core";
 import { useEffect, useRef } from "react";
 
@@ -22,12 +24,13 @@ export interface DGMEditorProps
   onActiveHandlerChange?: (handlerId: string) => void;
   onShapeCreate?: (shape: Shape) => void;
   onTransaction?: (tx: Transaction) => void;
+  onDblClick?: (event: DblClickEvent) => void;
   onZoom?: (scale: number) => void;
   onScroll?: (origin: number[]) => void;
-  onDragStart?: (dragStartPoint: number[]) => void;
-  onDrag?: (dragPoint: number[]) => void;
-  onDragEnd?: (dragEndPoint: number[]) => void;
-  onFileDrop?: (event: CanvasPointerEvent, dataTransfer: DataTransfer) => void;
+  onDragStart?: (dragEvent: DragEvent) => void;
+  onDrag?: (dragEvent: DragEvent) => void;
+  onDragEnd?: (dragEvent: DragEvent) => void;
+  onFileDrop?: (fileDropEvent: FileDropEvent) => void;
 }
 
 export const DGMEditor: React.FC<DGMEditorProps> = ({
@@ -39,6 +42,7 @@ export const DGMEditor: React.FC<DGMEditorProps> = ({
   onActiveHandlerChange,
   onShapeCreate,
   onTransaction,
+  onDblClick,
   onZoom,
   onScroll,
   onDragStart,
@@ -73,23 +77,26 @@ export const DGMEditor: React.FC<DGMEditorProps> = ({
       editor.transform.onTransaction.on((tx: Transaction) => {
         if (onTransaction) onTransaction(tx);
       });
+      editor.onDblClick.on((event: DblClickEvent) => {
+        if (onDblClick) onDblClick(event);
+      });
       editor.onZoom.on((scale: number) => {
         if (onZoom) onZoom(scale);
       });
       editor.onScroll.on((origin: number[]) => {
         if (onScroll) onScroll(origin);
       });
-      editor.onDragStart.on(({ controller, dragPoint }) => {
-        if (onDragStart) onDragStart(dragPoint);
+      editor.onDragStart.on((dragEvent) => {
+        if (onDragStart) onDragStart(dragEvent);
       });
-      editor.onDrag.on(({ controller, dragPoint }) => {
-        if (onDrag) onDrag(dragPoint);
+      editor.onDrag.on((dragEvent) => {
+        if (onDrag) onDrag(dragEvent);
       });
-      editor.onDragEnd.on(({ controller, dragPoint }) => {
-        if (onDragEnd) onDragEnd(dragPoint);
+      editor.onDragEnd.on((dragEvent) => {
+        if (onDragEnd) onDragEnd(dragEvent);
       });
-      editor.onFileDrop.on(({ event, dataTransfer }) => {
-        if (onFileDrop) onFileDrop(event, dataTransfer);
+      editor.onFileDrop.on((fileDropEvent) => {
+        if (onFileDrop) onFileDrop(fileDropEvent);
       });
 
       // initialize

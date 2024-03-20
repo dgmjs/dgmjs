@@ -48,7 +48,7 @@ export interface EditorOptions {
   onReady: (editor: Editor) => void;
 }
 
-export interface ShapeDblClickEvent {
+export interface DblClickEvent {
   shape: Shape | null;
   point: number[];
 }
@@ -72,7 +72,7 @@ export class Editor {
 
   onCurrentPageChange: TypedEvent<Page>;
   onActiveHandlerChange: TypedEvent<string>;
-  onDblClick: TypedEvent<ShapeDblClickEvent>;
+  onDblClick: TypedEvent<DblClickEvent>;
   onZoom: TypedEvent<number>;
   onScroll: TypedEvent<number[]>;
   onDragStart: TypedEvent<DragEvent>;
