@@ -59,6 +59,8 @@ type ConstraintFn = (
   arg?: any
 ) => boolean;
 
+type PageSize = [number, number] | null;
+
 const ScriptType = Object.freeze({
   RENDER: "render",
   OUTLINE: "outline",
@@ -680,7 +682,7 @@ class Shape extends Obj {
  */
 class Document extends Obj {
   version: number;
-  size: number[] | null;
+  size: PageSize;
 
   constructor() {
     super();
@@ -1987,6 +1989,7 @@ export {
   type Property,
   type Script,
   type ConstraintFn,
+  type PageSize,
   ScriptType,
   Movable,
   Sizable,
