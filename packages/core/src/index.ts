@@ -10,7 +10,7 @@ export { Store } from "./core/store";
 export { Transaction } from "./transform/mutations";
 export * from "./colors";
 export * from "./shapes";
-export { Editor, EditorOptions } from "./editor";
+export * from "./editor";
 export * from "./handlers";
 export * from "./export";
 export { renderOnCanvas } from "./utils/canvas-utils";

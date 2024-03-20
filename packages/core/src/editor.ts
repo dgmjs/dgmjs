@@ -66,7 +66,7 @@ export interface FileDropEvent {
 /**
  * The editor
  */
-class Editor {
+export class Editor {
   options: EditorOptions;
   platform: string;
 
@@ -911,14 +911,14 @@ class ManipulatorManager {
   }
 }
 
-interface HandlerOptions {
+export interface HandlerOptions {
   lock: boolean;
 }
 
 /**
  * Handler
  */
-class Handler {
+export class Handler {
   id: string;
   options: HandlerOptions;
 
@@ -1006,7 +1006,7 @@ class Handler {
 /**
  * Controller
  */
-class Controller {
+export class Controller {
   manipulator: Manipulator;
 
   /**
@@ -1295,7 +1295,7 @@ class Controller {
 /**
  * Manipulator
  */
-class Manipulator {
+export class Manipulator {
   /**
    * Controllers of the manipulator
    */
@@ -1460,13 +1460,4 @@ class Manipulator {
   }
 }
 
-const manipulatorManager = ManipulatorManager.getInstance();
-
-export {
-  Editor,
-  type HandlerOptions,
-  Handler,
-  Manipulator,
-  Controller,
-  manipulatorManager,
-};
+export const manipulatorManager = ManipulatorManager.getInstance();
