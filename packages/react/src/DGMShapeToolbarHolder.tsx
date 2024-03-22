@@ -61,7 +61,6 @@ export const DGMShapeToolbarHolder: React.FC<DGMShapeToolbarHolderProps> = ({
 
   useEffect(() => {
     if (editor && editor.currentPage && toolbarHolderRef.current) {
-      const canvas = editor.canvas;
       const canvasWidth = editor.canvasElement?.offsetWidth || 0;
       const canvasHeight = editor.canvasElement?.offsetHeight || 0;
       let visible = selection.length > 0;
@@ -74,13 +73,14 @@ export const DGMShapeToolbarHolder: React.FC<DGMShapeToolbarHolderProps> = ({
       ) {
         visible = false;
       }
+      if (dragging) visible = false;
+      toolbarHolderRef.current.style.display = visible ? "flex" : "none";
       const onBelow = moveToAboveOrBelow(
         editor,
         toolbarHolderRef.current,
         rect,
         distance
       );
-      toolbarHolderRef.current.style.display = visible ? "flex" : "none";
       if (onMove) onMove(onBelow);
     }
   }, [editor, origin, scale, dragging, selection]);
