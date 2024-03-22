@@ -1,4 +1,4 @@
-import { Connector, Editor, Shape, geometry } from "@dgmjs/core";
+import { Editor, Shape, geometry } from "@dgmjs/core";
 import { useEffect, useRef, useState } from "react";
 import { moveToAboveOrBelow } from "./utils";
 
@@ -7,30 +7,30 @@ interface DGMShapeToolbarHolderProps
   editor?: Editor;
   toolbar?: React.ReactNode;
   distance?: number;
-  onOpen?: (open: boolean, onBelow: boolean) => void;
+  onMove?: (onBelow: boolean) => void;
 }
 
 /**
  * Get the bounding rect of the selection considering line's anchor points
  */
-function getSelectionBoundingRect(editor: Editor): number[][] {
-  const canvas = editor.canvas;
-  let rect = editor.selection.getBoundingRect(canvas);
-  editor.selection.shapes.forEach((shape) => {
-    if (shape instanceof Connector) {
-      let hp = shape.getHeadAnchorPoint();
-      let tp = shape.getTailAnchorPoint();
-      rect = geometry.unionRect(rect, geometry.normalizeRect([tp, hp]));
-    }
-  });
-  return rect;
+function getSelectionRectInDOM(editor: Editor): number[][] {
+  if (editor.selection.shapes.length > 0) {
+    const rects = editor.selection.shapes.map((s) =>
+      s.getRectInDOM(editor.canvas, true)
+    );
+    return rects.reduce((acc, r) => geometry.unionRect(acc, r), rects[0]);
+  }
+  return [
+    [0, 0],
+    [0, 0],
+  ];
 }
 
 export const DGMShapeToolbarHolder: React.FC<DGMShapeToolbarHolderProps> = ({
   editor,
   toolbar,
   distance = 46,
-  onOpen,
+  onMove,
   ...others
 }) => {
   const toolbarHolderRef = useRef<HTMLDivElement>(null);
@@ -65,10 +65,7 @@ export const DGMShapeToolbarHolder: React.FC<DGMShapeToolbarHolderProps> = ({
       const canvasWidth = editor.canvasElement?.offsetWidth || 0;
       const canvasHeight = editor.canvasElement?.offsetHeight || 0;
       let visible = selection.length > 0;
-      let rect = getSelectionBoundingRect(editor).map((p) => {
-        let tp = canvas.globalCoordTransform(p);
-        return [tp[0] / canvas.ratio, tp[1] / canvas.ratio];
-      });
+      let rect = getSelectionRectInDOM(editor);
       if (
         rect[1][0] < 0 ||
         rect[0][0] > canvasWidth ||
@@ -77,18 +74,14 @@ export const DGMShapeToolbarHolder: React.FC<DGMShapeToolbarHolderProps> = ({
       ) {
         visible = false;
       }
-      const currentDisplay = toolbarHolderRef.current.style.display;
-      const display = visible ? "flex" : "none";
       const onBelow = moveToAboveOrBelow(
         editor,
         toolbarHolderRef.current,
         rect,
-        distance / scale
+        distance
       );
-      if (currentDisplay !== display) {
-        toolbarHolderRef.current.style.display = display;
-        if (onOpen) onOpen(display === "flex", onBelow);
-      }
+      toolbarHolderRef.current.style.display = visible ? "flex" : "none";
+      if (onMove) onMove(onBelow);
     }
   }, [editor, origin, scale, dragging, selection]);
 

@@ -115,8 +115,8 @@ export const DGMRichTextInplaceEditor: React.FC<
     const textHeight = textMetric.height + state.padding[0] + state.padding[2];
     const MIN_WIDTH = 2;
     return {
-      left: rect.left,
-      top: rect.top,
+      left: rect[0][0],
+      top: rect[0][1],
       width: Math.max(textWidth, MIN_WIDTH),
       height: textHeight,
     };

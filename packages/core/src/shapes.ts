@@ -453,7 +453,7 @@ class Shape extends Obj {
   /**
    * Return a bounding rect.
    */
-  getBoundingRect(): number[][] {
+  getBoundingRect(includeAnchorPoints: boolean = false): number[][] {
     return [
       [this.left, this.top],
       [this.right, this.bottom],
@@ -476,13 +476,11 @@ class Shape extends Obj {
    * [Note] If you want to place DOM elements over the canvas, use this method
    * and don't forget to apply transform scale to the DOM element.
    */
-  getRectInDOM(canvas: Canvas): {
-    left: number;
-    top: number;
-    width: number;
-    height: number;
-  } {
-    const rect = this.getBoundingRect().map((p) => {
+  getRectInDOM(
+    canvas: Canvas,
+    includeAnchorPoints: boolean = false
+  ): number[][] {
+    const rect = this.getBoundingRect(includeAnchorPoints).map((p) => {
       let tp = canvas.globalCoordTransform(p);
       return [tp[0] / canvas.ratio, tp[1] / canvas.ratio];
     });
@@ -491,12 +489,10 @@ class Shape extends Obj {
     let height = geometry.height(rect) * (1 / scale);
     const left = rect[0][0] - (width * (1 - scale)) / 2;
     const top = rect[0][1] - (height * (1 - scale)) / 2;
-    return {
-      left,
-      top,
-      width,
-      height,
-    };
+    return [
+      [left, top],
+      [left + width, top + height],
+    ];
   }
 
   /**
@@ -1724,6 +1720,22 @@ class Connector extends Line {
   }
 
   /**
+   * Return a bounding rect.
+   */
+  getBoundingRect(includeAnchorPoints: boolean = false): number[][] {
+    const rect = [
+      [this.left, this.top],
+      [this.right, this.bottom],
+    ];
+    if (includeAnchorPoints) {
+      const hp = this.getHeadAnchorPoint();
+      const tp = this.getTailAnchorPoint();
+      return geometry.unionRect(rect, geometry.normalizeRect([hp, tp]));
+    }
+    return rect;
+  }
+
+  /**
    * Return head anchor point
    */
   getHeadAnchorPoint(): number[] {
@@ -1862,11 +1874,15 @@ class Embed extends Box {
   renderDefault(canvas: Canvas): void {
     const rect = this.getRectInDOM(canvas);
     const scale = canvas.scale;
+    const left = rect[0][0];
+    const top = rect[0][1];
+    const width = geometry.width(rect);
+    const height = geometry.height(rect);
     if (this.iframe) {
-      this.iframe.style.left = `${rect.left}px`;
-      this.iframe.style.top = `${rect.top}px`;
-      this.iframe.style.width = `${rect.width}px`;
-      this.iframe.style.height = `${rect.height}px`;
+      this.iframe.style.left = `${left}px`;
+      this.iframe.style.top = `${top}px`;
+      this.iframe.style.width = `${width}px`;
+      this.iframe.style.height = `${height}px`;
       this.iframe.style.transform = `scale(${scale})`;
     }
   }

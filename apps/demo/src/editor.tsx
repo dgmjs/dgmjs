@@ -220,9 +220,13 @@ export const EditorWrapper: React.FC<EditorWrapperProps> = ({
         />
         <DGMShapeToolbarHolder
           editor={editor!}
-          toolbar={<div className="bg-red-900">Toolbar</div>}
-          onOpen={(onBelow: boolean) => {
-            console.log("onOpen", onBelow);
+          toolbar={
+            <div className="bg-green-100 shadow-sm h-10 rounded border flex items-center">
+              Toolbar
+            </div>
+          }
+          onMove={(onBelow: boolean) => {
+            console.log("onMove", onBelow);
           }}
         />
       </DGMEditor>
