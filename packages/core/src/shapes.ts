@@ -1709,13 +1709,21 @@ class Connector extends Line {
     this.tailMargin = json.tailMargin ?? this.tailMargin;
   }
 
-  resolveRefs(idMap: Record<string, Shape>) {
+  resolveRefs(idMap: Record<string, Shape>, nullIfNotFound: boolean = false) {
     super.resolveRefs(idMap);
-    if (typeof this.tail === "string" && idMap[this.tail]) {
-      this.tail = idMap[this.tail];
+    if (typeof this.tail === "string") {
+      if (idMap[this.tail]) {
+        this.tail = idMap[this.tail];
+      } else if (nullIfNotFound) {
+        this.tail = null;
+      }
     }
-    if (typeof this.head === "string" && idMap[this.head]) {
-      this.head = idMap[this.head];
+    if (typeof this.head === "string") {
+      if (idMap[this.head]) {
+        this.head = idMap[this.head];
+      } else if (nullIfNotFound) {
+        this.head = null;
+      }
     }
   }
 

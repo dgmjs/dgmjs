@@ -225,9 +225,7 @@ export const EditorWrapper: React.FC<EditorWrapperProps> = ({
               Toolbar
             </div>
           }
-          onMove={(onBelow: boolean) => {
-            console.log("onMove", onBelow);
-          }}
+          onMove={(onBelow: boolean) => {}}
         />
       </DGMEditor>
     </>

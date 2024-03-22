@@ -58,10 +58,16 @@ export class Obj {
 
   /**
    * Resolve references
+   * @param idMap id to object map
+   * @param nullIfNotFound assign null if not found
    */
-  resolveRefs(idMap: Record<string, Obj>) {
-    if (typeof this.parent === "string" && idMap[this.parent]) {
-      this.parent = idMap[this.parent];
+  resolveRefs(idMap: Record<string, Obj>, nullIfNotFound: boolean = false) {
+    if (typeof this.parent === "string") {
+      if (idMap[this.parent]) {
+        this.parent = idMap[this.parent];
+      } else if (nullIfNotFound) {
+        this.parent = null;
+      }
     }
   }
 
