@@ -1,4 +1,11 @@
-import { Editor, Shape, Box, Text, measureText } from "@dgmjs/core";
+import {
+  Editor,
+  Shape,
+  Box,
+  Text,
+  measureText,
+  DblClickEvent,
+} from "@dgmjs/core";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { textVertAlignToAlignItems } from "./utils";
 
@@ -144,27 +151,33 @@ export const DGMPlainTextInplaceEditor: React.FC<
     update(state.textShape as Box, textValue);
   };
 
+  const handleDblClick = ({ shape, point }: DblClickEvent) => {
+    if (shape instanceof Box && shape.textEditable && shape.richText === false)
+      open(shape);
+  };
+
+  const handleCreate = (shape: Shape) => {
+    if (
+      shape instanceof Text &&
+      shape.textEditable &&
+      shape.richText === false
+    ) {
+      editor.selection.deselectAll();
+      open(shape);
+    }
+  };
+
   useEffect(() => {
     if (editor) {
-      editor.onDblClick.on(({ shape, point }) => {
-        if (
-          shape instanceof Box &&
-          shape.textEditable &&
-          shape.richText === false
-        )
-          open(shape);
-      });
-      editor.factory.onCreate.on((shape: Shape) => {
-        if (
-          shape instanceof Text &&
-          shape.textEditable &&
-          shape.richText === false
-        ) {
-          editor.selection.deselectAll();
-          open(shape);
-        }
-      });
+      editor.onDblClick.on(handleDblClick);
+      editor.factory.onCreate.on(handleCreate);
     }
+    return function cleanup() {
+      if (editor) {
+        editor.onDblClick.off(handleDblClick);
+        editor.factory.onCreate.off(handleCreate);
+      }
+    };
   }, [editor]);
 
   return (
