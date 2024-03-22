@@ -43,9 +43,10 @@ export class Actions {
   /**
    * Add a page
    */
-  addPage(position: number): Page {
+  addPage(position?: number): Page {
+    position = position ?? this.editor.getPages().length;
     const page = new Page();
-    page.name = `Page ${this.editor.store.doc!.children.length + 1}`;
+    page.name = `Page ${position + 1}`;
     const tr = this.editor.transform;
     tr.startTransaction("add-page");
     tr.addPage(page);
