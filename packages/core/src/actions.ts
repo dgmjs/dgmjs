@@ -81,7 +81,7 @@ export class Actions {
   /**
    * Duplicate a page
    */
-  duplcatePage(page: Page, position: number) {
+  duplicatePage(page: Page, position: number) {
     const clipboard = this.editor.clipboard;
     const buffer: any[] = [];
     clipboard.putObjects([page], buffer);
