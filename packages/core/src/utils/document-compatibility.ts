@@ -12,6 +12,7 @@ export function convertToLatestVersion(json: any): any {
   // convert single-page document to multi-page document
   if (
     json.type === "Document" &&
+    json.children &&
     json.children.length > 0 &&
     json.children[0].type !== "Page"
   ) {
