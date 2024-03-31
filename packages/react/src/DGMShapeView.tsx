@@ -67,6 +67,7 @@ export const DGMShapeView = forwardRef<DGMShapeViewHandle, DGMShapeViewProps>(
         }
       });
       wrapperRef.current && observer.observe(wrapperRef.current);
+      return () => observer.disconnect();
     }, [darkMode, shapes]);
 
     return (

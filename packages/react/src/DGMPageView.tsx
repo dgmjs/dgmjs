@@ -67,6 +67,7 @@ export const DGMPageView = forwardRef<DGMPageViewHandle, DGMPageViewProps>(
         }
       });
       wrapperRef.current && observer.observe(wrapperRef.current);
+      return () => observer.disconnect();
     }, [darkMode, pageSize, page]);
 
     return (
