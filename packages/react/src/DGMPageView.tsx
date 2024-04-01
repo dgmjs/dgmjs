@@ -1,4 +1,4 @@
-import { Shape, renderOnCanvas } from "@dgmjs/core";
+import { Document, Page, PageSize, renderOnCanvas } from "@dgmjs/core";
 import {
   forwardRef,
   useEffect,
@@ -7,23 +7,22 @@ import {
   useState,
 } from "react";
 
-export interface DGMShapeViewProps
-  extends React.HTMLAttributes<HTMLDivElement> {
-  shapes: Shape[];
-  heightRatio?: number;
+export interface DGMPageViewProps extends React.HTMLAttributes<HTMLDivElement> {
+  pageSize: PageSize;
+  page: Page;
   darkMode?: boolean;
   scaleAdjust?: number;
 }
 
-export interface DGMShapeViewHandle {
+export interface DGMPageViewHandle {
   repaint: () => void;
 }
 
-export const DGMShapeView = forwardRef<DGMShapeViewHandle, DGMShapeViewProps>(
+export const DGMPageView = forwardRef<DGMPageViewHandle, DGMPageViewProps>(
   (
     {
-      shapes = [],
-      heightRatio = 0.75, // 4:3
+      pageSize,
+      page,
       darkMode = false,
       scaleAdjust = 1,
       style,
@@ -34,15 +33,16 @@ export const DGMShapeView = forwardRef<DGMShapeViewHandle, DGMShapeViewProps>(
   ) => {
     const wrapperRef = useRef<HTMLDivElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const heightRatio = pageSize ? pageSize[1] / pageSize[0] : 0.75;
     const [size, setSize] = useState([0, 0]);
 
     const repaint = (width: number, height: number) => {
       if (canvasRef.current) {
         renderOnCanvas(
-          shapes,
+          [page],
           canvasRef.current,
           darkMode,
-          null,
+          pageSize,
           [width, height],
           scaleAdjust
         );
@@ -68,7 +68,7 @@ export const DGMShapeView = forwardRef<DGMShapeViewHandle, DGMShapeViewProps>(
       });
       wrapperRef.current && observer.observe(wrapperRef.current);
       return () => observer.disconnect();
-    }, [darkMode, shapes]);
+    }, [darkMode, pageSize, page]);
 
     return (
       <div
@@ -88,4 +88,4 @@ export const DGMShapeView = forwardRef<DGMShapeViewHandle, DGMShapeViewProps>(
   }
 );
 
-DGMShapeView.displayName = "DGMShapeView";
+DGMPageView.displayName = "DGMPageView";

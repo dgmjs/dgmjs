@@ -1,4 +1,3 @@
-import { EventEmitter } from "events";
 import {
   Mutation,
   InsertMutation,
@@ -26,6 +25,7 @@ import { convertDocToText, convertTextToDoc } from "../utils/text-utils";
 import { moveEndPoint, adjustRoute } from "../utils/route-utils";
 import type { Obj } from "../core/obj";
 import { getAllConnectorsTo, getAllDescendant } from "../utils/shape-utils";
+import { TypedEvent } from "../std/typed-event";
 
 // Maximum size of undo/redo stack
 const MAX_STACK_SIZE = 1000;
@@ -35,12 +35,8 @@ const MAX_STACK_SIZE = 1000;
  *
  * 1. All changes should be applied via transform.
  * 2. All mutation methods return true if there is any changes.
- *
- * Triggering events:
- * - 'mutate': (m: Mutation)
- * - 'transaction': (tx: Transaction)
  */
-export class Transform extends EventEmitter {
+export class Transform {
   /**
    * Shape store
    */
@@ -62,14 +58,25 @@ export class Transform extends EventEmitter {
   redoHistory: Stack<Transaction>;
 
   /**
+   * Event emitter for mutation
+   */
+  onMutate: TypedEvent<Mutation> = new TypedEvent();
+
+  /**
+   * Event emitter for transaction
+   */
+  onTransaction: TypedEvent<Transaction> = new TypedEvent();
+
+  /**
    * constructor
    */
   constructor(store: Store) {
-    super();
     this.store = store;
     this.tx = null;
     this.undoHistory = new Stack(MAX_STACK_SIZE);
     this.redoHistory = new Stack(MAX_STACK_SIZE);
+    this.onMutate = new TypedEvent();
+    this.onTransaction = new TypedEvent();
   }
 
   /**
@@ -77,7 +84,7 @@ export class Transform extends EventEmitter {
    */
   applyMutation(m: Mutation) {
     m.apply(this.store);
-    this.emit("mutate", m);
+    this.onMutate.emit(m);
   }
 
   /**
@@ -85,7 +92,7 @@ export class Transform extends EventEmitter {
    */
   unapplyMutation(m: Mutation) {
     m.unapply(this.store);
-    this.emit("mutate", m);
+    this.onMutate.emit(m);
   }
 
   /**
@@ -104,7 +111,7 @@ export class Transform extends EventEmitter {
   endTransaction() {
     if (!this.tx) throw new Error("No transaction started");
     if (this.tx.mutations.length > 0) {
-      this.emit("transaction", this.tx);
+      this.onTransaction.emit(this.tx);
       this.undoHistory.push(this.tx);
       this.redoHistory.clear();
     }
@@ -149,7 +156,7 @@ export class Transform extends EventEmitter {
           const mut = tx.mutations[i];
           this.unapplyMutation(mut);
         }
-        this.emit("transaction", tx);
+        this.onTransaction.emit(tx);
         this.redoHistory.push(tx);
       }
     }
@@ -166,7 +173,7 @@ export class Transform extends EventEmitter {
           const mut = tx.mutations[i];
           this.applyMutation(mut);
         }
-        this.emit("transaction", tx);
+        this.onTransaction.emit(tx);
         this.undoHistory.push(tx);
       }
     }
@@ -492,18 +499,17 @@ export class Transform extends EventEmitter {
   }
 
   /**
-   * Mutation to set shape's path (including left, top, width, height)
+   * Mutation to set line's path (including left, top, width, height)
    */
-  setPath(shape: Shape, path: number[][]): boolean {
+  setPath(line: Line, path: number[][]): boolean {
     let changed = false;
     const rect = geometry.boundingRect(path);
-    changed = this.atomicAssignPath(shape, "path", path) || changed;
-    changed = this.atomicAssign(shape, "left", rect[0][0]) || changed;
-    changed = this.atomicAssign(shape, "top", rect[0][1]) || changed;
+    changed = this.atomicAssignPath(line, "path", path) || changed;
+    changed = this.atomicAssign(line, "left", rect[0][0]) || changed;
+    changed = this.atomicAssign(line, "top", rect[0][1]) || changed;
+    changed = this.atomicAssign(line, "width", geometry.width(rect)) || changed;
     changed =
-      this.atomicAssign(shape, "width", geometry.width(rect)) || changed;
-    changed =
-      this.atomicAssign(shape, "height", geometry.height(rect)) || changed;
+      this.atomicAssign(line, "height", geometry.height(rect)) || changed;
     return changed;
   }
 
@@ -542,68 +548,68 @@ export class Transform extends EventEmitter {
   }
 
   /**
-   * A set of mutations to move an anchored node
+   * A set of mutations to move an anchored box
    */
-  moveAnchor(node: Box, angle: number, length: number): boolean {
+  moveAnchor(box: Box, angle: number, length: number): boolean {
     let changed = false;
-    changed = this.atomicAssign(node, "anchorAngle", angle) || changed;
-    changed = this.atomicAssign(node, "anchorLength", length) || changed;
+    changed = this.atomicAssign(box, "anchorAngle", angle) || changed;
+    changed = this.atomicAssign(box, "anchorLength", length) || changed;
     return changed;
   }
 
   /**
    * A set of mutations to change rich text or not
    */
-  setRichText(node: Box, richText: boolean): boolean {
+  setRichText(box: Box, richText: boolean): boolean {
     let changed = false;
     if (richText) {
       let doc = structuredClone(
-        richText && typeof node.text === "string"
-          ? convertTextToDoc(node.text)
-          : node.text
+        richText && typeof box.text === "string"
+          ? convertTextToDoc(box.text)
+          : box.text
       );
-      changed = this.atomicAssign(node, "text", doc) || changed;
+      changed = this.atomicAssign(box, "text", doc) || changed;
     } else {
       let str =
-        !richText && typeof node.text !== "string"
-          ? convertDocToText(node.text)
-          : node.text;
-      changed = this.atomicAssign(node, "text", str) || changed;
+        !richText && typeof box.text !== "string"
+          ? convertDocToText(box.text)
+          : box.text;
+      changed = this.atomicAssign(box, "text", str) || changed;
     }
-    changed = this.atomicAssign(node, "richText", richText) || changed;
+    changed = this.atomicAssign(box, "richText", richText) || changed;
     return changed;
   }
 
   /**
    * A set of mutations to change horz align
    */
-  setHorzAlign(node: Box, horzAlign: string): boolean {
+  setHorzAlign(box: Box, horzAlign: string): boolean {
     let changed = false;
     let doc = structuredClone(
-      node.richText && typeof node.text === "string"
-        ? convertTextToDoc(node.text)
-        : node.text
+      box.richText && typeof box.text === "string"
+        ? convertTextToDoc(box.text)
+        : box.text
     );
-    node.visitNodes(doc, (docNode) => {
+    box.visitNodes(doc, (docNode) => {
       if (docNode.attrs && docNode.attrs.textAlign)
         docNode.attrs.textAlign = horzAlign;
     });
-    changed = this.atomicAssign(node, "text", doc) || changed;
-    changed = this.atomicAssign(node, "horzAlign", horzAlign) || changed;
+    changed = this.atomicAssign(box, "text", doc) || changed;
+    changed = this.atomicAssign(box, "horzAlign", horzAlign) || changed;
     return changed;
   }
 
   /**
    * A set of mutations to change font size
    */
-  setFontSize(node: Box, fontSize: number): boolean {
+  setFontSize(box: Box, fontSize: number): boolean {
     let changed = false;
     let doc = structuredClone(
-      node.richText && typeof node.text === "string"
-        ? convertTextToDoc(node.text)
-        : node.text
+      box.richText && typeof box.text === "string"
+        ? convertTextToDoc(box.text)
+        : box.text
     );
-    node.visitNodes(doc, (docNode) => {
+    box.visitNodes(doc, (docNode) => {
       if (Array.isArray(docNode.marks)) {
         console.log(docNode);
         docNode.marks.forEach((mark: any) => {
@@ -613,22 +619,22 @@ export class Transform extends EventEmitter {
         });
       }
     });
-    changed = this.atomicAssign(node, "fontSize", fontSize) || changed;
-    changed = this.atomicAssign(node, "text", doc) || changed;
+    changed = this.atomicAssign(box, "fontSize", fontSize) || changed;
+    changed = this.atomicAssign(box, "text", doc) || changed;
     return changed;
   }
 
   /**
    * A set of mutation to change font family
    */
-  setFontFamily(node: Box, fontFamily: string): boolean {
+  setFontFamily(box: Box, fontFamily: string): boolean {
     let changed = false;
     let doc = structuredClone(
-      node.richText && typeof node.text === "string"
-        ? convertTextToDoc(node.text)
-        : node.text
+      box.richText && typeof box.text === "string"
+        ? convertTextToDoc(box.text)
+        : box.text
     );
-    node.visitNodes(doc, (docNode) => {
+    box.visitNodes(doc, (docNode) => {
       if (Array.isArray(docNode.marks)) {
         console.log(docNode);
         docNode.marks.forEach((mark: any) => {
@@ -638,22 +644,22 @@ export class Transform extends EventEmitter {
         });
       }
     });
-    changed = this.atomicAssign(node, "fontFamily", fontFamily) || changed;
-    changed = this.atomicAssign(node, "text", doc) || changed;
+    changed = this.atomicAssign(box, "fontFamily", fontFamily) || changed;
+    changed = this.atomicAssign(box, "text", doc) || changed;
     return changed;
   }
 
   /**
    * A set of mutation to change font color
    */
-  setFontColor(node: Box, fontColor: string): boolean {
+  setFontColor(box: Box, fontColor: string): boolean {
     let changed = false;
     let doc = structuredClone(
-      node.richText && typeof node.text === "string"
-        ? convertTextToDoc(node.text)
-        : node.text
+      box.richText && typeof box.text === "string"
+        ? convertTextToDoc(box.text)
+        : box.text
     );
-    node.visitNodes(doc, (docNode) => {
+    box.visitNodes(doc, (docNode) => {
       if (Array.isArray(docNode.marks)) {
         console.log(docNode);
         docNode.marks.forEach((mark: any) => {
@@ -663,8 +669,8 @@ export class Transform extends EventEmitter {
         });
       }
     });
-    changed = this.atomicAssign(node, "fontColor", fontColor) || changed;
-    changed = this.atomicAssign(node, "text", doc) || changed;
+    changed = this.atomicAssign(box, "fontColor", fontColor) || changed;
+    changed = this.atomicAssign(box, "text", doc) || changed;
     return changed;
   }
 

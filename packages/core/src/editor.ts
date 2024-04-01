@@ -11,9 +11,15 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { EventEmitter } from "events";
 import { Canvas, CanvasPointerEvent } from "./graphics/graphics";
-import { Connector, Document, Shape, Page, shapeInstantiator } from "./shapes";
+import {
+  Connector,
+  Document,
+  Shape,
+  Page,
+  shapeInstantiator,
+  FillStyle,
+} from "./shapes";
 import { Cursor, Color, Mouse, CONTROL_POINT_APOTHEM } from "./graphics/const";
 import { assert } from "./std/assert";
 import * as geometry from "./graphics/geometry";
@@ -29,23 +35,51 @@ import { Store } from "./core/store";
 import { Transform } from "./transform/transform";
 import { SelectionManager } from "./selection-manager";
 import { Clipboard } from "./core/clipboard";
+import { TypedEvent } from "./std/typed-event";
 
 export interface EditorOptions {
   handlers: Handler[];
   defaultHandlerId: string | null;
   keymap: KeyMap;
+  keymapEventTarget: EventTarget | null;
   allowAutoScroll: boolean;
   allowCreateTextOnCanvas: boolean;
   allowCreateTextOnConnector: boolean;
   onReady: (editor: Editor) => void;
 }
 
+export interface DblClickEvent {
+  shape: Shape | null;
+  point: number[];
+}
+
+export interface DragEvent {
+  controller: Controller | null;
+  dragPoint: number[];
+}
+
+export interface FileDropEvent {
+  event: CanvasPointerEvent;
+  dataTransfer: DataTransfer;
+}
+
 /**
  * The editor
  */
-class Editor extends EventEmitter {
+export class Editor {
   options: EditorOptions;
   platform: string;
+
+  onCurrentPageChange: TypedEvent<Page>;
+  onActiveHandlerChange: TypedEvent<string>;
+  onDblClick: TypedEvent<DblClickEvent>;
+  onZoom: TypedEvent<number>;
+  onScroll: TypedEvent<number[]>;
+  onDragStart: TypedEvent<DragEvent>;
+  onDrag: TypedEvent<DragEvent>;
+  onDragEnd: TypedEvent<DragEvent>;
+  onFileDrop: TypedEvent<FileDropEvent>;
+  onKeyDown: TypedEvent<KeyboardEvent>;
 
   store: Store;
   transform: Transform;
@@ -60,7 +94,6 @@ class Editor extends EventEmitter {
   parent: HTMLElement;
   canvasElement: HTMLCanvasElement;
   canvas: Canvas;
-  backgroundColor: string;
   darkMode: boolean;
   gridSize: number[];
   showGrid: boolean;
@@ -81,17 +114,30 @@ class Editor extends EventEmitter {
    * constructor
    */
   constructor(editorHolder: HTMLElement, options: Partial<EditorOptions>) {
-    super();
     this.options = {
       handlers: [],
       defaultHandlerId: "",
       keymap: {},
+      keymapEventTarget: null,
       allowAutoScroll: true,
       allowCreateTextOnCanvas: true,
       allowCreateTextOnConnector: true,
       onReady: () => {},
       ...options,
     };
+
+    // initialize event emitters
+    this.onCurrentPageChange = new TypedEvent();
+    this.onActiveHandlerChange = new TypedEvent();
+    this.onDblClick = new TypedEvent();
+    this.onZoom = new TypedEvent();
+    this.onScroll = new TypedEvent();
+    this.onDragStart = new TypedEvent();
+    this.onDrag = new TypedEvent();
+    this.onDragEnd = new TypedEvent();
+    this.onFileDrop = new TypedEvent();
+    this.onKeyDown = new TypedEvent();
+
     this.store = new Store(shapeInstantiator, {
       objInitializer: (o) => {
         if (o instanceof Shape) o.initialze(this.canvas);
@@ -116,7 +162,6 @@ class Editor extends EventEmitter {
     // initialize properties
     this.canvasElement = null as any;
     this.canvas = null as any;
-    this.backgroundColor = Color.CANVAS;
     this.darkMode = false;
     this.gridSize = [8, 8];
     this.showGrid = false;
@@ -153,9 +198,9 @@ class Editor extends EventEmitter {
   }
 
   initializeState() {
-    this.transform.on("transaction", () => this.repaint());
-    this.selection.on("change", () => this.repaint());
-    this.factory.on("create", (shape: Shape) => {
+    this.transform.onTransaction.on(() => this.repaint());
+    this.selection.onChange.on(() => this.repaint());
+    this.factory.onCreate.on((shape: Shape) => {
       this.selection.select([shape]);
     });
   }
@@ -307,7 +352,7 @@ class Editor extends EventEmitter {
           this.factory.triggerCreate(textShape);
         }
         // trigger double click event
-        this.triggerDblClick(shape, [x, y]);
+        this.onDblClick.emit({ shape, point: [x, y] });
       }
     });
 
@@ -351,14 +396,17 @@ class Editor extends EventEmitter {
       e.preventDefault();
       const event = createPointerEvent(this.canvasElement, this.canvas, e);
       // const files = Array.from(e.dataTransfer?.files ?? []);
-      this.triggerFileDrop(event, e.dataTransfer as DataTransfer);
+      this.onFileDrop.emit({
+        event,
+        dataTransfer: e.dataTransfer as DataTransfer,
+      });
     });
 
     // key down event
     this.canvasElement.addEventListener("keydown", (e) => {
       e.preventDefault();
       this.focus();
-      this.triggerKeyDown(e);
+      this.onKeyDown.emit(e);
     });
   }
 
@@ -390,8 +438,18 @@ class Editor extends EventEmitter {
     if (this.currentPage !== page) {
       this.currentPage = page;
       this.repaint();
-      this.emit("currentPageChange", page);
+      this.onCurrentPageChange.emit(page);
     }
+  }
+
+  /**
+   * Get pages
+   */
+  getPages(): Page[] {
+    if (this.store.doc) {
+      return this.store.doc.children as Page[];
+    }
+    return [];
   }
 
   /**
@@ -399,14 +457,6 @@ class Editor extends EventEmitter {
    */
   focus() {
     this.canvasElement.focus();
-  }
-
-  /**
-   * Set background color
-   */
-  setBackgroundColor(color: string) {
-    this.backgroundColor = color;
-    this.repaint();
   }
 
   /**
@@ -508,7 +558,7 @@ class Editor extends EventEmitter {
   setOrigin(x: number, y: number) {
     this.canvas.origin = [x, y];
     this.repaint();
-    this.triggerScroll(x, y);
+    this.onScroll.emit([x, y]);
   }
 
   /**
@@ -532,7 +582,7 @@ class Editor extends EventEmitter {
     }
     this.canvas.scale = scale;
     this.repaint();
-    this.triggerZoom(this.canvas.scale);
+    this.onZoom.emit(scale);
   }
 
   /**
@@ -662,7 +712,7 @@ class Editor extends EventEmitter {
       this.activeHandlerId = id;
       this.activeHandler = this.handlers[this.activeHandlerId];
       this.activeHandler.onActivate(this);
-      this.emit("activeHandlerChange", this.activeHandlerId);
+      this.onActiveHandlerChange.emit(this.activeHandlerId);
     }
   }
 
@@ -680,7 +730,10 @@ class Editor extends EventEmitter {
    */
   clearBackground(canvas: Canvas) {
     const g = canvas.context;
-    g.fillStyle = this.canvas.resolveColor(this.backgroundColor);
+    const docSize = (this.store.doc as Document).pageSize;
+    g.fillStyle = this.canvas.resolveColor(
+      docSize ? Color.CANVAS : Color.BACKGROUND
+    );
     g.fillRect(0, 0, this.canvasElement.width, this.canvasElement.height);
   }
 
@@ -688,11 +741,25 @@ class Editor extends EventEmitter {
    * Draw the grid
    */
   drawGrid(canvas: Canvas) {
+    const scale = this.getScale();
+    const docSize = (this.store.doc as Document).pageSize;
+
+    canvas.save();
+    canvas.globalTransform();
+
+    // draw document background
+    if (docSize) {
+      canvas.roughness = 0;
+      canvas.fillStyle = FillStyle.SOLID;
+      canvas.fillColor = this.canvas.resolveColor(Color.BACKGROUND);
+      canvas.fillRect(0, 0, docSize[0], docSize[1]);
+    }
+
+    // draw grid
     if (this.showGrid) {
       const sz = this.getSize();
       const p1 = canvas.globalCoordTransformRev([0, 0]);
       const p2 = canvas.globalCoordTransformRev(sz);
-      const scale = this.getScale();
       let w = this.gridSize[0] * 2;
       let h = this.gridSize[1] * 2;
       let thick = Math.max(Math.round(1 / scale), 1);
@@ -708,8 +775,6 @@ class Editor extends EventEmitter {
       }
       const wc = Math.floor((p2[0] - p1[0]) / w);
       const wh = Math.floor((p2[1] - p1[1]) / h);
-      canvas.save();
-      canvas.globalTransform();
       canvas.strokeColor = this.canvas.resolveColor(Color.GRID);
       canvas.strokeWidth = thick;
       canvas.strokePattern = [];
@@ -723,8 +788,16 @@ class Editor extends EventEmitter {
         const y = p1[1] + i * h - (p1[1] % h);
         canvas.line(p1[0], y, p2[0], y);
       }
-      canvas.restore();
     }
+
+    // draw document border
+    if (docSize) {
+      canvas.strokeColor = this.canvas.resolveColor(Color.BORDER);
+      canvas.strokeWidth = 1 / scale;
+      canvas.strokeRect(0, 0, docSize[0], docSize[1]);
+    }
+
+    canvas.restore();
   }
 
   /**
@@ -740,13 +813,11 @@ class Editor extends EventEmitter {
    * Repaint diagram
    */
   repaint(drawSelection: boolean = true) {
+    this.clearBackground(this.canvas);
     if (this.currentPage) {
-      this.clearBackground(this.canvas);
       this.drawGrid(this.canvas);
       this.currentPage.render(this.canvas);
       if (drawSelection) this.drawSelection();
-    } else {
-      this.clearBackground(this.canvas);
     }
   }
 
@@ -786,38 +857,6 @@ class Editor extends EventEmitter {
         this.setCurrentPage(this.store.doc.children[0] as Page);
       }
     }
-  }
-
-  triggerDblClick(shape: Shape | null, point: number[]) {
-    this.emit("dblClick", shape, point);
-  }
-
-  triggerZoom(scale: number) {
-    this.emit("zoom", scale);
-  }
-
-  triggerScroll(originX: number, originY: number) {
-    this.emit("scroll", [originX, originY]);
-  }
-
-  triggerDragStart(controller: Controller | null, dragStartPoint: number[]) {
-    this.emit("dragStart", controller, dragStartPoint);
-  }
-
-  triggerDrag(controller: Controller | null, dragPoint: number[]) {
-    this.emit("drag", controller, dragPoint);
-  }
-
-  triggerDragEnd(controller: Controller | null, dragEndPoint: number[]) {
-    this.emit("dragEnd", controller, dragEndPoint);
-  }
-
-  triggerFileDrop(event: CanvasPointerEvent, dataTransfer: DataTransfer) {
-    this.emit("fileDrop", event, dataTransfer);
-  }
-
-  triggerKeyDown(e: KeyboardEvent) {
-    this.emit("keyDown", e);
   }
 }
 
@@ -872,14 +911,14 @@ class ManipulatorManager {
   }
 }
 
-interface HandlerOptions {
+export interface HandlerOptions {
   lock: boolean;
 }
 
 /**
  * Handler
  */
-class Handler {
+export class Handler {
   id: string;
   options: HandlerOptions;
 
@@ -967,7 +1006,7 @@ class Handler {
 /**
  * Controller
  */
-class Controller {
+export class Controller {
   manipulator: Manipulator;
 
   /**
@@ -1169,7 +1208,10 @@ class Controller {
       this.update(editor, shape);
       editor.repaint();
       this.drawDragging(editor, shape, e);
-      editor.triggerDragStart(this, this.dragStartPoint);
+      editor.onDragStart.emit({
+        controller: this,
+        dragPoint: this.dragStartPoint,
+      });
     }
     return handled;
   }
@@ -1200,7 +1242,10 @@ class Controller {
       this.update(editor, shape);
       editor.repaint();
       this.drawDragging(editor, shape, e);
-      editor.triggerDrag(this, this.dragPoint);
+      editor.onDrag.emit({
+        controller: this,
+        dragPoint: this.dragPoint,
+      });
     }
     return handled;
   }
@@ -1216,7 +1261,10 @@ class Controller {
       handled = true;
       this.finalize(editor, shape);
       editor.repaint();
-      editor.triggerDragEnd(this, this.dragPoint);
+      editor.onDragEnd.emit({
+        controller: this,
+        dragPoint: this.dragPoint,
+      });
     }
     return handled;
   }
@@ -1247,7 +1295,7 @@ class Controller {
 /**
  * Manipulator
  */
-class Manipulator {
+export class Manipulator {
   /**
    * Controllers of the manipulator
    */
@@ -1412,13 +1460,4 @@ class Manipulator {
   }
 }
 
-const manipulatorManager = ManipulatorManager.getInstance();
-
-export {
-  Editor,
-  type HandlerOptions,
-  Handler,
-  Manipulator,
-  Controller,
-  manipulatorManager,
-};
+export const manipulatorManager = ManipulatorManager.getInstance();

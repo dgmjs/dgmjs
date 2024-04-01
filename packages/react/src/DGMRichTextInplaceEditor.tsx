@@ -5,6 +5,7 @@ import {
   Text,
   measureText,
   convertDocToText,
+  DblClickEvent,
 } from "@dgmjs/core";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { moveToAboveOrBelow, textVertAlignToAlignItems } from "./utils";
@@ -66,6 +67,47 @@ export const DGMRichTextInplaceEditor: React.FC<
     textHeight: 0,
   });
 
+  const tiptapEditor = useEditor({
+    extensions,
+    content: /* textString.length > 0 ? editingText?.text : */ "",
+    onUpdate: (editor) => {
+      if (editor && tiptapEditor && state.textShape) {
+        const textValue = tiptapEditor.getJSON();
+        update(state.textShape, textValue);
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (editor) {
+      editor.onDblClick.on(handleDblClick);
+      editor.factory.onCreate.on(handleCreate);
+    }
+    return function cleanup() {
+      if (editor) {
+        editor.onDblClick.off(handleDblClick);
+        editor.factory.onCreate.off(handleCreate);
+      }
+    };
+  }, [editor]);
+
+  useEffect(() => {
+    if (tiptapEditor && onMount) {
+      onMount(tiptapEditor);
+    }
+  }, [tiptapEditor]);
+
+  useEffect(() => {
+    if (state.textShape) {
+      setToolbarPosition({
+        left: state.left,
+        top: state.top,
+        width: state.textShape.width,
+        height: state.textShape.height,
+      });
+    }
+  }, [state.left, state.top, state.textShape]);
+
   const getTextRect = (textShape: Text, doc: any) => {
     const rect = textShape.getRectInDOM(editor.canvas);
     const textMetric = measureText(editor.canvas, textShape, doc);
@@ -73,8 +115,8 @@ export const DGMRichTextInplaceEditor: React.FC<
     const textHeight = textMetric.height + state.padding[0] + state.padding[2];
     const MIN_WIDTH = 2;
     return {
-      left: rect.left,
-      top: rect.top,
+      left: rect[0][0],
+      top: rect[0][1],
       width: Math.max(textWidth, MIN_WIDTH),
       height: textHeight,
     };
@@ -99,17 +141,6 @@ export const DGMRichTextInplaceEditor: React.FC<
     }
   };
 
-  const tiptapEditor = useEditor({
-    extensions,
-    content: /* textString.length > 0 ? editingText?.text : */ "",
-    onUpdate: (editor) => {
-      if (editor && tiptapEditor && state.textShape) {
-        const textValue = tiptapEditor.getJSON();
-        update(state.textShape, textValue);
-      }
-    },
-  });
-
   const open = (textShape: Box) => {
     if (editor.currentPage && textShape) {
       // disable shape's text rendering
@@ -120,12 +151,13 @@ export const DGMRichTextInplaceEditor: React.FC<
       editor.transform.startTransaction("text-edit");
       editor.transform.resolveAllConstraints(editor.currentPage, editor.canvas);
 
-      // update states
-      update(textShape, textShape.text);
-
+      // set initial content
       tiptapEditor?.commands.setContent(textShape.text);
       tiptapEditor?.commands.focus();
       tiptapEditor?.commands.selectAll();
+
+      // update states
+      update(textShape, textShape.text);
 
       setTimeout(() => {
         if (onOpen) onOpen(textShape as Box);
@@ -159,14 +191,6 @@ export const DGMRichTextInplaceEditor: React.FC<
         textWidth: rect.width,
         textHeight: rect.height,
       });
-
-      // update toolbar position
-      setToolbarPosition({
-        left: rect.left,
-        top: rect.top,
-        width: textShape.width,
-        height: textShape.height,
-      });
     }
   };
 
@@ -175,7 +199,7 @@ export const DGMRichTextInplaceEditor: React.FC<
       editor.transform.endTransaction();
       const textString = convertDocToText(tiptapEditor.getJSON());
       if (state.textShape instanceof Text && textString.trim().length === 0) {
-        editor.actions.delete_([state.textShape]);
+        editor.actions.remove([state.textShape]);
       }
       state.textShape._renderText = true;
       editor.repaint();
@@ -187,34 +211,22 @@ export const DGMRichTextInplaceEditor: React.FC<
     if (event.key === "Escape") close();
   };
 
-  useEffect(() => {
-    if (editor) {
-      editor.on("dblClick", (shape: Shape, point: number[]) => {
-        if (
-          shape instanceof Box &&
-          shape.textEditable &&
-          shape.richText === true
-        )
-          open(shape);
-      });
-      editor.factory.on("create", (shape: Shape) => {
-        if (
-          shape instanceof Text &&
-          shape.textEditable &&
-          shape.richText === true
-        ) {
-          editor.selection.deselectAll();
-          open(shape);
-        }
-      });
+  const handleDblClick = ({ shape, point }: DblClickEvent) => {
+    if (shape instanceof Box && shape.textEditable && shape.richText === true) {
+      open(shape);
     }
-  }, [editor]);
+  };
 
-  useEffect(() => {
-    if (tiptapEditor && onMount) {
-      onMount(tiptapEditor);
+  const handleCreate = (shape: Shape) => {
+    if (
+      shape instanceof Text &&
+      shape.textEditable &&
+      shape.richText === true
+    ) {
+      editor.selection.deselectAll();
+      open(shape);
     }
-  }, [tiptapEditor]);
+  };
 
   return (
     <>

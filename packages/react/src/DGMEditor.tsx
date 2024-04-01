@@ -4,8 +4,10 @@ import {
   Shape,
   Transaction,
   basicSetup,
-  CanvasPointerEvent,
   Page,
+  DragEvent,
+  FileDropEvent,
+  DblClickEvent,
 } from "@dgmjs/core";
 import { useEffect, useRef } from "react";
 
@@ -21,13 +23,15 @@ export interface DGMEditorProps
   onCurrentPageChange?: (page: Page) => void;
   onActiveHandlerChange?: (handlerId: string) => void;
   onShapeCreate?: (shape: Shape) => void;
+  onShapeInitialize?: (shape: Shape) => void;
   onTransaction?: (tx: Transaction) => void;
+  onDblClick?: (event: DblClickEvent) => void;
   onZoom?: (scale: number) => void;
   onScroll?: (origin: number[]) => void;
-  onDragStart?: (dragStartPoint: number[]) => void;
-  onDrag?: (dragPoint: number[]) => void;
-  onDragEnd?: (dragEndPoint: number[]) => void;
-  onFileDrop?: (event: CanvasPointerEvent, dataTransfer: DataTransfer) => void;
+  onDragStart?: (dragEvent: DragEvent) => void;
+  onDrag?: (dragEvent: DragEvent) => void;
+  onDragEnd?: (dragEvent: DragEvent) => void;
+  onFileDrop?: (fileDropEvent: FileDropEvent) => void;
 }
 
 export const DGMEditor: React.FC<DGMEditorProps> = ({
@@ -38,7 +42,9 @@ export const DGMEditor: React.FC<DGMEditorProps> = ({
   onCurrentPageChange,
   onActiveHandlerChange,
   onShapeCreate,
+  onShapeInitialize,
   onTransaction,
+  onDblClick,
   onZoom,
   onScroll,
   onDragStart,
@@ -58,42 +64,45 @@ export const DGMEditor: React.FC<DGMEditorProps> = ({
       );
 
       // events forwarding
-      editor.selection.on("change", (shapes: Shape[]) => {
+      editor.selection.onChange.on((shapes: Shape[]) => {
         if (onSelectionChange) onSelectionChange(shapes);
       });
-      editor.on("currentPageChange", (page: Page) => {
+      editor.onCurrentPageChange.on((page) => {
         if (onCurrentPageChange) onCurrentPageChange(page);
       });
-      editor.on("activeHandlerChange", (handlerId: string) => {
+      editor.onActiveHandlerChange.on((handlerId) => {
         if (onActiveHandlerChange) onActiveHandlerChange(handlerId);
       });
-      editor.factory.on("create", (shape: Shape) => {
+      editor.factory.onCreate.on((shape: Shape) => {
         if (onShapeCreate) onShapeCreate(shape);
       });
-      editor.transform.on("transaction", (tx: Transaction) => {
+      editor.factory.onShapeInitialize.on((shape: Shape) => {
+        if (onShapeInitialize) onShapeInitialize(shape);
+      });
+      editor.transform.onTransaction.on((tx: Transaction) => {
         if (onTransaction) onTransaction(tx);
       });
-      editor.on("zoom", (scale: number) => {
+      editor.onDblClick.on((event: DblClickEvent) => {
+        if (onDblClick) onDblClick(event);
+      });
+      editor.onZoom.on((scale: number) => {
         if (onZoom) onZoom(scale);
       });
-      editor.on("scroll", (origin: number[]) => {
+      editor.onScroll.on((origin: number[]) => {
         if (onScroll) onScroll(origin);
       });
-      editor.on("dragStart", (dragStartPoint: number[]) => {
-        if (onDragStart) onDragStart(dragStartPoint);
+      editor.onDragStart.on((dragEvent) => {
+        if (onDragStart) onDragStart(dragEvent);
       });
-      editor.on("drag", (dragPoint: number[]) => {
-        if (onDrag) onDrag(dragPoint);
+      editor.onDrag.on((dragEvent) => {
+        if (onDrag) onDrag(dragEvent);
       });
-      editor.on("dragEnd", (dragEndPoint: number[]) => {
-        if (onDragEnd) onDragEnd(dragEndPoint);
+      editor.onDragEnd.on((dragEvent) => {
+        if (onDragEnd) onDragEnd(dragEvent);
       });
-      editor.on(
-        "fileDrop",
-        (event: CanvasPointerEvent, dataTransfer: DataTransfer) => {
-          if (onFileDrop) onFileDrop(event, dataTransfer);
-        }
-      );
+      editor.onFileDrop.on((fileDropEvent) => {
+        if (onFileDrop) onFileDrop(fileDropEvent);
+      });
 
       // initialize
       editorRef.current = editor;

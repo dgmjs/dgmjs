@@ -15,7 +15,6 @@ import React from "react";
 import { Document, Page, Shape } from "@dgmjs/core";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Layers } from "./layers";
-import { Libraries } from "./libraries";
 import { Pages } from "./pages";
 
 export interface ShapeSidebarProps {
@@ -56,7 +55,7 @@ export const ShapeSidebar: React.FC<ShapeSidebarProps> = ({
           value="libraries"
           className="absolute bottom-0 left-0 right-0 top-12"
         >
-          <Libraries />
+          ...
         </TabsContent>
         <TabsContent
           value="layers"

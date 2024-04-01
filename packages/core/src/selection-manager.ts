@@ -11,30 +11,24 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { EventEmitter } from "events";
 import type { Shape } from "./shapes";
 import * as geometry from "./graphics/geometry";
 import type { Canvas } from "./graphics/graphics";
 import { Editor } from "./editor";
+import { TypedEvent } from "./std/typed-event";
 
 /**
  * Selection Manager
  */
-export class SelectionManager extends EventEmitter {
+export class SelectionManager {
   editor: Editor;
   shapes: Shape[];
+  onChange: TypedEvent<Shape[]>;
 
   constructor(editor: Editor) {
-    super();
     this.editor = editor;
     this.shapes = [];
-  }
-
-  /**
-   * Trigger event
-   */
-  triggerEvent() {
-    this.emit("change", this.shapes);
+    this.onChange = new TypedEvent();
   }
 
   /**
@@ -93,7 +87,7 @@ export class SelectionManager extends EventEmitter {
         this.shapes.push(shape);
       }
     }
-    this.triggerEvent();
+    this.onChange.emit(this.shapes);
   }
 
   /**
@@ -116,7 +110,7 @@ export class SelectionManager extends EventEmitter {
         this.shapes.push(s as Shape);
       }
     });
-    this.triggerEvent();
+    this.onChange.emit(this.shapes);
   }
 
   /**
@@ -129,7 +123,7 @@ export class SelectionManager extends EventEmitter {
         this.shapes.push(s as Shape);
       }
     });
-    this.triggerEvent();
+    this.onChange.emit(this.shapes);
   }
 
   /**
@@ -141,7 +135,7 @@ export class SelectionManager extends EventEmitter {
         this.shapes.splice(this.shapes.indexOf(shape), 1);
       }
     }
-    this.triggerEvent();
+    this.onChange.emit(this.shapes);
   }
 
   /**
@@ -150,7 +144,7 @@ export class SelectionManager extends EventEmitter {
   deselectAll() {
     if (this.shapes.length > 0) {
       this.shapes = [];
-      this.triggerEvent();
+      this.onChange.emit(this.shapes);
     }
   }
 

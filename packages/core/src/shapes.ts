@@ -59,6 +59,8 @@ type ConstraintFn = (
   arg?: any
 ) => boolean;
 
+type PageSize = [number, number] | null;
+
 const ScriptType = Object.freeze({
   RENDER: "render",
   OUTLINE: "outline",
@@ -451,7 +453,7 @@ class Shape extends Obj {
   /**
    * Return a bounding rect.
    */
-  getBoundingRect(): number[][] {
+  getBoundingRect(includeAnchorPoints: boolean = false): number[][] {
     return [
       [this.left, this.top],
       [this.right, this.bottom],
@@ -474,13 +476,11 @@ class Shape extends Obj {
    * [Note] If you want to place DOM elements over the canvas, use this method
    * and don't forget to apply transform scale to the DOM element.
    */
-  getRectInDOM(canvas: Canvas): {
-    left: number;
-    top: number;
-    width: number;
-    height: number;
-  } {
-    const rect = this.getBoundingRect().map((p) => {
+  getRectInDOM(
+    canvas: Canvas,
+    includeAnchorPoints: boolean = false
+  ): number[][] {
+    const rect = this.getBoundingRect(includeAnchorPoints).map((p) => {
       let tp = canvas.globalCoordTransform(p);
       return [tp[0] / canvas.ratio, tp[1] / canvas.ratio];
     });
@@ -489,12 +489,10 @@ class Shape extends Obj {
     let height = geometry.height(rect) * (1 / scale);
     const left = rect[0][0] - (width * (1 - scale)) / 2;
     const top = rect[0][1] - (height * (1 - scale)) / 2;
-    return {
-      left,
-      top,
-      width,
-      height,
-    };
+    return [
+      [left, top],
+      [left + width, top + height],
+    ];
   }
 
   /**
@@ -680,22 +678,26 @@ class Shape extends Obj {
  */
 class Document extends Obj {
   version: number;
+  pageSize: PageSize;
 
   constructor() {
     super();
     this.type = "Document";
     this.version = 1;
+    this.pageSize = null; // null = infinite, [960, 720] = 4:3, [960, 540] = 16:9
   }
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
     json.version = this.version;
+    json.pageSize = structuredClone(this.pageSize);
     return json;
   }
 
   fromJSON(json: any) {
     super.fromJSON(json);
     this.version = json.version ?? this.version;
+    this.pageSize = json.pageSize ?? this.pageSize;
   }
 }
 
@@ -759,14 +761,14 @@ class Page extends Shape {
   }
 
   /**
-   * Document do not contain a point
+   * Page do not contain a point
    */
   containsPoint(canvas: Canvas, point: number[]): boolean {
     return false;
   }
 
   /**
-   * Document do not overlap with anything
+   * Page do not overlap with anything
    */
   overlapRect(canvas: Canvas, rect: number[][]): boolean {
     return false;
@@ -1707,14 +1709,38 @@ class Connector extends Line {
     this.tailMargin = json.tailMargin ?? this.tailMargin;
   }
 
-  resolveRefs(idMap: Record<string, Shape>) {
+  resolveRefs(idMap: Record<string, Shape>, nullIfNotFound: boolean = false) {
     super.resolveRefs(idMap);
-    if (typeof this.tail === "string" && idMap[this.tail]) {
-      this.tail = idMap[this.tail];
+    if (typeof this.tail === "string") {
+      if (idMap[this.tail]) {
+        this.tail = idMap[this.tail];
+      } else if (nullIfNotFound) {
+        this.tail = null;
+      }
     }
-    if (typeof this.head === "string" && idMap[this.head]) {
-      this.head = idMap[this.head];
+    if (typeof this.head === "string") {
+      if (idMap[this.head]) {
+        this.head = idMap[this.head];
+      } else if (nullIfNotFound) {
+        this.head = null;
+      }
     }
+  }
+
+  /**
+   * Return a bounding rect.
+   */
+  getBoundingRect(includeAnchorPoints: boolean = false): number[][] {
+    const rect = [
+      [this.left, this.top],
+      [this.right, this.bottom],
+    ];
+    if (includeAnchorPoints) {
+      const hp = this.getHeadAnchorPoint();
+      const tp = this.getTailAnchorPoint();
+      return geometry.unionRect(rect, geometry.normalizeRect([hp, tp]));
+    }
+    return rect;
   }
 
   /**
@@ -1856,11 +1882,15 @@ class Embed extends Box {
   renderDefault(canvas: Canvas): void {
     const rect = this.getRectInDOM(canvas);
     const scale = canvas.scale;
+    const left = rect[0][0];
+    const top = rect[0][1];
+    const width = geometry.width(rect);
+    const height = geometry.height(rect);
     if (this.iframe) {
-      this.iframe.style.left = `${rect.left}px`;
-      this.iframe.style.top = `${rect.top}px`;
-      this.iframe.style.width = `${rect.width}px`;
-      this.iframe.style.height = `${rect.height}px`;
+      this.iframe.style.left = `${left}px`;
+      this.iframe.style.top = `${top}px`;
+      this.iframe.style.width = `${width}px`;
+      this.iframe.style.height = `${height}px`;
       this.iframe.style.transform = `scale(${scale})`;
     }
   }
@@ -1962,64 +1992,28 @@ const shapeInstantiator = new Instantiator({
   Embed: () => new Embed(),
 });
 
-interface ShapeValues {
-  name?: string;
-  description?: string;
-  proto?: boolean;
-  enable?: boolean;
-  visible?: boolean;
-  movable?: string;
-  sizable?: string;
-  rotatable?: boolean;
-  containable?: boolean;
-  containableFilter?: string;
-  connectable?: boolean;
-  anchored?: boolean;
-  constraints?: Constraint[];
-  properties?: Property[];
-  scripts?: Script[];
-  manipulator?: string;
-  tags?: string[];
-  left?: number;
-  top?: number;
-  width?: number;
-  height?: number;
-  rotate?: number;
-  fillColor?: string;
-  fillStyle?: string;
-  strokeColor?: string;
-  strokeWidth?: number;
-  strokePattern?: number[];
-  fontColor?: string;
-  fontFamily?: string;
-  fontSize?: number;
-  fontStyle?: string;
-  fontWeight?: number;
-  opacity?: number;
-  roughness?: number;
-  lineType?: string;
-  pathEditable?: boolean;
-  headEndType?: string;
-  tailEndType?: string;
-  headMargin?: number;
-  tailMargin?: number;
-  padding?: number[];
-  corners?: number[];
-  richText?: boolean;
-  textEditable?: boolean;
-  text?: any;
-  wordWrap?: boolean;
-  horzAlign?: string;
-  vertAlign?: string;
-  lineHeight?: number;
-  paragraphSpacing?: number;
-}
+type ObjProps = Partial<
+  Shape &
+    Document &
+    Page &
+    Box &
+    Line &
+    Rectangle &
+    Ellipse &
+    Text &
+    Image &
+    Connector &
+    Group &
+    Frame &
+    Embed
+>;
 
 export {
   type Constraint,
   type Property,
   type Script,
   type ConstraintFn,
+  type PageSize,
   ScriptType,
   Movable,
   Sizable,
@@ -2042,5 +2036,5 @@ export {
   Embed,
   constraintManager,
   shapeInstantiator,
-  type ShapeValues,
+  type ObjProps,
 };

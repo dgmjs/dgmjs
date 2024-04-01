@@ -5,6 +5,7 @@ import {
   DGMEditorProps,
   DGMPlainTextInplaceEditor,
   DGMRichTextInplaceEditor,
+  DGMShapeToolbarHolder,
   TiptapEditor,
 } from "@dgmjs/react";
 import { constants } from "@dgmjs/core";
@@ -26,13 +27,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { ColorPalette, simplePalette } from "@/components/common/color-palette";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -97,31 +91,6 @@ export function RichTextInplaceEditorToolbar({
           />
         </PopoverContent>
       </Popover>
-      <Select
-        value={state.fontSize}
-        onValueChange={(value) => {
-          (tiptapEditor.chain().focus() as any).setFontSize(`${value}px`).run();
-        }}
-      >
-        <SelectTrigger className="w-[72px] h-8 border border-l-0 rounded-none">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="12">12</SelectItem>
-          <SelectItem value="14">14</SelectItem>
-          <SelectItem value="16">16</SelectItem>
-          <SelectItem value="18">18</SelectItem>
-          <SelectItem value="20">20</SelectItem>
-          <SelectItem value="24">24</SelectItem>
-          <SelectItem value="30">30</SelectItem>
-          <SelectItem value="36">36</SelectItem>
-          <SelectItem value="48">48</SelectItem>
-          <SelectItem value="60">60</SelectItem>
-          <SelectItem value="72">72</SelectItem>
-          <SelectItem value="96">96</SelectItem>
-          <SelectItem value="128">128</SelectItem>
-        </SelectContent>
-      </Select>
       <Toggle
         className="w-8 h-8 px-2 border-y rounded-none"
         pressed={state.bold}
@@ -248,6 +217,15 @@ export const EditorWrapper: React.FC<EditorWrapperProps> = ({
               shape={editingText}
             />
           }
+        />
+        <DGMShapeToolbarHolder
+          editor={editor!}
+          toolbar={
+            <div className="bg-foreground text-background px-3 shadow-sm h-10 rounded border flex items-center">
+              Toolbar
+            </div>
+          }
+          onMove={(onBelow: boolean) => {}}
         />
       </DGMEditor>
     </>

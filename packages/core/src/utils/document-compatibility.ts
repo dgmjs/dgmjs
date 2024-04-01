@@ -9,6 +9,11 @@ export function convertToLatestVersion(json: any): any {
     json.type = "Document";
   }
 
+  // ensure children is array
+  if (!Array.isArray(json.children)) {
+    json.children = [];
+  }
+
   // convert single-page document to multi-page document
   if (
     json.type === "Document" &&

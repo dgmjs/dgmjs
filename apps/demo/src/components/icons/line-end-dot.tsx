@@ -1,4 +1,3 @@
-import * as React from "react";
 import type { IconProps } from "./types";
 
 const SvgLineEndDot = ({ size = 24, strokeWidth = 2, ...props }: IconProps) => (

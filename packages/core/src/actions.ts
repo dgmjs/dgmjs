@@ -12,8 +12,9 @@
  */
 
 import type { Editor } from "./editor";
-import { Box, Group, type Shape, Line, type ShapeValues, Page } from "./shapes";
+import { Box, Group, type Shape, Line, type ObjProps, Page } from "./shapes";
 import * as geometry from "./graphics/geometry";
+import { Obj } from "./core/obj";
 
 /**
  * Editor actions
@@ -42,12 +43,16 @@ export class Actions {
   /**
    * Add a page
    */
-  addPage(): Page {
+  addPage(position?: number): Page {
+    position = position ?? this.editor.getPages().length;
     const page = new Page();
-    page.name = `Page ${this.editor.store.doc!.children.length + 1}`;
+    page.name = `Page ${position + 1}`;
     const tr = this.editor.transform;
     tr.startTransaction("add-page");
     tr.addPage(page);
+    if (position >= 0 && position < this.editor.getPages().length) {
+      tr.reorderPage(page, position);
+    }
     tr.resolveAllConstraints(page, this.editor.canvas);
     tr.endTransaction();
     return page;
@@ -76,19 +81,18 @@ export class Actions {
   /**
    * Duplicate a page
    */
-  duplcatePage(page: Page, position: number) {
+  duplicatePage(page: Page, position: number): Page {
     const clipboard = this.editor.clipboard;
     const buffer: any[] = [];
     clipboard.putObjects([page], buffer);
-    if (buffer.length > 0) {
-      const copied = clipboard.getObjects(buffer)[0] as Page;
-      const tr = this.editor.transform;
-      tr.startTransaction("duplicate-page");
-      tr.addPage(copied);
-      tr.reorderPage(copied, position);
-      tr.endTransaction();
-      this.editor.setCurrentPage(copied);
-    }
+    const copied = clipboard.getObjects(buffer)[0] as Page;
+    const tr = this.editor.transform;
+    tr.startTransaction("duplicate-page");
+    tr.addPage(copied);
+    tr.reorderPage(copied, position);
+    tr.endTransaction();
+    this.editor.setCurrentPage(copied);
+    return copied;
   }
 
   /**
@@ -106,37 +110,37 @@ export class Actions {
   }
 
   /**
-   * Update shape properties
+   * Update obj properties
    */
-  update(values: ShapeValues, shapes?: Shape[]) {
+  update(values: ObjProps, objs?: Obj[]) {
     const page = this.editor.currentPage;
     if (page) {
-      shapes = shapes ?? this.editor.selection.getShapes();
+      objs = objs ?? this.editor.selection.getShapes();
       const tr = this.editor.transform;
       tr.startTransaction("update");
       for (let key in values) {
         if (key === "richText") {
-          shapes.forEach((s) => {
+          objs.forEach((s) => {
             if (s instanceof Box) tr.setRichText(s, (values as any)[key]);
           });
         } else if (key === "horzAlign") {
-          shapes.forEach((s) => {
+          objs.forEach((s) => {
             if (s instanceof Box) tr.setHorzAlign(s, (values as any)[key]);
           });
         } else if (key === "fontSize") {
-          shapes.forEach((s) => {
+          objs.forEach((s) => {
             if (s instanceof Box) tr.setFontSize(s, (values as any)[key]);
           });
         } else if (key === "fontFamily") {
-          shapes.forEach((s) => {
+          objs.forEach((s) => {
             if (s instanceof Box) tr.setFontFamily(s, (values as any)[key]);
           });
         } else if (key === "fontColor") {
-          shapes.forEach((s) => {
+          objs.forEach((s) => {
             if (s instanceof Box) tr.setFontColor(s, (values as any)[key]);
           });
         } else {
-          shapes.forEach((s) => {
+          objs.forEach((s) => {
             tr.atomicAssign(s, key, (values as any)[key]);
           });
         }
@@ -147,9 +151,9 @@ export class Actions {
   }
 
   /**
-   * Delete selected shapes
+   * Remove selected shapes
    */
-  delete_(shapes?: Shape[]) {
+  remove(shapes?: Shape[]) {
     const page = this.editor.currentPage;
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();

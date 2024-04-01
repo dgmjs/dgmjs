@@ -60,7 +60,7 @@ export const ColorField: React.FC<ColorFieldProps> = ({
   return (
     <div className={cn("flex items-center gap-2", className)} {...others}>
       <div>
-        <Popover onOpenChange={handlePopoverOpenChange}>
+        <Popover onOpenChange={handlePopoverOpenChange} modal={true}>
           <PopoverTrigger asChild>
             <div
               className="h-8 w-8 rounded border cursor-pointer"

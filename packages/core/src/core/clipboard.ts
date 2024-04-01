@@ -84,7 +84,7 @@ class Clipboard {
     });
     // resolve refs and reassign ids
     for (let obj of objs) {
-      obj.traverse((s) => s?.resolveRefs(idMap));
+      obj.traverse((s) => s?.resolveRefs(idMap, true));
       obj.traverse((s) => (s.id = generateId()));
       obj.parent = null;
     }

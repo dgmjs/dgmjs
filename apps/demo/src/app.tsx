@@ -4,7 +4,7 @@ import {
   FillStyle,
   Page,
   Shape,
-  ShapeValues,
+  ObjProps,
   Transaction,
   basicSetup,
 } from "@dgmjs/core";
@@ -32,7 +32,7 @@ function App() {
     insertFontsToDocument(fontJson as Font[]);
     await fetchFonts(fontJson as Font[]);
 
-    window.editor.factory.on("shapeInitialize", (shape: Shape) => {
+    window.editor.factory.onShapeInitialize.on((shape: Shape) => {
       shape.strokeWidth = 2;
       shape.roughness = 1;
       shape.fillColor = "$lime9";
@@ -76,7 +76,7 @@ function App() {
     window.editor.selection.select(selection);
   };
 
-  const handleValuesChange = (values: ShapeValues) => {
+  const handleValuesChange = (values: ObjProps) => {
     const shapes = window.editor.selection.getShapes();
     window.editor.actions.update(values);
     demoStore.setSelection([...shapes]);
@@ -91,7 +91,9 @@ function App() {
       <EditorWrapper
         className="absolute inset-y-0 left-56 right-56"
         theme={demoStore.theme}
-        options={basicSetup()}
+        options={basicSetup({
+          keymapEventTarget: window,
+        })}
         showGrid={true}
         onMount={handleMount}
         onSelectionChange={handleSelectionChange}

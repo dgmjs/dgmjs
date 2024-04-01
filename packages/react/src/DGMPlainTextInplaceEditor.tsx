@@ -1,4 +1,11 @@
-import { Editor, Shape, Box, Text, measureText } from "@dgmjs/core";
+import {
+  Editor,
+  Shape,
+  Box,
+  Text,
+  measureText,
+  DblClickEvent,
+} from "@dgmjs/core";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { textVertAlignToAlignItems } from "./utils";
 
@@ -57,8 +64,8 @@ export const DGMPlainTextInplaceEditor: React.FC<
     const textHeight = textMetric.height + state.padding[0] + state.padding[2];
     const MIN_WIDTH = 2;
     return {
-      left: rect.left,
-      top: rect.top,
+      left: rect[0][0],
+      top: rect[0][1],
       width: Math.max(textWidth, MIN_WIDTH),
       height: textHeight,
     };
@@ -125,7 +132,7 @@ export const DGMPlainTextInplaceEditor: React.FC<
         state.textShape instanceof Text &&
         state.textValue.trim().length === 0
       ) {
-        editor.actions.delete_([state.textShape]);
+        editor.actions.remove([state.textShape]);
       }
       state.textShape._renderText = true;
       editor.repaint();
@@ -144,27 +151,33 @@ export const DGMPlainTextInplaceEditor: React.FC<
     update(state.textShape as Box, textValue);
   };
 
+  const handleDblClick = ({ shape, point }: DblClickEvent) => {
+    if (shape instanceof Box && shape.textEditable && shape.richText === false)
+      open(shape);
+  };
+
+  const handleCreate = (shape: Shape) => {
+    if (
+      shape instanceof Text &&
+      shape.textEditable &&
+      shape.richText === false
+    ) {
+      editor.selection.deselectAll();
+      open(shape);
+    }
+  };
+
   useEffect(() => {
     if (editor) {
-      editor.on("dblClick", (shape: Shape, point: number[]) => {
-        if (
-          shape instanceof Box &&
-          shape.textEditable &&
-          shape.richText === false
-        )
-          open(shape);
-      });
-      editor.factory.on("create", (shape: Shape) => {
-        if (
-          shape instanceof Text &&
-          shape.textEditable &&
-          shape.richText === false
-        ) {
-          editor.selection.deselectAll();
-          open(shape);
-        }
-      });
+      editor.onDblClick.on(handleDblClick);
+      editor.factory.onCreate.on(handleCreate);
     }
+    return function cleanup() {
+      if (editor) {
+        editor.onDblClick.off(handleDblClick);
+        editor.factory.onCreate.off(handleCreate);
+      }
+    };
   }, [editor]);
 
   return (

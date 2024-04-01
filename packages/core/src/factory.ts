@@ -1,4 +1,3 @@
-import { EventEmitter } from "events";
 import type { Editor } from "./editor";
 import {
   AlignmentKind,
@@ -18,21 +17,25 @@ import { fileToImageElement } from "./utils/image-utils";
 import * as geometry from "./graphics/geometry";
 import simplifyPath from "simplify-path";
 import { SHAPE_MIN_SIZE } from "./graphics/const";
+import { TypedEvent } from "./std/typed-event";
 
 /**
  * Shape factory
  */
-export class ShapeFactory extends EventEmitter {
+export class ShapeFactory {
   editor: Editor;
+  onCreate: TypedEvent<Shape>;
+  onShapeInitialize: TypedEvent<Shape>;
 
   constructor(editor: Editor) {
-    super();
     this.editor = editor;
+    this.onCreate = new TypedEvent();
+    this.onShapeInitialize = new TypedEvent();
   }
 
   // TODO: Consider to move to editor.on("create", shape)
   triggerCreate(shape: Shape) {
-    this.emit("create", shape);
+    this.onCreate.emit(shape);
   }
 
   /**
@@ -48,7 +51,7 @@ export class ShapeFactory extends EventEmitter {
     rectangle.height = h;
     rectangle.horzAlign = AlignmentKind.CENTER;
     rectangle.vertAlign = AlignmentKind.MIDDLE;
-    this.emit("shapeInitialize", rectangle);
+    this.onShapeInitialize.emit(rectangle);
     return rectangle;
   }
 
@@ -65,7 +68,7 @@ export class ShapeFactory extends EventEmitter {
     ellipse.height = h;
     ellipse.horzAlign = AlignmentKind.CENTER;
     ellipse.vertAlign = AlignmentKind.MIDDLE;
-    this.emit("shapeInitialize", ellipse);
+    this.onShapeInitialize.emit(ellipse);
     return ellipse;
   }
 
@@ -91,7 +94,7 @@ export class ShapeFactory extends EventEmitter {
     text.height = h;
     text.horzAlign = AlignmentKind.LEFT;
     text.vertAlign = AlignmentKind.TOP;
-    this.emit("shapeInitialize", text);
+    this.onShapeInitialize.emit(text);
     return text;
   }
 
@@ -114,7 +117,7 @@ export class ShapeFactory extends EventEmitter {
       width: "text",
       height: "text",
     });
-    this.emit("shapeInitialize", text);
+    this.onShapeInitialize.emit(text);
     return text;
   }
 
@@ -142,7 +145,7 @@ export class ShapeFactory extends EventEmitter {
     image.left = rect[0][0] - w / 2;
     image.top = rect[0][1] - h / 2;
     image.sizable = Sizable.RATIO;
-    this.emit("shapeInitialize", image);
+    this.onShapeInitialize.emit(image);
     return image;
   }
 
@@ -170,7 +173,7 @@ export class ShapeFactory extends EventEmitter {
     image.left = position[0] - size[0] / 2;
     image.top = position[1] - size[1] / 2;
     image.sizable = Sizable.RATIO;
-    this.emit("shapeInitialize", image);
+    this.onShapeInitialize.emit(image);
     return image;
   }
 
@@ -189,7 +192,7 @@ export class ShapeFactory extends EventEmitter {
     line.top = rect[0][1];
     line.width = geometry.width(rect);
     line.height = geometry.height(rect);
-    this.emit("shapeInitialize", line);
+    this.onShapeInitialize.emit(line);
     return line;
   }
 
@@ -210,7 +213,7 @@ export class ShapeFactory extends EventEmitter {
     freehand.width = geometry.width(rect);
     freehand.height = geometry.height(rect);
     freehand.pathEditable = false;
-    this.emit("shapeInitialize", freehand);
+    this.onShapeInitialize.emit(freehand);
     return freehand;
   }
 
@@ -237,7 +240,7 @@ export class ShapeFactory extends EventEmitter {
     connector.top = rect[0][1];
     connector.width = geometry.width(rect);
     connector.height = geometry.height(rect);
-    this.emit("shapeInitialize", connector);
+    this.onShapeInitialize.emit(connector);
     return connector;
   }
 
@@ -255,7 +258,7 @@ export class ShapeFactory extends EventEmitter {
     frame.height = h;
     frame.horzAlign = AlignmentKind.CENTER;
     frame.vertAlign = AlignmentKind.MIDDLE;
-    this.emit("shapeInitialize", frame);
+    this.onShapeInitialize.emit(frame);
     return frame;
   }
 
@@ -273,7 +276,7 @@ export class ShapeFactory extends EventEmitter {
     embed.height = h;
     embed.horzAlign = AlignmentKind.CENTER;
     embed.vertAlign = AlignmentKind.MIDDLE;
-    this.emit("shapeInitialize", embed);
+    this.onShapeInitialize.emit(embed);
     return embed;
   }
 }

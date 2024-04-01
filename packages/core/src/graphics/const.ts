@@ -59,7 +59,10 @@ const Color = Object.freeze({
   BACKGROUND: "$background",
   FOREGROUND: "$foreground",
   TRANSPARENT: "$transparent",
-  CANVAS: "$slate1", // #F5F5F5
+  CANVAS: "$slate2", // #F5F5F5
+  SELECTION: "$blue10",
+  GRID: "$slate3",
+  BORDER: "$slate9",
   BLACK: "#000000",
   WHITE: "#FFFFFF",
   DARK_GRAY: "#404040",
@@ -72,8 +75,6 @@ const Color = Object.freeze({
   ORANGE: "#FFC800",
   PINK: "#FFAFAF",
   YELLOW: "#FFFF00",
-  SELECTION: "$blue10",
-  GRID: "$slate4",
 });
 
 const StrokePattern = Object.freeze({
