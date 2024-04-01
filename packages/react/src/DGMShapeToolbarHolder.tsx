@@ -99,6 +99,7 @@ export const DGMShapeToolbarHolder: React.FC<DGMShapeToolbarHolderProps> = ({
         background: "transparent",
         zIndex: 10,
         outline: "none",
+        display: "none",
       }}
     >
       {toolbar}
