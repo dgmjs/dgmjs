@@ -608,8 +608,11 @@ export class Editor {
   fitToScreen(scaleDelta: number = 0) {
     if (this.currentPage) {
       // doc size in GCS
-      const doc = this.currentPage;
-      const box = doc.getPageBoundingBox(this.canvas);
+      const doc = this.store.doc as Document;
+      const page = this.currentPage;
+      let box = Array.isArray(doc.pageSize)
+        ? [[0, 0], doc.pageSize]
+        : page.getPageBoundingBox(this.canvas);
       const center = geometry.center(box);
       const dw = geometry.width(box);
       const dh = geometry.height(box);
