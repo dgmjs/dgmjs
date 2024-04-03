@@ -133,7 +133,7 @@ export class ShapeFactory {
     let w = geometry.width(rect);
     let h = geometry.height(rect);
     // if (geometry.distance(rect[0], rect[1]) <= SHAPE_MIN_SIZE) {
-    //   const size = geometry.fitScaledownTo(
+    //   const size = geometry.fitScaleTo(
     //     [image.imageWidth, image.imageHeight],
     //     [400, 400]
     //   );
@@ -163,7 +163,7 @@ export class ShapeFactory {
     image.imageWidth = imageElement.width;
     image.imageHeight = imageElement.height;
     if (!size) {
-      size = geometry.fitScaledownTo(
+      size = geometry.fitScaleTo(
         [image.imageWidth, image.imageHeight],
         [400, 400]
       );

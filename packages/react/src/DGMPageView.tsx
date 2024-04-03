@@ -1,4 +1,4 @@
-import { Document, Page, PageSize, renderOnCanvas } from "@dgmjs/core";
+import { Page, PageSize, renderOnCanvas } from "@dgmjs/core";
 import {
   forwardRef,
   useEffect,
@@ -11,6 +11,7 @@ export interface DGMPageViewProps extends React.HTMLAttributes<HTMLDivElement> {
   pageSize: PageSize;
   page: Page;
   darkMode?: boolean;
+  maxScale?: number;
   scaleAdjust?: number;
 }
 
@@ -24,6 +25,7 @@ export const DGMPageView = forwardRef<DGMPageViewHandle, DGMPageViewProps>(
       pageSize,
       page,
       darkMode = false,
+      maxScale = 1,
       scaleAdjust = 1,
       style,
       children,
@@ -44,6 +46,7 @@ export const DGMPageView = forwardRef<DGMPageViewHandle, DGMPageViewProps>(
           darkMode,
           pageSize,
           [width, height],
+          maxScale,
           scaleAdjust
         );
       }

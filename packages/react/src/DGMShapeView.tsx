@@ -12,6 +12,7 @@ export interface DGMShapeViewProps
   shapes: Shape[];
   heightRatio?: number;
   darkMode?: boolean;
+  maxScale?: number;
   scaleAdjust?: number;
 }
 
@@ -25,6 +26,7 @@ export const DGMShapeView = forwardRef<DGMShapeViewHandle, DGMShapeViewProps>(
       shapes = [],
       heightRatio = 0.75, // 4:3
       darkMode = false,
+      maxScale = 1,
       scaleAdjust = 1,
       style,
       children,
@@ -44,6 +46,7 @@ export const DGMShapeView = forwardRef<DGMShapeViewHandle, DGMShapeViewProps>(
           darkMode,
           null,
           [width, height],
+          maxScale,
           scaleAdjust
         );
       }
