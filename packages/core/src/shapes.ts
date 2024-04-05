@@ -882,7 +882,15 @@ class Box extends Shape {
     this.anchorLength = 0;
     this.anchorPosition = 0.5;
     this.textEditable = true;
-    this.text = "";
+    this.text = {
+      type: "doc",
+      content: [
+        {
+          type: "paragraph",
+          content: [],
+        },
+      ],
+    };
     this.wordWrap = false;
     this.horzAlign = AlignmentKind.CENTER;
     this.vertAlign = AlignmentKind.MIDDLE;

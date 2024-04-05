@@ -42,11 +42,10 @@ export function convertToLatestVersion(json: any): any {
     json.children = [page];
   }
 
+  // convert plain text string to text doc nodes
   traverse(json, (node) => {
-    if (node.type === "Text") {
-      if (typeof node.text === "string") {
-        node.text = convertTextToDoc(node.text, node.horzAlign);
-      }
+    if (typeof node.text === "string") {
+      node.text = convertTextToDoc(node.text, node.horzAlign);
     }
   });
 
