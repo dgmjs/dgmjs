@@ -1,17 +1,20 @@
 import { Editor } from "@dgmjs/core";
 import { useState } from "react";
 import { DGMEditor, DGMEditorProps } from "./DGMEditor";
-import { DGMRichTextInplaceEditor } from "./DGMRichTextInplaceEditor";
+import { DGMTextInplaceEditor } from "./DGMTextInplaceEditor";
 import { DGMShapeToolbarHolder } from "./DGMShapeToolbarHolder";
 
-interface DGMEditorWithInplaceEditorsProps extends DGMEditorProps {
-  richTextInplaceEditorToolbar?: React.ReactNode;
+interface DGMEditorWithAllProps extends DGMEditorProps {
+  textInplaceEditorToolbar?: React.ReactNode;
   shapeToolbar?: React.ReactNode;
 }
 
-export const DGMEditorWithInplaceEditors: React.FC<
-  DGMEditorWithInplaceEditorsProps
-> = ({ onMount, richTextInplaceEditorToolbar, shapeToolbar, ...props }) => {
+export const DGMEditorWithAll: React.FC<DGMEditorWithAllProps> = ({
+  onMount,
+  textInplaceEditorToolbar,
+  shapeToolbar,
+  ...props
+}) => {
   const [editor, setEditor] = useState<Editor | null>(null);
 
   return (
@@ -23,9 +26,9 @@ export const DGMEditorWithInplaceEditors: React.FC<
         }}
         {...props}
       >
-        <DGMRichTextInplaceEditor
+        <DGMTextInplaceEditor
           editor={editor as Editor}
-          toolbar={richTextInplaceEditorToolbar}
+          toolbar={textInplaceEditorToolbar}
         />
         <DGMShapeToolbarHolder
           editor={editor as Editor}

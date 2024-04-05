@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import {
   DGMEditor,
   DGMEditorProps,
-  DGMRichTextInplaceEditor,
+  DGMTextInplaceEditor,
   DGMShapeToolbarHolder,
   TiptapEditor,
 } from "@dgmjs/react";
@@ -200,7 +200,7 @@ export const EditorWrapper: React.FC<EditorWrapperProps> = ({
         }}
         {...props}
       >
-        <DGMRichTextInplaceEditor
+        <DGMTextInplaceEditor
           onMount={(tiptapEditor) => {
             setTiptapEditor(tiptapEditor);
           }}
