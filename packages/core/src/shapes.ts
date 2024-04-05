@@ -24,11 +24,7 @@ import {
 import * as geometry from "./graphics/geometry";
 import * as utils from "./graphics/utils";
 import { ZodSchema } from "zod";
-import {
-  convertTextToDoc,
-  drawRichText,
-  drawPlainText,
-} from "./utils/text-utils";
+import { drawRichText } from "./utils/text-utils";
 import { Transform } from "./transform/transform";
 import { evalScript } from "./mal/mal";
 import { Obj } from "./core/obj";
@@ -810,11 +806,6 @@ class Box extends Shape {
   anchorPosition: number;
 
   /**
-   * Rich text or plain text
-   */
-  richText: boolean;
-
-  /**
    * Text editable
    */
   textEditable: boolean;
@@ -890,7 +881,6 @@ class Box extends Shape {
     this.anchorAngle = 0;
     this.anchorLength = 0;
     this.anchorPosition = 0.5;
-    this.richText = false;
     this.textEditable = true;
     this.text = "";
     this.wordWrap = false;
@@ -909,7 +899,6 @@ class Box extends Shape {
     json.anchorAngle = this.anchorAngle;
     json.anchorLength = this.anchorLength;
     json.anchorPosition = this.anchorPosition;
-    json.richText = this.richText;
     json.textEditable = this.textEditable;
     json.text = structuredClone(this.text);
     json.wordWrap = this.wordWrap;
@@ -928,7 +917,6 @@ class Box extends Shape {
     this.anchorAngle = json.anchorAngle ?? this.anchorAngle;
     this.anchorLength = json.anchorLength ?? this.anchorLength;
     this.anchorPosition = json.anchorPosition ?? this.anchorPosition;
-    this.richText = json.richText ?? typeof json.text !== "string"; // for backward compatibility
     this.textEditable = json.textEditable ?? this.textEditable;
     this.text = json.text ?? this.text;
     this.wordWrap = json.wordWrap ?? this.wordWrap;
@@ -964,11 +952,7 @@ class Box extends Shape {
 
   renderText(canvas: Canvas): void {
     if (this._renderText) {
-      if (this.richText) {
-        drawRichText(canvas, this);
-      } else {
-        drawPlainText(canvas, this);
-      }
+      drawRichText(canvas, this);
     }
   }
 
@@ -1001,7 +985,6 @@ class Box extends Shape {
     startNode: { type: string; content: any[] },
     visitor: (node: any) => void
   ) {
-    if (typeof startNode !== "object") startNode = convertTextToDoc(startNode);
     visitor(startNode);
     if (Array.isArray(startNode.content)) {
       startNode.content.forEach((node) => this.visitNodes(node, visitor));

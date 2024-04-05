@@ -16,7 +16,7 @@ import {
 } from "./tiptap/tiptap-editor";
 import { Editor as TiptapEditor } from "@tiptap/react";
 
-interface DGMRichTextInplaceEditorProps
+interface DGMTextInplaceEditorProps
   extends React.HTMLAttributes<HTMLDivElement> {
   editor: Editor;
   toolbar?: React.ReactNode;
@@ -43,9 +43,13 @@ interface InternalState {
   textHeight: number;
 }
 
-export const DGMRichTextInplaceEditor: React.FC<
-  DGMRichTextInplaceEditorProps
-> = ({ editor, toolbar, onMount, onOpen, ...others }) => {
+export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
+  editor,
+  toolbar,
+  onMount,
+  onOpen,
+  ...others
+}) => {
   const toolbarHolderRef = useRef<HTMLDivElement>(null);
 
   const [state, setState] = useState<InternalState>({
@@ -212,17 +216,13 @@ export const DGMRichTextInplaceEditor: React.FC<
   };
 
   const handleDblClick = ({ shape, point }: DblClickEvent) => {
-    if (shape instanceof Box && shape.textEditable && shape.richText === true) {
+    if (shape instanceof Box && shape.textEditable) {
       open(shape);
     }
   };
 
   const handleCreate = (shape: Shape) => {
-    if (
-      shape instanceof Text &&
-      shape.textEditable &&
-      shape.richText === true
-    ) {
+    if (shape instanceof Text && shape.textEditable) {
       editor.selection.deselectAll();
       open(shape);
     }

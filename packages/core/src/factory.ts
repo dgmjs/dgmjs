@@ -18,6 +18,7 @@ import * as geometry from "./graphics/geometry";
 import simplifyPath from "simplify-path";
 import { SHAPE_MIN_SIZE } from "./graphics/const";
 import { TypedEvent } from "./std/typed-event";
+import { convertTextToDoc } from "./utils/text-utils";
 
 /**
  * Shape factory
@@ -77,13 +78,7 @@ export class ShapeFactory {
    */
   createText(rect: number[][], initialText: string = ""): Text {
     const text = new Text();
-    text.richText = false;
-    text.text = initialText;
-    text.constraints.push({
-      id: "set-size",
-      width: "text",
-      height: "text",
-    });
+    text.text = convertTextToDoc(initialText, text.horzAlign);
     text.strokeColor = "$transparent";
     text.fillColor = "$transparent";
     text.left = rect[0][0];
@@ -94,6 +89,11 @@ export class ShapeFactory {
     text.height = h;
     text.horzAlign = AlignmentKind.LEFT;
     text.vertAlign = AlignmentKind.TOP;
+    text.constraints.push({
+      id: "set-size",
+      width: "text",
+      height: "text",
+    });
     this.onShapeInitialize.emit(text);
     return text;
   }
@@ -103,8 +103,7 @@ export class ShapeFactory {
    */
   createAnchoredText(anchorPosition: number, initialText: string = ""): Text {
     const text = new Text();
-    text.richText = false;
-    text.text = initialText;
+    text.text = convertTextToDoc(initialText, text.horzAlign);
     text.strokeColor = "$transparent";
     text.fillColor = "$transparent";
     text.horzAlign = AlignmentKind.LEFT;

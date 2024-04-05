@@ -119,11 +119,7 @@ export class Actions {
       const tr = this.editor.transform;
       tr.startTransaction("update");
       for (let key in values) {
-        if (key === "richText") {
-          objs.forEach((s) => {
-            if (s instanceof Box) tr.setRichText(s, (values as any)[key]);
-          });
-        } else if (key === "horzAlign") {
+        if (key === "horzAlign") {
           objs.forEach((s) => {
             if (s instanceof Box) tr.setHorzAlign(s, (values as any)[key]);
           });
