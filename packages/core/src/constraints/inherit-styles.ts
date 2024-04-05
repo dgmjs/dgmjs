@@ -77,8 +77,6 @@ function constraint(
       changed =
         transform.atomicAssign(shape, "vertAlign", parent.vertAlign) || changed;
       changed =
-        transform.atomicAssign(shape, "wordWrap", parent.wordWrap) || changed;
-      changed =
         transform.atomicAssign(shape, "lineHeight", parent.lineHeight) ||
         changed;
       changed =

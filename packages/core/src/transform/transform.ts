@@ -21,7 +21,6 @@ import {
 } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { convertDocToText, convertTextToDoc } from "../utils/text-utils";
 import { moveEndPoint, adjustRoute } from "../utils/route-utils";
 import type { Obj } from "../core/obj";
 import { getAllConnectorsTo, getAllDescendant } from "../utils/shape-utils";
@@ -554,29 +553,6 @@ export class Transform {
     let changed = false;
     changed = this.atomicAssign(box, "anchorAngle", angle) || changed;
     changed = this.atomicAssign(box, "anchorLength", length) || changed;
-    return changed;
-  }
-
-  /**
-   * A set of mutations to change rich text or not
-   */
-  setRichText(box: Box, richText: boolean): boolean {
-    let changed = false;
-    if (richText) {
-      let doc = structuredClone(
-        richText && typeof box.text === "string"
-          ? convertTextToDoc(box.text)
-          : box.text
-      );
-      changed = this.atomicAssign(box, "text", doc) || changed;
-    } else {
-      let str =
-        !richText && typeof box.text !== "string"
-          ? convertDocToText(box.text)
-          : box.text;
-      changed = this.atomicAssign(box, "text", str) || changed;
-    }
-    changed = this.atomicAssign(box, "richText", richText) || changed;
     return changed;
   }
 

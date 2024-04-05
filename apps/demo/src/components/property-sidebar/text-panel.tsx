@@ -18,7 +18,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Toggle } from "@/components/ui/toggle";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Box, Text as TextShape } from "@dgmjs/core";
 import {
@@ -26,7 +25,6 @@ import {
   AlignLeftIcon,
   AlignRightIcon,
   ChevronsUpDownIcon,
-  WrapTextIcon,
 } from "lucide-react";
 import React from "react";
 import { ColorField } from "./fields/color-field";
@@ -61,7 +59,6 @@ export const TextPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
   const fontSize = merge(shapes.map((s) => (s as TextShape).fontSize));
   const vertAlign = merge(shapes.map((s) => (s as TextShape).vertAlign));
   const horzAlign = merge(shapes.map((s) => (s as TextShape).horzAlign));
-  const wordWrap = merge(shapes.map((s) => (s as TextShape).wordWrap));
   const lineHeight = merge(shapes.map((s) => (s as TextShape).lineHeight));
   const paragraphSpacing = merge(
     shapes.map((s) => (s as TextShape).paragraphSpacing)
@@ -213,15 +210,6 @@ export const TextPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
               title="Paragraph Spacing"
             />
           </div>
-          <Toggle
-            variant="outline"
-            size="sm"
-            pressed={wordWrap}
-            onPressedChange={(pressed) => onChange({ wordWrap: pressed })}
-            title="Word Wrap"
-          >
-            <WrapTextIcon size={16} />
-          </Toggle>
         </div>
       )}
     </Panel>

@@ -156,7 +156,6 @@ export function getTextNodeFont(
  * adding "line" type nodes with additional size info.
  *
  * options:
- *   wordWrap: boolean
  *   width: number
  *   listIndent: number
  *
@@ -188,7 +187,6 @@ export function preprocessDocNode(
   canvas: Canvas,
   node: any,
   shape: Box,
-  wordWrap: boolean,
   width: number,
   listIndent: number
 ): any {
@@ -208,7 +206,6 @@ export function preprocessDocNode(
             canvas,
             child,
             shape,
-            wordWrap,
             width,
             listIndent
           );
@@ -339,7 +336,7 @@ export function preprocessDocNode(
                 );
                 words.forEach((word, i) => {
                   let _wordMetric = canvas.textMetric(word);
-                  if (wordWrap && lineWidth + _wordMetric.width > width) {
+                  if (lineWidth + _wordMetric.width > width) {
                     addText();
                     _wordMetric = canvas.textMetric(word);
                     breakLine(false);
@@ -591,14 +588,7 @@ export function measureText(
   lineHeight: number;
   preprocessedDoc?: any;
 } {
-  const doc = preprocessDocNode(
-    canvas,
-    typeof text === "string" ? convertTextToDoc(text) : text,
-    shape,
-    shape.wordWrap, // word wrap
-    shape.width,
-    1.5
-  );
+  const doc = preprocessDocNode(canvas, text, shape, shape.width, 1.5);
   const textWidth = doc._width;
   // adjust last line height
   const lastLine = getLastLine(doc);
@@ -617,17 +607,6 @@ export function measureText(
 
 export function drawRichText(canvas: Canvas, shape: Box) {
   canvas.storeState();
-  // let doc = preprocessDocNode(
-  //   canvas,
-  //   typeof shape.text === "string" ? convertTextToDoc(shape.text) : shape.text,
-  //   shape,
-  //   shape.wordWrap,
-  //   shape.innerWidth,
-  //   1.5
-  // );
-
-  // const textValue =
-  //   typeof shape.text === "string" ? convertTextToDoc(shape.text) : shape.text;
   const textMetric = measureText(canvas, shape, shape.text);
   let top = shape.innerTop;
   switch (shape.vertAlign) {

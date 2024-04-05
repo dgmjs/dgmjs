@@ -24,7 +24,7 @@ import {
 import * as geometry from "./graphics/geometry";
 import * as utils from "./graphics/utils";
 import { ZodSchema } from "zod";
-import { convertTextToDoc, drawRichText } from "./utils/text-utils";
+import { drawRichText } from "./utils/text-utils";
 import { Transform } from "./transform/transform";
 import { evalScript } from "./mal/mal";
 import { Obj } from "./core/obj";
@@ -841,11 +841,6 @@ class Box extends Shape {
   text: any;
 
   /**
-   * Word wrap
-   */
-  wordWrap: boolean;
-
-  /**
    * Text horizontal alignment
    */
   horzAlign: string;
@@ -883,7 +878,6 @@ class Box extends Shape {
     this.anchorPosition = 0.5;
     this.textEditable = true;
     this.text = "";
-    this.wordWrap = false;
     this.horzAlign = AlignmentKind.CENTER;
     this.vertAlign = AlignmentKind.MIDDLE;
     this.lineHeight = 1.2;
@@ -901,7 +895,6 @@ class Box extends Shape {
     json.anchorPosition = this.anchorPosition;
     json.textEditable = this.textEditable;
     json.text = structuredClone(this.text);
-    json.wordWrap = this.wordWrap;
     json.horzAlign = this.horzAlign;
     json.vertAlign = this.vertAlign;
     json.lineHeight = this.lineHeight;
@@ -919,7 +912,6 @@ class Box extends Shape {
     this.anchorPosition = json.anchorPosition ?? this.anchorPosition;
     this.textEditable = json.textEditable ?? this.textEditable;
     this.text = json.text ?? this.text;
-    this.wordWrap = json.wordWrap ?? this.wordWrap;
     this.horzAlign = json.horzAlign ?? this.horzAlign;
     this.vertAlign = json.vertAlign ?? this.vertAlign;
     this.lineHeight = json.lineHeight ?? this.lineHeight;
@@ -985,7 +977,6 @@ class Box extends Shape {
     startNode: { type: string; content: any[] },
     visitor: (node: any) => void
   ) {
-    if (typeof startNode !== "object") startNode = convertTextToDoc(startNode);
     visitor(startNode);
     if (Array.isArray(startNode.content)) {
       startNode.content.forEach((node) => this.visitNodes(node, visitor));
