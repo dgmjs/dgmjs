@@ -49,16 +49,21 @@ export function stripUnit(value: string | number): number {
 /**
  * Convert a text (string) to document node
  */
-export function convertTextToDoc(text: string): any {
+export function convertTextToDoc(
+  text: string,
+  textAlign: string = "left"
+): any {
   const doc: any = {
     type: "doc",
-    content: [{ type: "paragraph", content: [] }],
+    content: [],
   };
   const lines = text.split("\n");
   lines.forEach((line, i) => {
-    if (i > 0) doc.content[0].content.push({ type: "hardBreak" });
-    if (line.length > 0)
-      doc.content[0].content.push({ type: "text", text: line });
+    doc.content.push({
+      type: "paragraph",
+      attrs: { textAlign },
+      content: [{ type: "text", text: line }],
+    });
   });
   return doc;
 }
@@ -586,47 +591,28 @@ export function measureText(
   lineHeight: number;
   preprocessedDoc?: any;
 } {
-  if (shape.richText) {
-    const doc = preprocessDocNode(
-      canvas,
-      typeof text === "string" ? convertTextToDoc(text) : text,
-      shape,
-      shape.wordWrap, // word wrap
-      shape.width,
-      1.5
-    );
-    const textWidth = doc._width;
-    // adjust last line height
-    const lastLine = getLastLine(doc);
-    const fontHeight = lastLine._ascent + lastLine._descent;
-    const gap = (lastLine._height - fontHeight) / 2;
-    const lastLineHeight = Math.max(lastLine._height, fontHeight + gap);
-    const textHeight = doc._height - lastLine._height + lastLineHeight;
-    return {
-      width: textWidth,
-      height: textHeight,
-      minWidth: doc._minWidth,
-      lineHeight: shape.fontSize * shape.lineHeight,
-      preprocessedDoc: doc,
-    };
-  } else {
-    const plain = typeof text !== "string" ? convertDocToText(text) : text;
-    const lines = plain.split("\n");
-    shape.assignStyles(canvas);
-    const textWidth = Math.max(...lines.map((l) => canvas.textMetric(l).width));
-    // adjust last line height
-    const fontMetric = canvas.textMetric("|"); // any character is possible
-    const gap = (shape.fontSize * shape.lineHeight - fontMetric.height) / 2;
-    const lineHeight = shape.fontSize * shape.lineHeight;
-    const lastLineHeight = Math.max(lineHeight, fontMetric.height + gap);
-    const textHeight = (lines.length - 1) * lineHeight + lastLineHeight;
-    return {
-      width: shape.width,
-      height: textHeight,
-      minWidth: textWidth,
-      lineHeight: lineHeight,
-    };
-  }
+  const doc = preprocessDocNode(
+    canvas,
+    typeof text === "string" ? convertTextToDoc(text) : text,
+    shape,
+    shape.wordWrap, // word wrap
+    shape.width,
+    1.5
+  );
+  const textWidth = doc._width;
+  // adjust last line height
+  const lastLine = getLastLine(doc);
+  const fontHeight = lastLine._ascent + lastLine._descent;
+  const gap = (lastLine._height - fontHeight) / 2;
+  const lastLineHeight = Math.max(lastLine._height, fontHeight + gap);
+  const textHeight = doc._height - lastLine._height + lastLineHeight;
+  return {
+    width: textWidth,
+    height: textHeight,
+    minWidth: doc._minWidth,
+    lineHeight: shape.fontSize * shape.lineHeight,
+    preprocessedDoc: doc,
+  };
 }
 
 export function drawRichText(canvas: Canvas, shape: Box) {
@@ -664,75 +650,5 @@ export function drawRichText(canvas: Canvas, shape: Box) {
     shape.innerWidth,
     1.5
   );
-  canvas.restoreState();
-}
-
-/**
- * Draw plain text inside a box
- *
- * How to draw a text line:
- *
- *     + -------------- +
- *     |                | G
- *     |  ------- +      +
- *  LH |  TEXT    | H    ____________ BL
- *     |  ------- +
- *     |
- *     + --------+
- *
- * Legends:
- * - LH (Line Height) = fontSize * lineHeight
- * - H (Text Height) = metric.ascent + metric.descent (= metric.height)
- * - G (Gap) = (LH - H) / 2
- * - BL (Baseline) = G + metric.ascent
- *
- * To draw a text on (x, y)
- * - canvas.fillText(x, y + BL)
- */
-export function drawPlainText(canvas: Canvas, shape: Box) {
-  canvas.storeState();
-  const text: string =
-    typeof shape.text !== "string" ? convertDocToText(shape.text) : shape.text;
-
-  const lines = text.split("\n");
-  const lineHeight = shape.fontSize * shape.lineHeight;
-  // const height = lines.length * lineHeight;
-
-  const textMetric = measureText(canvas, shape, text);
-
-  let top = shape.innerTop;
-  switch (shape.vertAlign) {
-    case "top":
-      top = shape.innerTop;
-      break;
-    case "middle":
-      top = shape.innerTop + (shape.innerHeight - textMetric.height) / 2;
-      break;
-    case "bottom":
-      top = shape.innerBottom - textMetric.height;
-      break;
-  }
-  shape.assignStyles(canvas);
-  if (lines.length > 0) {
-    let x = shape.innerLeft;
-    let y = top;
-    for (let i = 0; i < lines.length; i++) {
-      const m = canvas.textMetric(lines[i]);
-      switch (shape.horzAlign) {
-        case "left":
-          x = shape.innerLeft;
-          break;
-        case "center":
-          x = shape.innerLeft + (shape.innerWidth - m.width) / 2;
-          break;
-        case "right":
-          x = shape.innerRight - m.width;
-          break;
-      }
-      const gap = (lineHeight - m.height) / 2;
-      canvas.fillText(x, y + gap + m.ascent, lines[i]);
-      y = y + lineHeight;
-    }
-  }
   canvas.restoreState();
 }

@@ -212,17 +212,13 @@ export const DGMRichTextInplaceEditor: React.FC<
   };
 
   const handleDblClick = ({ shape, point }: DblClickEvent) => {
-    if (shape instanceof Box && shape.textEditable && shape.richText === true) {
+    if (shape instanceof Box && shape.textEditable) {
       open(shape);
     }
   };
 
   const handleCreate = (shape: Shape) => {
-    if (
-      shape instanceof Text &&
-      shape.textEditable &&
-      shape.richText === true
-    ) {
+    if (shape instanceof Text && shape.textEditable) {
       editor.selection.deselectAll();
       open(shape);
     }

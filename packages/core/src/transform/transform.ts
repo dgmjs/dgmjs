@@ -585,11 +585,7 @@ export class Transform {
    */
   setHorzAlign(box: Box, horzAlign: string): boolean {
     let changed = false;
-    let doc = structuredClone(
-      box.richText && typeof box.text === "string"
-        ? convertTextToDoc(box.text)
-        : box.text
-    );
+    let doc = structuredClone(box.text);
     box.visitNodes(doc, (docNode) => {
       if (docNode.attrs && docNode.attrs.textAlign)
         docNode.attrs.textAlign = horzAlign;
@@ -604,11 +600,7 @@ export class Transform {
    */
   setFontSize(box: Box, fontSize: number): boolean {
     let changed = false;
-    let doc = structuredClone(
-      box.richText && typeof box.text === "string"
-        ? convertTextToDoc(box.text)
-        : box.text
-    );
+    let doc = structuredClone(box.text);
     box.visitNodes(doc, (docNode) => {
       if (Array.isArray(docNode.marks)) {
         console.log(docNode);
@@ -629,11 +621,7 @@ export class Transform {
    */
   setFontFamily(box: Box, fontFamily: string): boolean {
     let changed = false;
-    let doc = structuredClone(
-      box.richText && typeof box.text === "string"
-        ? convertTextToDoc(box.text)
-        : box.text
-    );
+    let doc = structuredClone(box.text);
     box.visitNodes(doc, (docNode) => {
       if (Array.isArray(docNode.marks)) {
         console.log(docNode);
@@ -654,11 +642,7 @@ export class Transform {
    */
   setFontColor(box: Box, fontColor: string): boolean {
     let changed = false;
-    let doc = structuredClone(
-      box.richText && typeof box.text === "string"
-        ? convertTextToDoc(box.text)
-        : box.text
-    );
+    let doc = structuredClone(box.text);
     box.visitNodes(doc, (docNode) => {
       if (Array.isArray(docNode.marks)) {
         console.log(docNode);

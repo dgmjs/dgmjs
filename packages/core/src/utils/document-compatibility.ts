@@ -1,4 +1,12 @@
 import { generateId } from "../std/id";
+import { convertTextToDoc } from "./text-utils";
+
+function traverse(json: any, visitor: (node: any) => void) {
+  visitor(json);
+  if (json.children) {
+    json.children.forEach((child: any) => traverse(child, visitor));
+  }
+}
 
 /**
  * Convert a old-version format JSON object to the latest version.
@@ -33,6 +41,14 @@ export function convertToLatestVersion(json: any): any {
     };
     json.children = [page];
   }
+
+  traverse(json, (node) => {
+    if (node.type === "Text") {
+      if (typeof node.text === "string") {
+        node.text = convertTextToDoc(node.text, node.horzAlign);
+      }
+    }
+  });
 
   return json;
 }

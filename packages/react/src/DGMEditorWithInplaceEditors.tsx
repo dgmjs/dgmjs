@@ -1,7 +1,6 @@
 import { Editor } from "@dgmjs/core";
 import { useState } from "react";
 import { DGMEditor, DGMEditorProps } from "./DGMEditor";
-import { DGMPlainTextInplaceEditor } from "./DGMPlainTextInplaceEditor";
 import { DGMRichTextInplaceEditor } from "./DGMRichTextInplaceEditor";
 import { DGMShapeToolbarHolder } from "./DGMShapeToolbarHolder";
 
@@ -24,7 +23,6 @@ export const DGMEditorWithInplaceEditors: React.FC<
         }}
         {...props}
       >
-        <DGMPlainTextInplaceEditor editor={editor as Editor} />
         <DGMRichTextInplaceEditor
           editor={editor as Editor}
           toolbar={richTextInplaceEditorToolbar}
