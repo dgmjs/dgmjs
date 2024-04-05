@@ -57,14 +57,22 @@ export function convertTextToDoc(
     type: "doc",
     content: [],
   };
-  const lines = text.split("\n");
-  lines.forEach((line, i) => {
+  if (text.length > 0) {
+    const lines = text.split("\n");
+    lines.forEach((line, i) => {
+      doc.content.push({
+        type: "paragraph",
+        attrs: { textAlign },
+        content: [{ type: "text", text: line }],
+      });
+    });
+  } else {
     doc.content.push({
       type: "paragraph",
       attrs: { textAlign },
-      content: [{ type: "text", text: line }],
+      content: [],
     });
-  });
+  }
   return doc;
 }
 
