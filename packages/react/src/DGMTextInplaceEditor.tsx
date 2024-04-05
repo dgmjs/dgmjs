@@ -4,7 +4,7 @@ import {
   Box,
   Text,
   measureText,
-  convertDocToText,
+  convertTextNodeToString,
   DblClickEvent,
 } from "@dgmjs/core";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
@@ -201,7 +201,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
   const close = () => {
     if (tiptapEditor && state.textShape) {
       editor.transform.endTransaction();
-      const textString = convertDocToText(tiptapEditor.getJSON());
+      const textString = convertTextNodeToString(tiptapEditor.getJSON());
       if (state.textShape instanceof Text && textString.trim().length === 0) {
         editor.actions.remove([state.textShape]);
       }

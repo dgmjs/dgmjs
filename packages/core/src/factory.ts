@@ -18,7 +18,7 @@ import * as geometry from "./graphics/geometry";
 import simplifyPath from "simplify-path";
 import { SHAPE_MIN_SIZE } from "./graphics/const";
 import { TypedEvent } from "./std/typed-event";
-import { convertTextToDoc } from "./utils/text-utils";
+import { convertStringToTextNode } from "./utils/text-utils";
 
 /**
  * Shape factory
@@ -78,7 +78,7 @@ export class ShapeFactory {
    */
   createText(rect: number[][], initialText: string = ""): Text {
     const text = new Text();
-    text.text = convertTextToDoc(initialText, text.horzAlign);
+    text.text = convertStringToTextNode(initialText, text.horzAlign);
     text.strokeColor = "$transparent";
     text.fillColor = "$transparent";
     text.left = rect[0][0];
@@ -103,7 +103,7 @@ export class ShapeFactory {
    */
   createAnchoredText(anchorPosition: number, initialText: string = ""): Text {
     const text = new Text();
-    text.text = convertTextToDoc(initialText, text.horzAlign);
+    text.text = convertStringToTextNode(initialText, text.horzAlign);
     text.strokeColor = "$transparent";
     text.fillColor = "$transparent";
     text.horzAlign = AlignmentKind.LEFT;

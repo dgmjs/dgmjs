@@ -15,8 +15,9 @@ export * from "./handlers";
 export * from "./export";
 export { renderOnCanvas } from "./utils/canvas-utils";
 export {
-  convertDocToText,
-  preprocessDocNode,
+  convertTextNodeToString,
+  preprocessTextNode,
   measureText,
+  visitTextNodes,
 } from "./utils/text-utils";
 export { basicSetup } from "./basic-setup";

@@ -1,5 +1,5 @@
 import { generateId } from "../std/id";
-import { convertTextToDoc } from "./text-utils";
+import { convertStringToTextNode } from "./text-utils";
 
 function traverse(json: any, visitor: (node: any) => void) {
   visitor(json);
@@ -45,7 +45,7 @@ export function convertToLatestVersion(json: any): any {
   // convert plain text string to text doc nodes
   traverse(json, (node) => {
     if (typeof node.text === "string") {
-      node.text = convertTextToDoc(node.text, node.horzAlign);
+      node.text = convertStringToTextNode(node.text, node.horzAlign);
     }
   });
 

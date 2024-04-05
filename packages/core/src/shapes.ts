@@ -24,7 +24,11 @@ import {
 import * as geometry from "./graphics/geometry";
 import * as utils from "./graphics/utils";
 import { ZodSchema } from "zod";
-import { drawRichText } from "./utils/text-utils";
+import {
+  convertStringToTextNode,
+  drawText,
+  visitTextNodes,
+} from "./utils/text-utils";
 import { Transform } from "./transform/transform";
 import { evalScript } from "./mal/mal";
 import { Obj } from "./core/obj";
@@ -882,15 +886,7 @@ class Box extends Shape {
     this.anchorLength = 0;
     this.anchorPosition = 0.5;
     this.textEditable = true;
-    this.text = {
-      type: "doc",
-      content: [
-        {
-          type: "paragraph",
-          content: [],
-        },
-      ],
-    };
+    this.text = convertStringToTextNode("", AlignmentKind.CENTER);
     this.wordWrap = false;
     this.horzAlign = AlignmentKind.CENTER;
     this.vertAlign = AlignmentKind.MIDDLE;
@@ -960,7 +956,7 @@ class Box extends Shape {
 
   renderText(canvas: Canvas): void {
     if (this._renderText) {
-      drawRichText(canvas, this);
+      drawText(canvas, this);
     }
   }
 
@@ -984,19 +980,6 @@ class Box extends Shape {
       this.getSeed()
     );
     this.renderText(canvas);
-  }
-
-  /**
-   * Visit all document nodes and returns rebuilt document object
-   */
-  visitNodes(
-    startNode: { type: string; content: any[] },
-    visitor: (node: any) => void
-  ) {
-    visitor(startNode);
-    if (Array.isArray(startNode.content)) {
-      startNode.content.forEach((node) => this.visitNodes(node, visitor));
-    }
   }
 
   /**
@@ -1029,7 +1012,7 @@ class Box extends Shape {
     let xmax = 0;
     let ymax = 0;
     const h = canvas.textMetric("|").height * this.lineHeight;
-    this.visitNodes(this.text, (node) => {
+    visitTextNodes(this.text, (node) => {
       switch (node.type) {
         case "text":
           let fontStyle = this.fontStyle;

@@ -47,9 +47,9 @@ export function stripUnit(value: string | number): number {
 }
 
 /**
- * Convert a text (string) to document node
+ * Convert a string to text node
  */
-export function convertTextToDoc(
+export function convertStringToTextNode(
   text: string,
   textAlign: string = "left"
 ): any {
@@ -77,28 +77,32 @@ export function convertTextToDoc(
 }
 
 /**
- * Convert document node to text (string)
+ * Convert text node to string
  */
-export function convertDocToText(node: any): string {
+export function convertTextNodeToString(node: any): string {
   if (typeof node === "string") return node;
   switch (node.type) {
     case "doc":
       if (Array.isArray(node.content)) {
         return node.content
-          .map((child: any) => convertDocToText(child))
+          .map((child: any) => convertTextNodeToString(child))
           .join("")
           .trim();
       }
       return "";
     case "bulletList":
       if (Array.isArray(node.content)) {
-        const items = node.content.map((child: any) => convertDocToText(child));
+        const items = node.content.map((child: any) =>
+          convertTextNodeToString(child)
+        );
         return items.map((item: string) => `- ${item}`).join("");
       }
       return "";
     case "orderedList":
       if (Array.isArray(node.content)) {
-        const items = node.content.map((child: any) => convertDocToText(child));
+        const items = node.content.map((child: any) =>
+          convertTextNodeToString(child)
+        );
         return items
           .map((item: string, idx: number) => `${idx + 1} ${item}`)
           .join("");
@@ -107,15 +111,16 @@ export function convertDocToText(node: any): string {
     case "listItem":
       if (Array.isArray(node.content)) {
         return node.content
-          .map((child: any) => convertDocToText(child))
+          .map((child: any) => convertTextNodeToString(child))
           .join("");
       }
       return "";
     case "paragraph":
       if (Array.isArray(node.content)) {
         return (
-          node.content.map((child: any) => convertDocToText(child)).join("") +
-          "\n"
+          node.content
+            .map((child: any) => convertTextNodeToString(child))
+            .join("") + "\n"
         );
       }
       return "\n";
@@ -160,7 +165,7 @@ export function getTextNodeFont(
 }
 
 /**
- * Preprocess document nodes. It mainly handles wordWrap and hardBreak by
+ * Preprocess text nodes. It mainly handles wordWrap and hardBreak by
  * adding "line" type nodes with additional size info.
  *
  * options:
@@ -190,9 +195,9 @@ export function getTextNodeFont(
  *   inline = text
  *   text = <TERMINAL>
  *
- * @returns preprocessed doc node
+ * @returns preprocessed text node
  */
-export function preprocessDocNode(
+export function preprocessTextNode(
   canvas: Canvas,
   node: any,
   shape: Box,
@@ -212,7 +217,7 @@ export function preprocessDocNode(
       let block = { ...node, _height: 0, _width: 0, _minWidth: 0 };
       if (Array.isArray(node.content)) {
         block.content = node.content.map((child: any, i: number) => {
-          let processed = preprocessDocNode(
+          let processed = preprocessTextNode(
             canvas,
             child,
             shape,
@@ -391,9 +396,9 @@ export function preprocessDocNode(
 }
 
 /**
- * Draw preprocessed document nodes
+ * Draw preprocessed text nodes
  */
-export function drawDocNode(
+export function drawTextNode(
   canvas: Canvas,
   node: any,
   shape: Text,
@@ -410,7 +415,7 @@ export function drawDocNode(
         let y = top;
         for (let i = 0; i < node.content.length; i++) {
           let block = node.content[i];
-          drawDocNode(canvas, block, shape, left, y, width, listIndent);
+          drawTextNode(canvas, block, shape, left, y, width, listIndent);
           y += block._height;
         }
       }
@@ -457,7 +462,7 @@ export function drawDocNode(
         let y = top;
         for (let i = 0; i < node.content.length; i++) {
           let block = node.content[i];
-          drawDocNode(
+          drawTextNode(
             canvas,
             block,
             shape,
@@ -476,7 +481,7 @@ export function drawDocNode(
         let y = top;
         for (let i = 0; i < node.content.length; i++) {
           let line = node.content[i];
-          drawDocNode(canvas, line, shape, left, y, width, listIndent);
+          drawTextNode(canvas, line, shape, left, y, width, listIndent);
           y += line._height;
         }
       }
@@ -507,7 +512,7 @@ export function drawDocNode(
           let inline = node.content[i];
           inline._gap = node._last ? 0 : inline._gap || 0;
           inline._width += inline._gap;
-          drawDocNode(
+          drawTextNode(
             canvas,
             inline,
             shape,
@@ -600,7 +605,7 @@ export function measureText(
   lineHeight: number;
   preprocessedDoc?: any;
 } {
-  const doc = preprocessDocNode(
+  const doc = preprocessTextNode(
     canvas,
     text,
     shape,
@@ -624,7 +629,7 @@ export function measureText(
   };
 }
 
-export function drawRichText(canvas: Canvas, shape: Box) {
+export function drawText(canvas: Canvas, shape: Box) {
   canvas.storeState();
   const textMetric = measureText(canvas, shape, shape.text);
   let top = shape.innerTop;
@@ -639,7 +644,7 @@ export function drawRichText(canvas: Canvas, shape: Box) {
       top = shape.innerBottom - textMetric.height;
       break;
   }
-  drawDocNode(
+  drawTextNode(
     canvas,
     textMetric.preprocessedDoc,
     shape,
@@ -649,4 +654,17 @@ export function drawRichText(canvas: Canvas, shape: Box) {
     1.5
   );
   canvas.restoreState();
+}
+
+/**
+ * Visit all text nodes
+ */
+export function visitTextNodes(
+  startNode: { type: string; content: any[] },
+  visitor: (node: any) => void
+) {
+  visitor(startNode);
+  if (Array.isArray(startNode.content)) {
+    startNode.content.forEach((node) => visitTextNodes(node, visitor));
+  }
 }
