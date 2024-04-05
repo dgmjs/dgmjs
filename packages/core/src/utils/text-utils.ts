@@ -543,13 +543,14 @@ export function drawDocNode(
         canvas.fillText(left, top, node.text);
       }
       if (node.marks?.some((m: any) => m.type === "underline")) {
+        const w = shape.fontSize * 0.1;
         canvas.strokeColor = canvas.fontColor;
-        canvas.strokeWidth = shape.fontSize * 0.1;
+        canvas.strokeWidth = w;
         canvas.line(
           left,
-          top + 2,
+          top + w,
           left + node._width,
-          top + 2,
+          top + w,
           shape.getSeed()
         );
       }
