@@ -265,6 +265,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
               fontSize={state.fontSize}
               fontColor={state.color}
               lineHeight={state.lineHeight}
+              textHeight={state.textHeight}
               paragraphSpacing={state.paragraphSpacing}
               alignItems={state.alignItems}
               onBlur={() => {}}
