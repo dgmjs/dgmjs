@@ -1,6 +1,6 @@
 {
   "name": "@dgmjs/core",
-  "version": "0.13.4",
+  "version": "0.13.5",
   "description": "An extensible diagramming library for the web",
   "type": "module",
   "main": "./dist/index.js",
@@ -37,7 +37,6 @@
     "@tiptap/extension-underline": "^2.2.2",
     "@types/file-saver": "^2.0.7",
     "browser-fs-access": "^0.35.0",
-    "browser-image-resizer": "^2.4.1",
     "file-saver": "^2.0.5",
     "keycode": "^2.2.1",
     "nanoid": "^5.0.5",
