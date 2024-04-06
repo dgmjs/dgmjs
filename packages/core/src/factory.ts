@@ -13,7 +13,7 @@ import {
   Sizable,
   Text,
 } from "./shapes";
-import { fileToImageElement } from "./utils/image-utils";
+import { resizeImage } from "./utils/image-utils";
 import * as geometry from "./graphics/geometry";
 import simplifyPath from "simplify-path";
 import { SHAPE_MIN_SIZE } from "./graphics/const";
@@ -123,54 +123,18 @@ export class ShapeFactory {
   /**
    * Create an image
    */
-  async createImage(file: File, rect: number[][]): Promise<Image> {
-    const imageElement = await fileToImageElement(file);
+  async createImage(file: File, position: number[]): Promise<Image> {
+    const imageElement = await resizeImage(file);
     const image = new Image();
+    const w = imageElement.width;
+    const h = imageElement.height;
     image.imageData = imageElement.src;
-    image.imageWidth = imageElement.width;
-    image.imageHeight = imageElement.height;
-    let w = geometry.width(rect);
-    let h = geometry.height(rect);
-    // if (geometry.distance(rect[0], rect[1]) <= SHAPE_MIN_SIZE) {
-    //   const size = geometry.fitScaleTo(
-    //     [image.imageWidth, image.imageHeight],
-    //     [400, 400]
-    //   );
-    //   w = size[0];
-    //   h = size[1];
-    // }
+    image.imageWidth = w;
+    image.imageHeight = h;
     image.width = w;
     image.height = h;
-    image.left = rect[0][0] - w / 2;
-    image.top = rect[0][1] - h / 2;
-    image.sizable = Sizable.RATIO;
-    this.onShapeInitialize.emit(image);
-    return image;
-  }
-
-  /**
-   * Create an image at the position
-   */
-  async createImageAt(
-    file: File,
-    position: number[],
-    size?: number[]
-  ): Promise<Image> {
-    const imageElement = await fileToImageElement(file);
-    const image = new Image();
-    image.imageData = imageElement.src;
-    image.imageWidth = imageElement.width;
-    image.imageHeight = imageElement.height;
-    if (!size) {
-      size = geometry.fitScaleTo(
-        [image.imageWidth, image.imageHeight],
-        [400, 400]
-      );
-    }
-    image.width = size[0];
-    image.height = size[1];
-    image.left = position[0] - size[0] / 2;
-    image.top = position[1] - size[1] / 2;
+    image.left = position[0] - w / 2;
+    image.top = position[1] - h / 2;
     image.sizable = Sizable.RATIO;
     this.onShapeInitialize.emit(image);
     return image;
