@@ -1,4 +1,5 @@
-import { readAndCompressImage } from "browser-image-resizer";
+import pkg from "browser-image-resizer";
+const { readAndCompressImage } = pkg;
 
 /**
  * Convert image file to HTML image element
