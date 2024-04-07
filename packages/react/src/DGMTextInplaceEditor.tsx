@@ -117,7 +117,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
     const textMetric = measureText(editor.canvas, textShape, doc);
     const textWidth = textMetric.minWidth + state.padding[1] + state.padding[3];
     const textHeight = textMetric.height + state.padding[0] + state.padding[2];
-    const MIN_WIDTH = 2;
+    const MIN_WIDTH = 1;
     return {
       left: rect[0][0],
       top: rect[0][1],
