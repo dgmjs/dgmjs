@@ -64,43 +64,43 @@ export const DGMEditor: React.FC<DGMEditorProps> = ({
       );
 
       // events forwarding
-      editor.selection.onChange.on((shapes: Shape[]) => {
+      editor.selection.onChange.addListener((shapes: Shape[]) => {
         if (onSelectionChange) onSelectionChange(shapes);
       });
-      editor.onCurrentPageChange.on((page) => {
+      editor.onCurrentPageChange.addListener((page) => {
         if (onCurrentPageChange) onCurrentPageChange(page);
       });
-      editor.onActiveHandlerChange.on((handlerId) => {
+      editor.onActiveHandlerChange.addListener((handlerId) => {
         if (onActiveHandlerChange) onActiveHandlerChange(handlerId);
       });
-      editor.factory.onCreate.on((shape: Shape) => {
+      editor.factory.onCreate.addListener((shape: Shape) => {
         if (onShapeCreate) onShapeCreate(shape);
       });
-      editor.factory.onShapeInitialize.on((shape: Shape) => {
+      editor.factory.onShapeInitialize.addListener((shape: Shape) => {
         if (onShapeInitialize) onShapeInitialize(shape);
       });
-      editor.transform.onTransaction.on((tx: Transaction) => {
+      editor.transform.onTransaction.addListener((tx: Transaction) => {
         if (onTransaction) onTransaction(tx);
       });
-      editor.onDblClick.on((event: DblClickEvent) => {
+      editor.onDblClick.addListener((event: DblClickEvent) => {
         if (onDblClick) onDblClick(event);
       });
-      editor.onZoom.on((scale: number) => {
+      editor.onZoom.addListener((scale: number) => {
         if (onZoom) onZoom(scale);
       });
-      editor.onScroll.on((origin: number[]) => {
+      editor.onScroll.addListener((origin: number[]) => {
         if (onScroll) onScroll(origin);
       });
-      editor.onDragStart.on((dragEvent) => {
+      editor.onDragStart.addListener((dragEvent) => {
         if (onDragStart) onDragStart(dragEvent);
       });
-      editor.onDrag.on((dragEvent) => {
+      editor.onDrag.addListener((dragEvent) => {
         if (onDrag) onDrag(dragEvent);
       });
-      editor.onDragEnd.on((dragEvent) => {
+      editor.onDragEnd.addListener((dragEvent) => {
         if (onDragEnd) onDragEnd(dragEvent);
       });
-      editor.onFileDrop.on((fileDropEvent) => {
+      editor.onFileDrop.addListener((fileDropEvent) => {
         if (onFileDrop) onFileDrop(fileDropEvent);
       });
 

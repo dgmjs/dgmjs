@@ -84,13 +84,13 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
 
   useEffect(() => {
     if (editor) {
-      editor.onDblClick.on(handleDblClick);
-      editor.factory.onCreate.on(handleCreate);
+      editor.onDblClick.addListener(handleDblClick);
+      editor.factory.onCreate.addListener(handleCreate);
     }
     return function cleanup() {
       if (editor) {
-        editor.onDblClick.off(handleDblClick);
-        editor.factory.onCreate.off(handleCreate);
+        editor.onDblClick.removeListener(handleDblClick);
+        editor.factory.onCreate.removeListener(handleCreate);
       }
     };
   }, [editor]);
