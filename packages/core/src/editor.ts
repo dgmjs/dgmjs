@@ -85,12 +85,13 @@ export class Editor {
   transform: Transform;
   clipboard: Clipboard;
   selection: SelectionManager;
-  currentPage: Page | null;
-
   factory: ShapeFactory;
   actions: Actions;
   keymap: KeymapManager;
   autoScroller: AutoScroller;
+
+  enabled: boolean;
+  currentPage: Page | null;
   parent: HTMLElement;
   canvasElement: HTMLCanvasElement;
   canvas: Canvas;
@@ -152,9 +153,10 @@ export class Editor {
     this.factory = new ShapeFactory(this);
     this.actions = new Actions(this);
     this.keymap = new KeymapManager(this);
-    this.currentPage = null;
 
     this.platform = this.detectPlatform();
+    this.enabled = true;
+    this.currentPage = null;
     this.parent = editorHolder;
     this.parent.style.overflow = "hidden";
     this.autoScroller = new AutoScroller(this);
@@ -219,169 +221,188 @@ export class Editor {
 
     // pointer down handler
     this.canvasElement.addEventListener("pointerdown", (e) => {
-      this.focus();
-      if (e.button === Mouse.BUTTON1) this.leftButtonDown = true;
-      const event = createPointerEvent(this.canvasElement, this.canvas, e);
-      this.autoScroller.pointerDown(event);
-      if (event.ModDown) {
-        // viewpoint move
-        // TODO: viewpoint move need to be moved to Handler (SelectHandler or CreateHandler)
-        if (this.leftButtonDown) {
-          this.setCursor(Cursor.MOVE);
-          this.downX = e.offsetX;
-          this.downY = e.offsetY;
+      if (this.enabled) {
+        this.focus();
+        if (e.button === Mouse.BUTTON1) this.leftButtonDown = true;
+        const event = createPointerEvent(this.canvasElement, this.canvas, e);
+        this.autoScroller.pointerDown(event);
+        if (event.ModDown) {
+          // viewpoint move
+          // TODO: viewpoint move need to be moved to Handler (SelectHandler or CreateHandler)
+          if (this.leftButtonDown) {
+            this.setCursor(Cursor.MOVE);
+            this.downX = e.offsetX;
+            this.downY = e.offsetY;
+          }
+        } else if (!this.isPinching && this.activeHandler) {
+          // 모바일에서는 pointerMove 발생하지 않으므로, pointerMove 한번 호출해준다.
+          this.activeHandler.pointerMove(this, event);
+          this.activeHandler.pointerDown(this, event);
         }
-      } else if (!this.isPinching && this.activeHandler) {
-        // 모바일에서는 pointerMove 발생하지 않으므로, pointerMove 한번 호출해준다.
-        this.activeHandler.pointerMove(this, event);
-        this.activeHandler.pointerDown(this, event);
       }
     });
 
     // pointer move
     this.canvasElement.addEventListener("pointermove", (e) => {
-      const event = createPointerEvent(this.canvasElement, this.canvas, e);
-      event.leftButtonDown = this.leftButtonDown;
-      this.autoScroller.pointerMove(event);
-      if (event.ModDown) {
-        // viewpoint move
-        if (this.leftButtonDown) {
-          let dx = (e.offsetX - this.downX) / this.getScale();
-          let dy = (e.offsetY - this.downY) / this.getScale();
-          this.moveOrigin(dx, dy);
-          this.downX = e.offsetX;
-          this.downY = e.offsetY;
+      if (this.enabled) {
+        const event = createPointerEvent(this.canvasElement, this.canvas, e);
+        event.leftButtonDown = this.leftButtonDown;
+        this.autoScroller.pointerMove(event);
+        if (event.ModDown) {
+          // viewpoint move
+          if (this.leftButtonDown) {
+            let dx = (e.offsetX - this.downX) / this.getScale();
+            let dy = (e.offsetY - this.downY) / this.getScale();
+            this.moveOrigin(dx, dy);
+            this.downX = e.offsetX;
+            this.downY = e.offsetY;
+          }
+        } else if (!this.isPinching && this.activeHandler) {
+          this.activeHandler.pointerMove(this, event);
         }
-      } else if (!this.isPinching && this.activeHandler) {
-        this.activeHandler.pointerMove(this, event);
       }
     });
 
     // pointer up  handler
     this.canvasElement.addEventListener("pointerup", (e) => {
-      if (e.button === Mouse.BUTTON1) this.leftButtonDown = false;
-      const event = createPointerEvent(this.canvasElement, this.canvas, e);
-      this.autoScroller.pointerUp(event);
-      if (event.ModDown) {
-        // viewpoint move
-        this.setCursor(Cursor.DEFAULT);
-        this.downX = 0;
-        this.downY = 0;
-      } else if (!this.isPinching && this.activeHandler) {
-        this.activeHandler.pointerUp(this, event);
+      if (this.enabled) {
+        if (e.button === Mouse.BUTTON1) this.leftButtonDown = false;
+        const event = createPointerEvent(this.canvasElement, this.canvas, e);
+        this.autoScroller.pointerUp(event);
+        if (event.ModDown) {
+          // viewpoint move
+          this.setCursor(Cursor.DEFAULT);
+          this.downX = 0;
+          this.downY = 0;
+        } else if (!this.isPinching && this.activeHandler) {
+          this.activeHandler.pointerUp(this, event);
+        }
       }
     });
 
-    this.canvasElement.addEventListener("pointercancel", (e) => {});
+    this.canvasElement.addEventListener("pointercancel", (e) => {
+      if (this.enabled) {
+      }
+    });
 
     // touch start handler
     this.canvasElement.addEventListener("touchstart", (e) => {
-      this.focus();
-      if (e.touches.length === 2) {
-        const event = createTouchEvent(this.canvasElement, this.canvas, e);
-        this.isPinching = true;
-        this.initialScale = this.canvas.scale;
-        this.initialDistance = event.touchDistance;
-        this.touchPoint = [event.x, event.y];
+      if (this.enabled) {
+        this.focus();
+        if (e.touches.length === 2) {
+          const event = createTouchEvent(this.canvasElement, this.canvas, e);
+          this.isPinching = true;
+          this.initialScale = this.canvas.scale;
+          this.initialDistance = event.touchDistance;
+          this.touchPoint = [event.x, event.y];
+        }
       }
     });
 
     // touch move handler
     this.canvasElement.addEventListener("touchmove", (e) => {
-      if (this.isPinching && e.touches.length === 2) {
-        const event = createTouchEvent(this.canvasElement, this.canvas, e);
-        const currentDistance = event.touchDistance;
-        const scale = currentDistance / this.initialDistance;
-        const p1 = this.canvas.globalCoordTransformRev(this.touchPoint);
-        this.setScale(this.initialScale * scale);
-        const p2 = this.canvas.globalCoordTransformRev([event.x, event.y]);
-        this.moveOrigin(p2[0] - p1[0], p2[1] - p1[1]);
-        this.touchPoint = [event.x, event.y];
+      if (this.enabled) {
+        if (this.isPinching && e.touches.length === 2) {
+          const event = createTouchEvent(this.canvasElement, this.canvas, e);
+          const currentDistance = event.touchDistance;
+          const scale = currentDistance / this.initialDistance;
+          const p1 = this.canvas.globalCoordTransformRev(this.touchPoint);
+          this.setScale(this.initialScale * scale);
+          const p2 = this.canvas.globalCoordTransformRev([event.x, event.y]);
+          this.moveOrigin(p2[0] - p1[0], p2[1] - p1[1]);
+          this.touchPoint = [event.x, event.y];
+        }
       }
     });
 
     // touch end handler
     this.canvasElement.addEventListener("touchend", (e) => {
-      e.stopImmediatePropagation();
-      this.isPinching = false;
-      this.initialScale = 1;
-      this.initialDistance = 0;
-      this.touchPoint = [-1, -1];
+      if (this.enabled) {
+        e.stopImmediatePropagation();
+        this.isPinching = false;
+        this.initialScale = 1;
+        this.initialDistance = 0;
+        this.touchPoint = [-1, -1];
+      }
     });
 
     // mouse double click
     this.canvasElement.addEventListener("dblclick", (e) => {
-      this.focus();
-      this.selection.deselectAll();
-      const event = createPointerEvent(this.canvasElement, this.canvas, e);
-      const p = this.canvas.globalCoordTransformRev([event.x, event.y]);
-      const x = p[0];
-      const y = p[1];
-      if (this.currentPage) {
-        // allows double click on a disable shape (e.g. a text inside another shape)
-        const pred = (s: Obj) =>
-          (s as Shape).visible && (s as Shape).containsPoint(this.canvas, p);
-        const shape: Shape | null = this.currentPage.findDepthFirst(
-          pred
-        ) as Shape | null;
-        // create a text on canvas
-        if (this.options.allowCreateTextOnCanvas && !shape) {
-          const textShape = this.factory.createText([
-            [x, y],
-            [x, y],
-          ]);
-          this.actions.insert(textShape);
-          this.factory.triggerCreate(textShape);
+      if (this.enabled) {
+        this.focus();
+        this.selection.deselectAll();
+        const event = createPointerEvent(this.canvasElement, this.canvas, e);
+        const p = this.canvas.globalCoordTransformRev([event.x, event.y]);
+        const x = p[0];
+        const y = p[1];
+        if (this.currentPage) {
+          // allows double click on a disable shape (e.g. a text inside another shape)
+          const pred = (s: Obj) =>
+            (s as Shape).visible && (s as Shape).containsPoint(this.canvas, p);
+          const shape: Shape | null = this.currentPage.findDepthFirst(
+            pred
+          ) as Shape | null;
+          // create a text on canvas
+          if (this.options.allowCreateTextOnCanvas && !shape) {
+            const textShape = this.factory.createText([
+              [x, y],
+              [x, y],
+            ]);
+            this.actions.insert(textShape);
+            this.factory.triggerCreate(textShape);
+          }
+          // create a text on connector
+          if (
+            this.options.allowCreateTextOnConnector &&
+            shape instanceof Connector
+          ) {
+            const outline = shape.getOutline();
+            const nearest = geometry.findNearestOnPath(
+              [x, y],
+              outline,
+              CONTROL_POINT_APOTHEM * 2
+            );
+            const position = nearest
+              ? geometry.getPositionOnPath(outline, nearest)
+              : 0.5;
+            const textShape = this.factory.createAnchoredText(position);
+            this.actions.insert(textShape, shape);
+            this.factory.triggerCreate(textShape);
+          }
+          // trigger double click event
+          this.onDblClick.emit({ shape, point: [x, y] });
         }
-        // create a text on connector
-        if (
-          this.options.allowCreateTextOnConnector &&
-          shape instanceof Connector
-        ) {
-          const outline = shape.getOutline();
-          const nearest = geometry.findNearestOnPath(
-            [x, y],
-            outline,
-            CONTROL_POINT_APOTHEM * 2
-          );
-          const position = nearest
-            ? geometry.getPositionOnPath(outline, nearest)
-            : 0.5;
-          const textShape = this.factory.createAnchoredText(position);
-          this.actions.insert(textShape, shape);
-          this.factory.triggerCreate(textShape);
-        }
-        // trigger double click event
-        this.onDblClick.emit({ shape, point: [x, y] });
       }
     });
 
     // mouse wheel event
     this.canvasElement.addEventListener("wheel", (e) => {
-      const event = createPointerEvent(this.canvasElement, this.canvas, e);
-      const dx = -e.deltaX;
-      const dy = -e.deltaY;
-      const h = this.getSize()[1] / (this.canvas.px * 4);
-      if (e.ctrlKey || e.metaKey) {
-        // zoom with wheel
-        e.preventDefault();
-        if (dy < 0) {
-          const p1 = this.canvas.globalCoordTransformRev([event.x, event.y]);
-          this.setScale(this.canvas.scale * (1 + dy / h));
-          const p2 = this.canvas.globalCoordTransformRev([event.x, event.y]);
-          this.moveOrigin(p2[0] - p1[0], p2[1] - p1[1]);
-        } else if (dy > 0) {
-          const p1 = this.canvas.globalCoordTransformRev([event.x, event.y]);
-          this.setScale(this.canvas.scale * (1 + dy / h));
-          const p2 = this.canvas.globalCoordTransformRev([event.x, event.y]);
-          this.moveOrigin(p2[0] - p1[0], p2[1] - p1[1]);
+      if (this.enabled) {
+        const event = createPointerEvent(this.canvasElement, this.canvas, e);
+        const dx = -e.deltaX;
+        const dy = -e.deltaY;
+        const h = this.getSize()[1] / (this.canvas.px * 4);
+        if (e.ctrlKey || e.metaKey) {
+          // zoom with wheel
+          e.preventDefault();
+          if (dy < 0) {
+            const p1 = this.canvas.globalCoordTransformRev([event.x, event.y]);
+            this.setScale(this.canvas.scale * (1 + dy / h));
+            const p2 = this.canvas.globalCoordTransformRev([event.x, event.y]);
+            this.moveOrigin(p2[0] - p1[0], p2[1] - p1[1]);
+          } else if (dy > 0) {
+            const p1 = this.canvas.globalCoordTransformRev([event.x, event.y]);
+            this.setScale(this.canvas.scale * (1 + dy / h));
+            const p2 = this.canvas.globalCoordTransformRev([event.x, event.y]);
+            this.moveOrigin(p2[0] - p1[0], p2[1] - p1[1]);
+          }
+        } else if (e.shiftKey && Math.abs(dx) === 0) {
+          // horizontal scroll (only for non macOS)
+          this.moveOrigin(dy, dx);
+        } else {
+          // vertical scroll
+          this.moveOrigin(dx, dy);
         }
-      } else if (e.shiftKey && Math.abs(dx) === 0) {
-        // horizontal scroll (only for non macOS)
-        this.moveOrigin(dy, dx);
-      } else {
-        // vertical scroll
-        this.moveOrigin(dx, dy);
       }
     });
 
@@ -392,21 +413,25 @@ export class Editor {
 
     // mouse drag drop event
     this.canvasElement.addEventListener("drop", (e) => {
-      this.focus();
-      e.preventDefault();
-      const event = createPointerEvent(this.canvasElement, this.canvas, e);
-      // const files = Array.from(e.dataTransfer?.files ?? []);
-      this.onFileDrop.emit({
-        event,
-        dataTransfer: e.dataTransfer as DataTransfer,
-      });
+      if (this.enabled) {
+        this.focus();
+        e.preventDefault();
+        const event = createPointerEvent(this.canvasElement, this.canvas, e);
+        // const files = Array.from(e.dataTransfer?.files ?? []);
+        this.onFileDrop.emit({
+          event,
+          dataTransfer: e.dataTransfer as DataTransfer,
+        });
+      }
     });
 
     // key down event
     this.canvasElement.addEventListener("keydown", (e) => {
-      e.preventDefault();
-      this.focus();
-      this.onKeyDown.emit(e);
+      if (this.enabled) {
+        e.preventDefault();
+        this.focus();
+        this.onKeyDown.emit(e);
+      }
     });
   }
 
@@ -414,21 +439,33 @@ export class Editor {
     this.keymap.bind(this.options.keymap ?? {});
     // handle global key events
     this.canvasElement.addEventListener("keydown", (e) => {
-      if (this.activeHandler) {
-        this.activeHandler.keyDown(this, e);
-      }
-      if (e.key === "Escape" && this.options.defaultHandlerId) {
-        this.activateHandler(this.options.defaultHandlerId);
-      }
-      if (e.key === "Enter") {
-        // ...
+      if (this.enabled) {
+        if (this.activeHandler) {
+          this.activeHandler.keyDown(this, e);
+        }
+        if (e.key === "Escape" && this.options.defaultHandlerId) {
+          this.activateHandler(this.options.defaultHandlerId);
+        }
+        if (e.key === "Enter") {
+          // ...
+        }
       }
     });
     this.canvasElement.addEventListener("keyup", (e) => {
-      if (this.activeHandler) {
-        this.activeHandler.keyUp(this, e);
+      if (this.enabled) {
+        if (this.activeHandler) {
+          this.activeHandler.keyUp(this, e);
+        }
       }
     });
+  }
+
+  /**
+   * Set enable or disable
+   */
+  setEnabled(enabled: boolean) {
+    this.enabled = enabled;
+    this.canvasElement.style.opacity = enabled ? "1" : "0.5";
   }
 
   /**
@@ -649,20 +686,6 @@ export class Editor {
     const px = Math.round(center[0] - zsw / 2);
     const py = Math.round(center[1] - zsh / 2);
     this.setOrigin(-px, -py);
-  }
-
-  /**
-   * Set enable
-   */
-  setEnabled(enabled: boolean) {
-    this.canvasElement.style.display = enabled ? "" : "none";
-  }
-
-  /**
-   * Get enable
-   */
-  getEnabled(): boolean {
-    return this.canvasElement.style.display !== "none";
   }
 
   /**

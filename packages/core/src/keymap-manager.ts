@@ -328,16 +328,18 @@ export class KeymapManager {
     eventTarget.addEventListener(
       "keydown",
       (event) => {
-        // Disable Keymap in Input/TextArea/CodeMirror/ProseMirror or Modal Dialog
-        if (this.inEditMode() || this.inModalDialog()) {
-          // Allow default browser's actions
-        } else {
-          let handled = this.handleKey(
-            this.translateKeyboardEvent(event as KeyboardEvent)
-          );
-          if (handled) {
-            event.stopPropagation();
-            event.preventDefault();
+        if (this.editor.enabled) {
+          // Disable Keymap in Input/TextArea/CodeMirror/ProseMirror or Modal Dialog
+          if (this.inEditMode() || this.inModalDialog()) {
+            // Allow default browser's actions
+          } else {
+            let handled = this.handleKey(
+              this.translateKeyboardEvent(event as KeyboardEvent)
+            );
+            if (handled) {
+              event.stopPropagation();
+              event.preventDefault();
+            }
           }
         }
       },
