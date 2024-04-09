@@ -115,14 +115,17 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
   const getTextRect = (textShape: Text, doc: any) => {
     const rect = textShape.getRectInDOM(editor.canvas);
     const textMetric = measureText(editor.canvas, textShape, doc);
-    const textWidth = textMetric.minWidth + state.padding[1] + state.padding[3];
-    const textHeight = textMetric.height + state.padding[0] + state.padding[2];
+    const shapeWidth =
+      textMetric.minWidth + state.padding[1] + state.padding[3];
+    const shapeHeight = textMetric.height + state.padding[0] + state.padding[2];
     const MIN_WIDTH = 1;
     return {
       left: rect[0][0],
       top: rect[0][1],
-      width: Math.max(textWidth, MIN_WIDTH),
-      height: textHeight,
+      width: Math.max(shapeWidth, MIN_WIDTH),
+      height: shapeHeight,
+      textWidth: textMetric.width,
+      textHeight: textMetric.height,
     };
   };
 
@@ -192,8 +195,8 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
         top: rect.top,
         width: Math.max(textShape.width, rect.width),
         height: Math.max(textShape.height, rect.height),
-        textWidth: rect.width,
-        textHeight: rect.height,
+        textWidth: rect.textWidth,
+        textHeight: rect.textHeight,
       });
     }
   };

@@ -610,7 +610,7 @@ export function measureText(
     text,
     shape,
     shape.wordWrap,
-    shape.width,
+    shape.innerWidth,
     1.5
   );
   const textWidth = doc._width;
