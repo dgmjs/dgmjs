@@ -642,7 +642,7 @@ export class Editor {
   /**
    * Fit doc to screen and move to center
    */
-  fitToScreen(scaleDelta: number = 0) {
+  fitToScreen(scaleAdjust: number = 0.95, maxScale: number = 2) {
     if (this.currentPage) {
       // doc size in GCS
       const doc = this.store.doc as Document;
@@ -657,8 +657,8 @@ export class Editor {
       const size = this.getSize();
       const sw = Math.round(size[0] / this.canvas.ratio);
       const sh = Math.round(size[1] / this.canvas.ratio);
-      const scale = Math.min(sw / dw, sh / dh, 1);
-      this.setScale(scale + scaleDelta);
+      const scale = Math.min(sw / dw, sh / dh, maxScale);
+      this.setScale(scale * scaleAdjust);
       this.scrollCenterTo(center);
       this.repaint();
     }
@@ -674,18 +674,31 @@ export class Editor {
 
   /**
    * Scroll screen center to a point in GCS
+   * @param center center point in GCS. If not provided, scroll to the center
+   *   of the page size or the center of the shapes
    */
-  scrollCenterTo(center: number[]) {
-    const size = this.getSize();
-    // screen size in CGS when scale = 1
-    const sw = Math.round(size[0] / this.canvas.ratio);
-    const sh = Math.round(size[1] / this.canvas.ratio);
-    // screen size in CGS with zoom scale
-    const zsw = sw / this.canvas.scale;
-    const zsh = sh / this.canvas.scale;
-    const px = Math.round(center[0] - zsw / 2);
-    const py = Math.round(center[1] - zsh / 2);
-    this.setOrigin(-px, -py);
+  scrollCenterTo(center?: number[]) {
+    if (this.currentPage) {
+      // doc size in GCS
+      const doc = this.store.doc as Document;
+      const page = this.currentPage;
+      let box = Array.isArray(doc.pageSize)
+        ? [[0, 0], doc.pageSize]
+        : page.getPageBoundingBox(this.canvas);
+      if (!center) {
+        center = geometry.center(box);
+      }
+      // screen size in CGS when scale = 1
+      const size = this.getSize();
+      const sw = Math.round(size[0] / this.canvas.ratio);
+      const sh = Math.round(size[1] / this.canvas.ratio);
+      // screen size in CGS with zoom scale
+      const zsw = sw / this.canvas.scale;
+      const zsh = sh / this.canvas.scale;
+      const px = Math.round(center[0] - zsw / 2);
+      const py = Math.round(center[1] - zsh / 2);
+      this.setOrigin(-px, -py);
+    }
   }
 
   /**
