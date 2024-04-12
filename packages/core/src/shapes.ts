@@ -167,6 +167,8 @@ class Shape extends Obj {
   fontWeight: number;
   opacity: number;
   roughness: number;
+  link: string;
+  linkElement: HTMLElement | null;
   constraints: Constraint[];
   properties: Property[];
   scripts: Script[];
@@ -203,14 +205,29 @@ class Shape extends Obj {
     this.fontWeight = 400;
     this.opacity = 1;
     this.roughness = 0;
+    this.link = "";
+    this.linkElement = null;
     this.constraints = [];
     this.properties = [];
     this.scripts = [];
   }
 
-  initialze(canvas: Canvas) {}
+  initialze(canvas: Canvas) {
+    if (!this.linkElement) {
+      this.linkElement = document.createElement("a");
+      this.linkElement.style.position = "absolute";
+      // this.linkElement.setAttribute("href", this.link);
+      this.linkElement.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`;
+      canvas.element.parentElement?.appendChild(this.linkElement);
+    }
+  }
 
-  finalize(canvas: Canvas) {}
+  finalize(canvas: Canvas) {
+    if (this.linkElement) {
+      this.linkElement.remove();
+      this.linkElement = null;
+    }
+  }
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
@@ -396,7 +413,33 @@ class Shape extends Obj {
   /**
    * Default render this shape
    */
-  renderDefault(canvas: Canvas) {}
+  renderDefault(canvas: Canvas) {
+    const rect = this.getBoundingRect().map((p) => {
+      let tp = canvas.globalCoordTransform(p);
+      return [tp[0] / canvas.ratio, tp[1] / canvas.ratio];
+    });
+    const right = rect[1][0];
+    const top = rect[0][1];
+    const size = 24;
+    if (this.linkElement) {
+      this.linkElement.style.left = `${right + 4}px`;
+      this.linkElement.style.top = `${top}px`;
+      this.linkElement.style.width = `${size}px`;
+      this.linkElement.style.height = `${size}px`;
+      this.linkElement.style.padding = "4px";
+      // this.linkElement.style.backgroundColor = "hsl(var(--background))";
+      // this.linkElement.style.borderRadius = "3px";
+      // this.linkElement.style.border = "1px solid hsl(var(--border))";
+      this.linkElement.style.color = "var(--colors-blue9)";
+      this.linkElement.style.display = "flex";
+      this.linkElement.style.alignItems = "center";
+      this.linkElement.style.justifyContent = "center";
+      this.linkElement.style.cursor = "pointer";
+      this.linkElement.setAttribute("title", "Open link");
+      this.linkElement.setAttribute("href", "https://naver.com");
+      this.linkElement.setAttribute("target", "_blank");
+    }
+  }
 
   /**
    * Render this shape
@@ -961,6 +1004,7 @@ class Box extends Shape {
   }
 
   renderDefault(canvas: Canvas): void {
+    super.renderDefault(canvas);
     if (this.fillStyle !== FillStyle.NONE) {
       canvas.fillRoundRect(
         this.left,
@@ -1180,6 +1224,7 @@ class Line extends Shape {
    * Draw this shape
    */
   renderDefault(canvas: Canvas): void {
+    super.renderDefault(canvas);
     let path = geometry.pathCopy(this.path);
     if (path.length >= 2) {
       canvas.storeState();
@@ -1479,6 +1524,7 @@ class Ellipse extends Box {
   }
 
   renderDefault(canvas: Canvas): void {
+    super.renderDefault(canvas);
     if (this.fillStyle !== FillStyle.NONE) {
       canvas.fillEllipse(
         this.left,
@@ -1526,6 +1572,7 @@ class Text extends Box {
   }
 
   renderDefault(canvas: Canvas): void {
+    super.renderDefault(canvas);
     this.renderText(canvas);
   }
 }
@@ -1565,6 +1612,7 @@ class Image extends Box {
   }
 
   renderDefault(canvas: Canvas): void {
+    super.renderDefault(canvas);
     if (!this._image) {
       this._image = new globalThis.Image();
       this._image.src = this.imageData;
@@ -1608,7 +1656,9 @@ class Group extends Box {
     this.type = "Group";
   }
 
-  renderDefault(canvas: Canvas): void {}
+  renderDefault(canvas: Canvas): void {
+    super.renderDefault(canvas);
+  }
 
   /**
    * Pick a shape at specific position (x, y)
@@ -1836,6 +1886,7 @@ class Embed extends Box {
   }
 
   initialze(canvas: Canvas): void {
+    super.initialze(canvas);
     if (!this.iframe) {
       this.iframe = document.createElement("iframe");
       this.iframe.style.position = "absolute";
@@ -1851,9 +1902,11 @@ class Embed extends Box {
       this.iframe.remove();
       this.iframe = null;
     }
+    super.finalize(canvas);
   }
 
   renderDefault(canvas: Canvas): void {
+    super.renderDefault(canvas);
     const rect = this.getRectInDOM(canvas);
     const scale = canvas.scale;
     const left = rect[0][0];
