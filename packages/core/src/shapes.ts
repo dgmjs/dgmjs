@@ -410,23 +410,21 @@ class Shape extends Obj {
     return p;
   }
 
-  /**
-   * Default render this shape
-   */
-  renderDefault(canvas: Canvas) {
+  renderLink(canvas: Canvas) {
     const rect = this.getBoundingRect().map((p) => {
       let tp = canvas.globalCoordTransform(p);
       return [tp[0] / canvas.ratio, tp[1] / canvas.ratio];
     });
     const right = rect[1][0];
     const top = rect[0][1];
-    const size = 24;
+    const size = 16;
     if (this.linkElement) {
-      this.linkElement.style.left = `${right + 4}px`;
-      this.linkElement.style.top = `${top}px`;
+      // this.linkElement.style.pointerEvents = "none";
+      this.linkElement.style.left = `${right + 6}px`;
+      this.linkElement.style.top = `${top - size - 6}px`;
       this.linkElement.style.width = `${size}px`;
       this.linkElement.style.height = `${size}px`;
-      this.linkElement.style.padding = "4px";
+      // this.linkElement.style.padding = "2px";
       // this.linkElement.style.backgroundColor = "hsl(var(--background))";
       // this.linkElement.style.borderRadius = "3px";
       // this.linkElement.style.border = "1px solid hsl(var(--border))";
@@ -440,6 +438,11 @@ class Shape extends Obj {
       this.linkElement.setAttribute("target", "_blank");
     }
   }
+
+  /**
+   * Default render this shape
+   */
+  renderDefault(canvas: Canvas) {}
 
   /**
    * Render this shape
@@ -1004,7 +1007,7 @@ class Box extends Shape {
   }
 
   renderDefault(canvas: Canvas): void {
-    super.renderDefault(canvas);
+    this.renderLink(canvas);
     if (this.fillStyle !== FillStyle.NONE) {
       canvas.fillRoundRect(
         this.left,
@@ -1224,7 +1227,7 @@ class Line extends Shape {
    * Draw this shape
    */
   renderDefault(canvas: Canvas): void {
-    super.renderDefault(canvas);
+    this.renderLink(canvas);
     let path = geometry.pathCopy(this.path);
     if (path.length >= 2) {
       canvas.storeState();
@@ -1524,7 +1527,7 @@ class Ellipse extends Box {
   }
 
   renderDefault(canvas: Canvas): void {
-    super.renderDefault(canvas);
+    this.renderLink(canvas);
     if (this.fillStyle !== FillStyle.NONE) {
       canvas.fillEllipse(
         this.left,
@@ -1572,7 +1575,7 @@ class Text extends Box {
   }
 
   renderDefault(canvas: Canvas): void {
-    super.renderDefault(canvas);
+    this.renderLink(canvas);
     this.renderText(canvas);
   }
 }
@@ -1612,7 +1615,7 @@ class Image extends Box {
   }
 
   renderDefault(canvas: Canvas): void {
-    super.renderDefault(canvas);
+    this.renderLink(canvas);
     if (!this._image) {
       this._image = new globalThis.Image();
       this._image.src = this.imageData;
@@ -1657,7 +1660,7 @@ class Group extends Box {
   }
 
   renderDefault(canvas: Canvas): void {
-    super.renderDefault(canvas);
+    this.renderLink(canvas);
   }
 
   /**
@@ -1906,7 +1909,7 @@ class Embed extends Box {
   }
 
   renderDefault(canvas: Canvas): void {
-    super.renderDefault(canvas);
+    this.renderLink(canvas);
     const rect = this.getRectInDOM(canvas);
     const scale = canvas.scale;
     const left = rect[0][0];
