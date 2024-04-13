@@ -18,7 +18,8 @@ export function renderOnCanvas(
   pageSize: PageSize = [960, 720],
   maxCanvasSize: number[] = [200, 150],
   maxScale: number = 1,
-  scaleAdjust: number = 1
+  scaleAdjust: number = 1,
+  updateDOM: boolean = false
 ) {
   // get bounding box of given shapes and all their children
   const box = geometry.boundingRect(
@@ -60,7 +61,7 @@ export function renderOnCanvas(
   canvas.save();
   if (shapes.every((s) => !(s instanceof Page))) canvas.globalTransform();
   shapes.forEach((shape) => {
-    shape.render(canvas, false);
+    shape.render(canvas, updateDOM);
   });
 
   canvas.restore();

@@ -13,6 +13,7 @@ export interface DGMPageViewProps extends React.HTMLAttributes<HTMLDivElement> {
   darkMode?: boolean;
   maxScale?: number;
   scaleAdjust?: number;
+  updateDOM?: boolean;
 }
 
 export interface DGMPageViewHandle {
@@ -27,6 +28,7 @@ export const DGMPageView = forwardRef<DGMPageViewHandle, DGMPageViewProps>(
       darkMode = false,
       maxScale = 1,
       scaleAdjust = 1,
+      updateDOM = false,
       style,
       children,
       ...others
@@ -47,7 +49,8 @@ export const DGMPageView = forwardRef<DGMPageViewHandle, DGMPageViewProps>(
           pageSize,
           [width, height],
           maxScale,
-          scaleAdjust
+          scaleAdjust,
+          updateDOM
         );
       }
     };
@@ -84,7 +87,9 @@ export const DGMPageView = forwardRef<DGMPageViewHandle, DGMPageViewProps>(
         }}
         {...others}
       >
-        <canvas ref={canvasRef} style={{ width: "100%" }} />
+        <div className="relative">
+          <canvas ref={canvasRef} style={{ width: "100%" }} />
+        </div>
         {children}
       </div>
     );

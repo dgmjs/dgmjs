@@ -414,6 +414,7 @@ class Shape extends Obj {
       this.linkDOM.style.alignItems = "center";
       this.linkDOM.style.justifyContent = "center";
       this.linkDOM.style.cursor = "pointer";
+      this.linkDOM.style.zIndex = "10";
       this.linkDOM.setAttribute("target", "_blank");
       this.linkDOM.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`;
       canvas.element.parentElement?.appendChild(this.linkDOM);
@@ -424,6 +425,10 @@ class Shape extends Obj {
     }
     // update linkDOM
     if (updateDOM && this.linkDOM) {
+      // update linkDOM parent element
+      if (this.linkDOM.parentElement !== canvas.element.parentElement) {
+        canvas.element.parentElement?.appendChild(this.linkDOM);
+      }
       const rect = this.getBoundingRect().map((p) => {
         let tp = canvas.globalCoordTransform(p);
         return [tp[0] / canvas.ratio, tp[1] / canvas.ratio];
@@ -1902,24 +1907,14 @@ class Frame extends Box {
  * Embed
  */
 class Embed extends Box {
+  src: string;
   iframeDOM: HTMLIFrameElement | null;
 
   constructor() {
     super();
     this.type = "Embed";
+    this.src = "https://www.youtube.com/embed/MTdbhePtCco?si=6-6HWSoOtx0qAmM6";
     this.iframeDOM = null;
-  }
-
-  initialze(canvas: Canvas): void {
-    super.initialze(canvas);
-    if (!this.iframeDOM) {
-      this.iframeDOM = document.createElement("iframe");
-      this.iframeDOM.style.position = "absolute";
-      this.iframeDOM.style.pointerEvents = "none";
-      this.iframeDOM.src =
-        "https://www.youtube.com/embed/MTdbhePtCco?si=6-6HWSoOtx0qAmM6"; // "https://dgm.sh/home";
-      canvas.element.parentElement?.appendChild(this.iframeDOM);
-    }
   }
 
   finalize(canvas: Canvas): void {
@@ -1930,14 +1925,60 @@ class Embed extends Box {
     super.finalize(canvas);
   }
 
+  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
+    const json = super.toJSON(recursive, keepRefs);
+    json.src = this.src;
+    return json;
+  }
+
+  fromJSON(json: any) {
+    super.fromJSON(json);
+    this.src = json.src ?? this.src;
+  }
+
+  /**
+   * Determines whether this shape contains a point in GCS
+   */
+  // containsPoint(canvas: Canvas, point: number[]): boolean {
+  //   const outline = this.getOutline().map((p) =>
+  //     this.localCoordTransform(canvas, p, true)
+  //   );
+  //   return (
+  //     geometry.getNearSegment(
+  //       point,
+  //       outline,
+  //       LINE_SELECTION_THRESHOLD * canvas.px
+  //     ) > -1
+  //   );
+  // }
+
   renderFrame(canvas: Canvas, updateDOM: boolean = false): void {
-    const rect = this.getRectInDOM(canvas);
-    const scale = canvas.scale;
-    const left = rect[0][0];
-    const top = rect[0][1];
-    const width = geometry.width(rect);
-    const height = geometry.height(rect);
+    // create iframeDOM
+    if (this.src.length > 0 && !this.iframeDOM) {
+      this.iframeDOM = document.createElement("iframe");
+      this.iframeDOM.style.position = "absolute";
+      this.iframeDOM.style.pointerEvents = "none";
+      canvas.element.parentElement?.appendChild(this.iframeDOM);
+    }
+    // delete iframeDOM
+    if (this.src.length === 0 && this.iframeDOM) {
+      this.finalize(canvas);
+    }
+    // update iframeDOM
     if (updateDOM && this.iframeDOM) {
+      // update iframeDOM parent element
+      if (this.iframeDOM.parentElement !== canvas.element.parentElement) {
+        canvas.element.parentElement?.appendChild(this.iframeDOM);
+      }
+      if (this.iframeDOM.src !== this.src) {
+        this.iframeDOM.src = this.src;
+      }
+      const rect = this.getRectInDOM(canvas);
+      const scale = canvas.scale;
+      const left = rect[0][0];
+      const top = rect[0][1];
+      const width = geometry.width(rect);
+      const height = geometry.height(rect);
       this.iframeDOM.style.left = `${left}px`;
       this.iframeDOM.style.top = `${top}px`;
       this.iframeDOM.style.width = `${width}px`;
