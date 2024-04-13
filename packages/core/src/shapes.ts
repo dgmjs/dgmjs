@@ -1586,8 +1586,28 @@ class Text extends Box {
     this.vertAlign = AlignmentKind.TOP;
   }
 
+  /**
+   * Determines whether this shape contains a point in GCS
+   */
+  containsPoint(canvas: Canvas, point: number[]): boolean {
+    const outline = this.getOutline().map((p) =>
+      this.localCoordTransform(canvas, p, true)
+    );
+    return geometry.inPolygon(point, outline);
+  }
+
   renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
     this.renderLink(canvas, updateDOM);
+    if (this.fillStyle !== FillStyle.NONE) {
+      canvas.fillRoundRect(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.corners,
+        this.getSeed()
+      );
+    }
     this.renderText(canvas);
   }
 }

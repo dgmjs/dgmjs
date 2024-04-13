@@ -1,7 +1,6 @@
 import {
   Document,
   Editor,
-  FillStyle,
   Page,
   Shape,
   ObjProps,
@@ -33,10 +32,10 @@ function App() {
     await fetchFonts(fontJson as Font[]);
 
     window.editor.factory.onShapeInitialize.addListener((shape: Shape) => {
-      shape.strokeWidth = 2;
-      shape.roughness = 1;
-      shape.fillColor = "$lime9";
-      shape.fillStyle = FillStyle.HACHURE;
+      // shape.strokeWidth = 2;
+      // shape.roughness = 1;
+      // shape.fillColor = "$lime9";
+      // shape.fillStyle = FillStyle.HACHURE;
     });
 
     // load from local storage
