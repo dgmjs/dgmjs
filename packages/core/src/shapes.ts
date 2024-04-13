@@ -763,6 +763,12 @@ class Page extends Shape {
     this.enable = false; // page cannot be controllable
   }
 
+  finalize(canvas: Canvas): void {
+    this.traverseSequence().forEach((s) => {
+      if (s !== this) (s as Shape).finalize(canvas);
+    });
+  }
+
   /**
    * Render this shape
    */

@@ -473,6 +473,9 @@ export class Editor {
    */
   setCurrentPage(page: Page) {
     if (this.currentPage !== page) {
+      if (this.currentPage) {
+        this.currentPage.finalize(this.canvas);
+      }
       this.currentPage = page;
       this.repaint();
       this.onCurrentPageChange.emit(page);
