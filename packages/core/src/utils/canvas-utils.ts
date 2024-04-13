@@ -60,7 +60,7 @@ export function renderOnCanvas(
   canvas.save();
   if (shapes.every((s) => !(s instanceof Page))) canvas.globalTransform();
   shapes.forEach((shape) => {
-    shape.render(canvas);
+    shape.render(canvas, false);
   });
 
   canvas.restore();

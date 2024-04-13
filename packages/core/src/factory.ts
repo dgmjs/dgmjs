@@ -4,6 +4,7 @@ import {
   Connector,
   Ellipse,
   Embed,
+  FillStyle,
   Frame,
   Image,
   Line,
@@ -79,8 +80,9 @@ export class ShapeFactory {
   createText(rect: number[][], initialText: string = ""): Text {
     const text = new Text();
     text.text = convertStringToTextNode(initialText, text.horzAlign);
-    text.strokeColor = "$transparent";
-    text.fillColor = "$transparent";
+    text.strokeColor = "$foreground";
+    text.fillColor = "$background";
+    text.fillStyle = FillStyle.NONE;
     text.left = rect[0][0];
     text.top = rect[0][1];
     let w = geometry.width(rect);
@@ -104,8 +106,9 @@ export class ShapeFactory {
   createAnchoredText(anchorPosition: number, initialText: string = ""): Text {
     const text = new Text();
     text.text = convertStringToTextNode(initialText, text.horzAlign);
-    text.strokeColor = "$transparent";
-    text.fillColor = "$transparent";
+    text.strokeColor = "$foreground";
+    text.fillColor = "$background";
+    text.fillStyle = FillStyle.SOLID;
     text.horzAlign = AlignmentKind.LEFT;
     text.vertAlign = AlignmentKind.TOP;
     text.anchored = true;

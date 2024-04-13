@@ -167,6 +167,8 @@ class Shape extends Obj {
   fontWeight: number;
   opacity: number;
   roughness: number;
+  link: string;
+  linkDOM: HTMLAnchorElement | null;
   constraints: Constraint[];
   properties: Property[];
   scripts: Script[];
@@ -203,6 +205,8 @@ class Shape extends Obj {
     this.fontWeight = 400;
     this.opacity = 1;
     this.roughness = 0;
+    this.link = "";
+    this.linkDOM = null;
     this.constraints = [];
     this.properties = [];
     this.scripts = [];
@@ -210,7 +214,12 @@ class Shape extends Obj {
 
   initialze(canvas: Canvas) {}
 
-  finalize(canvas: Canvas) {}
+  finalize(canvas: Canvas) {
+    if (this.linkDOM) {
+      this.linkDOM.remove();
+      this.linkDOM = null;
+    }
+  }
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
@@ -243,6 +252,7 @@ class Shape extends Obj {
     json.fontWeight = this.fontWeight;
     json.opacity = this.opacity;
     json.roughness = this.roughness;
+    json.link = this.link;
     json.constraints = structuredClone(this.constraints);
     json.properties = structuredClone(this.properties);
     json.scripts = structuredClone(this.scripts);
@@ -280,6 +290,7 @@ class Shape extends Obj {
     this.fontWeight = json.fontWeight ?? this.fontWeight;
     this.opacity = json.opacity ?? this.opacity;
     this.roughness = json.roughness ?? this.roughness;
+    this.link = json.link ?? this.link;
     this.constraints = json.constraints ?? this.constraints;
     this.properties = json.properties ?? this.properties;
     this.scripts = json.scripts ?? this.scripts;
@@ -393,15 +404,51 @@ class Shape extends Obj {
     return p;
   }
 
+  renderLink(canvas: Canvas, updateDOM: boolean = false) {
+    // create linkDOM
+    if (this.link.length > 0 && !this.linkDOM) {
+      this.linkDOM = document.createElement("a");
+      this.linkDOM.style.position = "absolute";
+      this.linkDOM.style.color = "var(--colors-blue9)";
+      this.linkDOM.style.display = "flex";
+      this.linkDOM.style.alignItems = "center";
+      this.linkDOM.style.justifyContent = "center";
+      this.linkDOM.style.cursor = "pointer";
+      this.linkDOM.setAttribute("target", "_blank");
+      this.linkDOM.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`;
+      canvas.element.parentElement?.appendChild(this.linkDOM);
+    }
+    // delete linkDOM
+    if (this.link.length === 0 && this.linkDOM) {
+      this.finalize(canvas);
+    }
+    // update linkDOM
+    if (updateDOM && this.linkDOM) {
+      const rect = this.getBoundingRect().map((p) => {
+        let tp = canvas.globalCoordTransform(p);
+        return [tp[0] / canvas.ratio, tp[1] / canvas.ratio];
+      });
+      const right = rect[1][0];
+      const top = rect[0][1];
+      const size = 16;
+      this.linkDOM.style.left = `${right + 6}px`;
+      this.linkDOM.style.top = `${top - size - 6}px`;
+      this.linkDOM.style.width = `${size}px`;
+      this.linkDOM.style.height = `${size}px`;
+      this.linkDOM.setAttribute("title", this.link);
+      this.linkDOM.setAttribute("href", this.link);
+    }
+  }
+
   /**
    * Default render this shape
    */
-  renderDefault(canvas: Canvas) {}
+  renderDefault(canvas: Canvas, updateDOM: boolean = false) {}
 
   /**
    * Render this shape
    */
-  render(canvas: Canvas) {
+  render(canvas: Canvas, updateDOM: boolean = false) {
     if (this.visible) {
       canvas.save();
       this.assignStyles(canvas);
@@ -414,9 +461,9 @@ class Shape extends Obj {
           console.log("[Script Error]", err);
         }
       } else {
-        this.renderDefault(canvas);
+        this.renderDefault(canvas, updateDOM);
       }
-      this.children.forEach((s) => (s as Shape).render(canvas));
+      this.children.forEach((s) => (s as Shape).render(canvas, updateDOM));
       canvas.restore();
     }
   }
@@ -714,12 +761,12 @@ class Page extends Shape {
   /**
    * Render this shape
    */
-  render(canvas: Canvas) {
+  render(canvas: Canvas, updateDOM: boolean = false) {
     if (this.visible) {
       canvas.save();
       this.assignStyles(canvas);
       canvas.globalTransform();
-      this.children.forEach((s) => (s as Shape).render(canvas));
+      this.children.forEach((s) => (s as Shape).render(canvas, updateDOM));
       canvas.restore();
     }
   }
@@ -960,7 +1007,8 @@ class Box extends Shape {
     }
   }
 
-  renderDefault(canvas: Canvas): void {
+  renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
+    this.renderLink(canvas, updateDOM);
     if (this.fillStyle !== FillStyle.NONE) {
       canvas.fillRoundRect(
         this.left,
@@ -1179,7 +1227,8 @@ class Line extends Shape {
   /**
    * Draw this shape
    */
-  renderDefault(canvas: Canvas): void {
+  renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
+    this.renderLink(canvas, updateDOM);
     let path = geometry.pathCopy(this.path);
     if (path.length >= 2) {
       canvas.storeState();
@@ -1478,7 +1527,8 @@ class Ellipse extends Box {
     this.type = "Ellipse";
   }
 
-  renderDefault(canvas: Canvas): void {
+  renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
+    this.renderLink(canvas, updateDOM);
     if (this.fillStyle !== FillStyle.NONE) {
       canvas.fillEllipse(
         this.left,
@@ -1525,7 +1575,28 @@ class Text extends Box {
     this.vertAlign = AlignmentKind.TOP;
   }
 
-  renderDefault(canvas: Canvas): void {
+  /**
+   * Determines whether this shape contains a point in GCS
+   */
+  containsPoint(canvas: Canvas, point: number[]): boolean {
+    const outline = this.getOutline().map((p) =>
+      this.localCoordTransform(canvas, p, true)
+    );
+    return geometry.inPolygon(point, outline);
+  }
+
+  renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
+    this.renderLink(canvas, updateDOM);
+    if (this.fillStyle !== FillStyle.NONE) {
+      canvas.fillRoundRect(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.corners,
+        this.getSeed()
+      );
+    }
     this.renderText(canvas);
   }
 }
@@ -1564,7 +1635,8 @@ class Image extends Box {
     this.imageHeight = json.imageHeight ?? this.imageHeight;
   }
 
-  renderDefault(canvas: Canvas): void {
+  renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
+    this.renderLink(canvas, updateDOM);
     if (!this._image) {
       this._image = new globalThis.Image();
       this._image.src = this.imageData;
@@ -1608,7 +1680,9 @@ class Group extends Box {
     this.type = "Group";
   }
 
-  renderDefault(canvas: Canvas): void {}
+  renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
+    this.renderLink(canvas, updateDOM);
+  }
 
   /**
    * Pick a shape at specific position (x, y)
@@ -1779,8 +1853,9 @@ class Frame extends Box {
     this.containable = true;
   }
 
-  render(canvas: Canvas) {
+  render(canvas: Canvas, updateDOM: boolean = false) {
     if (this.visible) {
+      this.renderLink(canvas, updateDOM);
       canvas.save();
       this.assignStyles(canvas);
       this.localTransform(canvas);
@@ -1817,7 +1892,7 @@ class Frame extends Box {
       );
       canvas.context.clip();
       canvas.restoreState();
-      this.children.forEach((s) => (s as Shape).render(canvas));
+      this.children.forEach((s) => (s as Shape).render(canvas, updateDOM));
       canvas.restore();
     }
   }
@@ -1827,45 +1902,64 @@ class Frame extends Box {
  * Embed
  */
 class Embed extends Box {
-  iframe: HTMLIFrameElement | null;
+  iframeDOM: HTMLIFrameElement | null;
 
   constructor() {
     super();
     this.type = "Embed";
-    this.iframe = null;
+    this.iframeDOM = null;
   }
 
   initialze(canvas: Canvas): void {
-    if (!this.iframe) {
-      this.iframe = document.createElement("iframe");
-      this.iframe.style.position = "absolute";
-      this.iframe.style.pointerEvents = "none";
-      this.iframe.src =
+    super.initialze(canvas);
+    if (!this.iframeDOM) {
+      this.iframeDOM = document.createElement("iframe");
+      this.iframeDOM.style.position = "absolute";
+      this.iframeDOM.style.pointerEvents = "none";
+      this.iframeDOM.src =
         "https://www.youtube.com/embed/MTdbhePtCco?si=6-6HWSoOtx0qAmM6"; // "https://dgm.sh/home";
-      canvas.element.parentElement?.appendChild(this.iframe);
+      canvas.element.parentElement?.appendChild(this.iframeDOM);
     }
   }
 
   finalize(canvas: Canvas): void {
-    if (this.iframe) {
-      this.iframe.remove();
-      this.iframe = null;
+    if (this.iframeDOM) {
+      this.iframeDOM.remove();
+      this.iframeDOM = null;
     }
+    super.finalize(canvas);
   }
 
-  renderDefault(canvas: Canvas): void {
+  renderFrame(canvas: Canvas, updateDOM: boolean = false): void {
     const rect = this.getRectInDOM(canvas);
     const scale = canvas.scale;
     const left = rect[0][0];
     const top = rect[0][1];
     const width = geometry.width(rect);
     const height = geometry.height(rect);
-    if (this.iframe) {
-      this.iframe.style.left = `${left}px`;
-      this.iframe.style.top = `${top}px`;
-      this.iframe.style.width = `${width}px`;
-      this.iframe.style.height = `${height}px`;
-      this.iframe.style.transform = `scale(${scale})`;
+    if (updateDOM && this.iframeDOM) {
+      this.iframeDOM.style.left = `${left}px`;
+      this.iframeDOM.style.top = `${top}px`;
+      this.iframeDOM.style.width = `${width}px`;
+      this.iframeDOM.style.height = `${height}px`;
+      this.iframeDOM.style.transform = `scale(${scale})`;
+    }
+  }
+
+  renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
+    this.renderLink(canvas, updateDOM);
+    this.renderFrame(canvas, updateDOM);
+    if (this.fillStyle !== FillStyle.NONE) {
+      canvas.fillStyle = FillStyle.SOLID;
+      canvas.fillColor = Color.FOREGROUND;
+      canvas.alpha = 0.1;
+      canvas.fillRect(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.getSeed()
+      );
     }
   }
 }
