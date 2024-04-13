@@ -26,8 +26,13 @@ export class ImageFactoryHandler extends Handler {
           const file = await fileOpen([
             {
               description: "Image files",
-              mimeTypes: ["image/png", "image/jpeg", "image/svg+xml"],
-              extensions: [".png", ".jpeg", ".jpg", ".svg"],
+              mimeTypes: [
+                "image/png",
+                "image/jpeg",
+                "image/svg+xml",
+                "image/webp",
+              ],
+              extensions: [".png", ".jpeg", ".jpg", ".svg", ".webp"],
               multiple: false,
             },
           ]);
