@@ -11,10 +11,15 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { generateId, hashStringToNumber } from "../std/id";
+import { generateId } from "../std/id";
 import { Transform } from "../transform/transform";
 import { Store } from "./store";
 import type { Obj } from "./obj";
+
+interface ClipboardData {
+  text?: string;
+  objs?: Obj[];
+}
 
 /**
  * Clipboard
@@ -28,6 +33,14 @@ class Clipboard {
     this.store = store;
     this.transform = transform;
     this.buffer = [];
+  }
+
+  /**
+   * Write objs to clipboard
+   */
+  write(data: ClipboardData) {
+    if (Array.isArray(data.objs)) {
+    }
   }
 
   /**

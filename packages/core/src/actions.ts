@@ -15,6 +15,7 @@ import type { Editor } from "./editor";
 import { Box, Group, type Shape, Line, type ObjProps, Page } from "./shapes";
 import * as geometry from "./graphics/geometry";
 import { Obj } from "./core/obj";
+import { deserialize, serialize } from "./core/serialize";
 
 /**
  * Editor actions
@@ -82,10 +83,11 @@ export class Actions {
    * Duplicate a page
    */
   duplicatePage(page: Page, position: number): Page {
-    const clipboard = this.editor.clipboard;
-    const buffer: any[] = [];
-    clipboard.putObjects([page], buffer);
-    const copied = clipboard.getObjects(buffer)[0] as Page;
+    const buffer: any[] = serialize([page]);
+    const copied = deserialize(
+      this.editor.store.instantiator,
+      buffer
+    )[0] as Page;
     const tr = this.editor.transform;
     tr.startTransaction("duplicate-page");
     tr.addPage(copied);
@@ -228,11 +230,12 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       const tr = this.editor.transform;
-      const clipboard = this.editor.clipboard;
-      const buffer: any[] = [];
-      clipboard.putObjects(shapes, buffer);
+      const buffer: any[] = serialize(shapes);
       if (buffer.length > 0) {
-        const copied = clipboard.getObjects(buffer) as Shape[];
+        const copied = deserialize(
+          this.editor.store.instantiator,
+          buffer
+        ) as Shape[];
         tr.startTransaction("duplicate");
         copied.toReversed().forEach((shape) => {
           tr.atomicInsert(shape);
