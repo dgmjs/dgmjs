@@ -12,7 +12,7 @@
  */
 
 import { Canvas } from "../graphics/graphics";
-import { Box, Text } from "../shapes";
+import { Box, Shape, Text } from "../shapes";
 import * as utils from "../graphics/utils";
 
 /**
@@ -667,4 +667,20 @@ export function visitTextNodes(
   if (Array.isArray(startNode.content)) {
     startNode.content.forEach((node) => visitTextNodes(node, visitor));
   }
+}
+
+/**
+ * Extract text from shapes and return as a concatenated single string
+ */
+export function extractTextFromShapes(shapes: Shape[]): string {
+  let texts = [];
+  for (let shape of shapes) {
+    if (shape instanceof Box) {
+      const text = convertTextNodeToString(shape.text).trim();
+      if (text.length > 0) {
+        texts.push(text);
+      }
+    }
+  }
+  return texts.join(" ");
 }

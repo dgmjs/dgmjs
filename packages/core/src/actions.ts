@@ -16,6 +16,7 @@ import { Box, Group, type Shape, Line, type ObjProps, Page } from "./shapes";
 import * as geometry from "./graphics/geometry";
 import { Obj } from "./core/obj";
 import { deserialize, serialize } from "./core/serialize";
+import { extractTextFromShapes } from "./utils/text-utils";
 
 /**
  * Editor actions
@@ -167,24 +168,28 @@ export class Actions {
   /**
    * Copy selected shapes
    */
-  copy(shapes?: Shape[]) {
+  async copy(shapes?: Shape[]) {
     shapes = shapes ?? this.editor.selection.getShapes();
     const clipboard = this.editor.clipboard;
-    clipboard.clearBuffer();
-    clipboard.putObjects(shapes, clipboard.buffer);
+    await clipboard.write({
+      objs: shapes,
+      text: extractTextFromShapes(shapes),
+    });
   }
 
   /**
    * Cut selected shapes
    */
-  cut(shapes?: Shape[]) {
+  async cut(shapes?: Shape[]) {
     const page = this.editor.currentPage;
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       const tr = this.editor.transform;
       const clipboard = this.editor.clipboard;
-      clipboard.clearBuffer();
-      clipboard.putObjects(shapes, clipboard.buffer);
+      await clipboard.write({
+        objs: shapes,
+        text: extractTextFromShapes(shapes),
+      });
       tr.startTransaction("cut");
       tr.deleteShapes(page, shapes);
       tr.endTransaction();
@@ -195,14 +200,17 @@ export class Actions {
   /**
    * Paste
    */
-  paste(page?: Page) {
+  async paste(page?: Page) {
     const currentPage = page ?? this.editor.currentPage;
     if (currentPage) {
       const clipboard = this.editor.clipboard;
-      const tr = this.editor.transform;
-      const center = this.editor.getCenter();
-      if (clipboard.hasObjects()) {
-        const shapes = clipboard.getObjects(clipboard.buffer) as Shape[];
+      const data = await clipboard.read();
+
+      // paste shapes in clipboard
+      if (Array.isArray(data.objs)) {
+        const tr = this.editor.transform;
+        const center = this.editor.getCenter();
+        const shapes = data.objs as Shape[];
         const boundingRect = shapes
           .map((s) => (s as Shape).getBoundingRect())
           .reduce(geometry.unionRect);
@@ -218,7 +226,11 @@ export class Actions {
         tr.moveShapes(currentPage, shapes, dx, dy);
         tr.endTransaction();
         this.editor.selection.select(shapes);
+        return;
       }
+
+      // TODO: paste text in clipboard
+      // TODO: paste image in clipboard
     }
   }
 

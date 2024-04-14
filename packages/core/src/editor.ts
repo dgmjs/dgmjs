@@ -148,7 +148,7 @@ export class Editor {
       },
     });
     this.transform = new Transform(this.store);
-    this.clipboard = new Clipboard(this.store, this.transform);
+    this.clipboard = new Clipboard(this.store);
     this.selection = new SelectionManager(this);
     this.factory = new ShapeFactory(this);
     this.actions = new Actions(this);
