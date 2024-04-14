@@ -7,7 +7,7 @@ import {
   convertTextNodeToString,
   DblClickEvent,
 } from "@dgmjs/core";
-import { KeyboardEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { moveToAboveOrBelow, textVertAlignToAlignItems } from "./utils";
 import {
   useEditor,
@@ -84,13 +84,14 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
 
   useEffect(() => {
     if (editor) {
-      editor.onDblClick.addListener(handleDblClick);
-      editor.factory.onCreate.addListener(handleCreate);
+      editor.onDblClick.addListener(handleEditorDblClick);
+      editor.onKeyDown.addListener(handleEditorKeyDown);
+      editor.factory.onCreate.addListener(handleEditorFactoryCreate);
     }
     return function cleanup() {
       if (editor) {
-        editor.onDblClick.removeListener(handleDblClick);
-        editor.factory.onCreate.removeListener(handleCreate);
+        editor.onDblClick.removeListener(handleEditorDblClick);
+        editor.factory.onCreate.removeListener(handleEditorFactoryCreate);
       }
     };
   }, [editor]);
@@ -214,17 +215,28 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
     }
   };
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === "Escape") close();
   };
 
-  const handleDblClick = ({ shape, point }: DblClickEvent) => {
+  const handleEditorKeyDown = (event: KeyboardEvent) => {
+    if (event.key === "Enter") {
+      if (editor.selection.size() === 1) {
+        const shape = editor.selection.shapes[0];
+        if (shape instanceof Box && shape.textEditable) {
+          open(shape);
+        }
+      }
+    }
+  };
+
+  const handleEditorDblClick = ({ shape, point }: DblClickEvent) => {
     if (shape instanceof Box && shape.textEditable) {
       open(shape);
     }
   };
 
-  const handleCreate = (shape: Shape) => {
+  const handleEditorFactoryCreate = (shape: Shape) => {
     if (shape instanceof Text && shape.textEditable) {
       editor.selection.deselectAll();
       open(shape);

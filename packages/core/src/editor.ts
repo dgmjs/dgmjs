@@ -446,9 +446,6 @@ export class Editor {
         if (e.key === "Escape" && this.options.defaultHandlerId) {
           this.activateHandler(this.options.defaultHandlerId);
         }
-        if (e.key === "Enter") {
-          // ...
-        }
       }
     });
     this.canvasElement.addEventListener("keyup", (e) => {

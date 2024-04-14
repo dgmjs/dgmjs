@@ -139,6 +139,7 @@ export class ShapeFactory {
     image.left = position[0] - w / 2;
     image.top = position[1] - h / 2;
     image.sizable = Sizable.RATIO;
+    image.textEditable = false;
     this.onShapeInitialize.emit(image);
     return image;
   }
@@ -224,6 +225,7 @@ export class ShapeFactory {
     frame.height = h;
     frame.horzAlign = AlignmentKind.CENTER;
     frame.vertAlign = AlignmentKind.MIDDLE;
+    frame.textEditable = false;
     this.onShapeInitialize.emit(frame);
     return frame;
   }
@@ -242,6 +244,7 @@ export class ShapeFactory {
     embed.height = h;
     embed.horzAlign = AlignmentKind.CENTER;
     embed.vertAlign = AlignmentKind.MIDDLE;
+    embed.textEditable = false;
     this.onShapeInitialize.emit(embed);
     return embed;
   }
