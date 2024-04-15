@@ -2,13 +2,15 @@ import { readAndCompressImage } from "./browser-image-resizer";
 
 /**
  * Convert image file to HTML image element
- * @param file
+ * @param fileOrBlob
  * @returns HTML image element with data-url
  */
-export function fileToImage(file: File): Promise<HTMLImageElement> {
+export function fileToImage(
+  fileOrBlob: File | Blob
+): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     let reader = new FileReader();
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(fileOrBlob);
     reader.addEventListener("load", () => {
       const dataUrl = reader.result as string;
       let image = new Image();
@@ -56,20 +58,20 @@ export interface ResizeImageOptions {
  * Resize image file
  */
 export async function resizeImage(
-  file: File,
+  fileOrBlob: File | Blob,
   options?: ResizeImageOptions
 ): Promise<HTMLImageElement> {
-  if (file.type === "image/svg+xml") {
-    return fileToImage(file);
+  if (fileOrBlob.type === "image/svg+xml") {
+    return fileToImage(fileOrBlob);
   } else {
     const defaultOptions = {
       quality: 0.7,
       maxWidth: 800,
       maxHeight: 800,
-      mimeType: file.type,
+      mimeType: fileOrBlob.type,
     };
     const resizedImage = await readAndCompressImage(
-      file,
+      fileOrBlob,
       Object.assign(defaultOptions, options)
     );
     return await blobToImage(resizedImage);

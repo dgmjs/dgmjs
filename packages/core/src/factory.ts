@@ -126,8 +126,11 @@ export class ShapeFactory {
   /**
    * Create an image
    */
-  async createImage(file: File, position: number[]): Promise<Image> {
-    const imageElement = await resizeImage(file);
+  async createImage(
+    fileOrBlob: File | Blob,
+    position: number[]
+  ): Promise<Image> {
+    const imageElement = await resizeImage(fileOrBlob);
     const image = new Image();
     const w = imageElement.width;
     const h = imageElement.height;

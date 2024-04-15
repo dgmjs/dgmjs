@@ -16,8 +16,9 @@ import type { Obj } from "./obj";
 import { deserialize, serialize } from "./serialize";
 
 interface ClipboardData {
-  text?: string;
   objs?: Obj[];
+  text?: string;
+  image?: Blob;
 }
 
 /**
@@ -73,6 +74,8 @@ class Clipboard {
           data.text = await blob.text();
         }
         if (type === "image/png") {
+          const blob = await item.getType(type);
+          data.image = blob;
           // TODO: ...
         }
       }

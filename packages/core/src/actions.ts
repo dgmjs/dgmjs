@@ -203,13 +203,14 @@ export class Actions {
   async paste(page?: Page) {
     const currentPage = page ?? this.editor.currentPage;
     if (currentPage) {
+      const canvas = this.editor.canvas;
       const clipboard = this.editor.clipboard;
       const data = await clipboard.read();
+      const center = this.editor.getCenter();
+      const tr = this.editor.transform;
 
       // paste shapes in clipboard
       if (Array.isArray(data.objs)) {
-        const tr = this.editor.transform;
-        const center = this.editor.getCenter();
         const shapes = data.objs as Shape[];
         const boundingRect = shapes
           .map((s) => (s as Shape).getBoundingRect())
@@ -229,8 +230,30 @@ export class Actions {
         return;
       }
 
-      // TODO: paste text in clipboard
-      // TODO: paste image in clipboard
+      // paste image in clipboard
+      if (data.image) {
+        const shape = await this.editor.factory.createImage(data.image, center);
+        tr.startTransaction("paste");
+        tr.addShape(shape, currentPage);
+        tr.resolveAllConstraints(currentPage, canvas);
+        tr.endTransaction();
+        this.editor.selection.select([shape]);
+        return;
+      }
+
+      // paste text in clipboard
+      if (data.text) {
+        const shape = this.editor.factory.createText(
+          [center, center],
+          data.text
+        );
+        tr.startTransaction("paste");
+        tr.addShape(shape, currentPage);
+        tr.resolveAllConstraints(currentPage, canvas);
+        tr.endTransaction();
+        this.editor.selection.select([shape]);
+        return;
+      }
     }
   }
 

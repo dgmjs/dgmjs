@@ -258,7 +258,7 @@ export interface Config {
 }
 
 export function readAndCompressImage(
-  file: File,
+  fileOrBlob: File | Blob,
   userConfig: Config
 ): Promise<Blob> {
   return new Promise((resolve, reject) => {
@@ -286,7 +286,7 @@ export function readAndCompressImage(
       reader.onerror = function () {
         reject("cannot read image file.");
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(fileOrBlob);
     } catch (err) {
       reject(err);
     }
