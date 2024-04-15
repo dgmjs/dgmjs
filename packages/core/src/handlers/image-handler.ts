@@ -13,26 +13,11 @@
 
 import { Editor, Handler } from "../editor";
 import { fileOpen } from "browser-fs-access";
-import { Image } from "../shapes";
-import { geometry } from "..";
 
 /**
  * Image Factory Handler
  */
 export class ImageFactoryHandler extends Handler {
-  computeProperSize(editor: Editor, image: Image): number[] {
-    const rect = editor.getBoundingRect();
-    const sw = geometry.width(rect) * 0.7;
-    const sh = geometry.height(rect) * 0.7;
-    const w = image.imageWidth;
-    const h = image.imageHeight;
-    if (w > sw || h > sh) {
-      const ratio = Math.min(sw / w, sh / h);
-      return [w * ratio, h * ratio];
-    }
-    return [w, h];
-  }
-
   onActivate(editor: Editor): void {
     const asyncFn = async () => {
       try {
@@ -41,21 +26,20 @@ export class ImageFactoryHandler extends Handler {
           const file = await fileOpen([
             {
               description: "Image files",
-              mimeTypes: ["image/png", "image/jpeg", "image/svg+xml"],
-              extensions: [".png", ".jpeg", ".jpg", ".svg"],
+              mimeTypes: [
+                "image/png",
+                "image/jpeg",
+                "image/svg+xml",
+                "image/webp",
+              ],
+              extensions: [".png", ".jpeg", ".jpg", ".svg", ".webp"],
               multiple: false,
             },
           ]);
           const center = editor.getCenter();
-          const shape = await editor.factory.createImage(file, [
-            center,
-            center,
-          ]);
-          const size = this.computeProperSize(editor, shape);
+          const shape = await editor.factory.createImage(file, center);
           editor.transform.startTransaction("create");
           editor.transform.addShape(shape, page);
-          editor.transform.resize(shape, size[0], size[1]);
-          editor.transform.move(shape, -size[0] / 2, -size[1] / 2);
           editor.transform.resolveAllConstraints(page, editor.canvas);
           editor.transform.endTransaction();
           editor.factory.triggerCreate(shape);

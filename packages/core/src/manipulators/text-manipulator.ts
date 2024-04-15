@@ -27,9 +27,13 @@ class TextManipulator extends Manipulator {
   constructor() {
     super();
     // this.controllers.push(new BoxSizeController(this, {position: ControllerPosition.TOP}));
-    // this.controllers.push(new BoxSizeController(this, {position: ControllerPosition.RIGHT}));
     // this.controllers.push(new BoxSizeController(this, {position: ControllerPosition.BOTTOM}));
-    // this.controllers.push(new BoxSizeController(this, {position: ControllerPosition.LEFT}));
+    this.controllers.push(
+      new BoxSizeController(this, { position: ControllerPosition.LEFT })
+    );
+    this.controllers.push(
+      new BoxSizeController(this, { position: ControllerPosition.RIGHT })
+    );
     this.controllers.push(
       new BoxSizeController(this, {
         position: ControllerPosition.LEFT_TOP,

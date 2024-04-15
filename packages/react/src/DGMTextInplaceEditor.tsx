@@ -4,10 +4,10 @@ import {
   Box,
   Text,
   measureText,
-  convertDocToText,
+  convertTextNodeToString,
   DblClickEvent,
 } from "@dgmjs/core";
-import { KeyboardEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { moveToAboveOrBelow, textVertAlignToAlignItems } from "./utils";
 import {
   useEditor,
@@ -16,7 +16,7 @@ import {
 } from "./tiptap/tiptap-editor";
 import { Editor as TiptapEditor } from "@tiptap/react";
 
-interface DGMRichTextInplaceEditorProps
+interface DGMTextInplaceEditorProps
   extends React.HTMLAttributes<HTMLDivElement> {
   editor: Editor;
   toolbar?: React.ReactNode;
@@ -43,9 +43,13 @@ interface InternalState {
   textHeight: number;
 }
 
-export const DGMRichTextInplaceEditor: React.FC<
-  DGMRichTextInplaceEditorProps
-> = ({ editor, toolbar, onMount, onOpen, ...others }) => {
+export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
+  editor,
+  toolbar,
+  onMount,
+  onOpen,
+  ...others
+}) => {
   const toolbarHolderRef = useRef<HTMLDivElement>(null);
 
   const [state, setState] = useState<InternalState>({
@@ -80,13 +84,14 @@ export const DGMRichTextInplaceEditor: React.FC<
 
   useEffect(() => {
     if (editor) {
-      editor.onDblClick.on(handleDblClick);
-      editor.factory.onCreate.on(handleCreate);
+      editor.onDblClick.addListener(handleEditorDblClick);
+      editor.onKeyDown.addListener(handleEditorKeyDown);
+      editor.factory.onCreate.addListener(handleEditorFactoryCreate);
     }
     return function cleanup() {
       if (editor) {
-        editor.onDblClick.off(handleDblClick);
-        editor.factory.onCreate.off(handleCreate);
+        editor.onDblClick.removeListener(handleEditorDblClick);
+        editor.factory.onCreate.removeListener(handleEditorFactoryCreate);
       }
     };
   }, [editor]);
@@ -111,14 +116,17 @@ export const DGMRichTextInplaceEditor: React.FC<
   const getTextRect = (textShape: Text, doc: any) => {
     const rect = textShape.getRectInDOM(editor.canvas);
     const textMetric = measureText(editor.canvas, textShape, doc);
-    const textWidth = textMetric.minWidth + state.padding[1] + state.padding[3];
-    const textHeight = textMetric.height + state.padding[0] + state.padding[2];
-    const MIN_WIDTH = 2;
+    const shapeWidth =
+      textMetric.minWidth + state.padding[1] + state.padding[3];
+    const shapeHeight = textMetric.height + state.padding[0] + state.padding[2];
+    const MIN_WIDTH = 1;
     return {
       left: rect[0][0],
       top: rect[0][1],
-      width: Math.max(textWidth, MIN_WIDTH),
-      height: textHeight,
+      width: Math.max(shapeWidth, MIN_WIDTH),
+      height: shapeHeight,
+      textWidth: textMetric.width,
+      textHeight: textMetric.height,
     };
   };
 
@@ -188,8 +196,8 @@ export const DGMRichTextInplaceEditor: React.FC<
         top: rect.top,
         width: Math.max(textShape.width, rect.width),
         height: Math.max(textShape.height, rect.height),
-        textWidth: rect.width,
-        textHeight: rect.height,
+        textWidth: rect.textWidth,
+        textHeight: rect.textHeight,
       });
     }
   };
@@ -197,7 +205,7 @@ export const DGMRichTextInplaceEditor: React.FC<
   const close = () => {
     if (tiptapEditor && state.textShape) {
       editor.transform.endTransaction();
-      const textString = convertDocToText(tiptapEditor.getJSON());
+      const textString = convertTextNodeToString(tiptapEditor.getJSON());
       if (state.textShape instanceof Text && textString.trim().length === 0) {
         editor.actions.remove([state.textShape]);
       }
@@ -207,22 +215,29 @@ export const DGMRichTextInplaceEditor: React.FC<
     }
   };
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === "Escape") close();
   };
 
-  const handleDblClick = ({ shape, point }: DblClickEvent) => {
-    if (shape instanceof Box && shape.textEditable && shape.richText === true) {
+  const handleEditorKeyDown = (event: KeyboardEvent) => {
+    if (event.key === "Enter") {
+      if (editor.selection.size() === 1) {
+        const shape = editor.selection.shapes[0];
+        if (shape instanceof Box && shape.textEditable) {
+          open(shape);
+        }
+      }
+    }
+  };
+
+  const handleEditorDblClick = ({ shape, point }: DblClickEvent) => {
+    if (shape instanceof Box && shape.textEditable) {
       open(shape);
     }
   };
 
-  const handleCreate = (shape: Shape) => {
-    if (
-      shape instanceof Text &&
-      shape.textEditable &&
-      shape.richText === true
-    ) {
+  const handleEditorFactoryCreate = (shape: Shape) => {
+    if (shape instanceof Text && shape.textEditable) {
       editor.selection.deselectAll();
       open(shape);
     }
@@ -265,6 +280,7 @@ export const DGMRichTextInplaceEditor: React.FC<
               fontSize={state.fontSize}
               fontColor={state.color}
               lineHeight={state.lineHeight}
+              textHeight={state.textHeight}
               paragraphSpacing={state.paragraphSpacing}
               alignItems={state.alignItems}
               onBlur={() => {}}

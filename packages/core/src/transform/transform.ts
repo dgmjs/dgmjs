@@ -21,11 +21,11 @@ import {
 } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { convertDocToText, convertTextToDoc } from "../utils/text-utils";
 import { moveEndPoint, adjustRoute } from "../utils/route-utils";
 import type { Obj } from "../core/obj";
 import { getAllConnectorsTo, getAllDescendant } from "../utils/shape-utils";
 import { TypedEvent } from "../std/typed-event";
+import { visitTextNodes } from "../utils/text-utils";
 
 // Maximum size of undo/redo stack
 const MAX_STACK_SIZE = 1000;
@@ -558,39 +558,12 @@ export class Transform {
   }
 
   /**
-   * A set of mutations to change rich text or not
-   */
-  setRichText(box: Box, richText: boolean): boolean {
-    let changed = false;
-    if (richText) {
-      let doc = structuredClone(
-        richText && typeof box.text === "string"
-          ? convertTextToDoc(box.text)
-          : box.text
-      );
-      changed = this.atomicAssign(box, "text", doc) || changed;
-    } else {
-      let str =
-        !richText && typeof box.text !== "string"
-          ? convertDocToText(box.text)
-          : box.text;
-      changed = this.atomicAssign(box, "text", str) || changed;
-    }
-    changed = this.atomicAssign(box, "richText", richText) || changed;
-    return changed;
-  }
-
-  /**
    * A set of mutations to change horz align
    */
   setHorzAlign(box: Box, horzAlign: string): boolean {
     let changed = false;
-    let doc = structuredClone(
-      box.richText && typeof box.text === "string"
-        ? convertTextToDoc(box.text)
-        : box.text
-    );
-    box.visitNodes(doc, (docNode) => {
+    let doc = structuredClone(box.text);
+    visitTextNodes(doc, (docNode) => {
       if (docNode.attrs && docNode.attrs.textAlign)
         docNode.attrs.textAlign = horzAlign;
     });
@@ -604,14 +577,9 @@ export class Transform {
    */
   setFontSize(box: Box, fontSize: number): boolean {
     let changed = false;
-    let doc = structuredClone(
-      box.richText && typeof box.text === "string"
-        ? convertTextToDoc(box.text)
-        : box.text
-    );
-    box.visitNodes(doc, (docNode) => {
+    let doc = structuredClone(box.text);
+    visitTextNodes(doc, (docNode) => {
       if (Array.isArray(docNode.marks)) {
-        console.log(docNode);
         docNode.marks.forEach((mark: any) => {
           if (mark.type === "textStyle") {
             mark.attrs.fontSize = `${fontSize}px`;
@@ -629,14 +597,9 @@ export class Transform {
    */
   setFontFamily(box: Box, fontFamily: string): boolean {
     let changed = false;
-    let doc = structuredClone(
-      box.richText && typeof box.text === "string"
-        ? convertTextToDoc(box.text)
-        : box.text
-    );
-    box.visitNodes(doc, (docNode) => {
+    let doc = structuredClone(box.text);
+    visitTextNodes(doc, (docNode) => {
       if (Array.isArray(docNode.marks)) {
-        console.log(docNode);
         docNode.marks.forEach((mark: any) => {
           if (mark.type === "textStyle") {
             mark.attrs.fontFamily = fontFamily;
@@ -654,14 +617,9 @@ export class Transform {
    */
   setFontColor(box: Box, fontColor: string): boolean {
     let changed = false;
-    let doc = structuredClone(
-      box.richText && typeof box.text === "string"
-        ? convertTextToDoc(box.text)
-        : box.text
-    );
-    box.visitNodes(doc, (docNode) => {
+    let doc = structuredClone(box.text);
+    visitTextNodes(doc, (docNode) => {
       if (Array.isArray(docNode.marks)) {
-        console.log(docNode);
         docNode.marks.forEach((mark: any) => {
           if (mark.type === "textStyle") {
             mark.attrs.color = fontColor;

@@ -16,18 +16,18 @@ export class TypedEvent<T> {
   private listeners: Listener<T>[] = [];
   private listenersOncer: Listener<T>[] = [];
 
-  on = (listener: Listener<T>): Disposable => {
+  addListener = (listener: Listener<T>): Disposable => {
     this.listeners.push(listener);
     return {
-      dispose: () => this.off(listener),
+      dispose: () => this.removeListener(listener),
     };
   };
 
-  once = (listener: Listener<T>): void => {
+  addOnceListener = (listener: Listener<T>): void => {
     this.listenersOncer.push(listener);
   };
 
-  off = (listener: Listener<T>) => {
+  removeListener = (listener: Listener<T>) => {
     const callbackIndex = this.listeners.indexOf(listener);
     if (callbackIndex > -1) this.listeners.splice(callbackIndex, 1);
   };
@@ -45,6 +45,6 @@ export class TypedEvent<T> {
   };
 
   pipe = (te: TypedEvent<T>): Disposable => {
-    return this.on((e) => te.emit(e));
+    return this.addListener((e) => te.emit(e));
   };
 }

@@ -4,6 +4,7 @@ import {
   Connector,
   Ellipse,
   Embed,
+  FillStyle,
   Frame,
   Image,
   Line,
@@ -13,11 +14,12 @@ import {
   Sizable,
   Text,
 } from "./shapes";
-import { fileToImageElement } from "./utils/image-utils";
+import { resizeImage } from "./utils/image-utils";
 import * as geometry from "./graphics/geometry";
 import simplifyPath from "simplify-path";
 import { SHAPE_MIN_SIZE } from "./graphics/const";
 import { TypedEvent } from "./std/typed-event";
+import { convertStringToTextNode } from "./utils/text-utils";
 
 /**
  * Shape factory
@@ -77,15 +79,10 @@ export class ShapeFactory {
    */
   createText(rect: number[][], initialText: string = ""): Text {
     const text = new Text();
-    text.richText = false;
-    text.text = initialText;
-    text.constraints.push({
-      id: "set-size",
-      width: "text",
-      height: "text",
-    });
-    text.strokeColor = "$transparent";
-    text.fillColor = "$transparent";
+    text.text = convertStringToTextNode(initialText, text.horzAlign);
+    text.strokeColor = "$foreground";
+    text.fillColor = "$background";
+    text.fillStyle = FillStyle.NONE;
     text.left = rect[0][0];
     text.top = rect[0][1];
     let w = geometry.width(rect);
@@ -94,6 +91,11 @@ export class ShapeFactory {
     text.height = h;
     text.horzAlign = AlignmentKind.LEFT;
     text.vertAlign = AlignmentKind.TOP;
+    text.constraints.push({
+      id: "set-size",
+      width: "text",
+      height: "text",
+    });
     this.onShapeInitialize.emit(text);
     return text;
   }
@@ -103,10 +105,10 @@ export class ShapeFactory {
    */
   createAnchoredText(anchorPosition: number, initialText: string = ""): Text {
     const text = new Text();
-    text.richText = false;
-    text.text = initialText;
-    text.strokeColor = "$transparent";
-    text.fillColor = "$transparent";
+    text.text = convertStringToTextNode(initialText, text.horzAlign);
+    text.strokeColor = "$foreground";
+    text.fillColor = "$background";
+    text.fillStyle = FillStyle.SOLID;
     text.horzAlign = AlignmentKind.LEFT;
     text.vertAlign = AlignmentKind.TOP;
     text.anchored = true;
@@ -124,55 +126,23 @@ export class ShapeFactory {
   /**
    * Create an image
    */
-  async createImage(file: File, rect: number[][]): Promise<Image> {
-    const imageElement = await fileToImageElement(file);
+  async createImage(
+    fileOrBlob: File | Blob,
+    position: number[]
+  ): Promise<Image> {
+    const imageElement = await resizeImage(fileOrBlob);
     const image = new Image();
+    const w = imageElement.width;
+    const h = imageElement.height;
     image.imageData = imageElement.src;
-    image.imageWidth = imageElement.width;
-    image.imageHeight = imageElement.height;
-    let w = geometry.width(rect);
-    let h = geometry.height(rect);
-    // if (geometry.distance(rect[0], rect[1]) <= SHAPE_MIN_SIZE) {
-    //   const size = geometry.fitScaledownTo(
-    //     [image.imageWidth, image.imageHeight],
-    //     [400, 400]
-    //   );
-    //   w = size[0];
-    //   h = size[1];
-    // }
+    image.imageWidth = w;
+    image.imageHeight = h;
     image.width = w;
     image.height = h;
-    image.left = rect[0][0] - w / 2;
-    image.top = rect[0][1] - h / 2;
+    image.left = position[0] - w / 2;
+    image.top = position[1] - h / 2;
     image.sizable = Sizable.RATIO;
-    this.onShapeInitialize.emit(image);
-    return image;
-  }
-
-  /**
-   * Create an image at the position
-   */
-  async createImageAt(
-    file: File,
-    position: number[],
-    size?: number[]
-  ): Promise<Image> {
-    const imageElement = await fileToImageElement(file);
-    const image = new Image();
-    image.imageData = imageElement.src;
-    image.imageWidth = imageElement.width;
-    image.imageHeight = imageElement.height;
-    if (!size) {
-      size = geometry.fitScaledownTo(
-        [image.imageWidth, image.imageHeight],
-        [400, 400]
-      );
-    }
-    image.width = size[0];
-    image.height = size[1];
-    image.left = position[0] - size[0] / 2;
-    image.top = position[1] - size[1] / 2;
-    image.sizable = Sizable.RATIO;
+    image.textEditable = false;
     this.onShapeInitialize.emit(image);
     return image;
   }
@@ -258,6 +228,7 @@ export class ShapeFactory {
     frame.height = h;
     frame.horzAlign = AlignmentKind.CENTER;
     frame.vertAlign = AlignmentKind.MIDDLE;
+    frame.textEditable = false;
     this.onShapeInitialize.emit(frame);
     return frame;
   }
@@ -276,6 +247,7 @@ export class ShapeFactory {
     embed.height = h;
     embed.horzAlign = AlignmentKind.CENTER;
     embed.vertAlign = AlignmentKind.MIDDLE;
+    embed.textEditable = false;
     this.onShapeInitialize.emit(embed);
     return embed;
   }

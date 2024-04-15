@@ -63,6 +63,12 @@ export function PaletteToolbar() {
         <PaletteItem handlerId="Hand">
           <HandIcon size={16} />
         </PaletteItem>
+        <PaletteItem handlerId="Frame">
+          <FrameIcon size={16} />
+        </PaletteItem>
+        <PaletteItem handlerId="Embed">
+          <ScanIcon size={16} />
+        </PaletteItem>
         <Separator orientation="vertical" className="dark:bg-gray-700 mx-1" />
         <PaletteItem handlerId="Rectangle">
           <SquareIcon size={16} />
@@ -85,12 +91,6 @@ export function PaletteToolbar() {
         </PaletteItem>
         <PaletteItem handlerId="Freehand">
           <Pencil size={16} />
-        </PaletteItem>
-        <PaletteItem handlerId="Frame">
-          <FrameIcon size={16} />
-        </PaletteItem>
-        <PaletteItem handlerId="Embed">
-          <ScanIcon size={16} />
         </PaletteItem>
       </div>
     </div>

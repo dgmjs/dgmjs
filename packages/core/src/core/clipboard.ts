@@ -11,91 +11,81 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { generateId, hashStringToNumber } from "../std/id";
-import { Transform } from "../transform/transform";
 import { Store } from "./store";
 import type { Obj } from "./obj";
+import { deserialize, serialize } from "./serialize";
+
+interface ClipboardData {
+  objs?: Obj[];
+  text?: string;
+  image?: Blob;
+}
 
 /**
  * Clipboard
  */
 class Clipboard {
   store: Store;
-  transform: Transform;
-  buffer: any[];
 
-  constructor(store: Store, transform: Transform) {
+  constructor(store: Store) {
     this.store = store;
-    this.transform = transform;
-    this.buffer = [];
   }
 
   /**
-   * Write clipboard to system clipboard
+   * Write objs to clipboard
    */
-  writeToClipboard() {
-    const json = JSON.stringify(this.buffer);
-    navigator.clipboard.writeText(json);
-  }
-
-  /**
-   * Read from system clipboard
-   */
-  async readFromClipboard() {
-    const json = await navigator.clipboard.readText();
-    try {
-      this.buffer = JSON.parse(json);
-    } catch (err) {
-      this.buffer = [];
+  async write(data: ClipboardData): Promise<void> {
+    const clipboardItem: Record<string, Blob> = {};
+    if (Array.isArray(data.objs)) {
+      const buffer = serialize(data.objs);
+      const encoded = `<dgm>${btoa(JSON.stringify(buffer))}</dgm>`;
+      const blob = new Blob([encoded], { type: "text/html" });
+      clipboardItem["text/html"] = blob;
+    }
+    if (data.text && data.text.length > 0) {
+      const blob = new Blob([data.text], { type: "text/plain" });
+      clipboardItem["text/plain"] = blob;
+    }
+    if (Object.entries(clipboardItem).length > 0) {
+      await navigator.clipboard.write([new ClipboardItem(clipboardItem)]);
     }
   }
 
-  clearBuffer() {
-    this.buffer = [];
-  }
-
   /**
-   * Put shapes to the given buffer
+   * Read data from clipboard
+   *
    */
-  putObjects(objs: Obj[], buffer: any[]) {
-    // filter all descendants of one of the object
-    let filteredObjs = [];
-    for (let obj of objs) {
-      if (!objs.some((s) => s.isDescendant(obj))) filteredObjs.push(obj);
+  async read(): Promise<ClipboardData> {
+    const clipboardItem = await navigator.clipboard.read();
+    const data: ClipboardData = {};
+    for (let item of clipboardItem) {
+      for (let type of item.types) {
+        if (type === "text/html") {
+          const blob = await item.getType(type);
+          const text = await blob.text();
+          const match = text.match(/<dgm>(.*)<\/dgm>/);
+          if (match) {
+            const buffer = JSON.parse(atob(match[1]));
+            data.objs = deserialize(this.store.instantiator, buffer);
+          }
+        }
+        if (type === "text/plain") {
+          const blob = await item.getType(type);
+          const text = await blob.text();
+          const svgMatch = text.match(/<svg.*<\/svg>/);
+          if (svgMatch) {
+            data.image = new Blob([svgMatch[0]], { type: "image/svg+xml" });
+          } else {
+            data.text = text;
+          }
+        }
+        if (type === "image/png") {
+          const blob = await item.getType(type);
+          data.image = blob;
+        }
+      }
     }
-
-    // put objects to buffer
-    filteredObjs.forEach((s) => {
-      const json = s.toJSON(true);
-      buffer.push(json);
-    });
-  }
-
-  /**
-   * Get cloned shapes from the given buffer
-   */
-  getObjects(buffer: any[]): Obj[] {
-    // copy objects
-    const idMap: Record<string, Obj> = {};
-    const objs = buffer.map((json) => {
-      const obj = this.store.instantiator.createFromJson(json) as Obj;
-      obj.traverse((s) => (idMap[s.id] = s));
-      return obj;
-    });
-    // resolve refs and reassign ids
-    for (let obj of objs) {
-      obj.traverse((s) => s?.resolveRefs(idMap, true));
-      obj.traverse((s) => (s.id = generateId()));
-      obj.parent = null;
-    }
-    return objs;
-  }
-
-  /**
-   * Check if the clipboard has objects
-   */
-  hasObjects(): boolean {
-    return this.buffer.length > 0;
+    return data;
   }
 }
 

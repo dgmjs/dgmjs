@@ -52,7 +52,7 @@ export class BoxRotateController extends Controller {
     super(manipulator);
     this.snap = new Snap();
     this.options = {
-      position: ControllerPosition.RIGHT_TOP,
+      position: ControllerPosition.LEFT_TOP,
       distance: CONTROL_POINT_APOTHEM * 3,
       ...options,
     };

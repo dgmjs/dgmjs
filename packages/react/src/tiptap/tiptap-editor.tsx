@@ -68,12 +68,13 @@ export const extensions = [
  * - [x] undo, redo
  * - [x] copy, cut, paste
  */
-export const TiptapEditorComponent = ({
+export function TiptapEditorComponent({
   editor,
   fontFamily,
   fontSize,
   fontColor,
   lineHeight = 1,
+  textHeight = 0,
   paragraphSpacing = 1,
   alignItems = "start",
   ...others
@@ -83,22 +84,25 @@ export const TiptapEditorComponent = ({
   fontSize: number;
   fontColor: string;
   lineHeight: number;
+  textHeight: number;
   paragraphSpacing: number;
   alignItems: string;
   onBlur: any;
   onKeyDown: any;
-}) => {
+}) {
   return (
     <>
       <style>
         {`.RichTextEditor {
             display: flex;
             align-items: ${alignItems};
+            min-width: 1px;
           }
           .RichTextEditor > .ProseMirror {
             outline: none;
             word-break: keep-all;
             width: 100%;
+            height: 100%;
           }
           .RichTextEditor > .ProseMirror p {
             display: block;
@@ -128,10 +132,11 @@ export const TiptapEditorComponent = ({
           fontSize: fontSize,
           color: fontColor,
           lineHeight: lineHeight,
+          height: textHeight,
         }}
         {...others}
       />
     </>
   );
-};
+}
 TiptapEditorComponent.displayName = "TiptapEditorComponent";

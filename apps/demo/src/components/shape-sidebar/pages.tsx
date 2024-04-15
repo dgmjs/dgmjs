@@ -44,6 +44,7 @@ const PageView: React.FC<PageViewProps> = ({
           className="w-full border rounded"
           pageSize={doc.pageSize}
           page={page}
+          maxScale={1}
           scaleAdjust={doc.pageSize ? 1 : 0.8}
           darkMode={theme === "dark"}
         />
@@ -56,7 +57,7 @@ const PageView: React.FC<PageViewProps> = ({
             size="icon"
             className="w-7 h-7"
             onClick={() => {
-              window.editor.actions.duplcatePage(page as Page, idx + 1);
+              window.editor.actions.duplicatePage(page as Page, idx + 1);
             }}
           >
             <CopyIcon size={16} />

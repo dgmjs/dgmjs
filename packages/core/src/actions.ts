@@ -15,6 +15,8 @@ import type { Editor } from "./editor";
 import { Box, Group, type Shape, Line, type ObjProps, Page } from "./shapes";
 import * as geometry from "./graphics/geometry";
 import { Obj } from "./core/obj";
+import { deserialize, serialize } from "./core/serialize";
+import { extractTextFromShapes } from "./utils/text-utils";
 
 /**
  * Editor actions
@@ -82,10 +84,11 @@ export class Actions {
    * Duplicate a page
    */
   duplicatePage(page: Page, position: number): Page {
-    const clipboard = this.editor.clipboard;
-    const buffer: any[] = [];
-    clipboard.putObjects([page], buffer);
-    const copied = clipboard.getObjects(buffer)[0] as Page;
+    const buffer: any[] = serialize([page]);
+    const copied = deserialize(
+      this.editor.store.instantiator,
+      buffer
+    )[0] as Page;
     const tr = this.editor.transform;
     tr.startTransaction("duplicate-page");
     tr.addPage(copied);
@@ -119,11 +122,7 @@ export class Actions {
       const tr = this.editor.transform;
       tr.startTransaction("update");
       for (let key in values) {
-        if (key === "richText") {
-          objs.forEach((s) => {
-            if (s instanceof Box) tr.setRichText(s, (values as any)[key]);
-          });
-        } else if (key === "horzAlign") {
+        if (key === "horzAlign") {
           objs.forEach((s) => {
             if (s instanceof Box) tr.setHorzAlign(s, (values as any)[key]);
           });
@@ -169,24 +168,28 @@ export class Actions {
   /**
    * Copy selected shapes
    */
-  copy(shapes?: Shape[]) {
+  async copy(shapes?: Shape[]) {
     shapes = shapes ?? this.editor.selection.getShapes();
     const clipboard = this.editor.clipboard;
-    clipboard.clearBuffer();
-    clipboard.putObjects(shapes, clipboard.buffer);
+    await clipboard.write({
+      objs: shapes,
+      text: extractTextFromShapes(shapes),
+    });
   }
 
   /**
    * Cut selected shapes
    */
-  cut(shapes?: Shape[]) {
+  async cut(shapes?: Shape[]) {
     const page = this.editor.currentPage;
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       const tr = this.editor.transform;
       const clipboard = this.editor.clipboard;
-      clipboard.clearBuffer();
-      clipboard.putObjects(shapes, clipboard.buffer);
+      await clipboard.write({
+        objs: shapes,
+        text: extractTextFromShapes(shapes),
+      });
       tr.startTransaction("cut");
       tr.deleteShapes(page, shapes);
       tr.endTransaction();
@@ -197,14 +200,18 @@ export class Actions {
   /**
    * Paste
    */
-  paste(page?: Page) {
+  async paste(page?: Page) {
     const currentPage = page ?? this.editor.currentPage;
     if (currentPage) {
+      const canvas = this.editor.canvas;
       const clipboard = this.editor.clipboard;
-      const tr = this.editor.transform;
+      const data = await clipboard.read();
       const center = this.editor.getCenter();
-      if (clipboard.hasObjects()) {
-        const shapes = clipboard.getObjects(clipboard.buffer) as Shape[];
+      const tr = this.editor.transform;
+
+      // paste shapes in clipboard
+      if (Array.isArray(data.objs)) {
+        const shapes = data.objs as Shape[];
         const boundingRect = shapes
           .map((s) => (s as Shape).getBoundingRect())
           .reduce(geometry.unionRect);
@@ -220,6 +227,32 @@ export class Actions {
         tr.moveShapes(currentPage, shapes, dx, dy);
         tr.endTransaction();
         this.editor.selection.select(shapes);
+        return;
+      }
+
+      // paste image in clipboard
+      if (data.image) {
+        const shape = await this.editor.factory.createImage(data.image, center);
+        tr.startTransaction("paste");
+        tr.addShape(shape, currentPage);
+        tr.resolveAllConstraints(currentPage, canvas);
+        tr.endTransaction();
+        this.editor.selection.select([shape]);
+        return;
+      }
+
+      // paste text in clipboard
+      if (data.text) {
+        const shape = this.editor.factory.createText(
+          [center, center],
+          data.text
+        );
+        tr.startTransaction("paste");
+        tr.addShape(shape, currentPage);
+        tr.resolveAllConstraints(currentPage, canvas);
+        tr.endTransaction();
+        this.editor.selection.select([shape]);
+        return;
       }
     }
   }
@@ -232,11 +265,12 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       const tr = this.editor.transform;
-      const clipboard = this.editor.clipboard;
-      const buffer: any[] = [];
-      clipboard.putObjects(shapes, buffer);
+      const buffer: any[] = serialize(shapes);
       if (buffer.length > 0) {
-        const copied = clipboard.getObjects(buffer) as Shape[];
+        const copied = deserialize(
+          this.editor.store.instantiator,
+          buffer
+        ) as Shape[];
         tr.startTransaction("duplicate");
         copied.toReversed().forEach((shape) => {
           tr.atomicInsert(shape);

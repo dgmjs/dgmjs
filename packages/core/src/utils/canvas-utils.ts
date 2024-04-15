@@ -17,7 +17,9 @@ export function renderOnCanvas(
   darkMode: boolean = false,
   pageSize: PageSize = [960, 720],
   maxCanvasSize: number[] = [200, 150],
-  scaleAdjust: number = 1
+  maxScale: number = 1,
+  scaleAdjust: number = 1,
+  updateDOM: boolean = false
 ) {
   // get bounding box of given shapes and all their children
   const box = geometry.boundingRect(
@@ -31,9 +33,10 @@ export function renderOnCanvas(
   const bh = pageSize ? pageSize[1] : geometry.height(box);
 
   // get scaled size
-  const size = geometry.fitScaledownTo(
+  const size = geometry.fitScaleTo(
     [bw, bh],
-    [maxCanvasSize[0], maxCanvasSize[1]]
+    [maxCanvasSize[0], maxCanvasSize[1]],
+    maxScale
   );
   let w = size[0];
   let h = size[1];
@@ -58,7 +61,7 @@ export function renderOnCanvas(
   canvas.save();
   if (shapes.every((s) => !(s instanceof Page))) canvas.globalTransform();
   shapes.forEach((shape) => {
-    shape.render(canvas);
+    shape.render(canvas, updateDOM);
   });
 
   canvas.restore();

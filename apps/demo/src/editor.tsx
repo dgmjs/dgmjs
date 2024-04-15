@@ -1,13 +1,6 @@
-import { Box, Editor as CoreEditor } from "@dgmjs/core";
+import { Box } from "@dgmjs/core";
 import { useState, useEffect } from "react";
-import {
-  DGMEditor,
-  DGMEditorProps,
-  DGMPlainTextInplaceEditor,
-  DGMRichTextInplaceEditor,
-  DGMShapeToolbarHolder,
-  TiptapEditor,
-} from "@dgmjs/react";
+import { TiptapEditor, DGMEditor, DGMEditorProps } from "@dgmjs/react";
 import { constants } from "@dgmjs/core";
 import { Toggle } from "@/components/ui/toggle";
 import {
@@ -31,7 +24,7 @@ import { Button } from "@/components/ui/button";
 import { ColorPalette, simplePalette } from "@/components/common/color-palette";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
-export function RichTextInplaceEditorToolbar({
+export function TextInplaceEditorToolbar({
   tiptapEditor,
   theme,
   shape,
@@ -188,7 +181,6 @@ export const EditorWrapper: React.FC<EditorWrapperProps> = ({
   onMount,
   ...props
 }) => {
-  const [editor, setEditor] = useState<CoreEditor | null>(null);
   const [tiptapEditor, setTiptapEditor] = useState<any>(null);
   const [editingText, setEditingText] = useState<Box | null>(null);
 
@@ -196,38 +188,29 @@ export const EditorWrapper: React.FC<EditorWrapperProps> = ({
     <>
       <DGMEditor
         onMount={(editor) => {
-          setEditor(editor);
           if (onMount) onMount(editor);
         }}
+        textInplaceEditorToolbar={
+          <TextInplaceEditorToolbar
+            theme={theme}
+            tiptapEditor={tiptapEditor}
+            shape={editingText}
+          />
+        }
+        shapeToolbar={
+          <div className="bg-foreground text-background px-3 shadow-sm h-10 rounded border flex items-center">
+            Toolbar
+          </div>
+        }
+        onTextInplaceEditorMount={(tiptapEditor) => {
+          setTiptapEditor(tiptapEditor);
+        }}
+        onTextInplaceEditorOpen={(shape) => {
+          setEditingText(shape as Box);
+        }}
+        onShapeToolbarMove={(onBelow: boolean) => {}}
         {...props}
-      >
-        <DGMPlainTextInplaceEditor editor={editor as CoreEditor} />
-        <DGMRichTextInplaceEditor
-          onMount={(tiptapEditor) => {
-            setTiptapEditor(tiptapEditor);
-          }}
-          onOpen={(shape) => {
-            setEditingText(shape as Box);
-          }}
-          editor={editor as CoreEditor}
-          toolbar={
-            <RichTextInplaceEditorToolbar
-              theme={theme}
-              tiptapEditor={tiptapEditor}
-              shape={editingText}
-            />
-          }
-        />
-        <DGMShapeToolbarHolder
-          editor={editor!}
-          toolbar={
-            <div className="bg-foreground text-background px-3 shadow-sm h-10 rounded border flex items-center">
-              Toolbar
-            </div>
-          }
-          onMove={(onBelow: boolean) => {}}
-        />
-      </DGMEditor>
+      />
     </>
   );
 };

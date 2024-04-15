@@ -1,4 +1,12 @@
 import { generateId } from "../std/id";
+import { convertStringToTextNode } from "./text-utils";
+
+function traverse(json: any, visitor: (node: any) => void) {
+  visitor(json);
+  if (json.children) {
+    json.children.forEach((child: any) => traverse(child, visitor));
+  }
+}
 
 /**
  * Convert a old-version format JSON object to the latest version.
@@ -33,6 +41,13 @@ export function convertToLatestVersion(json: any): any {
     };
     json.children = [page];
   }
+
+  // convert plain text string to text doc nodes
+  traverse(json, (node) => {
+    if (typeof node.text === "string") {
+      node.text = convertStringToTextNode(node.text, node.horzAlign);
+    }
+  });
 
   return json;
 }

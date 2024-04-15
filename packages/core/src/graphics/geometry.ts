@@ -360,17 +360,20 @@ function scaleRect(rect: number[][], scale: number): number[][] {
  * Return scale-downed size with scale fit inside the given maximum size
  * @returns [scaled-width, scaled-height, scale]
  */
-function fitScaledownTo(size: number[], maxSize: number[]): number[] {
+function fitScaleTo(
+  size: number[],
+  maxSize: number[],
+  maxScale: number = 1
+): number[] {
   let w = size[0];
   let h = size[1];
   let scale = 1;
-  if (w > maxSize[0] || h > maxSize[1]) {
-    const scaleW = maxSize[0] / size[0];
-    const scaleH = maxSize[1] / size[1];
-    scale = Math.min(scaleW, scaleH);
-    w = Math.ceil(w * scale);
-    h = Math.ceil(h * scale);
-  }
+  const scaleW = maxSize[0] / size[0];
+  const scaleH = maxSize[1] / size[1];
+  scale = Math.min(scaleW, scaleH);
+  if (scale > maxScale) scale = maxScale;
+  w = Math.ceil(w * scale);
+  h = Math.ceil(h * scale);
   return [w, h, scale];
 }
 
@@ -969,7 +972,7 @@ export {
   expandRect,
   unionRect,
   scaleRect,
-  fitScaledownTo,
+  fitScaleTo,
   overlapRect,
   normalizeRect,
   rectToPolygon,

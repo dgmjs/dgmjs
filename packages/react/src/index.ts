@@ -1,7 +1,6 @@
+export { DGMEditorCore, type DGMEditorCoreProps } from "./DGMEditorCore";
+export { DGMTextInplaceEditor } from "./DGMTextInplaceEditor";
 export { DGMEditor, type DGMEditorProps } from "./DGMEditor";
-export { DGMPlainTextInplaceEditor } from "./DGMPlainTextInplaceEditor";
-export { DGMRichTextInplaceEditor } from "./DGMRichTextInplaceEditor";
-export { DGMEditorWithInplaceEditors } from "./DGMEditorWithInplaceEditors";
 export { DGMShapeToolbarHolder } from "./DGMShapeToolbarHolder";
 export { DGMShapeView, type DGMShapeViewHandle } from "./DGMShapeView";
 export { DGMPageView, type DGMPageViewHandle } from "./DGMPageView";

@@ -1,125 +1,53 @@
-import {
-  Editor,
-  EditorOptions,
-  Shape,
-  Transaction,
-  basicSetup,
-  Page,
-  DragEvent,
-  FileDropEvent,
-  DblClickEvent,
-} from "@dgmjs/core";
-import { useEffect, useRef } from "react";
+import { Box, Editor } from "@dgmjs/core";
+import { useState } from "react";
+import { DGMEditorCore, DGMEditorCoreProps } from "./DGMEditorCore";
+import { DGMTextInplaceEditor } from "./DGMTextInplaceEditor";
+import { DGMShapeToolbarHolder } from "./DGMShapeToolbarHolder";
+import { Editor as TiptapEditor } from "@tiptap/react";
 
-export interface DGMEditorProps
-  extends Omit<
-    React.HTMLAttributes<HTMLDivElement>,
-    "onScroll" | "onDragStart" | "onDrag" | "onDragEnd"
-  > {
-  options?: Partial<EditorOptions>;
-  showGrid?: boolean;
-  onMount?: (editor: Editor) => void;
-  onSelectionChange?: (selections: Shape[]) => void;
-  onCurrentPageChange?: (page: Page) => void;
-  onActiveHandlerChange?: (handlerId: string) => void;
-  onShapeCreate?: (shape: Shape) => void;
-  onShapeInitialize?: (shape: Shape) => void;
-  onTransaction?: (tx: Transaction) => void;
-  onDblClick?: (event: DblClickEvent) => void;
-  onZoom?: (scale: number) => void;
-  onScroll?: (origin: number[]) => void;
-  onDragStart?: (dragEvent: DragEvent) => void;
-  onDrag?: (dragEvent: DragEvent) => void;
-  onDragEnd?: (dragEvent: DragEvent) => void;
-  onFileDrop?: (fileDropEvent: FileDropEvent) => void;
+export interface DGMEditorProps extends DGMEditorCoreProps {
+  textInplaceEditorToolbar?: React.ReactNode;
+  shapeToolbar?: React.ReactNode;
+  shapeToolbarDistance?: number;
+  onTextInplaceEditorMount?: (tiptapEditor: TiptapEditor) => void;
+  onTextInplaceEditorOpen?: (shape: Box) => void;
+  onShapeToolbarMove?: (onBelow: boolean) => void;
 }
 
 export const DGMEditor: React.FC<DGMEditorProps> = ({
-  options,
-  showGrid = false,
   onMount,
-  onSelectionChange,
-  onCurrentPageChange,
-  onActiveHandlerChange,
-  onShapeCreate,
-  onShapeInitialize,
-  onTransaction,
-  onDblClick,
-  onZoom,
-  onScroll,
-  onDragStart,
-  onDrag,
-  onDragEnd,
-  onFileDrop,
-  ...others
+  textInplaceEditorToolbar,
+  shapeToolbar,
+  shapeToolbarDistance,
+  onTextInplaceEditorMount,
+  onTextInplaceEditorOpen,
+  onShapeToolbarMove,
+  ...props
 }) => {
-  const editorHolderRef = useRef<HTMLDivElement>(null);
-  const editorRef = useRef<Editor | null>(null);
+  const [editor, setEditor] = useState<Editor | null>(null);
 
-  useEffect(() => {
-    if (!editorRef.current) {
-      const editor = new Editor(
-        editorHolderRef.current!,
-        basicSetup({ ...options })
-      );
-
-      // events forwarding
-      editor.selection.onChange.on((shapes: Shape[]) => {
-        if (onSelectionChange) onSelectionChange(shapes);
-      });
-      editor.onCurrentPageChange.on((page) => {
-        if (onCurrentPageChange) onCurrentPageChange(page);
-      });
-      editor.onActiveHandlerChange.on((handlerId) => {
-        if (onActiveHandlerChange) onActiveHandlerChange(handlerId);
-      });
-      editor.factory.onCreate.on((shape: Shape) => {
-        if (onShapeCreate) onShapeCreate(shape);
-      });
-      editor.factory.onShapeInitialize.on((shape: Shape) => {
-        if (onShapeInitialize) onShapeInitialize(shape);
-      });
-      editor.transform.onTransaction.on((tx: Transaction) => {
-        if (onTransaction) onTransaction(tx);
-      });
-      editor.onDblClick.on((event: DblClickEvent) => {
-        if (onDblClick) onDblClick(event);
-      });
-      editor.onZoom.on((scale: number) => {
-        if (onZoom) onZoom(scale);
-      });
-      editor.onScroll.on((origin: number[]) => {
-        if (onScroll) onScroll(origin);
-      });
-      editor.onDragStart.on((dragEvent) => {
-        if (onDragStart) onDragStart(dragEvent);
-      });
-      editor.onDrag.on((dragEvent) => {
-        if (onDrag) onDrag(dragEvent);
-      });
-      editor.onDragEnd.on((dragEvent) => {
-        if (onDragEnd) onDragEnd(dragEvent);
-      });
-      editor.onFileDrop.on((fileDropEvent) => {
-        if (onFileDrop) onFileDrop(fileDropEvent);
-      });
-
-      // initialize
-      editorRef.current = editor;
-      editor.fit();
-      editor.activateDefaultHandler();
-      editor.repaint();
-      if (onMount) onMount(editor);
-    }
-
-    return () => {
-      // TODO: dispose (remove listeners)
-    };
-  }, []);
-
-  useEffect(() => {
-    editorRef.current?.setShowGrid(showGrid);
-  }, [showGrid]);
-
-  return <div ref={editorHolderRef} {...others} />;
+  return (
+    <>
+      <DGMEditorCore
+        onMount={(editor) => {
+          setEditor(editor);
+          if (onMount) onMount(editor);
+        }}
+        {...props}
+      >
+        <DGMTextInplaceEditor
+          editor={editor as Editor}
+          toolbar={textInplaceEditorToolbar}
+          onMount={onTextInplaceEditorMount}
+          onOpen={onTextInplaceEditorOpen}
+        />
+        <DGMShapeToolbarHolder
+          editor={editor as Editor}
+          toolbar={shapeToolbar}
+          distance={shapeToolbarDistance}
+          onMove={onShapeToolbarMove}
+        />
+      </DGMEditorCore>
+    </>
+  );
 };

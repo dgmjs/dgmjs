@@ -42,19 +42,19 @@ export const DGMShapeToolbarHolder: React.FC<DGMShapeToolbarHolderProps> = ({
 
   useEffect(() => {
     if (editor) {
-      editor.onScroll.on(handleScroll);
-      editor.onZoom.on(handleZoom);
-      editor.onDragStart.on(handleDragStart);
-      editor.onDragEnd.on(handleDragEnd);
-      editor.selection.onChange.on(handleSelectionChange);
+      editor.onScroll.addListener(handleScroll);
+      editor.onZoom.addListener(handleZoom);
+      editor.onDragStart.addListener(handleDragStart);
+      editor.onDragEnd.addListener(handleDragEnd);
+      editor.selection.onChange.addListener(handleSelectionChange);
     }
     return function cleanup() {
       if (editor) {
-        editor.onScroll.off(handleScroll);
-        editor.onZoom.off(handleZoom);
-        editor.onDragStart.off(handleDragStart);
-        editor.onDragEnd.off(handleDragEnd);
-        editor.selection.onChange.off(handleSelectionChange);
+        editor.onScroll.removeListener(handleScroll);
+        editor.onZoom.removeListener(handleZoom);
+        editor.onDragStart.removeListener(handleDragStart);
+        editor.onDragEnd.removeListener(handleDragEnd);
+        editor.selection.onChange.removeListener(handleSelectionChange);
       }
     };
   }, [editor]);
