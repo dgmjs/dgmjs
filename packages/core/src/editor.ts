@@ -789,6 +789,7 @@ export class Editor {
     // draw document background
     if (docSize) {
       canvas.roughness = 0;
+      canvas.alpha = 1;
       canvas.fillStyle = FillStyle.SOLID;
       canvas.fillColor = this.canvas.resolveColor(Color.BACKGROUND);
       canvas.fillRect(0, 0, docSize[0], docSize[1]);
@@ -833,6 +834,9 @@ export class Editor {
     if (docSize) {
       canvas.strokeColor = this.canvas.resolveColor(Color.BORDER);
       canvas.strokeWidth = 1 / scale;
+      canvas.strokePattern = [];
+      canvas.roughness = 0;
+      canvas.alpha = 1;
       canvas.strokeRect(0, 0, docSize[0], docSize[1]);
     }
 
