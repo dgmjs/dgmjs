@@ -5,7 +5,6 @@ import {
   Shape,
   ObjProps,
   Transaction,
-  basicSetup,
 } from "@dgmjs/core";
 import { PaletteToolbar } from "./components/palette-toolbar";
 import { useDemoStore } from "./demo-store";
@@ -90,9 +89,9 @@ function App() {
       <EditorWrapper
         className="absolute inset-y-0 left-56 right-56"
         theme={demoStore.theme}
-        options={basicSetup({
+        options={{
           keymapEventTarget: window,
-        })}
+        }}
         showGrid={true}
         onMount={handleMount}
         onSelectionChange={handleSelectionChange}

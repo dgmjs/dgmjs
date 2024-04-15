@@ -83,6 +83,7 @@ export class LineFactoryHandler extends Handler {
         if (this.closed) {
           this.finalize(editor, e);
           this.reset();
+          this.done(editor);
         } else {
           const p = canvas.globalCoordTransformRev([e.x, e.y]);
           this.points.push(p);
