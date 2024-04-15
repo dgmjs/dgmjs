@@ -86,7 +86,7 @@ export function Menus() {
             for (const type of clipboardItem.types) {
               const blob = await clipboardItem.getType(type);
               // we can now use blob here
-              console.log(type, blob);
+              console.log(type, await blob.text());
             }
           }
         }}

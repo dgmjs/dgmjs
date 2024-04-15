@@ -71,12 +71,17 @@ class Clipboard {
         }
         if (type === "text/plain") {
           const blob = await item.getType(type);
-          data.text = await blob.text();
+          const text = await blob.text();
+          const svgMatch = text.match(/<svg.*<\/svg>/);
+          if (svgMatch) {
+            data.image = new Blob([svgMatch[0]], { type: "image/svg+xml" });
+          } else {
+            data.text = text;
+          }
         }
         if (type === "image/png") {
           const blob = await item.getType(type);
           data.image = blob;
-          // TODO: ...
         }
       }
     }
