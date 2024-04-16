@@ -1,16 +1,67 @@
 ---
-
+import Layout from "@/layouts/layout.astro";
+import Header from "@/components/header.astro";
+import Footer from "@/components/footer.astro";
+import Feature from "@/components/feature.astro";
+import { siteConfig } from "../../site-config";
+import { Badge } from "@/components/ui/badge";
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>dgm.js</title>
-  </head>
-  <body>
-    <h1>dgm.js</h1>
-  </body>
-</html>
+<Layout>
+  <Header />
+  <section class="">
+    <div class="container my-10">
+      <div class="mx-auto w-full text-center">
+        <span class="text-center text-4xl font-bold tracking-tighter">
+          dgm.js
+        </span>
+        <Badge variant="secondary" className="font-normal">beta</Badge>
+      </div>
+      <p
+        class="text-xl text-muted-foreground text-center sm:leading-8 font-hand"
+      >
+        {siteConfig.description}
+      </p>
+    </div>
+  </section>
+  <section class="container my-10 flex justify-center">
+    <div class="max-w-4xl">
+      <img src="/images/cover.png" alt="Hero" class="w-full" />
+    </div>
+  </section>
+  <section id="features" class="container space-y-12">
+    <Feature
+      title="Smart shapes"
+      description="You can define a composite shape with constraints, exntended properties, and scripts, ..."
+    />
+    <Feature
+      title="Hand-drawn style"
+      description="dgm.js powered by awesome rough.js to support hand-drawn style shapes"
+    />
+    <Feature
+      title="Scripting support"
+      description="You can write a simple script to define how to render a shape instead of tedious compositing lots of shapes"
+    />
+    <Feature
+      title="Theme-adaptive colors"
+      description="Colors are automatically adapted to light or dark mode."
+    />
+    <Feature
+      title="Headless components"
+      description="dgm.js don't have it's own styles, do you can use with your own styles (CSS, tailwind CSS, styled-components, ...)"
+    />
+    <Feature
+      title="Image export"
+      description="You can export diagram to PNG, JPEG, SVG images"
+    />
+    <Feature
+      title="Realtime collaboration"
+      description="You can collaborate with your team in real-time."
+    />
+    <Feature
+      title="Another one-more feature"
+      description="another feature..."
+    />
+  </section>
+  <Footer />
+</Layout>
