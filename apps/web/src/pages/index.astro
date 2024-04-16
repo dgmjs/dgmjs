@@ -5,27 +5,43 @@ import Footer from "@/components/footer.astro";
 import Feature from "@/components/feature.astro";
 import { siteConfig } from "../../site-config";
 import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 ---
 
 <Layout>
   <Header />
   <section class="">
     <div class="container my-10">
-      <div class="mx-auto w-full text-center">
-        <span class="text-center text-4xl font-bold tracking-tighter">
+      <div class="mx-auto w-full text-center my-1">
+        <span class="text-center text-4xl font-semibold tracking-tighter">
           dgm.js
         </span>
-        <Badge variant="secondary" className="font-normal">beta</Badge>
+        <Badge variant="secondary" className="absolute font-normal ml-2"
+          >beta</Badge
+        >
       </div>
-      <p
-        class="text-xl text-muted-foreground text-center sm:leading-8 font-hand"
-      >
+      <p class="text-xl text-muted-foreground text-center sm:leading-8">
         {siteConfig.description}
       </p>
     </div>
   </section>
+  <section class="container text-center my-12">
+    <div class="flex items-center justify-center gap-4">
+      <a
+        href="https://dgmjs.dev/getting-started/quick-start"
+        class={cn(buttonVariants({ variant: "default" }), "rounded-full px-8")}
+        >Get Started</a
+      >
+      <a
+        href={siteConfig.social.github}
+        class={cn(buttonVariants({ variant: "secondary" }), "rounded-full")}
+        >View on Github</a
+      >
+    </div>
+  </section>
   <section class="container my-10 flex justify-center">
-    <div class="max-w-4xl">
+    <div>
       <img src="/images/cover.png" alt="Hero" class="w-full" />
     </div>
   </section>

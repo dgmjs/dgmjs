@@ -5,6 +5,7 @@ export type SiteConfig = {
   url: string;
   ogImage: string;
   social: {
+    github: string;
     twitter: string;
     discord: string;
   };
@@ -22,6 +23,7 @@ export const siteConfig: SiteConfig = {
   url: "https://dgmjs.dev",
   ogImage: "https://dgmjs.dev/og.jpg",
   social: {
+    github: "https://github.com/dgmjs/dgmjs",
     twitter: "dgm_sh",
     discord: "https://discord.gg/S2qWnqFJG2",
   },
