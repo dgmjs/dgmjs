@@ -1,6 +1,8 @@
 ---
 title: Getting Started
 description: shapes ...
+sidebar:
+  order: 1
 ---
 
 Basically, In DGM, you can create a diagram by combining the basic shapes. Supported shape objects are:
