@@ -21,3 +21,6 @@ export {
   visitTextNodes,
 } from "./utils/text-utils";
 export { basicSetup } from "./basic-setup";
+
+// plugins
+export { YDocSyncPlugin } from "./plugins/plugin-ydoc-sync";

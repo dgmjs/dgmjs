@@ -1,10 +1,24 @@
 import { Store } from "../core/store";
 import type { Obj } from "../core/obj";
 
+export const MutationType = {
+  ASSIGN: "assign",
+  ASSIGN_REF: "assign-ref",
+  INSERT: "insert",
+  DELETE: "delete",
+  INSERT_TO_ARRAY: "insert-to-array",
+  REMOVE_FROM_ARRAY: "remove-from-array",
+  REORDER_IN_ARRAY: "reorder-in-array",
+} as const;
+
 /**
  * Mutates object store
  */
-export abstract class Mutation {
+export class Mutation {
+  type: string;
+  constructor(type: string) {
+    this.type = type;
+  }
   apply(store: Store) {}
   unapply(store: Store) {}
   toJSON(): any {
@@ -22,7 +36,7 @@ export class AssignMutation extends Mutation {
   oldValue: any;
 
   constructor(obj: Obj, field: string, value: any) {
-    super();
+    super(MutationType.ASSIGN);
     this.obj = obj;
     this.field = field;
     this.newValue = value;
@@ -39,7 +53,7 @@ export class AssignMutation extends Mutation {
 
   toJSON() {
     return {
-      op: "assign",
+      op: this.type,
       objId: this.obj.id,
       field: this.field,
       newValue: this.newValue,
@@ -58,7 +72,7 @@ export class AssignRefMutation extends Mutation {
   oldValue: Obj;
 
   constructor(obj: Obj, field: string, value: Obj | null) {
-    super();
+    super(MutationType.ASSIGN_REF);
     this.obj = obj;
     this.field = field;
     this.newValue = value;
@@ -75,7 +89,7 @@ export class AssignRefMutation extends Mutation {
 
   toJSON() {
     return {
-      op: "assign-ref",
+      op: this.type,
       objId: this.obj.id,
       field: this.field,
       newValue: this.newValue,
@@ -91,7 +105,7 @@ export class InsertMutation extends Mutation {
   obj: Obj;
 
   constructor(obj: Obj) {
-    super();
+    super(MutationType.INSERT);
     this.obj = obj;
   }
 
@@ -104,7 +118,7 @@ export class InsertMutation extends Mutation {
   }
 
   toJSON(): any {
-    return { op: "insert", obj: this.obj.toJSON(true) };
+    return { op: this.type, obj: this.obj.toJSON(true) };
   }
 }
 
@@ -115,7 +129,7 @@ export class DeleteMutation extends Mutation {
   obj: Obj;
 
   constructor(obj: Obj) {
-    super();
+    super(MutationType.DELETE);
     this.obj = obj;
   }
 
@@ -128,7 +142,7 @@ export class DeleteMutation extends Mutation {
   }
 
   toJSON(): any {
-    return { op: "delete", obj: this.obj.toJSON(true) };
+    return { op: this.type, obj: this.obj.toJSON(true) };
   }
 }
 
@@ -142,7 +156,7 @@ export class InsertToArrayMutation extends Mutation {
   position: number;
 
   constructor(obj: Obj, field: string, value: any, position?: number) {
-    super();
+    super(MutationType.INSERT_TO_ARRAY);
     this.obj = obj;
     this.field = field;
     this.value = value;
@@ -170,7 +184,7 @@ export class InsertToArrayMutation extends Mutation {
 
   toJSON() {
     return {
-      op: "insert-to-array",
+      op: this.type,
       objId: this.obj.id,
       field: this.field,
       item: this.value,
@@ -189,7 +203,7 @@ export class RemoveFromArrayMutation extends Mutation {
   position: number;
 
   constructor(obj: Obj, field: string, value: any) {
-    super();
+    super(MutationType.REMOVE_FROM_ARRAY);
     this.obj = obj;
     this.field = field;
     this.value = value;
@@ -217,7 +231,7 @@ export class RemoveFromArrayMutation extends Mutation {
 
   toJSON() {
     return {
-      op: "remove-from-array",
+      op: this.type,
       objId: this.obj.id,
       field: this.field,
       item: this.value,
@@ -237,7 +251,7 @@ export class ReorderInArrayMutation extends Mutation {
   oldPosition: number;
 
   constructor(obj: Obj, field: string, value: any, position: number) {
-    super();
+    super(MutationType.REORDER_IN_ARRAY);
     this.obj = obj;
     this.field = field;
     this.value = value;
@@ -268,7 +282,7 @@ export class ReorderInArrayMutation extends Mutation {
 
   toJSON() {
     return {
-      op: "reorder-in-array",
+      op: this.type,
       objId: this.obj.id,
       field: this.field,
       item: this.value,

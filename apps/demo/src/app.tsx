@@ -5,6 +5,7 @@ import {
   Shape,
   ObjProps,
   Transaction,
+  YDocSyncPlugin,
 } from "@dgmjs/core";
 import { PaletteToolbar } from "./components/palette-toolbar";
 import { useDemoStore } from "./demo-store";
@@ -16,11 +17,26 @@ import { Font, fetchFonts, insertFontsToDocument } from "./font-manager";
 import { ShapeSidebar } from "./components/shape-sidebar";
 import { EditorWrapper } from "./editor";
 
+import * as Y from "yjs";
+import { WebrtcProvider } from "y-webrtc";
+import { Button } from "./components/ui/button";
+
 declare global {
   interface Window {
     editor: Editor;
   }
 }
+
+// ------------ yjs experiment ------------
+
+const yDoc = new Y.Doc();
+const provider = new WebrtcProvider("todo-demo", yDoc, { password: "1234" });
+provider.on("status", (event) => {
+  console.log("status", event);
+});
+const ydocSyncPlugin = new YDocSyncPlugin({ yDoc });
+
+// ------------ yjs experiment ------------
 
 function App() {
   const demoStore = useDemoStore();
@@ -38,10 +54,10 @@ function App() {
     });
 
     // load from local storage
-    const localData = localStorage.getItem("local-data");
-    if (localData) {
-      window.editor.loadFromJSON(JSON.parse(localData));
-    }
+    // const localData = localStorage.getItem("local-data");
+    // if (localData) {
+    //   window.editor.loadFromJSON(JSON.parse(localData));
+    // }
     demoStore.setDoc(window.editor.store.doc as Document);
     demoStore.setCurrentPage(window.editor.currentPage);
     window.editor.fitToScreen();
@@ -92,6 +108,7 @@ function App() {
         options={{
           keymapEventTarget: window,
         }}
+        plugins={[ydocSyncPlugin]}
         showGrid={true}
         onMount={handleMount}
         onSelectionChange={handleSelectionChange}
@@ -102,6 +119,13 @@ function App() {
       <div className="absolute top-2 left-60 right-60 h-10 border flex items-center justify-between bg-background">
         <Menus />
         <Options />
+        <Button
+          onClick={() => {
+            ydocSyncPlugin.synchronize();
+          }}
+        >
+          Share
+        </Button>
       </div>
       <PaletteToolbar />
       <ShapeSidebar

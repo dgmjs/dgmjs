@@ -48,6 +48,11 @@ export interface EditorOptions {
   onReady: (editor: Editor) => void;
 }
 
+export interface Plugin {
+  activate: (editor: Editor) => void;
+  deactivate: (editor: Editor) => void;
+}
+
 export interface DblClickEvent {
   shape: Shape | null;
   point: number[];
@@ -68,8 +73,10 @@ export interface FileDropEvent {
  */
 export class Editor {
   options: EditorOptions;
+  plugins: Plugin[];
   platform: string;
 
+  onDocumentLoaded: TypedEvent<Document>;
   onCurrentPageChange: TypedEvent<Page>;
   onActiveHandlerChange: TypedEvent<string>;
   onDblClick: TypedEvent<DblClickEvent>;
@@ -114,7 +121,11 @@ export class Editor {
   /**
    * constructor
    */
-  constructor(editorHolder: HTMLElement, options: Partial<EditorOptions>) {
+  constructor(
+    editorHolder: HTMLElement,
+    options: Partial<EditorOptions>,
+    plugins: Plugin[] = []
+  ) {
     this.options = {
       handlers: [],
       defaultHandlerId: "",
@@ -126,8 +137,10 @@ export class Editor {
       onReady: () => {},
       ...options,
     };
+    this.plugins = [...plugins];
 
     // initialize event emitters
+    this.onDocumentLoaded = new TypedEvent();
     this.onCurrentPageChange = new TypedEvent();
     this.onActiveHandlerChange = new TypedEvent();
     this.onDblClick = new TypedEvent();
@@ -183,6 +196,7 @@ export class Editor {
     this.initializeState();
     this.initializeCanvas();
     this.initializeKeymap();
+    this.initializePlugins();
     this.newDoc();
     if (this.options.onReady) this.options.onReady(this);
   }
@@ -457,6 +471,12 @@ export class Editor {
     });
   }
 
+  initializePlugins() {
+    this.plugins.forEach((plugin) => {
+      plugin.activate(this);
+    });
+  }
+
   /**
    * Set enable or disable
    */
@@ -642,7 +662,7 @@ export class Editor {
   /**
    * Fit doc to screen and move to center
    */
-  fitToScreen(scaleAdjust: number = 0.95, maxScale: number = 2) {
+  fitToScreen(scaleAdjust: number = 1, maxScale: number = 1) {
     if (this.currentPage) {
       // doc size in GCS
       const doc = this.store.doc as Document;
@@ -881,6 +901,7 @@ export class Editor {
     doc.children.push(page);
     page.parent = doc;
     this.store.setDoc(doc);
+    this.onDocumentLoaded.emit(this.store.doc as Document);
     this.setCurrentPage(doc.children[0] as Page);
     return doc;
   }
@@ -892,6 +913,7 @@ export class Editor {
     if (json) {
       this.selection.deselectAll();
       this.store.fromJSON(json);
+      this.onDocumentLoaded.emit(this.store.doc as Document);
       if (
         this.store.doc instanceof Document &&
         this.store.doc.children.length > 0 &&

@@ -8,6 +8,7 @@ import {
   DragEvent,
   FileDropEvent,
   DblClickEvent,
+  Plugin,
 } from "@dgmjs/core";
 import { useEffect, useRef } from "react";
 
@@ -17,6 +18,7 @@ export interface DGMEditorCoreProps
     "onScroll" | "onDragStart" | "onDrag" | "onDragEnd"
   > {
   options?: Partial<EditorOptions>;
+  plugins?: Plugin[];
   showGrid?: boolean;
   onMount?: (editor: Editor) => void;
   onSelectionChange?: (selections: Shape[]) => void;
@@ -36,6 +38,7 @@ export interface DGMEditorCoreProps
 
 export const DGMEditorCore: React.FC<DGMEditorCoreProps> = ({
   options,
+  plugins,
   showGrid = false,
   onMount,
   onSelectionChange,
@@ -60,7 +63,8 @@ export const DGMEditorCore: React.FC<DGMEditorCoreProps> = ({
     if (!editorRef.current) {
       const editor = new Editor(
         editorHolderRef.current!,
-        basicSetup({ ...options })
+        basicSetup({ ...options }),
+        plugins
       );
 
       // events forwarding
