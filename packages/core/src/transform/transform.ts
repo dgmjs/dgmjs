@@ -1,9 +1,9 @@
 import {
   Mutation,
-  InsertMutation,
+  CreateMutation,
   AssignMutation,
-  InsertToArrayMutation,
-  RemoveFromArrayMutation,
+  InsertChildMutation,
+  RemoveChildMutation,
   DeleteMutation,
   Transaction,
   AssignRefMutation,
@@ -189,7 +189,7 @@ export class Transform {
   atomicInsert(obj: Obj): boolean {
     if (!this.tx) throw new Error("No transaction started");
     if (!this.store.getById(obj.id)) {
-      const mut = new InsertMutation(obj);
+      const mut = new CreateMutation(obj);
       this.applyMutation(mut);
       this.tx.push(mut);
       return true;
@@ -286,14 +286,13 @@ export class Transform {
   }
 
   /**
-   * Atomic mutation to insert a value to shape's array field and returns
+   * Atomic mutation to insert a child to parent obj and returns
    * true if changed
    */
-  atomicInsertToArray(obj: Obj, field: string, value: any): boolean {
+  atomicInsertChild(parent: Obj, obj: Obj, position?: number): boolean {
     if (!this.tx) throw new Error("No transaction started");
-    const array = (obj as any)[field];
-    if (!array.includes(value)) {
-      const mut = new InsertToArrayMutation(obj, field, value);
+    if (!parent.children.includes(obj)) {
+      const mut = new InsertChildMutation(parent, obj, position);
       this.applyMutation(mut);
       this.tx.push(mut);
       return true;
@@ -302,14 +301,13 @@ export class Transform {
   }
 
   /**
-   * Atomic mutation to remove a value from shape's array field and returns
+   * Atomic mutation to remove a child from a parent and returns
    * true if changed
    */
-  atomicRemoveFromArray(obj: Obj, field: string, value: any): boolean {
+  atomicRemoveChild(parent: Obj, obj: Obj): boolean {
     if (!this.tx) throw new Error("No transaction started");
-    const array = (obj as any)[field];
-    if (array.includes(value)) {
-      const mut = new RemoveFromArrayMutation(obj, field, value);
+    if (parent.children.includes(obj)) {
+      const mut = new RemoveChildMutation(parent, obj);
       this.applyMutation(mut);
       this.tx.push(mut);
       return true;
@@ -346,10 +344,9 @@ export class Transform {
     let changed = false;
     if (parent) {
       if (obj.parent) {
-        changed =
-          this.atomicRemoveFromArray(obj.parent, "children", obj) || changed;
+        changed = this.atomicRemoveChild(obj.parent, obj) || changed;
       }
-      changed = this.atomicInsertToArray(parent, "children", obj) || changed;
+      changed = this.atomicInsertChild(parent, obj) || changed;
       changed = this.atomicAssignRef(obj, "parent", parent) || changed;
     }
     return changed;
@@ -375,8 +372,7 @@ export class Transform {
   removePage(page: Page): boolean {
     let changed = false;
     if (page && page.parent) {
-      changed =
-        this.atomicRemoveFromArray(page.parent, "children", page) || changed;
+      changed = this.atomicRemoveChild(page.parent, page) || changed;
       changed = this.atomicAssignRef(page.parent, "parent", null) || changed;
       changed = this.atomicDelete(page) || changed;
     }
@@ -394,6 +390,9 @@ export class Transform {
       position >= 0 &&
       position < page.parent.children.length
     ) {
+      // changed = this.atomicRemoveChild(page.parent, page) || changed;
+      // changed = this.atomicInsertChild(page.parent, page, position) || changed;
+
       changed = this.atomicReorderInArray(
         page.parent,
         "children",
@@ -758,9 +757,7 @@ export class Transform {
       }
       // delete the shape from store
       if (shape.parent) {
-        changed =
-          this.atomicRemoveFromArray(shape.parent, "children", shape) ||
-          changed;
+        changed = this.atomicRemoveChild(shape.parent, shape) || changed;
       }
       changed = this.atomicAssignRef(shape, "parent", null) || changed;
       changed = this.atomicDelete(shape) || changed;

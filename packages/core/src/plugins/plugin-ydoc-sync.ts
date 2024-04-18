@@ -4,7 +4,7 @@ import { Box, Document, Page, Shape } from "../shapes";
 import { Obj } from "../core/obj";
 import {
   AssignMutation,
-  InsertMutation,
+  CreateMutation,
   MutationType,
 } from "../transform/mutations";
 
@@ -134,9 +134,9 @@ export class YDocSyncPlugin implements Plugin {
         case MutationType.ASSIGN_REF: {
           break;
         }
-        case MutationType.INSERT: {
+        case MutationType.CREATE: {
           console.log("mutation", mutation.type);
-          const mut = mutation as InsertMutation;
+          const mut = mutation as CreateMutation;
           const parent = mut.obj.parent;
           if (parent) {
             const objXml = this.objToXml(mut.obj);
@@ -159,10 +159,10 @@ export class YDocSyncPlugin implements Plugin {
         case MutationType.DELETE: {
           break;
         }
-        case MutationType.INSERT_TO_ARRAY: {
+        case MutationType.INSERT_CHILD: {
           break;
         }
-        case MutationType.REMOVE_FROM_ARRAY: {
+        case MutationType.REMOVE_CHILD: {
           break;
         }
         case MutationType.REORDER_IN_ARRAY: {

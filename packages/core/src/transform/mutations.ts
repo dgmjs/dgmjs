@@ -2,12 +2,12 @@ import { Store } from "../core/store";
 import type { Obj } from "../core/obj";
 
 export const MutationType = {
+  CREATE: "create",
+  DELETE: "delete",
   ASSIGN: "assign",
   ASSIGN_REF: "assign-ref",
-  INSERT: "insert",
-  DELETE: "delete",
-  INSERT_TO_ARRAY: "insert-to-array",
-  REMOVE_FROM_ARRAY: "remove-from-array",
+  INSERT_CHILD: "insert-child",
+  REMOVE_CHILD: "remove-child",
   REORDER_IN_ARRAY: "reorder-in-array",
 } as const;
 
@@ -23,6 +23,54 @@ export class Mutation {
   unapply(store: Store) {}
   toJSON(): any {
     return null;
+  }
+}
+
+/**
+ * Create an object
+ */
+export class CreateMutation extends Mutation {
+  obj: Obj;
+
+  constructor(obj: Obj) {
+    super(MutationType.CREATE);
+    this.obj = obj;
+  }
+
+  apply(store: Store) {
+    store.addToIndex(this.obj);
+  }
+
+  unapply(store: Store): void {
+    store.removeFromIndex(this.obj);
+  }
+
+  toJSON(): any {
+    return { op: this.type, obj: this.obj.toJSON(true) };
+  }
+}
+
+/**
+ * Delete an object
+ */
+export class DeleteMutation extends Mutation {
+  obj: Obj;
+
+  constructor(obj: Obj) {
+    super(MutationType.DELETE);
+    this.obj = obj;
+  }
+
+  apply(store: Store) {
+    store.removeFromIndex(this.obj);
+  }
+
+  unapply(store: Store): void {
+    store.addToIndex(this.obj);
+  }
+
+  toJSON(): any {
+    return { op: this.type, obj: this.obj.toJSON(true) };
   }
 }
 
@@ -99,142 +147,83 @@ export class AssignRefMutation extends Mutation {
 }
 
 /**
- * Insert an object
+ * Insert a child
  */
-export class InsertMutation extends Mutation {
+export class InsertChildMutation extends Mutation {
+  parent: Obj;
   obj: Obj;
-
-  constructor(obj: Obj) {
-    super(MutationType.INSERT);
-    this.obj = obj;
-  }
-
-  apply(store: Store) {
-    store.addToIndex(this.obj);
-  }
-
-  unapply(store: Store): void {
-    store.removeFromIndex(this.obj);
-  }
-
-  toJSON(): any {
-    return { op: this.type, obj: this.obj.toJSON(true) };
-  }
-}
-
-/**
- * Delete an object
- */
-export class DeleteMutation extends Mutation {
-  obj: Obj;
-
-  constructor(obj: Obj) {
-    super(MutationType.DELETE);
-    this.obj = obj;
-  }
-
-  apply(store: Store) {
-    store.removeFromIndex(this.obj);
-  }
-
-  unapply(store: Store): void {
-    store.addToIndex(this.obj);
-  }
-
-  toJSON(): any {
-    return { op: this.type, obj: this.obj.toJSON(true) };
-  }
-}
-
-/**
- * Insert an object to an array
- */
-export class InsertToArrayMutation extends Mutation {
-  obj: Obj;
-  field: string;
-  value: any;
   position: number;
 
-  constructor(obj: Obj, field: string, value: any, position?: number) {
-    super(MutationType.INSERT_TO_ARRAY);
+  constructor(parent: Obj, obj: Obj, position?: number) {
+    super(MutationType.INSERT_CHILD);
+    this.parent = parent;
     this.obj = obj;
-    this.field = field;
-    this.value = value;
     if (typeof position === "number") {
       this.position = position;
     } else {
-      const array = (this.obj as Record<string, any>)[this.field];
-      this.position = array.length;
+      this.position = this.parent.children.length;
     }
   }
 
   apply(store: Store) {
-    const array = (this.obj as Record<string, any>)[this.field];
-    if (Array.isArray(array)) {
-      array.splice(this.position, 0, this.value);
+    if (Array.isArray(this.parent.children)) {
+      this.parent.children.splice(this.position, 0, this.obj);
     }
   }
 
   unapply(store: Store): void {
-    const array = (this.obj as Record<string, any>)[this.field];
-    if (Array.isArray(array)) {
-      array.splice(this.position, 1);
+    if (Array.isArray(this.parent.children)) {
+      this.parent.children.splice(this.position, 1);
     }
   }
 
   toJSON() {
     return {
       op: this.type,
-      objId: this.obj.id,
-      field: this.field,
-      item: this.value,
+      parentId: this.parent.id,
+      obj: this.obj,
       position: this.position,
     };
   }
 }
 
 /**
- * Remove from an array
+ * Remove a child
  */
-export class RemoveFromArrayMutation extends Mutation {
+export class RemoveChildMutation extends Mutation {
+  parent: Obj;
   obj: Obj;
-  field: string;
-  value: any;
   position: number;
 
-  constructor(obj: Obj, field: string, value: any) {
-    super(MutationType.REMOVE_FROM_ARRAY);
+  constructor(parent: Obj, obj: Obj) {
+    super(MutationType.REMOVE_CHILD);
+    this.parent = parent;
     this.obj = obj;
-    this.field = field;
-    this.value = value;
-    const array = (this.obj as Record<string, any>)[this.field];
+    const array = this.parent.children;
     if (Array.isArray(array)) {
-      this.position = array.indexOf(this.value);
+      this.position = array.indexOf(this.obj);
     } else {
       this.position = -1;
     }
   }
 
   apply(store: Store) {
-    const array = (this.obj as Record<string, any>)[this.field];
-    if (Array.isArray(array)) {
-      array.splice(this.position, 1);
+    if (Array.isArray(this.parent.children)) {
+      this.parent.children.splice(this.position, 1);
     }
   }
 
   unapply(store: Store): void {
-    const array = (this.obj as Record<string, any>)[this.field];
-    if (Array.isArray(array)) {
-      array.splice(this.position, 0, this.value);
+    if (Array.isArray(this.parent.children)) {
+      this.parent.children.splice(this.position, 0, this.obj);
     }
   }
 
   toJSON() {
     return {
       op: this.type,
-      objId: this.obj.id,
-      field: this.field,
-      item: this.value,
+      parentId: this.parent.id,
+      obj: this.obj,
       position: this.position,
     };
   }
