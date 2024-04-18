@@ -1,4 +1,5 @@
 import * as Y from "yjs";
+import { WebrtcProvider } from "y-webrtc";
 import { Editor, Plugin } from "../editor";
 import { Box, Document, Page, Shape } from "../shapes";
 import { Obj } from "../core/obj";
@@ -10,23 +11,34 @@ import {
   MutationType,
 } from "../transform/mutations";
 
-interface YDocSyncPluginOptions {
-  yDoc: Y.Doc;
-}
-
 export class YDocSyncPlugin implements Plugin {
   editor: Editor = null!;
-  yDoc: Y.Doc;
-  yObjMap: Y.Map<Y.Map<any>>;
+  yDoc: Y.Doc = null!;
+  yObjMap: Y.Map<Y.Map<any>> = null!;
 
-  constructor(options: YDocSyncPluginOptions) {
-    this.yDoc = options.yDoc;
+  constructor() {}
+
+  activate(editor: Editor) {
+    this.editor = editor;
+  }
+
+  deactivate(editor: Editor) {}
+
+  setup() {
+    this.yDoc = new Y.Doc();
+  }
+
+  startProvider(roomId: string) {
+    const provider = new WebrtcProvider(roomId, this.yDoc, {
+      password: "1234",
+    });
+    provider.on("status", (event) => {
+      console.log("status", event);
+    });
     this.yObjMap = this.yDoc.getMap("objmap");
   }
 
-  activate(editor: Editor) {
-    console.log("activate");
-    this.editor = editor;
+  listen() {
     this.editor.transform.onMutate.addListener((mutation) => {
       switch (mutation.type) {
         case MutationType.CREATE: {
@@ -98,7 +110,7 @@ export class YDocSyncPlugin implements Plugin {
                 }
 
                 if (obj instanceof Document) {
-                  this.editor.store.doc = obj;
+                  this.editor.store.setDoc(obj);
                 }
                 if (obj instanceof Page) {
                   this.editor.setCurrentPage(obj);
@@ -123,7 +135,6 @@ export class YDocSyncPlugin implements Plugin {
               if (key === "parent") {
                 const parentId = yObj.get("parent");
                 const parent = this.editor.store.getById(parentId);
-                console.log("event:update-parent", key, parentId);
                 if (parent) {
                   parent.children.push(obj);
                   obj.parent = parent;
@@ -141,7 +152,13 @@ export class YDocSyncPlugin implements Plugin {
     });
   }
 
-  deactivate(editor: Editor) {}
+  synchronize() {
+    const store = this.editor.store;
+    for (const key in store.idIndex) {
+      const obj = store.idIndex[key];
+      this.yObjMap.set(key, this.objToYMap(obj));
+    }
+  }
 
   yMapToObj(yMap: Y.Map<any>): Obj {
     const id = yMap.get("id");
@@ -232,20 +249,5 @@ export class YDocSyncPlugin implements Plugin {
     if (obj instanceof Box) {
     }
     return yMap;
-  }
-
-  synchronize() {
-    const store = this.editor.store;
-    for (const key in store.idIndex) {
-      const obj = store.idIndex[key];
-      this.yObjMap.set(key, this.objToYMap(obj));
-    }
-  }
-
-  push() {
-    // this.todos.push([Date.now().toString()]);
-    // const item = new Y.XmlElement();
-    // item.nodeName = Date.now().toString();
-    // this.xml.insert(0, [item]);
   }
 }

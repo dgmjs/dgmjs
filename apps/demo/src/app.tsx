@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   Document,
   Editor,
@@ -6,6 +7,7 @@ import {
   ObjProps,
   Transaction,
   YDocSyncPlugin,
+  FillStyle,
 } from "@dgmjs/core";
 import { PaletteToolbar } from "./components/palette-toolbar";
 import { useDemoStore } from "./demo-store";
@@ -16,11 +18,7 @@ import fontJson from "./fonts.json";
 import { Font, fetchFonts, insertFontsToDocument } from "./font-manager";
 import { ShapeSidebar } from "./components/shape-sidebar";
 import { EditorWrapper } from "./editor";
-
-import * as Y from "yjs";
-import { WebrtcProvider } from "y-webrtc";
 import { Button } from "./components/ui/button";
-import { useEffect } from "react";
 
 declare global {
   interface Window {
@@ -30,25 +28,24 @@ declare global {
 
 // ------------ yjs experiment ------------
 
-const urlSearchParams = new URLSearchParams(window.location.search);
-const params = Object.fromEntries(urlSearchParams.entries());
-// const fileId = params.fileId;
-console.log("params", params);
-
-const yDoc = new Y.Doc();
-const provider = new WebrtcProvider("todo-demo", yDoc, { password: "1234" });
-provider.on("status", (event) => {
-  console.log("status", event);
-});
-const ydocSyncPlugin = new YDocSyncPlugin({ yDoc });
+const ydocSyncPlugin = new YDocSyncPlugin();
 
 // ------------ yjs experiment ------------
 
 function App() {
   const demoStore = useDemoStore();
 
+  const urlSearchParams = new URLSearchParams(window.location.search);
+  const params = Object.fromEntries(urlSearchParams.entries());
+  const roomId = params.roomId;
+
   useEffect(() => {
-    console.log("use effect");
+    if (roomId && !ydocSyncPlugin.yDoc) {
+      console.log("room setup");
+      ydocSyncPlugin.setup();
+      ydocSyncPlugin.startProvider(roomId);
+      ydocSyncPlugin.listen();
+    }
   }, []);
 
   const handleMount = async (editor: Editor) => {
@@ -56,12 +53,12 @@ function App() {
     insertFontsToDocument(fontJson as Font[]);
     await fetchFonts(fontJson as Font[]);
 
-    window.editor.factory.onShapeInitialize.addListener((shape: Shape) => {
-      // shape.strokeWidth = 2;
-      // shape.roughness = 1;
-      // shape.fillColor = "$lime9";
-      // shape.fillStyle = FillStyle.HACHURE;
-    });
+    // window.editor.factory.onShapeInitialize.addListener((shape: Shape) => {
+    //   shape.strokeWidth = 2;
+    //   shape.roughness = 1;
+    //   shape.fillColor = "$lime9";
+    //   shape.fillStyle = FillStyle.HACHURE;
+    // });
 
     // load from local storage
     // const localData = localStorage.getItem("local-data");
@@ -110,6 +107,15 @@ function App() {
     demoStore.setCurrentPage(page);
   };
 
+  const handleShare = () => {
+    const roomId = window.editor.store.doc?.id;
+    ydocSyncPlugin.setup();
+    ydocSyncPlugin.startProvider(roomId!);
+    ydocSyncPlugin.listen();
+    ydocSyncPlugin.synchronize();
+    window.history.pushState({}, "", `?roomId=${roomId}`);
+  };
+
   return (
     <div className="absolute inset-0 h-[calc(100dvh)] select-none">
       <EditorWrapper
@@ -129,13 +135,7 @@ function App() {
       <div className="absolute top-2 left-60 right-60 h-10 border flex items-center justify-between bg-background">
         <Menus />
         <Options />
-        <Button
-          onClick={() => {
-            ydocSyncPlugin.synchronize();
-          }}
-        >
-          Share
-        </Button>
+        <Button onClick={handleShare}>Share</Button>
       </div>
       <PaletteToolbar />
       <ShapeSidebar
