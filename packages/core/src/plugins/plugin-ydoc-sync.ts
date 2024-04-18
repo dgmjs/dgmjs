@@ -165,7 +165,7 @@ export class YDocSyncPlugin implements Plugin {
         case MutationType.REMOVE_CHILD: {
           break;
         }
-        case MutationType.REORDER_IN_ARRAY: {
+        case MutationType.REORDER_CHILD: {
           break;
         }
       }

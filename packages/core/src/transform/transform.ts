@@ -7,7 +7,7 @@ import {
   DeleteMutation,
   Transaction,
   AssignRefMutation,
-  ReorderInArrayMutation,
+  ReorderChildMutation,
 } from "./mutations";
 import { Store } from "../core/store";
 import { Stack } from "../std/collections";
@@ -286,8 +286,7 @@ export class Transform {
   }
 
   /**
-   * Atomic mutation to insert a child to parent obj and returns
-   * true if changed
+   * Atomic mutation to insert a child and returns true if changed
    */
   atomicInsertChild(parent: Obj, obj: Obj, position?: number): boolean {
     if (!this.tx) throw new Error("No transaction started");
@@ -301,8 +300,7 @@ export class Transform {
   }
 
   /**
-   * Atomic mutation to remove a child from a parent and returns
-   * true if changed
+   * Atomic mutation to remove a child and returns true if changed
    */
   atomicRemoveChild(parent: Obj, obj: Obj): boolean {
     if (!this.tx) throw new Error("No transaction started");
@@ -316,20 +314,14 @@ export class Transform {
   }
 
   /**
-   * Atomic mutation to reorder a value from shape's array field and returns
-   * true if changed
+   * Atomic mutation to reorder a child and returns true if changed
    */
-  atomicReorderInArray(
-    obj: Obj,
-    field: string,
-    value: any,
-    position: number
-  ): boolean {
+  atomicReorderChild(parent: Obj, obj: Obj, position: number): boolean {
     if (!this.tx) throw new Error("No transaction started");
-    const array = (obj as any)[field];
-    const oldIndex = array.indexOf(value);
+    const array = parent.children;
+    const oldIndex = array.indexOf(obj);
     if (oldIndex >= 0) {
-      const mut = new ReorderInArrayMutation(obj, field, value, position);
+      const mut = new ReorderChildMutation(parent, obj, position);
       this.applyMutation(mut);
       this.tx.push(mut);
       return true;
@@ -390,15 +382,7 @@ export class Transform {
       position >= 0 &&
       position < page.parent.children.length
     ) {
-      // changed = this.atomicRemoveChild(page.parent, page) || changed;
-      // changed = this.atomicInsertChild(page.parent, page, position) || changed;
-
-      changed = this.atomicReorderInArray(
-        page.parent,
-        "children",
-        page,
-        position
-      );
+      changed = this.atomicReorderChild(page.parent, page, position);
     }
     return changed;
   }
@@ -784,8 +768,7 @@ export class Transform {
     if (shape.parent) {
       const len = shape.parent.children.length;
       changed =
-        this.atomicReorderInArray(shape.parent, "children", shape, len - 1) ||
-        changed;
+        this.atomicReorderChild(shape.parent, shape, len - 1) || changed;
     }
     return changed;
   }
@@ -796,9 +779,7 @@ export class Transform {
   sendToBack(shape: Shape): boolean {
     let changed = false;
     if (shape.parent) {
-      changed =
-        this.atomicReorderInArray(shape.parent, "children", shape, 0) ||
-        changed;
+      changed = this.atomicReorderChild(shape.parent, shape, 0) || changed;
     }
     return changed;
   }
@@ -812,7 +793,7 @@ export class Transform {
       const len = shape.parent.children.length;
       const pos = shape.parent.children.indexOf(shape);
       if (pos < len - 1) {
-        this.atomicReorderInArray(shape.parent, "children", shape, pos + 1);
+        this.atomicReorderChild(shape.parent, shape, pos + 1);
       }
     }
     return changed;
@@ -826,7 +807,7 @@ export class Transform {
     if (shape.parent) {
       const pos = shape.parent.children.indexOf(shape);
       if (pos > 0) {
-        this.atomicReorderInArray(shape.parent, "children", shape, pos - 1);
+        this.atomicReorderChild(shape.parent, shape, pos - 1);
       }
     }
     return changed;

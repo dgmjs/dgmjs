@@ -8,7 +8,7 @@ export const MutationType = {
   ASSIGN_REF: "assign-ref",
   INSERT_CHILD: "insert-child",
   REMOVE_CHILD: "remove-child",
-  REORDER_IN_ARRAY: "reorder-in-array",
+  REORDER_CHILD: "reorder-child",
 } as const;
 
 /**
@@ -230,52 +230,49 @@ export class RemoveChildMutation extends Mutation {
 }
 
 /**
- * Remove from an array
+ * Reorder a child
  */
-export class ReorderInArrayMutation extends Mutation {
+export class ReorderChildMutation extends Mutation {
+  parent: Obj;
   obj: Obj;
-  field: string;
-  value: any;
   newPosition: number;
   oldPosition: number;
 
-  constructor(obj: Obj, field: string, value: any, position: number) {
-    super(MutationType.REORDER_IN_ARRAY);
+  constructor(parent: Obj, obj: Obj, position: number) {
+    super(MutationType.REORDER_CHILD);
+    this.parent = parent;
     this.obj = obj;
-    this.field = field;
-    this.value = value;
     this.newPosition = position;
-    const array = (this.obj as Record<string, any>)[this.field];
-    if (Array.isArray(array)) {
-      this.oldPosition = array.indexOf(this.value);
+    if (Array.isArray(this.parent.children)) {
+      this.oldPosition = this.parent.children.indexOf(this.obj);
     } else {
       this.oldPosition = -1;
     }
   }
 
   apply(store: Store) {
-    const array = (this.obj as Record<string, any>)[this.field];
+    const array = this.parent.children;
     if (Array.isArray(array)) {
       array.splice(this.oldPosition, 1);
-      array.splice(this.newPosition, 0, this.value);
+      array.splice(this.newPosition, 0, this.obj);
     }
   }
 
   unapply(store: Store): void {
-    const array = (this.obj as Record<string, any>)[this.field];
+    const array = this.parent.children;
     if (Array.isArray(array)) {
       array.splice(this.newPosition, 1);
-      array.splice(this.oldPosition, 0, this.value);
+      array.splice(this.oldPosition, 0, this.obj);
     }
   }
 
   toJSON() {
     return {
       op: this.type,
-      objId: this.obj.id,
-      field: this.field,
-      item: this.value,
-      position: this.oldPosition,
+      parentId: this.parent.id,
+      obj: this.obj,
+      oldPosition: this.oldPosition,
+      newPosition: this.newPosition,
     };
   }
 }
