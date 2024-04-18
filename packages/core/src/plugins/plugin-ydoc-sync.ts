@@ -4,7 +4,9 @@ import { Box, Document, Page, Shape } from "../shapes";
 import { Obj } from "../core/obj";
 import {
   AssignMutation,
+  AssignRefMutation,
   CreateMutation,
+  InsertChildMutation,
   MutationType,
 } from "../transform/mutations";
 
@@ -15,151 +17,54 @@ interface YDocSyncPluginOptions {
 export class YDocSyncPlugin implements Plugin {
   editor: Editor = null!;
   yDoc: Y.Doc;
-  yXmlRoot: Y.XmlFragment;
-  XmlMap: Map<string, Y.XmlElement> = new Map();
+  yObjMap: Y.Map<Y.Map<any>>;
 
   constructor(options: YDocSyncPluginOptions) {
     this.yDoc = options.yDoc;
-    this.yXmlRoot = this.yDoc.getXmlElement("xml:root");
-    this.yXmlRoot.observeDeep((events) => {
-      events.forEach((event) => {
-        const added = [...event.changes.added];
-        const deleted = [...event.changes.deleted];
-        console.log("yEvent", event);
-        if (added.length > 0) {
-          console.log(
-            "yEvent addded changes",
-            (added[0].content as any).type.toJSON()
-          );
-        }
-        if (deleted.length > 0) {
-          console.log(
-            "yEvent deleted changes",
-            (deleted[0].content as any).type.toJSON()
-          );
-        }
-      });
-    });
+    this.yObjMap = this.yDoc.getMap("objmap");
   }
 
   activate(editor: Editor) {
     console.log("activate");
     this.editor = editor;
-  }
-
-  deactivate(editor: Editor) {}
-
-  objToXml(obj: Obj): Y.XmlElement {
-    const xml = new Y.XmlElement();
-    xml.nodeName = obj.type;
-    xml.setAttribute("id", obj.id);
-    if (obj instanceof Shape) {
-      xml.setAttribute("name", obj.name);
-      xml.setAttribute("description", obj.description);
-      xml.setAttribute("proto", obj.proto.toString());
-      xml.setAttribute("tags", JSON.stringify(obj.tags));
-      xml.setAttribute("enable", obj.enable.toString());
-      xml.setAttribute("visible", obj.visible.toString());
-      xml.setAttribute("movable", obj.movable.toString());
-      xml.setAttribute("sizable", obj.sizable.toString());
-      xml.setAttribute("rotatable", obj.rotatable.toString());
-      xml.setAttribute("containable", obj.containable.toString());
-      xml.setAttribute("containableFilter", obj.containableFilter);
-      xml.setAttribute("connectable", obj.connectable.toString());
-      xml.setAttribute("left", obj.left.toString());
-      xml.setAttribute("top", obj.top.toString());
-      xml.setAttribute("width", obj.width.toString());
-      xml.setAttribute("height", obj.height.toString());
-      xml.setAttribute("rotate", obj.rotate.toString());
-      xml.setAttribute("strokeColor", obj.strokeColor);
-      xml.setAttribute("strokeWidth", obj.strokeWidth.toString());
-      xml.setAttribute("strokePattern", JSON.stringify(obj.strokePattern));
-      xml.setAttribute("fillColor", obj.fillColor);
-      xml.setAttribute("fillStyle", obj.fillStyle);
-      xml.setAttribute("fontColor", obj.fontColor);
-      xml.setAttribute("fontFamily", obj.fontFamily);
-      xml.setAttribute("fontSize", obj.fontSize.toString());
-      xml.setAttribute("fontStyle", obj.fontStyle);
-      xml.setAttribute("fontWeight", obj.fontWeight.toString());
-      xml.setAttribute("opacity", obj.opacity.toString());
-      xml.setAttribute("roughness", obj.roughness.toString());
-      xml.setAttribute("link", obj.link);
-      xml.setAttribute("constraints", JSON.stringify(obj.constraints));
-      xml.setAttribute("properties", JSON.stringify(obj.properties));
-      xml.setAttribute("scripts", JSON.stringify(obj.scripts));
-    }
-    if (obj instanceof Document) {
-    }
-    if (obj instanceof Page) {
-    }
-    if (obj instanceof Box) {
-    }
-    const childrenXml = obj.children.map((child) => this.objToXml(child));
-    xml.insert(xml.length, childrenXml);
-    return xml;
-  }
-
-  traverseXml(xml: Y.XmlElement, callback: (xml: Y.XmlElement) => void) {
-    callback(xml);
-    for (let i = 0; i < xml.length; i++) {
-      this.traverseXml(xml.get(i) as Y.XmlElement, callback);
-    }
-  }
-
-  findXml(xml: Y.XmlElement, id: string): Y.XmlElement | null {
-    let found = null;
-    this.traverseXml(xml, (node) => {
-      if (node.getAttribute("id") === id) {
-        found = node;
-      }
-    });
-    return found;
-  }
-
-  synchronize() {
     this.editor.transform.onMutate.addListener((mutation) => {
-      console.log("mutation", mutation);
       switch (mutation.type) {
+        case MutationType.CREATE: {
+          console.log("mutation", mutation.type);
+          const mut = mutation as CreateMutation;
+          const yObj = this.objToYMap(mut.obj);
+          this.yObjMap.set(mut.obj.id, yObj);
+          break;
+        }
+        case MutationType.DELETE: {
+          const mut = mutation as CreateMutation;
+          this.yObjMap.delete(mut.obj.id);
+          break;
+        }
         case MutationType.ASSIGN: {
           const mut = mutation as AssignMutation;
-          const objXml = this.findXml(
-            this.yXmlRoot.get(0) as Y.XmlElement,
-            mut.obj.id
-          );
-          if (objXml) {
-            objXml.setAttribute(mut.field, mut.newValue.toString());
+          const yObj = this.yObjMap.get(mut.obj.id);
+          if (yObj) {
+            yObj.set(mut.field, mut.newValue);
           }
           break;
         }
         case MutationType.ASSIGN_REF: {
-          break;
-        }
-        case MutationType.CREATE: {
-          console.log("mutation", mutation.type);
-          const mut = mutation as CreateMutation;
-          const parent = mut.obj.parent;
-          if (parent) {
-            const objXml = this.objToXml(mut.obj);
-            const parentXml = this.findXml(
-              this.yXmlRoot.get(0) as Y.XmlElement,
-              parent.id
-            );
-
-            console.log("objXml", objXml.toJSON());
-            console.log("parentXml", parentXml?.toJSON());
-
-            if (parentXml) {
-              parentXml.push([objXml]);
-            }
-            // find xml parent
-            // insert yobj to parent at the last
+          const mut = mutation as AssignRefMutation;
+          const yObj = this.yObjMap.get(mut.obj.id);
+          if (yObj && mut.newValue) {
+            yObj.set(mut.field, mut.newValue.id);
           }
           break;
         }
-        case MutationType.DELETE: {
-          break;
-        }
         case MutationType.INSERT_CHILD: {
+          const mut = mutation as InsertChildMutation;
+          const yParent = this.yObjMap.get(mut.parent.id);
+          const yChild = this.yObjMap.get(mut.obj.id);
+          if (yParent && yChild) {
+            yChild.set("parent", mut.parent.id);
+            // yChild.set("parentOrder", ???);
+          }
           break;
         }
         case MutationType.REMOVE_CHILD: {
@@ -171,10 +76,170 @@ export class YDocSyncPlugin implements Plugin {
       }
     });
 
-    const doc: Document = this.editor.store.doc as Document;
-    const docXml = this.objToXml(doc);
-    this.yXmlRoot.insert(0, [docXml]);
-    console.log(docXml.toJSON());
+    this.yObjMap.observeDeep((events) => {
+      events.forEach((event: any) => {
+        if (event.target === this.yObjMap) {
+          const keys = [...event.keysChanged];
+          for (const key of keys) {
+            const yObj = this.yObjMap.get(key);
+            if (yObj) {
+              // create
+              if (!this.editor.store.getById(key)) {
+                const obj = this.yMapToObj(yObj);
+
+                console.log("created obj", obj);
+
+                this.editor.store.addToIndex(obj);
+                const parentId = yObj.get("parent");
+                const parent = this.editor.store.getById(parentId);
+                if (parent) {
+                  parent.children.push(obj);
+                  obj.parent = parent;
+                }
+
+                if (obj instanceof Document) {
+                  this.editor.store.doc = obj;
+                }
+                if (obj instanceof Page) {
+                  this.editor.setCurrentPage(obj);
+                }
+
+                console.log("event:create", key);
+              }
+            } else {
+              //delete
+              const obj = this.editor.store.getById(key);
+              if (obj) this.editor.store.removeFromIndex(obj);
+              console.log("event:delete", key);
+            }
+          }
+        } else {
+          const id = event.target.get("id");
+          const obj = this.editor.store.getById(id);
+          const yObj = this.yObjMap.get(id);
+          if (obj && yObj) {
+            const keys = [...event.keysChanged];
+            for (const key of keys) {
+              if (key === "parent") {
+                const parentId = yObj.get("parent");
+                const parent = this.editor.store.getById(parentId);
+                console.log("event:update-parent", key, parentId);
+                if (parent) {
+                  parent.children.push(obj);
+                  obj.parent = parent;
+                }
+              } else {
+                const value = yObj.get(key);
+                (obj as any)[key] = value;
+                console.log("event:update", key, id);
+              }
+            }
+          }
+        }
+      });
+      this.editor.repaint();
+    });
+  }
+
+  deactivate(editor: Editor) {}
+
+  yMapToObj(yMap: Y.Map<any>): Obj {
+    const id = yMap.get("id");
+    const type = yMap.get("type");
+    const json: any = { id, type };
+    if (type === "Box") {
+      json.name = yMap.get("name");
+      json.description = yMap.get("description");
+      json.proto = yMap.get("proto");
+      // json.tags = []; // JSON.parse(yMap.get("tags"));
+      json.enable = yMap.get("enable");
+      json.visible = yMap.get("visible");
+      json.movable = yMap.get("movable");
+      json.sizable = yMap.get("sizable");
+      json.rotatable = yMap.get("rotatable");
+      json.containable = yMap.get("containable");
+      json.containableFilter = yMap.get("containableFilter");
+      json.connectable = yMap.get("connectable");
+      json.left = yMap.get("left");
+      json.top = yMap.get("top");
+      json.width = yMap.get("width");
+      json.height = yMap.get("height");
+      json.rotate = yMap.get("rotate");
+      json.strokeColor = yMap.get("strokeColor");
+      json.strokeWidth = yMap.get("strokeWidth");
+      // json.strokePattern = []; // JSON.parse(yMap.get("strokePattern"));
+      json.fillColor = yMap.get("fillColor");
+      json.fillStyle = yMap.get("fillStyle");
+      json.fontColor = yMap.get("fontColor");
+      json.fontFamily = yMap.get("fontFamily");
+      json.fontSize = yMap.get("fontSize");
+      json.fontStyle = yMap.get("fontStyle");
+      json.fontWeight = yMap.get("fontWeight");
+      json.opacity = yMap.get("opacity");
+      json.roughness = yMap.get("roughness");
+      json.link = yMap.get("link");
+      // json.constraints = []; // JSON.parse(yMap.get("constraints"));
+      // json.properties = []; // JSON.parse(yMap.get("properties"));
+      // json.scripts = []; // JSON.parse(yMap.get("scripts"));
+    }
+    return this.editor.store.instantiator.createFromJson(json)!;
+  }
+
+  objToYMap(obj: Obj): Y.Map<any> {
+    const yMap = new Y.Map();
+    yMap.set("id", obj.id);
+    yMap.set("type", obj.type);
+    yMap.set("parent", obj.parent?.id);
+    if (obj instanceof Shape) {
+      yMap.set("name", obj.name);
+      yMap.set("description", obj.description);
+      yMap.set("proto", obj.proto.toString());
+      yMap.set("tags", JSON.stringify(obj.tags));
+      yMap.set("enable", obj.enable);
+      yMap.set("visible", obj.visible);
+      yMap.set("movable", obj.movable);
+      yMap.set("sizable", obj.sizable);
+      yMap.set("rotatable", obj.rotatable);
+      yMap.set("containable", obj.containable);
+      yMap.set("containableFilter", obj.containableFilter);
+      yMap.set("connectable", obj.connectable);
+      yMap.set("left", obj.left);
+      yMap.set("top", obj.top);
+      yMap.set("width", obj.width);
+      yMap.set("height", obj.height);
+      yMap.set("rotate", obj.rotate);
+      yMap.set("strokeColor", obj.strokeColor);
+      yMap.set("strokeWidth", obj.strokeWidth);
+      yMap.set("strokePattern", JSON.stringify(obj.strokePattern));
+      yMap.set("fillColor", obj.fillColor);
+      yMap.set("fillStyle", obj.fillStyle);
+      yMap.set("fontColor", obj.fontColor);
+      yMap.set("fontFamily", obj.fontFamily);
+      yMap.set("fontSize", obj.fontSize);
+      yMap.set("fontStyle", obj.fontStyle);
+      yMap.set("fontWeight", obj.fontWeight);
+      yMap.set("opacity", obj.opacity);
+      yMap.set("roughness", obj.roughness);
+      yMap.set("link", obj.link);
+      yMap.set("constraints", JSON.stringify(obj.constraints));
+      yMap.set("properties", JSON.stringify(obj.properties));
+      yMap.set("scripts", JSON.stringify(obj.scripts));
+    }
+    if (obj instanceof Document) {
+    }
+    if (obj instanceof Page) {
+    }
+    if (obj instanceof Box) {
+    }
+    return yMap;
+  }
+
+  synchronize() {
+    const store = this.editor.store;
+    for (const key in store.idIndex) {
+      const obj = store.idIndex[key];
+      this.yObjMap.set(key, this.objToYMap(obj));
+    }
   }
 
   push() {

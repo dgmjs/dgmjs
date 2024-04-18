@@ -20,6 +20,7 @@ import { EditorWrapper } from "./editor";
 import * as Y from "yjs";
 import { WebrtcProvider } from "y-webrtc";
 import { Button } from "./components/ui/button";
+import { useEffect } from "react";
 
 declare global {
   interface Window {
@@ -28,6 +29,11 @@ declare global {
 }
 
 // ------------ yjs experiment ------------
+
+const urlSearchParams = new URLSearchParams(window.location.search);
+const params = Object.fromEntries(urlSearchParams.entries());
+// const fileId = params.fileId;
+console.log("params", params);
 
 const yDoc = new Y.Doc();
 const provider = new WebrtcProvider("todo-demo", yDoc, { password: "1234" });
@@ -40,6 +46,10 @@ const ydocSyncPlugin = new YDocSyncPlugin({ yDoc });
 
 function App() {
   const demoStore = useDemoStore();
+
+  useEffect(() => {
+    console.log("use effect");
+  }, []);
 
   const handleMount = async (editor: Editor) => {
     window.editor = editor;
