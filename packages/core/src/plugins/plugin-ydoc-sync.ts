@@ -9,6 +9,8 @@ import {
   CreateMutation,
   InsertChildMutation,
   MutationType,
+  RemoveChildMutation,
+  ReorderChildMutation,
 } from "../transform/mutations";
 
 export class YDocSyncPlugin implements Plugin {
@@ -40,9 +42,9 @@ export class YDocSyncPlugin implements Plugin {
 
   listen() {
     this.editor.transform.onMutate.addListener((mutation) => {
+      console.log("mut", mutation.toJSON());
       switch (mutation.type) {
         case MutationType.CREATE: {
-          console.log("mutation", mutation.type);
           const mut = mutation as CreateMutation;
           const yObj = this.objToYMap(mut.obj);
           this.yObjMap.set(mut.obj.id, yObj);
@@ -80,78 +82,102 @@ export class YDocSyncPlugin implements Plugin {
           break;
         }
         case MutationType.REMOVE_CHILD: {
+          const mut = mutation as RemoveChildMutation;
+          const yParent = this.yObjMap.get(mut.parent.id);
+          const yChild = this.yObjMap.get(mut.obj.id);
+          if (yParent && yChild) {
+            yChild.delete("parent");
+            // yChild.delete("parentOrder");
+          }
           break;
         }
         case MutationType.REORDER_CHILD: {
+          const mut = mutation as ReorderChildMutation;
+          const yParent = this.yObjMap.get(mut.parent.id);
+          const yChild = this.yObjMap.get(mut.obj.id);
+          if (yParent && yChild) {
+            // yChild.set("parentOrder", ???);
+          }
           break;
         }
       }
     });
 
-    this.yObjMap.observeDeep((events) => {
-      events.forEach((event: any) => {
-        if (event.target === this.yObjMap) {
-          const keys = [...event.keysChanged];
-          for (const key of keys) {
-            const yObj = this.yObjMap.get(key);
-            if (yObj) {
-              // create
-              if (!this.editor.store.getById(key)) {
-                const obj = this.yMapToObj(yObj);
-
-                console.log("created obj", obj);
-
-                this.editor.store.addToIndex(obj);
-                const parentId = yObj.get("parent");
-                const parent = this.editor.store.getById(parentId);
-                if (parent) {
-                  parent.children.push(obj);
-                  obj.parent = parent;
-                }
-
-                if (obj instanceof Document) {
-                  this.editor.store.setDoc(obj);
-                }
-                if (obj instanceof Page) {
-                  this.editor.setCurrentPage(obj);
-                }
-
-                console.log("event:create", key);
-              }
-            } else {
-              //delete
-              const obj = this.editor.store.getById(key);
-              if (obj) this.editor.store.removeFromIndex(obj);
-              console.log("event:delete", key);
-            }
-          }
-        } else {
-          const id = event.target.get("id");
-          const obj = this.editor.store.getById(id);
-          const yObj = this.yObjMap.get(id);
-          if (obj && yObj) {
+    this.yObjMap.observeDeep((events, tr) => {
+      if (!tr.local) {
+        events.forEach((event: any) => {
+          if (event.target === this.yObjMap) {
             const keys = [...event.keysChanged];
             for (const key of keys) {
-              if (key === "parent") {
-                const parentId = yObj.get("parent");
-                const parent = this.editor.store.getById(parentId);
-                if (parent) {
-                  parent.children.push(obj);
-                  obj.parent = parent;
+              const yObj = this.yObjMap.get(key);
+              if (yObj) {
+                // create
+                if (!this.editor.store.getById(key)) {
+                  const obj = this.yMapToObj(yObj);
+                  obj.resolveRefs(this.editor.store.idIndex);
+                  this.editor.store.addToIndex(obj);
+                  const parentId = yObj.get("parent");
+                  const parent = this.editor.store.getById(parentId);
+                  if (parent) {
+                    parent.children.push(obj);
+                    obj.parent = parent;
+                  }
+                  // TODO: remove this
+                  if (obj instanceof Document) {
+                    this.editor.store.setDoc(obj);
+                  }
+                  // TODO: remove this
+                  if (obj instanceof Page) {
+                    this.editor.setCurrentPage(obj);
+                  }
+
+                  console.log("create", obj);
                 }
               } else {
-                const value = yObj.get(key);
-                (obj as any)[key] = value;
-                console.log("event:update", key, id);
+                //delete
+                const obj = this.editor.store.getById(key);
+                if (obj) this.editor.store.removeFromIndex(obj);
+                console.log("delete", key);
+              }
+            }
+          } else {
+            // update
+            const id = event.target.get("id");
+            const obj = this.editor.store.getById(id);
+            const yObj = this.yObjMap.get(id);
+            if (obj && yObj) {
+              const keys = [...event.keysChanged];
+              for (const key of keys) {
+                if (key === "parent") {
+                  const parentId = yObj.get("parent");
+                  const parent = this.editor.store.getById(parentId);
+                  if (parent) {
+                    parent.children.push(obj);
+                    obj.parent = parent;
+                  }
+                  console.log("update-parent", parent);
+                } else if (key === "head" || key === "tail") {
+                  const value = yObj.get(key);
+                  const ref = this.editor.store.getById(value);
+                  (obj as any)[key] = ref;
+                  console.log("update-ref", key, ref);
+                } else {
+                  const value = yObj.get(key);
+                  (obj as any)[key] = value;
+                  console.log("update", key, id);
+                }
               }
             }
           }
-        }
-      });
-      this.editor.repaint();
+        });
+        this.editor.repaint();
+      }
     });
   }
 
+  /**
+   * Synchronize the store to the ydoc
+   */
   synchronize() {
     const store = this.editor.store;
     for (const key in store.idIndex) {
@@ -161,92 +187,15 @@ export class YDocSyncPlugin implements Plugin {
   }
 
   yMapToObj(yMap: Y.Map<any>): Obj {
-    const id = yMap.get("id");
-    const type = yMap.get("type");
-    const json: any = { id, type };
-    if (type === "Box") {
-      json.name = yMap.get("name");
-      json.description = yMap.get("description");
-      json.proto = yMap.get("proto");
-      // json.tags = []; // JSON.parse(yMap.get("tags"));
-      json.enable = yMap.get("enable");
-      json.visible = yMap.get("visible");
-      json.movable = yMap.get("movable");
-      json.sizable = yMap.get("sizable");
-      json.rotatable = yMap.get("rotatable");
-      json.containable = yMap.get("containable");
-      json.containableFilter = yMap.get("containableFilter");
-      json.connectable = yMap.get("connectable");
-      json.left = yMap.get("left");
-      json.top = yMap.get("top");
-      json.width = yMap.get("width");
-      json.height = yMap.get("height");
-      json.rotate = yMap.get("rotate");
-      json.strokeColor = yMap.get("strokeColor");
-      json.strokeWidth = yMap.get("strokeWidth");
-      // json.strokePattern = []; // JSON.parse(yMap.get("strokePattern"));
-      json.fillColor = yMap.get("fillColor");
-      json.fillStyle = yMap.get("fillStyle");
-      json.fontColor = yMap.get("fontColor");
-      json.fontFamily = yMap.get("fontFamily");
-      json.fontSize = yMap.get("fontSize");
-      json.fontStyle = yMap.get("fontStyle");
-      json.fontWeight = yMap.get("fontWeight");
-      json.opacity = yMap.get("opacity");
-      json.roughness = yMap.get("roughness");
-      json.link = yMap.get("link");
-      // json.constraints = []; // JSON.parse(yMap.get("constraints"));
-      // json.properties = []; // JSON.parse(yMap.get("properties"));
-      // json.scripts = []; // JSON.parse(yMap.get("scripts"));
-    }
+    const json = yMap.toJSON();
     return this.editor.store.instantiator.createFromJson(json)!;
   }
 
   objToYMap(obj: Obj): Y.Map<any> {
+    const json = obj.toJSON();
     const yMap = new Y.Map();
-    yMap.set("id", obj.id);
-    yMap.set("type", obj.type);
-    yMap.set("parent", obj.parent?.id);
-    if (obj instanceof Shape) {
-      yMap.set("name", obj.name);
-      yMap.set("description", obj.description);
-      yMap.set("proto", obj.proto.toString());
-      yMap.set("tags", JSON.stringify(obj.tags));
-      yMap.set("enable", obj.enable);
-      yMap.set("visible", obj.visible);
-      yMap.set("movable", obj.movable);
-      yMap.set("sizable", obj.sizable);
-      yMap.set("rotatable", obj.rotatable);
-      yMap.set("containable", obj.containable);
-      yMap.set("containableFilter", obj.containableFilter);
-      yMap.set("connectable", obj.connectable);
-      yMap.set("left", obj.left);
-      yMap.set("top", obj.top);
-      yMap.set("width", obj.width);
-      yMap.set("height", obj.height);
-      yMap.set("rotate", obj.rotate);
-      yMap.set("strokeColor", obj.strokeColor);
-      yMap.set("strokeWidth", obj.strokeWidth);
-      yMap.set("strokePattern", JSON.stringify(obj.strokePattern));
-      yMap.set("fillColor", obj.fillColor);
-      yMap.set("fillStyle", obj.fillStyle);
-      yMap.set("fontColor", obj.fontColor);
-      yMap.set("fontFamily", obj.fontFamily);
-      yMap.set("fontSize", obj.fontSize);
-      yMap.set("fontStyle", obj.fontStyle);
-      yMap.set("fontWeight", obj.fontWeight);
-      yMap.set("opacity", obj.opacity);
-      yMap.set("roughness", obj.roughness);
-      yMap.set("link", obj.link);
-      yMap.set("constraints", JSON.stringify(obj.constraints));
-      yMap.set("properties", JSON.stringify(obj.properties));
-      yMap.set("scripts", JSON.stringify(obj.scripts));
-    }
-    if (obj instanceof Document) {
-    }
-    if (obj instanceof Page) {
-    }
-    if (obj instanceof Box) {
+    for (const key in json) {
+      yMap.set(key, json[key]);
     }
     return yMap;
   }
