@@ -19,7 +19,7 @@ import { Cursor, Mouse } from "../graphics/const";
 import { findConnectionAnchor } from "../controllers/utils";
 import * as guide from "../utils/guide";
 import { lcs2ccs } from "../graphics/utils";
-import { addShape, resolveAllConstraints, setPath } from "../mutates";
+import { addShape, resolveAllConstraints, setLinePath } from "../mutates";
 
 /**
  * Connector Factory Handler
@@ -83,7 +83,7 @@ export class ConnectorFactoryHandler extends Handler {
       const newPath = geometry.pathCopy((this.shape as Connector).path);
       newPath[1] = this.dragPoint;
       editor.store.transact((tx) => {
-        setPath(tx, this.shape as Line, newPath);
+        setLinePath(tx, this.shape as Line, newPath);
         tx.assignRef(this.shape as Shape, "head", this.headEnd);
         tx.assign(this.shape as Shape, "headAnchor", this.headAnchor);
         resolveAllConstraints(tx, page, editor.canvas);

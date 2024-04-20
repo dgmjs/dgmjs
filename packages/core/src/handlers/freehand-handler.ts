@@ -17,7 +17,7 @@ import { Editor, Handler } from "../editor";
 import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
 import { Line } from "../shapes";
 import simplifyPath from "simplify-path";
-import { addShape, resolveAllConstraints, setPath } from "../mutates";
+import { addShape, resolveAllConstraints, setLinePath } from "../mutates";
 
 /**
  * Freehand Factory Handler
@@ -65,7 +65,7 @@ export class FreehandFactoryHandler extends Handler {
     }
     editor.store.transact((tx) => {
       if (page && this.shape) {
-        setPath(tx, this.shape, newPath);
+        setLinePath(tx, this.shape, newPath);
         resolveAllConstraints(tx, page, editor.canvas);
       }
     });

@@ -16,8 +16,8 @@ import { Box, Page, Shape, constraintManager } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import { Transaction } from "../core/transaction";
 import {
-  moveShapes,
-  resize,
+  moveMultipleShapes,
+  resizeShape,
   setBottom,
   setHeight,
   setLeft,
@@ -118,10 +118,10 @@ function setHorzAlign(
       break;
   }
   dx += offset;
-  changed = moveShapes(tx, page, [shape], dx, dy);
+  changed = moveMultipleShapes(tx, page, [shape], dx, dy);
   if (width > -1) {
     changed =
-      resize(tx, shape, width < 0 ? shape.width : width, shape.height) ||
+      resizeShape(tx, shape, width < 0 ? shape.width : width, shape.height) ||
       changed;
   }
   return changed;
@@ -196,10 +196,10 @@ function setVertAlign(
       break;
   }
   dy += offset;
-  changed = moveShapes(tx, page, [shape], dx, dy);
+  changed = moveMultipleShapes(tx, page, [shape], dx, dy);
   if (height > -1) {
     changed =
-      resize(tx, shape, shape.width, height < 0 ? shape.height : height) ||
+      resizeShape(tx, shape, shape.width, height < 0 ? shape.height : height) ||
       changed;
   }
   return changed;

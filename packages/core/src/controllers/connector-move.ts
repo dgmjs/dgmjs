@@ -17,7 +17,7 @@ import { Controller, Editor, Manipulator } from "../editor";
 import { Snap } from "../manipulators/snap";
 import * as geometry from "../graphics/geometry";
 import { Cursor } from "../graphics/const";
-import { resolveAllConstraints, setPath } from "../mutates";
+import { resolveAllConstraints, setLinePath } from "../mutates";
 
 /**
  * ConnectorMove Controller
@@ -100,7 +100,7 @@ export class ConnectorMoveController extends Controller {
     // transform shape
     editor.store.transact((tx) => {
       if (this.dx !== 0 || this.dy !== 0) {
-        setPath(tx, shape as Line, newPath);
+        setLinePath(tx, shape as Line, newPath);
         tx.assignRef(shape, "head", null);
         tx.assignRef(shape, "tail", null);
         resolveAllConstraints(tx, page, canvas);

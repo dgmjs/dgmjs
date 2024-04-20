@@ -12,10 +12,8 @@ import * as geometry from "./graphics/geometry";
 import { moveEndPoint, adjustRoute } from "./utils/route-utils";
 import type { Obj } from "./core/obj";
 import { getAllConnectorsTo, getAllDescendant } from "./utils/shape-utils";
-import { TypedEvent } from "./std/typed-event";
 import { visitTextNodes } from "./utils/text-utils";
 import { Transaction } from "./core/transaction";
-import { Store } from "./core/store";
 
 /**
  * Mutation utility functions
@@ -230,7 +228,7 @@ export function setHeight(
 /**
  * Mutation to set line's path (including left, top, width, height)
  */
-export function setPath(
+export function setLinePath(
   tx: Transaction,
   line: Line,
   path: number[][]
@@ -248,7 +246,7 @@ export function setPath(
 /**
  * Mutation to resize a shape (width, height, path)
  */
-export function resize(
+export function resizeShape(
   tx: Transaction,
   shape: Shape,
   width: number,
@@ -269,7 +267,7 @@ export function resize(
 /**
  * Mutations to move a single shape
  */
-export function move(
+export function moveShape(
   tx: Transaction,
   shape: Shape,
   dx: number,
@@ -433,10 +431,13 @@ export function moveConnectorEnd(
 /**
  * Mutations to adjust routing path
  */
-export function adjustRoute2(tx: Transaction, connector: Connector): boolean {
+export function adjustConnectorRoute(
+  tx: Transaction,
+  connector: Connector
+): boolean {
   let changed = false;
   const newPath = adjustRoute(connector);
-  changed = setPath(tx, connector, newPath) || changed;
+  changed = setLinePath(tx, connector, newPath) || changed;
   return changed;
 }
 
@@ -447,7 +448,7 @@ export function adjustRoute2(tx: Transaction, connector: Connector): boolean {
 /**
  * A set of mutations to move shapes
  */
-export function moveShapes(
+export function moveMultipleShapes(
   tx: Transaction,
   page: Page,
   shapes: Shape[],
@@ -466,7 +467,7 @@ export function moveShapes(
   // move all children and descendants
   let targets = getAllDescendant(filteredShapes) as Shape[];
   targets.forEach((s) => {
-    changed = move(tx, s as Shape, dx, dy) || changed;
+    changed = moveShape(tx, s as Shape, dx, dy) || changed;
   });
 
   // move ends of edges which is not in targets
@@ -479,7 +480,7 @@ export function moveShapes(
         targets.includes(s.tail as Shape) &&
         targets.includes(s.head as Shape)
       ) {
-        changed = move(tx, s, dx, dy) || changed;
+        changed = moveShape(tx, s, dx, dy) || changed;
       } else if (
         targets.includes(s.tail as Shape) &&
         !targets.includes(s.head as Shape)
@@ -507,7 +508,7 @@ export function moveShapes(
 /**
  * A set of mutations to delete a shape
  */
-export function deleteSingleShape(
+export function deleteShape(
   tx: Transaction,
   page: Page,
   shape: Shape
@@ -533,14 +534,14 @@ export function deleteSingleShape(
 /**
  * A set of mutations to delete shapes
  */
-export function deleteShapes(
+export function deleteMultipleShapes(
   tx: Transaction,
   page: Page,
   shapes: Shape[]
 ): boolean {
   let changed = false;
   shapes.forEach((s) => {
-    changed = deleteSingleShape(tx, page, s) || changed;
+    changed = deleteShape(tx, page, s) || changed;
   });
   return changed;
 }
@@ -604,7 +605,7 @@ export function sendBackward(tx: Transaction, shape: Shape): boolean {
 /**
  * A set of mutations to resolve a shape's constraints
  */
-export function resolveSingleConstraints(
+export function resolveConstraints(
   tx: Transaction,
   page: Page,
   shape: Shape,
@@ -634,8 +635,7 @@ export function resolveAllConstraints(
   let changed = false;
   for (let i = 0; i < maxIteration; i++) {
     page.traverse((s) => {
-      changed =
-        resolveSingleConstraints(tx, page, s as Shape, canvas) || changed;
+      changed = resolveConstraints(tx, page, s as Shape, canvas) || changed;
     });
     if (!changed) return false;
     changed = false;

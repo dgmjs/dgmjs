@@ -25,7 +25,7 @@ import * as geometry from "../graphics/geometry";
 import { Snap } from "../manipulators/snap";
 import { findControlPoint } from "./utils";
 import { reducePath } from "../utils/route-utils";
-import { resolveAllConstraints, setPath } from "../mutates";
+import { resolveAllConstraints, setLinePath } from "../mutates";
 
 interface LineMovePointControllerOptions {
   exceptEndPoints: boolean;
@@ -148,7 +148,7 @@ export class LineMovePointController extends Controller {
     editor.store.transact((tx) => {
       const canvas = editor.canvas;
       const page = editor.currentPage!;
-      setPath(tx, shape as Line, newPath);
+      setLinePath(tx, shape as Line, newPath);
       resolveAllConstraints(tx, page, canvas);
     });
   }

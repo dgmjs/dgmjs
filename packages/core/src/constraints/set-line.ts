@@ -16,7 +16,7 @@ import { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { z } from "zod";
 import { Transaction } from "../core/transaction";
-import { setPath } from "../mutates";
+import { setLinePath } from "../mutates";
 
 const schema = z.object({
   type: z.enum(["free", "horizontal", "vertical"]).default("free"),
@@ -49,7 +49,7 @@ function constraint(
         ];
         break;
     }
-    return setPath(tx, shape, path);
+    return setLinePath(tx, shape, path);
   }
   return false;
 }

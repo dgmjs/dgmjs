@@ -20,7 +20,7 @@ import { lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { findConnectionAnchor } from "./utils";
-import { resolveAllConstraints, setPath } from "../mutates";
+import { resolveAllConstraints, setLinePath } from "../mutates";
 
 /**
  * Connector Reconnect Controller
@@ -121,7 +121,7 @@ export class ConnectorReconnectController extends Controller {
     // transform shape
     editor.store.transact((tx) => {
       const page = editor.currentPage!;
-      setPath(tx, shape as Line, newPath);
+      setLinePath(tx, shape as Line, newPath);
       tx.assignRef(shape, isHead ? "head" : "tail", newEnd);
       tx.assign(shape, isHead ? "headAnchor" : "tailAnchor", anchor);
       resolveAllConstraints(tx, page, editor.canvas);

@@ -17,7 +17,7 @@ import * as geometry from "../graphics/geometry";
 import { z } from "zod";
 import { measureText } from "../utils/text-utils";
 import { Transaction } from "../core/transaction";
-import { resize } from "../mutates";
+import { resizeShape } from "../mutates";
 
 const schema = z.object({
   width: z
@@ -89,7 +89,7 @@ function constraint(
       if (args.width === "parent") width = shape.parent.innerWidth;
       if (args.height === "parent") height = shape.parent.innerHeight;
     }
-    return resize(tx, shape, width, height);
+    return resizeShape(tx, shape, width, height);
   }
   return false;
 }

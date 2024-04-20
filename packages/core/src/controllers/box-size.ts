@@ -28,7 +28,12 @@ import {
 } from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { fitEnclosureInCSS, getControllerPosition } from "./utils";
-import { move, moveShapes, resize, resolveAllConstraints } from "../mutates";
+import {
+  moveShape,
+  moveMultipleShapes,
+  resizeShape,
+  resolveAllConstraints,
+} from "../mutates";
 
 interface BoxSizeControllerOptions {
   position: string;
@@ -355,8 +360,8 @@ export class BoxSizeController extends Controller {
     // transform shapes
     editor.store.transact((tx) => {
       const page = editor.currentPage!;
-      resize(tx, shape, targetWidth, targetHeight);
-      moveShapes(
+      resizeShape(tx, shape, targetWidth, targetHeight);
+      moveMultipleShapes(
         tx,
         page,
         [shape],
@@ -409,8 +414,8 @@ export class BoxSizeController extends Controller {
             const b = targetChildRect[1][1];
             const w = r - l;
             const h = b - t;
-            move(tx, s, l - s.left, t - s.top);
-            resize(tx, s, w, h);
+            moveShape(tx, s, l - s.left, t - s.top);
+            resizeShape(tx, s, w, h);
             if (s instanceof Line) {
               const newPath = geometry.projectPoints(
                 initialChild.path,
