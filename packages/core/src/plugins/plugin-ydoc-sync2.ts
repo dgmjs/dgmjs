@@ -13,7 +13,7 @@ import {
   ReorderChildMutation,
 } from "../transform/mutations";
 
-export class YDocSyncPlugin implements Plugin {
+export class YDocSyncPlugin2 implements Plugin {
   editor: Editor = null!;
   yDoc: Y.Doc = null!;
   yObjMap: Y.Map<Y.Map<any>> = null!;
@@ -41,67 +41,73 @@ export class YDocSyncPlugin implements Plugin {
   }
 
   listen() {
-    this.editor.transform.onMutate.addListener((mutation) => {
-      console.log("mut", mutation.toJSON());
-      switch (mutation.type) {
-        case MutationType.CREATE: {
-          const mut = mutation as CreateMutation;
-          const yObj = this.objToYMap(mut.obj);
-          this.yObjMap.set(mut.obj.id, yObj);
-          break;
-        }
-        case MutationType.DELETE: {
-          const mut = mutation as CreateMutation;
-          this.yObjMap.delete(mut.obj.id);
-          break;
-        }
-        case MutationType.ASSIGN: {
-          const mut = mutation as AssignMutation;
-          const yObj = this.yObjMap.get(mut.obj.id);
-          if (yObj) {
-            yObj.set(mut.field, mut.newValue);
+    this.editor.transform.onTransaction.addListener((tr) => {
+      this.yDoc.transact(() => {
+        tr.mutations.forEach((mutation) => {
+          switch (mutation.type) {
+            case MutationType.CREATE: {
+              const mut = mutation as CreateMutation;
+              const yObj = this.objToYMap(mut.obj);
+              this.yObjMap.set(mut.obj.id, yObj);
+              break;
+            }
+            case MutationType.DELETE: {
+              const mut = mutation as CreateMutation;
+              this.yObjMap.delete(mut.obj.id);
+              break;
+            }
+            case MutationType.ASSIGN: {
+              const mut = mutation as AssignMutation;
+              const yObj = this.yObjMap.get(mut.obj.id);
+              if (yObj) {
+                yObj.set(mut.field, mut.newValue);
+              }
+              break;
+            }
+            case MutationType.ASSIGN_REF: {
+              const mut = mutation as AssignRefMutation;
+              const yObj = this.yObjMap.get(mut.obj.id);
+              if (yObj && mut.newValue) {
+                yObj.set(mut.field, mut.newValue.id);
+              }
+              break;
+            }
+            case MutationType.INSERT_CHILD: {
+              const mut = mutation as InsertChildMutation;
+              const yParent = this.yObjMap.get(mut.parent.id);
+              const yChild = this.yObjMap.get(mut.obj.id);
+              if (yParent && yChild) {
+                yChild.set("parent", mut.parent.id);
+                // yChild.set("parentOrder", ???);
+              }
+              break;
+            }
+            case MutationType.REMOVE_CHILD: {
+              const mut = mutation as RemoveChildMutation;
+              const yParent = this.yObjMap.get(mut.parent.id);
+              const yChild = this.yObjMap.get(mut.obj.id);
+              if (yParent && yChild) {
+                yChild.delete("parent");
+                // yChild.delete("parentOrder");
+              }
+              break;
+            }
+            case MutationType.REORDER_CHILD: {
+              const mut = mutation as ReorderChildMutation;
+              const yParent = this.yObjMap.get(mut.parent.id);
+              const yChild = this.yObjMap.get(mut.obj.id);
+              if (yParent && yChild) {
+                // yChild.set("parentOrder", ???);
+              }
+              break;
+            }
           }
-          break;
-        }
-        case MutationType.ASSIGN_REF: {
-          const mut = mutation as AssignRefMutation;
-          const yObj = this.yObjMap.get(mut.obj.id);
-          if (yObj && mut.newValue) {
-            yObj.set(mut.field, mut.newValue.id);
-          }
-          break;
-        }
-        case MutationType.INSERT_CHILD: {
-          const mut = mutation as InsertChildMutation;
-          const yParent = this.yObjMap.get(mut.parent.id);
-          const yChild = this.yObjMap.get(mut.obj.id);
-          if (yParent && yChild) {
-            yChild.set("parent", mut.parent.id);
-            // yChild.set("parentOrder", ???);
-          }
-          break;
-        }
-        case MutationType.REMOVE_CHILD: {
-          const mut = mutation as RemoveChildMutation;
-          const yParent = this.yObjMap.get(mut.parent.id);
-          const yChild = this.yObjMap.get(mut.obj.id);
-          if (yParent && yChild) {
-            yChild.delete("parent");
-            // yChild.delete("parentOrder");
-          }
-          break;
-        }
-        case MutationType.REORDER_CHILD: {
-          const mut = mutation as ReorderChildMutation;
-          const yParent = this.yObjMap.get(mut.parent.id);
-          const yChild = this.yObjMap.get(mut.obj.id);
-          if (yParent && yChild) {
-            // yChild.set("parentOrder", ???);
-          }
-          break;
-        }
-      }
+        });
+      });
     });
+    // this.editor.transform.onMutate.addListener((mutation) => {
+    //   console.log("mut", mutation.toJSON());
+    // });
 
     this.yObjMap.observeDeep((events, tr) => {
       console.log("tr", tr);

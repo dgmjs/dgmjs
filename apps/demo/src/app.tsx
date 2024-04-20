@@ -6,7 +6,7 @@ import {
   Shape,
   ObjProps,
   Transaction,
-  YDocSyncPlugin,
+  YDocSyncPlugin2,
   FillStyle,
 } from "@dgmjs/core";
 import { PaletteToolbar } from "./components/palette-toolbar";
@@ -28,7 +28,8 @@ declare global {
 
 // ------------ yjs experiment ------------
 
-const ydocSyncPlugin = new YDocSyncPlugin();
+// const ydocSyncPlugin = new YDocSyncPlugin();
+const ydocSyncPlugin = new YDocSyncPlugin2();
 
 // ------------ yjs experiment ------------
 

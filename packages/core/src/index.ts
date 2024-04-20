@@ -24,3 +24,4 @@ export { basicSetup } from "./basic-setup";
 
 // plugins
 export { YDocSyncPlugin } from "./plugins/plugin-ydoc-sync";
+export { YDocSyncPlugin2 } from "./plugins/plugin-ydoc-sync2";
