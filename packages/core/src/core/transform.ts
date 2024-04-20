@@ -62,14 +62,24 @@ export class Transform {
   redoHistory: Stack<Action>;
 
   /**
-   * Event emitter for transaction
+   * Event for transaction apply
    */
   onTransactionApply: TypedEvent<Transaction>;
 
   /**
-   * Event emitter for transaction
+   * Event for transaction unapply
    */
   onTransactionUnapply: TypedEvent<Transaction>;
+
+  /**
+   * Event for action apply
+   */
+  onActionApply: TypedEvent<Action>;
+
+  /**
+   * Event for action unapply
+   */
+  onActionUnapply: TypedEvent<Action>;
 
   /**
    * constructor
@@ -81,6 +91,8 @@ export class Transform {
     this.redoHistory = new Stack(MAX_STACK_SIZE);
     this.onTransactionApply = new TypedEvent();
     this.onTransactionUnapply = new TypedEvent();
+    this.onActionApply = new TypedEvent();
+    this.onActionUnapply = new TypedEvent();
   }
 
   /**
@@ -141,6 +153,7 @@ export class Transform {
   endAction() {
     if (!this.action) throw new Error("No action started");
     if (this.action.transactions.length > 0) {
+      this.onActionApply.emit(this.action);
       this.undoHistory.push(this.action);
       this.redoHistory.clear();
     }
@@ -153,6 +166,7 @@ export class Transform {
   cancelAction() {
     if (this.action) {
       this.action.unapply(this);
+      this.onActionUnapply.emit(this.action);
       this.action = null;
     }
   }
@@ -179,6 +193,7 @@ export class Transform {
       const action = this.undoHistory.pop();
       if (action) {
         action.unapply(this);
+        this.onActionUnapply.emit(action);
         this.redoHistory.push(action);
       }
     }
@@ -192,6 +207,7 @@ export class Transform {
       const action = this.redoHistory.pop();
       if (action) {
         action.apply(this);
+        this.onActionApply.emit(action);
         this.undoHistory.push(action);
       }
     }
