@@ -62,7 +62,7 @@ export class BoxMoveAnchoredController extends Controller {
 
   initialize(editor: Editor, shape: Shape): void {
     // this.ghost = shape.getEnclosure();
-    editor.history.startAction("move-anchor");
+    editor.transform.startAction("move-anchor");
   }
 
   /**
@@ -80,7 +80,7 @@ export class BoxMoveAnchoredController extends Controller {
     const angle = geometry.angle(anchorPoint, shapeCenter);
     const length = geometry.distance(shapeCenter, anchorPoint);
     // transform shape
-    editor.store.transact((tx) => {
+    editor.transform.transact((tx) => {
       const page = editor.currentPage!;
       moveAnchor(tx, shape as Box, angle, length);
       resolveAllConstraints(tx, page, canvas);
@@ -91,7 +91,7 @@ export class BoxMoveAnchoredController extends Controller {
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Box) {
-    editor.history.endAction();
+    editor.transform.endAction();
   }
 
   /**

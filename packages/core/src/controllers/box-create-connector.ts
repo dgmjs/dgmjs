@@ -120,8 +120,8 @@ export class BoxCreateConnectorController extends Controller {
       [this.dragStartPointGCS, this.dragPointGCS]
     );
     const page = editor.currentPage!;
-    editor.history.startAction("create");
-    editor.store.transact((tx) => {
+    editor.transform.startAction("create");
+    editor.transform.transact((tx) => {
       addShape(tx, this.connector!, page);
       resolveAllConstraints(tx, page, editor.canvas);
     });
@@ -138,7 +138,7 @@ export class BoxCreateConnectorController extends Controller {
         this.connector,
         this.dragPointGCS
       );
-      editor.store.transact((tx) => {
+      editor.transform.transact((tx) => {
         const page = editor.currentPage!;
         setLinePath(tx, this.connector!, [
           this.dragStartPointGCS,
@@ -155,7 +155,7 @@ export class BoxCreateConnectorController extends Controller {
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Box) {
-    editor.history.endAction();
+    editor.transform.endAction();
   }
 
   /**

@@ -158,7 +158,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
       editor.repaint();
 
       // start transaction
-      editor.history.startAction("text-edit");
+      editor.transform.startAction("text-edit");
 
       // set initial content
       tiptapEditor?.commands.setContent(textShape.text);
@@ -177,7 +177,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
   const update = (textShape: Box, textValue: any) => {
     if (editor.currentPage) {
       // mutate text shape
-      editor.store.transact((tx: Transaction) => {
+      editor.transform.transact((tx: Transaction) => {
         tx.assign(textShape, "text", textValue);
         resolveAllConstraints(tx, editor.currentPage!, editor.canvas);
       });
@@ -207,7 +207,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
 
   const close = () => {
     if (tiptapEditor && state.textShape) {
-      editor.history.endAction();
+      editor.transform.endAction();
       const textString = convertTextNodeToString(tiptapEditor.getJSON());
       if (state.textShape instanceof Text && textString.trim().length === 0) {
         editor.actions.remove([state.textShape]);

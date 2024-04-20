@@ -99,7 +99,7 @@ export class ConnectorReconnectController extends Controller {
         this.controlPoint = 0;
       this.controlPath = geometry.pathCopy(shape.path);
     }
-    editor.history.startAction("reconnect");
+    editor.transform.startAction("reconnect");
   }
 
   /**
@@ -119,7 +119,7 @@ export class ConnectorReconnectController extends Controller {
     }
     const isHead = this.controlPoint > 0;
     // transform shape
-    editor.store.transact((tx) => {
+    editor.transform.transact((tx) => {
       const page = editor.currentPage!;
       setLinePath(tx, shape as Line, newPath);
       tx.assignRef(shape, isHead ? "head" : "tail", newEnd);
@@ -132,7 +132,7 @@ export class ConnectorReconnectController extends Controller {
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Connector) {
-    editor.history.endAction();
+    editor.transform.endAction();
   }
 
   /**

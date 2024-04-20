@@ -195,7 +195,7 @@ export class BoxSizeController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
-    editor.history.startAction("resize");
+    editor.transform.startAction("resize");
     this.initialEnclosure = shape.getEnclosure();
     this.initialSnapshot = {};
     shape.traverse((s) => (this.initialSnapshot[s.id] = s.toJSON(false, true)));
@@ -358,7 +358,7 @@ export class BoxSizeController extends Controller {
     shape.fromJSON(memo);
 
     // transform shapes
-    editor.store.transact((tx) => {
+    editor.transform.transact((tx) => {
       const page = editor.currentPage!;
       resizeShape(tx, shape, targetWidth, targetHeight);
       moveMultipleShapes(
@@ -445,7 +445,7 @@ export class BoxSizeController extends Controller {
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Box) {
-    editor.history.endAction();
+    editor.transform.endAction();
   }
 
   /**

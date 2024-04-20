@@ -39,12 +39,12 @@ export class ImageFactoryHandler extends Handler {
           ]);
           const center = editor.getCenter();
           const shape = await editor.factory.createImage(file, center);
-          editor.history.startAction("create");
-          editor.store.transact((tx) => {
+          editor.transform.startAction("create");
+          editor.transform.transact((tx) => {
             addShape(tx, shape, page);
             resolveAllConstraints(tx, page, editor.canvas);
           });
-          editor.history.endAction();
+          editor.transform.endAction();
           editor.factory.triggerCreate(shape);
           this.done(editor);
         }

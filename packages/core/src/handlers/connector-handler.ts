@@ -63,8 +63,8 @@ export class ConnectorFactoryHandler extends Handler {
         [this.dragStartPoint, this.dragPoint]
       );
       this.shape.path = [this.dragStartPoint, this.dragPoint];
-      editor.history.startAction("create");
-      editor.store.transact((tx) => {
+      editor.transform.startAction("create");
+      editor.transform.transact((tx) => {
         addShape(tx, this.shape!, page);
       });
     }
@@ -82,7 +82,7 @@ export class ConnectorFactoryHandler extends Handler {
       this.headAnchor = anchor;
       const newPath = geometry.pathCopy((this.shape as Connector).path);
       newPath[1] = this.dragPoint;
-      editor.store.transact((tx) => {
+      editor.transform.transact((tx) => {
         setLinePath(tx, this.shape as Line, newPath);
         tx.assignRef(this.shape as Shape, "head", this.headEnd);
         tx.assign(this.shape as Shape, "headAnchor", this.headAnchor);
@@ -95,9 +95,9 @@ export class ConnectorFactoryHandler extends Handler {
     const MIN_SIZE = 2;
     if (this.shape) {
       if (geometry.pathLength((this.shape as Connector).path) < MIN_SIZE) {
-        editor.history.cancelAction();
+        editor.transform.cancelAction();
       } else {
-        editor.history.endAction();
+        editor.transform.endAction();
         editor.factory.triggerCreate(this.shape);
       }
     }
@@ -151,7 +151,7 @@ export class ConnectorFactoryHandler extends Handler {
 
   keyDown(editor: Editor, e: KeyboardEvent): boolean {
     if (e.key === "Escape" && this.dragging) {
-      editor.history.cancelAction();
+      editor.transform.cancelAction();
       editor.repaint();
       this.reset();
       this.done(editor);

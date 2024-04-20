@@ -13,7 +13,7 @@
 
 import { TypedEvent } from "../std/typed-event";
 import { convertToLatestVersion } from "../utils/document-compatibility";
-import { History } from "./history";
+import { Transform } from "./transform";
 import { Instantiator } from "./instantiator";
 import type { Obj } from "./obj";
 import { Transaction } from "./transaction";
@@ -42,7 +42,7 @@ export class Store {
   /**
    * History
    */
-  history: History;
+  history: Transform;
 
   /**
    * Index for object.id
@@ -55,16 +55,11 @@ export class Store {
   doc: Obj | null;
 
   /**
-   * Event emitter for transaction
-   */
-  onTransaction: TypedEvent<Transaction> = new TypedEvent();
-
-  /**
    * Constructor
    */
   constructor(instantiator: Instantiator, options?: StoreOptions) {
     this.instantiator = instantiator;
-    this.history = new History(this);
+    this.history = new Transform(this);
     this.options = options || {};
     this.idIndex = {};
     this.doc = null;
@@ -146,37 +141,5 @@ export class Store {
   setDoc(doc: Obj) {
     this.doc = doc;
     this.addToIndex(doc);
-  }
-
-  /**
-   * Apply transaction
-   */
-  apply(tx: Transaction) {
-    for (let i = 0; i < tx.mutations.length; i++) {
-      const mut = tx.mutations[i];
-      mut.apply(this);
-    }
-  }
-
-  /**
-   * Unapply transaction
-   */
-  unapply(tx: Transaction) {
-    for (let i = tx.mutations.length - 1; i >= 0; i--) {
-      const mut = tx.mutations[i];
-      mut.unapply(this);
-    }
-  }
-
-  /**
-   * Execute function as a transaction
-   */
-  transact(fn: (tx: Transaction) => void) {
-    const tx = new Transaction(this);
-    fn(tx);
-    if (tx.mutations.length > 0) {
-      this.apply(tx);
-      this.onTransaction.emit(tx);
-    }
   }
 }

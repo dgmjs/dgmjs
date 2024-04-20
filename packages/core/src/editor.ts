@@ -35,7 +35,7 @@ import { Store } from "./core/store";
 import { SelectionManager } from "./selection-manager";
 import { Clipboard } from "./core/clipboard";
 import { TypedEvent } from "./std/typed-event";
-import { History } from "./core/history";
+import { Transform } from "./core/transform";
 
 export interface EditorOptions {
   handlers: Handler[];
@@ -89,7 +89,7 @@ export class Editor {
   onKeyDown: TypedEvent<KeyboardEvent>;
 
   store: Store;
-  history: History;
+  transform: Transform;
   clipboard: Clipboard;
   selection: SelectionManager;
   factory: ShapeFactory;
@@ -160,7 +160,7 @@ export class Editor {
         if (o instanceof Shape) o.finalize(this.canvas);
       },
     });
-    this.history = new History(this.store);
+    this.transform = new Transform(this.store);
     this.clipboard = new Clipboard(this.store);
     this.selection = new SelectionManager(this);
     this.factory = new ShapeFactory(this);
@@ -214,7 +214,8 @@ export class Editor {
   }
 
   initializeState() {
-    this.store.onTransaction.addListener(() => this.repaint());
+    this.transform.onTransactionApply.addListener(() => this.repaint());
+    this.transform.onTransactionUnapply.addListener(() => this.repaint());
     this.selection.onChange.addListener(() => this.repaint());
     this.factory.onCreate.addListener((shape: Shape) => {
       this.selection.select([shape]);
@@ -1341,7 +1342,7 @@ export class Controller {
   keyDown(editor: Editor, shape: Shape, e: KeyboardEvent): boolean {
     if (this.dragging && e.key === "Escape") {
       this.reset();
-      editor.history.cancelAction();
+      editor.transform.cancelAction();
       editor.repaint();
       return true;
     }

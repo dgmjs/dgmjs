@@ -65,7 +65,7 @@ export class ConnectorMoveController extends Controller {
 
   initialize(editor: Editor, shape: Shape): void {
     this.controlPath = geometry.pathCopy((shape as Line).path);
-    editor.history.startAction("repath");
+    editor.transform.startAction("repath");
   }
 
   /**
@@ -98,7 +98,7 @@ export class ConnectorMoveController extends Controller {
     const page = editor.currentPage!;
 
     // transform shape
-    editor.store.transact((tx) => {
+    editor.transform.transact((tx) => {
       if (this.dx !== 0 || this.dy !== 0) {
         setLinePath(tx, shape as Line, newPath);
         tx.assignRef(shape, "head", null);
@@ -112,7 +112,7 @@ export class ConnectorMoveController extends Controller {
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Shape) {
-    editor.history.endAction();
+    editor.transform.endAction();
   }
 
   /**

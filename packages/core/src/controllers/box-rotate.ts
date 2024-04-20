@@ -141,7 +141,7 @@ export class BoxRotateController extends Controller {
    * Initialize ghost
    */
   initialize(editor: Editor, shape: Shape): void {
-    editor.history.startAction("rotate");
+    editor.transform.startAction("rotate");
   }
 
   /**
@@ -157,7 +157,7 @@ export class BoxRotateController extends Controller {
     const delta = Math.round(d / ANGLE_STEP) * ANGLE_STEP;
     let angle = Math.round(geometry.normalizeAngle(shape.rotate + delta));
     // transform shapes
-    editor.store.transact((tx) => {
+    editor.transform.transact((tx) => {
       const page = editor.currentPage!;
       tx.assign(shape, "rotate", angle);
       resolveAllConstraints(tx, page, editor.canvas);
@@ -168,7 +168,7 @@ export class BoxRotateController extends Controller {
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Box) {
-    editor.history.endAction();
+    editor.transform.endAction();
   }
 
   /**

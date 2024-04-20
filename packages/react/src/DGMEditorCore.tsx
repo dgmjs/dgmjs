@@ -26,7 +26,8 @@ export interface DGMEditorCoreProps
   onActiveHandlerChange?: (handlerId: string) => void;
   onShapeCreate?: (shape: Shape) => void;
   onShapeInitialize?: (shape: Shape) => void;
-  onTransaction?: (tx: Transaction) => void;
+  onTransactionApply?: (tx: Transaction) => void;
+  onTransactionUnapply?: (tx: Transaction) => void;
   onDblClick?: (event: DblClickEvent) => void;
   onZoom?: (scale: number) => void;
   onScroll?: (origin: number[]) => void;
@@ -46,7 +47,8 @@ export const DGMEditorCore: React.FC<DGMEditorCoreProps> = ({
   onActiveHandlerChange,
   onShapeCreate,
   onShapeInitialize,
-  onTransaction,
+  onTransactionApply,
+  onTransactionUnapply,
   onDblClick,
   onZoom,
   onScroll,
@@ -83,8 +85,11 @@ export const DGMEditorCore: React.FC<DGMEditorCoreProps> = ({
       editor.factory.onShapeInitialize.addListener((shape: Shape) => {
         if (onShapeInitialize) onShapeInitialize(shape);
       });
-      editor.store.onTransaction.addListener((tx: Transaction) => {
-        if (onTransaction) onTransaction(tx);
+      editor.transform.onTransactionApply.addListener((tx: Transaction) => {
+        if (onTransactionApply) onTransactionApply(tx);
+      });
+      editor.transform.onTransactionUnapply.addListener((tx: Transaction) => {
+        if (onTransactionUnapply) onTransactionUnapply(tx);
       });
       editor.onDblClick.addListener((event: DblClickEvent) => {
         if (onDblClick) onDblClick(event);

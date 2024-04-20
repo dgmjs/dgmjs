@@ -58,7 +58,7 @@ export class BoxMoveController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
-    editor.history.startAction("move");
+    editor.transform.startAction("move");
   }
 
   /**
@@ -93,9 +93,8 @@ export class BoxMoveController extends Controller {
       container = editor.currentPage;
 
     // update
-    const store = editor.store;
     const page = editor.currentPage!;
-    store.transact((tx) => {
+    editor.transform.transact((tx) => {
       moveMultipleShapes(
         tx,
         page,
@@ -112,8 +111,7 @@ export class BoxMoveController extends Controller {
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Shape) {
-    // editor.history.endAction();
-    editor.history.endAction();
+    editor.transform.endAction();
   }
 
   /**

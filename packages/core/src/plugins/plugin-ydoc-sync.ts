@@ -106,13 +106,14 @@ export class YDocSyncPlugin implements Plugin {
   }
 
   listen() {
-    this.editor.store.onTransaction.addListener((tx) => {
+    this.editor.transform.onTransactionApply.addListener((tx) => {
       this.yDoc.transact(() => {
         this.applyTransaction(tx);
       });
     });
-    this.editor.history.onUndo.addListener((action) => {});
-    this.editor.history.onRedo.addListener((action) => {});
+    this.editor.transform.onTransactionUnapply.addListener((tx) => {
+      // TODO: ...
+    });
 
     this.yObjMap.observeDeep((events, tr) => {
       console.log("tr", tr);

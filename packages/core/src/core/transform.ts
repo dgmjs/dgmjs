@@ -1,4 +1,4 @@
-import { Store } from "../core/store";
+import { Store } from "./store";
 import { Stack } from "../std/collections";
 import { TypedEvent } from "../std/typed-event";
 import { Transaction } from "./transaction";
@@ -22,25 +22,25 @@ export class Action {
     this.transactions.push(tx);
   }
 
-  apply(store: Store) {
+  apply(transform: Transform) {
     for (let i = 0; i < this.transactions.length; i++) {
       const tx = this.transactions[i];
-      store.apply(tx);
+      transform.applyTransaction(tx);
     }
   }
 
-  unapply(store: Store) {
+  unapply(transform: Transform) {
     for (let i = this.transactions.length - 1; i >= 0; i--) {
       const tx = this.transactions[i];
-      store.unapply(tx);
+      transform.unapplyTransaction(tx);
     }
   }
 }
 
 /**
- * History
+ * Transform
  */
-export class History {
+export class Transform {
   /**
    * Shape store
    */
@@ -62,14 +62,14 @@ export class History {
   redoHistory: Stack<Action>;
 
   /**
-   * On undo event
+   * Event emitter for transaction
    */
-  onUndo: TypedEvent<Action> = new TypedEvent();
+  onTransactionApply: TypedEvent<Transaction>;
 
   /**
-   * On redo event
+   * Event emitter for transaction
    */
-  onRedo: TypedEvent<Action> = new TypedEvent();
+  onTransactionUnapply: TypedEvent<Transaction>;
 
   /**
    * constructor
@@ -79,9 +79,32 @@ export class History {
     this.action = null;
     this.undoHistory = new Stack(MAX_STACK_SIZE);
     this.redoHistory = new Stack(MAX_STACK_SIZE);
-    store.onTransaction.addListener((tx) => {
-      this.applyTransaction(tx);
-    });
+    this.onTransactionApply = new TypedEvent();
+    this.onTransactionUnapply = new TypedEvent();
+  }
+
+  /**
+   * Apply transaction
+   */
+  applyTransaction(tx: Transaction) {
+    if (tx.mutations.length === 0) return;
+    for (let i = 0; i < tx.mutations.length; i++) {
+      const mut = tx.mutations[i];
+      mut.apply(this.store);
+    }
+    this.onTransactionApply.emit(tx);
+  }
+
+  /**
+   * Unapply transaction
+   */
+  unapplyTransaction(tx: Transaction) {
+    if (tx.mutations.length === 0) return;
+    for (let i = tx.mutations.length - 1; i >= 0; i--) {
+      const mut = tx.mutations[i];
+      mut.unapply(this.store);
+    }
+    this.onTransactionUnapply.emit(tx);
   }
 
   /**
@@ -95,15 +118,20 @@ export class History {
   }
 
   /**
-   * Apply a transaction in the current action
+   * Execute function as a transaction
    */
-  applyTransaction(tx: Transaction) {
-    if (this.action) {
-      this.action.push(tx);
-    } else {
-      this.startAction("unknown");
-      this.action!.push(tx);
-      this.endAction();
+  transact(fn: (tx: Transaction) => void) {
+    const tx = new Transaction(this.store);
+    fn(tx);
+    if (tx.mutations.length > 0) {
+      this.applyTransaction(tx);
+      if (this.action) {
+        this.action.push(tx);
+      } else {
+        this.startAction("unknown");
+        this.action!.push(tx);
+        this.endAction();
+      }
     }
   }
 
@@ -124,7 +152,7 @@ export class History {
    */
   cancelAction() {
     if (this.action) {
-      this.action.unapply(this.store);
+      this.action.unapply(this);
       this.action = null;
     }
   }
@@ -150,8 +178,7 @@ export class History {
     if (this.undoHistory.size() > 0) {
       const action = this.undoHistory.pop();
       if (action) {
-        action.unapply(this.store);
-        this.onUndo.emit(action);
+        action.unapply(this);
         this.redoHistory.push(action);
       }
     }
@@ -164,8 +191,7 @@ export class History {
     if (this.redoHistory.size() > 0) {
       const action = this.redoHistory.pop();
       if (action) {
-        action.apply(this.store);
-        this.onRedo.emit(action);
+        action.apply(this);
         this.undoHistory.push(action);
       }
     }

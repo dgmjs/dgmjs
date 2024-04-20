@@ -107,7 +107,7 @@ export class BoxMoveAnchorPositionController extends Controller {
     );
     this.outOfPath = false;
 
-    editor.history.startAction("move-anchor");
+    editor.transform.startAction("move-anchor");
   }
 
   /**
@@ -147,7 +147,7 @@ export class BoxMoveAnchorPositionController extends Controller {
     ]);
 
     // transform shape
-    editor.store.transact((tx) => {
+    editor.transform.transact((tx) => {
       const page = editor.currentPage!;
       tx.assign(shape, "anchorPosition", this.anchorPosition);
       resolveAllConstraints(tx, page, canvas);
@@ -158,7 +158,7 @@ export class BoxMoveAnchorPositionController extends Controller {
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Box) {
-    editor.history.endAction();
+    editor.transform.endAction();
   }
 
   /**

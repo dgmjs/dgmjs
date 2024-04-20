@@ -60,14 +60,14 @@ export class Actions {
    * Undo
    */
   undo() {
-    this.editor.history.undo();
+    this.editor.transform.undo();
   }
 
   /**
    * Redo
    */
   redo() {
-    this.editor.history.redo();
+    this.editor.transform.redo();
   }
 
   /**
@@ -77,15 +77,15 @@ export class Actions {
     position = position ?? this.editor.getPages().length;
     const page = new Page();
     page.name = `Page ${position + 1}`;
-    this.editor.history.startAction("add-page");
-    this.editor.store.transact((tx) => {
+    this.editor.transform.startAction("add-page");
+    this.editor.transform.transact((tx) => {
       addPage(tx, this.editor.store.doc as Document, page);
       if (position >= 0 && position < this.editor.getPages().length) {
         reorderPage(tx, page, position);
       }
       resolveAllConstraints(tx, page, this.editor.canvas);
     });
-    this.editor.history.endAction();
+    this.editor.transform.endAction();
     return page;
   }
 
@@ -93,22 +93,22 @@ export class Actions {
    * Remove a page
    */
   removePage(page: Page) {
-    this.editor.history.startAction("remove-page");
-    this.editor.store.transact((tx) => {
+    this.editor.transform.startAction("remove-page");
+    this.editor.transform.transact((tx) => {
       removePage(tx, page);
     });
-    this.editor.history.endAction();
+    this.editor.transform.endAction();
   }
 
   /**
    * Reorder a page
    */
   reorderPage(page: Page, position: number) {
-    this.editor.history.startAction("remove-page");
-    this.editor.store.transact((tx) => {
+    this.editor.transform.startAction("remove-page");
+    this.editor.transform.transact((tx) => {
       reorderPage(tx, page, position);
     });
-    this.editor.history.endAction();
+    this.editor.transform.endAction();
   }
 
   /**
@@ -120,12 +120,12 @@ export class Actions {
       this.editor.store.instantiator,
       buffer
     )[0] as Page;
-    this.editor.history.startAction("duplicate-page");
-    this.editor.store.transact((tx) => {
+    this.editor.transform.startAction("duplicate-page");
+    this.editor.transform.transact((tx) => {
       addPage(tx, this.editor.store.doc as Document, copied);
       reorderPage(tx, copied, position);
     });
-    this.editor.history.endAction();
+    this.editor.transform.endAction();
     this.editor.setCurrentPage(copied);
     return copied;
   }
@@ -136,12 +136,12 @@ export class Actions {
   insert(shape: Shape, parent?: Shape) {
     const page = this.editor.currentPage;
     if (page) {
-      this.editor.history.startAction("insert");
-      this.editor.store.transact((tx) => {
+      this.editor.transform.startAction("insert");
+      this.editor.transform.transact((tx) => {
         addShape(tx, shape, parent ?? page);
         resolveAllConstraints(tx, page, this.editor.canvas);
       });
-      this.editor.history.endAction();
+      this.editor.transform.endAction();
     }
   }
 
@@ -151,8 +151,8 @@ export class Actions {
   update(values: ObjProps, objs?: Obj[]) {
     const page = this.editor.currentPage;
     if (page) {
-      this.editor.history.startAction("update");
-      this.editor.store.transact((tx) => {
+      this.editor.transform.startAction("update");
+      this.editor.transform.transact((tx) => {
         objs = objs ?? this.editor.selection.getShapes();
         for (let key in values) {
           if (key === "horzAlign") {
@@ -179,7 +179,7 @@ export class Actions {
         }
         resolveAllConstraints(tx, page, this.editor.canvas);
       });
-      this.editor.history.endAction();
+      this.editor.transform.endAction();
     }
   }
 
@@ -189,13 +189,13 @@ export class Actions {
   remove(shapes?: Shape[]) {
     const page = this.editor.currentPage;
     if (page) {
-      this.editor.history.startAction("delete");
-      this.editor.store.transact((tx) => {
+      this.editor.transform.startAction("delete");
+      this.editor.transform.transact((tx) => {
         shapes = shapes ?? this.editor.selection.getShapes();
         deleteMultipleShapes(tx, page, shapes);
         resolveAllConstraints(tx, page, this.editor.canvas);
       });
-      this.editor.history.endAction();
+      this.editor.transform.endAction();
       this.editor.selection.deselectAll();
     }
   }
@@ -224,11 +224,11 @@ export class Actions {
         objs: shapes,
         text: extractTextFromShapes(shapes),
       });
-      this.editor.history.startAction("cut");
-      this.editor.store.transact((tx) => {
+      this.editor.transform.startAction("cut");
+      this.editor.transform.transact((tx) => {
         deleteMultipleShapes(tx, page, shapes!);
       });
-      this.editor.history.endAction();
+      this.editor.transform.endAction();
       this.editor.selection.deselectAll();
     }
   }
@@ -254,15 +254,15 @@ export class Actions {
         const h = geometry.height(boundingRect);
         const dx = center[0] - (boundingRect[0][0] + w / 2);
         const dy = center[1] - (boundingRect[0][1] + h / 2);
-        this.editor.history.startAction("paste");
-        this.editor.store.transact((tx) => {
+        this.editor.transform.startAction("paste");
+        this.editor.transform.transact((tx) => {
           shapes.toReversed().forEach((shape) => {
             tx.atomicCreate(shape);
             changeParent(tx, shape, currentPage);
           });
           moveMultipleShapes(tx, currentPage, shapes, dx, dy);
         });
-        this.editor.history.endAction();
+        this.editor.transform.endAction();
         this.editor.selection.select(shapes);
         return;
       }
@@ -270,12 +270,12 @@ export class Actions {
       // paste image in clipboard
       if (data.image) {
         const shape = await this.editor.factory.createImage(data.image, center);
-        this.editor.history.startAction("paste");
-        this.editor.store.transact((tx) => {
+        this.editor.transform.startAction("paste");
+        this.editor.transform.transact((tx) => {
           addShape(tx, shape, currentPage);
           resolveAllConstraints(tx, currentPage, canvas);
         });
-        this.editor.history.endAction();
+        this.editor.transform.endAction();
         this.editor.selection.select([shape]);
         return;
       }
@@ -286,12 +286,12 @@ export class Actions {
           [center, center],
           data.text
         );
-        this.editor.history.startAction("paste");
-        this.editor.store.transact((tx) => {
+        this.editor.transform.startAction("paste");
+        this.editor.transform.transact((tx) => {
           addShape(tx, shape, currentPage);
           resolveAllConstraints(tx, currentPage, canvas);
         });
-        this.editor.history.endAction();
+        this.editor.transform.endAction();
         this.editor.selection.select([shape]);
         return;
       }
@@ -311,15 +311,15 @@ export class Actions {
           this.editor.store.instantiator,
           buffer
         ) as Shape[];
-        this.editor.history.startAction("duplicate");
-        this.editor.store.transact((tx) => {
+        this.editor.transform.startAction("duplicate");
+        this.editor.transform.transact((tx) => {
           copied.toReversed().forEach((shape) => {
             tx.atomicCreate(shape);
             changeParent(tx, shape, page);
           });
           moveMultipleShapes(tx, page, copied, 30, 30);
         });
-        this.editor.history.endAction();
+        this.editor.transform.endAction();
         this.editor.selection.select(copied);
       }
     }
@@ -333,8 +333,8 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.history.startAction("move-right");
-        this.editor.store.transact((tx) => {
+        this.editor.transform.startAction("move-right");
+        this.editor.transform.transact((tx) => {
           if (shapes!.every((s) => s instanceof Box && s.anchored)) {
             for (let s of shapes!) {
               if (s instanceof Box && s.anchored) {
@@ -357,7 +357,7 @@ export class Actions {
           }
           resolveAllConstraints(tx, page, this.editor.canvas);
         });
-        this.editor.history.endAction();
+        this.editor.transform.endAction();
       }
     }
   }
@@ -381,8 +381,8 @@ export class Actions {
         group.top = box[0][1];
         group.width = geometry.width(box);
         group.height = geometry.height(box);
-        this.editor.history.startAction("group");
-        this.editor.store.transact((tx) => {
+        this.editor.transform.startAction("group");
+        this.editor.transform.transact((tx) => {
           tx.atomicCreate(group);
           changeParent(tx, group, page);
           page
@@ -395,7 +395,7 @@ export class Actions {
             });
           resolveAllConstraints(tx, page, this.editor.canvas);
         });
-        this.editor.history.endAction();
+        this.editor.transform.endAction();
         this.editor.selection.select([group]);
       }
     }
@@ -410,8 +410,8 @@ export class Actions {
       shapes = shapes ?? this.editor.selection.getShapes();
       const children: Shape[] = [];
       if (shapes.some((s) => s instanceof Group)) {
-        this.editor.history.startAction("ungroup");
-        this.editor.store.transact((tx) => {
+        this.editor.transform.startAction("ungroup");
+        this.editor.transform.transact((tx) => {
           for (let s of shapes!) {
             if (s instanceof Group) {
               for (let i = s.children.length - 1; i >= 0; i--) {
@@ -424,7 +424,7 @@ export class Actions {
           }
           resolveAllConstraints(tx, page, this.editor.canvas);
         });
-        this.editor.history.endAction();
+        this.editor.transform.endAction();
         this.editor.selection.select(children);
       }
     }
@@ -438,14 +438,14 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.history.startAction("bring-to-front");
-        this.editor.store.transact((tx) => {
+        this.editor.transform.startAction("bring-to-front");
+        this.editor.transform.transact((tx) => {
           for (let s of shapes!) {
             bringToFront(tx, s);
           }
           resolveAllConstraints(tx, page, this.editor.canvas);
         });
-        this.editor.history.endAction();
+        this.editor.transform.endAction();
       }
     }
   }
@@ -458,14 +458,14 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.history.startAction("send-to-back");
-        this.editor.store.transact((tx) => {
+        this.editor.transform.startAction("send-to-back");
+        this.editor.transform.transact((tx) => {
           for (let s of shapes!) {
             sendToBack(tx, s);
           }
           resolveAllConstraints(tx, page, this.editor.canvas);
         });
-        this.editor.history.endAction();
+        this.editor.transform.endAction();
       }
     }
   }
@@ -478,14 +478,14 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.history.startAction("bring-forward");
-        this.editor.store.transact((tx) => {
+        this.editor.transform.startAction("bring-forward");
+        this.editor.transform.transact((tx) => {
           for (let s of shapes!) {
             bringForward(tx, s);
           }
           resolveAllConstraints(tx, page, this.editor.canvas);
         });
-        this.editor.history.endAction();
+        this.editor.transform.endAction();
       }
     }
   }
@@ -498,14 +498,14 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.history.startAction("send-backward");
-        this.editor.store.transact((tx) => {
+        this.editor.transform.startAction("send-backward");
+        this.editor.transform.transact((tx) => {
           for (let s of shapes!) {
             sendBackward(tx, s);
           }
           resolveAllConstraints(tx, page, this.editor.canvas);
         });
-        this.editor.history.endAction();
+        this.editor.transform.endAction();
       }
     }
   }
@@ -518,8 +518,8 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.history.startAction("align-left");
-        this.editor.store.transact((tx) => {
+        this.editor.transform.startAction("align-left");
+        this.editor.transform.transact((tx) => {
           const ls = shapes!.map((s) => s.getBoundingRect()[0][0]);
           const left = Math.min(...ls);
           for (const s of shapes!) {
@@ -533,7 +533,7 @@ export class Actions {
           }
           resolveAllConstraints(tx, page, this.editor.canvas);
         });
-        this.editor.history.endAction();
+        this.editor.transform.endAction();
       }
     }
   }
@@ -546,8 +546,8 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.history.startAction("align-right");
-        this.editor.store.transact((tx) => {
+        this.editor.transform.startAction("align-right");
+        this.editor.transform.transact((tx) => {
           const rs = shapes!.map((s) => s.getBoundingRect()[1][0]);
           const right = Math.max(...rs);
           for (const s of shapes!) {
@@ -561,7 +561,7 @@ export class Actions {
           }
           resolveAllConstraints(tx, page, this.editor.canvas);
         });
-        this.editor.history.endAction();
+        this.editor.transform.endAction();
       }
     }
   }
@@ -574,8 +574,8 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.history.startAction("align-center");
-        this.editor.store.transact((tx) => {
+        this.editor.transform.startAction("align-center");
+        this.editor.transform.transact((tx) => {
           const ls = shapes!.map((s) => s.getBoundingRect()[0][0]);
           const rs = shapes!.map((s) => s.getBoundingRect()[1][0]);
           const left = Math.min(...ls);
@@ -594,7 +594,7 @@ export class Actions {
           }
           resolveAllConstraints(tx, page, this.editor.canvas);
         });
-        this.editor.history.endAction();
+        this.editor.transform.endAction();
       }
     }
   }
@@ -607,8 +607,8 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.history.startAction("align-top");
-        this.editor.store.transact((tx) => {
+        this.editor.transform.startAction("align-top");
+        this.editor.transform.transact((tx) => {
           const ts = shapes!.map((s) => s.getBoundingRect()[0][1]);
           const top = Math.min(...ts);
           for (const s of shapes!) {
@@ -622,7 +622,7 @@ export class Actions {
           }
           resolveAllConstraints(tx, page, this.editor.canvas);
         });
-        this.editor.history.endAction();
+        this.editor.transform.endAction();
       }
     }
   }
@@ -635,8 +635,8 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.history.startAction("align-bottom");
-        this.editor.store.transact((tx) => {
+        this.editor.transform.startAction("align-bottom");
+        this.editor.transform.transact((tx) => {
           const bs = shapes!.map((s) => s.getBoundingRect()[1][1]);
           const bottom = Math.max(...bs);
           for (const s of shapes!) {
@@ -650,7 +650,7 @@ export class Actions {
           }
           resolveAllConstraints(tx, page, this.editor.canvas);
         });
-        this.editor.history.endAction();
+        this.editor.transform.endAction();
       }
     }
   }
@@ -663,8 +663,8 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.history.startAction("align-middle");
-        this.editor.store.transact((tx) => {
+        this.editor.transform.startAction("align-middle");
+        this.editor.transform.transact((tx) => {
           const ts = shapes!.map((s) => s.getBoundingRect()[0][1]);
           const bs = shapes!.map((s) => s.getBoundingRect()[1][1]);
           const top = Math.min(...ts);
@@ -683,7 +683,7 @@ export class Actions {
           }
           resolveAllConstraints(tx, page, this.editor.canvas);
         });
-        this.editor.history.endAction();
+        this.editor.transform.endAction();
       }
     }
   }

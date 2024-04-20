@@ -28,8 +28,8 @@ export class EllipseFactoryHandler extends Handler {
         this.dragStartPoint,
         this.dragPoint,
       ]);
-      editor.history.startAction("create");
-      editor.store.transact((tx) => {
+      editor.transform.startAction("create");
+      editor.transform.transact((tx) => {
         addShape(tx, this.shape!, page);
       });
     }
@@ -42,7 +42,7 @@ export class EllipseFactoryHandler extends Handler {
         this.dragStartPoint,
         this.dragPoint,
       ]);
-      editor.store.transact((tx) => {
+      editor.transform.transact((tx) => {
         tx.assign(this.shape!, "left", rect[0][0]);
         tx.assign(this.shape!, "top", rect[0][1]);
         tx.assign(this.shape!, "width", geometry.width(rect));
@@ -56,9 +56,9 @@ export class EllipseFactoryHandler extends Handler {
     const MIN_SIZE = 2;
     if (this.shape) {
       if (this.shape?.width < MIN_SIZE && this.shape?.height < MIN_SIZE) {
-        editor.history.cancelAction();
+        editor.transform.cancelAction();
       } else {
-        editor.history.endAction();
+        editor.transform.endAction();
         editor.factory.triggerCreate(this.shape as Shape);
       }
     }
@@ -113,7 +113,7 @@ export class EllipseFactoryHandler extends Handler {
 
   keyDown(editor: Editor, e: KeyboardEvent): boolean {
     if (e.key === "Escape" && this.dragging) {
-      editor.history.cancelAction();
+      editor.transform.cancelAction();
       editor.repaint();
       this.reset();
       this.done(editor);

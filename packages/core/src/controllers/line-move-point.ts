@@ -108,7 +108,7 @@ export class LineMovePointController extends Controller {
       this.dragStartPoint
     );
     this.controlPath = geometry.pathCopy((shape as Line).path);
-    editor.history.startAction("repath");
+    editor.transform.startAction("repath");
   }
 
   /**
@@ -145,7 +145,7 @@ export class LineMovePointController extends Controller {
     newPath = reducePath(newPath, LINE_STRATIFY_ANGLE_THRESHOLD);
 
     // transform shape
-    editor.store.transact((tx) => {
+    editor.transform.transact((tx) => {
       const canvas = editor.canvas;
       const page = editor.currentPage!;
       setLinePath(tx, shape as Line, newPath);
@@ -157,7 +157,7 @@ export class LineMovePointController extends Controller {
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Line) {
-    editor.history.endAction();
+    editor.transform.endAction();
   }
 
   /**

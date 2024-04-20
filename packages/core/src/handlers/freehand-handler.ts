@@ -44,8 +44,8 @@ export class FreehandFactoryHandler extends Handler {
     if (page) {
       this.draggingPoints.push(this.dragStartPoint);
       this.shape = editor.factory.createFreehand(this.draggingPoints, false);
-      editor.history.startAction("create");
-      editor.store.transact((tx) => {
+      editor.transform.startAction("create");
+      editor.transform.transact((tx) => {
         addShape(tx, this.shape!, page);
       });
     }
@@ -63,7 +63,7 @@ export class FreehandFactoryHandler extends Handler {
     if (this.closed) {
       newPath[newPath.length - 1] = geometry.copy(newPath[0]);
     }
-    editor.store.transact((tx) => {
+    editor.transform.transact((tx) => {
       if (page && this.shape) {
         setLinePath(tx, this.shape, newPath);
         resolveAllConstraints(tx, page, editor.canvas);
@@ -75,9 +75,9 @@ export class FreehandFactoryHandler extends Handler {
     if (this.shape) {
       const MIN_SIZE = 2;
       if (geometry.pathLength(this.draggingPoints) < MIN_SIZE) {
-        editor.history.cancelAction();
+        editor.transform.cancelAction();
       } else {
-        editor.history.endAction();
+        editor.transform.endAction();
         editor.factory.triggerCreate(this.shape);
       }
     }
@@ -128,7 +128,7 @@ export class FreehandFactoryHandler extends Handler {
 
   keyDown(editor: Editor, e: KeyboardEvent): boolean {
     if (e.key === "Escape" && this.dragging) {
-      editor.history.cancelAction();
+      editor.transform.cancelAction();
       editor.repaint();
       this.reset();
       this.done(editor);

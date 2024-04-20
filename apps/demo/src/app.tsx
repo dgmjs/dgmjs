@@ -7,7 +7,6 @@ import {
   ObjProps,
   Transaction,
   YDocSyncPlugin,
-  FillStyle,
 } from "@dgmjs/core";
 import { PaletteToolbar } from "./components/palette-toolbar";
 import { useDemoStore } from "./demo-store";
@@ -53,7 +52,7 @@ function App() {
     insertFontsToDocument(fontJson as Font[]);
     await fetchFonts(fontJson as Font[]);
 
-    window.editor.store.onTransaction.addListener((tx) => {
+    window.editor.transform.onTransactionApply.addListener((tx) => {
       console.log("tx", tx);
     });
 
@@ -134,7 +133,8 @@ function App() {
         onSelectionChange={handleSelectionChange}
         onCurrentPageChange={handleCurrentPageChange}
         onActiveHandlerChange={handleActiveHandlerChange}
-        onTransaction={handleTransaction}
+        onTransactionApply={handleTransaction}
+        onTransactionUnapply={handleTransaction}
       />
       <div className="absolute top-2 left-60 right-60 h-10 border flex items-center justify-between bg-background">
         <Menus />

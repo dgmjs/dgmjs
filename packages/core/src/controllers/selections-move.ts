@@ -67,7 +67,7 @@ export class SelectionsMoveController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
-    editor.history.startAction("move");
+    editor.transform.startAction("move");
   }
 
   /**
@@ -91,7 +91,7 @@ export class SelectionsMoveController extends Controller {
       container = editor.currentPage;
 
     // move shapes
-    editor.store.transact((tx) => {
+    editor.transform.transact((tx) => {
       const page = editor.currentPage!;
       moveMultipleShapes(
         tx,
@@ -110,7 +110,7 @@ export class SelectionsMoveController extends Controller {
    * @param shape (is a page in group manipulator)
    */
   finalize(editor: Editor, shape: Shape) {
-    editor.history.endAction();
+    editor.transform.endAction();
   }
 
   /**

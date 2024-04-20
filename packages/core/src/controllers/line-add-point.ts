@@ -88,7 +88,7 @@ export class LineAddPointController extends Controller {
       shape as Line,
       this.dragStartPoint
     );
-    editor.history.startAction("repath");
+    editor.transform.startAction("repath");
   }
 
   /**
@@ -114,7 +114,7 @@ export class LineAddPointController extends Controller {
     newPath = newPath.map((p) => [p[0] + delta[0], p[1] + delta[1]]);
 
     // transform shape
-    editor.store.transact((tx) => {
+    editor.transform.transact((tx) => {
       const page = editor.currentPage!;
       setLinePath(tx, shape as Line, newPath);
       resolveAllConstraints(tx, page, canvas);
@@ -125,7 +125,7 @@ export class LineAddPointController extends Controller {
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Line) {
-    editor.history.endAction();
+    editor.transform.endAction();
   }
 
   /**
