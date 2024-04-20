@@ -16,7 +16,8 @@ import { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { z } from "zod";
 import { measureText } from "../utils/text-utils";
-import { Transform } from "../transform/transform";
+import { Transaction } from "../core/transaction";
+import { resize } from "../mutates";
 
 const schema = z.object({
   width: z
@@ -33,10 +34,10 @@ const schema = z.object({
  * Set size
  */
 function constraint(
+  tx: Transaction,
   page: Page,
   shape: Shape,
   canvas: Canvas,
-  transform: Transform,
   args: z.infer<typeof schema>
 ) {
   if (shape instanceof Box) {
@@ -88,7 +89,7 @@ function constraint(
       if (args.width === "parent") width = shape.parent.innerWidth;
       if (args.height === "parent") height = shape.parent.innerHeight;
     }
-    return transform.resize(shape, width, height);
+    return resize(tx, shape, width, height);
   }
   return false;
 }

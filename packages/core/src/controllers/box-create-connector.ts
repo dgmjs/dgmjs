@@ -23,6 +23,7 @@ import { lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { findConnectionAnchor, getControllerPosition } from "./utils";
+import { addShape, resolveAllConstraints, setPath } from "../mutates";
 
 interface BoxCreateConnectorControllerOptions {
   position: string;
@@ -119,9 +120,11 @@ export class BoxCreateConnectorController extends Controller {
       [this.dragStartPointGCS, this.dragPointGCS]
     );
     const page = editor.currentPage!;
-    editor.transform.startTransaction("create");
-    editor.transform.addShape(this.connector, page);
-    editor.transform.resolveAllConstraints(page, editor.canvas);
+    editor.history.startAction("create");
+    editor.store.transact((tx) => {
+      addShape(tx, this.connector!, page);
+      resolveAllConstraints(tx, page, editor.canvas);
+    });
   }
 
   /**
@@ -135,12 +138,16 @@ export class BoxCreateConnectorController extends Controller {
         this.connector,
         this.dragPointGCS
       );
-      const tr = editor.transform;
-      const page = editor.currentPage!;
-      tr.setPath(this.connector, [this.dragStartPointGCS, this.dragPointGCS]);
-      tr.atomicAssignRef(this.connector, "head", newEnd);
-      tr.atomicAssign(this.connector, "headAnchor", anchor);
-      tr.resolveAllConstraints(page, editor.canvas);
+      editor.store.transact((tx) => {
+        const page = editor.currentPage!;
+        setPath(tx, this.connector!, [
+          this.dragStartPointGCS,
+          this.dragPointGCS,
+        ]);
+        tx.assignRef(this.connector!, "head", newEnd);
+        tx.assign(this.connector!, "headAnchor", anchor);
+        resolveAllConstraints(tx, page, editor.canvas);
+      });
     }
   }
 
@@ -148,7 +155,7 @@ export class BoxCreateConnectorController extends Controller {
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Box) {
-    editor.transform.endTransaction();
+    editor.history.endAction();
   }
 
   /**

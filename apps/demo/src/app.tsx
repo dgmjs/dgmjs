@@ -6,7 +6,7 @@ import {
   Shape,
   ObjProps,
   Transaction,
-  YDocSyncPlugin2,
+  YDocSyncPlugin,
   FillStyle,
 } from "@dgmjs/core";
 import { PaletteToolbar } from "./components/palette-toolbar";
@@ -28,8 +28,7 @@ declare global {
 
 // ------------ yjs experiment ------------
 
-// const ydocSyncPlugin = new YDocSyncPlugin();
-const ydocSyncPlugin = new YDocSyncPlugin2();
+const ydocSyncPlugin = new YDocSyncPlugin();
 
 // ------------ yjs experiment ------------
 
@@ -54,6 +53,10 @@ function App() {
     insertFontsToDocument(fontJson as Font[]);
     await fetchFonts(fontJson as Font[]);
 
+    window.editor.store.onTransaction.addListener((tx) => {
+      console.log("tx", tx);
+    });
+
     // window.editor.factory.onShapeInitialize.addListener((shape: Shape) => {
     //   shape.strokeWidth = 2;
     //   shape.roughness = 1;
@@ -62,10 +65,10 @@ function App() {
     // });
 
     // load from local storage
-    // const localData = localStorage.getItem("local-data");
-    // if (localData) {
-    //   window.editor.loadFromJSON(JSON.parse(localData));
-    // }
+    const localData = localStorage.getItem("local-data");
+    if (localData) {
+      window.editor.loadFromJSON(JSON.parse(localData));
+    }
     demoStore.setDoc(window.editor.store.doc as Document);
     demoStore.setCurrentPage(window.editor.currentPage);
     window.editor.fitToScreen();

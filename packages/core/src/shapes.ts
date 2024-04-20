@@ -29,10 +29,10 @@ import {
   drawText,
   visitTextNodes,
 } from "./utils/text-utils";
-import { Transform } from "./transform/transform";
 import { evalScript } from "./mal/mal";
 import { Obj } from "./core/obj";
 import { Instantiator } from "./core/instantiator";
+import { Transaction } from "./core/transaction";
 
 interface Constraint {
   id: string;
@@ -52,10 +52,10 @@ interface Script {
 }
 
 type ConstraintFn = (
+  tx: Transaction,
   page: Page,
   shape: Shape,
   canvas: Canvas,
-  transform: Transform,
   arg?: any
 ) => boolean;
 

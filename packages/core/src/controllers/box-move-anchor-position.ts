@@ -19,6 +19,7 @@ import { ccs2lcs, lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import type { CanvasPointerEvent } from "../graphics/graphics";
+import { resolveAllConstraints } from "../mutates";
 
 /**
  * BoxMoveAnchorPositionController
@@ -106,7 +107,7 @@ export class BoxMoveAnchorPositionController extends Controller {
     );
     this.outOfPath = false;
 
-    editor.transform.startTransaction("move-anchor");
+    editor.history.startAction("move-anchor");
   }
 
   /**
@@ -146,17 +147,18 @@ export class BoxMoveAnchorPositionController extends Controller {
     ]);
 
     // transform shape
-    const tr = editor.transform;
-    const page = editor.currentPage!;
-    tr.atomicAssign(shape, "anchorPosition", this.anchorPosition);
-    tr.resolveAllConstraints(page, canvas);
+    editor.store.transact((tx) => {
+      const page = editor.currentPage!;
+      tx.assign(shape, "anchorPosition", this.anchorPosition);
+      resolveAllConstraints(tx, page, canvas);
+    });
   }
 
   /**
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Box) {
-    editor.transform.endTransaction();
+    editor.history.endAction();
   }
 
   /**

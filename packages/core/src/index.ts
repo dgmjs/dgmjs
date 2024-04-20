@@ -7,11 +7,12 @@ export * as utils from "./graphics/utils";
 export { CanvasPointerEvent } from "./graphics/graphics";
 export { Obj } from "./core/obj";
 export { Store } from "./core/store";
-export { Transaction } from "./transform/mutations";
+export * from "./core/transaction";
 export * from "./colors";
 export * from "./shapes";
 export * from "./editor";
 export * from "./handlers";
+export * from "./mutates";
 export * from "./export";
 export { renderOnCanvas } from "./utils/canvas-utils";
 export {
@@ -24,4 +25,3 @@ export { basicSetup } from "./basic-setup";
 
 // plugins
 export { YDocSyncPlugin } from "./plugins/plugin-ydoc-sync";
-export { YDocSyncPlugin2 } from "./plugins/plugin-ydoc-sync2";

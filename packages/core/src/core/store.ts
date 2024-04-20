@@ -11,9 +11,11 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
+import { TypedEvent } from "../std/typed-event";
 import { convertToLatestVersion } from "../utils/document-compatibility";
 import { Instantiator } from "./instantiator";
 import type { Obj } from "./obj";
+import { Transaction } from "./transaction";
 
 type StoreOptions = {
   objInitializer?: (obj: Obj) => void;
@@ -42,6 +44,11 @@ export class Store {
    * this document object
    */
   doc: Obj | null;
+
+  /**
+   * Event emitter for transaction
+   */
+  onTransaction: TypedEvent<Transaction> = new TypedEvent();
 
   constructor(instantiator: Instantiator, options?: StoreOptions) {
     this.instantiator = instantiator;
@@ -126,5 +133,16 @@ export class Store {
   setDoc(doc: Obj) {
     this.doc = doc;
     this.addToIndex(doc);
+  }
+
+  /**
+   * Execute function as a transaction
+   */
+  transact(fn: (tx: Transaction) => void) {
+    const tx = new Transaction(this);
+    fn(tx);
+    if (tx.mutations.length > 0) {
+      this.onTransaction.emit(tx);
+    }
   }
 }

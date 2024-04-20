@@ -17,6 +17,7 @@ import { Editor, Handler } from "../editor";
 import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
 import { Line } from "../shapes";
 import simplifyPath from "simplify-path";
+import { addShape, resolveAllConstraints, setPath } from "../mutates";
 
 /**
  * Freehand Factory Handler
@@ -43,8 +44,10 @@ export class FreehandFactoryHandler extends Handler {
     if (page) {
       this.draggingPoints.push(this.dragStartPoint);
       this.shape = editor.factory.createFreehand(this.draggingPoints, false);
-      editor.transform.startTransaction("create");
-      editor.transform.addShape(this.shape, page);
+      editor.history.startAction("create");
+      editor.store.transact((tx) => {
+        addShape(tx, this.shape!, page);
+      });
     }
   }
 
@@ -60,19 +63,21 @@ export class FreehandFactoryHandler extends Handler {
     if (this.closed) {
       newPath[newPath.length - 1] = geometry.copy(newPath[0]);
     }
-    if (page && this.shape) {
-      editor.transform.setPath(this.shape, newPath);
-      editor.transform.resolveAllConstraints(page, editor.canvas);
-    }
+    editor.store.transact((tx) => {
+      if (page && this.shape) {
+        setPath(tx, this.shape, newPath);
+        resolveAllConstraints(tx, page, editor.canvas);
+      }
+    });
   }
 
   finalize(editor: Editor, e: CanvasPointerEvent): void {
     if (this.shape) {
       const MIN_SIZE = 2;
       if (geometry.pathLength(this.draggingPoints) < MIN_SIZE) {
-        editor.transform.cancelTransaction();
+        editor.history.cancelAction();
       } else {
-        editor.transform.endTransaction();
+        editor.history.endAction();
         editor.factory.triggerCreate(this.shape);
       }
     }
@@ -123,7 +128,7 @@ export class FreehandFactoryHandler extends Handler {
 
   keyDown(editor: Editor, e: KeyboardEvent): boolean {
     if (e.key === "Escape" && this.dragging) {
-      editor.transform.cancelTransaction();
+      editor.history.cancelAction();
       editor.repaint();
       this.reset();
       this.done(editor);

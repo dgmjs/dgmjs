@@ -17,6 +17,7 @@ import { Controller, Editor, Manipulator } from "../editor";
 import { Snap } from "../manipulators/snap";
 import * as geometry from "../graphics/geometry";
 import { Cursor } from "../graphics/const";
+import { resolveAllConstraints, setPath } from "../mutates";
 
 /**
  * ConnectorMove Controller
@@ -64,7 +65,7 @@ export class ConnectorMoveController extends Controller {
 
   initialize(editor: Editor, shape: Shape): void {
     this.controlPath = geometry.pathCopy((shape as Line).path);
-    editor.transform.startTransaction("repath");
+    editor.history.startAction("repath");
   }
 
   /**
@@ -97,20 +98,21 @@ export class ConnectorMoveController extends Controller {
     const page = editor.currentPage!;
 
     // transform shape
-    if (this.dx !== 0 || this.dy !== 0) {
-      const tr = editor.transform;
-      tr.setPath(shape, newPath);
-      tr.atomicAssignRef(shape, "head", null);
-      tr.atomicAssignRef(shape, "tail", null);
-      tr.resolveAllConstraints(page, canvas);
-    }
+    editor.store.transact((tx) => {
+      if (this.dx !== 0 || this.dy !== 0) {
+        setPath(tx, shape as Line, newPath);
+        tx.assignRef(shape, "head", null);
+        tx.assignRef(shape, "tail", null);
+        resolveAllConstraints(tx, page, canvas);
+      }
+    });
   }
 
   /**
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Shape) {
-    editor.transform.endTransaction();
+    editor.history.endAction();
   }
 
   /**

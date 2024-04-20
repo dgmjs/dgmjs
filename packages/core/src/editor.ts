@@ -32,10 +32,10 @@ import { KeyMap, KeymapManager } from "./keymap-manager";
 import { AutoScroller } from "./utils/auto-scroller";
 import { createPointerEvent, createTouchEvent } from "./utils/canvas-utils";
 import { Store } from "./core/store";
-import { Transform } from "./transform/transform";
 import { SelectionManager } from "./selection-manager";
 import { Clipboard } from "./core/clipboard";
 import { TypedEvent } from "./std/typed-event";
+import { History } from "./core/history";
 
 export interface EditorOptions {
   handlers: Handler[];
@@ -89,7 +89,7 @@ export class Editor {
   onKeyDown: TypedEvent<KeyboardEvent>;
 
   store: Store;
-  transform: Transform;
+  history: History;
   clipboard: Clipboard;
   selection: SelectionManager;
   factory: ShapeFactory;
@@ -160,7 +160,7 @@ export class Editor {
         if (o instanceof Shape) o.finalize(this.canvas);
       },
     });
-    this.transform = new Transform(this.store);
+    this.history = new History(this.store);
     this.clipboard = new Clipboard(this.store);
     this.selection = new SelectionManager(this);
     this.factory = new ShapeFactory(this);
@@ -214,7 +214,7 @@ export class Editor {
   }
 
   initializeState() {
-    this.transform.onTransaction.addListener(() => this.repaint());
+    this.store.onTransaction.addListener(() => this.repaint());
     this.selection.onChange.addListener(() => this.repaint());
     this.factory.onCreate.addListener((shape: Shape) => {
       this.selection.select([shape]);
@@ -1341,7 +1341,7 @@ export class Controller {
   keyDown(editor: Editor, shape: Shape, e: KeyboardEvent): boolean {
     if (this.dragging && e.key === "Escape") {
       this.reset();
-      editor.transform.cancelTransaction();
+      editor.history.cancelAction();
       editor.repaint();
       return true;
     }

@@ -83,7 +83,7 @@ export const DGMEditorCore: React.FC<DGMEditorCoreProps> = ({
       editor.factory.onShapeInitialize.addListener((shape: Shape) => {
         if (onShapeInitialize) onShapeInitialize(shape);
       });
-      editor.transform.onTransaction.addListener((tx: Transaction) => {
+      editor.store.onTransaction.addListener((tx: Transaction) => {
         if (onTransaction) onTransaction(tx);
       });
       editor.onDblClick.addListener((event: DblClickEvent) => {

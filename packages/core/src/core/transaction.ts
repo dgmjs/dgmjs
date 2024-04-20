@@ -12,7 +12,7 @@ export const MutationType = {
 } as const;
 
 /**
- * Mutates object store
+ * Mutation is an atomic modification on an object in store
  */
 export class Mutation {
   type: string;
@@ -278,14 +278,14 @@ export class ReorderChildMutation extends Mutation {
 }
 
 /**
- * Transation is a atomic operation includes a set of mutations
+ * Transation is an operation consists of a set of mutations
  */
 export class Transaction {
-  name: string;
+  store: Store;
   mutations: Mutation[];
 
-  constructor(name: string) {
-    this.name = name;
+  constructor(store: Store) {
+    this.store = store;
     this.mutations = [];
   }
 
@@ -295,5 +295,131 @@ export class Transaction {
 
   toJSON(): any {
     return this.mutations.map((mut) => mut.toJSON());
+  }
+
+  apply(store: Store) {
+    for (let i = 0; i < this.mutations.length; i++) {
+      const mut = this.mutations[i];
+      mut.apply(store);
+    }
+  }
+
+  unapply(store: Store) {
+    for (let i = this.mutations.length - 1; i >= 0; i--) {
+      const mut = this.mutations[i];
+      mut.unapply(store);
+    }
+  }
+
+  /**
+   * Atomic mutation to create a shape and returns true if changed
+   */
+  atomicCreate(obj: Obj): boolean {
+    if (!this.store.getById(obj.id)) {
+      const mut = new CreateMutation(obj);
+      mut.apply(this.store);
+      this.push(mut);
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Atomic mutation to delete a shape and returns true if changed
+   */
+  atomicDelete(obj: Obj): boolean {
+    if (this.store.getById(obj.id)) {
+      const mut = new DeleteMutation(obj);
+      mut.apply(this.store);
+      this.push(mut);
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Assign a value to shape's field and returns true if changed
+   */
+  assign(obj: Obj, field: string, value: any): boolean {
+    const old = JSON.stringify((obj as any)[field]);
+    const val = JSON.stringify(value);
+    if (old !== val) {
+      const existingMut = this.mutations.find(
+        (m) => m instanceof AssignMutation && m.obj === obj && m.field === field
+      );
+      if (existingMut) {
+        (existingMut as AssignMutation).newValue = structuredClone(value);
+        existingMut.apply(this.store);
+      } else {
+        const mut = new AssignMutation(obj, field, structuredClone(value));
+        mut.apply(this.store);
+        this.push(mut);
+      }
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Assign a ref to shape's field and returns true if changed
+   */
+  assignRef(obj: Obj, field: string, value: Obj | null): boolean {
+    const old = (obj as any)[field];
+    if (old !== value) {
+      const existingMut = this.mutations.find(
+        (m) => m instanceof AssignMutation && m.obj === obj && m.field === field
+      );
+      if (existingMut) {
+        (existingMut as AssignMutation).newValue = value;
+        existingMut.apply(this.store);
+      } else {
+        const mut = new AssignRefMutation(obj, field, value);
+        mut.apply(this.store);
+        this.push(mut);
+      }
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Insert a child and returns true if changed
+   */
+  insertChild(parent: Obj, obj: Obj, position?: number): boolean {
+    if (!parent.children.includes(obj)) {
+      const mut = new InsertChildMutation(parent, obj, position);
+      mut.apply(this.store);
+      this.push(mut);
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Remove a child and returns true if changed
+   */
+  removeChild(parent: Obj, obj: Obj): boolean {
+    if (parent.children.includes(obj)) {
+      const mut = new RemoveChildMutation(parent, obj);
+      mut.apply(this.store);
+      this.push(mut);
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Reorder a child and returns true if changed
+   */
+  reorderChild(parent: Obj, obj: Obj, position: number): boolean {
+    const array = parent.children;
+    const oldIndex = array.indexOf(obj);
+    if (oldIndex >= 0) {
+      const mut = new ReorderChildMutation(parent, obj, position);
+      mut.apply(this.store);
+      this.push(mut);
+      return true;
+    }
+    return false;
   }
 }

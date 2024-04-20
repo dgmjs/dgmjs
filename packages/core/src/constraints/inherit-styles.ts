@@ -14,7 +14,7 @@
 import { z } from "zod";
 import { Shape, constraintManager, Box, Page } from "../shapes";
 import { Canvas } from "../graphics/graphics";
-import { Transform } from "../transform/transform";
+import { Transaction } from "../core/transaction";
 
 const schema = z.object({
   stroke: z.boolean().default(false),
@@ -27,66 +27,42 @@ const schema = z.object({
  * Inherit styles from parent
  */
 function constraint(
+  tx: Transaction,
   page: Page,
   shape: Shape,
   canvas: Canvas,
-  transform: Transform,
   args: z.infer<typeof schema>
 ) {
   let changed = false;
   const parent = shape.parent as Shape;
   if (parent && !(parent instanceof Document)) {
-    changed =
-      transform.atomicAssign(shape, "opacity", parent.opacity) || changed;
+    changed = tx.assign(shape, "opacity", parent.opacity) || changed;
     if (args.stroke) {
+      changed = tx.assign(shape, "strokeColor", parent.strokeColor) || changed;
+      changed = tx.assign(shape, "strokeWidth", parent.strokeWidth) || changed;
       changed =
-        transform.atomicAssign(shape, "strokeColor", parent.strokeColor) ||
-        changed;
-      changed =
-        transform.atomicAssign(shape, "strokeWidth", parent.strokeWidth) ||
-        changed;
-      changed =
-        transform.atomicAssign(shape, "strokePattern", parent.strokePattern) ||
-        changed;
-      changed =
-        transform.atomicAssign(shape, "roughness", parent.roughness) || changed;
+        tx.assign(shape, "strokePattern", parent.strokePattern) || changed;
+      changed = tx.assign(shape, "roughness", parent.roughness) || changed;
     }
     if (args.fill) {
-      changed =
-        transform.atomicAssign(shape, "fillColor", parent.fillColor) || changed;
-      changed =
-        transform.atomicAssign(shape, "fillStyle", parent.fillStyle) || changed;
+      changed = tx.assign(shape, "fillColor", parent.fillColor) || changed;
+      changed = tx.assign(shape, "fillStyle", parent.fillStyle) || changed;
     }
     if (args.font) {
-      changed =
-        transform.atomicAssign(shape, "fontColor", parent.fontColor) || changed;
-      changed =
-        transform.atomicAssign(shape, "fontFamily", parent.fontFamily) ||
-        changed;
-      changed =
-        transform.atomicAssign(shape, "fontSize", parent.fontSize) || changed;
-      changed =
-        transform.atomicAssign(shape, "fontStyle", parent.fontStyle) || changed;
-      changed =
-        transform.atomicAssign(shape, "fontWeight", parent.fontWeight) ||
-        changed;
+      changed = tx.assign(shape, "fontColor", parent.fontColor) || changed;
+      changed = tx.assign(shape, "fontFamily", parent.fontFamily) || changed;
+      changed = tx.assign(shape, "fontSize", parent.fontSize) || changed;
+      changed = tx.assign(shape, "fontStyle", parent.fontStyle) || changed;
+      changed = tx.assign(shape, "fontWeight", parent.fontWeight) || changed;
     }
     if (args.textAlignment && parent instanceof Box) {
+      changed = tx.assign(shape, "horzAlign", parent.horzAlign) || changed;
+      changed = tx.assign(shape, "vertAlign", parent.vertAlign) || changed;
+      changed = tx.assign(shape, "wordWrap", parent.wordWrap) || changed;
+      changed = tx.assign(shape, "lineHeight", parent.lineHeight) || changed;
       changed =
-        transform.atomicAssign(shape, "horzAlign", parent.horzAlign) || changed;
-      changed =
-        transform.atomicAssign(shape, "vertAlign", parent.vertAlign) || changed;
-      changed =
-        transform.atomicAssign(shape, "wordWrap", parent.wordWrap) || changed;
-      changed =
-        transform.atomicAssign(shape, "lineHeight", parent.lineHeight) ||
+        tx.assign(shape, "paragraphSpacing", parent.paragraphSpacing) ||
         changed;
-      changed =
-        transform.atomicAssign(
-          shape,
-          "paragraphSpacing",
-          parent.paragraphSpacing
-        ) || changed;
     }
   }
   return changed;

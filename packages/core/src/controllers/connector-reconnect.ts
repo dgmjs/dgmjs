@@ -13,13 +13,14 @@
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Shape, Connector } from "../shapes";
+import { Shape, Connector, Line } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { Cursor } from "../graphics/const";
 import { lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { findConnectionAnchor } from "./utils";
+import { resolveAllConstraints, setPath } from "../mutates";
 
 /**
  * Connector Reconnect Controller
@@ -98,7 +99,7 @@ export class ConnectorReconnectController extends Controller {
         this.controlPoint = 0;
       this.controlPath = geometry.pathCopy(shape.path);
     }
-    editor.transform.startTransaction("reconnect");
+    editor.history.startAction("reconnect");
   }
 
   /**
@@ -118,19 +119,20 @@ export class ConnectorReconnectController extends Controller {
     }
     const isHead = this.controlPoint > 0;
     // transform shape
-    const tr = editor.transform;
-    const page = editor.currentPage!;
-    tr.setPath(shape, newPath);
-    tr.atomicAssignRef(shape, isHead ? "head" : "tail", newEnd);
-    tr.atomicAssign(shape, isHead ? "headAnchor" : "tailAnchor", anchor);
-    tr.resolveAllConstraints(page, editor.canvas);
+    editor.store.transact((tx) => {
+      const page = editor.currentPage!;
+      setPath(tx, shape as Line, newPath);
+      tx.assignRef(shape, isHead ? "head" : "tail", newEnd);
+      tx.assign(shape, isHead ? "headAnchor" : "tailAnchor", anchor);
+      resolveAllConstraints(tx, page, editor.canvas);
+    });
   }
 
   /**
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Connector) {
-    editor.transform.endTransaction();
+    editor.history.endAction();
   }
 
   /**

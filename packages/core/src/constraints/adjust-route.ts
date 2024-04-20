@@ -14,7 +14,8 @@
 import { z } from "zod";
 import { Shape, constraintManager, Connector, Page } from "../shapes";
 import { Canvas } from "../graphics/graphics";
-import { Transform } from "../transform/transform";
+import { Transaction } from "../core/transaction";
+import { adjustRoute2 } from "../mutates";
 
 const schema = z.object({});
 
@@ -22,15 +23,15 @@ const schema = z.object({});
  * Adjust route path of connector
  */
 function constraint(
+  tx: Transaction,
   page: Page,
   shape: Shape,
   canvas: Canvas,
-  transform: Transform,
   args: z.infer<typeof schema>
 ): boolean {
   let changed = false;
   if (shape instanceof Connector) {
-    changed = transform.adjustRoute(shape) || changed;
+    changed = adjustRoute2(tx, shape) || changed;
   }
   return changed;
 }

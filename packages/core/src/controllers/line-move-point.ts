@@ -25,6 +25,7 @@ import * as geometry from "../graphics/geometry";
 import { Snap } from "../manipulators/snap";
 import { findControlPoint } from "./utils";
 import { reducePath } from "../utils/route-utils";
+import { resolveAllConstraints, setPath } from "../mutates";
 
 interface LineMovePointControllerOptions {
   exceptEndPoints: boolean;
@@ -107,7 +108,7 @@ export class LineMovePointController extends Controller {
       this.dragStartPoint
     );
     this.controlPath = geometry.pathCopy((shape as Line).path);
-    editor.transform.startTransaction("repath");
+    editor.history.startAction("repath");
   }
 
   /**
@@ -144,18 +145,19 @@ export class LineMovePointController extends Controller {
     newPath = reducePath(newPath, LINE_STRATIFY_ANGLE_THRESHOLD);
 
     // transform shape
-    const canvas = editor.canvas;
-    const page = editor.currentPage!;
-    const tr = editor.transform;
-    tr.setPath(shape, newPath);
-    tr.resolveAllConstraints(page, canvas);
+    editor.store.transact((tx) => {
+      const canvas = editor.canvas;
+      const page = editor.currentPage!;
+      setPath(tx, shape as Line, newPath);
+      resolveAllConstraints(tx, page, canvas);
+    });
   }
 
   /**
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Line) {
-    editor.transform.endTransaction();
+    editor.history.endAction();
   }
 
   /**

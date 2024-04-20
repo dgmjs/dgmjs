@@ -14,7 +14,7 @@
 import { Page, Shape, constraintManager } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import { z } from "zod";
-import { Transform } from "../transform/transform";
+import { Transaction } from "../core/transaction";
 
 const schema = z.object({
   query: z.string().default(""),
@@ -38,10 +38,10 @@ const schema = z.object({
  * - property {string} A boolean-type property name
  */
 function constraint(
+  tx: Transaction,
   page: Page,
   shape: Shape,
   canvas: Canvas,
-  transform: Transform,
   args: z.infer<typeof schema>
 ) {
   let changed = false;
@@ -57,10 +57,10 @@ function constraint(
         args.state === "containable" ||
         args.state === "editable")
     ) {
-      changed = transform.atomicAssign(child, args.state, value) || changed;
+      changed = tx.assign(child, args.state, value) || changed;
     }
     if (typeof value === "string" && args.state === "text") {
-      changed = transform.atomicAssign(child, args.state, value) || changed;
+      changed = tx.assign(child, args.state, value) || changed;
     }
   }
   return changed;

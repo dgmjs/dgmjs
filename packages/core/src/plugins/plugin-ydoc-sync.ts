@@ -1,17 +1,19 @@
 import * as Y from "yjs";
 import { WebrtcProvider } from "y-webrtc";
 import { Editor, Plugin } from "../editor";
-import { Box, Document, Page, Shape } from "../shapes";
+import { Document, Page } from "../shapes";
 import { Obj } from "../core/obj";
 import {
   AssignMutation,
   AssignRefMutation,
   CreateMutation,
   InsertChildMutation,
+  Mutation,
   MutationType,
   RemoveChildMutation,
   ReorderChildMutation,
-} from "../transform/mutations";
+  Transaction,
+} from "../core/transaction";
 
 export class YDocSyncPlugin implements Plugin {
   editor: Editor = null!;
@@ -40,9 +42,8 @@ export class YDocSyncPlugin implements Plugin {
     this.yObjMap = this.yDoc.getMap("objmap");
   }
 
-  listen() {
-    this.editor.transform.onMutate.addListener((mutation) => {
-      console.log("mut", mutation.toJSON());
+  applyTransaction(tx: Transaction) {
+    tx.mutations.forEach((mutation) => {
       switch (mutation.type) {
         case MutationType.CREATE: {
           const mut = mutation as CreateMutation;
@@ -102,6 +103,16 @@ export class YDocSyncPlugin implements Plugin {
         }
       }
     });
+  }
+
+  listen() {
+    this.editor.store.onTransaction.addListener((tx) => {
+      this.yDoc.transact(() => {
+        this.applyTransaction(tx);
+      });
+    });
+    this.editor.history.onUndo.addListener((action) => {});
+    this.editor.history.onRedo.addListener((action) => {});
 
     this.yObjMap.observeDeep((events, tr) => {
       console.log("tr", tr);

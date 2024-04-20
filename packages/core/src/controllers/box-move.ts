@@ -17,6 +17,7 @@ import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { drawPolylineInLCS } from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { Cursor } from "../graphics/const";
+import { moveShapes, resolveAllConstraints } from "../mutates";
 
 /**
  * BoxMoveController
@@ -57,7 +58,7 @@ export class BoxMoveController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
-    editor.transform.startTransaction("move");
+    editor.history.startAction("move");
   }
 
   /**
@@ -92,23 +93,27 @@ export class BoxMoveController extends Controller {
       container = editor.currentPage;
 
     // update
-    const tr = editor.transform;
+    const store = editor.store;
     const page = editor.currentPage!;
-    tr.moveShapes(
-      page,
-      [targetShape],
-      this.dxStepGCS,
-      this.dyStepGCS,
-      container
-    );
-    tr.resolveAllConstraints(page, canvas);
+    store.transact((tx) => {
+      moveShapes(
+        tx,
+        page,
+        [targetShape],
+        this.dxStepGCS,
+        this.dyStepGCS,
+        container
+      );
+      resolveAllConstraints(tx, page, canvas);
+    });
   }
 
   /**
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Shape) {
-    editor.transform.endTransaction();
+    // editor.history.endAction();
+    editor.history.endAction();
   }
 
   /**

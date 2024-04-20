@@ -15,7 +15,8 @@ import { constraintManager, Shape, Line, Page } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { z } from "zod";
-import { Transform } from "../transform/transform";
+import { Transaction } from "../core/transaction";
+import { setPath } from "../mutates";
 
 const schema = z.object({
   type: z.enum(["free", "horizontal", "vertical"]).default("free"),
@@ -25,10 +26,10 @@ const schema = z.object({
  * Set line
  */
 function constraint(
+  tx: Transaction,
   page: Page,
   shape: Shape,
   canvas: Canvas,
-  transform: Transform,
   args: z.infer<typeof schema>
 ) {
   if (shape instanceof Line) {
@@ -48,7 +49,7 @@ function constraint(
         ];
         break;
     }
-    return transform.setPath(shape, path);
+    return setPath(tx, shape, path);
   }
   return false;
 }
