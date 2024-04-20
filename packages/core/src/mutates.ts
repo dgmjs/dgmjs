@@ -63,7 +63,7 @@ export function changeParent(tx: Transaction, obj: Obj, parent: Obj): boolean {
  */
 export function addPage(tx: Transaction, doc: Document, page: Page): boolean {
   let changed = false;
-  changed = tx.atomicCreate(page) || changed;
+  changed = tx.appendObj(page) || changed;
   changed = changeParent(tx, page, doc) || changed;
   return changed;
 }
@@ -76,7 +76,7 @@ export function removePage(tx: Transaction, page: Page): boolean {
   if (page && page.parent) {
     changed = tx.removeChild(page.parent, page) || changed;
     changed = tx.assignRef(page.parent, "parent", null) || changed;
-    changed = tx.atomicDelete(page) || changed;
+    changed = tx.deleteObj(page) || changed;
   }
   return changed;
 }
@@ -114,7 +114,7 @@ export function addShape(
   parent: Shape
 ): boolean {
   let changed = false;
-  changed = tx.atomicCreate(shape) || changed;
+  changed = tx.appendObj(shape) || changed;
   changed = changeParent(tx, shape, parent) || changed;
   return changed;
 }
@@ -527,7 +527,7 @@ export function deleteShape(
     changed = tx.removeChild(shape.parent, shape) || changed;
   }
   changed = tx.assignRef(shape, "parent", null) || changed;
-  changed = tx.atomicDelete(shape) || changed;
+  changed = tx.deleteObj(shape) || changed;
   return changed;
 }
 

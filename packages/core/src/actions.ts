@@ -257,7 +257,7 @@ export class Actions {
         this.editor.transform.startAction("paste");
         this.editor.transform.transact((tx) => {
           shapes.toReversed().forEach((shape) => {
-            tx.atomicCreate(shape);
+            tx.appendObj(shape);
             changeParent(tx, shape, currentPage);
           });
           moveMultipleShapes(tx, currentPage, shapes, dx, dy);
@@ -314,7 +314,7 @@ export class Actions {
         this.editor.transform.startAction("duplicate");
         this.editor.transform.transact((tx) => {
           copied.toReversed().forEach((shape) => {
-            tx.atomicCreate(shape);
+            tx.appendObj(shape);
             changeParent(tx, shape, page);
           });
           moveMultipleShapes(tx, page, copied, 30, 30);
@@ -383,7 +383,7 @@ export class Actions {
         group.height = geometry.height(box);
         this.editor.transform.startAction("group");
         this.editor.transform.transact((tx) => {
-          tx.atomicCreate(group);
+          tx.appendObj(group);
           changeParent(tx, group, page);
           page
             ?.traverseSequence()

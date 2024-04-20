@@ -298,9 +298,9 @@ export class Transaction {
   }
 
   /**
-   * Atomic mutation to create a shape and returns true if changed
+   * Atomic mutation to append an obj and returns true if changed
    */
-  atomicCreate(obj: Obj): boolean {
+  appendObj(obj: Obj): boolean {
     if (!this.store.getById(obj.id)) {
       const mut = new CreateMutation(obj);
       mut.apply(this.store);
@@ -311,9 +311,9 @@ export class Transaction {
   }
 
   /**
-   * Atomic mutation to delete a shape and returns true if changed
+   * Atomic mutation to delete an obj and returns true if changed
    */
-  atomicDelete(obj: Obj): boolean {
+  deleteObj(obj: Obj): boolean {
     if (this.store.getById(obj.id)) {
       const mut = new DeleteMutation(obj);
       mut.apply(this.store);
