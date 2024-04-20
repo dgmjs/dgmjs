@@ -297,20 +297,6 @@ export class Transaction {
     return this.mutations.map((mut) => mut.toJSON());
   }
 
-  apply(store: Store) {
-    for (let i = 0; i < this.mutations.length; i++) {
-      const mut = this.mutations[i];
-      mut.apply(store);
-    }
-  }
-
-  unapply(store: Store) {
-    for (let i = this.mutations.length - 1; i >= 0; i--) {
-      const mut = this.mutations[i];
-      mut.unapply(store);
-    }
-  }
-
   /**
    * Atomic mutation to create a shape and returns true if changed
    */

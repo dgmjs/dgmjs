@@ -6,6 +6,9 @@ import { Transaction } from "./transaction";
 // Maximum size of undo/redo stack
 const MAX_STACK_SIZE = 1000;
 
+/**
+ * Action
+ */
 export class Action {
   name: string;
   transactions: Transaction[];
@@ -22,14 +25,14 @@ export class Action {
   apply(store: Store) {
     for (let i = 0; i < this.transactions.length; i++) {
       const tx = this.transactions[i];
-      tx.apply(store);
+      store.apply(tx);
     }
   }
 
   unapply(store: Store) {
     for (let i = this.transactions.length - 1; i >= 0; i--) {
       const tx = this.transactions[i];
-      tx.unapply(store);
+      store.unapply(tx);
     }
   }
 }
@@ -76,14 +79,8 @@ export class History {
     this.action = null;
     this.undoHistory = new Stack(MAX_STACK_SIZE);
     this.redoHistory = new Stack(MAX_STACK_SIZE);
-    this.store.onTransaction.addListener((tx) => {
-      if (this.action) {
-        this.action.push(tx);
-      } else {
-        this.startAction("unknown");
-        this.action!.push(tx);
-        this.endAction();
-      }
+    store.onTransaction.addListener((tx) => {
+      this.applyTransaction(tx);
     });
   }
 
@@ -95,6 +92,19 @@ export class History {
       this.endAction();
     }
     this.action = new Action(name);
+  }
+
+  /**
+   * Apply a transaction in the current action
+   */
+  applyTransaction(tx: Transaction) {
+    if (this.action) {
+      this.action.push(tx);
+    } else {
+      this.startAction("unknown");
+      this.action!.push(tx);
+      this.endAction();
+    }
   }
 
   /**
