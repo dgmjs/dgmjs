@@ -49,7 +49,6 @@ export function changeParent(tx: Transaction, obj: Obj, parent: Obj): boolean {
       changed = tx.removeChild(obj.parent, obj) || changed;
     }
     changed = tx.insertChild(parent, obj) || changed;
-    changed = tx.assignRef(obj, "parent", parent) || changed;
   }
   return changed;
 }
@@ -75,7 +74,6 @@ export function removePage(tx: Transaction, page: Page): boolean {
   let changed = false;
   if (page && page.parent) {
     changed = tx.removeChild(page.parent, page) || changed;
-    changed = tx.assignRef(page.parent, "parent", null) || changed;
     changed = tx.deleteObj(page) || changed;
   }
   return changed;
@@ -526,7 +524,6 @@ export function deleteShape(
   if (shape.parent) {
     changed = tx.removeChild(shape.parent, shape) || changed;
   }
-  changed = tx.assignRef(shape, "parent", null) || changed;
   changed = tx.deleteObj(shape) || changed;
   return changed;
 }

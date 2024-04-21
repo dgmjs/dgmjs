@@ -168,12 +168,14 @@ export class InsertChildMutation extends Mutation {
   apply(store: Store) {
     if (Array.isArray(this.parent.children)) {
       this.parent.children.splice(this.position, 0, this.obj);
+      this.obj.parent = this.parent;
     }
   }
 
   unapply(store: Store): void {
     if (Array.isArray(this.parent.children)) {
       this.parent.children.splice(this.position, 1);
+      this.obj.parent = null;
     }
   }
 
@@ -210,12 +212,14 @@ export class RemoveChildMutation extends Mutation {
   apply(store: Store) {
     if (Array.isArray(this.parent.children)) {
       this.parent.children.splice(this.position, 1);
+      this.obj.parent = null;
     }
   }
 
   unapply(store: Store): void {
     if (Array.isArray(this.parent.children)) {
       this.parent.children.splice(this.position, 0, this.obj);
+      this.obj.parent = this.parent;
     }
   }
 
