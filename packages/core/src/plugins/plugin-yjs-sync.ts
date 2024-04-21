@@ -14,6 +14,43 @@ import {
   Transaction,
 } from "../core/transaction";
 
+function getParentOrder(
+  yObjMap: Y.Map<Y.Map<any>>,
+  parent: Obj,
+  position: number
+) {
+  // compute parent:order
+  const objPrev = position > 0 ? parent.children[position - 1] : null;
+  const objNext =
+    position < parent.children.length ? parent.children[position + 1] : null;
+  const yObjPrev = objPrev ? yObjMap.get(objPrev.id) : null;
+  const yObjNext = objNext ? yObjMap.get(objNext.id) : null;
+  if (yObjNext && yObjPrev) {
+    const prev = yObjPrev.get("parent:order");
+    const next = yObjNext.get("parent:order");
+    const order = (prev + next) / 2;
+    return order;
+  } else if (yObjNext) {
+    const next = yObjNext.get("parent:order");
+    return next - 1;
+  } else if (yObjPrev) {
+    const prev = yObjPrev.get("parent:order");
+    return prev + 1;
+  } else {
+    return 0;
+  }
+}
+
+function getYChildren(yObjMap: Y.Map<Y.Map<any>>, parent: string) {
+  const children: Y.Map<any>[] = [];
+  yObjMap.forEach((yObj, key) => {
+    if (yObj.get("parent") === parent) {
+      children.push(yObj);
+    }
+  });
+  return children;
+}
+
 export class YjsSyncPlugin implements Plugin {
   editor: Editor = null!;
   yDoc: Y.Doc = null!;
@@ -76,28 +113,31 @@ export class YjsSyncPlugin implements Plugin {
         case MutationType.INSERT_CHILD: {
           const mut = mutation as InsertChildMutation;
           const yParent = this.yObjMap.get(mut.parent.id);
-          const yChild = this.yObjMap.get(mut.obj.id);
-          if (yParent && yChild) {
-            yChild.set("parent", mut.parent.id);
-            // TODO: parent order
+          const yObj = this.yObjMap.get(mut.obj.id);
+          if (yParent && yObj) {
+            yObj.set("parent", mut.parent.id);
+            yObj.set(
+              "parent:order",
+              getParentOrder(this.yObjMap, mut.parent, mut.position)
+            );
           }
           break;
         }
         case MutationType.REMOVE_CHILD: {
           const mut = mutation as RemoveChildMutation;
           const yParent = this.yObjMap.get(mut.parent.id);
-          const yChild = this.yObjMap.get(mut.obj.id);
-          if (yParent && yChild) {
-            yChild.set("parent", null);
-            // TODO: parent order
+          const yObj = this.yObjMap.get(mut.obj.id);
+          if (yParent && yObj) {
+            yObj.delete("parent");
+            yObj.delete("parent:order");
           }
           break;
         }
         case MutationType.REORDER_CHILD: {
           const mut = mutation as ReorderChildMutation;
           const yParent = this.yObjMap.get(mut.parent.id);
-          const yChild = this.yObjMap.get(mut.obj.id);
-          if (yParent && yChild) {
+          const yObj = this.yObjMap.get(mut.obj.id);
+          if (yParent && yObj) {
             // TODO: parent order
           }
           break;
@@ -141,28 +181,31 @@ export class YjsSyncPlugin implements Plugin {
         case MutationType.INSERT_CHILD: {
           const mut = mutation as InsertChildMutation;
           const yParent = this.yObjMap.get(mut.parent.id);
-          const yChild = this.yObjMap.get(mut.obj.id);
-          if (yParent && yChild) {
-            yChild.set("parent", null);
-            // TODO: parent order
+          const yObj = this.yObjMap.get(mut.obj.id);
+          if (yParent && yObj) {
+            yObj.delete("parent");
+            yObj.delete("parent:order");
           }
           break;
         }
         case MutationType.REMOVE_CHILD: {
           const mut = mutation as RemoveChildMutation;
           const yParent = this.yObjMap.get(mut.parent.id);
-          const yChild = this.yObjMap.get(mut.obj.id);
-          if (yParent && yChild) {
-            yChild.set("parent", mut.parent.id);
-            // TODO: parent order
+          const yObj = this.yObjMap.get(mut.obj.id);
+          if (yParent && yObj) {
+            yObj.set("parent", mut.parent.id);
+            yObj.set(
+              "parent:order",
+              getParentOrder(this.yObjMap, mut.parent, mut.position)
+            );
           }
           break;
         }
         case MutationType.REORDER_CHILD: {
           const mut = mutation as ReorderChildMutation;
           const yParent = this.yObjMap.get(mut.parent.id);
-          const yChild = this.yObjMap.get(mut.obj.id);
-          if (yParent && yChild) {
+          const yObj = this.yObjMap.get(mut.obj.id);
+          if (yParent && yObj) {
             // TODO: parent order
           }
           break;
@@ -211,8 +254,14 @@ export class YjsSyncPlugin implements Plugin {
                   const parentId = yObj.get("parent");
                   const parent = this.editor.store.getById(parentId);
                   if (parent) {
-                    parent.children.push(obj);
                     obj.parent = parent;
+                    const order = yObj.get("parent:order");
+                    const yChildren = getYChildren(this.yObjMap, parentId);
+                    const orders = yChildren.map((yChild) =>
+                      yChild.get("parent:order")
+                    );
+                    const position = orders.findIndex((o) => o >= order);
+                    parent.children.splice(position, 0, obj);
                   }
                   // TODO: remove this
                   if (obj instanceof Document) {
@@ -227,6 +276,13 @@ export class YjsSyncPlugin implements Plugin {
                 //delete
                 console.log("delete", key);
                 const obj = this.editor.store.getById(key);
+                if (obj?.parent && Array.isArray(obj.parent.children)) {
+                  obj.parent.children.splice(
+                    obj.parent.children.indexOf(obj),
+                    1
+                  );
+                  obj.parent = null;
+                }
                 if (obj) this.editor.store.removeFromIndex(obj);
               }
             }
