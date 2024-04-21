@@ -195,7 +195,6 @@ export class YjsSyncPlugin implements Plugin {
     });
 
     this.yObjMap.observeDeep((events, tr) => {
-      console.log("tr", tr);
       if (!tr.local) {
         events.forEach((event: any) => {
           if (event.target === this.yObjMap) {
@@ -229,6 +228,7 @@ export class YjsSyncPlugin implements Plugin {
                 //delete
                 const obj = this.editor.store.getById(key);
                 if (obj) this.editor.store.removeFromIndex(obj);
+
                 console.log("delete", key);
               }
             }
@@ -246,6 +246,14 @@ export class YjsSyncPlugin implements Plugin {
                   if (parent) {
                     parent.children.push(obj);
                     obj.parent = parent;
+                  } else {
+                    if (obj.parent) {
+                      obj.parent.children.splice(
+                        obj.parent.children.indexOf(obj),
+                        1
+                      );
+                    }
+                    obj.parent = null;
                   }
                   console.log("update-parent", parent);
                 } else if (key === "head" || key === "tail") {

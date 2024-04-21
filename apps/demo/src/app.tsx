@@ -53,7 +53,10 @@ function App() {
     await fetchFonts(fontJson as Font[]);
 
     window.editor.transform.onTransaction.addListener((tx) => {
-      console.log("tx", tx);
+      // console.log("tx", tx, editor.store.doc?.children[0].children.length);
+    });
+    window.editor.transform.onAction.addListener((action) => {
+      // console.log("action", action);
     });
 
     // window.editor.factory.onShapeInitialize.addListener((shape: Shape) => {
@@ -64,10 +67,10 @@ function App() {
     // });
 
     // load from local storage
-    const localData = localStorage.getItem("local-data");
-    if (localData) {
-      window.editor.loadFromJSON(JSON.parse(localData));
-    }
+    // const localData = localStorage.getItem("local-data");
+    // if (localData) {
+    //   window.editor.loadFromJSON(JSON.parse(localData));
+    // }
     demoStore.setDoc(window.editor.store.doc as Document);
     demoStore.setCurrentPage(window.editor.currentPage);
     window.editor.fitToScreen();

@@ -303,7 +303,6 @@ export class Transaction {
   appendObj(obj: Obj): boolean {
     if (!this.store.getById(obj.id)) {
       const mut = new CreateMutation(obj);
-      mut.apply(this.store);
       this.push(mut);
       return true;
     }
@@ -316,7 +315,6 @@ export class Transaction {
   deleteObj(obj: Obj): boolean {
     if (this.store.getById(obj.id)) {
       const mut = new DeleteMutation(obj);
-      mut.apply(this.store);
       this.push(mut);
       return true;
     }
@@ -338,7 +336,6 @@ export class Transaction {
         existingMut.apply(this.store);
       } else {
         const mut = new AssignMutation(obj, field, structuredClone(value));
-        mut.apply(this.store);
         this.push(mut);
       }
       return true;
@@ -360,7 +357,6 @@ export class Transaction {
         existingMut.apply(this.store);
       } else {
         const mut = new AssignRefMutation(obj, field, value);
-        mut.apply(this.store);
         this.push(mut);
       }
       return true;
@@ -374,7 +370,6 @@ export class Transaction {
   insertChild(parent: Obj, obj: Obj, position?: number): boolean {
     if (!parent.children.includes(obj)) {
       const mut = new InsertChildMutation(parent, obj, position);
-      mut.apply(this.store);
       this.push(mut);
       return true;
     }
@@ -387,7 +382,6 @@ export class Transaction {
   removeChild(parent: Obj, obj: Obj): boolean {
     if (parent.children.includes(obj)) {
       const mut = new RemoveChildMutation(parent, obj);
-      mut.apply(this.store);
       this.push(mut);
       return true;
     }
@@ -402,7 +396,6 @@ export class Transaction {
     const oldIndex = array.indexOf(obj);
     if (oldIndex >= 0) {
       const mut = new ReorderChildMutation(parent, obj, position);
-      mut.apply(this.store);
       this.push(mut);
       return true;
     }
