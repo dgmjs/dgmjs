@@ -88,7 +88,7 @@ export class YjsSyncPlugin implements Plugin {
           const yParent = this.yObjMap.get(mut.parent.id);
           const yChild = this.yObjMap.get(mut.obj.id);
           if (yParent && yChild) {
-            yChild.delete("parent");
+            yChild.set("parent", null);
             // TODO: parent order
           }
           break;
@@ -143,7 +143,7 @@ export class YjsSyncPlugin implements Plugin {
           const yParent = this.yObjMap.get(mut.parent.id);
           const yChild = this.yObjMap.get(mut.obj.id);
           if (yParent && yChild) {
-            yChild.delete("parent");
+            yChild.set("parent", null);
             // TODO: parent order
           }
           break;
@@ -203,6 +203,7 @@ export class YjsSyncPlugin implements Plugin {
               const yObj = this.yObjMap.get(key);
               if (yObj) {
                 // create
+                console.log("create", key);
                 if (!this.editor.store.getById(key)) {
                   const obj = this.yMapToObj(yObj);
                   obj.resolveRefs(this.editor.store.idIndex);
@@ -221,15 +222,12 @@ export class YjsSyncPlugin implements Plugin {
                   if (obj instanceof Page) {
                     this.editor.setCurrentPage(obj);
                   }
-
-                  console.log("create", obj);
                 }
               } else {
                 //delete
+                console.log("delete", key);
                 const obj = this.editor.store.getById(key);
                 if (obj) this.editor.store.removeFromIndex(obj);
-
-                console.log("delete", key);
               }
             }
           } else {
@@ -240,6 +238,8 @@ export class YjsSyncPlugin implements Plugin {
             if (obj && yObj) {
               const keys = [...event.keysChanged];
               for (const key of keys) {
+                const value = yObj.get(key);
+                console.log(`update (${id}) : ${key}=${value}`);
                 if (key === "parent") {
                   const parentId = yObj.get("parent");
                   const parent = this.editor.store.getById(parentId);

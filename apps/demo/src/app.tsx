@@ -53,7 +53,7 @@ function App() {
     await fetchFonts(fontJson as Font[]);
 
     window.editor.transform.onTransaction.addListener((tx) => {
-      // console.log("tx", tx, editor.store.doc?.children[0].children.length);
+      // console.log("tx", tx);
     });
     window.editor.transform.onAction.addListener((action) => {
       // console.log("action", action);
