@@ -3,6 +3,7 @@ import {
   EditorOptions,
   Shape,
   Transaction,
+  Action,
   basicSetup,
   Page,
   DragEvent,
@@ -26,8 +27,10 @@ export interface DGMEditorCoreProps
   onActiveHandlerChange?: (handlerId: string) => void;
   onShapeCreate?: (shape: Shape) => void;
   onShapeInitialize?: (shape: Shape) => void;
-  onTransactionApply?: (tx: Transaction) => void;
-  onTransactionUnapply?: (tx: Transaction) => void;
+  onTransaction?: (tx: Transaction) => void;
+  onAction?: (action: Action) => void;
+  onUndo?: (action: Action) => void;
+  onRedo?: (action: Action) => void;
   onDblClick?: (event: DblClickEvent) => void;
   onZoom?: (scale: number) => void;
   onScroll?: (origin: number[]) => void;
@@ -47,8 +50,10 @@ export const DGMEditorCore: React.FC<DGMEditorCoreProps> = ({
   onActiveHandlerChange,
   onShapeCreate,
   onShapeInitialize,
-  onTransactionApply,
-  onTransactionUnapply,
+  onTransaction,
+  onAction,
+  onUndo,
+  onRedo,
   onDblClick,
   onZoom,
   onScroll,
@@ -85,11 +90,17 @@ export const DGMEditorCore: React.FC<DGMEditorCoreProps> = ({
       editor.factory.onShapeInitialize.addListener((shape: Shape) => {
         if (onShapeInitialize) onShapeInitialize(shape);
       });
-      editor.transform.onTransactionApply.addListener((tx: Transaction) => {
-        if (onTransactionApply) onTransactionApply(tx);
+      editor.transform.onTransaction.addListener((tx: Transaction) => {
+        if (onTransaction) onTransaction(tx);
       });
-      editor.transform.onTransactionUnapply.addListener((tx: Transaction) => {
-        if (onTransactionUnapply) onTransactionUnapply(tx);
+      editor.transform.onAction.addListener((action: Action) => {
+        if (onAction) onAction(action);
+      });
+      editor.transform.onUndo.addListener((action: Action) => {
+        if (onUndo) onUndo(action);
+      });
+      editor.transform.onRedo.addListener((action: Action) => {
+        if (onRedo) onRedo(action);
       });
       editor.onDblClick.addListener((event: DblClickEvent) => {
         if (onDblClick) onDblClick(event);

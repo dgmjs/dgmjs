@@ -8,14 +8,13 @@ import {
   AssignRefMutation,
   CreateMutation,
   InsertChildMutation,
-  Mutation,
   MutationType,
   RemoveChildMutation,
   ReorderChildMutation,
   Transaction,
 } from "../core/transaction";
 
-export class YDocSyncPlugin implements Plugin {
+export class YjsSyncPlugin implements Plugin {
   editor: Editor = null!;
   yDoc: Y.Doc = null!;
   yObjMap: Y.Map<Y.Map<any>> = null!;
@@ -43,7 +42,9 @@ export class YDocSyncPlugin implements Plugin {
   }
 
   applyTransaction(tx: Transaction) {
-    tx.mutations.forEach((mutation) => {
+    if (tx.mutations.length === 0) return;
+    for (let i = 0; i < tx.mutations.length; i++) {
+      const mutation = tx.mutations[i];
       switch (mutation.type) {
         case MutationType.CREATE: {
           const mut = mutation as CreateMutation;
@@ -78,7 +79,7 @@ export class YDocSyncPlugin implements Plugin {
           const yChild = this.yObjMap.get(mut.obj.id);
           if (yParent && yChild) {
             yChild.set("parent", mut.parent.id);
-            // yChild.set("parentOrder", ???);
+            // TODO: parent order
           }
           break;
         }
@@ -88,7 +89,7 @@ export class YDocSyncPlugin implements Plugin {
           const yChild = this.yObjMap.get(mut.obj.id);
           if (yParent && yChild) {
             yChild.delete("parent");
-            // yChild.delete("parentOrder");
+            // TODO: parent order
           }
           break;
         }
@@ -97,22 +98,100 @@ export class YDocSyncPlugin implements Plugin {
           const yParent = this.yObjMap.get(mut.parent.id);
           const yChild = this.yObjMap.get(mut.obj.id);
           if (yParent && yChild) {
-            // yChild.set("parentOrder", ???);
+            // TODO: parent order
           }
           break;
         }
       }
-    });
+    }
+  }
+
+  unapplyTransaction(tx: Transaction) {
+    if (tx.mutations.length === 0) return;
+    for (let i = tx.mutations.length - 1; i >= 0; i--) {
+      const mutation = tx.mutations[i];
+      switch (mutation.type) {
+        case MutationType.CREATE: {
+          const mut = mutation as CreateMutation;
+          this.yObjMap.delete(mut.obj.id);
+          break;
+        }
+        case MutationType.DELETE: {
+          const mut = mutation as CreateMutation;
+          const yObj = this.objToYMap(mut.obj);
+          this.yObjMap.set(mut.obj.id, yObj);
+          break;
+        }
+        case MutationType.ASSIGN: {
+          const mut = mutation as AssignMutation;
+          const yObj = this.yObjMap.get(mut.obj.id);
+          if (yObj) {
+            yObj.set(mut.field, mut.oldValue);
+          }
+          break;
+        }
+        case MutationType.ASSIGN_REF: {
+          const mut = mutation as AssignRefMutation;
+          const yObj = this.yObjMap.get(mut.obj.id);
+          if (yObj && mut.oldValue) {
+            yObj.set(mut.field, mut.oldValue.id);
+          }
+          break;
+        }
+        case MutationType.INSERT_CHILD: {
+          const mut = mutation as InsertChildMutation;
+          const yParent = this.yObjMap.get(mut.parent.id);
+          const yChild = this.yObjMap.get(mut.obj.id);
+          if (yParent && yChild) {
+            yChild.delete("parent");
+            // TODO: parent order
+          }
+          break;
+        }
+        case MutationType.REMOVE_CHILD: {
+          const mut = mutation as RemoveChildMutation;
+          const yParent = this.yObjMap.get(mut.parent.id);
+          const yChild = this.yObjMap.get(mut.obj.id);
+          if (yParent && yChild) {
+            yChild.set("parent", mut.parent.id);
+            // TODO: parent order
+          }
+          break;
+        }
+        case MutationType.REORDER_CHILD: {
+          const mut = mutation as ReorderChildMutation;
+          const yParent = this.yObjMap.get(mut.parent.id);
+          const yChild = this.yObjMap.get(mut.obj.id);
+          if (yParent && yChild) {
+            // TODO: parent order
+          }
+          break;
+        }
+      }
+    }
   }
 
   listen() {
-    this.editor.transform.onTransactionApply.addListener((tx) => {
+    this.editor.transform.onTransaction.addListener((tx) => {
       this.yDoc.transact(() => {
         this.applyTransaction(tx);
       });
     });
-    this.editor.transform.onTransactionUnapply.addListener((tx) => {
-      // TODO: ...
+    this.editor.transform.onUndo.addListener((action) => {
+      this.yDoc.transact(() => {
+        for (let i = action.transactions.length - 1; i >= 0; i--) {
+          const tx = action.transactions[i];
+          this.unapplyTransaction(tx);
+        }
+      });
+    });
+    this.editor.transform.onRedo.addListener((action) => {
+      this.yDoc.transact(() => {
+        for (let i = 0; i < action.transactions.length; i++) {
+          const tx = action.transactions[i];
+          this.applyTransaction(tx);
+        }
+      });
     });
 
     this.yObjMap.observeDeep((events, tr) => {

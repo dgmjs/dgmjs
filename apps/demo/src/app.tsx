@@ -6,7 +6,7 @@ import {
   Shape,
   ObjProps,
   Transaction,
-  YDocSyncPlugin,
+  YjsSyncPlugin,
 } from "@dgmjs/core";
 import { PaletteToolbar } from "./components/palette-toolbar";
 import { useDemoStore } from "./demo-store";
@@ -27,7 +27,7 @@ declare global {
 
 // ------------ yjs experiment ------------
 
-const ydocSyncPlugin = new YDocSyncPlugin();
+const ydocSyncPlugin = new YjsSyncPlugin();
 
 // ------------ yjs experiment ------------
 
@@ -52,7 +52,7 @@ function App() {
     insertFontsToDocument(fontJson as Font[]);
     await fetchFonts(fontJson as Font[]);
 
-    window.editor.transform.onTransactionApply.addListener((tx) => {
+    window.editor.transform.onTransaction.addListener((tx) => {
       console.log("tx", tx);
     });
 
@@ -133,8 +133,7 @@ function App() {
         onSelectionChange={handleSelectionChange}
         onCurrentPageChange={handleCurrentPageChange}
         onActiveHandlerChange={handleActiveHandlerChange}
-        onTransactionApply={handleTransaction}
-        onTransactionUnapply={handleTransaction}
+        onTransaction={handleTransaction}
       />
       <div className="absolute top-2 left-60 right-60 h-10 border flex items-center justify-between bg-background">
         <Menus />

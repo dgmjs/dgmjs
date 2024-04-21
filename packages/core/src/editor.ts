@@ -214,8 +214,9 @@ export class Editor {
   }
 
   initializeState() {
-    this.transform.onTransactionApply.addListener(() => this.repaint());
-    this.transform.onTransactionUnapply.addListener(() => this.repaint());
+    this.transform.onTransaction.addListener(() => this.repaint());
+    this.transform.onUndo.addListener(() => this.repaint());
+    this.transform.onRedo.addListener(() => this.repaint());
     this.selection.onChange.addListener(() => this.repaint());
     this.factory.onCreate.addListener((shape: Shape) => {
       this.selection.select([shape]);

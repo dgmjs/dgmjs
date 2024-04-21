@@ -8,6 +8,7 @@ export { CanvasPointerEvent } from "./graphics/graphics";
 export { Obj } from "./core/obj";
 export { Store } from "./core/store";
 export * from "./core/transaction";
+export * from "./core/transform";
 export * from "./colors";
 export * from "./shapes";
 export * from "./editor";
@@ -24,4 +25,4 @@ export {
 export { basicSetup } from "./basic-setup";
 
 // plugins
-export { YDocSyncPlugin } from "./plugins/plugin-ydoc-sync";
+export { YjsSyncPlugin } from "./plugins/plugin-yjs-sync";

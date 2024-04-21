@@ -11,12 +11,10 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { TypedEvent } from "../std/typed-event";
 import { convertToLatestVersion } from "../utils/document-compatibility";
 import { Transform } from "./transform";
 import { Instantiator } from "./instantiator";
 import type { Obj } from "./obj";
-import { Transaction } from "./transaction";
 
 type StoreOptions = {
   objInitializer?: (obj: Obj) => void;
