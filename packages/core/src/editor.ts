@@ -48,11 +48,6 @@ export interface EditorOptions {
   onReady: (editor: Editor) => void;
 }
 
-export interface Plugin {
-  activate: (editor: Editor) => void;
-  deactivate: (editor: Editor) => void;
-}
-
 export interface DblClickEvent {
   shape: Shape | null;
   point: number[];
@@ -73,7 +68,7 @@ export interface FileDropEvent {
  */
 export class Editor {
   options: EditorOptions;
-  plugins: Plugin[];
+  plugins: Record<string, Plugin>;
   platform: string;
 
   onDocumentLoaded: TypedEvent<Document>;
@@ -137,7 +132,12 @@ export class Editor {
       onReady: () => {},
       ...options,
     };
-    this.plugins = [...plugins];
+
+    // register plugins
+    this.plugins = {};
+    plugins.forEach((plugin) => {
+      this.plugins[plugin.id] = plugin;
+    });
 
     // initialize event emitters
     this.onDocumentLoaded = new TypedEvent();
@@ -196,7 +196,7 @@ export class Editor {
     this.initializeState();
     this.initializeCanvas();
     this.initializeKeymap();
-    this.initializePlugins();
+    this.activatePlugins();
     this.newDoc();
     if (this.options.onReady) this.options.onReady(this);
   }
@@ -473,10 +473,29 @@ export class Editor {
     });
   }
 
-  initializePlugins() {
-    this.plugins.forEach((plugin) => {
+  /**
+   * Activate plugins
+   */
+  activatePlugins() {
+    for (const plugin of Object.values(this.plugins)) {
       plugin.activate(this);
-    });
+    }
+  }
+
+  /**
+   * Deactivate plugins
+   */
+  deactivatePlugins() {
+    for (const plugin of Object.values(this.plugins)) {
+      plugin.deactivate(this);
+    }
+  }
+
+  /**
+   * Get a plugin by id
+   */
+  getPlugin(id: string): Plugin | null {
+    return this.plugins[id];
   }
 
   /**
@@ -895,6 +914,20 @@ export class Editor {
   }
 
   /**
+   * Get the document
+   */
+  getDoc(): Document {
+    return this.store.doc as Document;
+  }
+
+  /**
+   * Set the document
+   */
+  setDoc(doc: Document) {
+    this.store.setDoc(doc);
+  }
+
+  /**
    * Create a new document
    */
   newDoc(): Document {
@@ -924,6 +957,13 @@ export class Editor {
         this.setCurrentPage(this.store.doc.children[0] as Page);
       }
     }
+  }
+
+  /**
+   * Save to JSON
+   */
+  saveToJSON(): any {
+    return this.store.toJSON();
   }
 }
 
@@ -1525,6 +1565,20 @@ export class Manipulator {
       (cp) => cp.active(editor, shape) && cp.drawHovering(editor, shape, e)
     );
   }
+}
+
+/**
+ * Plugin
+ */
+export abstract class Plugin {
+  id: string;
+
+  constructor(pluginId: string) {
+    this.id = pluginId;
+  }
+
+  abstract activate(editor: Editor): void;
+  abstract deactivate(editor: Editor): void;
 }
 
 export const manipulatorManager = ManipulatorManager.getInstance();

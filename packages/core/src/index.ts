@@ -25,4 +25,4 @@ export {
 export { basicSetup } from "./basic-setup";
 
 // plugins
-export { YjsSyncPlugin } from "./plugins/plugin-yjs-sync";
+export { YjsSyncPlugin } from "./plugins/yjs-sync/plugin-yjs-sync";

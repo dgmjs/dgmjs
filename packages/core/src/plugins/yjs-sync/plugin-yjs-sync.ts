@@ -1,8 +1,7 @@
 import * as Y from "yjs";
-import { WebrtcProvider } from "y-webrtc";
-import { Editor, Plugin } from "../editor";
-import { Document, Page } from "../shapes";
-import { Obj } from "../core/obj";
+import { Editor, Plugin } from "../../editor";
+import { Document, Page } from "../../shapes";
+import { Obj } from "../../core/obj";
 import {
   AssignMutation,
   AssignRefMutation,
@@ -12,7 +11,9 @@ import {
   RemoveChildMutation,
   ReorderChildMutation,
   Transaction,
-} from "../core/transaction";
+} from "../../core/transaction";
+import { Disposable } from "../../std/typed-event";
+import { objToYMap, yMapToObj } from "./yjs-utils";
 
 function getParentOrder(
   yObjMap: Y.Map<Y.Map<any>>,
@@ -51,12 +52,19 @@ function getYChildren(yObjMap: Y.Map<Y.Map<any>>, parent: string) {
   return children;
 }
 
-export class YjsSyncPlugin implements Plugin {
+export class YjsSyncPlugin extends Plugin {
   editor: Editor = null!;
-  yDoc: Y.Doc = null!;
-  yObjMap: Y.Map<Y.Map<any>> = null!;
+  state: "idle" | "syncing";
+  yDoc: Y.Doc | null;
+  yObjMap: Y.Map<Y.Map<any>> | null;
+  disposables: Disposable[] = [];
 
-  constructor() {}
+  constructor() {
+    super("dgmjs/yjs-sync");
+    this.state = "idle";
+    this.yDoc = null;
+    this.yObjMap = null;
+  }
 
   activate(editor: Editor) {
     this.editor = editor;
@@ -64,28 +72,41 @@ export class YjsSyncPlugin implements Plugin {
 
   deactivate(editor: Editor) {}
 
-  setup() {
-    this.yDoc = new Y.Doc();
+  start(yDoc: Y.Doc) {
+    this.state = "syncing";
+    this.yDoc = yDoc;
+    this.yObjMap = this.yDoc.getMap("objmap");
+    this.listen();
   }
 
-  startProvider(roomId: string) {
-    const provider = new WebrtcProvider(roomId, this.yDoc, {
-      password: "1234",
-    });
-    provider.on("status", (event) => {
-      console.log("status", event);
-    });
-    this.yObjMap = this.yDoc.getMap("objmap");
+  stop() {
+    this.state = "idle";
+    this.yDoc = null;
+    this.yObjMap = null;
+    this.unlisten();
+  }
+
+  /**
+   * Synchronize the store to the ydoc
+   */
+  flush() {
+    if (this.state === "syncing" && this.yDoc && this.yObjMap) {
+      const store = this.editor.store;
+      for (const key in store.idIndex) {
+        const obj = store.idIndex[key];
+        this.yObjMap.set(key, objToYMap(obj));
+      }
+    }
   }
 
   applyTransaction(tx: Transaction) {
-    if (tx.mutations.length === 0) return;
+    if (!this.yObjMap || tx.mutations.length === 0) return;
     for (let i = 0; i < tx.mutations.length; i++) {
       const mutation = tx.mutations[i];
       switch (mutation.type) {
         case MutationType.CREATE: {
           const mut = mutation as CreateMutation;
-          const yObj = this.objToYMap(mut.obj);
+          const yObj = objToYMap(mut.obj);
           this.yObjMap.set(mut.obj.id, yObj);
           break;
         }
@@ -147,7 +168,7 @@ export class YjsSyncPlugin implements Plugin {
   }
 
   unapplyTransaction(tx: Transaction) {
-    if (tx.mutations.length === 0) return;
+    if (!this.yObjMap || tx.mutations.length === 0) return;
     for (let i = tx.mutations.length - 1; i >= 0; i--) {
       const mutation = tx.mutations[i];
       switch (mutation.type) {
@@ -158,7 +179,7 @@ export class YjsSyncPlugin implements Plugin {
         }
         case MutationType.DELETE: {
           const mut = mutation as CreateMutation;
-          const yObj = this.objToYMap(mut.obj);
+          const yObj = objToYMap(mut.obj);
           this.yObjMap.set(mut.obj.id, yObj);
           break;
         }
@@ -215,40 +236,54 @@ export class YjsSyncPlugin implements Plugin {
   }
 
   listen() {
-    this.editor.transform.onTransaction.addListener((tx) => {
-      this.yDoc.transact(() => {
-        this.applyTransaction(tx);
-      });
-    });
-    this.editor.transform.onUndo.addListener((action) => {
-      this.yDoc.transact(() => {
-        for (let i = action.transactions.length - 1; i >= 0; i--) {
-          const tx = action.transactions[i];
-          this.unapplyTransaction(tx);
+    this.disposables.push(
+      this.editor.transform.onTransaction.addListener((tx) => {
+        if (this.state == "syncing" && this.yDoc) {
+          this.yDoc.transact(() => {
+            this.applyTransaction(tx);
+          });
         }
-      });
-    });
-    this.editor.transform.onRedo.addListener((action) => {
-      this.yDoc.transact(() => {
-        for (let i = 0; i < action.transactions.length; i++) {
-          const tx = action.transactions[i];
-          this.applyTransaction(tx);
-        }
-      });
-    });
+      })
+    );
 
-    this.yObjMap.observeDeep((events, tr) => {
-      if (!tr.local) {
-        events.forEach((event: any) => {
+    this.disposables.push(
+      this.editor.transform.onUndo.addListener((action) => {
+        if (this.state == "syncing" && this.yDoc) {
+          this.yDoc.transact(() => {
+            for (let i = action.transactions.length - 1; i >= 0; i--) {
+              const tx = action.transactions[i];
+              this.unapplyTransaction(tx);
+            }
+          });
+        }
+      })
+    );
+
+    this.disposables.push(
+      this.editor.transform.onRedo.addListener((action) => {
+        if (this.state == "syncing" && this.yDoc) {
+          this.yDoc.transact(() => {
+            for (let i = 0; i < action.transactions.length; i++) {
+              const tx = action.transactions[i];
+              this.applyTransaction(tx);
+            }
+          });
+        }
+      })
+    );
+
+    const observeListener = (events: Y.YEvent<any>[], tr: any) => {
+      if (this.yObjMap && !tr.local) {
+        for (const event of events) {
           if (event.target === this.yObjMap) {
-            const keys = [...event.keysChanged];
+            const keys = [...(event as any).keysChanged];
             for (const key of keys) {
               const yObj = this.yObjMap.get(key);
               if (yObj) {
                 // create
                 console.log("create", key);
                 if (!this.editor.store.getById(key)) {
-                  const obj = this.yMapToObj(yObj);
+                  const obj = yMapToObj(this.editor, yObj);
                   obj.resolveRefs(this.editor.store.idIndex);
                   this.editor.store.addToIndex(obj);
                   const parentId = yObj.get("parent");
@@ -292,7 +327,7 @@ export class YjsSyncPlugin implements Plugin {
             const obj = this.editor.store.getById(id);
             const yObj = this.yObjMap.get(id);
             if (obj && yObj) {
-              const keys = [...event.keysChanged];
+              const keys = [...(event as any).keysChanged];
               for (const key of keys) {
                 const value = yObj.get(key);
                 console.log(`update (${id}) : ${key}=${value}`);
@@ -325,34 +360,23 @@ export class YjsSyncPlugin implements Plugin {
               }
             }
           }
-        });
+        }
         this.editor.repaint();
       }
-    });
-  }
+    };
 
-  /**
-   * Synchronize the store to the ydoc
-   */
-  synchronize() {
-    const store = this.editor.store;
-    for (const key in store.idIndex) {
-      const obj = store.idIndex[key];
-      this.yObjMap.set(key, this.objToYMap(obj));
+    if (this.yObjMap) {
+      this.yObjMap.observeDeep(observeListener);
+      this.disposables.push({
+        dispose: () => {
+          if (this.yObjMap) this.yObjMap.unobserveDeep(observeListener);
+        },
+      });
     }
   }
 
-  yMapToObj(yMap: Y.Map<any>): Obj {
-    const json = yMap.toJSON();
-    return this.editor.store.instantiator.createFromJson(json)!;
-  }
-
-  objToYMap(obj: Obj): Y.Map<any> {
-    const json = obj.toJSON();
-    const yMap = new Y.Map();
-    for (const key in json) {
-      yMap.set(key, json[key]);
-    }
-    return yMap;
+  unlisten() {
+    this.disposables.forEach((d) => d.dispose());
+    this.disposables = [];
   }
 }

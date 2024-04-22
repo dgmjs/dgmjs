@@ -8,6 +8,7 @@ import {
   Transaction,
   YjsSyncPlugin,
 } from "@dgmjs/core";
+import { nanoid } from "nanoid";
 import { PaletteToolbar } from "./components/palette-toolbar";
 import { useDemoStore } from "./demo-store";
 import { Options } from "./components/options";
@@ -18,18 +19,13 @@ import { Font, fetchFonts, insertFontsToDocument } from "./font-manager";
 import { ShapeSidebar } from "./components/shape-sidebar";
 import { EditorWrapper } from "./editor";
 import { Button } from "./components/ui/button";
+import { collab } from "./collab";
 
 declare global {
   interface Window {
     editor: Editor;
   }
 }
-
-// ------------ yjs experiment ------------
-
-const ydocSyncPlugin = new YjsSyncPlugin();
-
-// ------------ yjs experiment ------------
 
 function App() {
   const demoStore = useDemoStore();
@@ -38,19 +34,15 @@ function App() {
   const params = Object.fromEntries(urlSearchParams.entries());
   const roomId = params.roomId;
 
-  useEffect(() => {
-    if (roomId && !ydocSyncPlugin.yDoc) {
-      console.log("room setup");
-      ydocSyncPlugin.setup();
-      ydocSyncPlugin.startProvider(roomId);
-      ydocSyncPlugin.listen();
-    }
-  }, []);
-
   const handleMount = async (editor: Editor) => {
     window.editor = editor;
     insertFontsToDocument(fontJson as Font[]);
     await fetchFonts(fontJson as Font[]);
+
+    if (roomId) {
+      collab.start(window.editor, roomId);
+      console.log("collab started with roomId", roomId);
+    }
 
     window.editor.transform.onTransaction.addListener((tx) => {
       // console.log("tx", tx);
@@ -114,12 +106,15 @@ function App() {
   };
 
   const handleShare = () => {
-    const roomId = window.editor.store.doc?.id;
-    ydocSyncPlugin.setup();
-    ydocSyncPlugin.startProvider(roomId!);
-    ydocSyncPlugin.listen();
-    ydocSyncPlugin.synchronize();
+    const roomId = nanoid(); // window.editor.store.doc?.id;
+    collab.start(window.editor, roomId!);
+    collab.flush();
     window.history.pushState({}, "", `?roomId=${roomId}`);
+  };
+
+  const handleShareStop = () => {
+    collab.stop();
+    window.history.pushState({}, "", "/");
   };
 
   return (
@@ -130,7 +125,7 @@ function App() {
         options={{
           keymapEventTarget: window,
         }}
-        plugins={[ydocSyncPlugin]}
+        plugins={[new YjsSyncPlugin()]}
         showGrid={true}
         onMount={handleMount}
         onSelectionChange={handleSelectionChange}
@@ -142,6 +137,7 @@ function App() {
         <Menus />
         <Options />
         <Button onClick={handleShare}>Share</Button>
+        <Button onClick={handleShareStop}>Stop</Button>
       </div>
       <PaletteToolbar />
       <ShapeSidebar
