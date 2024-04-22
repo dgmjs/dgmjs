@@ -72,20 +72,28 @@ function setObjParent(
   store: Store,
   yStore: YStore,
   obj: Obj,
-  parentId: string,
+  parentId: string | null,
   parentOrder: number
 ) {
-  const parent = store.getById(parentId);
-  if (parent) {
-    obj.parent = parent;
-    const yChildren = getYChildren(yStore, parentId);
-    const orders = yChildren.map((yChild) => yChild.get("parent:order"));
-    const position = orders.findIndex((o) => o >= parentOrder);
-    parent.children.splice(position, 0, obj);
-  } else {
-    if (obj.parent && obj.parent.children) {
-      obj.parent.children.splice(obj.parent.children.indexOf(obj), 1);
+  // remove from old parent
+  if (obj.parent && obj.parent.id !== parentId) {
+    obj.parent.children.splice(obj.parent.children.indexOf(obj), 1);
+  }
+  // add to new parent
+  if (parentId) {
+    const parent = store.getById(parentId);
+    if (parent) {
+      obj.parent = parent;
+      if (parent.children.indexOf(obj) < 0) {
+        const yChildren = getYChildren(yStore, parentId!);
+        const orders = yChildren.map((yChild) => yChild.get("parent:order"));
+        const position = orders.findIndex((o) => o >= parentOrder);
+        parent.children.splice(position, 0, obj);
+      }
+    } else {
+      obj.parent = null;
     }
+  } else {
     obj.parent = null;
   }
 }
@@ -281,8 +289,12 @@ export function applyYjsEvent(
               setObjParent(store, yStore, obj, parentId, parentOrder);
             } else if (key === "head" || key === "tail") {
               const value = yObj.get(key);
-              const ref = store.getById(value);
-              (obj as any)[key] = ref;
+              if (value) {
+                const ref = store.getById(value);
+                (obj as any)[key] = ref;
+              } else {
+                (obj as any)[key] = null;
+              }
             } else {
               const value = yObj.get(key);
               (obj as any)[key] = value;
