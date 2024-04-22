@@ -197,7 +197,6 @@ export class Editor {
     this.initializeCanvas();
     this.initializeKeymap();
     this.activatePlugins();
-    this.newDoc();
     if (this.options.onReady) this.options.onReady(this);
   }
 
@@ -810,7 +809,7 @@ export class Editor {
    */
   clearBackground(canvas: Canvas) {
     const g = canvas.context;
-    const docSize = (this.store.doc as Document).pageSize;
+    const docSize = (this.store.doc as Document)?.pageSize;
     g.fillStyle = this.canvas.resolveColor(
       docSize ? Color.CANVAS : Color.BACKGROUND
     );

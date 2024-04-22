@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import {
   Document,
   Editor,
@@ -6,7 +5,7 @@ import {
   Shape,
   ObjProps,
   Transaction,
-  YjsSyncPlugin,
+  YjsDocSyncPlugin,
 } from "@dgmjs/core";
 import { nanoid } from "nanoid";
 import { PaletteToolbar } from "./components/palette-toolbar";
@@ -42,6 +41,8 @@ function App() {
     if (roomId) {
       collab.start(window.editor, roomId);
       console.log("collab started with roomId", roomId);
+    } else {
+      window.editor.newDoc();
     }
 
     window.editor.transform.onTransaction.addListener((tx) => {
@@ -125,7 +126,7 @@ function App() {
         options={{
           keymapEventTarget: window,
         }}
-        plugins={[new YjsSyncPlugin()]}
+        plugins={[new YjsDocSyncPlugin()]}
         showGrid={true}
         onMount={handleMount}
         onSelectionChange={handleSelectionChange}

@@ -15,7 +15,7 @@ export class Collab {
 
   start(editor: Editor, roomId: string) {
     this.editor = editor;
-    this.plugin = this.editor.getPlugin("dgmjs/yjs-sync") as YjsSyncPlugin;
+    this.plugin = this.editor.getPlugin("dgmjs/yjs-doc-sync") as YjsSyncPlugin;
     this.yDoc = new Y.Doc();
     this.yProvider = new WebrtcProvider(roomId, this.yDoc, {
       password: "1234",
