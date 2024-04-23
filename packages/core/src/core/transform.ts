@@ -25,14 +25,14 @@ export class Action {
   apply(transform: Transform) {
     for (let i = 0; i < this.transactions.length; i++) {
       const tx = this.transactions[i];
-      transform.applyTransaction(tx);
+      tx.apply();
     }
   }
 
   unapply(transform: Transform) {
     for (let i = this.transactions.length - 1; i >= 0; i--) {
       const tx = this.transactions[i];
-      transform.unapplyTransaction(tx);
+      tx.unapply();
     }
   }
 }
@@ -96,28 +96,6 @@ export class Transform {
   }
 
   /**
-   * Apply transaction
-   */
-  applyTransaction(tx: Transaction) {
-    if (tx.mutations.length === 0) return;
-    for (let i = 0; i < tx.mutations.length; i++) {
-      const mut = tx.mutations[i];
-      mut.apply(this.store);
-    }
-  }
-
-  /**
-   * Unapply transaction
-   */
-  unapplyTransaction(tx: Transaction) {
-    if (tx.mutations.length === 0) return;
-    for (let i = tx.mutations.length - 1; i >= 0; i--) {
-      const mut = tx.mutations[i];
-      mut.unapply(this.store);
-    }
-  }
-
-  /**
    * Start an action
    */
   startAction(name: string) {
@@ -134,7 +112,6 @@ export class Transform {
     const tx = new Transaction(this.store);
     fn(tx);
     if (tx.mutations.length > 0) {
-      this.applyTransaction(tx);
       this.onTransaction.emit(tx);
       if (this.action) {
         this.action.push(tx);

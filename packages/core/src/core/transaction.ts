@@ -283,6 +283,11 @@ export class ReorderChildMutation extends Mutation {
 
 /**
  * Transation is an operation consists of a set of mutations
+ *
+ * Note:
+ * - all mutations are immediately applied when it created
+ *   (this is because constraints are resolved based on current obj states)
+ * - apply() and unapply() are called when only undo and redo
  */
 export class Transaction {
   store: Store;
@@ -302,11 +307,34 @@ export class Transaction {
   }
 
   /**
+   * Apply transaction
+   */
+  apply() {
+    if (this.mutations.length === 0) return;
+    for (let i = 0; i < this.mutations.length; i++) {
+      const mut = this.mutations[i];
+      mut.apply(this.store);
+    }
+  }
+
+  /**
+   * Unapply transaction
+   */
+  unapply() {
+    if (this.mutations.length === 0) return;
+    for (let i = this.mutations.length - 1; i >= 0; i--) {
+      const mut = this.mutations[i];
+      mut.unapply(this.store);
+    }
+  }
+
+  /**
    * Atomic mutation to append an obj and returns true if changed
    */
   appendObj(obj: Obj): boolean {
     if (!this.store.getById(obj.id)) {
       const mut = new CreateMutation(obj);
+      mut.apply(this.store);
       this.push(mut);
       return true;
     }
@@ -319,6 +347,7 @@ export class Transaction {
   deleteObj(obj: Obj): boolean {
     if (this.store.getById(obj.id)) {
       const mut = new DeleteMutation(obj);
+      mut.apply(this.store);
       this.push(mut);
       return true;
     }
@@ -340,6 +369,7 @@ export class Transaction {
         existingMut.apply(this.store);
       } else {
         const mut = new AssignMutation(obj, field, structuredClone(value));
+        mut.apply(this.store);
         this.push(mut);
       }
       return true;
@@ -354,13 +384,15 @@ export class Transaction {
     const old = (obj as any)[field];
     if (old !== value) {
       const existingMut = this.mutations.find(
-        (m) => m instanceof AssignMutation && m.obj === obj && m.field === field
+        (m) =>
+          m instanceof AssignRefMutation && m.obj === obj && m.field === field
       );
       if (existingMut) {
-        (existingMut as AssignMutation).newValue = value;
+        (existingMut as AssignRefMutation).newValue = value;
         existingMut.apply(this.store);
       } else {
         const mut = new AssignRefMutation(obj, field, value);
+        mut.apply(this.store);
         this.push(mut);
       }
       return true;
@@ -374,6 +406,7 @@ export class Transaction {
   insertChild(parent: Obj, obj: Obj, position?: number): boolean {
     if (!parent.children.includes(obj)) {
       const mut = new InsertChildMutation(parent, obj, position);
+      mut.apply(this.store);
       this.push(mut);
       return true;
     }
@@ -386,6 +419,7 @@ export class Transaction {
   removeChild(parent: Obj, obj: Obj): boolean {
     if (parent.children.includes(obj)) {
       const mut = new RemoveChildMutation(parent, obj);
+      mut.apply(this.store);
       this.push(mut);
       return true;
     }
@@ -400,6 +434,7 @@ export class Transaction {
     const oldIndex = array.indexOf(obj);
     if (oldIndex >= 0) {
       const mut = new ReorderChildMutation(parent, obj, position);
+      mut.apply(this.store);
       this.push(mut);
       return true;
     }
