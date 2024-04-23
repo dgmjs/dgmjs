@@ -15,43 +15,6 @@ import { Store } from "../../core/store";
 export type YObj = Y.Map<any>;
 export type YStore = Y.Map<YObj>;
 
-export function yObjToObj(store: Store, yObj: YObj): Obj {
-  const json = yObj.toJSON();
-  return store.instantiator.createFromJson(json)!;
-}
-
-export function objToYObj(obj: Obj): YObj {
-  const json = obj.toJSON();
-  const yMap = new Y.Map();
-  for (const key in json) {
-    yMap.set(key, json[key]);
-  }
-  return yMap;
-}
-
-export function getParentOrder(yStore: YStore, parent: Obj, position: number) {
-  // compute parent:order
-  const objPrev = position > 0 ? parent.children[position - 1] : null;
-  const objNext =
-    position < parent.children.length ? parent.children[position + 1] : null;
-  const yObjPrev = objPrev ? yStore.get(objPrev.id) : null;
-  const yObjNext = objNext ? yStore.get(objNext.id) : null;
-  if (yObjNext && yObjPrev) {
-    const prev = yObjPrev.get("parent:order");
-    const next = yObjNext.get("parent:order");
-    const order = (prev + next) / 2;
-    return order;
-  } else if (yObjNext) {
-    const next = yObjNext.get("parent:order");
-    return next - 1;
-  } else if (yObjPrev) {
-    const prev = yObjPrev.get("parent:order");
-    return prev + 1;
-  } else {
-    return 0;
-  }
-}
-
 /**
  * Get the child yObjs with the given parentId
  */
@@ -66,9 +29,56 @@ export function getYChildren(yStore: YStore, parentId: string) {
 }
 
 /**
+ * Get the parent order of a child with the given parentId and position
+ */
+function getParentOrder(
+  yStore: YStore,
+  parentId: string,
+  position: number
+): number {
+  const siblings = getYChildren(yStore, parentId);
+  const siblingOrders = siblings.map((yChild) => yChild.get("parent:order"));
+  if (siblingOrders.length === 0) return 0;
+  if (position === 0) {
+    return siblingOrders[0] - 1;
+  } else if (position >= siblingOrders.length) {
+    return siblingOrders[siblingOrders.length - 1] + 1;
+  } else {
+    return (siblingOrders[position - 1] + siblingOrders[position]) / 2;
+  }
+}
+
+/**
+ * Convert a Yjs object to an editor object
+ */
+export function yObjToObj(store: Store, yObj: YObj): Obj {
+  const json = yObj.toJSON();
+  const obj = store.instantiator.createFromJson(json)!;
+  console.log("obj", obj);
+  return obj;
+}
+
+/**
+ * Convert an editor object to a Yjs object
+ */
+export function objToYObj(yStore: YStore, obj: Obj): YObj {
+  const json = obj.toJSON();
+  const yObj = new Y.Map();
+  for (const key in json) {
+    yObj.set(key, json[key]);
+  }
+  if (obj.parent) {
+    const position = obj.parent.children.indexOf(obj);
+    const order = getParentOrder(yStore, obj.parent.id, position);
+    yObj.set("parent:order", order);
+  }
+  return yObj;
+}
+
+/**
  * Set the parent of an obj with the given parentId and parent:order
  */
-function setObjParent(
+function setParent(
   store: Store,
   yStore: YStore,
   obj: Obj,
@@ -85,10 +95,23 @@ function setObjParent(
     if (parent) {
       obj.parent = parent;
       if (parent.children.indexOf(obj) < 0) {
-        const yChildren = getYChildren(yStore, parentId!);
-        const orders = yChildren.map((yChild) => yChild.get("parent:order"));
-        const position = orders.findIndex((o) => o >= parentOrder);
-        parent.children.splice(position, 0, obj);
+        const siblings = getYChildren(yStore, parentId!);
+        const siblingOrders = siblings.map((yChild) =>
+          yChild.get("parent:order")
+        );
+        const position = siblingOrders.findIndex((o) => o >= parentOrder);
+        if (position < 0) {
+          parent.children.push(obj);
+        } else {
+          parent.children.splice(position, 0, obj);
+        }
+        console.log(
+          "setObjParent",
+          parentId,
+          parentOrder,
+          position,
+          siblingOrders
+        );
       }
     } else {
       obj.parent = null;
@@ -108,7 +131,7 @@ export function applyTransaction(tx: Transaction, yStore: YStore) {
     switch (mutation.type) {
       case MutationType.CREATE: {
         const mut = mutation as CreateMutation;
-        const yObj = objToYObj(mut.obj);
+        const yObj = objToYObj(yStore, mut.obj);
         yStore.set(mut.obj.id, yObj);
         break;
       }
@@ -141,7 +164,7 @@ export function applyTransaction(tx: Transaction, yStore: YStore) {
           yObj.set("parent", mut.parent.id);
           yObj.set(
             "parent:order",
-            getParentOrder(yStore, mut.parent, mut.position)
+            getParentOrder(yStore, mut.parent.id, mut.position)
           );
         }
         break;
@@ -184,7 +207,7 @@ export function unapplyTransaction(tx: Transaction, yStore: YStore) {
       }
       case MutationType.DELETE: {
         const mut = mutation as CreateMutation;
-        const yObj = objToYObj(mut.obj);
+        const yObj = objToYObj(yStore, mut.obj);
         yStore.set(mut.obj.id, yObj);
         break;
       }
@@ -222,7 +245,7 @@ export function unapplyTransaction(tx: Transaction, yStore: YStore) {
           yObj.set("parent", mut.parent.id);
           yObj.set(
             "parent:order",
-            getParentOrder(yStore, mut.parent, mut.position)
+            getParentOrder(yStore, mut.parent.id, mut.position)
           );
         }
         break;
@@ -260,7 +283,7 @@ export function applyYjsEvent(
           const parentId = yObj.get("parent");
           const parentOrder = yObj.get("parent:order");
           console.log("parent", parentId, parentOrder);
-          setObjParent(store, yStore, obj, parentId, parentOrder);
+          setParent(store, yStore, obj, parentId, parentOrder);
           if (onObjCreate) {
             onObjCreate(obj);
           }
@@ -286,7 +309,7 @@ export function applyYjsEvent(
             if (key === "parent") {
               const parentId = yObj.get("parent");
               const parentOrder = yObj.get("parent:order");
-              setObjParent(store, yStore, obj, parentId, parentOrder);
+              setParent(store, yStore, obj, parentId, parentOrder);
             } else if (key === "head" || key === "tail") {
               const value = yObj.get(key);
               if (value) {

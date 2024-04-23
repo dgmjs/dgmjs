@@ -54,7 +54,7 @@ export class YjsDocSyncPlugin extends Plugin {
       const store = this.editor.store;
       for (const key in store.idIndex) {
         const obj = store.idIndex[key];
-        this.yStore.set(key, objToYObj(obj));
+        this.yStore.set(key, objToYObj(this.yStore, obj));
       }
     }
   }
