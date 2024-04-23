@@ -1,5 +1,14 @@
 # yjs sync plugin
 
+```
+         user1                                 user2
++---------------------+              +---------------------+
+
++-------+      +------+              +------+      +-------+
+| Store | ---> | yDoc | <--(sync)--> | yDoc | ---> | Store |
++-------+      +------+              +------+      +-------+
+```
+
 ## plugin setup
 
 ```ts
@@ -27,7 +36,10 @@ class YjsDocSyncPlugin {
 
 ## sync
 
-### Doc to yDoc
+- sync to ydoc
+- sync to store
+
+### Sync to yDoc
 
 Apply `Transaction` to `Y.Map`
 
@@ -58,7 +70,7 @@ Apply `Transaction` to `Y.Map`
 
 Convert `obj` to `yObj`
 
-### yDoc to Doc
+### Sync to Store
 
 - yObjMap `add` change
 - yObjMap `delete` change
