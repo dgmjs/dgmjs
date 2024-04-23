@@ -54,23 +54,28 @@ function getParentOrder(
 export function yObjToObj(store: Store, yObj: YObj): Obj {
   const json = yObj.toJSON();
   const obj = store.instantiator.createFromJson(json)!;
-  console.log("obj", obj);
+  obj.resolveRefs(store.idIndex);
+  // console.log("obj", obj);
   return obj;
 }
 
 /**
  * Convert an editor object to a Yjs object
  */
-export function objToYObj(yStore: YStore, obj: Obj): YObj {
+export function objToYObj(
+  yStore: YStore,
+  obj: Obj,
+  assignParentOrder: boolean = false
+): YObj {
   const json = obj.toJSON();
   const yObj = new Y.Map();
   for (const key in json) {
     yObj.set(key, json[key]);
   }
-  if (obj.parent) {
+  if (assignParentOrder && obj.parent) {
     const position = obj.parent.children.indexOf(obj);
-    const order = getParentOrder(yStore, obj.parent.id, position);
-    yObj.set("parent:order", order);
+    // const order = getParentOrder(yStore, obj.parent.id, position);
+    yObj.set("parent:order", position);
   }
   return yObj;
 }
@@ -105,13 +110,13 @@ function setParent(
         } else {
           parent.children.splice(position, 0, obj);
         }
-        console.log(
-          "setObjParent",
-          parentId,
-          parentOrder,
-          position,
-          siblingOrders
-        );
+        // console.log(
+        //   "setObjParent",
+        //   parentId,
+        //   parentOrder,
+        //   position,
+        //   siblingOrders
+        // );
       }
     } else {
       obj.parent = null;
@@ -278,11 +283,10 @@ export function applyYjsEvent(
         const yObj = yStore.get(key);
         if (!store.getById(key) && yObj) {
           const obj = yObjToObj(store, yObj);
-          obj.resolveRefs(store.idIndex);
           store.addToIndex(obj);
           const parentId = yObj.get("parent");
           const parentOrder = yObj.get("parent:order");
-          console.log("parent", parentId, parentOrder);
+          // console.log("parent", parentId, parentOrder);
           setParent(store, yStore, obj, parentId, parentOrder);
           if (onObjCreate) {
             onObjCreate(obj);

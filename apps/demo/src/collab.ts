@@ -1,10 +1,10 @@
 import * as Y from "yjs";
 import { WebrtcProvider } from "y-webrtc";
-import { Editor, YjsSyncPlugin } from "@dgmjs/core";
+import { Editor, YjsDocSyncPlugin } from "@dgmjs/core";
 
 export class Collab {
   editor: Editor = null!;
-  plugin: YjsSyncPlugin = null!;
+  plugin: YjsDocSyncPlugin = null!;
   yDoc: Y.Doc | null;
   yProvider: WebrtcProvider | null;
 
@@ -15,7 +15,9 @@ export class Collab {
 
   start(editor: Editor, roomId: string) {
     this.editor = editor;
-    this.plugin = this.editor.getPlugin("dgmjs/yjs-doc-sync") as YjsSyncPlugin;
+    this.plugin = this.editor.getPlugin(
+      "dgmjs/yjs-doc-sync"
+    ) as YjsDocSyncPlugin;
     this.yDoc = new Y.Doc();
     this.yProvider = new WebrtcProvider(roomId, this.yDoc, {
       password: "1234",

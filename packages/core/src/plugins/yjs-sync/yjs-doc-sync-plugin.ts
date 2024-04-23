@@ -9,6 +9,7 @@ import {
   unapplyTransaction,
   applyYjsEvent,
 } from "./yjs-utils";
+import { Obj } from "../../core/obj";
 
 export class YjsDocSyncPlugin extends Plugin {
   editor: Editor = null!;
@@ -54,7 +55,7 @@ export class YjsDocSyncPlugin extends Plugin {
       const store = this.editor.store;
       for (const key in store.idIndex) {
         const obj = store.idIndex[key];
-        this.yStore.set(key, objToYObj(this.yStore, obj));
+        this.yStore.set(key, objToYObj(this.yStore, obj, true));
       }
     }
   }
@@ -98,16 +99,22 @@ export class YjsDocSyncPlugin extends Plugin {
 
     const observeListener = (events: Y.YEvent<any>[], tr: any) => {
       if (this.yStore && !tr.local) {
+        const createdObjs: Obj[] = [];
         for (const event of events) {
-          applyYjsEvent(event, this.editor.store, this.yStore, (obj) => {
-            if (obj instanceof Document) {
-              this.editor.store.setDoc(obj);
+          applyYjsEvent(event, this.editor.store, this.yStore, (createdObj) => {
+            createdObjs.push(createdObj);
+            if (createdObj instanceof Document) {
+              this.editor.store.setDoc(createdObj);
             }
-            if (!this.editor.currentPage && obj instanceof Page) {
-              this.editor.setCurrentPage(obj);
+            if (!this.editor.currentPage && createdObj instanceof Page) {
+              this.editor.setCurrentPage(createdObj);
             }
           });
         }
+        // resolve refs for all created objects
+        createdObjs.forEach((obj) => {
+          obj.resolveRefs(this.editor.store.idIndex, true);
+        });
         this.editor.repaint();
       }
     };

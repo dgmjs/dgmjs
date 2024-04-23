@@ -22,6 +22,13 @@ export function convertToLatestVersion(json: any): any {
     json.children = [];
   }
 
+  // ensure Page has parent
+  for (const page of json.children) {
+    if (page.type === "Page" && !page.parent) {
+      page.parent = json.id;
+    }
+  }
+
   // convert single-page document to multi-page document
   if (
     json.type === "Document" &&

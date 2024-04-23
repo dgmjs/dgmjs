@@ -65,3 +65,15 @@ Convert `obj` to `yObj`
 - yObj `add` change
 - yObj `delete` change
 - yObj `update` change
+
+### parent:order
+
+1. Setting `parent:order`
+   - in `flush()`
+   - applying/unapplying `InsertChild` mutation
+   - applying/unapplying `RemoveChild` mutation
+   - applying/unapplying `ReorderChild` mutation
+
+2. Reading `parent:order`
+   - `YObj` created
+   - `parent` changed
