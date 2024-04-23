@@ -34,8 +34,8 @@ export class YjsDocSyncPlugin extends Plugin {
   start(yDoc: Y.Doc) {
     this.state = "syncing";
     this.yDoc = yDoc;
-    this.yStore = this.yDoc.getMap("objmap");
-    this.listen();
+    this.yStore = this.yDoc.getMap("store");
+    this.watch();
 
     this.logChanges();
   }
@@ -44,7 +44,7 @@ export class YjsDocSyncPlugin extends Plugin {
     this.state = "idle";
     this.yDoc = null;
     this.yStore = null;
-    this.unlisten();
+    this.unwatch();
   }
 
   /**
@@ -60,7 +60,7 @@ export class YjsDocSyncPlugin extends Plugin {
     }
   }
 
-  listen() {
+  watch() {
     this.disposables.push(
       this.editor.transform.onTransaction.addListener((tx) => {
         if (this.state == "syncing" && this.yDoc && this.yStore) {
@@ -165,7 +165,7 @@ export class YjsDocSyncPlugin extends Plugin {
     }
   }
 
-  unlisten() {
+  unwatch() {
     this.disposables.forEach((d) => d.dispose());
     this.disposables = [];
   }

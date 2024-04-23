@@ -39,13 +39,16 @@ function getParentOrder(
   const siblings = getYChildren(yStore, parentId);
   const siblingOrders = siblings.map((yChild) => yChild.get("parent:order"));
   if (siblingOrders.length === 0) return 0;
+  let order = 0;
   if (position === 0) {
-    return siblingOrders[0] - 1;
+    order = siblingOrders[0] - 1;
   } else if (position >= siblingOrders.length) {
-    return siblingOrders[siblingOrders.length - 1] + 1;
+    order = siblingOrders[siblingOrders.length - 1] + 1;
   } else {
-    return (siblingOrders[position - 1] + siblingOrders[position]) / 2;
+    order = (siblingOrders[position - 1] + siblingOrders[position]) / 2;
   }
+  console.log("### parent-order", position, order, siblingOrders);
+  return order;
 }
 
 /**
@@ -101,28 +104,59 @@ function setParent(
       obj.parent = parent;
       if (parent.children.indexOf(obj) < 0) {
         const siblings = getYChildren(yStore, parentId!);
-        const siblingOrders = siblings.map((yChild) =>
-          yChild.get("parent:order")
-        );
+        const siblingOrders = siblings
+          .map((yChild) => yChild.get("parent:order"))
+          .sort((a, b) => a - b);
         const position = siblingOrders.findIndex((o) => o >= parentOrder);
         if (position < 0) {
           parent.children.push(obj);
         } else {
           parent.children.splice(position, 0, obj);
         }
-        // console.log(
-        //   "setObjParent",
-        //   parentId,
-        //   parentOrder,
-        //   position,
-        //   siblingOrders
-        // );
+        console.log(
+          "setObjParent",
+          parentId,
+          parentOrder,
+          position,
+          siblingOrders
+        );
       }
     } else {
       obj.parent = null;
     }
   } else {
     obj.parent = null;
+  }
+}
+
+function setParentOrder(
+  yStore: YStore,
+  obj: Obj,
+  parentOrder: number,
+  previousParentOrder: number
+) {
+  const parent = obj.parent;
+  if (parent) {
+    // remove from old position
+    const idx = parent.children.indexOf(obj);
+    parent.children.splice(idx, 1);
+    // add to new position
+    const siblings = getYChildren(yStore, parent.id)
+      .map((yObj) => {
+        const id = yObj.get("id");
+        const order = yObj.get("parent:order");
+        return obj.id === id ? previousParentOrder : order;
+      })
+      .sort((a, b) => a - b);
+    // const position = siblings.findIndex((o) => );
+    const position = siblings.findIndex((o) => o >= parentOrder);
+    console.log("set-parent-order", siblings, position);
+
+    if (position < 0) {
+      parent.children.push(obj);
+    } else {
+      parent.children.splice(position + 1, 0, obj);
+    }
   }
 }
 
@@ -189,7 +223,9 @@ export function applyTransaction(tx: Transaction, yStore: YStore) {
         const yParent = yStore.get(mut.parent.id);
         const yObj = yStore.get(mut.obj.id);
         if (yParent && yObj) {
-          // TODO: parent order
+          const order = getParentOrder(yStore, mut.parent.id, mut.newPosition);
+          yObj.set("parent:order", order);
+          console.log("reorder", mut.obj, mut.newPosition, order);
         }
         break;
       }
@@ -260,7 +296,10 @@ export function unapplyTransaction(tx: Transaction, yStore: YStore) {
         const yParent = yStore.get(mut.parent.id);
         const yObj = yStore.get(mut.obj.id);
         if (yParent && yObj) {
-          // TODO: parent order
+          yObj.set(
+            "parent:order",
+            getParentOrder(yStore, mut.parent.id, mut.oldPosition)
+          );
         }
         break;
       }
@@ -308,24 +347,27 @@ export function applyYjsEvent(
         const obj = store.getById(id);
         const yObj = yStore.get(id);
         if (obj && yObj) {
-          const keys = [...(event as any).keysChanged];
-          for (const key of keys) {
-            if (key === "parent") {
-              const parentId = yObj.get("parent");
-              const parentOrder = yObj.get("parent:order");
-              setParent(store, yStore, obj, parentId, parentOrder);
-            } else if (key === "head" || key === "tail") {
-              const value = yObj.get(key);
-              if (value) {
-                const ref = store.getById(value);
-                (obj as any)[key] = ref;
-              } else {
-                (obj as any)[key] = null;
-              }
+          const value = yObj.get(key);
+          if (key === "parent") {
+            const parentId = yObj.get("parent");
+            const parentOrder = yObj.get("parent:order");
+            setParent(store, yStore, obj, parentId, parentOrder);
+          } else if (key === "parent:order") {
+            const parentId = yObj.get("parent");
+            const parentOrder = yObj.get("parent:order");
+            const previousParentOrder = change.oldValue;
+            console.log("update parent:order", parentId, parentOrder);
+            // setParent(store, yStore, obj, parentId, parentOrder);
+            setParentOrder(yStore, obj, parentOrder, previousParentOrder);
+          } else if (key === "head" || key === "tail") {
+            if (value) {
+              const ref = store.getById(value);
+              (obj as any)[key] = ref;
             } else {
-              const value = yObj.get(key);
-              (obj as any)[key] = value;
+              (obj as any)[key] = null;
             }
+          } else {
+            (obj as any)[key] = value;
           }
         }
       }
