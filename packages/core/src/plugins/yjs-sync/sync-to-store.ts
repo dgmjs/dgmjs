@@ -1,7 +1,13 @@
 import * as Y from "yjs";
 import { Obj } from "../../core/obj";
 import { Store } from "../../core/store";
-import { YObj, YStore, yGetChildren } from "./yjs-utils";
+import {
+  YObj,
+  YStore,
+  yGetChildren,
+  yGetPositionByOrder,
+  ySortByOrder,
+} from "./yjs-utils";
 
 /**
  * Convert a Yjs object to an editor object
@@ -10,47 +16,22 @@ function yObjToObj(store: Store, yObj: YObj): Obj {
   const json = yObj.toJSON();
   const obj = store.instantiator.createFromJson(json)!;
   obj.resolveRefs(store.idIndex);
-  // console.log("obj", obj);
   return obj;
 }
 
 /**
- * Set the parent of an obj with the given parentId and parent:order
+ * Set the parent of an obj with the given parentId
  */
-function setParent(
-  store: Store,
-  yStore: YStore,
-  obj: Obj,
-  parentId: string | null,
-  parentOrder: number
-) {
-  // remove from old parent
+function setParent(store: Store, obj: Obj, parentId: string | null) {
   if (obj.parent && obj.parent.id !== parentId) {
     obj.parent.children.splice(obj.parent.children.indexOf(obj), 1);
   }
-  // add to new parent
   if (parentId) {
     const parent = store.getById(parentId);
     if (parent) {
       obj.parent = parent;
       if (parent.children.indexOf(obj) < 0) {
-        const siblings = yGetChildren(yStore, parentId!);
-        const siblingOrders = siblings
-          .map((yChild) => yChild.get("parent:order"))
-          .sort((a, b) => a - b);
-        const position = siblingOrders.findIndex((o) => o >= parentOrder);
-        if (position < 0) {
-          parent.children.push(obj);
-        } else {
-          parent.children.splice(position, 0, obj);
-        }
-        console.log(
-          "setObjParent",
-          parentId,
-          parentOrder,
-          position,
-          siblingOrders
-        );
+        parent.children.push(obj);
       }
     } else {
       obj.parent = null;
@@ -60,37 +41,37 @@ function setParent(
   }
 }
 
-function setParentOrder(
-  yStore: YStore,
-  obj: Obj,
-  parentOrder: number,
-  previousParentOrder: number
-) {
-  const parent = obj.parent;
-  if (parent) {
-    // remove from old position
-    const idx = parent.children.indexOf(obj);
-    parent.children.splice(idx, 1);
-    // add to new position
-    const siblings = yGetChildren(yStore, parent.id)
-      .map((yObj) => {
-        const id = yObj.get("id");
-        const order = yObj.get("parent:order");
-        return obj.id === id ? previousParentOrder : order;
-      })
-      .sort((a, b) => a - b);
-    // const position = siblings.findIndex((o) => );
-    const position = siblings.findIndex((o) => o >= parentOrder);
-    console.log("set-parent-order", siblings, position);
-
-    if (position < 0) {
-      parent.children.push(obj);
-    } else {
-      parent.children.splice(position + 1, 0, obj);
-    }
+/**
+ * Set the position of an obj in the parent's children array
+ */
+function setPosition(obj: Obj, position: number) {
+  if (obj.parent) {
+    obj.parent.children.splice(obj.parent.children.indexOf(obj), 1);
+    obj.parent.children.splice(position, 0, obj);
   }
 }
 
+/**
+ * Set the position of an obj by order
+ */
+function setPositionByOrder(
+  yStore: YStore,
+  obj: Obj,
+  parentId: string,
+  order: number = 0
+) {
+  const objId = obj.id;
+  const ySiblings = yGetChildren(yStore, parentId).filter(
+    (yObj) => yObj.get("id") !== objId
+  );
+  const ySortedSiblings = ySortByOrder(ySiblings);
+  const position = yGetPositionByOrder(ySortedSiblings, order);
+  setPosition(obj, position);
+}
+
+/**
+ * Create an obj in the store from a Yjs object
+ */
 export function createObj(
   store: Store,
   yStore: YStore,
@@ -100,32 +81,29 @@ export function createObj(
   if (!store.getById(objId) && yObj) {
     const obj = yObjToObj(store, yObj);
     store.addToIndex(obj);
-    // TODO:
     const parentId = yObj.get("parent");
-    const parentOrder = yObj.get("parent:order");
-    setParent(store, yStore, obj, parentId, parentOrder);
-    // const parentId = yObj.get("parent");
-    // const parentOrder = yObj.get("parent:order");
-    // console.log("parent", parentId, parentOrder);
-    // setParent(store, yStore, obj, parentId, parentOrder);
-    // if (onObjCreate) {
-    //   onObjCreate(obj);
-    // }
+    const order = yObj.get("parent:order");
+    setParent(store, obj, parentId);
+    setPositionByOrder(yStore, obj, parentId, order);
     return obj;
   }
   return null;
 }
 
+/**
+ * Delete an obj from the store
+ */
 export function deleteObj(store: Store, objId: string) {
   const obj = store.getById(objId);
-  // TODO: replace by setParent() ???
-  if (obj?.parent && Array.isArray(obj.parent.children)) {
-    obj.parent.children.splice(obj.parent.children.indexOf(obj), 1);
-    obj.parent = null;
+  if (obj) {
+    setParent(store, obj, null);
+    store.removeFromIndex(obj);
   }
-  if (obj) store.removeFromIndex(obj);
 }
 
+/**
+ * Update an obj in the store
+ */
 export function updateObj(
   store: Store,
   yStore: YStore,
@@ -137,21 +115,15 @@ export function updateObj(
   const obj = store.getById(objId);
   const yObj = yStore.get(objId);
   if (obj && yObj) {
-    // const value = yObj.get(field);
     if (field === "parent") {
       const parentId = yObj.get("parent");
-      const parentOrder = yObj.get("parent:order");
-      setParent(store, yStore, obj, parentId, parentOrder);
+      const order = yObj.get("parent:order");
+      setParent(store, obj, parentId);
+      setPositionByOrder(yStore, obj, parentId, order);
     } else if (field === "parent:order") {
       const parentId = yObj.get("parent");
       const parentOrder = yObj.get("parent:order");
-      const previousParentOrder = oldValue;
-      console.log("update parent:order", parentId, parentOrder);
-      setParent(store, yStore, obj, parentId, parentOrder);
-      setParentOrder(yStore, obj, parentOrder, previousParentOrder);
-
-      // const [children: Obj[], orders: number[]] = getSiblingOrders(yStore, obj);
-      // setSiblingOrders(obj, children, orders);
+      setPositionByOrder(yStore, obj, parentId, parentOrder);
     } else if (field === "head" || field === "tail") {
       if (newValue) {
         const ref = store.getById(newValue);
