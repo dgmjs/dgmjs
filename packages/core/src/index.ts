@@ -26,3 +26,4 @@ export { basicSetup } from "./basic-setup";
 
 // plugins
 export { YjsDocSyncPlugin } from "./plugins/yjs-sync/yjs-doc-sync-plugin";
+export { YjsUserPresencePlugin } from "./plugins/yjs-sync/yjs-user-presence-plugin";

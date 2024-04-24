@@ -6,6 +6,7 @@ import {
   ObjProps,
   Transaction,
   YjsDocSyncPlugin,
+  YjsUserPresencePlugin,
 } from "@dgmjs/core";
 import { nanoid } from "nanoid";
 import { PaletteToolbar } from "./components/palette-toolbar";
@@ -126,7 +127,7 @@ function App() {
         options={{
           keymapEventTarget: window,
         }}
-        plugins={[new YjsDocSyncPlugin()]}
+        plugins={[new YjsDocSyncPlugin(), new YjsUserPresencePlugin()]}
         showGrid={true}
         onMount={handleMount}
         onSelectionChange={handleSelectionChange}
