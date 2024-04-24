@@ -1,13 +1,219 @@
-// sync from store to ydoc
-//
-// onTransactionApply(store, yDoc, transaction);
-// onTransactionUnapply(store, yDoc, transaction);
-//
-// - convertObjToYObj
-// - createYObj(yStore, yObj);
-// - deleteYObj(yStore, yObj);
-// - assignYObj(yStore, yObj, field, value);
-// - assignRefYObj(yStore, yObj, field, value);
-// - insertYObjChild(yStore, yObj, yChild, position);
-// - deleteYObjChild(yStore, yObj, yChild);
-// - reorderYObjChild(yStore, yObj, from, to);
+import * as Y from "yjs";
+import { Obj } from "../../core/obj";
+import {
+  AssignMutation,
+  AssignRefMutation,
+  CreateMutation,
+  DeleteMutation,
+  InsertChildMutation,
+  MutationType,
+  RemoveChildMutation,
+  ReorderChildMutation,
+  Transaction,
+} from "../../core/transaction";
+import { YObj, YStore, getYChildren } from "./yjs-utils";
+
+/**
+ * Convert an editor object to a Yjs object
+ */
+export function objToYObj(
+  yStore: YStore,
+  obj: Obj,
+  assignParentOrder: boolean = false
+): YObj {
+  const json = obj.toJSON();
+  const yObj = new Y.Map();
+  for (const key in json) {
+    yObj.set(key, json[key]);
+  }
+  if (assignParentOrder && obj.parent) {
+    const position = obj.parent.children.indexOf(obj);
+    // const order = getParentOrder(yStore, obj.parent.id, position);
+    yObj.set("parent:order", position);
+  }
+  return yObj;
+}
+
+/**
+ * Get the parent order of a child with the given parentId and position
+ */
+function getParentOrder(
+  yStore: YStore,
+  parentId: string,
+  position: number
+): number {
+  const siblings = getYChildren(yStore, parentId);
+  const siblingOrders = siblings.map((yChild) => yChild.get("parent:order"));
+  if (siblingOrders.length === 0) return 0;
+  let order = 0;
+  if (position === 0) {
+    order = siblingOrders[0] - 1;
+  } else if (position >= siblingOrders.length) {
+    order = siblingOrders[siblingOrders.length - 1] + 1;
+  } else {
+    order = (siblingOrders[position - 1] + siblingOrders[position]) / 2;
+  }
+  console.log("### parent-order", position, order, siblingOrders);
+  return order;
+}
+
+function createYObj(yStore: YStore, obj: Obj) {
+  const yObj = objToYObj(yStore, obj);
+  yStore.set(obj.id, yObj);
+}
+
+function deleteYObj(yStore: YStore, objId: string) {
+  yStore.delete(objId);
+}
+
+function assignYObj(yStore: YStore, objId: string, field: string, value: any) {
+  const yObj = yStore.get(objId);
+  if (yObj) {
+    yObj.set(field, value);
+  }
+}
+
+function assignRefYObj(
+  yStore: YStore,
+  objId: string,
+  field: string,
+  value: Obj | null
+) {
+  const yObj = yStore.get(objId);
+  if (yObj) {
+    yObj.set(field, value?.id);
+  }
+}
+
+function insertYObjChild(
+  yStore: YStore,
+  parentId: string,
+  objId: string,
+  position: number
+) {
+  const yParent = yStore.get(parentId);
+  const yObj = yStore.get(objId);
+  if (yParent && yObj) {
+    yObj.set("parent", parentId);
+    // TODO: Fix parent order
+    yObj.set("parent:order", getParentOrder(yStore, parentId, position));
+  }
+}
+
+function removeYObjChild(yStore: YStore, parentId: string, objId: string) {
+  const yParent = yStore.get(parentId);
+  const yObj = yStore.get(objId);
+  if (yParent && yObj) {
+    yObj.delete("parent");
+    yObj.delete("parent:order");
+  }
+}
+
+function reorderYObjChild(
+  yStore: YStore,
+  parentId: string,
+  objId: string,
+  position: number
+) {
+  const yParent = yStore.get(parentId);
+  const yObj = yStore.get(objId);
+  if (yParent && yObj) {
+    const order = getParentOrder(yStore, parentId, position);
+    yObj.set("parent:order", order);
+    console.log("reorder", objId, position, order);
+  }
+}
+
+/**
+ * Apply a transaction to Yjs store
+ */
+export function handleApplyTransaction(tx: Transaction, yStore: YStore) {
+  if (tx.mutations.length === 0) return;
+  for (let i = 0; i < tx.mutations.length; i++) {
+    const mutation = tx.mutations[i];
+    switch (mutation.type) {
+      case MutationType.CREATE: {
+        const mut = mutation as CreateMutation;
+        createYObj(yStore, mut.obj);
+        break;
+      }
+      case MutationType.DELETE: {
+        const mut = mutation as DeleteMutation;
+        deleteYObj(yStore, mut.obj.id);
+        break;
+      }
+      case MutationType.ASSIGN: {
+        const mut = mutation as AssignMutation;
+        assignYObj(yStore, mut.obj.id, mut.field, mut.newValue);
+        break;
+      }
+      case MutationType.ASSIGN_REF: {
+        const mut = mutation as AssignRefMutation;
+        assignRefYObj(yStore, mut.obj.id, mut.field, mut.newValue);
+        break;
+      }
+      case MutationType.INSERT_CHILD: {
+        const mut = mutation as InsertChildMutation;
+        insertYObjChild(yStore, mut.parent.id, mut.obj.id, mut.position);
+        break;
+      }
+      case MutationType.REMOVE_CHILD: {
+        const mut = mutation as RemoveChildMutation;
+        removeYObjChild(yStore, mut.parent.id, mut.obj.id);
+        break;
+      }
+      case MutationType.REORDER_CHILD: {
+        const mut = mutation as ReorderChildMutation;
+        reorderYObjChild(yStore, mut.parent.id, mut.obj.id, mut.newPosition);
+        break;
+      }
+    }
+  }
+}
+
+/**
+ * Unapply a transaction to Yjs store
+ */
+export function handleUnapplyTransaction(tx: Transaction, yStore: YStore) {
+  if (tx.mutations.length === 0) return;
+  for (let i = tx.mutations.length - 1; i >= 0; i--) {
+    const mutation = tx.mutations[i];
+    switch (mutation.type) {
+      case MutationType.CREATE: {
+        const mut = mutation as CreateMutation;
+        deleteYObj(yStore, mut.obj.id);
+        break;
+      }
+      case MutationType.DELETE: {
+        const mut = mutation as DeleteMutation;
+        createYObj(yStore, mut.obj);
+        break;
+      }
+      case MutationType.ASSIGN: {
+        const mut = mutation as AssignMutation;
+        assignYObj(yStore, mut.obj.id, mut.field, mut.oldValue);
+        break;
+      }
+      case MutationType.ASSIGN_REF: {
+        const mut = mutation as AssignRefMutation;
+        assignRefYObj(yStore, mut.obj.id, mut.field, mut.oldValue);
+        break;
+      }
+      case MutationType.INSERT_CHILD: {
+        const mut = mutation as InsertChildMutation;
+        removeYObjChild(yStore, mut.parent.id, mut.obj.id);
+        break;
+      }
+      case MutationType.REMOVE_CHILD: {
+        const mut = mutation as RemoveChildMutation;
+        insertYObjChild(yStore, mut.parent.id, mut.obj.id, mut.position);
+        break;
+      }
+      case MutationType.REORDER_CHILD: {
+        const mut = mutation as ReorderChildMutation;
+        reorderYObjChild(yStore, mut.parent.id, mut.obj.id, mut.oldPosition);
+        break;
+      }
+    }
+  }
+}

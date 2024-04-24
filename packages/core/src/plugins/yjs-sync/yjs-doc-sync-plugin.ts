@@ -2,14 +2,13 @@ import * as Y from "yjs";
 import { Editor, Plugin } from "../../editor";
 import { Document, Page } from "../../shapes";
 import { Disposable } from "../../std/typed-event";
+import { YStore } from "./yjs-utils";
+import { handleYjsObserveDeep } from "./sync-to-store";
 import {
-  YStore,
+  handleApplyTransaction,
   objToYObj,
-  applyTransaction,
-  unapplyTransaction,
-  applyYjsEvent,
-} from "./yjs-utils";
-import { Obj } from "../../core/obj";
+  handleUnapplyTransaction,
+} from "./sync-to-ydoc";
 
 export class YjsDocSyncPlugin extends Plugin {
   editor: Editor = null!;
@@ -61,64 +60,65 @@ export class YjsDocSyncPlugin extends Plugin {
   }
 
   watch() {
+    // handle transaction
     this.disposables.push(
       this.editor.transform.onTransaction.addListener((tx) => {
         if (this.state == "syncing" && this.yDoc && this.yStore) {
           this.yDoc.transact(() => {
-            applyTransaction(tx, this.yStore!);
+            handleApplyTransaction(tx, this.yStore!);
           });
         }
       })
     );
 
+    // handle undo
     this.disposables.push(
       this.editor.transform.onUndo.addListener((action) => {
         if (this.state == "syncing" && this.yDoc && this.yStore) {
           this.yDoc.transact(() => {
             for (let i = action.transactions.length - 1; i >= 0; i--) {
               const tx = action.transactions[i];
-              unapplyTransaction(tx, this.yStore!);
+              handleUnapplyTransaction(tx, this.yStore!);
             }
           });
         }
       })
     );
 
+    // handle redo
     this.disposables.push(
       this.editor.transform.onRedo.addListener((action) => {
         if (this.state == "syncing" && this.yDoc && this.yStore) {
           this.yDoc.transact(() => {
             for (let i = 0; i < action.transactions.length; i++) {
               const tx = action.transactions[i];
-              applyTransaction(tx, this.yStore!);
+              handleApplyTransaction(tx, this.yStore!);
             }
           });
         }
       })
     );
 
+    // handle yjs observe deep
     const observeListener = (events: Y.YEvent<any>[], tr: any) => {
       if (this.yStore && !tr.local) {
-        const createdObjs: Obj[] = [];
-        for (const event of events) {
-          applyYjsEvent(event, this.editor.store, this.yStore, (createdObj) => {
-            createdObjs.push(createdObj);
-            if (createdObj instanceof Document) {
-              this.editor.store.setDoc(createdObj);
-            }
-            if (!this.editor.currentPage && createdObj instanceof Page) {
-              this.editor.setCurrentPage(createdObj);
-            }
-          });
-        }
-        // resolve refs for all created objects
+        const createdObjs = handleYjsObserveDeep(
+          this.editor.store,
+          this.yStore,
+          events
+        );
+        // TODO: fix this
         createdObjs.forEach((obj) => {
-          obj.resolveRefs(this.editor.store.idIndex, true);
+          if (obj instanceof Document) {
+            this.editor.store.setDoc(obj);
+          }
+          if (!this.editor.currentPage && obj instanceof Page) {
+            this.editor.setCurrentPage(obj);
+          }
         });
         this.editor.repaint();
       }
     };
-
     if (this.yStore) {
       this.yStore.observeDeep(observeListener);
       this.disposables.push({
