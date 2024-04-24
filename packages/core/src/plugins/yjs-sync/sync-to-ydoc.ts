@@ -11,16 +11,13 @@ import {
   ReorderChildMutation,
   Transaction,
 } from "../../core/transaction";
-import { YObj, YStore, getYChildren } from "./yjs-utils";
+import { YObj, YStore, yComputeParentOrder, yGetChildren } from "./yjs-utils";
+import { Store } from "../../core/store";
 
 /**
  * Convert an editor object to a Yjs object
  */
-export function objToYObj(
-  yStore: YStore,
-  obj: Obj,
-  assignParentOrder: boolean = false
-): YObj {
+export function objToYObj(obj: Obj, assignParentOrder: boolean = false): YObj {
   const json = obj.toJSON();
   const yObj = new Y.Map();
   for (const key in json) {
@@ -28,37 +25,13 @@ export function objToYObj(
   }
   if (assignParentOrder && obj.parent) {
     const position = obj.parent.children.indexOf(obj);
-    // const order = getParentOrder(yStore, obj.parent.id, position);
     yObj.set("parent:order", position);
   }
   return yObj;
 }
 
-/**
- * Get the parent order of a child with the given parentId and position
- */
-function getParentOrder(
-  yStore: YStore,
-  parentId: string,
-  position: number
-): number {
-  const siblings = getYChildren(yStore, parentId);
-  const siblingOrders = siblings.map((yChild) => yChild.get("parent:order"));
-  if (siblingOrders.length === 0) return 0;
-  let order = 0;
-  if (position === 0) {
-    order = siblingOrders[0] - 1;
-  } else if (position >= siblingOrders.length) {
-    order = siblingOrders[siblingOrders.length - 1] + 1;
-  } else {
-    order = (siblingOrders[position - 1] + siblingOrders[position]) / 2;
-  }
-  console.log("### parent-order", position, order, siblingOrders);
-  return order;
-}
-
 function createYObj(yStore: YStore, obj: Obj) {
-  const yObj = objToYObj(yStore, obj);
+  const yObj = objToYObj(obj);
   yStore.set(obj.id, yObj);
 }
 
@@ -95,8 +68,8 @@ function insertYObjChild(
   const yObj = yStore.get(objId);
   if (yParent && yObj) {
     yObj.set("parent", parentId);
-    // TODO: Fix parent order
-    yObj.set("parent:order", getParentOrder(yStore, parentId, position));
+    const order = yComputeParentOrder(yStore, objId, parentId, position);
+    yObj.set("parent:order", order);
   }
 }
 
@@ -118,9 +91,8 @@ function reorderYObjChild(
   const yParent = yStore.get(parentId);
   const yObj = yStore.get(objId);
   if (yParent && yObj) {
-    const order = getParentOrder(yStore, parentId, position);
+    const order = yComputeParentOrder(yStore, objId, parentId, position);
     yObj.set("parent:order", order);
-    console.log("reorder", objId, position, order);
   }
 }
 
@@ -215,5 +187,15 @@ export function handleUnapplyTransaction(tx: Transaction, yStore: YStore) {
         break;
       }
     }
+  }
+}
+
+/**
+ * Synchronize the store to the yStore
+ */
+export function syncToYStore(store: Store, yStore: YStore) {
+  for (const key in store.idIndex) {
+    const obj = store.idIndex[key];
+    yStore.set(key, objToYObj(obj, true));
   }
 }

@@ -1,7 +1,7 @@
 import * as Y from "yjs";
 import { Obj } from "../../core/obj";
 import { Store } from "../../core/store";
-import { YObj, YStore, getYChildren } from "./yjs-utils";
+import { YObj, YStore, yGetChildren } from "./yjs-utils";
 
 /**
  * Convert a Yjs object to an editor object
@@ -34,7 +34,7 @@ function setParent(
     if (parent) {
       obj.parent = parent;
       if (parent.children.indexOf(obj) < 0) {
-        const siblings = getYChildren(yStore, parentId!);
+        const siblings = yGetChildren(yStore, parentId!);
         const siblingOrders = siblings
           .map((yChild) => yChild.get("parent:order"))
           .sort((a, b) => a - b);
@@ -72,7 +72,7 @@ function setParentOrder(
     const idx = parent.children.indexOf(obj);
     parent.children.splice(idx, 1);
     // add to new position
-    const siblings = getYChildren(yStore, parent.id)
+    const siblings = yGetChildren(yStore, parent.id)
       .map((yObj) => {
         const id = yObj.get("id");
         const order = yObj.get("parent:order");
@@ -149,6 +149,9 @@ export function updateObj(
       console.log("update parent:order", parentId, parentOrder);
       setParent(store, yStore, obj, parentId, parentOrder);
       setParentOrder(yStore, obj, parentOrder, previousParentOrder);
+
+      // const [children: Obj[], orders: number[]] = getSiblingOrders(yStore, obj);
+      // setSiblingOrders(obj, children, orders);
     } else if (field === "head" || field === "tail") {
       if (newValue) {
         const ref = store.getById(newValue);

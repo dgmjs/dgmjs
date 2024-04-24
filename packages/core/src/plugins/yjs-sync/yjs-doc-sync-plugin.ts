@@ -6,8 +6,8 @@ import { YStore } from "./yjs-utils";
 import { handleYjsObserveDeep } from "./sync-to-store";
 import {
   handleApplyTransaction,
-  objToYObj,
   handleUnapplyTransaction,
+  syncToYStore,
 } from "./sync-to-ydoc";
 
 export class YjsDocSyncPlugin extends Plugin {
@@ -52,10 +52,7 @@ export class YjsDocSyncPlugin extends Plugin {
   flush() {
     if (this.state === "syncing" && this.yDoc && this.yStore) {
       const store = this.editor.store;
-      for (const key in store.idIndex) {
-        const obj = store.idIndex[key];
-        this.yStore.set(key, objToYObj(this.yStore, obj, true));
-      }
+      syncToYStore(store, this.yStore);
     }
   }
 
@@ -136,24 +133,24 @@ export class YjsDocSyncPlugin extends Plugin {
           if (event.target === this.yStore) {
             event.changes.keys.forEach((change, key) => {
               if (change.action === "add") {
-                console.log(`[objMap] add: ${key}`);
+                console.log(`[YStore] add: ${key}`);
               } else if (change.action === "delete") {
-                console.log(`[objMap] delete: ${key}`);
+                console.log(`[YStore] delete: ${key}`);
               } else if (change.action === "update") {
                 console.log(
-                  `[objMap] update: ${key}, old value: ${change.oldValue}`
+                  `[YStore] update: ${key}, old value: ${change.oldValue}`
                 );
               }
             });
           } else {
             event.changes.keys.forEach((change, key) => {
               if (change.action === "add") {
-                console.log(`[obj] add: ${key}`);
+                console.log(`[YObj] add: ${key}`);
               } else if (change.action === "delete") {
-                console.log(`[obj] delete: ${key}`);
+                console.log(`[YObj] delete: ${key}`);
               } else if (change.action === "update") {
                 console.log(
-                  `[obj] update: ${key} - ${
+                  `[YObj] update: ${key} - ${
                     change.oldValue
                   } --> ${event.target.get(key)}`
                 );
@@ -168,5 +165,14 @@ export class YjsDocSyncPlugin extends Plugin {
   unwatch() {
     this.disposables.forEach((d) => d.dispose());
     this.disposables = [];
+  }
+
+  printYStore() {
+    this.yStore?.forEach((yObj, key) => {
+      const json = yObj.toJSON();
+      console.log(
+        `[${json.type}] id:${json.id}, parent:${json.parent}, order:${json["parent:order"]}`
+      );
+    });
   }
 }

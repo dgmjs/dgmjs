@@ -89,3 +89,26 @@ Convert `obj` to `yObj`
 2. Reading `parent:order`
    - `YObj` created
    - `parent` changed
+
+### get parent order
+
+```
+orders = [0, 1, 2, 3, 4, 5]
+
+:get order of oldPositon = null, newPosition = 1;
+- between(0, 1): [0, (0.5), 1, 2, 3, 4, 5]
+
+:get order of oldPositon = null, newPosition = 0;
+- before(0): [(-1), 0, 1, 2, 3, 4, 5]
+
+:get order of oldPositon = null, newPosition = 6;
+- after(5): [0, 1, 2, 3, 4, 5, (6)]
+
+:get order of oldPositon = 0, newPosition = 1;
+- remove: [1, 2, 3, 4, 5]
+- between(0, 1): [1, (1.5), 2, 3, 4, 5]
+
+:get order of oldPositon = 0, newPosition = 5;
+- remove: [1, 2, 3, 4, 5]
+- after(4): [1, 2, 3, 4, 5, (6)]
+```
