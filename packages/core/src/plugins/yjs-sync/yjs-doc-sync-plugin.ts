@@ -10,26 +10,43 @@ import {
   syncToYStore,
 } from "./sync-to-ydoc";
 
+/**
+ * Yjs Doc Sync Plugin
+ */
 export class YjsDocSyncPlugin extends Plugin {
+  static ID = "dgmjs/yjs-doc-sync";
+
   editor: Editor = null!;
   state: "idle" | "syncing";
   yDoc: Y.Doc | null;
   yStore: YStore | null;
   disposables: Disposable[] = [];
 
+  /**
+   * Constructor
+   */
   constructor() {
-    super("dgmjs/yjs-doc-sync");
+    super(YjsDocSyncPlugin.ID);
     this.state = "idle";
     this.yDoc = null;
     this.yStore = null;
   }
 
+  /**
+   * Activate the plugin
+   */
   activate(editor: Editor) {
     this.editor = editor;
   }
 
+  /**
+   * Deactivate the plugin
+   */
   deactivate(editor: Editor) {}
 
+  /**
+   * Start the synchronization
+   */
   start(yDoc: Y.Doc) {
     this.state = "syncing";
     this.yDoc = yDoc;
@@ -38,6 +55,9 @@ export class YjsDocSyncPlugin extends Plugin {
     // this.logChanges();
   }
 
+  /**
+   * Stop the synchronization
+   */
   stop() {
     this.state = "idle";
     this.yDoc = null;
@@ -55,6 +75,9 @@ export class YjsDocSyncPlugin extends Plugin {
     }
   }
 
+  /**
+   * Watch for changes on the editor and ydoc
+   */
   watch() {
     // handle transaction
     this.disposables.push(
@@ -125,6 +148,17 @@ export class YjsDocSyncPlugin extends Plugin {
     }
   }
 
+  /**
+   * Unwatch for changes
+   */
+  unwatch() {
+    this.disposables.forEach((d) => d.dispose());
+    this.disposables = [];
+  }
+
+  /**
+   * log for the changes
+   */
   logChanges() {
     if (this.yStore) {
       this.yStore.observeDeep((events, tr) => {
@@ -161,11 +195,9 @@ export class YjsDocSyncPlugin extends Plugin {
     }
   }
 
-  unwatch() {
-    this.disposables.forEach((d) => d.dispose());
-    this.disposables = [];
-  }
-
+  /**
+   * Print the yStore objects
+   */
   printYStore() {
     this.yStore?.forEach((yObj, key) => {
       const json = yObj.toJSON();
