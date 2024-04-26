@@ -24,7 +24,7 @@ export class Collab {
     ) as YjsUserPresencePlugin;
     this.yDoc = new Y.Doc();
     this.yProvider = new WebrtcProvider(roomId, this.yDoc, {
-      signaling: ["ws://localhost:4444"],
+      // signaling: ["ws://localhost:4444"],
       password: "1234",
     });
     this.docSyncPlugin.start(this.yDoc);

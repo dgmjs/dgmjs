@@ -430,8 +430,7 @@ class Shape extends Obj {
         canvas.element.parentElement?.appendChild(this.linkDOM);
       }
       const rect = this.getBoundingRect().map((p) => {
-        let tp = canvas.globalCoordTransform(p);
-        return [tp[0] / canvas.ratio, tp[1] / canvas.ratio];
+        return utils.gcs2dcs(canvas, p);
       });
       const right = rect[1][0];
       const top = rect[0][1];
@@ -523,18 +522,17 @@ class Shape extends Obj {
   }
 
   /**
-   * Return a bounding box in canvas element.
+   * Return a bounding box in DOM coord.
    *
-   * [Note] If you want to place DOM elements over the canvas, use this method
+   * [Note] If you want to place DOM elements over the canvas, use this method.
    * and don't forget to apply transform scale to the DOM element.
    */
-  getRectInDOM(
+  getRectInDCS(
     canvas: Canvas,
     includeAnchorPoints: boolean = false
   ): number[][] {
     const rect = this.getBoundingRect(includeAnchorPoints).map((p) => {
-      let tp = canvas.globalCoordTransform(p);
-      return [tp[0] / canvas.ratio, tp[1] / canvas.ratio];
+      return utils.gcs2dcs(canvas, p);
     });
     const scale = canvas.scale;
     let width = geometry.width(rect) * (1 / scale);
@@ -1979,7 +1977,7 @@ class Embed extends Box {
       if (this.iframeDOM.src !== this.src) {
         this.iframeDOM.src = this.src;
       }
-      const rect = this.getRectInDOM(canvas);
+      const rect = this.getRectInDCS(canvas);
       const scale = canvas.scale;
       const left = rect[0][0];
       const top = rect[0][1];

@@ -38,7 +38,6 @@ function App() {
     window.editor = editor;
     insertFontsToDocument(fontJson as Font[]);
     await fetchFonts(fontJson as Font[]);
-    // window.editor.fitToScreen();
 
     if (roomId) {
       collab.start(window.editor, roomId);
@@ -68,7 +67,7 @@ function App() {
     // }
     demoStore.setDoc(window.editor.store.doc as Document);
     demoStore.setCurrentPage(window.editor.currentPage);
-    window.editor.fitToScreen();
+    // window.editor.fitToScreen();
 
     window.addEventListener("resize", () => {
       window.editor.fit();
