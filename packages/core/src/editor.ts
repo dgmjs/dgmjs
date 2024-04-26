@@ -74,14 +74,17 @@ export class Editor {
   onDocumentLoaded: TypedEvent<Document>;
   onCurrentPageChange: TypedEvent<Page>;
   onActiveHandlerChange: TypedEvent<string>;
-  onDblClick: TypedEvent<DblClickEvent>;
   onZoom: TypedEvent<number>;
   onScroll: TypedEvent<number[]>;
+  onPointerDown: TypedEvent<CanvasPointerEvent>;
+  onPointerMove: TypedEvent<CanvasPointerEvent>;
+  onPointerUp: TypedEvent<CanvasPointerEvent>;
+  onDblClick: TypedEvent<DblClickEvent>;
+  onKeyDown: TypedEvent<KeyboardEvent>;
   onDragStart: TypedEvent<DragEvent>;
   onDrag: TypedEvent<DragEvent>;
   onDragEnd: TypedEvent<DragEvent>;
   onFileDrop: TypedEvent<FileDropEvent>;
-  onKeyDown: TypedEvent<KeyboardEvent>;
 
   store: Store;
   transform: Transform;
@@ -143,14 +146,17 @@ export class Editor {
     this.onDocumentLoaded = new TypedEvent();
     this.onCurrentPageChange = new TypedEvent();
     this.onActiveHandlerChange = new TypedEvent();
-    this.onDblClick = new TypedEvent();
     this.onZoom = new TypedEvent();
     this.onScroll = new TypedEvent();
+    this.onPointerDown = new TypedEvent();
+    this.onPointerMove = new TypedEvent();
+    this.onPointerUp = new TypedEvent();
+    this.onDblClick = new TypedEvent();
+    this.onKeyDown = new TypedEvent();
     this.onDragStart = new TypedEvent();
     this.onDrag = new TypedEvent();
     this.onDragEnd = new TypedEvent();
     this.onFileDrop = new TypedEvent();
-    this.onKeyDown = new TypedEvent();
 
     this.store = new Store(shapeInstantiator, {
       objInitializer: (o) => {
@@ -254,6 +260,7 @@ export class Editor {
           this.activeHandler.pointerMove(this, event);
           this.activeHandler.pointerDown(this, event);
         }
+        this.onPointerDown.emit(event);
       }
     });
 
@@ -275,6 +282,7 @@ export class Editor {
         } else if (!this.isPinching && this.activeHandler) {
           this.activeHandler.pointerMove(this, event);
         }
+        this.onPointerMove.emit(event);
       }
     });
 
@@ -292,6 +300,7 @@ export class Editor {
         } else if (!this.isPinching && this.activeHandler) {
           this.activeHandler.pointerUp(this, event);
         }
+        this.onPointerUp.emit(event);
       }
     });
 

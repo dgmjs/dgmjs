@@ -38,6 +38,7 @@ function App() {
     window.editor = editor;
     insertFontsToDocument(fontJson as Font[]);
     await fetchFonts(fontJson as Font[]);
+    // window.editor.fitToScreen();
 
     if (roomId) {
       collab.start(window.editor, roomId);

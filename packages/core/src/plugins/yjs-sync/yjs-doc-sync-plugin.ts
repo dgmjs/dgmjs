@@ -35,8 +35,7 @@ export class YjsDocSyncPlugin extends Plugin {
     this.yDoc = yDoc;
     this.yStore = this.yDoc.getMap("store");
     this.watch();
-
-    this.logChanges();
+    // this.logChanges();
   }
 
   stop() {
