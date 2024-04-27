@@ -30,13 +30,13 @@ export class Collab {
     this.docSyncPlugin.start(this.yDoc);
     this.userPresencePlugin.start(this.yProvider.awareness);
     this.userPresencePlugin.onUserEnter.addListener((users) => {
-      console.log("user enter", users);
+      // console.log("user enter", users);
     });
     this.userPresencePlugin.onUserLeave.addListener((users) => {
-      console.log("user leave", users);
+      // console.log("user leave", users);
     });
     this.userPresencePlugin.onUserUpdate.addListener((users) => {
-      console.log("user update", users);
+      // console.log("user update", users);
     });
   }
 

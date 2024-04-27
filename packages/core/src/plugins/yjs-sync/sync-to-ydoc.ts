@@ -106,12 +106,16 @@ export function handleApplyTransaction(tx: Transaction, yStore: YStore) {
     switch (mutation.type) {
       case MutationType.CREATE: {
         const mut = mutation as CreateMutation;
-        createYObj(yStore, mut.obj);
+        mut.obj.traverse((o) => {
+          createYObj(yStore, o);
+        });
         break;
       }
       case MutationType.DELETE: {
         const mut = mutation as DeleteMutation;
-        deleteYObj(yStore, mut.obj.id);
+        mut.obj.traverse((o) => {
+          deleteYObj(yStore, o.id);
+        });
         break;
       }
       case MutationType.ASSIGN: {
