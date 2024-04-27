@@ -5,9 +5,11 @@ import {
   Shape,
   ObjProps,
   Transaction,
+} from "@dgmjs/core";
+import {
   YjsDocSyncPlugin,
   YjsUserPresencePlugin,
-} from "@dgmjs/core";
+} from "@dgmjs/dgmjs-plugin-yjs";
 import { nanoid } from "nanoid";
 import { PaletteToolbar } from "./components/palette-toolbar";
 import { useDemoStore } from "./demo-store";

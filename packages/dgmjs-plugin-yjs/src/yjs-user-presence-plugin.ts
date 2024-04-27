@@ -1,7 +1,5 @@
-import { Editor, Plugin } from "../../editor";
+import { Editor, Plugin, utils, Disposable, TypedEvent } from "@dgmjs/core";
 import * as awarenessProtocol from "y-protocols/awareness.js";
-import { gcs2dcs } from "../../graphics/utils";
-import { Disposable, TypedEvent } from "../../std/typed-event";
 
 // TODO: Separate this plugin into a separate package
 // TODO: show user's selection?
@@ -145,7 +143,7 @@ class RemoteUserState implements UserState {
     this.color = state.color;
     this.cursor = state.cursor;
     if (Array.isArray(this.cursor)) {
-      const position = gcs2dcs(canvas, this.cursor);
+      const position = utils.gcs2dcs(canvas, this.cursor);
       if (this.cursorDOM) {
         this.cursorDOM.style.left = `${position[0]}px`;
         this.cursorDOM.style.top = `${position[1]}px`;

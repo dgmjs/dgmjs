@@ -1,6 +1,7 @@
 import "./manipulators";
 import "./constraints";
 
+export * from "./std/typed-event";
 export * as geometry from "./graphics/geometry";
 export * as constants from "./graphics/const";
 export * as utils from "./graphics/utils";
@@ -23,7 +24,3 @@ export {
   visitTextNodes,
 } from "./utils/text-utils";
 export { basicSetup } from "./basic-setup";
-
-// plugins
-export { YjsDocSyncPlugin } from "./plugins/yjs-sync/yjs-doc-sync-plugin";
-export { YjsUserPresencePlugin } from "./plugins/yjs-sync/yjs-user-presence-plugin";

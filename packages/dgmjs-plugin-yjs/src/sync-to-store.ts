@@ -1,6 +1,5 @@
 import * as Y from "yjs";
-import { Obj } from "../../core/obj";
-import { Store } from "../../core/store";
+import { Obj, Store } from "@dgmjs/core";
 import {
   YObj,
   YStore,

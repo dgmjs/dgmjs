@@ -1,6 +1,7 @@
 import * as Y from "yjs";
-import { Obj } from "../../core/obj";
 import {
+  Obj,
+  Store,
   AssignMutation,
   AssignRefMutation,
   CreateMutation,
@@ -10,9 +11,8 @@ import {
   RemoveChildMutation,
   ReorderChildMutation,
   Transaction,
-} from "../../core/transaction";
-import { YObj, YStore, yComputeParentOrder, yGetChildren } from "./yjs-utils";
-import { Store } from "../../core/store";
+} from "@dgmjs/core";
+import { YObj, YStore, yComputeParentOrder } from "./yjs-utils";
 
 /**
  * Convert an editor object to a Yjs object
