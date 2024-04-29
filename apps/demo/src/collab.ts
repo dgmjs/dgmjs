@@ -29,6 +29,7 @@ export class Collab {
     this.yDoc = new Y.Doc();
     this.yProvider = new WebrtcProvider(roomId, this.yDoc, {
       // signaling: ["ws://localhost:4444"],
+      signaling: ["wss://webrtc.dgm.sh"],
       password: "1234",
     });
     this.docSyncPlugin.start(this.yDoc);
