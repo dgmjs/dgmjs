@@ -79,20 +79,6 @@ export function Menus() {
       <Button variant="ghost" className="h-8 w-8 p-0" onClick={handleAddPage}>
         <PlusIcon size={16} />
       </Button>
-      <Button
-        onClick={async () => {
-          const data = await navigator.clipboard.read();
-          for (const clipboardItem of data) {
-            for (const type of clipboardItem.types) {
-              const blob = await clipboardItem.getType(type);
-              // we can now use blob here
-              console.log(type, await blob.text());
-            }
-          }
-        }}
-      >
-        test
-      </Button>
     </div>
   );
 }

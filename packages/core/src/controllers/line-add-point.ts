@@ -21,6 +21,7 @@ import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { findSegmentControlPoint, fitPathInCSS } from "./utils";
 import { reducePath } from "../utils/route-utils";
+import { resolveAllConstraints, setLinePath } from "../mutates";
 
 /**
  * LineAddPointController
@@ -87,7 +88,7 @@ export class LineAddPointController extends Controller {
       shape as Line,
       this.dragStartPoint
     );
-    editor.transform.startTransaction("repath");
+    editor.transform.startAction("repath");
   }
 
   /**
@@ -113,17 +114,18 @@ export class LineAddPointController extends Controller {
     newPath = newPath.map((p) => [p[0] + delta[0], p[1] + delta[1]]);
 
     // transform shape
-    const tr = editor.transform;
-    const page = editor.currentPage!;
-    tr.setPath(shape, newPath);
-    tr.resolveAllConstraints(page, canvas);
+    editor.transform.transact((tx) => {
+      const page = editor.currentPage!;
+      setLinePath(tx, shape as Line, newPath);
+      resolveAllConstraints(tx, page, canvas);
+    });
   }
 
   /**
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Line) {
-    editor.transform.endTransaction();
+    editor.transform.endAction();
   }
 
   /**

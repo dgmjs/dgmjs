@@ -17,6 +17,7 @@ import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { Color, Cursor } from "../graphics/const";
 import { Snap } from "../manipulators/snap";
 import { lcs2ccs } from "../graphics/utils";
+import { moveMultipleShapes, resolveAllConstraints } from "../mutates";
 
 /**
  * SelectionsMoveController
@@ -66,7 +67,7 @@ export class SelectionsMoveController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
-    editor.transform.startTransaction("move");
+    editor.transform.startAction("move");
   }
 
   /**
@@ -90,10 +91,18 @@ export class SelectionsMoveController extends Controller {
       container = editor.currentPage;
 
     // move shapes
-    const tr = editor.transform;
-    const page = editor.currentPage!;
-    tr.moveShapes(page, selections, this.dxStepGCS, this.dyStepGCS, container);
-    tr.resolveAllConstraints(page, canvas);
+    editor.transform.transact((tx) => {
+      const page = editor.currentPage!;
+      moveMultipleShapes(
+        tx,
+        page,
+        selections,
+        this.dxStepGCS,
+        this.dyStepGCS,
+        container
+      );
+      resolveAllConstraints(tx, page, canvas);
+    });
   }
 
   /**
@@ -101,7 +110,7 @@ export class SelectionsMoveController extends Controller {
    * @param shape (is a page in group manipulator)
    */
   finalize(editor: Editor, shape: Shape) {
-    editor.transform.endTransaction();
+    editor.transform.endAction();
   }
 
   /**

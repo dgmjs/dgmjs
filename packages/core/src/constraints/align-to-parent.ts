@@ -14,7 +14,8 @@
 import { z } from "zod";
 import { constraintManager, Page, Shape } from "../shapes";
 import type { Canvas } from "../graphics/graphics";
-import type { Transform } from "../transform/transform";
+import { Transaction } from "../core/transaction";
+import { moveMultipleShapes, resizeShape } from "../mutates";
 
 const schema = z.object({
   horz: z
@@ -57,10 +58,10 @@ const schema = z.object({
  * Align to parent
  */
 function constraint(
+  tx: Transaction,
   page: Page,
   shape: Shape,
   canvas: Canvas,
-  transform: Transform,
   args: z.infer<typeof schema>
 ) {
   let changed = false;
@@ -193,10 +194,11 @@ function constraint(
     }
     dx += args.horzOffset || 0;
     dy += args.vertOffset || 0;
-    changed = transform.moveShapes(page, [shape], dx, dy);
+    changed = moveMultipleShapes(tx, page, [shape], dx, dy);
     if (width > -1 || height > -1) {
       changed =
-        transform.resize(
+        resizeShape(
+          tx,
           shape,
           width < 0 ? shape.width : width,
           height < 0 ? shape.height : height

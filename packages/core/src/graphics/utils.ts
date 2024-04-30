@@ -60,6 +60,14 @@ function gcs2lcs(canvas: Canvas, shape: Shape, point: number[]): number[] {
 }
 
 /**
+ * Transform global coord to DOM coord (GCS --> DCS) on canvas element
+ */
+function gcs2dcs(canvas: Canvas, point: number[]): number[] {
+  let tp = canvas.globalCoordTransform(point);
+  return [tp[0] / canvas.ratio, tp[1] / canvas.ratio];
+}
+
+/**
  * Returns the angle of shape in CCS
  */
 function angleInCCS(canvas: Canvas, shape: Shape): number {
@@ -118,6 +126,7 @@ export {
   ccs2lcs,
   lcs2gcs,
   gcs2lcs,
+  gcs2dcs,
   angleInCCS,
   boxInCCS,
   boxInGCS,

@@ -115,7 +115,7 @@ export const AlignmentPanel: React.FC<ShapeEditorProps> = ({
               variant="outline"
               size="icon"
               className="w-8 h-8"
-              onClick={() => window.editor.actions.sendBackward()}
+              onClick={() => window.editor.actions.sendToBack()}
             >
               <AlignSendToBackIcon size={16} />
             </Button>
@@ -123,7 +123,7 @@ export const AlignmentPanel: React.FC<ShapeEditorProps> = ({
               variant="outline"
               size="icon"
               className="w-8 h-8"
-              onClick={() => window.editor.actions.sendToBack()}
+              onClick={() => window.editor.actions.sendBackward()}
             >
               <AlignSendBackwardIcon size={16} />
             </Button>

@@ -32,10 +32,10 @@ import { KeyMap, KeymapManager } from "./keymap-manager";
 import { AutoScroller } from "./utils/auto-scroller";
 import { createPointerEvent, createTouchEvent } from "./utils/canvas-utils";
 import { Store } from "./core/store";
-import { Transform } from "./transform/transform";
 import { SelectionManager } from "./selection-manager";
 import { Clipboard } from "./core/clipboard";
 import { TypedEvent } from "./std/typed-event";
+import { Transform } from "./core/transform";
 
 export interface EditorOptions {
   handlers: Handler[];
@@ -68,18 +68,23 @@ export interface FileDropEvent {
  */
 export class Editor {
   options: EditorOptions;
+  plugins: Record<string, Plugin>;
   platform: string;
 
+  onDocumentLoaded: TypedEvent<Document>;
   onCurrentPageChange: TypedEvent<Page>;
   onActiveHandlerChange: TypedEvent<string>;
-  onDblClick: TypedEvent<DblClickEvent>;
   onZoom: TypedEvent<number>;
   onScroll: TypedEvent<number[]>;
+  onPointerDown: TypedEvent<CanvasPointerEvent>;
+  onPointerMove: TypedEvent<CanvasPointerEvent>;
+  onPointerUp: TypedEvent<CanvasPointerEvent>;
+  onDblClick: TypedEvent<DblClickEvent>;
+  onKeyDown: TypedEvent<KeyboardEvent>;
   onDragStart: TypedEvent<DragEvent>;
   onDrag: TypedEvent<DragEvent>;
   onDragEnd: TypedEvent<DragEvent>;
   onFileDrop: TypedEvent<FileDropEvent>;
-  onKeyDown: TypedEvent<KeyboardEvent>;
 
   store: Store;
   transform: Transform;
@@ -114,7 +119,11 @@ export class Editor {
   /**
    * constructor
    */
-  constructor(editorHolder: HTMLElement, options: Partial<EditorOptions>) {
+  constructor(
+    editorHolder: HTMLElement,
+    options: Partial<EditorOptions>,
+    plugins: Plugin[] = []
+  ) {
     this.options = {
       handlers: [],
       defaultHandlerId: "",
@@ -127,17 +136,27 @@ export class Editor {
       ...options,
     };
 
+    // register plugins
+    this.plugins = {};
+    plugins.forEach((plugin) => {
+      this.plugins[plugin.id] = plugin;
+    });
+
     // initialize event emitters
+    this.onDocumentLoaded = new TypedEvent();
     this.onCurrentPageChange = new TypedEvent();
     this.onActiveHandlerChange = new TypedEvent();
-    this.onDblClick = new TypedEvent();
     this.onZoom = new TypedEvent();
     this.onScroll = new TypedEvent();
+    this.onPointerDown = new TypedEvent();
+    this.onPointerMove = new TypedEvent();
+    this.onPointerUp = new TypedEvent();
+    this.onDblClick = new TypedEvent();
+    this.onKeyDown = new TypedEvent();
     this.onDragStart = new TypedEvent();
     this.onDrag = new TypedEvent();
     this.onDragEnd = new TypedEvent();
     this.onFileDrop = new TypedEvent();
-    this.onKeyDown = new TypedEvent();
 
     this.store = new Store(shapeInstantiator, {
       objInitializer: (o) => {
@@ -183,7 +202,7 @@ export class Editor {
     this.initializeState();
     this.initializeCanvas();
     this.initializeKeymap();
-    this.newDoc();
+    this.activatePlugins();
     if (this.options.onReady) this.options.onReady(this);
   }
 
@@ -201,6 +220,8 @@ export class Editor {
 
   initializeState() {
     this.transform.onTransaction.addListener(() => this.repaint());
+    this.transform.onUndo.addListener(() => this.repaint());
+    this.transform.onRedo.addListener(() => this.repaint());
     this.selection.onChange.addListener(() => this.repaint());
     this.factory.onCreate.addListener((shape: Shape) => {
       this.selection.select([shape]);
@@ -239,6 +260,7 @@ export class Editor {
           this.activeHandler.pointerMove(this, event);
           this.activeHandler.pointerDown(this, event);
         }
+        this.onPointerDown.emit(event);
       }
     });
 
@@ -260,6 +282,7 @@ export class Editor {
         } else if (!this.isPinching && this.activeHandler) {
           this.activeHandler.pointerMove(this, event);
         }
+        this.onPointerMove.emit(event);
       }
     });
 
@@ -277,6 +300,7 @@ export class Editor {
         } else if (!this.isPinching && this.activeHandler) {
           this.activeHandler.pointerUp(this, event);
         }
+        this.onPointerUp.emit(event);
       }
     });
 
@@ -455,6 +479,31 @@ export class Editor {
         }
       }
     });
+  }
+
+  /**
+   * Activate plugins
+   */
+  activatePlugins() {
+    for (const plugin of Object.values(this.plugins)) {
+      plugin.activate(this);
+    }
+  }
+
+  /**
+   * Deactivate plugins
+   */
+  deactivatePlugins() {
+    for (const plugin of Object.values(this.plugins)) {
+      plugin.deactivate(this);
+    }
+  }
+
+  /**
+   * Get a plugin by id
+   */
+  getPlugin(id: string): Plugin | null {
+    return this.plugins[id];
   }
 
   /**
@@ -642,7 +691,7 @@ export class Editor {
   /**
    * Fit doc to screen and move to center
    */
-  fitToScreen(scaleAdjust: number = 0.95, maxScale: number = 2) {
+  fitToScreen(scaleAdjust: number = 1, maxScale: number = 1) {
     if (this.currentPage) {
       // doc size in GCS
       const doc = this.store.doc as Document;
@@ -769,7 +818,7 @@ export class Editor {
    */
   clearBackground(canvas: Canvas) {
     const g = canvas.context;
-    const docSize = (this.store.doc as Document).pageSize;
+    const docSize = (this.store.doc as Document)?.pageSize;
     g.fillStyle = this.canvas.resolveColor(
       docSize ? Color.CANVAS : Color.BACKGROUND
     );
@@ -873,6 +922,20 @@ export class Editor {
   }
 
   /**
+   * Get the document
+   */
+  getDoc(): Document {
+    return this.store.doc as Document;
+  }
+
+  /**
+   * Set the document
+   */
+  setDoc(doc: Document) {
+    this.store.setDoc(doc);
+  }
+
+  /**
    * Create a new document
    */
   newDoc(): Document {
@@ -881,6 +944,7 @@ export class Editor {
     doc.children.push(page);
     page.parent = doc;
     this.store.setDoc(doc);
+    this.onDocumentLoaded.emit(this.store.doc as Document);
     this.setCurrentPage(doc.children[0] as Page);
     return doc;
   }
@@ -892,6 +956,7 @@ export class Editor {
     if (json) {
       this.selection.deselectAll();
       this.store.fromJSON(json);
+      this.onDocumentLoaded.emit(this.store.doc as Document);
       if (
         this.store.doc instanceof Document &&
         this.store.doc.children.length > 0 &&
@@ -900,6 +965,13 @@ export class Editor {
         this.setCurrentPage(this.store.doc.children[0] as Page);
       }
     }
+  }
+
+  /**
+   * Save to JSON
+   */
+  saveToJSON(): any {
+    return this.store.toJSON();
   }
 }
 
@@ -1319,7 +1391,7 @@ export class Controller {
   keyDown(editor: Editor, shape: Shape, e: KeyboardEvent): boolean {
     if (this.dragging && e.key === "Escape") {
       this.reset();
-      editor.transform.cancelTransaction();
+      editor.transform.cancelAction();
       editor.repaint();
       return true;
     }
@@ -1501,6 +1573,20 @@ export class Manipulator {
       (cp) => cp.active(editor, shape) && cp.drawHovering(editor, shape, e)
     );
   }
+}
+
+/**
+ * Plugin
+ */
+export abstract class Plugin {
+  id: string;
+
+  constructor(pluginId: string) {
+    this.id = pluginId;
+  }
+
+  abstract activate(editor: Editor): void;
+  abstract deactivate(editor: Editor): void;
 }
 
 export const manipulatorManager = ManipulatorManager.getInstance();

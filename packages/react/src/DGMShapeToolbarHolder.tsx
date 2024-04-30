@@ -13,10 +13,10 @@ interface DGMShapeToolbarHolderProps
 /**
  * Get the bounding rect of the selection considering line's anchor points
  */
-function getSelectionRectInDOM(editor: Editor): number[][] {
+function getSelectionRectInDCS(editor: Editor): number[][] {
   if (editor.selection.shapes.length > 0) {
     const rects = editor.selection.shapes.map((s) =>
-      s.getRectInDOM(editor.canvas, true)
+      s.getRectInDCS(editor.canvas, true)
     );
     return rects.reduce((acc, r) => geometry.unionRect(acc, r), rects[0]);
   }
@@ -64,7 +64,7 @@ export const DGMShapeToolbarHolder: React.FC<DGMShapeToolbarHolderProps> = ({
       const canvasWidth = editor.canvasElement?.offsetWidth || 0;
       const canvasHeight = editor.canvasElement?.offsetHeight || 0;
       let visible = selection.length > 0;
-      let rect = getSelectionRectInDOM(editor);
+      let rect = getSelectionRectInDCS(editor);
       if (
         rect[1][0] < 0 ||
         rect[0][0] > canvasWidth ||

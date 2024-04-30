@@ -3,6 +3,7 @@ import { Editor, Handler } from "../editor";
 import { CanvasPointerEvent } from "../graphics/graphics";
 import { Ellipse, Shape } from "../shapes";
 import { Cursor, Mouse } from "../graphics/const";
+import { addShape, resolveAllConstraints } from "../mutates";
 
 /**
  * Ellipse Factory Handler
@@ -27,8 +28,10 @@ export class EllipseFactoryHandler extends Handler {
         this.dragStartPoint,
         this.dragPoint,
       ]);
-      editor.transform.startTransaction("create");
-      editor.transform.addShape(this.shape, page);
+      editor.transform.startAction("create");
+      editor.transform.transact((tx) => {
+        addShape(tx, this.shape!, page);
+      });
     }
   }
 
@@ -39,15 +42,13 @@ export class EllipseFactoryHandler extends Handler {
         this.dragStartPoint,
         this.dragPoint,
       ]);
-      editor.transform.atomicAssign(this.shape, "left", rect[0][0]);
-      editor.transform.atomicAssign(this.shape, "top", rect[0][1]);
-      editor.transform.atomicAssign(this.shape, "width", geometry.width(rect));
-      editor.transform.atomicAssign(
-        this.shape,
-        "height",
-        geometry.height(rect)
-      );
-      editor.transform.resolveAllConstraints(page, editor.canvas);
+      editor.transform.transact((tx) => {
+        tx.assign(this.shape!, "left", rect[0][0]);
+        tx.assign(this.shape!, "top", rect[0][1]);
+        tx.assign(this.shape!, "width", geometry.width(rect));
+        tx.assign(this.shape!, "height", geometry.height(rect));
+        resolveAllConstraints(tx, page, editor.canvas);
+      });
     }
   }
 
@@ -55,9 +56,9 @@ export class EllipseFactoryHandler extends Handler {
     const MIN_SIZE = 2;
     if (this.shape) {
       if (this.shape?.width < MIN_SIZE && this.shape?.height < MIN_SIZE) {
-        editor.transform.cancelTransaction();
+        editor.transform.cancelAction();
       } else {
-        editor.transform.endTransaction();
+        editor.transform.endAction();
         editor.factory.triggerCreate(this.shape as Shape);
       }
     }
@@ -112,7 +113,7 @@ export class EllipseFactoryHandler extends Handler {
 
   keyDown(editor: Editor, e: KeyboardEvent): boolean {
     if (e.key === "Escape" && this.dragging) {
-      editor.transform.cancelTransaction();
+      editor.transform.cancelAction();
       editor.repaint();
       this.reset();
       this.done(editor);
