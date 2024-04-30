@@ -12,6 +12,7 @@
  */
 
 import { convertToLatestVersion } from "../utils/document-compatibility";
+import { Transform } from "./transform";
 import { Instantiator } from "./instantiator";
 import type { Obj } from "./obj";
 
@@ -27,11 +28,19 @@ type StoreOptions = {
  */
 export class Store {
   /**
+   * Store options
+   */
+  options: StoreOptions;
+
+  /**
    * Shape instantiator
    */
   instantiator: Instantiator;
 
-  options: StoreOptions;
+  /**
+   * History
+   */
+  history: Transform;
 
   /**
    * Index for object.id
@@ -43,8 +52,12 @@ export class Store {
    */
   doc: Obj | null;
 
+  /**
+   * Constructor
+   */
   constructor(instantiator: Instantiator, options?: StoreOptions) {
     this.instantiator = instantiator;
+    this.history = new Transform(this);
     this.options = options || {};
     this.idIndex = {};
     this.doc = null;

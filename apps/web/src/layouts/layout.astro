@@ -1,0 +1,37 @@
+---
+import "@/styles/globals.css";
+import { ViewTransitions } from "astro:transitions";
+import Seo from "@/components/seo.astro";
+import { getFontsInStyle } from "@/components/fonts-in-style";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  robots?: string;
+}
+
+const { title, description, image, robots } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- <GoogleAnalytics /> -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <Seo
+      title={title}
+      description={description}
+      image={image}
+      robots={robots}
+    />
+    <style set:html={getFontsInStyle()}></style>
+    <ViewTransitions />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

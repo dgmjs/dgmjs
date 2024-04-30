@@ -28,6 +28,12 @@ import {
 } from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { fitEnclosureInCSS, getControllerPosition } from "./utils";
+import {
+  moveShape,
+  moveMultipleShapes,
+  resizeShape,
+  resolveAllConstraints,
+} from "../mutates";
 
 interface BoxSizeControllerOptions {
   position: string;
@@ -189,7 +195,7 @@ export class BoxSizeController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
-    editor.transform.startTransaction("resize");
+    editor.transform.startAction("resize");
     this.initialEnclosure = shape.getEnclosure();
     this.initialSnapshot = {};
     shape.traverse((s) => (this.initialSnapshot[s.id] = s.toJSON(false, true)));
@@ -352,93 +358,94 @@ export class BoxSizeController extends Controller {
     shape.fromJSON(memo);
 
     // transform shapes
-    const tr = editor.transform;
-    const page = editor.currentPage!;
-
-    tr.resize(shape, targetWidth, targetHeight);
-    tr.moveShapes(
-      page,
-      [shape],
-      targetLeft - shape.left,
-      targetTop - shape.top
-    );
-
-    // resize path
-    if (shape instanceof Line) {
-      const newPath = geometry.projectPoints(
-        initialShape.path,
-        initialRect,
-        targetRect
+    editor.transform.transact((tx) => {
+      const page = editor.currentPage!;
+      resizeShape(tx, shape, targetWidth, targetHeight);
+      moveMultipleShapes(
+        tx,
+        page,
+        [shape],
+        targetLeft - shape.left,
+        targetTop - shape.top
       );
-      tr.atomicAssign(shape, "path", newPath);
-    }
 
-    // do scale (font, padding and path)
-    if (this.options.doScale) {
-      tr.atomicAssign(shape, "fontSize", initialShape.fontSize * ratio);
-      if (shape instanceof Box) {
-        tr.atomicAssign(
-          shape,
-          "padding",
-          initialShape.padding.map((v: number) => v * ratio)
+      // resize path
+      if (shape instanceof Line) {
+        const newPath = geometry.projectPoints(
+          initialShape.path,
+          initialRect,
+          targetRect
         );
+        tx.assign(shape, "path", newPath);
       }
-    }
 
-    // do scale children
-    if (this.options.doScaleChildren) {
-      shape.traverse((s) => {
-        if (s !== shape && s instanceof Shape) {
-          const initialChild = this.initialSnapshot[s.id];
-          const initialChildRect = [
-            [initialChild.left, initialChild.top],
-            [
-              initialChild.left + initialChild.width,
-              initialChild.top + initialChild.height,
-            ],
-          ];
-          const targetChildRect = geometry.projectPoints(
-            initialChildRect,
-            initialRect,
-            targetRect
+      // do scale (font, padding and path)
+      if (this.options.doScale) {
+        tx.assign(shape, "fontSize", initialShape.fontSize * ratio);
+        if (shape instanceof Box) {
+          tx.assign(
+            shape,
+            "padding",
+            initialShape.padding.map((v: number) => v * ratio)
           );
-          const l = targetChildRect[0][0];
-          const t = targetChildRect[0][1];
-          const r = targetChildRect[1][0];
-          const b = targetChildRect[1][1];
-          const w = r - l;
-          const h = b - t;
-          tr.move(s, l - s.left, t - s.top);
-          tr.resize(s, w, h);
-          if (s instanceof Line) {
-            const newPath = geometry.projectPoints(
-              initialChild.path,
+        }
+      }
+
+      // do scale children
+      if (this.options.doScaleChildren) {
+        shape.traverse((s) => {
+          if (s !== shape && s instanceof Shape) {
+            const initialChild = this.initialSnapshot[s.id];
+            const initialChildRect = [
+              [initialChild.left, initialChild.top],
+              [
+                initialChild.left + initialChild.width,
+                initialChild.top + initialChild.height,
+              ],
+            ];
+            const targetChildRect = geometry.projectPoints(
               initialChildRect,
-              targetChildRect
+              initialRect,
+              targetRect
             );
-            tr.atomicAssign(s, "path", newPath);
-          }
-          if (this.options.doScale) {
-            tr.atomicAssign(s, "fontSize", initialChild.fontSize * ratio);
-            if (s instanceof Box) {
-              tr.atomicAssign(
-                s,
-                "padding",
-                initialChild.padding.map((v: number) => v * ratio)
+            const l = targetChildRect[0][0];
+            const t = targetChildRect[0][1];
+            const r = targetChildRect[1][0];
+            const b = targetChildRect[1][1];
+            const w = r - l;
+            const h = b - t;
+            moveShape(tx, s, l - s.left, t - s.top);
+            resizeShape(tx, s, w, h);
+            if (s instanceof Line) {
+              const newPath = geometry.projectPoints(
+                initialChild.path,
+                initialChildRect,
+                targetChildRect
               );
+              tx.assign(s, "path", newPath);
+            }
+            if (this.options.doScale) {
+              tx.assign(s, "fontSize", initialChild.fontSize * ratio);
+              if (s instanceof Box) {
+                tx.assign(
+                  s,
+                  "padding",
+                  initialChild.padding.map((v: number) => v * ratio)
+                );
+              }
             }
           }
-        }
-      });
-    }
-    tr.resolveAllConstraints(page, canvas);
+        });
+      }
+      resolveAllConstraints(tx, page, canvas);
+    });
   }
 
   /**
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Box) {
-    editor.transform.endTransaction();
+    editor.transform.endAction();
   }
 
   /**

@@ -1,0 +1,31 @@
+---
+import type { Props } from "@astrojs/starlight/props";
+---
+
+<a href="/" class="site-title sl-flex">
+  <img class="light:sl-hidden h-5 w-auto" alt="logo" src="/logo-dark.svg" />
+  <img class="dark:sl-hidden h-5 w-auto" alt="logo" src="/logo-light.svg" />
+  <span class="text-base font-semibold">dgm.js</span>
+</a>
+
+<style>
+  .site-title {
+    justify-self: flex-start;
+    max-width: 100%;
+    overflow: hidden;
+    align-items: center;
+    gap: var(--sl-nav-gap);
+    font-size: var(--sl-text-h4);
+    font-weight: 600;
+    color: var(--sl-color-text-accent);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  img {
+    height: calc(var(--sl-nav-height) - 2 * var(--sl-nav-pad-y));
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: 0 50%;
+  }
+</style>

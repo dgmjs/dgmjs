@@ -16,6 +16,7 @@ import * as geometry from "../graphics/geometry";
 import { Line, Shape } from "../shapes";
 import { Editor, Handler } from "../editor";
 import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
+import { addShape, resolveAllConstraints, setLinePath } from "../mutates";
 
 /**
  * Line Factory Handler
@@ -46,8 +47,10 @@ export class LineFactoryHandler extends Handler {
     if (page) {
       this.points = [this.dragStartPoint];
       this.shape = editor.factory.createLine(this.points, false);
-      editor.transform.startTransaction("create");
-      editor.transform.addShape(this.shape, page);
+      editor.transform.startAction("create");
+      editor.transform.transact((tx) => {
+        addShape(tx, this.shape!, page);
+      });
     }
   }
 
@@ -55,8 +58,10 @@ export class LineFactoryHandler extends Handler {
     const page = editor.currentPage;
     if (page && this.shape) {
       const newPath = [...this.points, this.dragPoint];
-      editor.transform.setPath(this.shape, newPath);
-      editor.transform.resolveAllConstraints(page, editor.canvas);
+      editor.transform.transact((tx) => {
+        setLinePath(tx, this.shape!, newPath);
+        resolveAllConstraints(tx, page, editor.canvas);
+      });
       editor.repaint();
     }
   }
@@ -64,9 +69,9 @@ export class LineFactoryHandler extends Handler {
   finalize(editor: Editor, e?: CanvasPointerEvent): void {
     if (this.shape) {
       if (geometry.pathLength(this.shape.path) < 2) {
-        editor.transform.cancelTransaction();
+        editor.transform.cancelAction();
       } else {
-        editor.transform.endTransaction();
+        editor.transform.endAction();
         editor.factory.triggerCreate(this.shape as Shape);
       }
     }
@@ -83,6 +88,7 @@ export class LineFactoryHandler extends Handler {
         if (this.closed) {
           this.finalize(editor, e);
           this.reset();
+          this.done(editor);
         } else {
           const p = canvas.globalCoordTransformRev([e.x, e.y]);
           this.points.push(p);
@@ -137,7 +143,7 @@ export class LineFactoryHandler extends Handler {
 
   keyDown(editor: Editor, e: KeyboardEvent): boolean {
     if (e.key === "Escape" && this.dragging) {
-      editor.transform.cancelTransaction();
+      editor.transform.cancelAction();
       editor.repaint();
       this.reset();
       this.done(editor);

@@ -3,11 +3,13 @@ import {
   EditorOptions,
   Shape,
   Transaction,
+  Action,
   basicSetup,
   Page,
   DragEvent,
   FileDropEvent,
   DblClickEvent,
+  Plugin,
 } from "@dgmjs/core";
 import { useEffect, useRef } from "react";
 
@@ -17,6 +19,7 @@ export interface DGMEditorCoreProps
     "onScroll" | "onDragStart" | "onDrag" | "onDragEnd"
   > {
   options?: Partial<EditorOptions>;
+  plugins?: Plugin[];
   showGrid?: boolean;
   onMount?: (editor: Editor) => void;
   onSelectionChange?: (selections: Shape[]) => void;
@@ -25,6 +28,9 @@ export interface DGMEditorCoreProps
   onShapeCreate?: (shape: Shape) => void;
   onShapeInitialize?: (shape: Shape) => void;
   onTransaction?: (tx: Transaction) => void;
+  onAction?: (action: Action) => void;
+  onUndo?: (action: Action) => void;
+  onRedo?: (action: Action) => void;
   onDblClick?: (event: DblClickEvent) => void;
   onZoom?: (scale: number) => void;
   onScroll?: (origin: number[]) => void;
@@ -36,6 +42,7 @@ export interface DGMEditorCoreProps
 
 export const DGMEditorCore: React.FC<DGMEditorCoreProps> = ({
   options,
+  plugins,
   showGrid = false,
   onMount,
   onSelectionChange,
@@ -44,6 +51,9 @@ export const DGMEditorCore: React.FC<DGMEditorCoreProps> = ({
   onShapeCreate,
   onShapeInitialize,
   onTransaction,
+  onAction,
+  onUndo,
+  onRedo,
   onDblClick,
   onZoom,
   onScroll,
@@ -60,7 +70,8 @@ export const DGMEditorCore: React.FC<DGMEditorCoreProps> = ({
     if (!editorRef.current) {
       const editor = new Editor(
         editorHolderRef.current!,
-        basicSetup({ ...options })
+        basicSetup({ ...options }),
+        plugins
       );
 
       // events forwarding
@@ -81,6 +92,15 @@ export const DGMEditorCore: React.FC<DGMEditorCoreProps> = ({
       });
       editor.transform.onTransaction.addListener((tx: Transaction) => {
         if (onTransaction) onTransaction(tx);
+      });
+      editor.transform.onAction.addListener((action: Action) => {
+        if (onAction) onAction(action);
+      });
+      editor.transform.onUndo.addListener((action: Action) => {
+        if (onUndo) onUndo(action);
+      });
+      editor.transform.onRedo.addListener((action: Action) => {
+        if (onRedo) onRedo(action);
       });
       editor.onDblClick.addListener((event: DblClickEvent) => {
         if (onDblClick) onDblClick(event);

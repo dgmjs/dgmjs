@@ -19,6 +19,7 @@ import { Cursor, Mouse } from "../graphics/const";
 import { findConnectionAnchor } from "../controllers/utils";
 import * as guide from "../utils/guide";
 import { lcs2ccs } from "../graphics/utils";
+import { addShape, resolveAllConstraints, setLinePath } from "../mutates";
 
 /**
  * Connector Factory Handler
@@ -62,8 +63,10 @@ export class ConnectorFactoryHandler extends Handler {
         [this.dragStartPoint, this.dragPoint]
       );
       this.shape.path = [this.dragStartPoint, this.dragPoint];
-      editor.transform.startTransaction("create");
-      editor.transform.addShape(this.shape, page);
+      editor.transform.startAction("create");
+      editor.transform.transact((tx) => {
+        addShape(tx, this.shape!, page);
+      });
     }
   }
 
@@ -79,18 +82,12 @@ export class ConnectorFactoryHandler extends Handler {
       this.headAnchor = anchor;
       const newPath = geometry.pathCopy((this.shape as Connector).path);
       newPath[1] = this.dragPoint;
-      editor.transform.setPath(this.shape as Line, newPath);
-      editor.transform.atomicAssignRef(
-        this.shape as Shape,
-        "head",
-        this.headEnd
-      );
-      editor.transform.atomicAssign(
-        this.shape as Shape,
-        "headAnchor",
-        this.headAnchor
-      );
-      editor.transform.resolveAllConstraints(page, editor.canvas);
+      editor.transform.transact((tx) => {
+        setLinePath(tx, this.shape as Line, newPath);
+        tx.assignRef(this.shape as Shape, "head", this.headEnd);
+        tx.assign(this.shape as Shape, "headAnchor", this.headAnchor);
+        resolveAllConstraints(tx, page, editor.canvas);
+      });
     }
   }
 
@@ -98,9 +95,9 @@ export class ConnectorFactoryHandler extends Handler {
     const MIN_SIZE = 2;
     if (this.shape) {
       if (geometry.pathLength((this.shape as Connector).path) < MIN_SIZE) {
-        editor.transform.cancelTransaction();
+        editor.transform.cancelAction();
       } else {
-        editor.transform.endTransaction();
+        editor.transform.endAction();
         editor.factory.triggerCreate(this.shape);
       }
     }
@@ -154,7 +151,7 @@ export class ConnectorFactoryHandler extends Handler {
 
   keyDown(editor: Editor, e: KeyboardEvent): boolean {
     if (e.key === "Escape" && this.dragging) {
-      editor.transform.cancelTransaction();
+      editor.transform.cancelAction();
       editor.repaint();
       this.reset();
       this.done(editor);

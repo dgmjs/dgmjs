@@ -19,6 +19,7 @@ import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import { Cursor } from "../graphics/const";
+import { moveAnchor, resolveAllConstraints } from "../mutates";
 
 /**
  * BoxMoveAnchoredController
@@ -61,7 +62,7 @@ export class BoxMoveAnchoredController extends Controller {
 
   initialize(editor: Editor, shape: Shape): void {
     // this.ghost = shape.getEnclosure();
-    editor.transform.startTransaction("move-anchor");
+    editor.transform.startAction("move-anchor");
   }
 
   /**
@@ -79,17 +80,18 @@ export class BoxMoveAnchoredController extends Controller {
     const angle = geometry.angle(anchorPoint, shapeCenter);
     const length = geometry.distance(shapeCenter, anchorPoint);
     // transform shape
-    const tr = editor.transform;
-    const page = editor.currentPage!;
-    tr.moveAnchor(shape as Box, angle, length);
-    tr.resolveAllConstraints(page, canvas);
+    editor.transform.transact((tx) => {
+      const page = editor.currentPage!;
+      moveAnchor(tx, shape as Box, angle, length);
+      resolveAllConstraints(tx, page, canvas);
+    });
   }
 
   /**
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Box) {
-    editor.transform.endTransaction();
+    editor.transform.endAction();
   }
 
   /**

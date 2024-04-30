@@ -14,7 +14,17 @@
 import { z } from "zod";
 import { Box, Page, Shape, constraintManager } from "../shapes";
 import { Canvas } from "../graphics/graphics";
-import { Transform } from "../transform/transform";
+import { Transaction } from "../core/transaction";
+import {
+  moveMultipleShapes,
+  resizeShape,
+  setBottom,
+  setHeight,
+  setLeft,
+  setRight,
+  setTop,
+  setWidth,
+} from "../mutates";
 
 const schema = z.object({
   orient: z.enum(["top", "bottom", "left", "right", "center"]).default("top"),
@@ -46,7 +56,7 @@ const schema = z.object({
  * @return returns changed or not
  */
 function setHorzAlign(
-  tr: Transform,
+  tx: Transaction,
   page: Page,
   shape: Box,
   relativeTo: Box,
@@ -108,10 +118,10 @@ function setHorzAlign(
       break;
   }
   dx += offset;
-  changed = tr.moveShapes(page, [shape], dx, dy);
+  changed = moveMultipleShapes(tx, page, [shape], dx, dy);
   if (width > -1) {
     changed =
-      tr.resize(shape, width < 0 ? shape.width : width, shape.height) ||
+      resizeShape(tx, shape, width < 0 ? shape.width : width, shape.height) ||
       changed;
   }
   return changed;
@@ -122,7 +132,7 @@ function setHorzAlign(
  * @return returns changed or not
  */
 function setVertAlign(
-  tr: Transform,
+  tx: Transaction,
   page: Page,
   shape: Box,
   relativeTo: Box,
@@ -186,10 +196,10 @@ function setVertAlign(
       break;
   }
   dy += offset;
-  changed = tr.moveShapes(page, [shape], dx, dy);
+  changed = moveMultipleShapes(tx, page, [shape], dx, dy);
   if (height > -1) {
     changed =
-      tr.resize(shape, shape.width, height < 0 ? shape.height : height) ||
+      resizeShape(tx, shape, shape.width, height < 0 ? shape.height : height) ||
       changed;
   }
   return changed;
@@ -205,10 +215,10 @@ function setVertAlign(
  * - args.fillLast {boolean} fill space with last child
  */
 function constraint(
+  tx: Transaction,
   page: Page,
   shape: Shape,
   canvas: Canvas,
-  transform: Transform,
   args: z.infer<typeof schema>
 ) {
   let changed: boolean = false;
@@ -224,15 +234,14 @@ function constraint(
         let ty = shape.innerTop;
         for (let child of arr) {
           if (child instanceof Box) {
-            changed = transform.setTop(child, ty) || changed;
+            changed = setTop(tx, child, ty) || changed;
             ty = child.bottom;
             changed =
-              setHorzAlign(transform, page, child, shape, args.align) ||
-              changed;
+              setHorzAlign(tx, page, child, shape, args.align) || changed;
             // fill last child
             if (args.fillLast && child === arr[arr.length - 1]) {
               const h = shape.innerBottom - child.top;
-              changed = transform.setHeight(child, Math.max(h, 0)) || changed;
+              changed = setHeight(tx, child, Math.max(h, 0)) || changed;
             }
           }
         }
@@ -245,16 +254,15 @@ function constraint(
         let by = shape.innerBottom;
         for (let child of arr.reverse()) {
           if (child instanceof Box) {
-            changed = transform.setBottom(child, by) || changed;
+            changed = setBottom(tx, child, by) || changed;
             by = child.top - 1;
             changed =
-              setHorzAlign(transform, page, child, shape, args.align) ||
-              changed;
+              setHorzAlign(tx, page, child, shape, args.align) || changed;
             // fill last child
             if (args.fillLast && child === arr[arr.length - 1]) {
               const h = child.bottom - shape.innerTop;
-              changed = transform.setTop(child, shape.innerTop) || changed;
-              changed = transform.setHeight(child, Math.max(h, 0)) || changed;
+              changed = setTop(tx, child, shape.innerTop) || changed;
+              changed = setHeight(tx, child, Math.max(h, 0)) || changed;
             }
           }
         }
@@ -267,15 +275,14 @@ function constraint(
         let lx = shape.innerLeft;
         for (let child of arr) {
           if (child instanceof Box) {
-            changed = transform.setLeft(child, lx) || changed;
+            changed = setLeft(tx, child, lx) || changed;
             lx = child.right;
             changed =
-              setVertAlign(transform, page, child, shape, args.align) ||
-              changed;
+              setVertAlign(tx, page, child, shape, args.align) || changed;
             // fill last child
             if (args.fillLast && child === arr[arr.length - 1]) {
               const w = shape.innerRight - child.left;
-              changed = transform.setWidth(child, Math.max(w, 0)) || changed;
+              changed = setWidth(tx, child, Math.max(w, 0)) || changed;
             }
           }
         }
@@ -288,16 +295,15 @@ function constraint(
         let rx = shape.innerRight;
         for (let child of arr.reverse()) {
           if (child instanceof Box) {
-            changed = transform.setRight(child, rx) || changed;
+            changed = setRight(tx, child, rx) || changed;
             rx = child.left - 1;
             changed =
-              setVertAlign(transform, page, child, shape, args.align) ||
-              changed;
+              setVertAlign(tx, page, child, shape, args.align) || changed;
             // fill last child
             if (args.fillLast && child === arr[arr.length - 1]) {
               const w = child.right - shape.innerLeft;
-              changed = transform.setLeft(child, shape.innerLeft) || changed;
-              changed = transform.setWidth(child, Math.max(w, 0)) || changed;
+              changed = setLeft(tx, child, shape.innerLeft) || changed;
+              changed = setWidth(tx, child, Math.max(w, 0)) || changed;
             }
           }
         }
@@ -313,8 +319,8 @@ function constraint(
           if (child instanceof Box) {
             const x = cx - Math.round(child.width / 2);
             const y = cy - Math.round(child.height / 2);
-            changed = transform.setLeft(child, x) || changed;
-            changed = transform.setTop(child, y) || changed;
+            changed = setLeft(tx, child, x) || changed;
+            changed = setTop(tx, child, y) || changed;
           }
         }
       }

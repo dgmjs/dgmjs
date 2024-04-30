@@ -15,7 +15,8 @@ import { z } from "zod";
 import { constraintManager, Box, Shape, Page } from "../shapes";
 import * as geometry from "../graphics/geometry";
 import { Canvas } from "../graphics/graphics";
-import { Transform } from "../transform/transform";
+import { Transaction } from "../core/transaction";
+import { moveMultipleShapes } from "../mutates";
 
 const schema = z.object({});
 
@@ -26,10 +27,10 @@ const schema = z.object({});
  * @param {object} args
  */
 function constraint(
+  tx: Transaction,
   page: Page,
   shape: Shape,
   canvas: Canvas,
-  transform: Transform,
   args: z.infer<typeof schema>
 ) {
   let changed = false;
@@ -47,7 +48,7 @@ function constraint(
     const top = shapeCenter[1] - shape.height / 2;
     const dx = left - shape.left;
     const dy = top - shape.top;
-    changed = transform.moveShapes(page, [shape], dx, dy);
+    changed = moveMultipleShapes(tx, page, [shape], dx, dy);
   }
   return changed;
 }

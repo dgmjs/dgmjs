@@ -1,4 +1,5 @@
 import {
+  Transaction,
   Editor,
   Shape,
   Box,
@@ -6,6 +7,7 @@ import {
   measureText,
   convertTextNodeToString,
   DblClickEvent,
+  resolveAllConstraints,
 } from "@dgmjs/core";
 import { useEffect, useRef, useState } from "react";
 import { moveToAboveOrBelow, textVertAlignToAlignItems } from "./utils";
@@ -114,7 +116,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
   }, [state.left, state.top, state.textShape]);
 
   const getTextRect = (textShape: Text, doc: any) => {
-    const rect = textShape.getRectInDOM(editor.canvas);
+    const rect = textShape.getRectInDCS(editor.canvas);
     const textMetric = measureText(editor.canvas, textShape, doc);
     const shapeWidth =
       textMetric.minWidth + state.padding[1] + state.padding[3];
@@ -156,8 +158,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
       editor.repaint();
 
       // start transaction
-      editor.transform.startTransaction("text-edit");
-      editor.transform.resolveAllConstraints(editor.currentPage, editor.canvas);
+      editor.transform.startAction("text-edit");
 
       // set initial content
       tiptapEditor?.commands.setContent(textShape.text);
@@ -176,8 +177,10 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
   const update = (textShape: Box, textValue: any) => {
     if (editor.currentPage) {
       // mutate text shape
-      editor.transform.atomicAssign(textShape, "text", textValue);
-      editor.transform.resolveAllConstraints(editor.currentPage, editor.canvas);
+      editor.transform.transact((tx: Transaction) => {
+        tx.assign(textShape, "text", textValue);
+        resolveAllConstraints(tx, editor.currentPage!, editor.canvas);
+      });
 
       // update states
       const rect = getTextRect(textShape, textValue);
@@ -204,7 +207,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
 
   const close = () => {
     if (tiptapEditor && state.textShape) {
-      editor.transform.endTransaction();
+      editor.transform.endAction();
       const textString = convertTextNodeToString(tiptapEditor.getJSON());
       if (state.textShape instanceof Text && textString.trim().length === 0) {
         editor.actions.remove([state.textShape]);

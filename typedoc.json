@@ -1,0 +1,9 @@
+{
+  "entryPoints": ["packages/*"],
+  "name": "dgm.js",
+  "entryPointStrategy": "packages",
+  "includeVersion": false,
+  "excludeExternals": true,
+  "out": "./apps/web/public/reference",
+  "customCss": "./apps/web/src/styles/typedoc-custom.css"
+}

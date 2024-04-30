@@ -13,6 +13,7 @@
 
 import { Editor, Handler } from "../editor";
 import { fileOpen } from "browser-fs-access";
+import { addShape, resolveAllConstraints } from "../mutates";
 
 /**
  * Image Factory Handler
@@ -38,10 +39,12 @@ export class ImageFactoryHandler extends Handler {
           ]);
           const center = editor.getCenter();
           const shape = await editor.factory.createImage(file, center);
-          editor.transform.startTransaction("create");
-          editor.transform.addShape(shape, page);
-          editor.transform.resolveAllConstraints(page, editor.canvas);
-          editor.transform.endTransaction();
+          editor.transform.startAction("create");
+          editor.transform.transact((tx) => {
+            addShape(tx, shape, page);
+            resolveAllConstraints(tx, page, editor.canvas);
+          });
+          editor.transform.endAction();
           editor.factory.triggerCreate(shape);
           this.done(editor);
         }

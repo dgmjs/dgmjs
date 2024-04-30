@@ -1,6 +1,6 @@
 {
   "name": "@dgmjs/core",
-  "version": "0.15.0",
+  "version": "0.15.2",
   "description": "An extensible diagramming library for the web",
   "type": "module",
   "main": "./dist/index.js",
@@ -45,6 +45,8 @@
     "simplify-path": "^1.1.0",
     "svgcanvas": "^2.5.0",
     "tiptap-extension-font-size": "^1.2.0",
+    "y-webrtc": "^10.3.0",
+    "yjs": "^13.6.14",
     "zod": "^3.22.4"
   },
   "devDependencies": {

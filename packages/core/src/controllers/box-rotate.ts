@@ -25,6 +25,7 @@ import { angleInCCS, lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { getControllerPosition } from "./utils";
+import { resolveAllConstraints } from "../mutates";
 
 interface BoxRotateControllerOptions {
   position: string;
@@ -140,7 +141,7 @@ export class BoxRotateController extends Controller {
    * Initialize ghost
    */
   initialize(editor: Editor, shape: Shape): void {
-    editor.transform.startTransaction("rotate");
+    editor.transform.startAction("rotate");
   }
 
   /**
@@ -156,17 +157,18 @@ export class BoxRotateController extends Controller {
     const delta = Math.round(d / ANGLE_STEP) * ANGLE_STEP;
     let angle = Math.round(geometry.normalizeAngle(shape.rotate + delta));
     // transform shapes
-    const tr = editor.transform;
-    const page = editor.currentPage!;
-    tr.atomicAssign(shape, "rotate", angle);
-    tr.resolveAllConstraints(page, editor.canvas);
+    editor.transform.transact((tx) => {
+      const page = editor.currentPage!;
+      tx.assign(shape, "rotate", angle);
+      resolveAllConstraints(tx, page, editor.canvas);
+    });
   }
 
   /**
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Box) {
-    editor.transform.endTransaction();
+    editor.transform.endAction();
   }
 
   /**

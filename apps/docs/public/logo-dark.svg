@@ -1,0 +1,49 @@
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    width="24"
+    height="24"
+    fill="none"
+  >
+    <path d="M20 8V16" stroke="white" stroke-width="2" />
+    <path d="M4 8V16" stroke="white" stroke-width="2" />
+    <rect
+      x="1"
+      y="17"
+      width="6"
+      height="6"
+      stroke="white"
+      stroke-width="2"
+    />
+    <rect
+      x="17"
+      y="17"
+      width="6"
+      height="6"
+      stroke="white"
+      stroke-width="2"
+    />
+    <rect
+      x="17"
+      y="1"
+      width="6"
+      height="6"
+      stroke="white"
+      stroke-width="2"
+    />
+    <rect
+      x="1"
+      y="1"
+      width="6"
+      height="6"
+      stroke="white"
+      stroke-width="2"
+    />
+    <path d="M4 14L14 4" stroke="white" stroke-width="2" />
+    <path d="M6 18L18 6" stroke="white" stroke-width="2" />
+    <path d="M10 20L20 10" stroke="white" stroke-width="2" />
+    <path d="M8 4H16" stroke="white" stroke-width="2" />
+    <path d="M8 20H16" stroke="white" stroke-width="2" />
+  </svg>
+
+
