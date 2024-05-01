@@ -26,13 +26,16 @@ const colors = [
 
 type Awareness = awarenessProtocol.Awareness;
 
-/**
- * User State
- */
-export interface UserState {
+export interface UserIdentity {
   id: number;
   name: string;
   color: string;
+}
+
+/**
+ * User State
+ */
+export interface UserState extends UserIdentity {
   cursor: number[];
 }
 
@@ -184,7 +187,7 @@ export class YjsUserPresencePlugin extends Plugin {
   disposables: Disposable[] = [];
   onUserEnter: TypedEvent<UserState[]>;
   onUserLeave: TypedEvent<UserState[]>;
-  onUserUpdate: TypedEvent<UserState[]>;
+  onUserIdentityUpdate: TypedEvent<UserState[]>;
 
   /**
    * Constructor
@@ -196,7 +199,7 @@ export class YjsUserPresencePlugin extends Plugin {
     this.remoteUserStates = new Map();
     this.onUserEnter = new TypedEvent();
     this.onUserLeave = new TypedEvent();
-    this.onUserUpdate = new TypedEvent();
+    this.onUserIdentityUpdate = new TypedEvent();
   }
 
   /**
@@ -279,18 +282,6 @@ export class YjsUserPresencePlugin extends Plugin {
         });
         if (users.length > 0) this.onUserEnter.emit(users);
       }
-      if (changes.updated.length > 0) {
-        const users: RemoteUserState[] = [];
-        changes.updated.forEach((updatedId: number) => {
-          const state = this.yAwareness.getStates().get(updatedId);
-          const remoteUserState = this.remoteUserStates.get(updatedId);
-          if (state && remoteUserState) {
-            remoteUserState.update(state);
-            users.push(remoteUserState);
-          }
-        });
-        if (users.length > 0) this.onUserUpdate.emit(users);
-      }
       if (changes.removed.length > 0) {
         const users: RemoteUserState[] = [];
         changes.removed.forEach((removedId: number) => {
@@ -302,6 +293,23 @@ export class YjsUserPresencePlugin extends Plugin {
           }
         });
         if (users.length > 0) this.onUserLeave.emit(users);
+      }
+      if (changes.updated.length > 0) {
+        const users: RemoteUserState[] = [];
+        changes.updated.forEach((updatedId: number) => {
+          const state = this.yAwareness.getStates().get(updatedId);
+          const remoteUserState = this.remoteUserStates.get(updatedId);
+          if (state && remoteUserState) {
+            if (
+              state.name !== remoteUserState.name ||
+              state.color !== remoteUserState.color
+            ) {
+              users.push(remoteUserState);
+            }
+            remoteUserState.update(state);
+          }
+        });
+        if (users.length > 0) this.onUserIdentityUpdate.emit(users);
       }
     };
     if (this.yAwareness) {
