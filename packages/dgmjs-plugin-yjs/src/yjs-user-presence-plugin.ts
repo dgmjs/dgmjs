@@ -147,14 +147,16 @@ class RemoteUserState implements UserState {
     this.cursor = state.cursor;
     if (Array.isArray(this.cursor)) {
       const position = utils.gcs2dcs(canvas, this.cursor);
+      const left = position[0] - 5;
+      const top = position[1] - 5;
       if (this.cursorDOM) {
-        this.cursorDOM.style.left = `${position[0]}px`;
-        this.cursorDOM.style.top = `${position[1]}px`;
+        this.cursorDOM.style.left = `${left}px`;
+        this.cursorDOM.style.top = `${top}px`;
         this.cursorDOM.style.color = state.color;
       }
       if (this.nameDOM) {
-        this.nameDOM.style.left = `${position[0] + 20}px`;
-        this.nameDOM.style.top = `${position[1] + 20}px`;
+        this.nameDOM.style.left = `${left + 20}px`;
+        this.nameDOM.style.top = `${top + 20}px`;
         this.nameDOM.innerText = this.name;
         this.nameDOM.style.backgroundColor = state.color;
       }
