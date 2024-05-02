@@ -1,11 +1,10 @@
 import * as Y from "yjs";
-// import { WebrtcProvider } from "y-webrtc";
+import { WebrtcProvider } from "@dgmjs/y-webrtc";
 import { Editor } from "@dgmjs/core";
 import {
   YjsDocSyncPlugin,
   YjsUserPresencePlugin,
 } from "@dgmjs/dgmjs-plugin-yjs";
-import { WebrtcProvider } from "./y-webrtc-patch/y-webrtc";
 
 export class Collab {
   editor: Editor = null!;
