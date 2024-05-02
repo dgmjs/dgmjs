@@ -1,10 +1,11 @@
 import * as Y from "yjs";
-import { WebrtcProvider } from "y-webrtc";
+// import { WebrtcProvider } from "y-webrtc";
 import { Editor } from "@dgmjs/core";
 import {
   YjsDocSyncPlugin,
   YjsUserPresencePlugin,
 } from "@dgmjs/dgmjs-plugin-yjs";
+import { WebrtcProvider } from "./y-webrtc-patch/y-webrtc";
 
 export class Collab {
   editor: Editor = null!;
@@ -40,7 +41,7 @@ export class Collab {
     this.userPresencePlugin.onUserLeave.addListener((users) => {
       // console.log("user leave", users);
     });
-    this.userPresencePlugin.onUserUpdate.addListener((users) => {
+    this.userPresencePlugin.onUserIdentityUpdate.addListener((users) => {
       // console.log("user update", users);
     });
   }
