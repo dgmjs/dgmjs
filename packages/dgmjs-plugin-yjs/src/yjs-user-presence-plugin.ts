@@ -37,6 +37,7 @@ export interface UserIdentity {
  */
 export interface UserState extends UserIdentity {
   cursor: number[];
+  pageId: string | null;
 }
 
 /**
@@ -47,6 +48,7 @@ class LocalUserState implements UserState {
   name: string;
   color: string;
   cursor: number[];
+  pageId: string | null;
   yAwareness: Awareness;
 
   /**
@@ -63,6 +65,7 @@ class LocalUserState implements UserState {
     this.name = name;
     this.color = color;
     this.cursor = [0, 0];
+    this.pageId = null;
     this.setName(name);
     this.setColor(color);
   }
@@ -88,6 +91,13 @@ class LocalUserState implements UserState {
   setColor(color: string) {
     this.yAwareness.setLocalStateField("color", color);
   }
+
+  /**
+   * Set the page id
+   */
+  setPageId(pageId: string | null) {
+    this.yAwareness.setLocalStateField("page", pageId);
+  }
 }
 
 /**
@@ -98,6 +108,7 @@ class RemoteUserState implements UserState {
   name: string;
   color: string;
   cursor: number[];
+  pageId: string | null;
   private editor: Editor;
   private cursorDOM: HTMLElement | null = null;
   private nameDOM: HTMLElement | null = null;
@@ -111,6 +122,7 @@ class RemoteUserState implements UserState {
     this.name = "unknown";
     this.color = "#000000";
     this.cursor = [0, 0];
+    this.pageId = null;
     // setup cursor
     this.cursorDOM = document.createElement("div");
     this.cursorDOM.className = "yjs-awareness user-cursor";
@@ -161,6 +173,29 @@ class RemoteUserState implements UserState {
         this.nameDOM.style.backgroundColor = state.color;
       }
     }
+    // show cursor only on the same page
+    const currentPageId = this.editor.currentPage?.id ?? null;
+    if (currentPageId && currentPageId === state.page) {
+      this.showCursor();
+    } else {
+      this.hideCursor();
+    }
+  }
+
+  /**
+   * Show the cursor
+   */
+  showCursor() {
+    if (this.cursorDOM) this.cursorDOM.style.display = "block";
+    if (this.nameDOM) this.nameDOM.style.display = "block";
+  }
+
+  /**
+   * Hide the cursor
+   */
+  hideCursor() {
+    if (this.cursorDOM) this.cursorDOM.style.display = "none";
+    if (this.nameDOM) this.nameDOM.style.display = "none";
   }
 
   /**
@@ -170,6 +205,8 @@ class RemoteUserState implements UserState {
     this.id = -1;
     this.name = "unknown";
     this.color = "#000000";
+    this.cursor = [0, 0];
+    this.pageId = null;
     this.cursorDOM?.remove();
     this.nameDOM?.remove();
   }
@@ -264,6 +301,15 @@ export class YjsUserPresencePlugin extends Plugin {
         const ccs = [event.x, event.y];
         const gcs = this.editor.canvas.globalCoordTransformRev(ccs);
         this.localUserState?.setCursorPosition(gcs);
+      })
+    );
+
+    this.disposables.push(
+      this.editor.onCurrentPageChange.addListener((page) => {
+        this.localUserState?.setPageId(page?.id ?? null);
+        this.remoteUserStates.forEach((remoteUserState) => {
+          remoteUserState.update(remoteUserState);
+        });
       })
     );
 
