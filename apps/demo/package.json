@@ -59,6 +59,7 @@
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "tiptap-extension-font-size": "^1.2.0",
+    "unique-names-generator": "^4.7.1",
     "zod-to-json-schema": "^3.22.4",
     "zustand": "^4.5.0"
   },

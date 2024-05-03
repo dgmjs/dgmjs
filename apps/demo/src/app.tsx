@@ -21,7 +21,7 @@ import { Font, fetchFonts, insertFontsToDocument } from "./font-manager";
 import { ShapeSidebar } from "./components/shape-sidebar";
 import { EditorWrapper } from "./editor";
 import { Button } from "./components/ui/button";
-import { collab } from "./collab";
+import { UserColors, collab, generateUserIdentity } from "./collab";
 
 declare global {
   interface Window {
@@ -42,7 +42,7 @@ function App() {
     await fetchFonts(fontJson as Font[]);
 
     if (roomId) {
-      collab.start(window.editor, roomId);
+      collab.start(window.editor, roomId, generateUserIdentity());
       console.log("collab started with roomId", roomId);
     } else {
       window.editor.newDoc();
@@ -119,7 +119,7 @@ function App() {
 
   const handleShare = () => {
     const roomId = nanoid(); // window.editor.store.doc?.id;
-    collab.start(window.editor, roomId!);
+    collab.start(window.editor, roomId!, generateUserIdentity());
     collab.flush();
     window.history.pushState({}, "", `?roomId=${roomId}`);
   };

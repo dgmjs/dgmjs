@@ -9,33 +9,9 @@ import {
 } from "@dgmjs/core";
 import * as awarenessProtocol from "y-protocols/awareness.js";
 
-// TODO: Separate this plugin into a separate package
-// TODO: show user's selection?
-
-const colors = [
-  "#E54D2E",
-  "#E54666",
-  "#E54666",
-  "#8E4EC6",
-  "#6E56CF",
-  "#3E63DD",
-  "#0090FF",
-  "#00A2C7",
-  "#12A594",
-  "#30A46C",
-  "#46A758",
-  "#A18072",
-  "#A18072",
-  "#F76B15",
-  "#BDEE63",
-  "#86EAD4",
-  "#7CE2FE",
-];
-
 type Awareness = awarenessProtocol.Awareness;
 
 export interface UserIdentity {
-  id: number;
   name: string;
   color: string;
 }
@@ -44,6 +20,7 @@ export interface UserIdentity {
  * User State
  */
 export interface UserState extends UserIdentity {
+  id: number;
   cursor: number[];
   selection: string[];
   pageId: string | null;
@@ -302,7 +279,7 @@ export class YjsUserPresencePlugin extends Plugin {
   /**
    * Start the user presence synchronization
    */
-  start(yAwareness: awarenessProtocol.Awareness) {
+  start(yAwareness: awarenessProtocol.Awareness, userIdentity: UserIdentity) {
     this.state = "syncing";
     this.yAwareness = yAwareness;
     this.watch();
@@ -310,8 +287,8 @@ export class YjsUserPresencePlugin extends Plugin {
     this.localUserState = new LocalUserState(
       this.yAwareness,
       this.yAwareness.clientID,
-      "user-" + this.yAwareness.clientID,
-      colors[Math.round(Math.random() * colors.length - 1)],
+      userIdentity.name,
+      userIdentity.color,
       this.editor.currentPage?.id ?? null
     );
 
