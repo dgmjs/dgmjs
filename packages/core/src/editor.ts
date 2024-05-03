@@ -85,6 +85,7 @@ export class Editor {
   onDrag: TypedEvent<DragEvent>;
   onDragEnd: TypedEvent<DragEvent>;
   onFileDrop: TypedEvent<FileDropEvent>;
+  onRepaint: TypedEvent<void>;
 
   store: Store;
   transform: Transform;
@@ -157,6 +158,7 @@ export class Editor {
     this.onDrag = new TypedEvent();
     this.onDragEnd = new TypedEvent();
     this.onFileDrop = new TypedEvent();
+    this.onRepaint = new TypedEvent();
 
     this.store = new Store(shapeInstantiator, {
       objInitializer: (o) => {
@@ -822,6 +824,7 @@ export class Editor {
     g.fillStyle = this.canvas.resolveColor(
       docSize ? Color.CANVAS : Color.BACKGROUND
     );
+    g.globalAlpha = 1;
     g.fillRect(0, 0, this.canvasElement.width, this.canvasElement.height);
   }
 
@@ -910,6 +913,7 @@ export class Editor {
       this.drawGrid(this.canvas);
       this.currentPage.render(this.canvas, true);
       if (drawSelection) this.drawSelection();
+      this.onRepaint.emit();
     }
   }
 

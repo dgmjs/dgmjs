@@ -1,4 +1,12 @@
-import { Editor, Plugin, utils, Disposable, TypedEvent } from "@dgmjs/core";
+import {
+  Editor,
+  Plugin,
+  utils,
+  Disposable,
+  TypedEvent,
+  Shape,
+  geometry,
+} from "@dgmjs/core";
 import * as awarenessProtocol from "y-protocols/awareness.js";
 
 // TODO: Separate this plugin into a separate package
@@ -37,6 +45,7 @@ export interface UserIdentity {
  */
 export interface UserState extends UserIdentity {
   cursor: number[];
+  selection: string[];
   pageId: string | null;
 }
 
@@ -48,6 +57,7 @@ class LocalUserState implements UserState {
   name: string;
   color: string;
   cursor: number[];
+  selection: string[];
   pageId: string | null;
   yAwareness: Awareness;
 
@@ -65,6 +75,7 @@ class LocalUserState implements UserState {
     this.name = name;
     this.color = color;
     this.cursor = [0, 0];
+    this.selection = [];
     this.pageId = null;
     this.setName(name);
     this.setColor(color);
@@ -75,28 +86,39 @@ class LocalUserState implements UserState {
    */
   setCursorPosition(cursorPosition: number[]) {
     this.cursor = cursorPosition;
-    this.yAwareness.setLocalStateField("cursor", cursorPosition);
+    this.yAwareness.setLocalStateField("cursor", this.cursor);
   }
 
   /**
    * Set the user name
    */
   setName(name: string) {
-    this.yAwareness.setLocalStateField("name", name);
+    this.name = name;
+    this.yAwareness.setLocalStateField("name", this.name);
   }
 
   /**
    * Set the user color
    */
   setColor(color: string) {
-    this.yAwareness.setLocalStateField("color", color);
+    this.color = color;
+    this.yAwareness.setLocalStateField("color", this.color);
+  }
+
+  /**
+   * Set the selection
+   */
+  setSelection(shapes: Shape[]) {
+    this.selection = shapes.map((shape) => shape.id);
+    this.yAwareness.setLocalStateField("selection", this.selection);
   }
 
   /**
    * Set the page id
    */
   setPageId(pageId: string | null) {
-    this.yAwareness.setLocalStateField("page", pageId);
+    this.pageId = pageId;
+    this.yAwareness.setLocalStateField("page", this.pageId);
   }
 }
 
@@ -108,6 +130,7 @@ class RemoteUserState implements UserState {
   name: string;
   color: string;
   cursor: number[];
+  selection: string[];
   pageId: string | null;
   private editor: Editor;
   private cursorDOM: HTMLElement | null = null;
@@ -122,6 +145,7 @@ class RemoteUserState implements UserState {
     this.name = "unknown";
     this.color = "#000000";
     this.cursor = [0, 0];
+    this.selection = [];
     this.pageId = null;
     // setup cursor
     this.cursorDOM = document.createElement("div");
@@ -180,6 +204,8 @@ class RemoteUserState implements UserState {
     } else {
       this.hideCursor();
     }
+    this.selection = state.selection ?? [];
+    this.editor.repaint();
   }
 
   /**
@@ -206,6 +232,7 @@ class RemoteUserState implements UserState {
     this.name = "unknown";
     this.color = "#000000";
     this.cursor = [0, 0];
+    this.selection = [];
     this.pageId = null;
     this.cursorDOM?.remove();
     this.nameDOM?.remove();
@@ -310,6 +337,52 @@ export class YjsUserPresencePlugin extends Plugin {
         this.remoteUserStates.forEach((remoteUserState) => {
           remoteUserState.update(remoteUserState);
         });
+      })
+    );
+
+    this.disposables.push(
+      this.editor.selection.onChange.addListener((selection) => {
+        this.localUserState?.setSelection(selection);
+      })
+    );
+
+    this.disposables.push(
+      this.editor.onRepaint.addListener(() => {
+        // draw remote user's selection
+        const canvas = this.editor.canvas;
+        canvas.storeState();
+        canvas.strokeWidth = canvas.px * 3;
+        canvas.strokePattern = [];
+        canvas.roughness = 0;
+        canvas.alpha = 0.5;
+        this.remoteUserStates.forEach((remoteUserState) => {
+          canvas.strokeColor = remoteUserState.color;
+          if (remoteUserState.selection.length > 0) {
+            const shapes = remoteUserState.selection
+              .map((shapeId) => this.editor.store.getById(shapeId))
+              .filter((shape) => shape !== null) as Shape[];
+            const shapeOutlineCCSs = shapes.map((shape) => {
+              return shape
+                .getOutline()
+                .map((p) => utils.lcs2ccs(canvas, shape, p));
+            });
+            shapeOutlineCCSs.forEach((outlineCCS) => {
+              canvas.polyline(outlineCCS);
+            });
+            if (remoteUserState.selection.length > 1) {
+              const boundingRect = shapeOutlineCCSs
+                .map((ccs) => geometry.boundingRect(ccs))
+                .reduce(geometry.unionRect);
+              canvas.strokeRect(
+                boundingRect[0][0],
+                boundingRect[0][1],
+                boundingRect[1][0],
+                boundingRect[1][1]
+              );
+            }
+          }
+        });
+        canvas.restoreState();
       })
     );
 
