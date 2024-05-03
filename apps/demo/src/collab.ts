@@ -1,12 +1,7 @@
 import * as Y from "yjs";
 import { WebrtcProvider } from "@dgmjs/y-webrtc";
 import { Editor, TypedEvent } from "@dgmjs/core";
-import {
-  uniqueNamesGenerator,
-  adjectives,
-  colors,
-  animals,
-} from "unique-names-generator";
+import { uniqueNamesGenerator, colors, animals } from "unique-names-generator";
 import {
   UserIdentity,
   YjsDocSyncPlugin,
