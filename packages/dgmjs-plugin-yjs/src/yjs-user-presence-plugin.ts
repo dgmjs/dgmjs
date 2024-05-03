@@ -57,6 +57,7 @@ class LocalUserState implements UserState {
   name: string;
   color: string;
   cursor: number[];
+  area: number[][] | null;
   selection: string[];
   pageId: string | null;
   yAwareness: Awareness;
@@ -68,17 +69,23 @@ class LocalUserState implements UserState {
     yAwareness: Awareness,
     id: number,
     name: string = "unknown",
-    color: string = "#000000"
+    color: string = "#000000",
+    pageId: string | null = null
   ) {
     this.yAwareness = yAwareness;
     this.id = id;
     this.name = name;
     this.color = color;
     this.cursor = [0, 0];
+    this.area = null;
     this.selection = [];
-    this.pageId = null;
-    this.setName(name);
-    this.setColor(color);
+    this.pageId = pageId;
+    this.setName(this.name);
+    this.setColor(this.color);
+    this.setCursorPosition(this.cursor);
+    this.setArea(this.area);
+    this.setSelection([]);
+    this.setPageId(this.pageId);
   }
 
   /**
@@ -106,6 +113,14 @@ class LocalUserState implements UserState {
   }
 
   /**
+   * Set the area
+   */
+  setArea(area: number[][] | null) {
+    this.area = area;
+    this.yAwareness.setLocalStateField("area", this.area);
+  }
+
+  /**
    * Set the selection
    */
   setSelection(shapes: Shape[]) {
@@ -118,7 +133,7 @@ class LocalUserState implements UserState {
    */
   setPageId(pageId: string | null) {
     this.pageId = pageId;
-    this.yAwareness.setLocalStateField("page", this.pageId);
+    this.yAwareness.setLocalStateField("pageId", this.pageId);
   }
 }
 
@@ -130,6 +145,7 @@ class RemoteUserState implements UserState {
   name: string;
   color: string;
   cursor: number[];
+  area: number[][] | null;
   selection: string[];
   pageId: string | null;
   private editor: Editor;
@@ -145,6 +161,7 @@ class RemoteUserState implements UserState {
     this.name = "unknown";
     this.color = "#000000";
     this.cursor = [0, 0];
+    this.area = null;
     this.selection = [];
     this.pageId = null;
     // setup cursor
@@ -180,7 +197,10 @@ class RemoteUserState implements UserState {
     const canvas = this.editor.canvas;
     this.name = state.name;
     this.color = state.color;
+    this.area = state.area;
+    this.selection = state.selection ?? [];
     this.cursor = state.cursor;
+    this.pageId = state.pageId;
     if (Array.isArray(this.cursor)) {
       const position = utils.gcs2dcs(canvas, this.cursor);
       const left = position[0] - 5;
@@ -199,12 +219,11 @@ class RemoteUserState implements UserState {
     }
     // show cursor only on the same page
     const currentPageId = this.editor.currentPage?.id ?? null;
-    if (currentPageId && currentPageId === state.page) {
+    if (currentPageId && currentPageId === state.pageId) {
       this.showCursor();
     } else {
       this.hideCursor();
     }
-    this.selection = state.selection ?? [];
     this.editor.repaint();
   }
 
@@ -292,7 +311,8 @@ export class YjsUserPresencePlugin extends Plugin {
       this.yAwareness,
       this.yAwareness.clientID,
       "user-" + this.yAwareness.clientID,
-      colors[Math.round(Math.random() * colors.length - 1)]
+      colors[Math.round(Math.random() * colors.length - 1)],
+      this.editor.currentPage?.id ?? null
     );
 
     // this.logChanges();
@@ -347,8 +367,41 @@ export class YjsUserPresencePlugin extends Plugin {
     );
 
     this.disposables.push(
+      this.editor.onDragStart.addListener((event) => {
+        // if selecting area
+        if (event.controller === null) {
+          const area = [
+            geometry.copy(event.dragPoint),
+            geometry.copy(event.dragPoint),
+          ];
+          this.localUserState?.setArea(area);
+        }
+      })
+    );
+
+    this.disposables.push(
+      this.editor.onDrag.addListener((event) => {
+        // if selecting area
+        if (event.controller === null) {
+          const p = this.localUserState?.area![0] ?? [0, 0];
+          const area = [p, geometry.copy(event.dragPoint)];
+          this.localUserState?.setArea(area);
+        }
+      })
+    );
+
+    this.disposables.push(
+      this.editor.onDragEnd.addListener((event) => {
+        // if selecting area
+        if (event.controller === null) {
+          this.localUserState?.setArea(null);
+        }
+      })
+    );
+
+    this.disposables.push(
       this.editor.onRepaint.addListener(() => {
-        // draw remote user's selection
+        const currentPageId = this.editor.currentPage?.id ?? null;
         const canvas = this.editor.canvas;
         canvas.storeState();
         canvas.strokeWidth = canvas.px * 3;
@@ -356,28 +409,43 @@ export class YjsUserPresencePlugin extends Plugin {
         canvas.roughness = 0;
         canvas.alpha = 0.5;
         this.remoteUserStates.forEach((remoteUserState) => {
-          canvas.strokeColor = remoteUserState.color;
-          if (remoteUserState.selection.length > 0) {
-            const shapes = remoteUserState.selection
-              .map((shapeId) => this.editor.store.getById(shapeId))
-              .filter((shape) => shape !== null) as Shape[];
-            const shapeOutlineCCSs = shapes.map((shape) => {
-              return shape
-                .getOutline()
-                .map((p) => utils.lcs2ccs(canvas, shape, p));
-            });
-            shapeOutlineCCSs.forEach((outlineCCS) => {
-              canvas.polyline(outlineCCS);
-            });
-            if (remoteUserState.selection.length > 1) {
-              const boundingRect = shapeOutlineCCSs
-                .map((ccs) => geometry.boundingRect(ccs))
-                .reduce(geometry.unionRect);
+          if (remoteUserState.pageId === currentPageId) {
+            canvas.strokeColor = remoteUserState.color;
+            // draw remote user's selection
+            if (remoteUserState.selection.length > 0) {
+              const shapes = remoteUserState.selection
+                .map((shapeId) => this.editor.store.getById(shapeId))
+                .filter((shape) => shape !== null) as Shape[];
+              const shapeOutlineCCSs = shapes.map((shape) => {
+                return shape
+                  .getOutline()
+                  .map((p) => utils.lcs2ccs(canvas, shape, p));
+              });
+              shapeOutlineCCSs.forEach((outlineCCS) => {
+                canvas.polyline(outlineCCS);
+              });
+              if (remoteUserState.selection.length > 1) {
+                const boundingRect = shapeOutlineCCSs
+                  .map((ccs) => geometry.boundingRect(ccs))
+                  .reduce(geometry.unionRect);
+                canvas.strokeRect(
+                  boundingRect[0][0],
+                  boundingRect[0][1],
+                  boundingRect[1][0],
+                  boundingRect[1][1]
+                );
+              }
+            }
+            // draw remote user's dragging area
+            if (remoteUserState.area) {
+              const areaCCS = remoteUserState.area.map((p) =>
+                utils.gcs2ccs(canvas, p)
+              );
               canvas.strokeRect(
-                boundingRect[0][0],
-                boundingRect[0][1],
-                boundingRect[1][0],
-                boundingRect[1][1]
+                areaCCS[0][0],
+                areaCCS[0][1],
+                areaCCS[1][0],
+                areaCCS[1][1]
               );
             }
           }

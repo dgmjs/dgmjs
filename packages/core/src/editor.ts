@@ -523,6 +523,7 @@ export class Editor {
     if (this.currentPage !== page) {
       if (this.currentPage) {
         this.currentPage.finalize(this.canvas);
+        this.selection.deselectAll();
       }
       this.currentPage = page;
       this.repaint();
