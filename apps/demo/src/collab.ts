@@ -1,6 +1,6 @@
 import * as Y from "yjs";
 import { WebrtcProvider } from "@dgmjs/y-webrtc";
-import { Editor } from "@dgmjs/core";
+import { Editor, TypedEvent } from "@dgmjs/core";
 import {
   YjsDocSyncPlugin,
   YjsUserPresencePlugin,
@@ -12,10 +12,14 @@ export class Collab {
   userPresencePlugin: YjsUserPresencePlugin = null!;
   yDoc: Y.Doc | null;
   yProvider: WebrtcProvider | null;
+  syncStarted: boolean;
+  oDocReady: TypedEvent<void>;
 
   constructor() {
     this.yDoc = null;
     this.yProvider = null;
+    this.syncStarted = false;
+    this.oDocReady = new TypedEvent();
   }
 
   start(editor: Editor, roomId: string) {
@@ -26,7 +30,17 @@ export class Collab {
     this.userPresencePlugin = this.editor.getPlugin(
       "dgmjs/yjs-user-presence"
     ) as YjsUserPresencePlugin;
+
+    // initialize yDoc
+    this.syncStarted = true;
     this.yDoc = new Y.Doc();
+    this.yDoc.on("update", (update) => {
+      if (this.syncStarted) {
+        this.syncStarted = false;
+        this.oDocReady.emit();
+      }
+    });
+
     this.yProvider = new WebrtcProvider(roomId, this.yDoc, {
       // signaling: ["ws://localhost:4444"],
       signaling: ["wss://webrtc.dgm.sh"],

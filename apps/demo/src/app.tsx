@@ -75,6 +75,14 @@ function App() {
       window.editor.fit();
     });
 
+    collab.oDocReady.addListener(() => {
+      const doc = window.editor.store.doc as Document;
+      if (doc) {
+        demoStore.setDoc(doc);
+        demoStore.setCurrentPage(window.editor.currentPage);
+      }
+    });
+
     // forward key event to editor
     // window.addEventListener("keydown", (e) => {
     //   const event = new KeyboardEvent("keydown", { ...e });
