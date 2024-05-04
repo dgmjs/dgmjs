@@ -71,7 +71,6 @@ export class Editor {
   plugins: Record<string, Plugin>;
   platform: string;
 
-  onDocLoaded: TypedEvent<Doc>;
   onCurrentPageChange: TypedEvent<Page>;
   onActiveHandlerChange: TypedEvent<string>;
   onZoom: TypedEvent<number>;
@@ -144,7 +143,6 @@ export class Editor {
     });
 
     // initialize event emitters
-    this.onDocLoaded = new TypedEvent();
     this.onCurrentPageChange = new TypedEvent();
     this.onActiveHandlerChange = new TypedEvent();
     this.onZoom = new TypedEvent();
@@ -949,7 +947,6 @@ export class Editor {
     doc.children.push(page);
     page.parent = doc;
     this.store.setRoot(doc);
-    this.onDocLoaded.emit(this.store.root as Doc);
     this.setCurrentPage(doc.children[0] as Page);
     return doc;
   }
@@ -961,7 +958,6 @@ export class Editor {
     if (json) {
       this.selection.deselectAll();
       this.store.fromJSON(json);
-      this.onDocLoaded.emit(this.store.root as Doc);
       if (
         this.store.root instanceof Doc &&
         this.store.root.children.length > 0 &&
