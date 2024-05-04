@@ -58,14 +58,3 @@ export function yComputeParentOrder(
   const order = yGetOrderByPosition(ySortedChildren, position);
   return order;
 }
-
-/**
- * Get the position of the obj in the array of yObjs by order number
- */
-export function yGetPositionByOrder(
-  ySortedObjs: YObj[],
-  order: number
-): number {
-  const position = ySortedObjs.findIndex((o) => o.get("parent:order") >= order);
-  return position >= 0 ? position : ySortedObjs.length;
-}

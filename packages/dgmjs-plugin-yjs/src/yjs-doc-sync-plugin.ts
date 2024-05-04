@@ -119,13 +119,13 @@ export class YjsDocSyncPlugin extends Plugin {
     // handle yjs observe deep
     const observeListener = (events: Y.YEvent<any>[], tr: any) => {
       if (this.yStore && !tr.local) {
-        const createdObjs = handleYjsObserveDeep(
+        const postprocess = handleYjsObserveDeep(
           this.editor.store,
           this.yStore,
           events
         );
         // TODO: fix this
-        createdObjs.forEach((obj) => {
+        postprocess.created.forEach((obj) => {
           if (obj instanceof Document) {
             this.editor.store.setDoc(obj);
           }
@@ -203,5 +203,33 @@ export class YjsDocSyncPlugin extends Plugin {
         `[${json.type}] id:${json.id}, parent:${json.parent}, order:${json["parent:order"]}`
       );
     });
+  }
+
+  /**
+   * Print the yStore objects
+   */
+  printPages() {
+    this.editor.store.doc?.children.forEach((page) => {
+      const yPage = this.yStore?.get(page.id);
+      const json = yPage?.toJSON()!;
+      console.log(
+        `[${json.type}] id:${json.id}, parent:${json.parent}, order:${json["parent:order"]}`
+      );
+    });
+  }
+
+  /**
+   * Print the yStore objects
+   */
+  printCurrentPage() {
+    if (this.editor.currentPage) {
+      this.editor.currentPage.children.forEach((block) => {
+        const Obj = this.yStore?.get(block.id);
+        const json = Obj?.toJSON()!;
+        console.log(
+          `[${json.type}] id:${json.id}, parent:${json.parent}, order:${json["parent:order"]}`
+        );
+      });
+    }
   }
 }
