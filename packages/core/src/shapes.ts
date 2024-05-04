@@ -724,15 +724,15 @@ class Shape extends Obj {
 }
 
 /**
- * Document
+ * Doc
  */
-class Document extends Obj {
+class Doc extends Obj {
   version: number;
   pageSize: PageSize;
 
   constructor() {
     super();
-    this.type = "Document";
+    this.type = "Doc";
     this.version = 1;
     this.pageSize = null; // null = infinite, [960, 720] = 4:3, [960, 540] = 16:9
   }
@@ -2091,7 +2091,7 @@ const constraintManager = ConstraintManager.getInstance();
 
 const shapeInstantiator = new Instantiator({
   Shape: () => new Shape(),
-  Document: () => new Document(),
+  Doc: () => new Doc(),
   Page: () => new Page(),
   Box: () => new Box(),
   Line: () => new Line(),
@@ -2107,7 +2107,7 @@ const shapeInstantiator = new Instantiator({
 
 type ObjProps = Partial<
   Shape &
-    Document &
+    Doc &
     Page &
     Box &
     Line &
@@ -2135,7 +2135,7 @@ export {
   LineEndType,
   AlignmentKind,
   Shape,
-  Document,
+  Doc,
   Page,
   Box,
   Line,

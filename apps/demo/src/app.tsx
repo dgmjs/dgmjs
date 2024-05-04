@@ -1,11 +1,4 @@
-import {
-  Document,
-  Editor,
-  Page,
-  Shape,
-  ObjProps,
-  Transaction,
-} from "@dgmjs/core";
+import { Editor, Page, Shape, ObjProps, Transaction } from "@dgmjs/core";
 import {
   YjsDocSyncPlugin,
   YjsUserPresencePlugin,
@@ -21,7 +14,7 @@ import { Font, fetchFonts, insertFontsToDocument } from "./font-manager";
 import { ShapeSidebar } from "./components/shape-sidebar";
 import { EditorWrapper } from "./editor";
 import { Button } from "./components/ui/button";
-import { UserColors, collab, generateUserIdentity } from "./collab";
+import { collab, generateUserIdentity } from "./collab";
 
 declare global {
   interface Window {
@@ -67,7 +60,7 @@ function App() {
     // if (localData) {
     //   window.editor.loadFromJSON(JSON.parse(localData));
     // }
-    demoStore.setDoc(window.editor.store.doc as Document);
+    demoStore.setDoc(window.editor.getDoc());
     demoStore.setCurrentPage(window.editor.currentPage);
     // window.editor.fitToScreen();
 
@@ -76,7 +69,7 @@ function App() {
     });
 
     collab.oDocReady.addListener(() => {
-      const doc = window.editor.store.doc as Document;
+      const doc = window.editor.getDoc();
       if (doc) {
         demoStore.setDoc(doc);
         demoStore.setCurrentPage(window.editor.currentPage);
@@ -118,7 +111,7 @@ function App() {
   };
 
   const handleShare = () => {
-    const roomId = nanoid(); // window.editor.store.doc?.id;
+    const roomId = nanoid();
     collab.start(window.editor, roomId!, generateUserIdentity());
     collab.flush();
     window.history.pushState({}, "", `?roomId=${roomId}`);

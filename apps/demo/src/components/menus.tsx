@@ -21,14 +21,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { fileOpen } from "browser-fs-access";
 import { useDemoStore } from "@/demo-store";
-import { Document } from "@dgmjs/core";
 
 export function Menus() {
   const { setDoc, setCurrentPage } = useDemoStore();
 
   const handleNew = () => {
     window.editor.newDoc();
-    setDoc(window.editor.store.doc as Document);
+    setDoc(window.editor.getDoc());
   };
 
   const handleOpen = async () => {
@@ -46,7 +45,7 @@ export function Menus() {
         const data = await file.text();
         const json = JSON.parse(data);
         window.editor.loadFromJSON(json);
-        setDoc(window.editor.store.doc as Document);
+        setDoc(window.editor.getDoc());
         setCurrentPage(window.editor.currentPage);
         window.editor.fitToScreen();
         window.editor.repaint();

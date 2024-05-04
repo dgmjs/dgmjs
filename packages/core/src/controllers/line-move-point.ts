@@ -25,7 +25,7 @@ import * as geometry from "../graphics/geometry";
 import { Snap } from "../manipulators/snap";
 import { findControlPoint } from "./utils";
 import { reducePath } from "../utils/route-utils";
-import { resolveAllConstraints, setLinePath } from "../mutates";
+import { resolveAllConstraints, setLinePath } from "../macro";
 
 interface LineMovePointControllerOptions {
   exceptEndPoints: boolean;

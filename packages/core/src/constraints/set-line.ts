@@ -16,7 +16,7 @@ import { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { z } from "zod";
 import { Transaction } from "../core/transaction";
-import { setLinePath } from "../mutates";
+import { setLinePath } from "../macro";
 
 const schema = z.object({
   type: z.enum(["free", "horizontal", "vertical"]).default("free"),

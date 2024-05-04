@@ -14,7 +14,7 @@
 import { Canvas, CanvasPointerEvent } from "./graphics/graphics";
 import {
   Connector,
-  Document,
+  Doc,
   Shape,
   Page,
   shapeInstantiator,
@@ -26,7 +26,7 @@ import * as geometry from "./graphics/geometry";
 import * as utils from "./graphics/utils";
 import { ShapeFactory } from "./factory";
 import type { Obj } from "./core/obj";
-import { colors } from "./colors";
+import { themeColors } from "./colors";
 import { Actions } from "./actions";
 import { KeyMap, KeymapManager } from "./keymap-manager";
 import { AutoScroller } from "./utils/auto-scroller";
@@ -71,7 +71,7 @@ export class Editor {
   plugins: Record<string, Plugin>;
   platform: string;
 
-  onDocumentLoaded: TypedEvent<Document>;
+  onDocLoaded: TypedEvent<Doc>;
   onCurrentPageChange: TypedEvent<Page>;
   onActiveHandlerChange: TypedEvent<string>;
   onZoom: TypedEvent<number>;
@@ -144,7 +144,7 @@ export class Editor {
     });
 
     // initialize event emitters
-    this.onDocumentLoaded = new TypedEvent();
+    this.onDocLoaded = new TypedEvent();
     this.onCurrentPageChange = new TypedEvent();
     this.onActiveHandlerChange = new TypedEvent();
     this.onZoom = new TypedEvent();
@@ -240,7 +240,7 @@ export class Editor {
     // if (!context) throw new Error("Failed to create context2d");
     const pixelRatio = window.devicePixelRatio ?? 1;
     this.canvas = new Canvas(this.canvasElement, pixelRatio);
-    this.canvas.colorVariables = { ...colors["light"] };
+    this.canvas.colorVariables = { ...themeColors["light"] };
 
     // pointer down handler
     this.canvasElement.addEventListener("pointerdown", (e) => {
@@ -535,8 +535,8 @@ export class Editor {
    * Get pages
    */
   getPages(): Page[] {
-    if (this.store.doc) {
-      return this.store.doc.children as Page[];
+    if (this.store.root) {
+      return this.store.root.children as Page[];
     }
     return [];
   }
@@ -554,7 +554,7 @@ export class Editor {
   setDarkMode(dark: boolean) {
     this.darkMode = dark;
     this.canvas.colorVariables = {
-      ...colors[this.darkMode ? "dark" : "light"],
+      ...themeColors[this.darkMode ? "dark" : "light"],
     };
     this.repaint();
   }
@@ -697,7 +697,7 @@ export class Editor {
   fitToScreen(scaleAdjust: number = 1, maxScale: number = 1) {
     if (this.currentPage) {
       // doc size in GCS
-      const doc = this.store.doc as Document;
+      const doc = this.store.root as Doc;
       const page = this.currentPage;
       let box = Array.isArray(doc.pageSize)
         ? [[0, 0], doc.pageSize]
@@ -732,7 +732,7 @@ export class Editor {
   scrollCenterTo(center?: number[]) {
     if (this.currentPage) {
       // doc size in GCS
-      const doc = this.store.doc as Document;
+      const doc = this.store.root as Doc;
       const page = this.currentPage;
       let box = Array.isArray(doc.pageSize)
         ? [[0, 0], doc.pageSize]
@@ -821,7 +821,7 @@ export class Editor {
    */
   clearBackground(canvas: Canvas) {
     const g = canvas.context;
-    const docSize = (this.store.doc as Document)?.pageSize;
+    const docSize = (this.store.root as Doc)?.pageSize;
     g.fillStyle = this.canvas.resolveColor(
       docSize ? Color.CANVAS : Color.BACKGROUND
     );
@@ -834,7 +834,7 @@ export class Editor {
    */
   drawGrid(canvas: Canvas) {
     const scale = this.getScale();
-    const docSize = (this.store.doc as Document).pageSize;
+    const docSize = (this.store.root as Doc).pageSize;
 
     canvas.save();
     canvas.globalTransform();
@@ -929,27 +929,27 @@ export class Editor {
   /**
    * Get the document
    */
-  getDoc(): Document {
-    return this.store.doc as Document;
+  getDoc(): Doc {
+    return this.store.root as Doc;
   }
 
   /**
    * Set the document
    */
-  setDoc(doc: Document) {
-    this.store.setDoc(doc);
+  setDoc(doc: Doc) {
+    this.store.setRoot(doc);
   }
 
   /**
    * Create a new document
    */
-  newDoc(): Document {
-    const doc = new Document();
+  newDoc(): Doc {
+    const doc = new Doc();
     const page = new Page();
     doc.children.push(page);
     page.parent = doc;
-    this.store.setDoc(doc);
-    this.onDocumentLoaded.emit(this.store.doc as Document);
+    this.store.setRoot(doc);
+    this.onDocLoaded.emit(this.store.root as Doc);
     this.setCurrentPage(doc.children[0] as Page);
     return doc;
   }
@@ -961,13 +961,13 @@ export class Editor {
     if (json) {
       this.selection.deselectAll();
       this.store.fromJSON(json);
-      this.onDocumentLoaded.emit(this.store.doc as Document);
+      this.onDocLoaded.emit(this.store.root as Doc);
       if (
-        this.store.doc instanceof Document &&
-        this.store.doc.children.length > 0 &&
-        this.store.doc.children[0] instanceof Page
+        this.store.root instanceof Doc &&
+        this.store.root.children.length > 0 &&
+        this.store.root.children[0] instanceof Page
       ) {
-        this.setCurrentPage(this.store.doc.children[0] as Page);
+        this.setCurrentPage(this.store.root.children[0] as Page);
       }
     }
   }

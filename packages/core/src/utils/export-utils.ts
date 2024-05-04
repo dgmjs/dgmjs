@@ -1,8 +1,8 @@
-import type { Page } from "./shapes";
-import { Canvas } from "./graphics/graphics";
-import * as geometry from "./graphics/geometry";
+import type { Page } from "../shapes";
+import { Canvas } from "../graphics/graphics";
+import * as geometry from "../graphics/geometry";
 import fileSaverPkg from "file-saver";
-import { colors } from "./colors";
+import { themeColors } from "../colors";
 import { Context } from "svgcanvas";
 const { saveAs } = fileSaverPkg;
 
@@ -23,7 +23,7 @@ export type ExportImageOptions = {
 function getImageCanvas(page: Page, options: ExportImageOptions) {
   const { scale, dark, fillBackground } = options;
   const theme = dark ? "dark" : "light";
-  const colorVariables = colors[theme];
+  const colorVariables = themeColors[theme];
 
   // make a new canvas element for making image data
   const canvasElement = document.createElement("canvas");
@@ -109,7 +109,7 @@ export async function getSVGImageData(
     ...options,
   };
   const theme = dark ? "dark" : "light";
-  const colorVariables = colors[theme];
+  const colorVariables = themeColors[theme];
 
   // Make a new SVG canvas for making SVG image data
   const boundingBox = geometry.expandRect(
@@ -189,7 +189,7 @@ export async function exportImageAsFile(
 }
 
 /**
- * Copy doc image to clipboard
+ * Copy page image to clipboard
  */
 export async function copyToClipboard(
   canvas: Canvas,

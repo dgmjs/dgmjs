@@ -17,7 +17,7 @@ import { Controller, Editor, Manipulator } from "../editor";
 import { Snap } from "../manipulators/snap";
 import * as geometry from "../graphics/geometry";
 import { Cursor } from "../graphics/const";
-import { resolveAllConstraints, setLinePath } from "../mutates";
+import { resolveAllConstraints, setLinePath } from "../macro";
 
 /**
  * ConnectorMove Controller

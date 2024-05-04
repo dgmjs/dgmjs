@@ -12,7 +12,7 @@
  */
 
 import React from "react";
-import { colors } from "@dgmjs/core";
+import { themeColors } from "@dgmjs/core";
 import { cn } from "@/lib/utils";
 
 export const simplePalette: string[][] = [
@@ -95,8 +95,8 @@ const ColorItem: React.FC<ColorItemProps> = ({
 }) => {
   const c = value.startsWith("$")
     ? theme === "dark"
-      ? colors.dark[value.substring(1)]
-      : colors.light[value.substring(1)]
+      ? themeColors.dark[value.substring(1)]
+      : themeColors.light[value.substring(1)]
     : value;
 
   return (

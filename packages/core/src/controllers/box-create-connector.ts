@@ -23,7 +23,7 @@ import { lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { findConnectionAnchor, getControllerPosition } from "./utils";
-import { addShape, resolveAllConstraints, setLinePath } from "../mutates";
+import { addShape, resolveAllConstraints, setLinePath } from "../macro";
 
 interface BoxCreateConnectorControllerOptions {
   position: string;

@@ -12,7 +12,7 @@
  */
 
 import { z } from "zod";
-import { Shape, constraintManager, Box, Page } from "../shapes";
+import { Shape, constraintManager, Box, Page, Doc } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import { Transaction } from "../core/transaction";
 
@@ -35,7 +35,7 @@ function constraint(
 ) {
   let changed = false;
   const parent = shape.parent as Shape;
-  if (parent && !(parent instanceof Document)) {
+  if (parent && !(parent instanceof Doc)) {
     changed = tx.assign(shape, "opacity", parent.opacity) || changed;
     if (args.stroke) {
       changed = tx.assign(shape, "strokeColor", parent.strokeColor) || changed;

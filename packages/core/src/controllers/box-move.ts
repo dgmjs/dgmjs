@@ -17,7 +17,7 @@ import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { drawPolylineInLCS } from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { Cursor } from "../graphics/const";
-import { moveMultipleShapes, resolveAllConstraints } from "../mutates";
+import { moveMultipleShapes, resolveAllConstraints } from "../macro";
 
 /**
  * BoxMoveController

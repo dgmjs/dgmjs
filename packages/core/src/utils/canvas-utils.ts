@@ -1,7 +1,7 @@
 import { Page, PageSize, type Shape } from "../shapes";
 import * as geometry from "../graphics/geometry";
 import { Canvas, CanvasPointerEvent } from "../graphics/graphics";
-import { colors } from "../colors";
+import { themeColors } from "../colors";
 
 /**
  * Render the shape on the canvas element
@@ -55,7 +55,7 @@ export function renderOnCanvas(
 
   // draw shape on canvas
   const canvas = new Canvas(canvasElement, px);
-  canvas.colorVariables = colors[darkMode ? "dark" : "light"];
+  canvas.colorVariables = themeColors[darkMode ? "dark" : "light"];
   canvas.origin = [ox, oy];
   canvas.scale = scale;
   canvas.save();

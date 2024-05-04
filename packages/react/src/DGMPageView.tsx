@@ -1,4 +1,4 @@
-import { Page, PageSize, renderOnCanvas } from "@dgmjs/core";
+import { Page, PageSize, canvasUtils } from "@dgmjs/core";
 import {
   forwardRef,
   useEffect,
@@ -42,7 +42,7 @@ export const DGMPageView = forwardRef<DGMPageViewHandle, DGMPageViewProps>(
 
     const repaint = (width: number, height: number) => {
       if (canvasRef.current) {
-        renderOnCanvas(
+        canvasUtils.renderOnCanvas(
           [page],
           canvasRef.current,
           darkMode,

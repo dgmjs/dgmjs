@@ -12,9 +12,9 @@ function traverse(json: any, visitor: (node: any) => void) {
  * Convert a old-version format JSON object to the latest version.
  */
 export function convertToLatestVersion(json: any): any {
-  // convert Diagram to Document
-  if (json.type === "Diagram") {
-    json.type = "Document";
+  // convert Diagram, Document to Doc
+  if (json.type === "Diagram" || json.type === "Document") {
+    json.type = "Doc";
   }
 
   // ensure children is array
@@ -31,7 +31,7 @@ export function convertToLatestVersion(json: any): any {
 
   // convert single-page document to multi-page document
   if (
-    json.type === "Document" &&
+    json.type === "Doc" &&
     json.children.length > 0 &&
     json.children[0].type !== "Page"
   ) {

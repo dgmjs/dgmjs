@@ -24,7 +24,7 @@ import {
   setRight,
   setTop,
   setWidth,
-} from "../mutates";
+} from "../macro";
 
 const schema = z.object({
   orient: z.enum(["top", "bottom", "left", "right", "center"]).default("top"),

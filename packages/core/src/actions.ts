@@ -19,7 +19,7 @@ import {
   Line,
   type ObjProps,
   Page,
-  Document,
+  Doc,
 } from "./shapes";
 import * as geometry from "./graphics/geometry";
 import { Obj } from "./core/obj";
@@ -44,7 +44,7 @@ import {
   setFontFamily,
   setFontSize,
   setHorzAlign,
-} from "./mutates";
+} from "./macro";
 
 /**
  * Editor actions
@@ -79,7 +79,7 @@ export class Actions {
     page.name = `Page ${position + 1}`;
     this.editor.transform.startAction("add-page");
     this.editor.transform.transact((tx) => {
-      addPage(tx, this.editor.store.doc as Document, page);
+      addPage(tx, this.editor.getDoc(), page);
       if (position >= 0 && position < this.editor.getPages().length) {
         reorderPage(tx, page, position);
       }
@@ -122,7 +122,7 @@ export class Actions {
     )[0] as Page;
     this.editor.transform.startAction("duplicate-page");
     this.editor.transform.transact((tx) => {
-      addPage(tx, this.editor.store.doc as Document, copied);
+      addPage(tx, this.editor.getDoc(), copied);
       reorderPage(tx, copied, position);
     });
     this.editor.transform.endAction();

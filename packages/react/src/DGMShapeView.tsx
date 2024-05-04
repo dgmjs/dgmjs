@@ -1,4 +1,4 @@
-import { Shape, renderOnCanvas } from "@dgmjs/core";
+import { Shape, canvasUtils } from "@dgmjs/core";
 import {
   forwardRef,
   useEffect,
@@ -42,7 +42,7 @@ export const DGMShapeView = forwardRef<DGMShapeViewHandle, DGMShapeViewProps>(
 
     const repaint = (width: number, height: number) => {
       if (canvasRef.current) {
-        renderOnCanvas(
+        canvasUtils.renderOnCanvas(
           shapes,
           canvasRef.current,
           darkMode,

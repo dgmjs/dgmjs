@@ -19,7 +19,7 @@ import { Cursor, Mouse } from "../graphics/const";
 import { findConnectionAnchor } from "../controllers/utils";
 import * as guide from "../utils/guide";
 import { lcs2ccs } from "../graphics/utils";
-import { addShape, resolveAllConstraints, setLinePath } from "../mutates";
+import { addShape, resolveAllConstraints, setLinePath } from "../macro";
 
 /**
  * Connector Factory Handler

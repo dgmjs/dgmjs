@@ -21,7 +21,7 @@ import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { findSegmentControlPoint, fitPathInCSS } from "./utils";
 import { reducePath } from "../utils/route-utils";
-import { resolveAllConstraints, setLinePath } from "../mutates";
+import { resolveAllConstraints, setLinePath } from "../macro";
 
 /**
  * LineAddPointController

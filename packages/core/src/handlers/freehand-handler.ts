@@ -17,7 +17,7 @@ import { Editor, Handler } from "../editor";
 import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
 import { Line } from "../shapes";
 import simplifyPath from "simplify-path";
-import { addShape, resolveAllConstraints, setLinePath } from "../mutates";
+import { addShape, resolveAllConstraints, setLinePath } from "../macro";
 
 /**
  * Freehand Factory Handler

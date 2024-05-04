@@ -13,7 +13,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { colors } from "@dgmjs/core";
+import { themeColors } from "@dgmjs/core";
 import {
   Popover,
   PopoverContent,
@@ -31,8 +31,8 @@ interface ColorFieldProps extends React.HTMLAttributes<HTMLDivElement> {
 function evaluateColor(theme: string, color: string): string {
   if (color.startsWith("$")) {
     return theme === "dark"
-      ? colors.dark[color.substring(1)]
-      : colors.light[color.substring(1)];
+      ? themeColors.dark[color.substring(1)]
+      : themeColors.light[color.substring(1)];
   }
   return color;
 }

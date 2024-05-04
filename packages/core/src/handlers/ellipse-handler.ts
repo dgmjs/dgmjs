@@ -3,7 +3,7 @@ import { Editor, Handler } from "../editor";
 import { CanvasPointerEvent } from "../graphics/graphics";
 import { Ellipse, Shape } from "../shapes";
 import { Cursor, Mouse } from "../graphics/const";
-import { addShape, resolveAllConstraints } from "../mutates";
+import { addShape, resolveAllConstraints } from "../macro";
 
 /**
  * Ellipse Factory Handler

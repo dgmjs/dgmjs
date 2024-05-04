@@ -33,7 +33,7 @@ import {
   moveMultipleShapes,
   resizeShape,
   resolveAllConstraints,
-} from "../mutates";
+} from "../macro";
 
 interface BoxSizeControllerOptions {
   position: string;

@@ -1,5 +1,5 @@
 import * as Y from "yjs";
-import { Editor, Plugin, Document, Page, Disposable } from "@dgmjs/core";
+import { Editor, Plugin, Doc, Page, Disposable } from "@dgmjs/core";
 import { YStore } from "./yjs-utils";
 import { handleYjsObserveDeep } from "./sync-to-store";
 import {
@@ -126,9 +126,9 @@ export class YjsDocSyncPlugin extends Plugin {
         );
         // set the store.doc
         postprocess.created.forEach((obj) => {
-          if (obj instanceof Document) {
+          if (obj instanceof Doc) {
             const doc = obj;
-            this.editor.store.setDoc(doc);
+            this.editor.setDoc(doc);
             if (doc.children.length > 0 && doc.children[0] instanceof Page) {
               this.editor.setCurrentPage(doc.children[0] as Page);
             }
@@ -210,7 +210,7 @@ export class YjsDocSyncPlugin extends Plugin {
    * Print the yStore objects
    */
   printPages() {
-    this.editor.store.doc?.children.forEach((page) => {
+    this.editor.getDoc()?.children.forEach((page) => {
       const yPage = this.yStore?.get(page.id);
       const json = yPage?.toJSON()!;
       console.log(

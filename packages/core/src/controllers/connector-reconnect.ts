@@ -20,7 +20,7 @@ import { lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { findConnectionAnchor } from "./utils";
-import { resolveAllConstraints, setLinePath } from "../mutates";
+import { resolveAllConstraints, setLinePath } from "../macro";
 
 /**
  * Connector Reconnect Controller

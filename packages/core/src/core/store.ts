@@ -48,9 +48,9 @@ export class Store {
   idIndex: Record<string, Obj>;
 
   /**
-   * this document object
+   * the root object
    */
-  doc: Obj | null;
+  root: Obj | null;
 
   /**
    * Constructor
@@ -60,7 +60,7 @@ export class Store {
     this.history = new Transform(this);
     this.options = options || {};
     this.idIndex = {};
-    this.doc = null;
+    this.root = null;
   }
 
   /**
@@ -68,7 +68,7 @@ export class Store {
    */
   clear() {
     this.idIndex = {};
-    this.doc = null;
+    this.root = null;
   }
 
   /**
@@ -110,7 +110,7 @@ export class Store {
    * Test shape is exists in the store or not
    */
   has(obj: Obj): boolean {
-    if (this.doc?.find((s) => s === obj) && this.getById(obj.id)) return true;
+    if (this.root?.find((s) => s === obj) && this.getById(obj.id)) return true;
     return false;
   }
 
@@ -118,7 +118,7 @@ export class Store {
    * Return JSON of the root
    */
   toJSON(): any {
-    return this.doc ? this.doc.toJSON(true) : null;
+    return this.root ? this.root.toJSON(true) : null;
   }
 
   /**
@@ -126,18 +126,18 @@ export class Store {
    */
   fromJSON(json: any) {
     const latestVersionJson = convertToLatestVersion(json);
-    this.doc = this.instantiator.createFromJson(latestVersionJson);
-    if (this.doc) {
+    this.root = this.instantiator.createFromJson(latestVersionJson);
+    if (this.root) {
       this.idIndex = {};
-      this.addToIndex(this.doc);
+      this.addToIndex(this.root);
     }
   }
 
   /**
    * Set the root object
    */
-  setDoc(doc: Obj) {
-    this.doc = doc;
+  setRoot(doc: Obj) {
+    this.root = doc;
     this.addToIndex(doc);
   }
 }

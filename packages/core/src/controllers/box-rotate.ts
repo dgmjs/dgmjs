@@ -25,7 +25,7 @@ import { angleInCCS, lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { getControllerPosition } from "./utils";
-import { resolveAllConstraints } from "../mutates";
+import { resolveAllConstraints } from "../macro";
 
 interface BoxRotateControllerOptions {
   position: string;

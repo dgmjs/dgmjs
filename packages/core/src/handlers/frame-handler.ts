@@ -16,7 +16,7 @@ import { Editor, Handler } from "../editor";
 import { CanvasPointerEvent } from "../graphics/graphics";
 import { Cursor, Mouse } from "../graphics/const";
 import { Frame, Shape } from "../shapes";
-import { addShape, resolveAllConstraints } from "../mutates";
+import { addShape, resolveAllConstraints } from "../macro";
 
 /**
  * Frame Factory Handler

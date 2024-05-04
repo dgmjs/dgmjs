@@ -16,7 +16,7 @@ import * as geometry from "../graphics/geometry";
 import { Line, Shape } from "../shapes";
 import { Editor, Handler } from "../editor";
 import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
-import { addShape, resolveAllConstraints, setLinePath } from "../mutates";
+import { addShape, resolveAllConstraints, setLinePath } from "../macro";
 
 /**
  * Line Factory Handler

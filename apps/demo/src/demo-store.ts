@@ -1,4 +1,4 @@
-import { Document, Page, Shape } from "@dgmjs/core";
+import { Doc, Page, Shape } from "@dgmjs/core";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
@@ -7,15 +7,15 @@ export interface DemoState {
   origin: number[];
   theme: "light" | "dark";
   activeHandler: string | null;
-  doc: Document | null;
+  doc: Doc | null;
   currentPage: Page | null;
   selection: Shape[];
-  libraries: Document[];
+  libraries: Doc[];
   setScale: (scale: number) => void;
   setOrigin: (origin: [number, number]) => void;
   setTheme: (theme: "light" | "dark") => void;
   setActiveHandler: (handlerId: string | null) => void;
-  setDoc: (doc: Document | null) => void;
+  setDoc: (doc: Doc | null) => void;
   setCurrentPage: (page: Page | null) => void;
   setSelection: (selections: Shape[]) => void;
 }

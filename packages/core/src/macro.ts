@@ -5,7 +5,7 @@ import {
   Shape,
   Connector,
   Page,
-  Document,
+  Doc,
 } from "./shapes";
 import { Canvas } from "./graphics/graphics";
 import * as geometry from "./graphics/geometry";
@@ -16,14 +16,13 @@ import { visitTextNodes } from "./utils/text-utils";
 import { Transaction } from "./core/transaction";
 
 /**
- * Mutation utility functions
+ * Macro functions (a set of mutations)
  */
 
 /**
  * Atomic mutation to assign a path (number[][]) to shape's field and
  * returns true if changed
  */
-// TODO: Need to fix type of obj
 export function assignPath(
   tx: Transaction,
   obj: Obj,
@@ -40,7 +39,7 @@ export function assignPath(
 }
 
 /**
- * A set of mutations to add a child and change the child's parent
+ * A macro to add a child and change the child's parent
  */
 export function changeParent(tx: Transaction, obj: Obj, parent: Obj): boolean {
   let changed = false;
@@ -54,13 +53,13 @@ export function changeParent(tx: Transaction, obj: Obj, parent: Obj): boolean {
 }
 
 // ---------------------------------------------------------------------------
-//                         MUTATIONS FOR PAGES
+//                             MACRO FOR PAGES
 // ---------------------------------------------------------------------------
 
 /**
- * Mutation to add a page to doc
+ * A macro to add a page to doc
  */
-export function addPage(tx: Transaction, doc: Document, page: Page): boolean {
+export function addPage(tx: Transaction, doc: Doc, page: Page): boolean {
   let changed = false;
   changed = tx.appendObj(page) || changed;
   changed = changeParent(tx, page, doc) || changed;
@@ -68,7 +67,7 @@ export function addPage(tx: Transaction, doc: Document, page: Page): boolean {
 }
 
 /**
- * Mutation to remove a page from doc
+ * A macro to remove a page from doc
  */
 export function removePage(tx: Transaction, page: Page): boolean {
   let changed = false;
@@ -80,7 +79,7 @@ export function removePage(tx: Transaction, page: Page): boolean {
 }
 
 /**
- * Mutation to reorder a page in doc
+ * A macro to reorder a page in doc
  */
 export function reorderPage(
   tx: Transaction,
@@ -100,11 +99,11 @@ export function reorderPage(
 }
 
 // ---------------------------------------------------------------------------
-//                     MUTATIONS FOR GENERAL SHAPE
+//                         MACRO FOR GENERAL SHAPE
 // ---------------------------------------------------------------------------
 
 /**
- * Mutation to add a shape to a parent
+ * A macro to add a shape to a parent
  */
 export function addShape(
   tx: Transaction,
@@ -118,7 +117,7 @@ export function addShape(
 }
 
 /**
- * Mutation to set left
+ * A macro to set left
  */
 export function setLeft(tx: Transaction, shape: Shape, left: number): boolean {
   let changed = false;
@@ -132,7 +131,7 @@ export function setLeft(tx: Transaction, shape: Shape, left: number): boolean {
 }
 
 /**
- * Mutation to set right
+ * A macro to set right
  */
 export function setRight(
   tx: Transaction,
@@ -143,7 +142,7 @@ export function setRight(
 }
 
 /**
- * Mutation to set left and right
+ * A macro to set left and right
  */
 export function setLeftRight(
   tx: Transaction,
@@ -158,7 +157,7 @@ export function setLeftRight(
 }
 
 /**
- * Mutation to set top
+ * A macro to set top
  */
 export function setTop(tx: Transaction, shape: Shape, top: number): boolean {
   let changed = false;
@@ -172,7 +171,7 @@ export function setTop(tx: Transaction, shape: Shape, top: number): boolean {
 }
 
 /**
- * Mutation to set bottom
+ * A macro to set bottom
  */
 export function setBottom(
   tx: Transaction,
@@ -183,7 +182,7 @@ export function setBottom(
 }
 
 /**
- * Mutation to set top
+ * A macro to set top
  */
 export function setTopBottom(
   tx: Transaction,
@@ -198,7 +197,7 @@ export function setTopBottom(
 }
 
 /**
- * Mutation to set width
+ * A macro to set width
  */
 export function setWidth(
   tx: Transaction,
@@ -211,7 +210,7 @@ export function setWidth(
 }
 
 /**
- * Mutation to set height
+ * A macro to set height
  */
 export function setHeight(
   tx: Transaction,
@@ -224,7 +223,7 @@ export function setHeight(
 }
 
 /**
- * Mutation to set line's path (including left, top, width, height)
+ * A macro to set line's path (including left, top, width, height)
  */
 export function setLinePath(
   tx: Transaction,
@@ -242,7 +241,7 @@ export function setLinePath(
 }
 
 /**
- * Mutation to resize a shape (width, height, path)
+ * A macro to resize a shape (width, height, path)
  */
 export function resizeShape(
   tx: Transaction,
@@ -263,7 +262,7 @@ export function resizeShape(
 }
 
 /**
- * Mutations to move a single shape
+ * A macro to move a single shape
  */
 export function moveShape(
   tx: Transaction,
@@ -287,7 +286,7 @@ export function moveShape(
 }
 
 /**
- * A set of mutations to move an anchored box
+ * A macro to move an anchored box
  */
 export function moveAnchor(
   tx: Transaction,
@@ -302,7 +301,7 @@ export function moveAnchor(
 }
 
 /**
- * A set of mutations to change horz align
+ * A macro to change horz align
  */
 export function setHorzAlign(
   tx: Transaction,
@@ -321,7 +320,7 @@ export function setHorzAlign(
 }
 
 /**
- * A set of mutations to change font size
+ * A macro to change font size
  */
 export function setFontSize(
   tx: Transaction,
@@ -345,7 +344,7 @@ export function setFontSize(
 }
 
 /**
- * A set of mutation to change font family
+ * A macro to change font family
  */
 export function setFontFamily(
   tx: Transaction,
@@ -369,7 +368,7 @@ export function setFontFamily(
 }
 
 /**
- * A set of mutation to change font color
+ * A macro to change font color
  */
 export function setFontColor(
   tx: Transaction,
@@ -393,11 +392,11 @@ export function setFontColor(
 }
 
 // ---------------------------------------------------------------------------
-//                       MUTATIONS FOR CONNECTOR SHAPE
+//                         MACRO FOR CONNECTOR SHAPE
 // ---------------------------------------------------------------------------
 
 /**
- * A set of mutations to move an connector's end point
+ * A macro to move an connector's end point
  */
 export function moveConnectorEndPoint(
   tx: Transaction,
@@ -411,7 +410,7 @@ export function moveConnectorEndPoint(
 }
 
 /**
- * A set of mutations to move an connector's end
+ * A macro to move an connector's end
  */
 export function moveConnectorEnd(
   tx: Transaction,
@@ -427,7 +426,7 @@ export function moveConnectorEnd(
 }
 
 /**
- * Mutations to adjust routing path
+ * A macro to adjust routing path
  */
 export function adjustConnectorRoute(
   tx: Transaction,
@@ -440,11 +439,11 @@ export function adjustConnectorRoute(
 }
 
 // ---------------------------------------------------------------------------
-//                      GENERAL MUTATIONS FOR SHAPES
+//                        GENERAL MACRO FOR SHAPES
 // ---------------------------------------------------------------------------
 
 /**
- * A set of mutations to move shapes
+ * A macro to move shapes
  */
 export function moveMultipleShapes(
   tx: Transaction,
@@ -504,7 +503,7 @@ export function moveMultipleShapes(
 }
 
 /**
- * A set of mutations to delete a shape
+ * A macro to delete a shape
  */
 export function deleteShape(
   tx: Transaction,
@@ -529,7 +528,7 @@ export function deleteShape(
 }
 
 /**
- * A set of mutations to delete shapes
+ * A macro to delete shapes
  */
 export function deleteMultipleShapes(
   tx: Transaction,
@@ -544,7 +543,7 @@ export function deleteMultipleShapes(
 }
 
 /**
- * Bring the shape to the front
+ * A macro to bring the shape to the front
  */
 export function bringToFront(tx: Transaction, shape: Shape): boolean {
   let changed = false;
@@ -556,7 +555,7 @@ export function bringToFront(tx: Transaction, shape: Shape): boolean {
 }
 
 /**
- * Send the shape to the back
+ * A macro to send the shape to the back
  */
 export function sendToBack(tx: Transaction, shape: Shape): boolean {
   let changed = false;
@@ -567,7 +566,7 @@ export function sendToBack(tx: Transaction, shape: Shape): boolean {
 }
 
 /**
- * Bring the shape forward
+ * A macro to bring the shape forward
  */
 export function bringForward(tx: Transaction, shape: Shape): boolean {
   let changed = false;
@@ -582,7 +581,7 @@ export function bringForward(tx: Transaction, shape: Shape): boolean {
 }
 
 /**
- * Send the shape backward
+ * A macro to send the shape backward
  */
 export function sendBackward(tx: Transaction, shape: Shape): boolean {
   let changed = false;
@@ -596,11 +595,11 @@ export function sendBackward(tx: Transaction, shape: Shape): boolean {
 }
 
 // ---------------------------------------------------------------------------
-//                       MUTATIONS FOR CONSTRAINTS
+//                          MACRO FOR CONSTRAINTS
 // ---------------------------------------------------------------------------
 
 /**
- * A set of mutations to resolve a shape's constraints
+ * A macro to resolve a shape's constraints
  */
 export function resolveConstraints(
   tx: Transaction,
@@ -621,7 +620,7 @@ export function resolveConstraints(
 }
 
 /**
- * A set of mutations to resolve all constraints
+ * A macro to resolve all constraints
  */
 export function resolveAllConstraints(
   tx: Transaction,
