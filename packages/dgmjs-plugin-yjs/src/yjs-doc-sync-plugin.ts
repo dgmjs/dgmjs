@@ -124,13 +124,14 @@ export class YjsDocSyncPlugin extends Plugin {
           this.yStore,
           events
         );
-        // TODO: fix this
+        // set the store.doc
         postprocess.created.forEach((obj) => {
           if (obj instanceof Document) {
-            this.editor.store.setDoc(obj);
-          }
-          if (!this.editor.currentPage && obj instanceof Page) {
-            this.editor.setCurrentPage(obj);
+            const doc = obj;
+            this.editor.store.setDoc(doc);
+            if (doc.children.length > 0 && doc.children[0] instanceof Page) {
+              this.editor.setCurrentPage(doc.children[0] as Page);
+            }
           }
         });
         this.editor.repaint();
