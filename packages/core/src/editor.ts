@@ -524,6 +524,13 @@ export class Editor {
         this.selection.deselectAll();
       }
       this.currentPage = page;
+      if (page._origin) {
+        this.setOrigin(page._origin[0], page._origin[1]);
+      } else {
+        this.scrollToCenter();
+        this.currentPage._origin = this.getOrigin();
+      }
+      this.setScale(page._scale);
       this.repaint();
       this.onCurrentPageChange.emit(page);
     }
@@ -644,7 +651,10 @@ export class Editor {
    */
   setOrigin(x: number, y: number) {
     this.canvas.origin = [x, y];
-    this.repaint();
+    if (this.currentPage) {
+      this.currentPage._origin = [x, y];
+      this.repaint();
+    }
     this.onScroll.emit([x, y]);
   }
 
@@ -668,7 +678,10 @@ export class Editor {
       scale = 10;
     }
     this.canvas.scale = scale;
-    this.repaint();
+    if (this.currentPage) {
+      this.currentPage._scale = scale;
+      this.repaint();
+    }
     this.onZoom.emit(scale);
   }
 

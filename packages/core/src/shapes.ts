@@ -755,10 +755,24 @@ class Doc extends Obj {
  * Page
  */
 class Page extends Shape {
+  /**
+   * Page's scroll transient state
+   */
+  _origin: number[] | null;
+
+  /**
+   * Page's zoom transient state
+   */
+  _scale: number;
+
   constructor() {
     super();
     this.type = "Page";
     this.enable = false; // page cannot be controllable
+
+    // transient states
+    this._origin = null;
+    this._scale = 1;
   }
 
   finalize(canvas: Canvas): void {
