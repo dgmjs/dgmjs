@@ -710,7 +710,6 @@ export class Editor {
       const scale = Math.min(sw / dw, sh / dh, maxScale);
       this.setScale(scale * scaleAdjust);
       this.scrollCenterTo(center);
-      this.repaint();
     }
   }
 
@@ -719,7 +718,6 @@ export class Editor {
    */
   scroll(dx: number, dy: number) {
     this.moveOrigin(dx, dy);
-    this.repaint();
   }
 
   /**
