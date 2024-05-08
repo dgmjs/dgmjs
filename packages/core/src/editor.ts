@@ -752,6 +752,21 @@ export class Editor {
   }
 
   /**
+   * Scroll to center of the shapes
+   */
+  scrollToCenter() {
+    if (this.currentPage) {
+      const doc = this.store.root as Doc;
+      const page = this.currentPage;
+      let box = Array.isArray(doc.pageSize)
+        ? [[0, 0], doc.pageSize]
+        : page.getPageBoundingBox(this.canvas);
+      const center = geometry.center(box);
+      this.scrollCenterTo(center);
+    }
+  }
+
+  /**
    * Add an array of handlers
    * Note: the first handler is set as default handler
    */

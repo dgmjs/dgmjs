@@ -47,7 +47,7 @@ export function Menus() {
         window.editor.loadFromJSON(json);
         setDoc(window.editor.getDoc());
         setCurrentPage(window.editor.currentPage);
-        window.editor.fitToScreen();
+        window.editor.scrollToCenter();
         window.editor.repaint();
       }
     } catch {
