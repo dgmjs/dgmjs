@@ -10,7 +10,7 @@ import {
 import { Canvas } from "./graphics/graphics";
 import * as geometry from "./graphics/geometry";
 import { moveEndPoint, adjustRoute } from "./utils/route-utils";
-import type { Obj } from "./core/obj";
+import { filterDescendants, type Obj } from "./core/obj";
 import { getAllConnectorsTo, getAllDescendant } from "./utils/shape-utils";
 import { visitTextNodes } from "./utils/text-utils";
 import { Transaction } from "./core/transaction";
@@ -456,13 +456,10 @@ export function moveMultipleShapes(
   let changed = false;
 
   // filter all descendants of one of moving shapes
-  let filteredShapes = [];
-  for (let shape of shapes) {
-    if (!shapes.some((s) => s.isDescendant(shape))) filteredShapes.push(shape);
-  }
+  let filtered = filterDescendants(shapes) as Shape[];
 
   // move all children and descendants
-  let targets = getAllDescendant(filteredShapes) as Shape[];
+  let targets = getAllDescendant(filtered) as Shape[];
   targets.forEach((s) => {
     changed = moveShape(tx, s as Shape, dx, dy) || changed;
   });
@@ -493,7 +490,7 @@ export function moveMultipleShapes(
   });
 
   // move into container
-  filteredShapes.forEach((s) => {
+  filtered.forEach((s) => {
     if (container && s.parent !== container && !(s as Box).anchored) {
       changed = changeParent(tx, s, container) || changed;
     }

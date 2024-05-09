@@ -56,10 +56,10 @@ function App() {
     // });
 
     // load from local storage
-    // const localData = localStorage.getItem("local-data");
-    // if (localData) {
-    //   window.editor.loadFromJSON(JSON.parse(localData));
-    // }
+    const localData = localStorage.getItem("local-data");
+    if (localData) {
+      window.editor.loadFromJSON(JSON.parse(localData));
+    }
     demoStore.setDoc(window.editor.getDoc());
     demoStore.setCurrentPage(window.editor.currentPage);
     // window.editor.fitToScreen();

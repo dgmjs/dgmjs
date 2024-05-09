@@ -160,3 +160,11 @@ export class Obj {
     return !!this.find((s) => s !== this && s === obj);
   }
 }
+
+export function filterDescendants(objs: Obj[]): Obj[] {
+  let filtered: Obj[] = [];
+  for (let obj of objs) {
+    if (!objs.some((o) => o.isDescendant(obj))) filtered.push(obj);
+  }
+  return filtered;
+}

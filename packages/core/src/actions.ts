@@ -22,7 +22,7 @@ import {
   Doc,
 } from "./shapes";
 import * as geometry from "./graphics/geometry";
-import { Obj } from "./core/obj";
+import { Obj, filterDescendants } from "./core/obj";
 import { deserialize, serialize } from "./core/serialize";
 import { extractTextFromShapes } from "./utils/text-utils";
 import {
@@ -370,12 +370,8 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       const box = this.editor.selection.getBoundingRect(this.editor.canvas);
-      // filter all descendants of one of grouping shapes
-      let filteredShapes: Shape[] = [];
-      for (let s of shapes) {
-        if (!shapes.some((s) => s.isDescendant(s))) filteredShapes.push(s);
-      }
-      if (filteredShapes.length > 1) {
+      let filtered = filterDescendants(shapes) as Shape[];
+      if (filtered.length > 1) {
         const group = new Group();
         group.left = box[0][0];
         group.top = box[0][1];
@@ -389,7 +385,7 @@ export class Actions {
             ?.traverseSequence()
             .reverse()
             .forEach((s) => {
-              if (filteredShapes.includes(s as Shape)) {
+              if (filtered.includes(s as Shape)) {
                 changeParent(tx, s, group);
               }
             });
