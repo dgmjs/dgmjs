@@ -168,10 +168,14 @@ class Shape extends Obj {
   opacity: number;
   roughness: number;
   link: string;
-  linkDOM: HTMLAnchorElement | null;
   constraints: Constraint[];
   properties: Property[];
   scripts: Script[];
+
+  /**
+   * Link DOM element
+   */
+  _linkDOM: HTMLAnchorElement | null;
 
   constructor() {
     super();
@@ -206,18 +210,18 @@ class Shape extends Obj {
     this.opacity = 1;
     this.roughness = 0;
     this.link = "";
-    this.linkDOM = null;
     this.constraints = [];
     this.properties = [];
     this.scripts = [];
+    this._linkDOM = null;
   }
 
   initialze(canvas: Canvas) {}
 
   finalize(canvas: Canvas) {
-    if (this.linkDOM) {
-      this.linkDOM.remove();
-      this.linkDOM = null;
+    if (this._linkDOM) {
+      this._linkDOM.remove();
+      this._linkDOM = null;
     }
   }
 
@@ -406,28 +410,28 @@ class Shape extends Obj {
 
   renderLink(canvas: Canvas, updateDOM: boolean = false) {
     // create linkDOM
-    if (this.link.length > 0 && !this.linkDOM) {
-      this.linkDOM = document.createElement("a");
-      this.linkDOM.style.position = "absolute";
-      this.linkDOM.style.color = "var(--colors-blue9)";
-      this.linkDOM.style.display = "flex";
-      this.linkDOM.style.alignItems = "center";
-      this.linkDOM.style.justifyContent = "center";
-      this.linkDOM.style.cursor = "pointer";
-      this.linkDOM.style.zIndex = "10";
-      this.linkDOM.setAttribute("target", "_blank");
-      this.linkDOM.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`;
-      canvas.element.parentElement?.appendChild(this.linkDOM);
+    if (this.link.length > 0 && !this._linkDOM) {
+      this._linkDOM = document.createElement("a");
+      this._linkDOM.style.position = "absolute";
+      this._linkDOM.style.color = "var(--colors-blue9)";
+      this._linkDOM.style.display = "flex";
+      this._linkDOM.style.alignItems = "center";
+      this._linkDOM.style.justifyContent = "center";
+      this._linkDOM.style.cursor = "pointer";
+      this._linkDOM.style.zIndex = "10";
+      this._linkDOM.setAttribute("target", "_blank");
+      this._linkDOM.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`;
+      canvas.element.parentElement?.appendChild(this._linkDOM);
     }
     // delete linkDOM
-    if (this.link.length === 0 && this.linkDOM) {
+    if (this.link.length === 0 && this._linkDOM) {
       this.finalize(canvas);
     }
     // update linkDOM
-    if (updateDOM && this.linkDOM) {
+    if (updateDOM && this._linkDOM) {
       // update linkDOM parent element
-      if (this.linkDOM.parentElement !== canvas.element.parentElement) {
-        canvas.element.parentElement?.appendChild(this.linkDOM);
+      if (this._linkDOM.parentElement !== canvas.element.parentElement) {
+        canvas.element.parentElement?.appendChild(this._linkDOM);
       }
       const rect = this.getBoundingRect().map((p) => {
         return utils.gcs2dcs(canvas, p);
@@ -435,12 +439,12 @@ class Shape extends Obj {
       const right = rect[1][0];
       const top = rect[0][1];
       const size = 16;
-      this.linkDOM.style.left = `${right + 6}px`;
-      this.linkDOM.style.top = `${top - size - 6}px`;
-      this.linkDOM.style.width = `${size}px`;
-      this.linkDOM.style.height = `${size}px`;
-      this.linkDOM.setAttribute("title", this.link);
-      this.linkDOM.setAttribute("href", this.link);
+      this._linkDOM.style.left = `${right + 6}px`;
+      this._linkDOM.style.top = `${top - size - 6}px`;
+      this._linkDOM.style.width = `${size}px`;
+      this._linkDOM.style.height = `${size}px`;
+      this._linkDOM.setAttribute("title", this.link);
+      this._linkDOM.setAttribute("href", this.link);
     }
   }
 
@@ -1631,7 +1635,11 @@ class Image extends Box {
   imageData: string;
   imageWidth: number;
   imageHeight: number;
-  _image: HTMLImageElement | null;
+
+  /**
+   * Image DOM element
+   */
+  _imageDOM: HTMLImageElement | null;
 
   constructor() {
     super();
@@ -1639,8 +1647,8 @@ class Image extends Box {
     this.imageData = "";
     this.imageWidth = 0;
     this.imageHeight = 0;
-    this._image = null;
     this.sizable = Sizable.RATIO;
+    this._imageDOM = null;
   }
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
@@ -1660,11 +1668,11 @@ class Image extends Box {
 
   renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
     this.renderLink(canvas, updateDOM);
-    if (!this._image) {
-      this._image = new globalThis.Image();
-      this._image.src = this.imageData;
+    if (!this._imageDOM) {
+      this._imageDOM = new globalThis.Image();
+      this._imageDOM.src = this.imageData;
     }
-    if (this._image && this._image.complete) {
+    if (this._imageDOM && this._imageDOM.complete) {
       canvas.save();
       canvas.fillColor = Color.TRANSPARENT;
       canvas.fillStyle = FillStyle.SOLID;
@@ -1683,7 +1691,7 @@ class Image extends Box {
       );
       canvas.context.clip();
       canvas.drawImage(
-        this._image,
+        this._imageDOM,
         this.left,
         this.top,
         this.width,
@@ -1926,19 +1934,23 @@ class Frame extends Box {
  */
 class Embed extends Box {
   src: string;
-  iframeDOM: HTMLIFrameElement | null;
+
+  /**
+   * Iframe DOM element
+   */
+  _iframeDOM: HTMLIFrameElement | null;
 
   constructor() {
     super();
     this.type = "Embed";
     this.src = "https://www.youtube.com/embed/MTdbhePtCco?si=6-6HWSoOtx0qAmM6";
-    this.iframeDOM = null;
+    this._iframeDOM = null;
   }
 
   finalize(canvas: Canvas): void {
-    if (this.iframeDOM) {
-      this.iframeDOM.remove();
-      this.iframeDOM = null;
+    if (this._iframeDOM) {
+      this._iframeDOM.remove();
+      this._iframeDOM = null;
     }
     super.finalize(canvas);
   }
@@ -1972,24 +1984,24 @@ class Embed extends Box {
 
   renderFrame(canvas: Canvas, updateDOM: boolean = false): void {
     // create iframeDOM
-    if (this.src.length > 0 && !this.iframeDOM) {
-      this.iframeDOM = document.createElement("iframe");
-      this.iframeDOM.style.position = "absolute";
-      this.iframeDOM.style.pointerEvents = "none";
-      canvas.element.parentElement?.appendChild(this.iframeDOM);
+    if (this.src.length > 0 && !this._iframeDOM) {
+      this._iframeDOM = document.createElement("iframe");
+      this._iframeDOM.style.position = "absolute";
+      this._iframeDOM.style.pointerEvents = "none";
+      canvas.element.parentElement?.appendChild(this._iframeDOM);
     }
     // delete iframeDOM
-    if (this.src.length === 0 && this.iframeDOM) {
+    if (this.src.length === 0 && this._iframeDOM) {
       this.finalize(canvas);
     }
     // update iframeDOM
-    if (updateDOM && this.iframeDOM) {
+    if (updateDOM && this._iframeDOM) {
       // update iframeDOM parent element
-      if (this.iframeDOM.parentElement !== canvas.element.parentElement) {
-        canvas.element.parentElement?.appendChild(this.iframeDOM);
+      if (this._iframeDOM.parentElement !== canvas.element.parentElement) {
+        canvas.element.parentElement?.appendChild(this._iframeDOM);
       }
-      if (this.iframeDOM.src !== this.src) {
-        this.iframeDOM.src = this.src;
+      if (this._iframeDOM.src !== this.src) {
+        this._iframeDOM.src = this.src;
       }
       const rect = this.getRectInDCS(canvas);
       const scale = canvas.scale;
@@ -1997,11 +2009,11 @@ class Embed extends Box {
       const top = rect[0][1];
       const width = geometry.width(rect);
       const height = geometry.height(rect);
-      this.iframeDOM.style.left = `${left}px`;
-      this.iframeDOM.style.top = `${top}px`;
-      this.iframeDOM.style.width = `${width}px`;
-      this.iframeDOM.style.height = `${height}px`;
-      this.iframeDOM.style.transform = `scale(${scale})`;
+      this._iframeDOM.style.left = `${left}px`;
+      this._iframeDOM.style.top = `${top}px`;
+      this._iframeDOM.style.width = `${width}px`;
+      this._iframeDOM.style.height = `${height}px`;
+      this._iframeDOM.style.transform = `scale(${scale})`;
     }
   }
 
