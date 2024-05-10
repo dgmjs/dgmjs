@@ -68,9 +68,9 @@ export class Actions {
   addPage(position?: number): Page {
     const pages = this.editor.getPages();
     position = position ?? pages.length;
+    const prevPage = pages[position - 1] ?? null;
     const page = new Page();
-    // set size as the same as the last page
-    page.size = pages.length > 0 ? pages[pages.length - 1].size : null;
+    page.size = prevPage?.size ?? null; // set size to the previous page's size
     page.name = `Page ${position + 1}`;
     this.editor.transform.startAction("add-page");
     this.editor.transform.transact((tx) => {
