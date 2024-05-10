@@ -12,15 +12,7 @@
  */
 
 import type { Editor } from "./editor";
-import {
-  Box,
-  Group,
-  type Shape,
-  Line,
-  type ObjProps,
-  Page,
-  Doc,
-} from "./shapes";
+import { Box, Group, type Shape, Line, type ObjProps, Page } from "./shapes";
 import * as geometry from "./graphics/geometry";
 import { Obj, filterDescendants } from "./core/obj";
 import { deserialize, serialize } from "./core/serialize";
@@ -74,8 +66,11 @@ export class Actions {
    * Add a page
    */
   addPage(position?: number): Page {
-    position = position ?? this.editor.getPages().length;
+    const pages = this.editor.getPages();
+    position = position ?? pages.length;
     const page = new Page();
+    // set size as the same as the last page
+    page.size = pages.length > 0 ? pages[pages.length - 1].size : null;
     page.name = `Page ${position + 1}`;
     this.editor.transform.startAction("add-page");
     this.editor.transform.transact((tx) => {
