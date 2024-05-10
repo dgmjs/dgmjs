@@ -960,7 +960,7 @@ class Box extends Shape {
 
   constructor() {
     super();
-    this.type = "Node";
+    this.type = "Box";
     // Initialization
     this.containable = false;
     this.padding = [0, 0, 0, 0];
