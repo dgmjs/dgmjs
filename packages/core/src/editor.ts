@@ -708,10 +708,9 @@ export class Editor {
   fitToScreen(scaleAdjust: number = 1, maxScale: number = 1) {
     if (this.currentPage) {
       // doc size in GCS
-      const doc = this.store.root as Doc;
       const page = this.currentPage;
-      let box = Array.isArray(doc.pageSize)
-        ? [[0, 0], doc.pageSize]
+      let box = Array.isArray(page.size)
+        ? [[0, 0], page.size]
         : page.getPageBoundingBox(this.canvas);
       const center = geometry.center(box);
       const dw = geometry.width(box);
@@ -741,10 +740,9 @@ export class Editor {
   scrollCenterTo(center?: number[]) {
     if (this.currentPage) {
       // doc size in GCS
-      const doc = this.store.root as Doc;
       const page = this.currentPage;
-      let box = Array.isArray(doc.pageSize)
-        ? [[0, 0], doc.pageSize]
+      let box = Array.isArray(page.size)
+        ? [[0, 0], page.size]
         : page.getPageBoundingBox(this.canvas);
       if (!center) {
         center = geometry.center(box);
@@ -767,10 +765,9 @@ export class Editor {
    */
   scrollToCenter() {
     if (this.currentPage) {
-      const doc = this.store.root as Doc;
       const page = this.currentPage;
-      let box = Array.isArray(doc.pageSize)
-        ? [[0, 0], doc.pageSize]
+      let box = Array.isArray(page.size)
+        ? [[0, 0], page.size]
         : page.getPageBoundingBox(this.canvas);
       const center = geometry.center(box);
       this.scrollCenterTo(center);
@@ -845,9 +842,9 @@ export class Editor {
    */
   clearBackground(canvas: Canvas) {
     const g = canvas.context;
-    const docSize = (this.store.root as Doc)?.pageSize;
+    const pageSize = this.currentPage?.size;
     g.fillStyle = this.canvas.resolveColor(
-      docSize ? Color.CANVAS : Color.BACKGROUND
+      pageSize ? Color.CANVAS : Color.BACKGROUND
     );
     g.globalAlpha = 1;
     g.fillRect(0, 0, this.canvasElement.width, this.canvasElement.height);
@@ -858,18 +855,18 @@ export class Editor {
    */
   drawGrid(canvas: Canvas) {
     const scale = this.getScale();
-    const docSize = (this.store.root as Doc).pageSize;
+    const pageSize = this.currentPage?.size;
 
     canvas.save();
     canvas.globalTransform();
 
     // draw document background
-    if (docSize) {
+    if (pageSize) {
       canvas.roughness = 0;
       canvas.alpha = 1;
       canvas.fillStyle = FillStyle.SOLID;
       canvas.fillColor = this.canvas.resolveColor(Color.BACKGROUND);
-      canvas.fillRect(0, 0, docSize[0], docSize[1]);
+      canvas.fillRect(0, 0, pageSize[0], pageSize[1]);
     }
 
     // draw grid
@@ -908,13 +905,13 @@ export class Editor {
     }
 
     // draw document border
-    if (docSize) {
+    if (pageSize) {
       canvas.strokeColor = this.canvas.resolveColor(Color.BORDER);
       canvas.strokeWidth = 1 / scale;
       canvas.strokePattern = [];
       canvas.roughness = 0;
       canvas.alpha = 1;
-      canvas.strokeRect(0, 0, docSize[0], docSize[1]);
+      canvas.strokeRect(0, 0, pageSize[0], pageSize[1]);
     }
 
     canvas.restore();

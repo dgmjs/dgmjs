@@ -732,26 +732,22 @@ class Shape extends Obj {
  */
 class Doc extends Obj {
   version: number;
-  pageSize: PageSize;
 
   constructor() {
     super();
     this.type = "Doc";
     this.version = 1;
-    this.pageSize = null; // null = infinite, [960, 720] = 4:3, [960, 540] = 16:9
   }
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
     json.version = this.version;
-    json.pageSize = structuredClone(this.pageSize);
     return json;
   }
 
   fromJSON(json: any) {
     super.fromJSON(json);
     this.version = json.version ?? this.version;
-    this.pageSize = json.pageSize ?? this.pageSize;
   }
 }
 
@@ -759,6 +755,8 @@ class Doc extends Obj {
  * Page
  */
 class Page extends Shape {
+  size: PageSize;
+
   /**
    * Page's scroll transient state
    */
@@ -773,10 +771,22 @@ class Page extends Shape {
     super();
     this.type = "Page";
     this.enable = false; // page cannot be controllable
+    this.size = null; // null = infinite, [960, 720] = 4:3, [960, 540] = 16:9
 
     // transient states
     this._origin = null;
     this._scale = 1;
+  }
+
+  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
+    const json = super.toJSON(recursive, keepRefs);
+    json.size = structuredClone(this.size);
+    return json;
+  }
+
+  fromJSON(json: any) {
+    super.fromJSON(json);
+    this.size = json.size ?? this.size;
   }
 
   finalize(canvas: Canvas): void {

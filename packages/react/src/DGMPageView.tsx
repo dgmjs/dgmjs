@@ -8,7 +8,6 @@ import {
 } from "react";
 
 export interface DGMPageViewProps extends React.HTMLAttributes<HTMLDivElement> {
-  pageSize: PageSize;
   page: Page;
   darkMode?: boolean;
   maxScale?: number;
@@ -23,7 +22,6 @@ export interface DGMPageViewHandle {
 export const DGMPageView = forwardRef<DGMPageViewHandle, DGMPageViewProps>(
   (
     {
-      pageSize,
       page,
       darkMode = false,
       maxScale = 1,
@@ -37,7 +35,7 @@ export const DGMPageView = forwardRef<DGMPageViewHandle, DGMPageViewProps>(
   ) => {
     const wrapperRef = useRef<HTMLDivElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const heightRatio = pageSize ? pageSize[1] / pageSize[0] : 0.75;
+    const heightRatio = page.size ? page.size[1] / page.size[0] : 0.75;
     const [size, setSize] = useState([0, 0]);
 
     const repaint = (width: number, height: number) => {
@@ -46,7 +44,7 @@ export const DGMPageView = forwardRef<DGMPageViewHandle, DGMPageViewProps>(
           [page],
           canvasRef.current,
           darkMode,
-          pageSize,
+          page.size,
           [width, height],
           maxScale,
           scaleAdjust,
@@ -74,7 +72,7 @@ export const DGMPageView = forwardRef<DGMPageViewHandle, DGMPageViewProps>(
       });
       wrapperRef.current && observer.observe(wrapperRef.current);
       return () => observer.disconnect();
-    }, [darkMode, pageSize, page]);
+    }, [darkMode, page]);
 
     return (
       <div

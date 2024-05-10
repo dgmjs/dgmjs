@@ -22,14 +22,28 @@ export function convertToLatestVersion(json: any): any {
     json.children = [];
   }
 
-  // ensure Page has parent
+  // for Doc
+  let pageSize = null;
+  if (json.type === "Doc") {
+    pageSize = json.pageSize ?? null;
+  }
+
+  // for each Pages
   for (const page of json.children) {
-    if (page.type === "Page" && !page.parent) {
-      page.parent = json.id;
+    // ensure Page has parent
+    if (page.type === "Page") {
+      if (!page.parent) {
+        page.parent = json.id;
+      }
+    }
+
+    // ensure Page has size (if not set, use Doc's size)
+    if (typeof page.size === "undefined") {
+      page.size = pageSize;
     }
   }
 
-  // convert single-page document to multi-page document
+  // convert single-page doc to multi-page doc
   if (
     json.type === "Doc" &&
     json.children.length > 0 &&
