@@ -15,6 +15,7 @@ import {
   CircleIcon,
   FrameIcon,
   HandIcon,
+  HighlighterIcon,
   ImageIcon,
   MousePointer2Icon,
   Pencil,
@@ -91,6 +92,9 @@ export function PaletteToolbar() {
         </PaletteItem>
         <PaletteItem handlerId="Freehand">
           <Pencil size={16} />
+        </PaletteItem>
+        <PaletteItem handlerId="Highlighter">
+          <HighlighterIcon size={16} />
         </PaletteItem>
       </div>
     </div>

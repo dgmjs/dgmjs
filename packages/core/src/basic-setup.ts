@@ -21,6 +21,7 @@ import {
   ConnectorFactoryHandler,
   LineFactoryHandler,
   FreehandFactoryHandler,
+  HighlighterFactoryHandler,
   ImageFactoryHandler,
   EmbedFactoryHandler,
 } from "./handlers";
@@ -39,6 +40,7 @@ export function basicSetup(
       new ConnectorFactoryHandler("Connector", { lock: false }),
       new LineFactoryHandler("Line", { lock: false }),
       new FreehandFactoryHandler("Freehand", { lock: false }),
+      new HighlighterFactoryHandler("Highlighter", { lock: false }),
       new ImageFactoryHandler("Image", { lock: false }),
       new FrameFactoryHandler("Frame", { lock: false }),
       new EmbedFactoryHandler("Embed", { lock: false }),
