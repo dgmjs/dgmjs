@@ -69,5 +69,6 @@ class LineManipulator extends Manipulator {
 }
 
 manipulatorManager.define("Line", new LineManipulator());
+manipulatorManager.define("Freehand", new LineManipulator());
 
 export { LineManipulator };

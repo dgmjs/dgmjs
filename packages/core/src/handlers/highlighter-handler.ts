@@ -15,7 +15,7 @@ import { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { Editor, Handler } from "../editor";
 import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
-import { Line } from "../shapes";
+import { Line, LineType } from "../shapes";
 import simplifyPath from "simplify-path";
 import { addShape, resolveAllConstraints, setLinePath } from "../macro";
 
@@ -43,7 +43,8 @@ export class HighlighterFactoryHandler extends Handler {
     const page = editor.currentPage;
     if (page) {
       this.draggingPoints.push(this.dragStartPoint);
-      this.shape = editor.factory.createFreehand(this.draggingPoints, false);
+      this.shape = editor.factory.createLine(this.draggingPoints, false);
+      this.shape.lineType = LineType.STRAIGHT;
       this.shape.strokeWidth = 20;
       this.shape.opacity = 0.5;
       editor.transform.startAction("create");
@@ -61,13 +62,15 @@ export class HighlighterFactoryHandler extends Handler {
         this.draggingPoints[0],
         this.draggingPoints[this.draggingPoints.length - 1]
       ) <= MAGNET_THRESHOLD;
-    const newPath = simplifyPath(this.draggingPoints, 5);
+    // const newPath = simplifyPath(this.draggingPoints, 1);
     if (this.closed) {
-      newPath[newPath.length - 1] = geometry.copy(newPath[0]);
+      this.draggingPoints[this.draggingPoints.length - 1] = geometry.copy(
+        this.draggingPoints[0]
+      );
     }
     editor.transform.transact((tx) => {
       if (page && this.shape) {
-        setLinePath(tx, this.shape, newPath);
+        setLinePath(tx, this.shape, this.draggingPoints);
         resolveAllConstraints(tx, page, editor.canvas);
       }
     });

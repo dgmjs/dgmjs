@@ -11,6 +11,7 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
+import { getStroke } from "perfect-freehand";
 import { assert } from "./std/assert";
 import { Canvas } from "./graphics/graphics";
 import {
@@ -1884,6 +1885,34 @@ class Connector extends Line {
 }
 
 /**
+ * Freehand
+ */
+class Freehand extends Line {
+  constructor() {
+    super();
+    this.type = "Freehand";
+  }
+
+  renderDefault(canvas: Canvas, updateDOM?: boolean): void {
+    this.renderLink(canvas, updateDOM);
+
+    canvas.context.strokeStyle = canvas.resolveColor(this.strokeColor);
+    canvas.context.fillStyle = canvas.resolveColor(this.strokeColor);
+    canvas.context.lineWidth = this.strokeWidth;
+    canvas.context.lineCap = "round";
+    canvas.context.globalAlpha = canvas.alpha;
+    canvas.context.setLineDash(this.strokePattern);
+
+    const stroke = getStroke(this.path, { size: this.strokeWidth });
+    const pathData = utils.getSvgPathFromStroke(stroke);
+    const myPath = new Path2D(pathData);
+
+    canvas.context.beginPath();
+    canvas.context.fill(myPath);
+  }
+}
+
+/**
  * Frame
  */
 class Frame extends Box {
@@ -2136,6 +2165,7 @@ const shapeInstantiator = new Instantiator({
   Text: () => new Text(),
   Image: () => new Image(),
   Connector: () => new Connector(),
+  Freehand: () => new Freehand(),
   Group: () => new Group(),
   Frame: () => new Frame(),
   Embed: () => new Embed(),
@@ -2181,6 +2211,7 @@ export {
   Image,
   Group,
   Connector,
+  Freehand,
   Frame,
   Embed,
   constraintManager,

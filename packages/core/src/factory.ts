@@ -6,6 +6,7 @@ import {
   Embed,
   FillStyle,
   Frame,
+  Freehand,
   Image,
   Line,
   LineType,
@@ -167,27 +168,6 @@ export class ShapeFactory {
   }
 
   /**
-   * Create a freehand lines
-   */
-  createFreehand(points: number[][], closed: boolean = false): Line {
-    const freehand = new Line();
-    const path = simplifyPath(points, 4);
-    if (closed) {
-      path[path.length - 1] = geometry.copy(path[0]);
-    }
-    freehand.path = path;
-    freehand.lineType = LineType.CURVE;
-    const rect = geometry.boundingRect(freehand.path);
-    freehand.left = rect[0][0];
-    freehand.top = rect[0][1];
-    freehand.width = geometry.width(rect);
-    freehand.height = geometry.height(rect);
-    freehand.pathEditable = false;
-    this.onShapeInitialize.emit(freehand);
-    return freehand;
-  }
-
-  /**
    * Create a connector
    */
   createConnector(
@@ -212,6 +192,27 @@ export class ShapeFactory {
     connector.height = geometry.height(rect);
     this.onShapeInitialize.emit(connector);
     return connector;
+  }
+
+  /**
+   * Create a freehand lines
+   */
+  createFreehand(points: number[][], closed: boolean = false): Line {
+    const freehand = new Freehand();
+    const path = simplifyPath(points, 4);
+    if (closed) {
+      path[path.length - 1] = geometry.copy(path[0]);
+    }
+    freehand.strokeWidth = 8;
+    freehand.path = path;
+    const rect = geometry.boundingRect(freehand.path);
+    freehand.left = rect[0][0];
+    freehand.top = rect[0][1];
+    freehand.width = geometry.width(rect);
+    freehand.height = geometry.height(rect);
+    freehand.pathEditable = false;
+    this.onShapeInitialize.emit(freehand);
+    return freehand;
   }
 
   createFrame(rect: number[][]): Frame {

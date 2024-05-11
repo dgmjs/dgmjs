@@ -16,7 +16,6 @@ import * as geometry from "../graphics/geometry";
 import { Editor, Handler } from "../editor";
 import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
 import { Line } from "../shapes";
-import simplifyPath from "simplify-path";
 import { addShape, resolveAllConstraints, setLinePath } from "../macro";
 
 /**
@@ -59,13 +58,14 @@ export class FreehandFactoryHandler extends Handler {
         this.draggingPoints[0],
         this.draggingPoints[this.draggingPoints.length - 1]
       ) <= MAGNET_THRESHOLD;
-    const newPath = simplifyPath(this.draggingPoints, 5);
     if (this.closed) {
-      newPath[newPath.length - 1] = geometry.copy(newPath[0]);
+      this.draggingPoints[this.draggingPoints.length - 1] = geometry.copy(
+        this.draggingPoints[0]
+      );
     }
     editor.transform.transact((tx) => {
       if (page && this.shape) {
-        setLinePath(tx, this.shape, newPath);
+        setLinePath(tx, this.shape, this.draggingPoints);
         resolveAllConstraints(tx, page, editor.canvas);
       }
     });
