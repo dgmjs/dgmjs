@@ -34,7 +34,7 @@ import { evalScript } from "./mal/mal";
 import { Obj } from "./core/obj";
 import { Instantiator } from "./core/instantiator";
 import { Transaction } from "./core/transaction";
-import { Drawing } from "./graphics/drawing";
+import { Drawing } from "./drawing";
 
 interface Constraint {
   id: string;
@@ -226,7 +226,7 @@ class Shape extends Obj {
     this.properties = [];
     this.scripts = [];
 
-    this._drawing = new Drawing();
+    this._drawing = new Drawing(this);
     this._parsedScripts = [];
     this._linkDOM = null;
   }
@@ -250,9 +250,9 @@ class Shape extends Obj {
    * Update shape
    */
   update(canvas: Canvas) {
-    // parse scripts
-    // draw by drawing objects
-    // console.log("update", this.type);
+    // this.parseScripts()
+    // this.updateDrawing()
+    // this.updateScripts()
   }
 
   /**
@@ -1019,43 +1019,23 @@ class Box extends Shape {
     super.update(canvas);
     this._drawing.clear();
     if (this.fillStyle !== FillStyle.NONE) {
-      this._drawing.fillRect(
+      this._drawing.fillRoundRect(
         canvas,
-        canvas.resolveColor(this.fillColor),
-        this.opacity,
         this.left,
         this.top,
         this.right,
-        this.bottom
+        this.bottom,
+        this.corners
       );
-      // canvas.fillRoundRect(
-      //   this.left,
-      //   this.top,
-      //   this.right,
-      //   this.bottom,
-      //   this.corners,
-      //   this.getSeed()
-      // );
     }
-    this._drawing.rect(
+    this._drawing.roundRect(
       canvas,
-      canvas.resolveColor(this.strokeColor),
-      this.strokeWidth,
-      this.strokePattern,
-      this.opacity,
       this.left,
       this.top,
       this.right,
-      this.bottom
+      this.bottom,
+      this.corners
     );
-    // canvas.strokeRoundRect(
-    //   this.left,
-    //   this.top,
-    //   this.right,
-    //   this.bottom,
-    //   this.corners,
-    //   this.getSeed()
-    // );
     this.renderText(canvas);
   }
 
