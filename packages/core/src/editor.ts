@@ -166,7 +166,14 @@ export class Editor {
         if (o instanceof Shape) o.finalize(this.canvas);
       },
     });
-    this.transform = new Transform(this.store);
+    this.transform = new Transform(this.store, {
+      transactionHandler: (tx) => {
+        const mutated = tx.getMutated();
+        mutated.forEach((obj) => {
+          if (obj instanceof Shape) obj.update(this.canvas);
+        });
+      },
+    });
     this.clipboard = new Clipboard(this.store);
     this.selection = new SelectionManager(this);
     this.factory = new ShapeFactory(this);

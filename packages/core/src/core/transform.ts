@@ -2,6 +2,7 @@ import { Store } from "./store";
 import { Stack } from "../std/collections";
 import { TypedEvent } from "../std/typed-event";
 import { Transaction } from "./transaction";
+import { Obj } from "./obj";
 
 // Maximum size of undo/redo stack
 const MAX_STACK_SIZE = 1000;
@@ -38,9 +39,21 @@ export class Action {
 }
 
 /**
+ * Transform options
+ */
+type TransformOptions = {
+  transactionHandler?: (tx: Transaction) => void;
+};
+
+/**
  * Transform
  */
 export class Transform {
+  /**
+   * Transform options
+   */
+  options: TransformOptions;
+
   /**
    * Shape store
    */
@@ -84,7 +97,8 @@ export class Transform {
   /**
    * constructor
    */
-  constructor(store: Store) {
+  constructor(store: Store, options?: TransformOptions) {
+    this.options = options || {};
     this.store = store;
     this.action = null;
     this.undoHistory = new Stack(MAX_STACK_SIZE);
@@ -112,6 +126,9 @@ export class Transform {
     const tx = new Transaction(this.store);
     fn(tx);
     if (tx.mutations.length > 0) {
+      if (this.options.transactionHandler) {
+        this.options.transactionHandler(tx);
+      }
       this.onTransaction.emit(tx);
       if (this.action) {
         this.action.push(tx);

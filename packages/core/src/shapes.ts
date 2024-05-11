@@ -34,6 +34,7 @@ import { evalScript } from "./mal/mal";
 import { Obj } from "./core/obj";
 import { Instantiator } from "./core/instantiator";
 import { Transaction } from "./core/transaction";
+import { Drawing } from "./graphics/drawing";
 
 interface Constraint {
   id: string;
@@ -174,6 +175,16 @@ class Shape extends Obj {
   scripts: Script[];
 
   /**
+   * Drawing object
+   */
+  _drawing: Drawing;
+
+  /**
+   * Parsed scripts
+   */
+  _parsedScripts: [];
+
+  /**
    * Link DOM element
    */
   _linkDOM: HTMLAnchorElement | null;
@@ -214,11 +225,20 @@ class Shape extends Obj {
     this.constraints = [];
     this.properties = [];
     this.scripts = [];
+
+    this._drawing = new Drawing();
+    this._parsedScripts = [];
     this._linkDOM = null;
   }
 
+  /**
+   * Initialize shape
+   */
   initialze(canvas: Canvas) {}
 
+  /**
+   * Finalize shape
+   */
   finalize(canvas: Canvas) {
     if (this._linkDOM) {
       this._linkDOM.remove();
@@ -226,6 +246,18 @@ class Shape extends Obj {
     }
   }
 
+  /**
+   * Update shape
+   */
+  update(canvas: Canvas) {
+    // parse scripts
+    // draw by drawing objects
+    console.log("update", this.type);
+  }
+
+  /**
+   * Export shape to JSON
+   */
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
     json.name = this.name;
@@ -264,6 +296,9 @@ class Shape extends Obj {
     return json;
   }
 
+  /**
+   * Import shape from JSON
+   */
   fromJSON(json: any) {
     super.fromJSON(json);
     this.name = json.name ?? this.name;
