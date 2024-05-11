@@ -160,18 +160,18 @@ export class Editor {
 
     this.store = new Store(shapeInstantiator, {
       objInitializer: (o) => {
-        if (o instanceof Shape) o.initialze(this.canvas);
+        if (o instanceof Shape) {
+          o.initialze(this.canvas);
+          o.update(this.canvas);
+        }
       },
       objFinalizer: (o) => {
         if (o instanceof Shape) o.finalize(this.canvas);
       },
     });
     this.transform = new Transform(this.store, {
-      transactionHandler: (tx) => {
-        const mutated = tx.getMutated();
-        mutated.forEach((obj) => {
-          if (obj instanceof Shape) obj.update(this.canvas);
-        });
+      objUpdater: (obj) => {
+        if (obj instanceof Shape) obj.update(this.canvas);
       },
     });
     this.clipboard = new Clipboard(this.store);

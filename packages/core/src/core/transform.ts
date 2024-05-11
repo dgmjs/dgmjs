@@ -42,7 +42,7 @@ export class Action {
  * Transform options
  */
 type TransformOptions = {
-  transactionHandler?: (tx: Transaction) => void;
+  objUpdater?: (obj: Obj) => void;
 };
 
 /**
@@ -126,8 +126,11 @@ export class Transform {
     const tx = new Transaction(this.store);
     fn(tx);
     if (tx.mutations.length > 0) {
-      if (this.options.transactionHandler) {
-        this.options.transactionHandler(tx);
+      if (this.options.objUpdater) {
+        const mutated = tx.getMutated();
+        for (let i = 0; i < mutated.length; i++) {
+          this.options.objUpdater(mutated[i]);
+        }
       }
       this.onTransaction.emit(tx);
       if (this.action) {

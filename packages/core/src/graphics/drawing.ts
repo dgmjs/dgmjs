@@ -83,6 +83,31 @@ export class Drawing {
     return this;
   }
 
+  fillRect(
+    canvas: Canvas,
+    fillColor: string,
+    alpha: number,
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number
+  ) {
+    const x = x1 < x2 ? x1 : x2;
+    const y = y1 < y2 ? y1 : y2;
+    const w = Math.abs(x2 - x1);
+    const h = Math.abs(y2 - y1);
+    this.do.push({
+      type: "fillRect",
+      fillColor,
+      alpha,
+      x,
+      y,
+      w,
+      h,
+    });
+    return this;
+  }
+
   roughRect(
     canvas: Canvas,
     strokeColor: string,

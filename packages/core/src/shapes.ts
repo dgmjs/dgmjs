@@ -252,7 +252,7 @@ class Shape extends Obj {
   update(canvas: Canvas) {
     // parse scripts
     // draw by drawing objects
-    console.log("update", this.type);
+    // console.log("update", this.type);
   }
 
   /**
@@ -1015,6 +1015,50 @@ class Box extends Shape {
     this._renderText = true;
   }
 
+  update(canvas: Canvas): void {
+    super.update(canvas);
+    this._drawing.clear();
+    if (this.fillStyle !== FillStyle.NONE) {
+      this._drawing.fillRect(
+        canvas,
+        canvas.resolveColor(this.fillColor),
+        this.opacity,
+        this.left,
+        this.top,
+        this.right,
+        this.bottom
+      );
+      // canvas.fillRoundRect(
+      //   this.left,
+      //   this.top,
+      //   this.right,
+      //   this.bottom,
+      //   this.corners,
+      //   this.getSeed()
+      // );
+    }
+    this._drawing.rect(
+      canvas,
+      canvas.resolveColor(this.strokeColor),
+      this.strokeWidth,
+      this.strokePattern,
+      this.opacity,
+      this.left,
+      this.top,
+      this.right,
+      this.bottom
+    );
+    // canvas.strokeRoundRect(
+    //   this.left,
+    //   this.top,
+    //   this.right,
+    //   this.bottom,
+    //   this.corners,
+    //   this.getSeed()
+    // );
+    this.renderText(canvas);
+  }
+
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
     json.padding = structuredClone(this.padding);
@@ -1082,24 +1126,25 @@ class Box extends Shape {
 
   renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
     this.renderLink(canvas, updateDOM);
-    if (this.fillStyle !== FillStyle.NONE) {
-      canvas.fillRoundRect(
-        this.left,
-        this.top,
-        this.right,
-        this.bottom,
-        this.corners,
-        this.getSeed()
-      );
-    }
-    canvas.strokeRoundRect(
-      this.left,
-      this.top,
-      this.right,
-      this.bottom,
-      this.corners,
-      this.getSeed()
-    );
+    // if (this.fillStyle !== FillStyle.NONE) {
+    //   canvas.fillRoundRect(
+    //     this.left,
+    //     this.top,
+    //     this.right,
+    //     this.bottom,
+    //     this.corners,
+    //     this.getSeed()
+    //   );
+    // }
+    // canvas.strokeRoundRect(
+    //   this.left,
+    //   this.top,
+    //   this.right,
+    //   this.bottom,
+    //   this.corners,
+    //   this.getSeed()
+    // );
+    this._drawing.draw(canvas);
     this.renderText(canvas);
   }
 
