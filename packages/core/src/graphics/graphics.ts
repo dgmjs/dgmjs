@@ -1404,4 +1404,4 @@ class CanvasPointerEvent {
   }
 }
 
-export { Canvas, CanvasPointerEvent };
+export { SVGPath, pathToString, Canvas, CanvasPointerEvent };

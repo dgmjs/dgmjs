@@ -1323,25 +1323,37 @@ class Line extends Shape {
 
   update(canvas: Canvas): void {
     super.update(canvas);
-    // this._drawing.clear();
-    // this._drawing.setCanvas(canvas);
-    // if (this.fillStyle !== FillStyle.NONE) {
-    //   this._drawing.fillRoundRect(
-    //     this.left,
-    //     this.top,
-    //     this.right,
-    //     this.bottom,
-    //     this.corners
-    //   );
-    // }
-    // this._drawing.strokeRoundRect(
-    //   this.left,
-    //   this.top,
-    //   this.right,
-    //   this.bottom,
-    //   this.corners
-    // );
-    // this.renderText(canvas);
+    this._drawing.clear();
+    this._drawing.setCanvas(canvas);
+    let path = geometry.pathCopy(this.path);
+    if (path.length >= 2) {
+      // TODO:
+      // canvas.storeState();
+      // const hp = this.drawLineEnd(canvas, this.headEndType, true);
+      // const tp = this.drawLineEnd(canvas, this.tailEndType, false);
+      // canvas.restoreState();
+      // path[0] = tp;
+      // path[path.length - 1] = hp;
+    }
+    if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
+      switch (this.lineType) {
+        case LineType.STRAIGHT:
+          this._drawing.polygon(path);
+          break;
+        case LineType.CURVE:
+          this._drawing.curve(path);
+          break;
+      }
+    } else {
+      switch (this.lineType) {
+        case LineType.STRAIGHT:
+          this._drawing.polyline(path);
+          break;
+        case LineType.CURVE:
+          this._drawing.strokeCurve(path);
+          break;
+      }
+    }
   }
 
   /**
@@ -1349,34 +1361,35 @@ class Line extends Shape {
    */
   renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
     this.renderLink(canvas, updateDOM);
-    let path = geometry.pathCopy(this.path);
-    if (path.length >= 2) {
-      canvas.storeState();
-      const hp = this.drawLineEnd(canvas, this.headEndType, true);
-      const tp = this.drawLineEnd(canvas, this.tailEndType, false);
-      canvas.restoreState();
-      path[0] = tp;
-      path[path.length - 1] = hp;
-    }
-    if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
-      switch (this.lineType) {
-        case LineType.STRAIGHT:
-          canvas.polygon(path, this.getSeed());
-          break;
-        case LineType.CURVE:
-          canvas.curve(path, this.getSeed());
-          break;
-      }
-    } else {
-      switch (this.lineType) {
-        case LineType.STRAIGHT:
-          canvas.polyline(path, this.getSeed());
-          break;
-        case LineType.CURVE:
-          canvas.strokeCurve(path, this.getSeed());
-          break;
-      }
-    }
+    // let path = geometry.pathCopy(this.path);
+    // if (path.length >= 2) {
+    //   canvas.storeState();
+    //   const hp = this.drawLineEnd(canvas, this.headEndType, true);
+    //   const tp = this.drawLineEnd(canvas, this.tailEndType, false);
+    //   canvas.restoreState();
+    //   path[0] = tp;
+    //   path[path.length - 1] = hp;
+    // }
+    // if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
+    //   switch (this.lineType) {
+    //     case LineType.STRAIGHT:
+    //       canvas.polygon(path, this.getSeed());
+    //       break;
+    //     case LineType.CURVE:
+    //       canvas.curve(path, this.getSeed());
+    //       break;
+    //   }
+    // } else {
+    //   switch (this.lineType) {
+    //     case LineType.STRAIGHT:
+    //       canvas.polyline(path, this.getSeed());
+    //       break;
+    //     case LineType.CURVE:
+    //       canvas.strokeCurve(path, this.getSeed());
+    //       break;
+    //   }
+    // }
+    this._drawing.draw(canvas);
   }
 
   /**
