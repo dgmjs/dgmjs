@@ -1015,30 +1015,6 @@ class Box extends Shape {
     this._renderText = true;
   }
 
-  update(canvas: Canvas): void {
-    super.update(canvas);
-    this._drawing.clear();
-    if (this.fillStyle !== FillStyle.NONE) {
-      this._drawing.fillRoundRect(
-        canvas,
-        this.left,
-        this.top,
-        this.right,
-        this.bottom,
-        this.corners
-      );
-    }
-    this._drawing.roundRect(
-      canvas,
-      this.left,
-      this.top,
-      this.right,
-      this.bottom,
-      this.corners
-    );
-    this.renderText(canvas);
-  }
-
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
     json.padding = structuredClone(this.padding);
@@ -1096,6 +1072,29 @@ class Box extends Shape {
 
   get innerHeight(): number {
     return this.innerBottom - this.innerTop;
+  }
+
+  update(canvas: Canvas): void {
+    super.update(canvas);
+    this._drawing.clear();
+    this._drawing.setCanvas(canvas);
+    if (this.fillStyle !== FillStyle.NONE) {
+      this._drawing.fillRoundRect(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.corners
+      );
+    }
+    this._drawing.strokeRoundRect(
+      this.left,
+      this.top,
+      this.right,
+      this.bottom,
+      this.corners
+    );
+    this.renderText(canvas);
   }
 
   renderText(canvas: Canvas): void {
@@ -1320,6 +1319,29 @@ class Line extends Shape {
    */
   isClosed(): boolean {
     return geometry.isClosed(this.path);
+  }
+
+  update(canvas: Canvas): void {
+    super.update(canvas);
+    // this._drawing.clear();
+    // this._drawing.setCanvas(canvas);
+    // if (this.fillStyle !== FillStyle.NONE) {
+    //   this._drawing.fillRoundRect(
+    //     this.left,
+    //     this.top,
+    //     this.right,
+    //     this.bottom,
+    //     this.corners
+    //   );
+    // }
+    // this._drawing.strokeRoundRect(
+    //   this.left,
+    //   this.top,
+    //   this.right,
+    //   this.bottom,
+    //   this.corners
+    // );
+    // this.renderText(canvas);
   }
 
   /**
@@ -1625,24 +1647,36 @@ class Ellipse extends Box {
     this.type = "Ellipse";
   }
 
+  update(canvas: Canvas): void {
+    super.update(canvas);
+    this._drawing.clear();
+    this._drawing.setCanvas(canvas);
+    if (this.fillStyle !== FillStyle.NONE) {
+      this._drawing.fillEllipse(this.left, this.top, this.right, this.bottom);
+    }
+    this._drawing.strokeEllipse(this.left, this.top, this.right, this.bottom);
+    this.renderText(canvas);
+  }
+
   renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
     this.renderLink(canvas, updateDOM);
-    if (this.fillStyle !== FillStyle.NONE) {
-      canvas.fillEllipse(
-        this.left,
-        this.top,
-        this.right,
-        this.bottom,
-        this.getSeed()
-      );
-    }
-    canvas.strokeEllipse(
-      this.left,
-      this.top,
-      this.right,
-      this.bottom,
-      this.getSeed()
-    );
+    // if (this.fillStyle !== FillStyle.NONE) {
+    //   canvas.fillEllipse(
+    //     this.left,
+    //     this.top,
+    //     this.right,
+    //     this.bottom,
+    //     this.getSeed()
+    //   );
+    // }
+    // canvas.strokeEllipse(
+    //   this.left,
+    //   this.top,
+    //   this.right,
+    //   this.bottom,
+    //   this.getSeed()
+    // );
+    this._drawing.draw(canvas);
     this.renderText(canvas);
   }
 
