@@ -618,16 +618,15 @@ export class MemoizationCanvas {
         roughness: this.roughness,
         stroke: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern,
+        strokeLineDash: structuredClone(this.strokePattern),
       });
       this.do.push({ type: "rough", rd });
-      // roughDraw(this.context, rd);
     } else {
       this.do.push({
         type: "polyline",
         strokeColor: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokePattern: this.strokePattern,
+        strokePattern: structuredClone(this.strokePattern),
         alpha: this.alpha,
         path: path,
       });
@@ -965,6 +964,7 @@ export class MemoizationCanvas {
    * Get Text Metric
    */
   textMetric(text: string): CanvasTextMetric {
+    this.canvas.font = this.font;
     return this.canvas.textMetric(text);
   }
 

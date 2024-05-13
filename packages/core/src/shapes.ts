@@ -27,7 +27,7 @@ import * as utils from "./graphics/utils";
 import { ZodSchema } from "zod";
 import {
   convertStringToTextNode,
-  drawText,
+  renderTextShape,
   measureText,
   visitTextNodes,
 } from "./utils/text-utils";
@@ -448,9 +448,9 @@ class Shape extends Obj {
    * - Render: computing geometries how to draw the shape
    * - Draw: actual drawing the geometries of the shape on the canvas
    */
-  render(canvas: MemoizationCanvas, updateDOM: boolean = false) {
+  render(canvas: MemoizationCanvas) {
     this.assignStyles(canvas);
-    this.renderDefault(canvas, updateDOM);
+    this.renderDefault(canvas);
   }
 
   /**
@@ -483,7 +483,7 @@ class Shape extends Obj {
   /**
    * Default render this shape
    */
-  renderDefault(canvas: MemoizationCanvas, updateDOM: boolean = false) {}
+  renderDefault(canvas: MemoizationCanvas) {}
 
   drawLink(canvas: Canvas, updateDOM: boolean = false) {
     // create linkDOM
@@ -1086,7 +1086,7 @@ class Box extends Shape {
     return this.innerBottom - this.innerTop;
   }
 
-  renderDefault(canvas: MemoizationCanvas, updateDOM: boolean = false): void {
+  renderDefault(canvas: MemoizationCanvas): void {
     if (this.fillStyle !== FillStyle.NONE) {
       canvas.fillRoundRect(
         this.left,
@@ -1107,9 +1107,9 @@ class Box extends Shape {
   }
 
   renderText(canvas: MemoizationCanvas): void {
-    // if (this._renderText) {
-    //   drawText(canvas, this);
-    // }
+    if (this._renderText) {
+      renderTextShape(canvas, this);
+    }
   }
 
   /**
@@ -1309,17 +1309,17 @@ class Line extends Shape {
   /**
    * Draw this shape
    */
-  renderDefault(canvas: MemoizationCanvas, updateDOM: boolean = false): void {
+  renderDefault(canvas: MemoizationCanvas): void {
     let path = geometry.pathCopy(this.path);
     if (path.length >= 2) {
-      // TODO:
       // canvas.storeState();
-      // const hp = this.drawLineEnd(canvas, this.headEndType, true);
-      // const tp = this.drawLineEnd(canvas, this.tailEndType, false);
+      const hp = this.renderLineEnd(canvas, this.headEndType, true);
+      const tp = this.renderLineEnd(canvas, this.tailEndType, false);
       // canvas.restoreState();
-      // path[0] = tp;
-      // path[path.length - 1] = hp;
+      path[0] = tp;
+      path[path.length - 1] = hp;
     }
+    this.assignStyles(canvas);
     if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
       switch (this.lineType) {
         case LineType.STRAIGHT:
@@ -1356,7 +1356,11 @@ class Line extends Shape {
    *
    * @returns an end point the path should be drawn to
    */
-  drawLineEnd(canvas: Canvas, edgeEndType: string, isHead: boolean): number[] {
+  renderLineEnd(
+    canvas: MemoizationCanvas,
+    edgeEndType: string,
+    isHead: boolean
+  ): number[] {
     let rt = [
       [0, 0],
       [0, 0],
@@ -1609,12 +1613,12 @@ class Ellipse extends Box {
     this.type = "Ellipse";
   }
 
-  renderDefault(canvas: MemoizationCanvas, updateDOM: boolean = false): void {
+  renderDefault(canvas: MemoizationCanvas): void {
     if (this.fillStyle !== FillStyle.NONE) {
       canvas.fillEllipse(this.left, this.top, this.right, this.bottom);
     }
     canvas.strokeEllipse(this.left, this.top, this.right, this.bottom);
-    // TODO: this.renderText(canvas);
+    this.renderText(canvas);
   }
 
   /**
@@ -1654,8 +1658,7 @@ class Text extends Box {
     return geometry.inPolygon(point, outline);
   }
 
-  renderDefault(canvas: MemoizationCanvas, updateDOM: boolean = false): void {
-    // this.drawLink(canvas, updateDOM);
+  renderDefault(canvas: MemoizationCanvas): void {
     if (this.fillStyle !== FillStyle.NONE) {
       canvas.fillRoundRect(
         this.left,
@@ -1665,7 +1668,7 @@ class Text extends Box {
         this.corners
       );
     }
-    // TODO: this.renderText(canvas);
+    this.renderText(canvas);
   }
 }
 
@@ -1707,8 +1710,7 @@ class Image extends Box {
     this.imageHeight = json.imageHeight ?? this.imageHeight;
   }
 
-  renderDefault(canvas: MemoizationCanvas, updateDOM: boolean = false): void {
-    // this.drawLink(canvas, updateDOM);
+  renderDefault(canvas: MemoizationCanvas): void {
     if (!this._imageDOM) {
       this._imageDOM = new globalThis.Image();
       this._imageDOM.src = this.imageData;

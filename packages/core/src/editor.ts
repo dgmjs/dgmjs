@@ -937,7 +937,7 @@ export class Editor {
    * Repaint diagram
    */
   repaint(drawSelection: boolean = true) {
-    console.time("repaint");
+    // console.time("repaint");
     this.clearBackground(this.canvas);
     if (this.currentPage) {
       this.drawGrid(this.canvas);
@@ -945,7 +945,7 @@ export class Editor {
       if (drawSelection) this.drawSelection();
       this.onRepaint.emit();
     }
-    console.timeEnd("repaint");
+    // console.timeEnd("repaint");
   }
 
   /**
