@@ -11,12 +11,10 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { Color } from "./const";
+import { Color, FillStyle } from "./const";
 import * as geometry from "./geometry";
-
 import rough from "roughjs";
 import { roughDraw } from "./roughjs-draw";
-import { FillStyle } from "../shapes";
 import type { Point } from "roughjs/bin/geometry";
 import type { RoughGenerator } from "roughjs/bin/generator";
 
@@ -1404,4 +1402,4 @@ class CanvasPointerEvent {
   }
 }
 
-export { SVGPath, pathToString, Canvas, CanvasPointerEvent };
+export { FillStyle, SVGPath, pathToString, Canvas, CanvasPointerEvent };

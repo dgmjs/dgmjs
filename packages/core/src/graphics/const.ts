@@ -77,6 +77,13 @@ const Color = Object.freeze({
   YELLOW: "#FFFF00",
 });
 
+const FillStyle = Object.freeze({
+  NONE: "none",
+  SOLID: "solid",
+  HACHURE: "hachure",
+  CROSS_HATCH: "cross-hatch",
+});
+
 const StrokePattern = Object.freeze({
   SOLID: [],
   DOTTED: [3],
@@ -109,6 +116,7 @@ export {
   Cursor,
   Mouse,
   Color,
+  FillStyle,
   StrokePattern,
   ControllerPosition,
   FontSizes,

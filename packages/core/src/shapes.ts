@@ -18,6 +18,7 @@ import {
   CONTROL_POINT_APOTHEM,
   Color,
   DEFAULT_FONT_SIZE,
+  FillStyle,
   LINE_SELECTION_THRESHOLD,
   SYSTEM_FONT,
   SYSTEM_FONT_SIZE,
@@ -82,13 +83,6 @@ const Sizable = Object.freeze({
   VERT: "vert",
   FREE: "free",
   RATIO: "ratio",
-});
-
-const FillStyle = Object.freeze({
-  NONE: "none",
-  SOLID: "solid",
-  HACHURE: "hachure",
-  CROSS_HATCH: "cross-hatch",
 });
 
 const LineType = Object.freeze({
