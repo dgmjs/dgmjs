@@ -1402,4 +1402,11 @@ class CanvasPointerEvent {
   }
 }
 
-export { FillStyle, SVGPath, pathToString, Canvas, CanvasPointerEvent };
+export {
+  FillStyle,
+  SVGPath,
+  pathToString,
+  Canvas,
+  CanvasTextMetric,
+  CanvasPointerEvent,
+};

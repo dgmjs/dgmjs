@@ -2,7 +2,12 @@ import rough from "roughjs";
 import { Drawable } from "roughjs/bin/core";
 import { RoughGenerator } from "roughjs/bin/generator";
 import type { Point } from "roughjs/bin/geometry";
-import { Canvas, SVGPath, pathToString } from "./graphics/graphics";
+import {
+  Canvas,
+  CanvasTextMetric,
+  SVGPath,
+  pathToString,
+} from "./graphics/graphics";
 import { roughDraw } from "./graphics/roughjs-draw";
 import { FillStyle, Shape } from "./shapes";
 import * as geometry from "./graphics/geometry";
@@ -927,6 +932,13 @@ export class Drawing {
       height,
     });
     return this;
+  }
+
+  /**
+   * Get Text Metric
+   */
+  textMetric(text: string): CanvasTextMetric {
+    return this.canvas.textMetric(text);
   }
 
   /**
