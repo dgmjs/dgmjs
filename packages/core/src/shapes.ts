@@ -28,7 +28,6 @@ import { ZodSchema } from "zod";
 import {
   convertStringToTextNode,
   renderTextShape,
-  measureText,
   visitTextNodes,
 } from "./utils/text-utils";
 import { evalScript } from "./mal/mal";
@@ -1715,34 +1714,14 @@ class Image extends Box {
       this._imageDOM = new globalThis.Image();
       this._imageDOM.src = this.imageData;
     }
-    // TODO:
-    // if (this._imageDOM && this._imageDOM.complete) {
-    //   canvas.save();
-    //   canvas.fillColor = Color.TRANSPARENT;
-    //   canvas.fillStyle = FillStyle.SOLID;
-    //   canvas.strokeColor = Color.TRANSPARENT;
-    //   canvas.strokeWidth = 1;
-    //   canvas.strokePattern = [];
-    //   canvas.alpha = 1;
-    //   canvas.roughness = 0;
-    //   canvas.fillRoundRect(
-    //     this.left,
-    //     this.top,
-    //     this.right,
-    //     this.bottom,
-    //     this.corners,
-    //     this.getSeed()
-    //   );
-    //   canvas.context.clip();
-    //   canvas.drawImage(
-    //     this._imageDOM,
-    //     this.left,
-    //     this.top,
-    //     this.width,
-    //     this.height
-    //   );
-    //   canvas.restore();
-    // }
+    canvas.drawImage(
+      this._imageDOM,
+      this.left,
+      this.top,
+      this.width,
+      this.height,
+      this.corners
+    );
   }
 }
 
@@ -2046,7 +2025,7 @@ class Embed extends Box {
   //   );
   // }
 
-  renderFrame(canvas: Canvas, updateDOM: boolean = false): void {
+  drawFrame(canvas: Canvas, updateDOM: boolean = false): void {
     // create iframeDOM
     if (this.src.length > 0 && !this._iframeDOM) {
       this._iframeDOM = document.createElement("iframe");

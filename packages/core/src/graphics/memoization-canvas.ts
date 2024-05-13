@@ -237,11 +237,12 @@ interface FillTextDO extends BaseDO {
 interface DrawImageDO extends BaseDO {
   type: "drawImage";
   alpha: number;
-  image: CanvasImageSource;
+  image: HTMLImageElement;
   x: number;
   y: number;
-  width: number;
-  height: number;
+  w: number;
+  h: number;
+  radius: number[];
 }
 
 interface RoughDO extends BaseDO {
@@ -942,20 +943,25 @@ export class MemoizationCanvas {
    * Draw Image
    */
   drawImage(
-    image: CanvasImageSource,
+    image: HTMLImageElement,
     x: number,
     y: number,
     width: number,
-    height: number
+    height: number,
+    radius: number | number[]
   ) {
+    const rs = Array.isArray(radius)
+      ? radius
+      : [radius, radius, radius, radius];
     this.do.push({
       type: "drawImage",
       alpha: this.alpha,
       image,
       x,
       y,
-      width,
-      height,
+      w: width,
+      h: height,
+      radius: rs,
     });
     return this;
   }
@@ -1254,7 +1260,73 @@ export class MemoizationCanvas {
         }
         case "drawImage": {
           canvas.context.globalAlpha = d.alpha;
-          canvas.context.drawImage(d.image, d.x, d.y, d.width, d.height);
+          if (d.image && d.image.complete) {
+            canvas.context.strokeStyle = this.canvas.resolveColor(
+              Color.TRANSPARENT
+            );
+            canvas.context.lineWidth = 0;
+            canvas.context.setLineDash([]);
+            canvas.context.globalAlpha = d.alpha;
+            canvas.context.fillStyle = this.canvas.resolveColor(
+              Color.TRANSPARENT
+            );
+            canvas.context.beginPath();
+            canvas.context.moveTo(d.x + d.radius[0], d.y);
+            canvas.context.lineTo(d.x + d.w - d.radius[1], d.y);
+            canvas.context.quadraticCurveTo(
+              d.x + d.w,
+              d.y,
+              d.x + d.w,
+              d.y + d.radius[1]
+            );
+            canvas.context.lineTo(d.x + d.w, d.y + d.h - d.radius[2]);
+            canvas.context.quadraticCurveTo(
+              d.x + d.w,
+              d.y + d.h,
+              d.x + d.w - d.radius[2],
+              d.y + d.h
+            );
+            canvas.context.lineTo(d.x + d.radius[3], d.y + d.h);
+            canvas.context.quadraticCurveTo(
+              d.x,
+              d.y + d.h,
+              d.x,
+              d.y + d.h - d.radius[3]
+            );
+            canvas.context.lineTo(d.x, d.y + d.radius[0]);
+            canvas.context.quadraticCurveTo(d.x, d.y, d.x + d.radius[0], d.y);
+            canvas.context.closePath();
+            canvas.context.fill();
+            canvas.context.clip();
+            canvas.context.drawImage(d.image, d.x, d.y, d.w, d.h);
+          }
+          // if (this._imageDOM && this._imageDOM.complete) {
+          //   canvas.save();
+          //   canvas.fillColor = Color.TRANSPARENT;
+          //   canvas.fillStyle = FillStyle.SOLID;
+          //   canvas.strokeColor = Color.TRANSPARENT;
+          //   canvas.strokeWidth = 1;
+          //   canvas.strokePattern = [];
+          //   canvas.alpha = 1;
+          //   canvas.roughness = 0;
+          //   canvas.fillRoundRect(
+          //     this.left,
+          //     this.top,
+          //     this.right,
+          //     this.bottom,
+          //     this.corners,
+          //     this.getSeed()
+          //   );
+          //   canvas.context.clip();
+          //   canvas.drawImage(
+          //     this._imageDOM,
+          //     this.left,
+          //     this.top,
+          //     this.width,
+          //     this.height
+          //   );
+          //   canvas.restore();
+          // }
           break;
         }
         case "rough": {

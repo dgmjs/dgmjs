@@ -199,7 +199,7 @@ export function getTextNodeFont(
  * @returns preprocessed text node
  */
 export function preprocessTextNode(
-  canvas: MemoizationCanvas,
+  canvas: Canvas,
   node: any,
   shape: Box,
   wordWrap: boolean,
@@ -596,7 +596,7 @@ function getLastLine(node: any): any {
  * Measure text size
  */
 export function measureText(
-  canvas: MemoizationCanvas,
+  canvas: Canvas,
   shape: Text,
   text: string | any
 ): {
@@ -631,7 +631,7 @@ export function measureText(
 }
 
 export function renderTextShape(canvas: MemoizationCanvas, shape: Box) {
-  const textMetric = measureText(canvas, shape, shape.text);
+  const textMetric = measureText(canvas.canvas, shape, shape.text);
   let top = shape.innerTop;
   switch (shape.vertAlign) {
     case "top":
