@@ -35,6 +35,7 @@ import { Obj } from "./core/obj";
 import { Instantiator } from "./core/instantiator";
 import { Transaction } from "./core/transaction";
 import { MemoizationCanvas } from "./graphics/memoization-canvas";
+import { hashStringToNumber } from "./std/id";
 
 interface Constraint {
   id: string;
@@ -168,6 +169,11 @@ class Shape extends Obj {
   scripts: Script[];
 
   /**
+   * Memoize seed
+   */
+  _memoSeed: number | null;
+
+  /**
    * Memoization canvas
    */
   _memoCanvas: MemoizationCanvas;
@@ -219,6 +225,7 @@ class Shape extends Obj {
     this.properties = [];
     this.scripts = [];
 
+    this._memoSeed = null;
     this._memoCanvas = new MemoizationCanvas();
     this._memoScripts = [];
     this._linkDOM = null;
@@ -311,6 +318,11 @@ class Shape extends Obj {
 
   get bottom(): number {
     return this.top + this.height;
+  }
+
+  getSeed(): number {
+    if (!this._memoSeed) this._memoSeed = hashStringToNumber(this.id);
+    return this._memoSeed;
   }
 
   /**

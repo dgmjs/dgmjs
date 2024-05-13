@@ -11,7 +11,7 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { generateId, hashStringToNumber } from "../std/id";
+import { generateId } from "../std/id";
 
 /**
  * Base object.
@@ -31,10 +31,6 @@ export class Obj {
     this.type = "Obj";
     this.parent = null;
     this.children = [];
-  }
-
-  getSeed(): number {
-    return hashStringToNumber(this.id);
   }
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
