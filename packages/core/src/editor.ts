@@ -941,7 +941,7 @@ export class Editor {
     this.clearBackground(this.canvas);
     if (this.currentPage) {
       this.drawGrid(this.canvas);
-      this.currentPage.render(this.canvas, true);
+      this.currentPage.draw(this.canvas, true);
       if (drawSelection) this.drawSelection();
       this.onRepaint.emit();
     }

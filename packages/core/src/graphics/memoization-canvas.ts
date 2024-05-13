@@ -2,16 +2,10 @@ import rough from "roughjs";
 import { Drawable } from "roughjs/bin/core";
 import { RoughGenerator } from "roughjs/bin/generator";
 import type { Point } from "roughjs/bin/geometry";
-import {
-  Canvas,
-  CanvasTextMetric,
-  SVGPath,
-  pathToString,
-} from "./graphics/graphics";
-import { roughDraw } from "./graphics/roughjs-draw";
-import { FillStyle, Shape } from "./shapes";
-import * as geometry from "./graphics/geometry";
-import * as utils from "./graphics/utils";
+import { Canvas, CanvasTextMetric, SVGPath, pathToString } from "./graphics";
+import { roughDraw } from "./roughjs-draw";
+import * as geometry from "./geometry";
+import { Color, FillStyle } from "./const";
 
 /**
  * Drawing Object
@@ -67,7 +61,7 @@ interface LineDO extends BaseDO {
   strokeColor: string;
   strokeWidth: number;
   strokePattern: number[];
-  opacity: number;
+  alpha: number;
   x1: number;
   y1: number;
   x2: number;
@@ -79,7 +73,7 @@ interface StrokeRectDO extends BaseDO {
   strokeColor: string;
   strokeWidth: number;
   strokePattern: number[];
-  opacity: number;
+  alpha: number;
   x: number;
   y: number;
   w: number;
@@ -90,7 +84,7 @@ interface FillRectDO extends BaseDO {
   type: "fillRect";
   fillColor: string;
   fillStyle: string;
-  opacity: number;
+  alpha: number;
   x: number;
   y: number;
   w: number;
@@ -102,7 +96,7 @@ interface StrokeRoundRectDO extends BaseDO {
   strokeColor: string;
   strokeWidth: number;
   strokePattern: number[];
-  opacity: number;
+  alpha: number;
   x: number;
   y: number;
   w: number;
@@ -114,7 +108,7 @@ interface FillRoundRectDO extends BaseDO {
   type: "fillRoundRect";
   fillColor: string;
   fillStyle: string;
-  opacity: number;
+  alpha: number;
   x: number;
   y: number;
   w: number;
@@ -127,7 +121,7 @@ interface StrokeEllipseDO extends BaseDO {
   strokeColor: string;
   strokeWidth: number;
   strokePattern: number[];
-  opacity: number;
+  alpha: number;
   x: number;
   y: number;
   w: number;
@@ -138,7 +132,7 @@ interface FillEllipseDO extends BaseDO {
   type: "fillEllipse";
   fillColor: string;
   fillStyle: string;
-  opacity: number;
+  alpha: number;
   x: number;
   y: number;
   w: number;
@@ -150,7 +144,7 @@ interface PolylineDO extends BaseDO {
   strokeColor: string;
   strokeWidth: number;
   strokePattern: number[];
-  opacity: number;
+  alpha: number;
   path: number[][];
 }
 
@@ -159,7 +153,7 @@ interface StrokeCurveDO extends BaseDO {
   strokeColor: string;
   strokeWidth: number;
   strokePattern: number[];
-  opacity: number;
+  alpha: number;
   path: number[][];
 }
 
@@ -167,7 +161,7 @@ interface FillCurveDO extends BaseDO {
   type: "fillCurve";
   fillColor: string;
   fillStyle: string;
-  opacity: number;
+  alpha: number;
   path: number[][];
 }
 
@@ -176,7 +170,7 @@ interface StrokePolygonDO extends BaseDO {
   strokeColor: string;
   strokeWidth: number;
   strokePattern: number[];
-  opacity: number;
+  alpha: number;
   path: number[][];
 }
 
@@ -184,7 +178,7 @@ interface FillPolygonDO extends BaseDO {
   type: "fillPolygon";
   fillColor: string;
   fillStyle: string;
-  opacity: number;
+  alpha: number;
   path: number[][];
 }
 
@@ -193,7 +187,7 @@ interface StrokeArcDO extends BaseDO {
   strokeColor: string;
   strokeWidth: number;
   strokePattern: number[];
-  opacity: number;
+  alpha: number;
   x: number;
   y: number;
   r: number;
@@ -205,7 +199,7 @@ interface FillArcDO extends BaseDO {
   type: "fillArc";
   fillColor: string;
   fillStyle: string;
-  opacity: number;
+  alpha: number;
   x: number;
   y: number;
   r: number;
@@ -218,7 +212,7 @@ interface StrokePathDO extends BaseDO {
   strokeColor: string;
   strokeWidth: number;
   strokePattern: number[];
-  opacity: number;
+  alpha: number;
   path: SVGPath;
 }
 
@@ -226,15 +220,14 @@ interface FillPathDO extends BaseDO {
   type: "fillPath";
   fillColor: string;
   fillStyle: string;
-  opacity: number;
+  alpha: number;
   path: SVGPath;
 }
 
 interface FillTextDO extends BaseDO {
   type: "fillText";
-  fillColor: string;
-  fillStyle: string;
-  opacity: number;
+  fontColor: string;
+  alpha: number;
   font: string;
   x: number;
   y: number;
@@ -243,7 +236,7 @@ interface FillTextDO extends BaseDO {
 
 interface DrawImageDO extends BaseDO {
   type: "drawImage";
-  opacity: number;
+  alpha: number;
   image: CanvasImageSource;
   x: number;
   y: number;
@@ -257,18 +250,34 @@ interface RoughDO extends BaseDO {
 }
 
 /**
- * Drawing class
+ * Memoization Canvas
  */
-export class Drawing {
+export class MemoizationCanvas {
   canvas: Canvas = null!;
-  shape: Shape;
   do: DO[];
   generator: RoughGenerator;
+  strokeColor: string;
+  strokeWidth: number;
+  strokePattern: number[];
+  fillColor: string;
+  fillStyle: string;
+  fontColor: string;
+  font: string;
+  alpha: number;
+  roughness: number;
 
-  constructor(shape: Shape) {
-    this.shape = shape;
+  constructor() {
     this.do = [];
     this.generator = rough.generator();
+    this.strokeColor = Color.FOREGROUND;
+    this.strokeWidth = 1;
+    this.strokePattern = []; // solid
+    this.fillColor = Color.BACKGROUND;
+    this.fillStyle = FillStyle.SOLID;
+    this.fontColor = Color.FOREGROUND;
+    this.font = "13px sans-serif";
+    this.alpha = 1.0;
+    this.roughness = 0;
   }
 
   clear() {
@@ -282,23 +291,23 @@ export class Drawing {
   /**
    * Draw a line
    */
-  line(x1: number, y1: number, x2: number, y2: number) {
-    if (this.shape.roughness > 0) {
+  line(x1: number, y1: number, x2: number, y2: number, seed: number = 1) {
+    if (this.roughness > 0) {
       const rd = this.generator.line(x1, y1, x2, y2, {
-        seed: this.shape.getSeed(),
-        roughness: this.shape.roughness,
-        stroke: this.canvas.resolveColor(this.shape.strokeColor),
-        strokeWidth: this.shape.strokeWidth,
-        strokeLineDash: this.shape.strokePattern,
+        seed,
+        roughness: this.roughness,
+        stroke: this.canvas.resolveColor(this.strokeColor),
+        strokeWidth: this.strokeWidth,
+        strokeLineDash: this.strokePattern,
       });
       this.do.push({ type: "rough", rd });
     } else {
       this.do.push({
         type: "line",
-        strokeColor: this.canvas.resolveColor(this.shape.strokeColor),
-        strokeWidth: this.shape.strokeWidth,
-        strokePattern: this.shape.strokePattern,
-        opacity: this.shape.opacity,
+        strokeColor: this.canvas.resolveColor(this.strokeColor),
+        strokeWidth: this.strokeWidth,
+        strokePattern: this.strokePattern,
+        alpha: this.alpha,
         x1,
         y1,
         x2,
@@ -316,22 +325,22 @@ export class Drawing {
     const y = y1 < y2 ? y1 : y2;
     const w = Math.abs(x2 - x1);
     const h = Math.abs(y2 - y1);
-    if (this.shape.roughness > 0) {
+    if (this.roughness > 0) {
       const rd = this.generator.rectangle(x, y, w, h, {
-        seed: this.shape.getSeed(),
-        roughness: this.shape.roughness,
-        stroke: this.canvas.resolveColor(this.shape.strokeColor),
-        strokeWidth: this.shape.strokeWidth,
-        strokeLineDash: this.shape.strokePattern,
+        seed,
+        roughness: this.roughness,
+        stroke: this.canvas.resolveColor(this.strokeColor),
+        strokeWidth: this.strokeWidth,
+        strokeLineDash: this.strokePattern,
       });
       this.do.push({ type: "rough", rd });
     } else {
       this.do.push({
         type: "strokeRect",
-        strokeColor: this.canvas.resolveColor(this.shape.strokeColor),
-        strokeWidth: this.shape.strokeWidth,
-        strokePattern: this.shape.strokePattern,
-        opacity: this.shape.opacity,
+        strokeColor: this.canvas.resolveColor(this.strokeColor),
+        strokeWidth: this.strokeWidth,
+        strokePattern: this.strokePattern,
+        alpha: this.alpha,
         x,
         y,
         w,
@@ -344,28 +353,28 @@ export class Drawing {
   /**
    * Draw a filled rect
    */
-  fillRect(x1: number, y1: number, x2: number, y2: number) {
+  fillRect(x1: number, y1: number, x2: number, y2: number, seed: number = 1) {
     const x = x1 < x2 ? x1 : x2;
     const y = y1 < y2 ? y1 : y2;
     const w = Math.abs(x2 - x1);
     const h = Math.abs(y2 - y1);
-    if (this.shape.roughness > 0 || this.shape.fillStyle !== FillStyle.SOLID) {
+    if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const rd = this.generator.rectangle(x, y, w, h, {
-        seed: this.shape.getSeed(),
-        roughness: this.shape.roughness,
-        fill: this.canvas.resolveColor(this.shape.fillColor),
-        fillStyle: this.shape.fillStyle,
+        seed,
+        roughness: this.roughness,
+        fill: this.canvas.resolveColor(this.fillColor),
+        fillStyle: this.fillStyle,
         fillLineDash: [],
         stroke: this.canvas.resolveColor("$transparent"),
-        strokeWidth: this.shape.strokeWidth,
+        strokeWidth: this.strokeWidth,
       });
       this.do.push({ type: "rough", rd });
     } else {
       this.do.push({
         type: "fillRect",
-        fillColor: this.canvas.resolveColor(this.shape.fillColor),
-        fillStyle: this.shape.fillStyle,
-        opacity: this.shape.opacity,
+        fillColor: this.canvas.resolveColor(this.fillColor),
+        fillStyle: this.fillStyle,
+        alpha: this.alpha,
         x,
         y,
         w,
@@ -378,9 +387,9 @@ export class Drawing {
   /**
    * Draw a rect
    */
-  rect(x1: number, y1: number, x2: number, y2: number) {
-    this.fillRect(x1, y1, x2, y2);
-    this.strokeRect(x1, y1, x2, y2);
+  rect(x1: number, y1: number, x2: number, y2: number, seed: number = 1) {
+    this.fillRect(x1, y1, x2, y2, seed);
+    this.strokeRect(x1, y1, x2, y2, seed);
     return this;
   }
 
@@ -392,7 +401,8 @@ export class Drawing {
     y1: number,
     x2: number,
     y2: number,
-    radius: number | number[]
+    radius: number | number[],
+    seed: number = 1
   ) {
     const x = x1 < x2 ? x1 : x2;
     const y = y1 < y2 ? y1 : y2;
@@ -401,7 +411,7 @@ export class Drawing {
     const rs = Array.isArray(radius)
       ? radius
       : [radius, radius, radius, radius];
-    if (this.shape.roughness > 0) {
+    if (this.roughness > 0) {
       const rd = this.generator.path(
         `M${x + rs[0]},${y} L${x + w - rs[1]},${y} Q${x + w},${y} ${x + w},${
           y + rs[1]
@@ -411,21 +421,21 @@ export class Drawing {
           y + rs[0]
         } Q${x},${y} ${x + rs[0]},${y} Z`,
         {
-          seed: this.shape.getSeed(),
-          roughness: this.shape.roughness,
-          stroke: this.canvas.resolveColor(this.shape.strokeColor),
-          strokeWidth: this.shape.strokeWidth,
-          strokeLineDash: this.shape.strokePattern,
+          seed,
+          roughness: this.roughness,
+          stroke: this.canvas.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern,
         }
       );
       this.do.push({ type: "rough", rd });
     } else {
       this.do.push({
         type: "strokeRoundRect",
-        strokeColor: this.canvas.resolveColor(this.shape.strokeColor),
-        strokeWidth: this.shape.strokeWidth,
-        strokePattern: this.shape.strokePattern,
-        opacity: this.shape.opacity,
+        strokeColor: this.canvas.resolveColor(this.strokeColor),
+        strokeWidth: this.strokeWidth,
+        strokePattern: this.strokePattern,
+        alpha: this.alpha,
         x,
         y,
         w,
@@ -444,7 +454,8 @@ export class Drawing {
     y1: number,
     x2: number,
     y2: number,
-    radius: number | number[]
+    radius: number | number[],
+    seed: number = 1
   ) {
     const x = x1 < x2 ? x1 : x2;
     const y = y1 < y2 ? y1 : y2;
@@ -453,7 +464,7 @@ export class Drawing {
     const rs = Array.isArray(radius)
       ? radius
       : [radius, radius, radius, radius];
-    if (this.shape.roughness > 0 || this.shape.fillStyle !== FillStyle.SOLID) {
+    if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const rd = this.generator.path(
         `M${x + rs[0]},${y} L${x + w - rs[1]},${y} Q${x + w},${y} ${x + w},${
           y + rs[1]
@@ -463,22 +474,22 @@ export class Drawing {
           y + rs[0]
         } Q${x},${y} ${x + rs[0]},${y} Z`,
         {
-          seed: this.shape.getSeed(),
-          roughness: this.shape.roughness,
-          fill: this.canvas.resolveColor(this.shape.fillColor),
-          fillStyle: this.shape.fillStyle,
+          seed,
+          roughness: this.roughness,
+          fill: this.canvas.resolveColor(this.fillColor),
+          fillStyle: this.fillStyle,
           fillLineDash: [],
           stroke: this.canvas.resolveColor("$transparent"),
-          strokeWidth: this.shape.strokeWidth,
+          strokeWidth: this.strokeWidth,
         }
       );
       this.do.push({ type: "rough", rd });
     } else {
       this.do.push({
         type: "fillRoundRect",
-        fillColor: this.canvas.resolveColor(this.shape.fillColor),
-        fillStyle: this.shape.fillStyle,
-        opacity: this.shape.opacity,
+        fillColor: this.canvas.resolveColor(this.fillColor),
+        fillStyle: this.fillStyle,
+        alpha: this.alpha,
         x,
         y,
         w,
@@ -497,39 +508,46 @@ export class Drawing {
     y1: number,
     x2: number,
     y2: number,
-    radius: number | number[]
+    radius: number | number[],
+    seed: number = 1
   ) {
-    this.fillRoundRect(x1, y1, x2, y2, radius);
-    this.strokeRoundRect(x1, y1, x2, y2, radius);
+    this.fillRoundRect(x1, y1, x2, y2, radius, seed);
+    this.strokeRoundRect(x1, y1, x2, y2, radius, seed);
     return this;
   }
 
   /**
    * Draw an ellipse
    */
-  strokeEllipse(x1: number, y1: number, x2: number, y2: number) {
+  strokeEllipse(
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    seed: number = 1
+  ) {
     const x = x1 < x2 ? x1 : x2;
     const y = y1 < y2 ? y1 : y2;
     const w = Math.abs(x2 - x1);
     const h = Math.abs(y2 - y1);
     const xm = x + w / 2.0;
     const ym = y + h / 2.0;
-    if (this.shape.roughness > 0) {
+    if (this.roughness > 0) {
       const rd = this.generator.ellipse(xm, ym, w, h, {
-        seed: this.shape.getSeed(),
-        roughness: this.shape.roughness,
-        stroke: this.canvas.resolveColor(this.shape.strokeColor),
-        strokeWidth: this.shape.strokeWidth,
-        strokeLineDash: this.shape.strokePattern,
+        seed,
+        roughness: this.roughness,
+        stroke: this.canvas.resolveColor(this.strokeColor),
+        strokeWidth: this.strokeWidth,
+        strokeLineDash: this.strokePattern,
       });
       this.do.push({ type: "rough", rd });
     } else {
       this.do.push({
         type: "strokeEllipse",
-        strokeColor: this.canvas.resolveColor(this.shape.strokeColor),
-        strokeWidth: this.shape.strokeWidth,
-        strokePattern: this.shape.strokePattern,
-        opacity: this.shape.opacity,
+        strokeColor: this.canvas.resolveColor(this.strokeColor),
+        strokeWidth: this.strokeWidth,
+        strokePattern: this.strokePattern,
+        alpha: this.alpha,
         x,
         y,
         w,
@@ -542,30 +560,36 @@ export class Drawing {
   /**
    * Draw a filled ellipse
    */
-  fillEllipse(x1: number, y1: number, x2: number, y2: number) {
+  fillEllipse(
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    seed: number = 1
+  ) {
     const x = x1 < x2 ? x1 : x2;
     const y = y1 < y2 ? y1 : y2;
     const w = Math.abs(x2 - x1);
     const h = Math.abs(y2 - y1);
     const xm = x + w / 2.0;
     const ym = y + h / 2.0;
-    if (this.shape.roughness > 0 || this.shape.fillStyle !== FillStyle.SOLID) {
+    if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const rd = this.generator.ellipse(xm, ym, w, h, {
-        seed: this.shape.getSeed(),
-        roughness: this.shape.roughness,
-        fill: this.canvas.resolveColor(this.shape.fillColor),
-        fillStyle: this.shape.fillStyle,
+        seed,
+        roughness: this.roughness,
+        fill: this.canvas.resolveColor(this.fillColor),
+        fillStyle: this.fillStyle,
         fillLineDash: [],
         stroke: this.canvas.resolveColor("$transparent"),
-        strokeWidth: this.shape.strokeWidth,
+        strokeWidth: this.strokeWidth,
       });
       this.do.push({ type: "rough", rd });
     } else {
       this.do.push({
         type: "fillEllipse",
-        fillColor: this.canvas.resolveColor(this.shape.fillColor),
-        fillStyle: this.shape.fillStyle,
-        opacity: this.shape.opacity,
+        fillColor: this.canvas.resolveColor(this.fillColor),
+        fillStyle: this.fillStyle,
+        alpha: this.alpha,
         x,
         y,
         w,
@@ -578,33 +602,33 @@ export class Drawing {
   /**
    * Draw an ellipse
    */
-  ellipse(x1: number, y1: number, x2: number, y2: number) {
-    this.fillEllipse(x1, y1, x2, y2);
-    this.strokeEllipse(x1, y1, x2, y2);
+  ellipse(x1: number, y1: number, x2: number, y2: number, seed: number = 1) {
+    this.fillEllipse(x1, y1, x2, y2, seed);
+    this.strokeEllipse(x1, y1, x2, y2, seed);
     return this;
   }
 
   /**
    * Draw polyline
    */
-  polyline(path: number[][]) {
-    if (this.shape.roughness > 0) {
+  polyline(path: number[][], seed: number = 1) {
+    if (this.roughness > 0) {
       const rd = this.generator.linearPath(path as Point[], {
-        seed: this.shape.getSeed(),
-        roughness: this.shape.roughness,
-        stroke: this.canvas.resolveColor(this.shape.strokeColor),
-        strokeWidth: this.shape.strokeWidth,
-        strokeLineDash: this.shape.strokePattern,
+        seed,
+        roughness: this.roughness,
+        stroke: this.canvas.resolveColor(this.strokeColor),
+        strokeWidth: this.strokeWidth,
+        strokeLineDash: this.strokePattern,
       });
       this.do.push({ type: "rough", rd });
       // roughDraw(this.context, rd);
     } else {
       this.do.push({
         type: "polyline",
-        strokeColor: this.canvas.resolveColor(this.shape.strokeColor),
-        strokeWidth: this.shape.strokeWidth,
-        strokePattern: this.shape.strokePattern,
-        opacity: this.shape.opacity,
+        strokeColor: this.canvas.resolveColor(this.strokeColor),
+        strokeWidth: this.strokeWidth,
+        strokePattern: this.strokePattern,
+        alpha: this.alpha,
         path: path,
       });
     }
@@ -614,23 +638,23 @@ export class Drawing {
   /**
    * Draw curved lines
    */
-  strokeCurve(path: number[][]) {
-    if (this.shape.roughness > 0) {
+  strokeCurve(path: number[][], seed: number = 1) {
+    if (this.roughness > 0) {
       const rd = this.generator.curve(path as Point[], {
-        seed: this.shape.getSeed(),
-        roughness: this.shape.roughness,
-        stroke: this.canvas.resolveColor(this.shape.strokeColor),
-        strokeWidth: this.shape.strokeWidth,
-        strokeLineDash: this.shape.strokePattern,
+        seed,
+        roughness: this.roughness,
+        stroke: this.canvas.resolveColor(this.strokeColor),
+        strokeWidth: this.strokeWidth,
+        strokeLineDash: this.strokePattern,
       });
       this.do.push({ type: "rough", rd });
     } else {
       this.do.push({
         type: "strokeCurve",
-        strokeColor: this.canvas.resolveColor(this.shape.strokeColor),
-        strokeWidth: this.shape.strokeWidth,
-        strokePattern: this.shape.strokePattern,
-        opacity: this.shape.opacity,
+        strokeColor: this.canvas.resolveColor(this.strokeColor),
+        strokeWidth: this.strokeWidth,
+        strokePattern: this.strokePattern,
+        alpha: this.alpha,
         path: path,
       });
     }
@@ -640,24 +664,24 @@ export class Drawing {
   /**
    * Draw filled curved lines
    */
-  fillCurve(path: number[][]) {
-    if (this.shape.roughness > 0 || this.shape.fillStyle !== FillStyle.SOLID) {
+  fillCurve(path: number[][], seed: number = 1) {
+    if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const rd = this.generator.curve([...path, path[0]] as Point[], {
-        seed: this.shape.getSeed(),
-        roughness: this.shape.roughness,
-        fill: this.canvas.resolveColor(this.shape.fillColor),
-        fillStyle: this.shape.fillStyle,
+        seed,
+        roughness: this.roughness,
+        fill: this.canvas.resolveColor(this.fillColor),
+        fillStyle: this.fillStyle,
         fillLineDash: [],
         stroke: this.canvas.resolveColor("$transparent"),
-        strokeWidth: this.shape.strokeWidth,
+        strokeWidth: this.strokeWidth,
       });
       this.do.push({ type: "rough", rd });
     } else {
       this.do.push({
         type: "fillCurve",
-        fillColor: this.canvas.resolveColor(this.shape.fillColor),
-        fillStyle: this.shape.fillStyle,
-        opacity: this.shape.opacity,
+        fillColor: this.canvas.resolveColor(this.fillColor),
+        fillStyle: this.fillStyle,
+        alpha: this.alpha,
         path: path,
       });
     }
@@ -667,32 +691,32 @@ export class Drawing {
   /**
    * Draw a curve
    */
-  curve(path: number[][]) {
-    this.fillCurve(path);
-    this.strokeCurve(path);
+  curve(path: number[][], seed: number = 1) {
+    this.fillCurve(path, seed);
+    this.strokeCurve(path, seed);
     return this;
   }
 
   /**
    * Draw polygon
    */
-  strokePolygon(path: number[][]) {
-    if (this.shape.roughness > 0) {
+  strokePolygon(path: number[][], seed: number = 1) {
+    if (this.roughness > 0) {
       const rd = this.generator.polygon(path as Point[], {
-        seed: this.shape.getSeed(),
-        roughness: this.shape.roughness,
-        stroke: this.canvas.resolveColor(this.shape.strokeColor),
-        strokeWidth: this.shape.strokeWidth,
-        strokeLineDash: this.shape.strokePattern,
+        seed,
+        roughness: this.roughness,
+        stroke: this.canvas.resolveColor(this.strokeColor),
+        strokeWidth: this.strokeWidth,
+        strokeLineDash: this.strokePattern,
       });
       this.do.push({ type: "rough", rd });
     } else {
       this.do.push({
         type: "strokePolygon",
-        strokeColor: this.canvas.resolveColor(this.shape.strokeColor),
-        strokeWidth: this.shape.strokeWidth,
-        strokePattern: this.shape.strokePattern,
-        opacity: this.shape.opacity,
+        strokeColor: this.canvas.resolveColor(this.strokeColor),
+        strokeWidth: this.strokeWidth,
+        strokePattern: this.strokePattern,
+        alpha: this.alpha,
         path: path,
       });
     }
@@ -702,24 +726,24 @@ export class Drawing {
   /**
    * Draw filled polygon
    */
-  fillPolygon(path: number[][]) {
-    if (this.shape.roughness > 0 || this.shape.fillStyle !== FillStyle.SOLID) {
+  fillPolygon(path: number[][], seed: number = 1) {
+    if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const rd = this.generator.polygon(path as Point[], {
-        seed: this.shape.getSeed(),
-        roughness: this.shape.roughness,
-        fill: this.canvas.resolveColor(this.shape.fillColor),
-        fillStyle: this.shape.fillStyle,
+        seed,
+        roughness: this.roughness,
+        fill: this.canvas.resolveColor(this.fillColor),
+        fillStyle: this.fillStyle,
         fillLineDash: [],
         stroke: this.canvas.resolveColor("$transparent"),
-        strokeWidth: this.shape.strokeWidth,
+        strokeWidth: this.strokeWidth,
       });
       this.do.push({ type: "rough", rd });
     } else {
       this.do.push({
         type: "fillPolygon",
-        fillColor: this.canvas.resolveColor(this.shape.fillColor),
-        fillStyle: this.shape.fillStyle,
-        opacity: this.shape.opacity,
+        fillColor: this.canvas.resolveColor(this.fillColor),
+        fillStyle: this.fillStyle,
+        alpha: this.alpha,
         path: path,
       });
     }
@@ -729,9 +753,9 @@ export class Drawing {
   /**
    * Draw a polygon
    */
-  polygon(path: number[][]) {
-    this.fillPolygon(path);
-    this.strokePolygon(path);
+  polygon(path: number[][], seed: number = 1) {
+    this.fillPolygon(path, seed);
+    this.strokePolygon(path, seed);
     return this;
   }
 
@@ -743,28 +767,29 @@ export class Drawing {
     y: number,
     r: number,
     startAngle: number,
-    endAngle: number
+    endAngle: number,
+    seed: number = 1
   ) {
     const sa = geometry.toRadian(startAngle);
     const ea = geometry.toRadian(endAngle);
-    if (this.shape.roughness > 0) {
+    if (this.roughness > 0) {
       // To avoid system stuck due to the bug of roughjs
       if (startAngle === 0 && endAngle === 360) return this;
       const rd = this.generator.arc(x, y, r * 2, r * 2, sa, ea, false, {
-        seed: this.shape.getSeed(),
-        roughness: this.shape.roughness,
-        stroke: this.canvas.resolveColor(this.shape.strokeColor),
-        strokeWidth: this.shape.strokeWidth,
-        strokeLineDash: this.shape.strokePattern,
+        seed,
+        roughness: this.roughness,
+        stroke: this.canvas.resolveColor(this.strokeColor),
+        strokeWidth: this.strokeWidth,
+        strokeLineDash: this.strokePattern,
       });
       this.do.push({ type: "rough", rd });
     } else {
       this.do.push({
         type: "strokeArc",
-        strokeColor: this.canvas.resolveColor(this.shape.strokeColor),
-        strokeWidth: this.shape.strokeWidth,
-        strokePattern: this.shape.strokePattern,
-        opacity: this.shape.opacity,
+        strokeColor: this.canvas.resolveColor(this.strokeColor),
+        strokeWidth: this.strokeWidth,
+        strokePattern: this.strokePattern,
+        alpha: this.alpha,
         x,
         y,
         r,
@@ -783,27 +808,28 @@ export class Drawing {
     y: number,
     r: number,
     startAngle: number,
-    endAngle: number
+    endAngle: number,
+    seed: number = 1
   ) {
     const sa = geometry.toRadian(geometry.normalizeAngle(startAngle));
     const ea = geometry.toRadian(geometry.normalizeAngle(endAngle));
-    if (this.shape.roughness > 0 || this.shape.fillStyle !== FillStyle.SOLID) {
+    if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const rd = this.generator.arc(x, y, r * 2, r * 2, sa, ea, true, {
-        seed: this.shape.getSeed(),
-        roughness: this.shape.roughness,
-        fill: this.canvas.resolveColor(this.shape.fillColor),
-        fillStyle: this.shape.fillStyle,
+        seed,
+        roughness: this.roughness,
+        fill: this.canvas.resolveColor(this.fillColor),
+        fillStyle: this.fillStyle,
         fillLineDash: [],
         stroke: this.canvas.resolveColor("$transparent"),
-        strokeWidth: this.shape.strokeWidth,
+        strokeWidth: this.strokeWidth,
       });
       this.do.push({ type: "rough", rd });
     } else {
       this.do.push({
         type: "fillArc",
-        fillColor: this.canvas.resolveColor(this.shape.fillColor),
-        fillStyle: this.shape.fillStyle,
-        opacity: this.shape.opacity,
+        fillColor: this.canvas.resolveColor(this.fillColor),
+        fillStyle: this.fillStyle,
+        alpha: this.alpha,
         x,
         y,
         r,
@@ -817,33 +843,40 @@ export class Drawing {
   /**
    * Draw an arc
    */
-  arc(x: number, y: number, r: number, startAngle: number, endAngle: number) {
-    this.fillArc(x, y, r, startAngle, endAngle);
-    this.strokeArc(x, y, r, startAngle, endAngle);
+  arc(
+    x: number,
+    y: number,
+    r: number,
+    startAngle: number,
+    endAngle: number,
+    seed: number = 1
+  ) {
+    this.fillArc(x, y, r, startAngle, endAngle, seed);
+    this.strokeArc(x, y, r, startAngle, endAngle, seed);
     return this;
   }
 
   /**
    * Draw a path
    */
-  strokePath(path: SVGPath) {
-    if (this.shape.roughness > 0) {
+  strokePath(path: SVGPath, seed: number = 1) {
+    if (this.roughness > 0) {
       const d = pathToString(path);
       const rd = this.generator.path(d, {
-        seed: this.shape.getSeed(),
-        roughness: this.shape.roughness,
-        stroke: this.canvas.resolveColor(this.shape.strokeColor),
-        strokeWidth: this.shape.strokeWidth,
-        strokeLineDash: this.shape.strokePattern,
+        seed,
+        roughness: this.roughness,
+        stroke: this.canvas.resolveColor(this.strokeColor),
+        strokeWidth: this.strokeWidth,
+        strokeLineDash: this.strokePattern,
       });
       this.do.push({ type: "rough", rd });
     } else {
       this.do.push({
         type: "strokePath",
-        strokeColor: this.canvas.resolveColor(this.shape.strokeColor),
-        strokeWidth: this.shape.strokeWidth,
-        strokePattern: this.shape.strokePattern,
-        opacity: this.shape.opacity,
+        strokeColor: this.canvas.resolveColor(this.strokeColor),
+        strokeWidth: this.strokeWidth,
+        strokePattern: this.strokePattern,
+        alpha: this.alpha,
         path,
       });
     }
@@ -853,25 +886,25 @@ export class Drawing {
   /**
    * Draw filled path
    */
-  fillPath(path: SVGPath) {
-    if (this.shape.roughness > 0 || this.shape.fillStyle !== FillStyle.SOLID) {
+  fillPath(path: SVGPath, seed: number = 1) {
+    if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const d = pathToString(path);
       const rd = this.generator.path(d, {
-        seed: this.shape.getSeed(),
-        roughness: this.shape.roughness,
-        fill: this.canvas.resolveColor(this.shape.fillColor),
-        fillStyle: this.shape.fillStyle,
+        seed,
+        roughness: this.roughness,
+        fill: this.canvas.resolveColor(this.fillColor),
+        fillStyle: this.fillStyle,
         fillLineDash: [],
         stroke: this.canvas.resolveColor("$transparent"),
-        strokeWidth: this.shape.strokeWidth,
+        strokeWidth: this.strokeWidth,
       });
       this.do.push({ type: "rough", rd });
     } else {
       this.do.push({
         type: "fillPath",
-        fillColor: this.canvas.resolveColor(this.shape.fillColor),
-        fillStyle: this.shape.fillStyle,
-        opacity: this.shape.opacity,
+        fillColor: this.canvas.resolveColor(this.fillColor),
+        fillStyle: this.fillStyle,
+        alpha: this.alpha,
         path,
       });
     }
@@ -881,9 +914,9 @@ export class Drawing {
   /**
    * Draw a path
    */
-  path(path: SVGPath) {
-    this.fillPath(path);
-    this.strokePath(path);
+  path(path: SVGPath, seed: number = 1) {
+    this.fillPath(path, seed);
+    this.strokePath(path, seed);
     return this;
   }
 
@@ -896,15 +929,9 @@ export class Drawing {
   fillText(x: number, y: number, text: string) {
     this.do.push({
       type: "fillText",
-      fillColor: this.canvas.resolveColor(this.shape.fillColor),
-      fillStyle: this.shape.fillStyle,
-      opacity: this.shape.opacity,
-      font: utils.toCssFont(
-        this.shape.fontStyle,
-        this.shape.fontWeight,
-        this.shape.fontSize,
-        this.shape.fontFamily
-      ),
+      fontColor: this.canvas.resolveColor(this.fontColor),
+      alpha: this.alpha,
+      font: this.font,
       x,
       y,
       text,
@@ -924,7 +951,7 @@ export class Drawing {
   ) {
     this.do.push({
       type: "drawImage",
-      opacity: this.shape.opacity,
+      alpha: this.alpha,
       image,
       x,
       y,
@@ -953,7 +980,7 @@ export class Drawing {
           canvas.context.strokeStyle = d.strokeColor;
           canvas.context.lineWidth = d.strokeWidth;
           canvas.context.setLineDash(d.strokePattern);
-          canvas.context.globalAlpha = d.opacity;
+          canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           canvas.context.moveTo(d.x1, d.y1);
           canvas.context.lineTo(d.x2, d.y2);
@@ -965,7 +992,7 @@ export class Drawing {
           canvas.context.strokeStyle = d.strokeColor;
           canvas.context.lineWidth = d.strokeWidth;
           canvas.context.setLineDash(d.strokePattern);
-          canvas.context.globalAlpha = d.opacity;
+          canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           canvas.context.rect(d.x, d.y, d.w, d.h);
           canvas.context.closePath();
@@ -974,7 +1001,7 @@ export class Drawing {
         }
         case "fillRect": {
           canvas.context.fillStyle = d.fillColor;
-          canvas.context.globalAlpha = d.opacity;
+          canvas.context.globalAlpha = d.alpha;
           canvas.context.fillRect(d.x, d.y, d.w, d.h);
           break;
         }
@@ -982,7 +1009,7 @@ export class Drawing {
           canvas.context.strokeStyle = d.strokeColor;
           canvas.context.lineWidth = d.strokeWidth;
           canvas.context.setLineDash(d.strokePattern);
-          canvas.context.globalAlpha = d.opacity;
+          canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           canvas.context.moveTo(d.x + d.radius[0], d.y);
           canvas.context.lineTo(d.x + d.w - d.radius[1], d.y);
@@ -1014,7 +1041,7 @@ export class Drawing {
         }
         case "fillRoundRect": {
           canvas.context.fillStyle = d.fillColor;
-          canvas.context.globalAlpha = d.opacity;
+          canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           canvas.context.moveTo(d.x + d.radius[0], d.y);
           canvas.context.lineTo(d.x + d.w - d.radius[1], d.y);
@@ -1048,7 +1075,7 @@ export class Drawing {
           canvas.context.strokeStyle = d.strokeColor;
           canvas.context.lineWidth = d.strokeWidth;
           canvas.context.setLineDash(d.strokePattern);
-          canvas.context.globalAlpha = d.opacity;
+          canvas.context.globalAlpha = d.alpha;
           const kappa = 0.5522848;
           const ox = (d.w / 2.0) * kappa;
           const oy = (d.h / 2.0) * kappa;
@@ -1068,7 +1095,7 @@ export class Drawing {
         }
         case "fillEllipse": {
           canvas.context.fillStyle = d.fillColor;
-          canvas.context.globalAlpha = d.opacity;
+          canvas.context.globalAlpha = d.alpha;
           const kappa = 0.5522848;
           const ox = (d.w / 2.0) * kappa;
           const oy = (d.h / 2.0) * kappa;
@@ -1090,7 +1117,7 @@ export class Drawing {
           canvas.context.strokeStyle = d.strokeColor;
           canvas.context.lineWidth = d.strokeWidth;
           canvas.context.setLineDash(d.strokePattern);
-          canvas.context.globalAlpha = d.opacity;
+          canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           for (let i = 0, len = d.path.length; i < len; i++) {
             const p = d.path[i];
@@ -1107,7 +1134,7 @@ export class Drawing {
           canvas.context.strokeStyle = d.strokeColor;
           canvas.context.lineWidth = d.strokeWidth;
           canvas.context.setLineDash(d.strokePattern);
-          canvas.context.globalAlpha = d.opacity;
+          canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           if (d.path.length > 2) {
             const ps = geometry.curvePathPoints(d.path);
@@ -1124,7 +1151,7 @@ export class Drawing {
         }
         case "fillCurve": {
           canvas.context.fillStyle = d.fillColor;
-          canvas.context.globalAlpha = d.opacity;
+          canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           if (d.path.length > 2) {
             const ps = geometry.curvePathPoints([...d.path, d.path[0]]);
@@ -1150,7 +1177,7 @@ export class Drawing {
           canvas.context.strokeStyle = d.strokeColor;
           canvas.context.lineWidth = d.strokeWidth;
           canvas.context.setLineDash(d.strokePattern);
-          canvas.context.globalAlpha = d.opacity;
+          canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           let start: number[] = [-1, -1];
           for (let i = 0, len = d.path.length; i < len; i++) {
@@ -1168,7 +1195,7 @@ export class Drawing {
         }
         case "fillPolygon": {
           canvas.context.fillStyle = d.fillColor;
-          canvas.context.globalAlpha = d.opacity;
+          canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           for (let i = 0, len = d.path.length; i < len; i++) {
             const p = d.path[i];
@@ -1185,7 +1212,7 @@ export class Drawing {
           canvas.context.strokeStyle = d.strokeColor;
           canvas.context.lineWidth = d.strokeWidth;
           canvas.context.setLineDash(d.strokePattern);
-          canvas.context.globalAlpha = d.opacity;
+          canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           canvas.context.arc(d.x, d.y, d.r, d.startAngle, d.endAngle, false);
           canvas.context.stroke();
@@ -1193,7 +1220,7 @@ export class Drawing {
         }
         case "fillArc": {
           canvas.context.fillStyle = d.fillColor;
-          canvas.context.globalAlpha = d.opacity;
+          canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           canvas.context.arc(d.x, d.y, d.r, d.startAngle, d.endAngle, false);
           canvas.context.fill();
@@ -1203,7 +1230,7 @@ export class Drawing {
           canvas.context.strokeStyle = d.strokeColor;
           canvas.context.lineWidth = d.strokeWidth;
           canvas.context.setLineDash(d.strokePattern);
-          canvas.context.globalAlpha = d.opacity;
+          canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           const path2d = new Path2D(pathToString(d.path));
           canvas.context.stroke(path2d);
@@ -1211,22 +1238,22 @@ export class Drawing {
         }
         case "fillPath": {
           canvas.context.fillStyle = d.fillColor;
-          canvas.context.globalAlpha = d.opacity;
+          canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           const path2d = new Path2D(pathToString(d.path));
           canvas.context.fill(path2d);
           break;
         }
         case "fillText": {
-          canvas.context.fillStyle = d.fillColor;
-          canvas.context.globalAlpha = d.opacity;
+          canvas.context.fillStyle = d.fontColor;
+          canvas.context.globalAlpha = d.alpha;
           canvas.context.font = d.font;
           canvas.context.beginPath();
           canvas.context.fillText(d.text, d.x, d.y);
           break;
         }
         case "drawImage": {
-          canvas.context.globalAlpha = d.opacity;
+          canvas.context.globalAlpha = d.alpha;
           canvas.context.drawImage(d.image, d.x, d.y, d.width, d.height);
           break;
         }

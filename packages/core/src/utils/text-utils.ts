@@ -14,6 +14,7 @@
 import { Canvas } from "../graphics/graphics";
 import { Box, Shape, Text } from "../shapes";
 import * as utils from "../graphics/utils";
+import { MemoizationCanvas } from "../graphics/memoization-canvas";
 
 /**
  * Split a string into words at spaces(' ') and hypens('-').

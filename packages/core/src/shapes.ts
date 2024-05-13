@@ -11,7 +11,6 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { getStroke } from "perfect-freehand";
 import { assert } from "./std/assert";
 import { Canvas } from "./graphics/graphics";
 import {
@@ -29,13 +28,14 @@ import { ZodSchema } from "zod";
 import {
   convertStringToTextNode,
   drawText,
+  measureText,
   visitTextNodes,
 } from "./utils/text-utils";
 import { evalScript } from "./mal/mal";
 import { Obj } from "./core/obj";
 import { Instantiator } from "./core/instantiator";
 import { Transaction } from "./core/transaction";
-import { Drawing } from "./drawing";
+import { MemoizationCanvas } from "./graphics/memoization-canvas";
 
 interface Constraint {
   id: string;
@@ -169,14 +169,14 @@ class Shape extends Obj {
   scripts: Script[];
 
   /**
-   * Drawing object
+   * Memoization canvas
    */
-  _drawing: Drawing;
+  _memoCanvas: MemoizationCanvas;
 
   /**
-   * Parsed scripts
+   * Memoization parsed scripts
    */
-  _parsedScripts: [];
+  _memoScripts: [];
 
   /**
    * Link DOM element
@@ -220,33 +220,9 @@ class Shape extends Obj {
     this.properties = [];
     this.scripts = [];
 
-    this._drawing = new Drawing(this);
-    this._parsedScripts = [];
+    this._memoCanvas = new MemoizationCanvas();
+    this._memoScripts = [];
     this._linkDOM = null;
-  }
-
-  /**
-   * Initialize shape
-   */
-  initialze(canvas: Canvas) {}
-
-  /**
-   * Finalize shape
-   */
-  finalize(canvas: Canvas) {
-    if (this._linkDOM) {
-      this._linkDOM.remove();
-      this._linkDOM = null;
-    }
-  }
-
-  /**
-   * Update shape
-   */
-  update(canvas: Canvas) {
-    // this.parseScripts()
-    // this.updateDrawing()
-    // this.updateScripts()
   }
 
   /**
@@ -339,6 +315,33 @@ class Shape extends Obj {
   }
 
   /**
+   * Initialize shape
+   */
+  initialze(canvas: Canvas) {}
+
+  /**
+   * Finalize shape
+   */
+  finalize(canvas: Canvas) {
+    if (this._linkDOM) {
+      this._linkDOM.remove();
+      this._linkDOM = null;
+    }
+  }
+
+  /**
+   * Update shape
+   */
+  update(canvas: Canvas) {
+    this._memoCanvas.clear();
+    this._memoCanvas.setCanvas(canvas);
+    this.render(this._memoCanvas);
+    // this.parseScripts()
+    // this.updateDrawing()
+    // this.updateScripts()
+  }
+
+  /**
    * Pick a shape at specific position (x, y)
    */
   getShapeAt(
@@ -364,9 +367,9 @@ class Shape extends Obj {
   }
 
   /**
-   * Assign styles to canvas.
+   * Assign styles to memoization canvas.
    */
-  assignStyles(canvas: Canvas) {
+  assignStyles(canvas: MemoizationCanvas) {
     canvas.strokeColor = this.strokeColor;
     canvas.strokeWidth = this.strokeWidth;
     canvas.strokePattern = this.strokePattern;
@@ -438,7 +441,51 @@ class Shape extends Obj {
     return p;
   }
 
-  renderLink(canvas: Canvas, updateDOM: boolean = false) {
+  /**
+   * Render shape
+   *
+   * Render vs Draw
+   * - Render: computing geometries how to draw the shape
+   * - Draw: actual drawing the geometries of the shape on the canvas
+   */
+  render(canvas: MemoizationCanvas, updateDOM: boolean = false) {
+    this.assignStyles(canvas);
+    this.renderDefault(canvas, updateDOM);
+  }
+
+  /**
+   * Draw this shape
+   *
+   * Render vs Draw
+   * - Render: computing geometries how to draw the shape
+   * - Draw: actual drawing the geometries of the shape on the canvas
+   */
+  draw(canvas: Canvas, updateDOM: boolean = false) {
+    if (this.visible) {
+      canvas.save();
+      this.localTransform(canvas);
+      this.drawLink(canvas, updateDOM);
+      const script = this.getScript(ScriptType.RENDER);
+      if (script) {
+        try {
+          evalScript({ canvas: canvas, shape: this }, script);
+        } catch (err) {
+          console.log("[Script Error]", err);
+        }
+      } else {
+        this._memoCanvas.draw(canvas);
+      }
+      this.children.forEach((s) => (s as Shape).draw(canvas, updateDOM));
+      canvas.restore();
+    }
+  }
+
+  /**
+   * Default render this shape
+   */
+  renderDefault(canvas: MemoizationCanvas, updateDOM: boolean = false) {}
+
+  drawLink(canvas: Canvas, updateDOM: boolean = false) {
     // create linkDOM
     if (this.link.length > 0 && !this._linkDOM) {
       this._linkDOM = document.createElement("a");
@@ -475,34 +522,6 @@ class Shape extends Obj {
       this._linkDOM.style.height = `${size}px`;
       this._linkDOM.setAttribute("title", this.link);
       this._linkDOM.setAttribute("href", this.link);
-    }
-  }
-
-  /**
-   * Default render this shape
-   */
-  renderDefault(canvas: Canvas, updateDOM: boolean = false) {}
-
-  /**
-   * Render this shape
-   */
-  render(canvas: Canvas, updateDOM: boolean = false) {
-    if (this.visible) {
-      canvas.save();
-      this.assignStyles(canvas);
-      this.localTransform(canvas);
-      const script = this.getScript(ScriptType.RENDER);
-      if (script) {
-        try {
-          evalScript({ canvas: canvas, shape: this }, script);
-        } catch (err) {
-          console.log("[Script Error]", err);
-        }
-      } else {
-        this.renderDefault(canvas, updateDOM);
-      }
-      this.children.forEach((s) => (s as Shape).render(canvas, updateDOM));
-      canvas.restore();
     }
   }
 
@@ -828,12 +847,11 @@ class Page extends Shape {
   /**
    * Render this shape
    */
-  render(canvas: Canvas, updateDOM: boolean = false) {
+  draw(canvas: Canvas, updateDOM: boolean = false) {
     if (this.visible) {
       canvas.save();
-      this.assignStyles(canvas);
       canvas.globalTransform();
-      this.children.forEach((s) => (s as Shape).render(canvas, updateDOM));
+      this.children.forEach((s) => (s as Shape).draw(canvas, updateDOM));
       canvas.restore();
     }
   }
@@ -1068,12 +1086,9 @@ class Box extends Shape {
     return this.innerBottom - this.innerTop;
   }
 
-  update(canvas: Canvas): void {
-    super.update(canvas);
-    this._drawing.clear();
-    this._drawing.setCanvas(canvas);
+  renderDefault(canvas: MemoizationCanvas, updateDOM: boolean = false): void {
     if (this.fillStyle !== FillStyle.NONE) {
-      this._drawing.fillRoundRect(
+      canvas.fillRoundRect(
         this.left,
         this.top,
         this.right,
@@ -1081,7 +1096,7 @@ class Box extends Shape {
         this.corners
       );
     }
-    this._drawing.strokeRoundRect(
+    canvas.strokeRoundRect(
       this.left,
       this.top,
       this.right,
@@ -1091,34 +1106,10 @@ class Box extends Shape {
     this.renderText(canvas);
   }
 
-  renderText(canvas: Canvas): void {
-    if (this._renderText) {
-      drawText(canvas, this);
-    }
-  }
-
-  renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
-    this.renderLink(canvas, updateDOM);
-    // if (this.fillStyle !== FillStyle.NONE) {
-    //   canvas.fillRoundRect(
-    //     this.left,
-    //     this.top,
-    //     this.right,
-    //     this.bottom,
-    //     this.corners,
-    //     this.getSeed()
-    //   );
+  renderText(canvas: MemoizationCanvas): void {
+    // if (this._renderText) {
+    //   drawText(canvas, this);
     // }
-    // canvas.strokeRoundRect(
-    //   this.left,
-    //   this.top,
-    //   this.right,
-    //   this.bottom,
-    //   this.corners,
-    //   this.getSeed()
-    // );
-    this._drawing.draw(canvas);
-    this.renderText(canvas);
   }
 
   /**
@@ -1315,10 +1306,10 @@ class Line extends Shape {
     return geometry.isClosed(this.path);
   }
 
-  update(canvas: Canvas): void {
-    super.update(canvas);
-    this._drawing.clear();
-    this._drawing.setCanvas(canvas);
+  /**
+   * Draw this shape
+   */
+  renderDefault(canvas: MemoizationCanvas, updateDOM: boolean = false): void {
     let path = geometry.pathCopy(this.path);
     if (path.length >= 2) {
       // TODO:
@@ -1332,58 +1323,22 @@ class Line extends Shape {
     if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
       switch (this.lineType) {
         case LineType.STRAIGHT:
-          this._drawing.polygon(path);
+          canvas.polygon(path);
           break;
         case LineType.CURVE:
-          this._drawing.curve(path);
+          canvas.curve(path);
           break;
       }
     } else {
       switch (this.lineType) {
         case LineType.STRAIGHT:
-          this._drawing.polyline(path);
+          canvas.polyline(path);
           break;
         case LineType.CURVE:
-          this._drawing.strokeCurve(path);
+          canvas.strokeCurve(path);
           break;
       }
     }
-  }
-
-  /**
-   * Draw this shape
-   */
-  renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
-    this.renderLink(canvas, updateDOM);
-    // let path = geometry.pathCopy(this.path);
-    // if (path.length >= 2) {
-    //   canvas.storeState();
-    //   const hp = this.drawLineEnd(canvas, this.headEndType, true);
-    //   const tp = this.drawLineEnd(canvas, this.tailEndType, false);
-    //   canvas.restoreState();
-    //   path[0] = tp;
-    //   path[path.length - 1] = hp;
-    // }
-    // if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
-    //   switch (this.lineType) {
-    //     case LineType.STRAIGHT:
-    //       canvas.polygon(path, this.getSeed());
-    //       break;
-    //     case LineType.CURVE:
-    //       canvas.curve(path, this.getSeed());
-    //       break;
-    //   }
-    // } else {
-    //   switch (this.lineType) {
-    //     case LineType.STRAIGHT:
-    //       canvas.polyline(path, this.getSeed());
-    //       break;
-    //     case LineType.CURVE:
-    //       canvas.strokeCurve(path, this.getSeed());
-    //       break;
-    //   }
-    // }
-    this._drawing.draw(canvas);
   }
 
   /**
@@ -1654,37 +1609,12 @@ class Ellipse extends Box {
     this.type = "Ellipse";
   }
 
-  update(canvas: Canvas): void {
-    super.update(canvas);
-    this._drawing.clear();
-    this._drawing.setCanvas(canvas);
+  renderDefault(canvas: MemoizationCanvas, updateDOM: boolean = false): void {
     if (this.fillStyle !== FillStyle.NONE) {
-      this._drawing.fillEllipse(this.left, this.top, this.right, this.bottom);
+      canvas.fillEllipse(this.left, this.top, this.right, this.bottom);
     }
-    this._drawing.strokeEllipse(this.left, this.top, this.right, this.bottom);
-    this.renderText(canvas);
-  }
-
-  renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
-    this.renderLink(canvas, updateDOM);
-    // if (this.fillStyle !== FillStyle.NONE) {
-    //   canvas.fillEllipse(
-    //     this.left,
-    //     this.top,
-    //     this.right,
-    //     this.bottom,
-    //     this.getSeed()
-    //   );
-    // }
-    // canvas.strokeEllipse(
-    //   this.left,
-    //   this.top,
-    //   this.right,
-    //   this.bottom,
-    //   this.getSeed()
-    // );
-    this._drawing.draw(canvas);
-    this.renderText(canvas);
+    canvas.strokeEllipse(this.left, this.top, this.right, this.bottom);
+    // TODO: this.renderText(canvas);
   }
 
   /**
@@ -1724,19 +1654,18 @@ class Text extends Box {
     return geometry.inPolygon(point, outline);
   }
 
-  renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
-    this.renderLink(canvas, updateDOM);
+  renderDefault(canvas: MemoizationCanvas, updateDOM: boolean = false): void {
+    // this.drawLink(canvas, updateDOM);
     if (this.fillStyle !== FillStyle.NONE) {
       canvas.fillRoundRect(
         this.left,
         this.top,
         this.right,
         this.bottom,
-        this.corners,
-        this.getSeed()
+        this.corners
       );
     }
-    this.renderText(canvas);
+    // TODO: this.renderText(canvas);
   }
 }
 
@@ -1778,39 +1707,40 @@ class Image extends Box {
     this.imageHeight = json.imageHeight ?? this.imageHeight;
   }
 
-  renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
-    this.renderLink(canvas, updateDOM);
+  renderDefault(canvas: MemoizationCanvas, updateDOM: boolean = false): void {
+    // this.drawLink(canvas, updateDOM);
     if (!this._imageDOM) {
       this._imageDOM = new globalThis.Image();
       this._imageDOM.src = this.imageData;
     }
-    if (this._imageDOM && this._imageDOM.complete) {
-      canvas.save();
-      canvas.fillColor = Color.TRANSPARENT;
-      canvas.fillStyle = FillStyle.SOLID;
-      canvas.strokeColor = Color.TRANSPARENT;
-      canvas.strokeWidth = 1;
-      canvas.strokePattern = [];
-      canvas.alpha = 1;
-      canvas.roughness = 0;
-      canvas.fillRoundRect(
-        this.left,
-        this.top,
-        this.right,
-        this.bottom,
-        this.corners,
-        this.getSeed()
-      );
-      canvas.context.clip();
-      canvas.drawImage(
-        this._imageDOM,
-        this.left,
-        this.top,
-        this.width,
-        this.height
-      );
-      canvas.restore();
-    }
+    // TODO:
+    // if (this._imageDOM && this._imageDOM.complete) {
+    //   canvas.save();
+    //   canvas.fillColor = Color.TRANSPARENT;
+    //   canvas.fillStyle = FillStyle.SOLID;
+    //   canvas.strokeColor = Color.TRANSPARENT;
+    //   canvas.strokeWidth = 1;
+    //   canvas.strokePattern = [];
+    //   canvas.alpha = 1;
+    //   canvas.roughness = 0;
+    //   canvas.fillRoundRect(
+    //     this.left,
+    //     this.top,
+    //     this.right,
+    //     this.bottom,
+    //     this.corners,
+    //     this.getSeed()
+    //   );
+    //   canvas.context.clip();
+    //   canvas.drawImage(
+    //     this._imageDOM,
+    //     this.left,
+    //     this.top,
+    //     this.width,
+    //     this.height
+    //   );
+    //   canvas.restore();
+    // }
   }
 }
 
@@ -1821,10 +1751,6 @@ class Group extends Box {
   constructor() {
     super();
     this.type = "Group";
-  }
-
-  renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
-    this.renderLink(canvas, updateDOM);
   }
 
   /**
@@ -1994,22 +1920,19 @@ class Freehand extends Line {
     this.type = "Freehand";
   }
 
-  renderDefault(canvas: Canvas, updateDOM?: boolean): void {
-    this.renderLink(canvas, updateDOM);
-
-    canvas.context.strokeStyle = canvas.resolveColor(this.strokeColor);
-    canvas.context.fillStyle = canvas.resolveColor(this.strokeColor);
-    canvas.context.lineWidth = this.strokeWidth;
-    canvas.context.lineCap = "round";
-    canvas.context.globalAlpha = canvas.alpha;
-    canvas.context.setLineDash(this.strokePattern);
-
-    const stroke = getStroke(this.path, { size: this.strokeWidth });
-    const pathData = utils.getSvgPathFromStroke(stroke);
-    const myPath = new Path2D(pathData);
-
-    canvas.context.beginPath();
-    canvas.context.fill(myPath);
+  renderDefault(canvas: MemoizationCanvas, updateDOM?: boolean): void {
+    // this.drawLink(canvas, updateDOM);
+    // canvas.context.strokeStyle = canvas.resolveColor(this.strokeColor);
+    // canvas.context.fillStyle = canvas.resolveColor(this.strokeColor);
+    // canvas.context.lineWidth = this.strokeWidth;
+    // canvas.context.lineCap = "round";
+    // canvas.context.globalAlpha = canvas.alpha;
+    // canvas.context.setLineDash(this.strokePattern);
+    // const stroke = getStroke(this.path, { size: this.strokeWidth });
+    // const pathData = utils.getSvgPathFromStroke(stroke);
+    // const myPath = new Path2D(pathData);
+    // canvas.context.beginPath();
+    // canvas.context.fill(myPath);
   }
 }
 
@@ -2024,11 +1947,10 @@ class Frame extends Box {
     this.containable = true;
   }
 
-  render(canvas: Canvas, updateDOM: boolean = false) {
+  draw(canvas: Canvas, updateDOM: boolean = false) {
     if (this.visible) {
-      this.renderLink(canvas, updateDOM);
+      this.drawLink(canvas, updateDOM);
       canvas.save();
-      this.assignStyles(canvas);
       this.localTransform(canvas);
       // const script = this.getScript(ScriptType.RENDER);
       // if (script) {
@@ -2063,7 +1985,7 @@ class Frame extends Box {
       );
       canvas.context.clip();
       canvas.restoreState();
-      this.children.forEach((s) => (s as Shape).render(canvas, updateDOM));
+      this.children.forEach((s) => (s as Shape).draw(canvas, updateDOM));
       canvas.restore();
     }
   }
@@ -2157,21 +2079,21 @@ class Embed extends Box {
     }
   }
 
-  renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
-    this.renderLink(canvas, updateDOM);
-    this.renderFrame(canvas, updateDOM);
-    if (this.fillStyle !== FillStyle.NONE) {
-      canvas.fillStyle = FillStyle.SOLID;
-      canvas.fillColor = Color.FOREGROUND;
-      canvas.alpha = 0.1;
-      canvas.fillRect(
-        this.left,
-        this.top,
-        this.right,
-        this.bottom,
-        this.getSeed()
-      );
-    }
+  renderDefault(canvas: MemoizationCanvas, updateDOM: boolean = false): void {
+    // this.drawLink(canvas, updateDOM);
+    // this.renderFrame(canvas, updateDOM);
+    // if (this.fillStyle !== FillStyle.NONE) {
+    //   canvas.fillStyle = FillStyle.SOLID;
+    //   canvas.fillColor = Color.FOREGROUND;
+    //   canvas.alpha = 0.1;
+    //   canvas.fillRect(
+    //     this.left,
+    //     this.top,
+    //     this.right,
+    //     this.bottom,
+    //     this.getSeed()
+    //   );
+    // }
   }
 }
 
