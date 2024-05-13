@@ -53,19 +53,16 @@ export class FreehandFactoryHandler extends Handler {
   update(editor: Editor, e: CanvasPointerEvent): void {
     const page = editor.currentPage;
     this.draggingPoints.push(this.dragPoint);
+    const newPath = structuredClone(this.draggingPoints);
     this.closed =
-      geometry.distance(
-        this.draggingPoints[0],
-        this.draggingPoints[this.draggingPoints.length - 1]
-      ) <= MAGNET_THRESHOLD;
+      geometry.distance(newPath[0], newPath[newPath.length - 1]) <=
+      MAGNET_THRESHOLD;
     if (this.closed) {
-      this.draggingPoints[this.draggingPoints.length - 1] = geometry.copy(
-        this.draggingPoints[0]
-      );
+      newPath[newPath.length - 1] = geometry.copy(newPath[0]);
     }
     editor.transform.transact((tx) => {
       if (page && this.shape) {
-        setLinePath(tx, this.shape, this.draggingPoints);
+        setLinePath(tx, this.shape, newPath);
         resolveAllConstraints(tx, page, editor.canvas);
       }
     });

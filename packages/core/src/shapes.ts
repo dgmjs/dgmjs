@@ -1104,7 +1104,8 @@ class Box extends Shape {
         this.top,
         this.right,
         this.bottom,
-        this.corners
+        this.corners,
+        this.getSeed()
       );
     }
     canvas.strokeRoundRect(
@@ -1112,7 +1113,8 @@ class Box extends Shape {
       this.top,
       this.right,
       this.bottom,
-      this.corners
+      this.corners,
+      this.getSeed()
     );
     this.renderText(canvas);
   }
@@ -1323,10 +1325,8 @@ class Line extends Shape {
   renderDefault(canvas: MemoizationCanvas): void {
     let path = geometry.pathCopy(this.path);
     if (path.length >= 2) {
-      // canvas.storeState();
       const hp = this.renderLineEnd(canvas, this.headEndType, true);
       const tp = this.renderLineEnd(canvas, this.tailEndType, false);
-      // canvas.restoreState();
       path[0] = tp;
       path[path.length - 1] = hp;
     }
@@ -1334,19 +1334,19 @@ class Line extends Shape {
     if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
       switch (this.lineType) {
         case LineType.STRAIGHT:
-          canvas.polygon(path);
+          canvas.polygon(path, this.getSeed());
           break;
         case LineType.CURVE:
-          canvas.curve(path);
+          canvas.curve(path, this.getSeed());
           break;
       }
     } else {
       switch (this.lineType) {
         case LineType.STRAIGHT:
-          canvas.polyline(path);
+          canvas.polyline(path, this.getSeed());
           break;
         case LineType.CURVE:
-          canvas.strokeCurve(path);
+          canvas.strokeCurve(path, this.getSeed());
           break;
       }
     }
@@ -1626,9 +1626,21 @@ class Ellipse extends Box {
 
   renderDefault(canvas: MemoizationCanvas): void {
     if (this.fillStyle !== FillStyle.NONE) {
-      canvas.fillEllipse(this.left, this.top, this.right, this.bottom);
+      canvas.fillEllipse(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.getSeed()
+      );
     }
-    canvas.strokeEllipse(this.left, this.top, this.right, this.bottom);
+    canvas.strokeEllipse(
+      this.left,
+      this.top,
+      this.right,
+      this.bottom,
+      this.getSeed()
+    );
     this.renderText(canvas);
   }
 
@@ -1676,7 +1688,8 @@ class Text extends Box {
         this.top,
         this.right,
         this.bottom,
-        this.corners
+        this.corners,
+        this.getSeed()
       );
     }
     this.renderText(canvas);
@@ -1913,19 +1926,11 @@ class Freehand extends Line {
     this.type = "Freehand";
   }
 
-  renderDefault(canvas: MemoizationCanvas, updateDOM?: boolean): void {
-    // this.drawLink(canvas, updateDOM);
-    // canvas.context.strokeStyle = canvas.resolveColor(this.strokeColor);
-    // canvas.context.fillStyle = canvas.resolveColor(this.strokeColor);
-    // canvas.context.lineWidth = this.strokeWidth;
-    // canvas.context.lineCap = "round";
-    // canvas.context.globalAlpha = canvas.alpha;
-    // canvas.context.setLineDash(this.strokePattern);
-    // const stroke = getStroke(this.path, { size: this.strokeWidth });
-    // const pathData = utils.getSvgPathFromStroke(stroke);
-    // const myPath = new Path2D(pathData);
-    // canvas.context.beginPath();
-    // canvas.context.fill(myPath);
+  renderDefault(canvas: MemoizationCanvas): void {
+    if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
+      canvas.fillPolygon(this.path, this.getSeed());
+    }
+    canvas.strokeFreehand(this.path);
   }
 }
 

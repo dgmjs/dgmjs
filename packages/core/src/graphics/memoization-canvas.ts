@@ -2,10 +2,12 @@ import rough from "roughjs";
 import { Drawable } from "roughjs/bin/core";
 import { RoughGenerator } from "roughjs/bin/generator";
 import type { Point } from "roughjs/bin/geometry";
+import { getStroke } from "perfect-freehand";
 import { Canvas, CanvasTextMetric, SVGPath, pathToString } from "./graphics";
 import { roughDraw } from "./roughjs-draw";
 import * as geometry from "./geometry";
 import { Color, FillStyle } from "./const";
+import { getSvgPathFromStroke } from "./utils";
 
 /**
  * Drawing Object
@@ -27,6 +29,7 @@ type DO =
   | FillArcDO
   | StrokePathDO
   | FillPathDO
+  | strokeFreehandDO
   | FillTextDO
   | DrawImageDO
   | RoughDO;
@@ -48,6 +51,7 @@ type DOType =
   | "fillArc"
   | "strokePath"
   | "fillPath"
+  | "strokeFreehand"
   | "fillText"
   | "drawImage"
   | "rough";
@@ -224,6 +228,13 @@ interface FillPathDO extends BaseDO {
   path: SVGPath;
 }
 
+interface strokeFreehandDO extends BaseDO {
+  type: "strokeFreehand";
+  strokeColor: string;
+  alpha: number;
+  path2d: Path2D;
+}
+
 interface FillTextDO extends BaseDO {
   type: "fillText";
   fontColor: string;
@@ -247,6 +258,7 @@ interface DrawImageDO extends BaseDO {
 
 interface RoughDO extends BaseDO {
   type: "rough";
+  alpha: number;
   rd: Drawable;
 }
 
@@ -301,7 +313,7 @@ export class MemoizationCanvas {
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
       });
-      this.do.push({ type: "rough", rd });
+      this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
       this.do.push({
         type: "line",
@@ -334,7 +346,7 @@ export class MemoizationCanvas {
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
       });
-      this.do.push({ type: "rough", rd });
+      this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
       this.do.push({
         type: "strokeRect",
@@ -369,7 +381,7 @@ export class MemoizationCanvas {
         stroke: this.canvas.resolveColor("$transparent"),
         strokeWidth: this.strokeWidth,
       });
-      this.do.push({ type: "rough", rd });
+      this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
       this.do.push({
         type: "fillRect",
@@ -429,7 +441,7 @@ export class MemoizationCanvas {
           strokeLineDash: this.strokePattern,
         }
       );
-      this.do.push({ type: "rough", rd });
+      this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
       this.do.push({
         type: "strokeRoundRect",
@@ -484,7 +496,7 @@ export class MemoizationCanvas {
           strokeWidth: this.strokeWidth,
         }
       );
-      this.do.push({ type: "rough", rd });
+      this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
       this.do.push({
         type: "fillRoundRect",
@@ -541,7 +553,7 @@ export class MemoizationCanvas {
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
       });
-      this.do.push({ type: "rough", rd });
+      this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
       this.do.push({
         type: "strokeEllipse",
@@ -584,7 +596,7 @@ export class MemoizationCanvas {
         stroke: this.canvas.resolveColor("$transparent"),
         strokeWidth: this.strokeWidth,
       });
-      this.do.push({ type: "rough", rd });
+      this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
       this.do.push({
         type: "fillEllipse",
@@ -621,7 +633,7 @@ export class MemoizationCanvas {
         strokeWidth: this.strokeWidth,
         strokeLineDash: structuredClone(this.strokePattern),
       });
-      this.do.push({ type: "rough", rd });
+      this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
       this.do.push({
         type: "polyline",
@@ -647,7 +659,7 @@ export class MemoizationCanvas {
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
       });
-      this.do.push({ type: "rough", rd });
+      this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
       this.do.push({
         type: "strokeCurve",
@@ -675,7 +687,7 @@ export class MemoizationCanvas {
         stroke: this.canvas.resolveColor("$transparent"),
         strokeWidth: this.strokeWidth,
       });
-      this.do.push({ type: "rough", rd });
+      this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
       this.do.push({
         type: "fillCurve",
@@ -709,7 +721,7 @@ export class MemoizationCanvas {
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
       });
-      this.do.push({ type: "rough", rd });
+      this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
       this.do.push({
         type: "strokePolygon",
@@ -737,7 +749,7 @@ export class MemoizationCanvas {
         stroke: this.canvas.resolveColor("$transparent"),
         strokeWidth: this.strokeWidth,
       });
-      this.do.push({ type: "rough", rd });
+      this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
       this.do.push({
         type: "fillPolygon",
@@ -782,7 +794,7 @@ export class MemoizationCanvas {
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
       });
-      this.do.push({ type: "rough", rd });
+      this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
       this.do.push({
         type: "strokeArc",
@@ -823,7 +835,7 @@ export class MemoizationCanvas {
         stroke: this.canvas.resolveColor("$transparent"),
         strokeWidth: this.strokeWidth,
       });
-      this.do.push({ type: "rough", rd });
+      this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
       this.do.push({
         type: "fillArc",
@@ -869,7 +881,7 @@ export class MemoizationCanvas {
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
       });
-      this.do.push({ type: "rough", rd });
+      this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
       this.do.push({
         type: "strokePath",
@@ -898,7 +910,7 @@ export class MemoizationCanvas {
         stroke: this.canvas.resolveColor("$transparent"),
         strokeWidth: this.strokeWidth,
       });
-      this.do.push({ type: "rough", rd });
+      this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
       this.do.push({
         type: "fillPath",
@@ -917,6 +929,22 @@ export class MemoizationCanvas {
   path(path: SVGPath, seed: number = 1) {
     this.fillPath(path, seed);
     this.strokePath(path, seed);
+    return this;
+  }
+
+  /**
+   * Draw a freehand stroke
+   */
+  strokeFreehand(path: number[][]) {
+    const stroke = getStroke(path, { size: this.strokeWidth });
+    const pathData = getSvgPathFromStroke(stroke);
+    const path2d = new Path2D(pathData);
+    this.do.push({
+      type: "strokeFreehand",
+      strokeColor: this.canvas.resolveColor(this.strokeColor),
+      alpha: this.alpha,
+      path2d,
+    });
     return this;
   }
 
@@ -1250,6 +1278,14 @@ export class MemoizationCanvas {
           canvas.context.fill(path2d);
           break;
         }
+        case "strokeFreehand": {
+          canvas.context.fillStyle = d.strokeColor;
+          canvas.context.lineCap = "round";
+          canvas.context.globalAlpha = d.alpha;
+          canvas.context.beginPath();
+          canvas.context.fill(d.path2d);
+          break;
+        }
         case "fillText": {
           canvas.context.fillStyle = d.fontColor;
           canvas.context.globalAlpha = d.alpha;
@@ -1300,36 +1336,10 @@ export class MemoizationCanvas {
             canvas.context.clip();
             canvas.context.drawImage(d.image, d.x, d.y, d.w, d.h);
           }
-          // if (this._imageDOM && this._imageDOM.complete) {
-          //   canvas.save();
-          //   canvas.fillColor = Color.TRANSPARENT;
-          //   canvas.fillStyle = FillStyle.SOLID;
-          //   canvas.strokeColor = Color.TRANSPARENT;
-          //   canvas.strokeWidth = 1;
-          //   canvas.strokePattern = [];
-          //   canvas.alpha = 1;
-          //   canvas.roughness = 0;
-          //   canvas.fillRoundRect(
-          //     this.left,
-          //     this.top,
-          //     this.right,
-          //     this.bottom,
-          //     this.corners,
-          //     this.getSeed()
-          //   );
-          //   canvas.context.clip();
-          //   canvas.drawImage(
-          //     this._imageDOM,
-          //     this.left,
-          //     this.top,
-          //     this.width,
-          //     this.height
-          //   );
-          //   canvas.restore();
-          // }
           break;
         }
         case "rough": {
+          canvas.context.globalAlpha = d.alpha;
           roughDraw(canvas.context, d.rd);
           break;
         }
