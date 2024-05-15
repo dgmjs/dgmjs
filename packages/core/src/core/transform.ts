@@ -36,6 +36,14 @@ export class Action {
       tx.unapply();
     }
   }
+
+  getMutated() {
+    const mutated = new Set<Obj>();
+    this.transactions.forEach((tx) => {
+      tx.getMutated().forEach((m) => mutated.add(m));
+    });
+    return Array.from(mutated);
+  }
 }
 
 /**
@@ -188,6 +196,10 @@ export class Transform {
       const action = this.undoHistory.pop();
       if (action) {
         action.unapply(this);
+        if (this.options.objUpdater) {
+          const mutated = action.getMutated();
+          for (let obj of mutated) this.options.objUpdater(obj);
+        }
         this.onUndo.emit(action);
         this.redoHistory.push(action);
       }
@@ -202,6 +214,10 @@ export class Transform {
       const action = this.redoHistory.pop();
       if (action) {
         action.apply(this);
+        if (this.options.objUpdater) {
+          const mutated = action.getMutated();
+          for (let obj of mutated) this.options.objUpdater(obj);
+        }
         this.onRedo.emit(action);
         this.undoHistory.push(action);
       }
