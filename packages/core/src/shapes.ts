@@ -461,7 +461,16 @@ class Shape extends Obj {
    */
   render(canvas: MemoizationCanvas) {
     this.assignStyles(canvas);
-    this.renderDefault(canvas);
+    const script = this.getScript(ScriptType.RENDER);
+    if (script) {
+      try {
+        evalScript({ canvas: canvas, shape: this }, script);
+      } catch (err) {
+        console.error("[Script Error]", err);
+      }
+    } else {
+      this.renderDefault(canvas);
+    }
   }
 
   /**
@@ -476,16 +485,7 @@ class Shape extends Obj {
       canvas.save();
       this.localTransform(canvas);
       this.drawLink(canvas, updateDOM);
-      const script = this.getScript(ScriptType.RENDER);
-      if (script) {
-        try {
-          evalScript({ canvas: canvas, shape: this }, script);
-        } catch (err) {
-          console.log("[Script Error]", err);
-        }
-      } else {
-        this._memoCanvas.draw(canvas);
-      }
+      this._memoCanvas.draw(canvas);
       this.children.forEach((s) => (s as Shape).draw(canvas, updateDOM));
       canvas.restore();
     }
@@ -559,7 +559,7 @@ class Shape extends Obj {
       try {
         return evalScript({ shape: this }, script);
       } catch (err) {
-        console.log("[Script Error]", err);
+        console.error("[Script Error]", err);
       }
     }
     return this.getOutlineDefault();
