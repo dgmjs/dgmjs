@@ -538,7 +538,6 @@ export class Editor {
         this.currentPage._origin = this.getOrigin();
       }
       this.setScale(page._scale);
-      this.update();
       this.repaint();
       this.onCurrentPageChange.emit(page);
     }
