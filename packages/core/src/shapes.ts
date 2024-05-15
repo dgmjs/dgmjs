@@ -77,6 +77,16 @@ const Movable = Object.freeze({
   PARENT: "parent",
 });
 
+// const Movable = {
+//   NONE: "none",
+//   HORZ: "horz",
+//   VERT: "vert",
+//   FREE: "free",
+//   PARENT: "parent",
+// } as const;
+
+// type MovableType = (typeof Movable)[keyof typeof Movable];
+
 const Sizable = Object.freeze({
   NONE: "none",
   HORZ: "horz",
@@ -134,38 +144,169 @@ const AlignmentKind = Object.freeze({
  * 6. has it's own coordinate system (rotate)
  */
 class Shape extends Obj {
+  /**
+   * Name of the shape
+   */
   name: string;
+
+  /**
+   * Description of the shape
+   */
   description: string;
+
+  /**
+   * The flag to indicate this shape is a prototype or not
+   */
   proto: boolean;
+
+  /**
+   * Tags
+   */
   tags: string[];
+
+  /**
+   * Enable flag
+   */
   enable: boolean;
+
+  /**
+   * Visible flag
+   */
   visible: boolean;
+
+  /**
+   * Indicate how this shape can be moved
+   */
   movable: string;
+
+  /**
+   * Indicate how this shape can be resized
+   */
   sizable: string;
+
+  /**
+   * Rotatable flag
+   */
   rotatable: boolean;
+
+  /**
+   * Containable flag
+   */
   containable: boolean;
+
+  /**
+   * Containable filter
+   */
   containableFilter: string;
+
+  /**
+   * Connectable flag
+   */
   connectable: boolean;
+
+  /**
+   * Shape's left position
+   */
   left: number;
+
+  /**
+   * Shape's top position
+   */
   top: number;
+
+  /**
+   * Shape's width
+   */
   width: number;
+
+  /**
+   * Shape's height
+   */
   height: number;
+
+  /**
+   * Shape's rotation angle (in degree)
+   */
   rotate: number;
+
+  /**
+   * Stroke color
+   */
   strokeColor: string;
+
+  /**
+   * Stroke width
+   */
   strokeWidth: number;
+
+  /**
+   * Stroke pattern
+   */
   strokePattern: number[];
+
+  /**
+   * Fill color
+   */
   fillColor: string;
+
+  /**
+   * Fill style
+   */
   fillStyle: string;
+
+  /**
+   * Font color
+   */
   fontColor: string;
+
+  /**
+   * Font family
+   */
   fontFamily: string;
+
+  /**
+   * Font size
+   */
   fontSize: number;
+
+  /**
+   * Font style
+   */
   fontStyle: string;
+
+  /**
+   * Font weight
+   */
   fontWeight: number;
+
+  /**
+   * Opacity
+   */
   opacity: number;
+
+  /**
+   * Roughness
+   */
   roughness: number;
+
+  /**
+   * Link
+   */
   link: string;
+
+  /**
+   * Shape's constraints
+   */
   constraints: Constraint[];
+
+  /**
+   * Shape's properties
+   */
   properties: Property[];
+
+  /**
+   * Shape's scripts
+   */
   scripts: Script[];
 
   /**
@@ -177,11 +318,6 @@ class Shape extends Obj {
    * Memoization canvas
    */
   _memoCanvas: MemoizationCanvas;
-
-  /**
-   * Memoization parsed scripts
-   */
-  _memoScripts: [];
 
   /**
    * Link DOM element
@@ -227,7 +363,6 @@ class Shape extends Obj {
 
     this._memoSeed = null;
     this._memoCanvas = new MemoizationCanvas();
-    this._memoScripts = [];
     this._linkDOM = null;
   }
 
@@ -457,7 +592,7 @@ class Shape extends Obj {
    *
    * Render vs Draw
    * - Render: computing geometries how to draw the shape
-   * - Draw: actual drawing the geometries of the shape on the canvas
+   * - Draw: actual drawing the computed geometries of the shape on the canvas
    */
   render(canvas: MemoizationCanvas) {
     this.assignStyles(canvas);
@@ -478,7 +613,7 @@ class Shape extends Obj {
    *
    * Render vs Draw
    * - Render: computing geometries how to draw the shape
-   * - Draw: actual drawing the geometries of the shape on the canvas
+   * - Draw: actual drawing the computed geometries of the shape on the canvas
    */
   draw(canvas: Canvas, updateDOM: boolean = false) {
     if (this.visible) {
