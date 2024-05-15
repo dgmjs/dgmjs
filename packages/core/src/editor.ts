@@ -538,6 +538,7 @@ export class Editor {
         this.currentPage._origin = this.getOrigin();
       }
       this.setScale(page._scale);
+      this.update();
       this.repaint();
       this.onCurrentPageChange.emit(page);
     }
@@ -568,6 +569,7 @@ export class Editor {
     this.canvas.colorVariables = {
       ...themeColors[this.darkMode ? "dark" : "light"],
     };
+    this.update();
     this.repaint();
   }
 
@@ -934,10 +936,23 @@ export class Editor {
   }
 
   /**
+   * Update all shapes
+   */
+  update() {
+    if (this.store.root) {
+      this.store.root.traverse((obj) => {
+        if (obj instanceof Shape) {
+          obj.update(this.canvas);
+        }
+      });
+    }
+  }
+
+  /**
    * Repaint diagram
    */
   repaint(drawSelection: boolean = true) {
-    console.time("repaint");
+    // console.time("repaint");
     this.clearBackground(this.canvas);
     if (this.currentPage) {
       this.drawGrid(this.canvas);
@@ -945,7 +960,7 @@ export class Editor {
       if (drawSelection) this.drawSelection();
       this.onRepaint.emit();
     }
-    console.timeEnd("repaint");
+    // console.timeEnd("repaint");
   }
 
   /**

@@ -1,10 +1,12 @@
 import * as Y from "yjs";
-import { Obj, Store } from "@dgmjs/core";
+import { Editor, Obj, Shape, Store } from "@dgmjs/core";
 import { YObj, YStore } from "./yjs-utils";
 
 interface Postprocess {
-  created: Obj[];
-  reorder: Obj[];
+  created: Set<Obj>;
+  updated: Set<Obj>;
+  deleted: Set<Obj>;
+  reorder: Set<Obj>;
 }
 
 /**
@@ -53,13 +55,11 @@ export function createObj(
     const obj = yObjToObj(store, yObj);
     store.addToIndex(obj);
     const parentId = yObj.get("parent");
-    // const order = yObj.get("parent:order");
     setParent(store, obj, parentId);
-    // setPositionByOrder(yStore, obj, parentId, order);
-    postprocess.created.push(obj);
+    postprocess.created.add(obj);
     const parent = store.getById(parentId);
-    if (parent && !postprocess.reorder.includes(parent)) {
-      postprocess.reorder.push(parent);
+    if (parent) {
+      postprocess.reorder.add(parent);
     }
     return obj;
   }
@@ -69,7 +69,11 @@ export function createObj(
 /**
  * Delete an obj from the store
  */
-export function deleteObj(store: Store, objId: string) {
+export function deleteObj(
+  store: Store,
+  objId: string,
+  postprocess: Postprocess
+) {
   const obj = store.getById(objId);
   if (obj) {
     setParent(store, obj, null);
@@ -95,11 +99,14 @@ export function updateObj(
     if (field === "parent") {
       const parentId = yObj.get("parent");
       setParent(store, obj, parentId);
+      postprocess.updated.add(obj);
     } else if (field === "parent:order") {
       const parentId = yObj.get("parent");
       const parent = store.getById(parentId);
-      if (parent && !postprocess.reorder.includes(parent)) {
-        postprocess.reorder.push(parent);
+      postprocess.updated.add(obj);
+      if (parent) {
+        postprocess.updated.add(parent);
+        postprocess.reorder.add(parent);
       }
     } else if (field === "head" || field === "tail") {
       if (newValue) {
@@ -108,8 +115,10 @@ export function updateObj(
       } else {
         (obj as any)[field] = null;
       }
+      postprocess.updated.add(obj);
     } else {
       (obj as any)[field] = newValue;
+      postprocess.updated.add(obj);
     }
   }
 }
@@ -129,7 +138,7 @@ export function applyYjsEvent(
         const yObj = yStore.get(key);
         createObj(store, yStore, yObj!, postprocess);
       } else if (change.action === "delete") {
-        deleteObj(store, key);
+        deleteObj(store, key, postprocess);
       }
     });
   } else {
@@ -155,13 +164,16 @@ export function applyYjsEvent(
  * Handle Yjs events and apply them to store
  */
 export function handleYjsObserveDeep(
+  editor: Editor,
   store: Store,
   yStore: YStore,
   events: Y.YEvent<any>[]
 ): Postprocess {
   const postprocess: Postprocess = {
-    created: [],
-    reorder: [],
+    created: new Set(),
+    updated: new Set(),
+    deleted: new Set(),
+    reorder: new Set(),
   };
 
   // apply all yjs events
@@ -169,9 +181,19 @@ export function handleYjsObserveDeep(
     applyYjsEvent(event, store, yStore, postprocess);
   }
 
-  // resolve refs for all created objects
+  // resolve refs for all created objs and update created objs
   postprocess.created.forEach((obj) => {
     obj.resolveRefs(store.idIndex, true);
+    if (obj instanceof Shape) {
+      obj.update(editor.canvas);
+    }
+  });
+
+  // update shapes
+  postprocess.updated.forEach((obj) => {
+    if (obj instanceof Shape) {
+      obj.update(editor.canvas);
+    }
   });
 
   // reorder children
