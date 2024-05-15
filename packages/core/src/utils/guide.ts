@@ -12,10 +12,15 @@
  */
 
 import * as geometry from "../graphics/geometry";
-import { Color, CONTROL_POINT_APOTHEM, SYSTEM_FONT } from "../graphics/const";
+import {
+  Color,
+  CONTROL_POINT_APOTHEM,
+  FillStyle,
+  SYSTEM_FONT,
+} from "../graphics/const";
 import { Canvas, CanvasPointerEvent } from "../graphics/graphics";
 import { toCssFont, lcs2ccs } from "../graphics/utils";
-import { FillStyle, LineType, Shape } from "../shapes";
+import { LineType, Shape } from "../shapes";
 import { Editor, manipulatorManager } from "../editor";
 
 export const ControlPoint = {

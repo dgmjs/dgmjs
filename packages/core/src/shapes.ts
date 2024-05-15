@@ -37,31 +37,31 @@ import { Transaction } from "./core/transaction";
 import { MemoizationCanvas } from "./graphics/memoization-canvas";
 import { hashStringToNumber } from "./std/id";
 
-const ScriptType = {
+export const ScriptType = {
   RENDER: "render",
   OUTLINE: "outline",
 } as const;
 
-type ScriptTypeEnum = (typeof ScriptType)[keyof typeof ScriptType];
+export type ScriptTypeEnum = (typeof ScriptType)[keyof typeof ScriptType];
 
-interface Constraint {
+export interface Constraint {
   id: string;
   [key: string]: any; // allow all additional fields
 }
 
-interface Property {
+export interface Property {
   name: string;
   type: "string" | "boolean" | "number" | "enum" | "text";
   options?: string[];
   value: any;
 }
 
-interface Script {
+export interface Script {
   id: ScriptTypeEnum;
   script: string;
 }
 
-type ConstraintFn = (
+export type ConstraintFn = (
   tx: Transaction,
   page: Page,
   shape: Shape,
@@ -69,9 +69,9 @@ type ConstraintFn = (
   arg?: any
 ) => boolean;
 
-type PageSize = [number, number] | null;
+export type PageSize = [number, number] | null;
 
-const Movable = {
+export const Movable = {
   NONE: "none",
   HORZ: "horz",
   VERT: "vert",
@@ -79,9 +79,9 @@ const Movable = {
   PARENT: "parent",
 } as const;
 
-type MovableEnum = (typeof Movable)[keyof typeof Movable];
+export type MovableEnum = (typeof Movable)[keyof typeof Movable];
 
-const Sizable = {
+export const Sizable = {
   NONE: "none",
   HORZ: "horz",
   VERT: "vert",
@@ -89,16 +89,16 @@ const Sizable = {
   RATIO: "ratio",
 } as const;
 
-type SizableEnum = (typeof Sizable)[keyof typeof Sizable];
+export type SizableEnum = (typeof Sizable)[keyof typeof Sizable];
 
-const LineType = {
+export const LineType = {
   STRAIGHT: "straight",
   CURVE: "curve",
 } as const;
 
-type LineTypeEnum = (typeof LineType)[keyof typeof LineType];
+export type LineTypeEnum = (typeof LineType)[keyof typeof LineType];
 
-const LineEndType = {
+export const LineEndType = {
   FLAT: "flat",
   ARROW: "arrow",
   SOLID_ARROW: "solid-arrow",
@@ -122,18 +122,23 @@ const LineEndType = {
   SQUARE: "square",
 } as const;
 
-type LineEndTypeEnum = (typeof LineEndType)[keyof typeof LineEndType];
+export type LineEndTypeEnum = (typeof LineEndType)[keyof typeof LineEndType];
 
-const Alignment = {
+export const HorzAlign = {
   LEFT: "left",
   RIGHT: "right",
   CENTER: "center",
+} as const;
+
+export type HorzAlignEnum = (typeof HorzAlign)[keyof typeof HorzAlign];
+
+export const VertAlign = {
   TOP: "top",
   MIDDLE: "middle",
   BOTTOM: "bottom",
 } as const;
 
-type AlignmentEnum = (typeof Alignment)[keyof typeof Alignment];
+export type VertAlignEnum = (typeof VertAlign)[keyof typeof VertAlign];
 
 /**
  * Shape object.
@@ -145,7 +150,7 @@ type AlignmentEnum = (typeof Alignment)[keyof typeof Alignment];
  * 5. can have a manipulator
  * 6. has it's own coordinate system (rotate)
  */
-class Shape extends Obj {
+export class Shape extends Obj {
   /**
    * Name of the shape
    */
@@ -941,7 +946,7 @@ class Shape extends Obj {
 /**
  * Doc
  */
-class Doc extends Obj {
+export class Doc extends Obj {
   version: number;
 
   constructor() {
@@ -965,7 +970,7 @@ class Doc extends Obj {
 /**
  * Page
  */
-class Page extends Shape {
+export class Page extends Shape {
   size: PageSize;
 
   /**
@@ -1072,7 +1077,7 @@ class Page extends Shape {
 /**
  * Box shape
  */
-class Box extends Shape {
+export class Box extends Shape {
   /**
    * Padding spaces [top, right, bottom, left] (same with CSS)
    */
@@ -1146,12 +1151,12 @@ class Box extends Shape {
   /**
    * Text horizontal alignment
    */
-  horzAlign: AlignmentEnum;
+  horzAlign: HorzAlignEnum;
 
   /**
    * Text vertical alignment
    */
-  vertAlign: AlignmentEnum;
+  vertAlign: VertAlignEnum;
 
   /**
    * Text line height
@@ -1180,10 +1185,10 @@ class Box extends Shape {
     this.anchorLength = 0;
     this.anchorPosition = 0.5;
     this.textEditable = true;
-    this.text = convertStringToTextNode("", Alignment.CENTER);
+    this.text = convertStringToTextNode("", HorzAlign.CENTER);
     this.wordWrap = false;
-    this.horzAlign = Alignment.CENTER;
-    this.vertAlign = Alignment.MIDDLE;
+    this.horzAlign = HorzAlign.CENTER;
+    this.vertAlign = VertAlign.MIDDLE;
     this.lineHeight = 1.2;
     this.paragraphSpacing = 0;
     this._renderText = true;
@@ -1426,7 +1431,7 @@ class Box extends Shape {
 /**
  * Line shape
  */
-class Line extends Shape {
+export class Line extends Shape {
   pathEditable: boolean;
   path: number[][];
   lineType: LineTypeEnum;
@@ -1759,7 +1764,7 @@ class Line extends Shape {
 /**
  * Rectangle
  */
-class Rectangle extends Box {
+export class Rectangle extends Box {
   constructor() {
     super();
     this.type = "Rectangle";
@@ -1769,7 +1774,7 @@ class Rectangle extends Box {
 /**
  * Ellipse
  */
-class Ellipse extends Box {
+export class Ellipse extends Box {
   constructor() {
     super();
     this.type = "Ellipse";
@@ -1812,14 +1817,14 @@ class Ellipse extends Box {
 /**
  * Text
  */
-class Text extends Box {
+export class Text extends Box {
   constructor() {
     super();
     this.type = "Text";
     this.fillColor = "$transparent";
     this.strokeColor = "$transparent";
-    this.horzAlign = Alignment.LEFT;
-    this.vertAlign = Alignment.TOP;
+    this.horzAlign = HorzAlign.LEFT;
+    this.vertAlign = VertAlign.TOP;
   }
 
   /**
@@ -1850,7 +1855,7 @@ class Text extends Box {
 /**
  * Image
  */
-class Image extends Box {
+export class Image extends Box {
   imageData: string;
   imageWidth: number;
   imageHeight: number;
@@ -1904,7 +1909,7 @@ class Image extends Box {
 /**
  * Group
  */
-class Group extends Box {
+export class Group extends Box {
   constructor() {
     super();
     this.type = "Group";
@@ -1923,7 +1928,7 @@ class Group extends Box {
 /**
  * Connector
  */
-class Connector extends Line {
+export class Connector extends Line {
   head: Shape | null;
   tail: Shape | null;
 
@@ -2071,7 +2076,7 @@ class Connector extends Line {
 /**
  * Freehand
  */
-class Freehand extends Line {
+export class Freehand extends Line {
   constructor() {
     super();
     this.type = "Freehand";
@@ -2088,7 +2093,7 @@ class Freehand extends Line {
 /**
  * Frame
  */
-class Frame extends Box {
+export class Frame extends Box {
   constructor() {
     super();
     this.type = "Frame";
@@ -2143,7 +2148,7 @@ class Frame extends Box {
 /**
  * Embed
  */
-class Embed extends Box {
+export class Embed extends Box {
   src: string;
 
   /**
@@ -2324,9 +2329,9 @@ class ConstraintManager {
   }
 }
 
-const constraintManager = ConstraintManager.getInstance();
+export const constraintManager = ConstraintManager.getInstance();
 
-const shapeInstantiator = new Instantiator({
+export const shapeInstantiator = new Instantiator({
   Shape: () => new Shape(),
   Doc: () => new Doc(),
   Page: () => new Page(),
@@ -2343,7 +2348,7 @@ const shapeInstantiator = new Instantiator({
   Embed: () => new Embed(),
 });
 
-type ObjProps = Partial<
+export type ObjProps = Partial<
   Shape &
     Doc &
     Page &
@@ -2358,35 +2363,3 @@ type ObjProps = Partial<
     Frame &
     Embed
 >;
-
-export {
-  type Constraint,
-  type Property,
-  type Script,
-  type ConstraintFn,
-  type PageSize,
-  ScriptType,
-  Movable,
-  Sizable,
-  FillStyle,
-  LineType,
-  LineEndType,
-  Alignment as AlignmentKind,
-  Shape,
-  Doc,
-  Page,
-  Box,
-  Line,
-  Rectangle,
-  Ellipse,
-  Text,
-  Image,
-  Group,
-  Connector,
-  Freehand,
-  Frame,
-  Embed,
-  constraintManager,
-  shapeInstantiator,
-  type ObjProps,
-};
