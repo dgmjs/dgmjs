@@ -37,6 +37,13 @@ import { Transaction } from "./core/transaction";
 import { MemoizationCanvas } from "./graphics/memoization-canvas";
 import { hashStringToNumber } from "./std/id";
 
+const ScriptType = {
+  RENDER: "render",
+  OUTLINE: "outline",
+} as const;
+
+type ScriptTypeEnum = (typeof ScriptType)[keyof typeof ScriptType];
+
 interface Constraint {
   id: string;
   [key: string]: any; // allow all additional fields
@@ -50,7 +57,7 @@ interface Property {
 }
 
 interface Script {
-  id: string;
+  id: ScriptTypeEnum;
   script: string;
 }
 
@@ -64,43 +71,34 @@ type ConstraintFn = (
 
 type PageSize = [number, number] | null;
 
-const ScriptType = Object.freeze({
-  RENDER: "render",
-  OUTLINE: "outline",
-});
-
-const Movable = Object.freeze({
+const Movable = {
   NONE: "none",
   HORZ: "horz",
   VERT: "vert",
   FREE: "free",
   PARENT: "parent",
-});
+} as const;
 
-// const Movable = {
-//   NONE: "none",
-//   HORZ: "horz",
-//   VERT: "vert",
-//   FREE: "free",
-//   PARENT: "parent",
-// } as const;
+type MovableEnum = (typeof Movable)[keyof typeof Movable];
 
-// type MovableType = (typeof Movable)[keyof typeof Movable];
-
-const Sizable = Object.freeze({
+const Sizable = {
   NONE: "none",
   HORZ: "horz",
   VERT: "vert",
   FREE: "free",
   RATIO: "ratio",
-});
+} as const;
 
-const LineType = Object.freeze({
+type SizableEnum = (typeof Sizable)[keyof typeof Sizable];
+
+const LineType = {
   STRAIGHT: "straight",
   CURVE: "curve",
-});
+} as const;
 
-const LineEndType = Object.freeze({
+type LineTypeEnum = (typeof LineType)[keyof typeof LineType];
+
+const LineEndType = {
   FLAT: "flat",
   ARROW: "arrow",
   SOLID_ARROW: "solid-arrow",
@@ -122,16 +120,20 @@ const LineEndType = Object.freeze({
   DOT: "dot",
   BAR: "bar",
   SQUARE: "square",
-});
+} as const;
 
-const AlignmentKind = Object.freeze({
+type LineEndTypeEnum = (typeof LineEndType)[keyof typeof LineEndType];
+
+const Alignment = {
   LEFT: "left",
   RIGHT: "right",
   CENTER: "center",
   TOP: "top",
   MIDDLE: "middle",
   BOTTOM: "bottom",
-});
+} as const;
+
+type AlignmentEnum = (typeof Alignment)[keyof typeof Alignment];
 
 /**
  * Shape object.
@@ -177,12 +179,12 @@ class Shape extends Obj {
   /**
    * Indicate how this shape can be moved
    */
-  movable: string;
+  movable: MovableEnum;
 
   /**
    * Indicate how this shape can be resized
    */
-  sizable: string;
+  sizable: SizableEnum;
 
   /**
    * Rotatable flag
@@ -1144,12 +1146,12 @@ class Box extends Shape {
   /**
    * Text horizontal alignment
    */
-  horzAlign: string;
+  horzAlign: AlignmentEnum;
 
   /**
    * Text vertical alignment
    */
-  vertAlign: string;
+  vertAlign: AlignmentEnum;
 
   /**
    * Text line height
@@ -1178,10 +1180,10 @@ class Box extends Shape {
     this.anchorLength = 0;
     this.anchorPosition = 0.5;
     this.textEditable = true;
-    this.text = convertStringToTextNode("", AlignmentKind.CENTER);
+    this.text = convertStringToTextNode("", Alignment.CENTER);
     this.wordWrap = false;
-    this.horzAlign = AlignmentKind.CENTER;
-    this.vertAlign = AlignmentKind.MIDDLE;
+    this.horzAlign = Alignment.CENTER;
+    this.vertAlign = Alignment.MIDDLE;
     this.lineHeight = 1.2;
     this.paragraphSpacing = 0;
     this._renderText = true;
@@ -1427,9 +1429,9 @@ class Box extends Shape {
 class Line extends Shape {
   pathEditable: boolean;
   path: number[][];
-  lineType: string;
-  headEndType: string;
-  tailEndType: string;
+  lineType: LineTypeEnum;
+  headEndType: LineEndTypeEnum;
+  tailEndType: LineEndTypeEnum;
 
   constructor() {
     super();
@@ -1816,8 +1818,8 @@ class Text extends Box {
     this.type = "Text";
     this.fillColor = "$transparent";
     this.strokeColor = "$transparent";
-    this.horzAlign = AlignmentKind.LEFT;
-    this.vertAlign = AlignmentKind.TOP;
+    this.horzAlign = Alignment.LEFT;
+    this.vertAlign = Alignment.TOP;
   }
 
   /**
@@ -2369,7 +2371,7 @@ export {
   FillStyle,
   LineType,
   LineEndType,
-  AlignmentKind,
+  Alignment as AlignmentKind,
   Shape,
   Doc,
   Page,

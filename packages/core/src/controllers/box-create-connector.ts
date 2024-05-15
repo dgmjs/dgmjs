@@ -164,12 +164,7 @@ export class BoxCreateConnectorController extends Controller {
   draw(editor: Editor, shape: Shape) {
     const canvas = editor.canvas;
     const cpCCS = lcs2ccs(canvas, shape, this.getControlPoint(canvas, shape));
-    guide.drawControlPoint(
-      canvas,
-      cpCCS,
-      guide.ControlPointType.FILLED_CIRCLE,
-      0
-    );
+    guide.drawControlPoint(canvas, cpCCS, guide.ControlPoint.FILLED_CIRCLE, 0);
   }
 
   /**
