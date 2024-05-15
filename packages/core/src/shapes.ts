@@ -320,6 +320,11 @@ class Shape extends Obj {
   _memoCanvas: MemoizationCanvas;
 
   /**
+   * Memoization outline
+   */
+  _memoOutline: number[][];
+
+  /**
    * Link DOM element
    */
   _linkDOM: HTMLAnchorElement | null;
@@ -363,6 +368,7 @@ class Shape extends Obj {
 
     this._memoSeed = null;
     this._memoCanvas = new MemoizationCanvas();
+    this._memoOutline = [];
     this._linkDOM = null;
   }
 
@@ -482,9 +488,6 @@ class Shape extends Obj {
     this._memoCanvas.clear();
     this._memoCanvas.setCanvas(canvas);
     this.render(this._memoCanvas);
-    // this.parseScripts()
-    // this.updateDrawing()
-    // this.updateScripts()
   }
 
   /**
@@ -588,7 +591,7 @@ class Shape extends Obj {
   }
 
   /**
-   * Render shape
+   * Render this shape
    *
    * Render vs Draw
    * - Render: computing geometries how to draw the shape
@@ -596,6 +599,7 @@ class Shape extends Obj {
    */
   render(canvas: MemoizationCanvas) {
     this.assignStyles(canvas);
+    this.renderOutline(canvas);
     const script = this.getScript(ScriptType.RENDER);
     if (script) {
       try {
@@ -606,6 +610,40 @@ class Shape extends Obj {
     } else {
       this.renderDefault(canvas);
     }
+  }
+
+  /**
+   * Default render this shape
+   */
+  renderDefault(canvas: MemoizationCanvas) {}
+
+  /**
+   * Render this shape's outline
+   */
+  renderOutline(canvas: MemoizationCanvas) {
+    const script = this.getScript(ScriptType.OUTLINE);
+    if (script) {
+      try {
+        this._memoOutline = evalScript({ shape: this }, script);
+      } catch (err) {
+        console.error("[Script Error]", err);
+      }
+    }
+    this._memoOutline = this.renderOutlineDefault();
+  }
+
+  /**
+   * Render default outline
+   */
+  renderOutlineDefault(): number[][] {
+    return [];
+  }
+
+  /**
+   * Return outline polygon.
+   */
+  getOutline(): number[][] {
+    return this._memoOutline;
   }
 
   /**
@@ -627,10 +665,8 @@ class Shape extends Obj {
   }
 
   /**
-   * Default render this shape
+   * Draw link
    */
-  renderDefault(canvas: MemoizationCanvas) {}
-
   drawLink(canvas: Canvas, updateDOM: boolean = false) {
     // create linkDOM
     if (this.link.length > 0 && !this._linkDOM) {
@@ -676,28 +712,6 @@ class Shape extends Obj {
    */
   getCenter(): number[] {
     return geometry.center(this.getBoundingRect());
-  }
-
-  /**
-   * Return default outline
-   */
-  getOutlineDefault(): number[][] {
-    return [];
-  }
-
-  /**
-   * Return outline polygon.
-   */
-  getOutline(): number[][] {
-    const script = this.getScript(ScriptType.OUTLINE);
-    if (script) {
-      try {
-        return evalScript({ shape: this }, script);
-      } catch (err) {
-        console.error("[Script Error]", err);
-      }
-    }
-    return this.getOutlineDefault();
   }
 
   /**
@@ -1360,7 +1374,7 @@ class Box extends Shape {
   /**
    * Return outline polygon
    */
-  getOutlineDefault(): number[][] {
+  renderOutlineDefault(): number[][] {
     return [
       [this.left, this.top],
       [this.right, this.top],
@@ -1729,7 +1743,7 @@ class Line extends Shape {
   /**
    * Return default outline
    */
-  getOutlineDefault(): number[][] {
+  renderOutlineDefault(): number[][] {
     switch (this.lineType) {
       case LineType.CURVE:
         return this.path.length > 2
@@ -1782,7 +1796,7 @@ class Ellipse extends Box {
   /**
    * Return outline polygon
    */
-  getOutlineDefault(): number[][] {
+  renderOutlineDefault(): number[][] {
     const points = geometry.pointsOnEllipse(
       this.getCenter(),
       this.width / 2,
