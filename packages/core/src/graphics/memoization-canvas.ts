@@ -9,6 +9,8 @@ import * as geometry from "./geometry";
 import { Color, FillStyle } from "./const";
 import { getSvgPathFromStroke } from "./utils";
 
+const MIN_HACHURE_GAP = 4;
+
 /**
  * Drawing Object
  */
@@ -378,6 +380,7 @@ export class MemoizationCanvas {
         fill: this.canvas.resolveColor(this.fillColor),
         fillStyle: this.fillStyle,
         fillLineDash: [],
+        hachureGap: Math.max(MIN_HACHURE_GAP, this.strokeWidth * 3),
         stroke: this.canvas.resolveColor("$transparent"),
         strokeWidth: this.strokeWidth,
       });
@@ -492,6 +495,7 @@ export class MemoizationCanvas {
           fill: this.canvas.resolveColor(this.fillColor),
           fillStyle: this.fillStyle,
           fillLineDash: [],
+          hachureGap: Math.max(MIN_HACHURE_GAP, this.strokeWidth * 3),
           stroke: this.canvas.resolveColor("$transparent"),
           strokeWidth: this.strokeWidth,
         }
@@ -593,6 +597,7 @@ export class MemoizationCanvas {
         fill: this.canvas.resolveColor(this.fillColor),
         fillStyle: this.fillStyle,
         fillLineDash: [],
+        hachureGap: Math.max(MIN_HACHURE_GAP, this.strokeWidth * 3),
         stroke: this.canvas.resolveColor("$transparent"),
         strokeWidth: this.strokeWidth,
       });
@@ -684,6 +689,7 @@ export class MemoizationCanvas {
         fill: this.canvas.resolveColor(this.fillColor),
         fillStyle: this.fillStyle,
         fillLineDash: [],
+        hachureGap: Math.max(MIN_HACHURE_GAP, this.strokeWidth * 3),
         stroke: this.canvas.resolveColor("$transparent"),
         strokeWidth: this.strokeWidth,
       });
@@ -746,6 +752,7 @@ export class MemoizationCanvas {
         fill: this.canvas.resolveColor(this.fillColor),
         fillStyle: this.fillStyle,
         fillLineDash: [],
+        hachureGap: Math.max(MIN_HACHURE_GAP, this.strokeWidth * 3),
         stroke: this.canvas.resolveColor("$transparent"),
         strokeWidth: this.strokeWidth,
       });
@@ -832,6 +839,7 @@ export class MemoizationCanvas {
         fill: this.canvas.resolveColor(this.fillColor),
         fillStyle: this.fillStyle,
         fillLineDash: [],
+        hachureGap: Math.max(MIN_HACHURE_GAP, this.strokeWidth * 3),
         stroke: this.canvas.resolveColor("$transparent"),
         strokeWidth: this.strokeWidth,
       });
@@ -907,6 +915,7 @@ export class MemoizationCanvas {
         fill: this.canvas.resolveColor(this.fillColor),
         fillStyle: this.fillStyle,
         fillLineDash: [],
+        hachureGap: Math.max(MIN_HACHURE_GAP, this.strokeWidth * 3),
         stroke: this.canvas.resolveColor("$transparent"),
         strokeWidth: this.strokeWidth,
       });
