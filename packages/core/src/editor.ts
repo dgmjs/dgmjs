@@ -12,15 +12,14 @@
  */
 
 import { Canvas, CanvasPointerEvent } from "./graphics/graphics";
+import { Connector, Doc, Shape, Page, shapeInstantiator } from "./shapes";
 import {
-  Connector,
-  Doc,
-  Shape,
-  Page,
-  shapeInstantiator,
+  Cursor,
+  Color,
+  Mouse,
+  CONTROL_POINT_APOTHEM,
   FillStyle,
-} from "./shapes";
-import { Cursor, Color, Mouse, CONTROL_POINT_APOTHEM } from "./graphics/const";
+} from "./graphics/const";
 import { assert } from "./std/assert";
 import * as geometry from "./graphics/geometry";
 import * as utils from "./graphics/utils";
@@ -160,13 +159,20 @@ export class Editor {
 
     this.store = new Store(shapeInstantiator, {
       objInitializer: (o) => {
-        if (o instanceof Shape) o.initialze(this.canvas);
+        if (o instanceof Shape) {
+          o.initialze(this.canvas);
+          o.update(this.canvas);
+        }
       },
       objFinalizer: (o) => {
         if (o instanceof Shape) o.finalize(this.canvas);
       },
     });
-    this.transform = new Transform(this.store);
+    this.transform = new Transform(this.store, {
+      objUpdater: (obj) => {
+        if (obj instanceof Shape) obj.update(this.canvas);
+      },
+    });
     this.clipboard = new Clipboard(this.store);
     this.selection = new SelectionManager(this);
     this.factory = new ShapeFactory(this);
@@ -561,6 +567,7 @@ export class Editor {
     this.canvas.colorVariables = {
       ...themeColors[this.darkMode ? "dark" : "light"],
     };
+    this.update();
     this.repaint();
   }
 
@@ -927,16 +934,31 @@ export class Editor {
   }
 
   /**
+   * Update all shapes
+   */
+  update() {
+    if (this.store.root) {
+      this.store.root.traverse((obj) => {
+        if (obj instanceof Shape) {
+          obj.update(this.canvas);
+        }
+      });
+    }
+  }
+
+  /**
    * Repaint diagram
    */
   repaint(drawSelection: boolean = true) {
+    // console.time("repaint");
     this.clearBackground(this.canvas);
     if (this.currentPage) {
       this.drawGrid(this.canvas);
-      this.currentPage.render(this.canvas, true);
+      this.currentPage.draw(this.canvas, true);
       if (drawSelection) this.drawSelection();
       this.onRepaint.emit();
     }
+    // console.timeEnd("repaint");
   }
 
   /**

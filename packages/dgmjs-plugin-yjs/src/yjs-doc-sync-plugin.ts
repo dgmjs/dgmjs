@@ -1,5 +1,5 @@
 import * as Y from "yjs";
-import { Editor, Plugin, Doc, Page, Disposable } from "@dgmjs/core";
+import { Editor, Plugin, Doc, Page, Disposable, Shape } from "@dgmjs/core";
 import { YStore } from "./yjs-utils";
 import { handleYjsObserveDeep } from "./sync-to-store";
 import {
@@ -120,6 +120,7 @@ export class YjsDocSyncPlugin extends Plugin {
     const observeListener = (events: Y.YEvent<any>[], tr: any) => {
       if (this.yStore && !tr.local) {
         const postprocess = handleYjsObserveDeep(
+          this.editor,
           this.editor.store,
           this.yStore,
           events

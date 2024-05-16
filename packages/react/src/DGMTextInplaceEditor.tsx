@@ -154,6 +154,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
     if (editor.currentPage && textShape) {
       // disable shape's text rendering
       textShape._renderText = false;
+      textShape.update(editor.canvas);
       editor.repaint();
 
       // start transaction
@@ -214,6 +215,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
         editor.actions.remove([state.textShape]);
       }
       state.textShape._renderText = true;
+      state.textShape.update(editor.canvas);
       editor.repaint();
       setState((state) => ({ ...state, textShape: null }));
     }

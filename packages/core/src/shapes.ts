@@ -11,13 +11,13 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { getStroke } from "perfect-freehand";
 import { assert } from "./std/assert";
 import { Canvas } from "./graphics/graphics";
 import {
   CONTROL_POINT_APOTHEM,
   Color,
   DEFAULT_FONT_SIZE,
+  FillStyle,
   LINE_SELECTION_THRESHOLD,
   SYSTEM_FONT,
   SYSTEM_FONT_SIZE,
@@ -27,32 +27,41 @@ import * as utils from "./graphics/utils";
 import { ZodSchema } from "zod";
 import {
   convertStringToTextNode,
-  drawText,
+  renderTextShape,
   visitTextNodes,
 } from "./utils/text-utils";
 import { evalScript } from "./mal/mal";
 import { Obj } from "./core/obj";
 import { Instantiator } from "./core/instantiator";
 import { Transaction } from "./core/transaction";
+import { MemoizationCanvas } from "./graphics/memoization-canvas";
+import { hashStringToNumber } from "./std/id";
 
-interface Constraint {
+export const ScriptType = {
+  RENDER: "render",
+  OUTLINE: "outline",
+} as const;
+
+export type ScriptTypeEnum = (typeof ScriptType)[keyof typeof ScriptType];
+
+export interface Constraint {
   id: string;
   [key: string]: any; // allow all additional fields
 }
 
-interface Property {
+export interface Property {
   name: string;
   type: "string" | "boolean" | "number" | "enum" | "text";
   options?: string[];
   value: any;
 }
 
-interface Script {
-  id: string;
+export interface Script {
+  id: ScriptTypeEnum;
   script: string;
 }
 
-type ConstraintFn = (
+export type ConstraintFn = (
   tx: Transaction,
   page: Page,
   shape: Shape,
@@ -60,42 +69,36 @@ type ConstraintFn = (
   arg?: any
 ) => boolean;
 
-type PageSize = [number, number] | null;
+export type PageSize = [number, number] | null;
 
-const ScriptType = Object.freeze({
-  RENDER: "render",
-  OUTLINE: "outline",
-});
-
-const Movable = Object.freeze({
+export const Movable = {
   NONE: "none",
   HORZ: "horz",
   VERT: "vert",
   FREE: "free",
   PARENT: "parent",
-});
+} as const;
 
-const Sizable = Object.freeze({
+export type MovableEnum = (typeof Movable)[keyof typeof Movable];
+
+export const Sizable = {
   NONE: "none",
   HORZ: "horz",
   VERT: "vert",
   FREE: "free",
   RATIO: "ratio",
-});
+} as const;
 
-const FillStyle = Object.freeze({
-  NONE: "none",
-  SOLID: "solid",
-  HACHURE: "hachure",
-  CROSS_HATCH: "cross-hatch",
-});
+export type SizableEnum = (typeof Sizable)[keyof typeof Sizable];
 
-const LineType = Object.freeze({
+export const LineType = {
   STRAIGHT: "straight",
   CURVE: "curve",
-});
+} as const;
 
-const LineEndType = Object.freeze({
+export type LineTypeEnum = (typeof LineType)[keyof typeof LineType];
+
+export const LineEndType = {
   FLAT: "flat",
   ARROW: "arrow",
   SOLID_ARROW: "solid-arrow",
@@ -117,16 +120,25 @@ const LineEndType = Object.freeze({
   DOT: "dot",
   BAR: "bar",
   SQUARE: "square",
-});
+} as const;
 
-const AlignmentKind = Object.freeze({
+export type LineEndTypeEnum = (typeof LineEndType)[keyof typeof LineEndType];
+
+export const HorzAlign = {
   LEFT: "left",
   RIGHT: "right",
   CENTER: "center",
+} as const;
+
+export type HorzAlignEnum = (typeof HorzAlign)[keyof typeof HorzAlign];
+
+export const VertAlign = {
   TOP: "top",
   MIDDLE: "middle",
   BOTTOM: "bottom",
-});
+} as const;
+
+export type VertAlignEnum = (typeof VertAlign)[keyof typeof VertAlign];
 
 /**
  * Shape object.
@@ -138,40 +150,186 @@ const AlignmentKind = Object.freeze({
  * 5. can have a manipulator
  * 6. has it's own coordinate system (rotate)
  */
-class Shape extends Obj {
+export class Shape extends Obj {
+  /**
+   * Name of the shape
+   */
   name: string;
+
+  /**
+   * Description of the shape
+   */
   description: string;
+
+  /**
+   * The flag to indicate this shape is a prototype or not
+   */
   proto: boolean;
+
+  /**
+   * Tags
+   */
   tags: string[];
+
+  /**
+   * Enable flag
+   */
   enable: boolean;
+
+  /**
+   * Visible flag
+   */
   visible: boolean;
-  movable: string;
-  sizable: string;
+
+  /**
+   * Indicate how this shape can be moved
+   */
+  movable: MovableEnum;
+
+  /**
+   * Indicate how this shape can be resized
+   */
+  sizable: SizableEnum;
+
+  /**
+   * Rotatable flag
+   */
   rotatable: boolean;
+
+  /**
+   * Containable flag
+   */
   containable: boolean;
+
+  /**
+   * Containable filter
+   */
   containableFilter: string;
+
+  /**
+   * Connectable flag
+   */
   connectable: boolean;
+
+  /**
+   * Shape's left position
+   */
   left: number;
+
+  /**
+   * Shape's top position
+   */
   top: number;
+
+  /**
+   * Shape's width
+   */
   width: number;
+
+  /**
+   * Shape's height
+   */
   height: number;
+
+  /**
+   * Shape's rotation angle (in degree)
+   */
   rotate: number;
+
+  /**
+   * Stroke color
+   */
   strokeColor: string;
+
+  /**
+   * Stroke width
+   */
   strokeWidth: number;
+
+  /**
+   * Stroke pattern
+   */
   strokePattern: number[];
+
+  /**
+   * Fill color
+   */
   fillColor: string;
+
+  /**
+   * Fill style
+   */
   fillStyle: string;
+
+  /**
+   * Font color
+   */
   fontColor: string;
+
+  /**
+   * Font family
+   */
   fontFamily: string;
+
+  /**
+   * Font size
+   */
   fontSize: number;
+
+  /**
+   * Font style
+   */
   fontStyle: string;
+
+  /**
+   * Font weight
+   */
   fontWeight: number;
+
+  /**
+   * Opacity
+   */
   opacity: number;
+
+  /**
+   * Roughness
+   */
   roughness: number;
+
+  /**
+   * Link
+   */
   link: string;
+
+  /**
+   * Shape's constraints
+   */
   constraints: Constraint[];
+
+  /**
+   * Shape's properties
+   */
   properties: Property[];
+
+  /**
+   * Shape's scripts
+   */
   scripts: Script[];
+
+  /**
+   * Memoize seed
+   */
+  _memoSeed: number | null;
+
+  /**
+   * Memoization canvas
+   */
+  _memoCanvas: MemoizationCanvas;
+
+  /**
+   * Memoization outline
+   */
+  _memoOutline: number[][];
 
   /**
    * Link DOM element
@@ -214,18 +372,16 @@ class Shape extends Obj {
     this.constraints = [];
     this.properties = [];
     this.scripts = [];
+
+    this._memoSeed = null;
+    this._memoCanvas = new MemoizationCanvas();
+    this._memoOutline = [];
     this._linkDOM = null;
   }
 
-  initialze(canvas: Canvas) {}
-
-  finalize(canvas: Canvas) {
-    if (this._linkDOM) {
-      this._linkDOM.remove();
-      this._linkDOM = null;
-    }
-  }
-
+  /**
+   * Export shape to JSON
+   */
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
     json.name = this.name;
@@ -264,6 +420,9 @@ class Shape extends Obj {
     return json;
   }
 
+  /**
+   * Import shape from JSON
+   */
   fromJSON(json: any) {
     super.fromJSON(json);
     this.name = json.name ?? this.name;
@@ -309,6 +468,35 @@ class Shape extends Obj {
     return this.top + this.height;
   }
 
+  getSeed(): number {
+    if (!this._memoSeed) this._memoSeed = hashStringToNumber(this.id);
+    return this._memoSeed;
+  }
+
+  /**
+   * Initialize shape
+   */
+  initialze(canvas: Canvas) {}
+
+  /**
+   * Finalize shape
+   */
+  finalize(canvas: Canvas) {
+    if (this._linkDOM) {
+      this._linkDOM.remove();
+      this._linkDOM = null;
+    }
+  }
+
+  /**
+   * Update shape
+   */
+  update(canvas: Canvas) {
+    this._memoCanvas.clear();
+    this._memoCanvas.setCanvas(canvas);
+    this.render(this._memoCanvas);
+  }
+
   /**
    * Pick a shape at specific position (x, y)
    */
@@ -335,9 +523,9 @@ class Shape extends Obj {
   }
 
   /**
-   * Assign styles to canvas.
+   * Assign styles to memoization canvas.
    */
-  assignStyles(canvas: Canvas) {
+  assignStyles(canvas: MemoizationCanvas) {
     canvas.strokeColor = this.strokeColor;
     canvas.strokeWidth = this.strokeWidth;
     canvas.strokePattern = this.strokePattern;
@@ -409,7 +597,84 @@ class Shape extends Obj {
     return p;
   }
 
-  renderLink(canvas: Canvas, updateDOM: boolean = false) {
+  /**
+   * Render this shape
+   *
+   * Render vs Draw
+   * - Render: computing geometries how to draw the shape
+   * - Draw: actual drawing the computed geometries of the shape on the canvas
+   */
+  render(canvas: MemoizationCanvas) {
+    this.assignStyles(canvas);
+    this.renderOutline(canvas);
+    const script = this.getScript(ScriptType.RENDER);
+    if (script) {
+      try {
+        evalScript({ canvas: canvas, shape: this }, script);
+      } catch (err) {
+        console.error("[Script Error]", err);
+      }
+    } else {
+      this.renderDefault(canvas);
+    }
+  }
+
+  /**
+   * Default render this shape
+   */
+  renderDefault(canvas: MemoizationCanvas) {}
+
+  /**
+   * Render this shape's outline
+   */
+  renderOutline(canvas: MemoizationCanvas) {
+    const script = this.getScript(ScriptType.OUTLINE);
+    if (script) {
+      try {
+        this._memoOutline = evalScript({ shape: this }, script);
+      } catch (err) {
+        console.error("[Script Error]", err);
+      }
+    }
+    this._memoOutline = this.renderOutlineDefault();
+  }
+
+  /**
+   * Render default outline
+   */
+  renderOutlineDefault(): number[][] {
+    return [];
+  }
+
+  /**
+   * Return outline polygon.
+   */
+  getOutline(): number[][] {
+    return this._memoOutline;
+  }
+
+  /**
+   * Draw this shape
+   *
+   * Render vs Draw
+   * - Render: computing geometries how to draw the shape
+   * - Draw: actual drawing the computed geometries of the shape on the canvas
+   */
+  draw(canvas: Canvas, updateDOM: boolean = false) {
+    if (this.visible) {
+      canvas.save();
+      this.localTransform(canvas);
+      this.drawLink(canvas, updateDOM);
+      this._memoCanvas.draw(canvas);
+      this.children.forEach((s) => (s as Shape).draw(canvas, updateDOM));
+      canvas.restore();
+    }
+  }
+
+  /**
+   * Draw link
+   */
+  drawLink(canvas: Canvas, updateDOM: boolean = false) {
     // create linkDOM
     if (this.link.length > 0 && !this._linkDOM) {
       this._linkDOM = document.createElement("a");
@@ -450,60 +715,10 @@ class Shape extends Obj {
   }
 
   /**
-   * Default render this shape
-   */
-  renderDefault(canvas: Canvas, updateDOM: boolean = false) {}
-
-  /**
-   * Render this shape
-   */
-  render(canvas: Canvas, updateDOM: boolean = false) {
-    if (this.visible) {
-      canvas.save();
-      this.assignStyles(canvas);
-      this.localTransform(canvas);
-      const script = this.getScript(ScriptType.RENDER);
-      if (script) {
-        try {
-          evalScript({ canvas: canvas, shape: this }, script);
-        } catch (err) {
-          console.log("[Script Error]", err);
-        }
-      } else {
-        this.renderDefault(canvas, updateDOM);
-      }
-      this.children.forEach((s) => (s as Shape).render(canvas, updateDOM));
-      canvas.restore();
-    }
-  }
-
-  /**
    * Returns the center point
    */
   getCenter(): number[] {
     return geometry.center(this.getBoundingRect());
-  }
-
-  /**
-   * Return default outline
-   */
-  getOutlineDefault(): number[][] {
-    return [];
-  }
-
-  /**
-   * Return outline polygon.
-   */
-  getOutline(): number[][] {
-    const script = this.getScript(ScriptType.OUTLINE);
-    if (script) {
-      try {
-        return evalScript({ shape: this }, script);
-      } catch (err) {
-        console.log("[Script Error]", err);
-      }
-    }
-    return this.getOutlineDefault();
   }
 
   /**
@@ -731,7 +946,7 @@ class Shape extends Obj {
 /**
  * Doc
  */
-class Doc extends Obj {
+export class Doc extends Obj {
   version: number;
 
   constructor() {
@@ -755,7 +970,7 @@ class Doc extends Obj {
 /**
  * Page
  */
-class Page extends Shape {
+export class Page extends Shape {
   size: PageSize;
 
   /**
@@ -799,12 +1014,11 @@ class Page extends Shape {
   /**
    * Render this shape
    */
-  render(canvas: Canvas, updateDOM: boolean = false) {
+  draw(canvas: Canvas, updateDOM: boolean = false) {
     if (this.visible) {
       canvas.save();
-      this.assignStyles(canvas);
       canvas.globalTransform();
-      this.children.forEach((s) => (s as Shape).render(canvas, updateDOM));
+      this.children.forEach((s) => (s as Shape).draw(canvas, updateDOM));
       canvas.restore();
     }
   }
@@ -863,7 +1077,7 @@ class Page extends Shape {
 /**
  * Box shape
  */
-class Box extends Shape {
+export class Box extends Shape {
   /**
    * Padding spaces [top, right, bottom, left] (same with CSS)
    */
@@ -937,12 +1151,12 @@ class Box extends Shape {
   /**
    * Text horizontal alignment
    */
-  horzAlign: string;
+  horzAlign: HorzAlignEnum;
 
   /**
    * Text vertical alignment
    */
-  vertAlign: string;
+  vertAlign: VertAlignEnum;
 
   /**
    * Text line height
@@ -971,10 +1185,10 @@ class Box extends Shape {
     this.anchorLength = 0;
     this.anchorPosition = 0.5;
     this.textEditable = true;
-    this.text = convertStringToTextNode("", AlignmentKind.CENTER);
+    this.text = convertStringToTextNode("", HorzAlign.CENTER);
     this.wordWrap = false;
-    this.horzAlign = AlignmentKind.CENTER;
-    this.vertAlign = AlignmentKind.MIDDLE;
+    this.horzAlign = HorzAlign.CENTER;
+    this.vertAlign = VertAlign.MIDDLE;
     this.lineHeight = 1.2;
     this.paragraphSpacing = 0;
     this._renderText = true;
@@ -1039,14 +1253,7 @@ class Box extends Shape {
     return this.innerBottom - this.innerTop;
   }
 
-  renderText(canvas: Canvas): void {
-    if (this._renderText) {
-      drawText(canvas, this);
-    }
-  }
-
-  renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
-    this.renderLink(canvas, updateDOM);
+  renderDefault(canvas: MemoizationCanvas): void {
     if (this.fillStyle !== FillStyle.NONE) {
       canvas.fillRoundRect(
         this.left,
@@ -1066,6 +1273,12 @@ class Box extends Shape {
       this.getSeed()
     );
     this.renderText(canvas);
+  }
+
+  renderText(canvas: MemoizationCanvas): void {
+    if (this._renderText) {
+      renderTextShape(canvas, this);
+    }
   }
 
   /**
@@ -1168,7 +1381,7 @@ class Box extends Shape {
   /**
    * Return outline polygon
    */
-  getOutlineDefault(): number[][] {
+  renderOutlineDefault(): number[][] {
     return [
       [this.left, this.top],
       [this.right, this.top],
@@ -1218,12 +1431,12 @@ class Box extends Shape {
 /**
  * Line shape
  */
-class Line extends Shape {
+export class Line extends Shape {
   pathEditable: boolean;
   path: number[][];
-  lineType: string;
-  headEndType: string;
-  tailEndType: string;
+  lineType: LineTypeEnum;
+  headEndType: LineEndTypeEnum;
+  tailEndType: LineEndTypeEnum;
 
   constructor() {
     super();
@@ -1265,17 +1478,15 @@ class Line extends Shape {
   /**
    * Draw this shape
    */
-  renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
-    this.renderLink(canvas, updateDOM);
+  renderDefault(canvas: MemoizationCanvas): void {
     let path = geometry.pathCopy(this.path);
     if (path.length >= 2) {
-      canvas.storeState();
-      const hp = this.drawLineEnd(canvas, this.headEndType, true);
-      const tp = this.drawLineEnd(canvas, this.tailEndType, false);
-      canvas.restoreState();
+      const hp = this.renderLineEnd(canvas, this.headEndType, true);
+      const tp = this.renderLineEnd(canvas, this.tailEndType, false);
       path[0] = tp;
       path[path.length - 1] = hp;
     }
+    this.assignStyles(canvas);
     if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
       switch (this.lineType) {
         case LineType.STRAIGHT:
@@ -1312,7 +1523,11 @@ class Line extends Shape {
    *
    * @returns an end point the path should be drawn to
    */
-  drawLineEnd(canvas: Canvas, edgeEndType: string, isHead: boolean): number[] {
+  renderLineEnd(
+    canvas: MemoizationCanvas,
+    edgeEndType: string,
+    isHead: boolean
+  ): number[] {
     let rt = [
       [0, 0],
       [0, 0],
@@ -1535,7 +1750,7 @@ class Line extends Shape {
   /**
    * Return default outline
    */
-  getOutlineDefault(): number[][] {
+  renderOutlineDefault(): number[][] {
     switch (this.lineType) {
       case LineType.CURVE:
         return this.path.length > 2
@@ -1549,7 +1764,7 @@ class Line extends Shape {
 /**
  * Rectangle
  */
-class Rectangle extends Box {
+export class Rectangle extends Box {
   constructor() {
     super();
     this.type = "Rectangle";
@@ -1559,14 +1774,13 @@ class Rectangle extends Box {
 /**
  * Ellipse
  */
-class Ellipse extends Box {
+export class Ellipse extends Box {
   constructor() {
     super();
     this.type = "Ellipse";
   }
 
-  renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
-    this.renderLink(canvas, updateDOM);
+  renderDefault(canvas: MemoizationCanvas): void {
     if (this.fillStyle !== FillStyle.NONE) {
       canvas.fillEllipse(
         this.left,
@@ -1589,7 +1803,7 @@ class Ellipse extends Box {
   /**
    * Return outline polygon
    */
-  getOutlineDefault(): number[][] {
+  renderOutlineDefault(): number[][] {
     const points = geometry.pointsOnEllipse(
       this.getCenter(),
       this.width / 2,
@@ -1603,14 +1817,14 @@ class Ellipse extends Box {
 /**
  * Text
  */
-class Text extends Box {
+export class Text extends Box {
   constructor() {
     super();
     this.type = "Text";
     this.fillColor = "$transparent";
     this.strokeColor = "$transparent";
-    this.horzAlign = AlignmentKind.LEFT;
-    this.vertAlign = AlignmentKind.TOP;
+    this.horzAlign = HorzAlign.LEFT;
+    this.vertAlign = VertAlign.TOP;
   }
 
   /**
@@ -1623,8 +1837,7 @@ class Text extends Box {
     return geometry.inPolygon(point, outline);
   }
 
-  renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
-    this.renderLink(canvas, updateDOM);
+  renderDefault(canvas: MemoizationCanvas): void {
     if (this.fillStyle !== FillStyle.NONE) {
       canvas.fillRoundRect(
         this.left,
@@ -1642,7 +1855,7 @@ class Text extends Box {
 /**
  * Image
  */
-class Image extends Box {
+export class Image extends Box {
   imageData: string;
   imageWidth: number;
   imageHeight: number;
@@ -1677,53 +1890,29 @@ class Image extends Box {
     this.imageHeight = json.imageHeight ?? this.imageHeight;
   }
 
-  renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
-    this.renderLink(canvas, updateDOM);
+  renderDefault(canvas: MemoizationCanvas): void {
     if (!this._imageDOM) {
       this._imageDOM = new globalThis.Image();
       this._imageDOM.src = this.imageData;
     }
-    if (this._imageDOM && this._imageDOM.complete) {
-      canvas.save();
-      canvas.fillColor = Color.TRANSPARENT;
-      canvas.fillStyle = FillStyle.SOLID;
-      canvas.strokeColor = Color.TRANSPARENT;
-      canvas.strokeWidth = 1;
-      canvas.strokePattern = [];
-      canvas.alpha = 1;
-      canvas.roughness = 0;
-      canvas.fillRoundRect(
-        this.left,
-        this.top,
-        this.right,
-        this.bottom,
-        this.corners,
-        this.getSeed()
-      );
-      canvas.context.clip();
-      canvas.drawImage(
-        this._imageDOM,
-        this.left,
-        this.top,
-        this.width,
-        this.height
-      );
-      canvas.restore();
-    }
+    canvas.drawImage(
+      this._imageDOM,
+      this.left,
+      this.top,
+      this.width,
+      this.height,
+      this.corners
+    );
   }
 }
 
 /**
  * Group
  */
-class Group extends Box {
+export class Group extends Box {
   constructor() {
     super();
     this.type = "Group";
-  }
-
-  renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
-    this.renderLink(canvas, updateDOM);
   }
 
   /**
@@ -1739,7 +1928,7 @@ class Group extends Box {
 /**
  * Connector
  */
-class Connector extends Line {
+export class Connector extends Line {
   head: Shape | null;
   tail: Shape | null;
 
@@ -1887,35 +2076,24 @@ class Connector extends Line {
 /**
  * Freehand
  */
-class Freehand extends Line {
+export class Freehand extends Line {
   constructor() {
     super();
     this.type = "Freehand";
   }
 
-  renderDefault(canvas: Canvas, updateDOM?: boolean): void {
-    this.renderLink(canvas, updateDOM);
-
-    canvas.context.strokeStyle = canvas.resolveColor(this.strokeColor);
-    canvas.context.fillStyle = canvas.resolveColor(this.strokeColor);
-    canvas.context.lineWidth = this.strokeWidth;
-    canvas.context.lineCap = "round";
-    canvas.context.globalAlpha = canvas.alpha;
-    canvas.context.setLineDash(this.strokePattern);
-
-    const stroke = getStroke(this.path, { size: this.strokeWidth });
-    const pathData = utils.getSvgPathFromStroke(stroke);
-    const myPath = new Path2D(pathData);
-
-    canvas.context.beginPath();
-    canvas.context.fill(myPath);
+  renderDefault(canvas: MemoizationCanvas): void {
+    if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
+      canvas.fillPolygon(this.path, this.getSeed());
+    }
+    canvas.strokeFreehand(this.path);
   }
 }
 
 /**
  * Frame
  */
-class Frame extends Box {
+export class Frame extends Box {
   constructor() {
     super();
     this.type = "Frame";
@@ -1923,11 +2101,10 @@ class Frame extends Box {
     this.containable = true;
   }
 
-  render(canvas: Canvas, updateDOM: boolean = false) {
+  draw(canvas: Canvas, updateDOM: boolean = false) {
     if (this.visible) {
-      this.renderLink(canvas, updateDOM);
+      this.drawLink(canvas, updateDOM);
       canvas.save();
-      this.assignStyles(canvas);
       this.localTransform(canvas);
       // const script = this.getScript(ScriptType.RENDER);
       // if (script) {
@@ -1962,7 +2139,7 @@ class Frame extends Box {
       );
       canvas.context.clip();
       canvas.restoreState();
-      this.children.forEach((s) => (s as Shape).render(canvas, updateDOM));
+      this.children.forEach((s) => (s as Shape).draw(canvas, updateDOM));
       canvas.restore();
     }
   }
@@ -1971,7 +2148,7 @@ class Frame extends Box {
 /**
  * Embed
  */
-class Embed extends Box {
+export class Embed extends Box {
   src: string;
 
   /**
@@ -2021,7 +2198,7 @@ class Embed extends Box {
   //   );
   // }
 
-  renderFrame(canvas: Canvas, updateDOM: boolean = false): void {
+  drawFrame(canvas: Canvas, updateDOM: boolean = false): void {
     // create iframeDOM
     if (this.src.length > 0 && !this._iframeDOM) {
       this._iframeDOM = document.createElement("iframe");
@@ -2056,21 +2233,21 @@ class Embed extends Box {
     }
   }
 
-  renderDefault(canvas: Canvas, updateDOM: boolean = false): void {
-    this.renderLink(canvas, updateDOM);
-    this.renderFrame(canvas, updateDOM);
-    if (this.fillStyle !== FillStyle.NONE) {
-      canvas.fillStyle = FillStyle.SOLID;
-      canvas.fillColor = Color.FOREGROUND;
-      canvas.alpha = 0.1;
-      canvas.fillRect(
-        this.left,
-        this.top,
-        this.right,
-        this.bottom,
-        this.getSeed()
-      );
-    }
+  renderDefault(canvas: MemoizationCanvas, updateDOM: boolean = false): void {
+    // this.drawLink(canvas, updateDOM);
+    // this.renderFrame(canvas, updateDOM);
+    // if (this.fillStyle !== FillStyle.NONE) {
+    //   canvas.fillStyle = FillStyle.SOLID;
+    //   canvas.fillColor = Color.FOREGROUND;
+    //   canvas.alpha = 0.1;
+    //   canvas.fillRect(
+    //     this.left,
+    //     this.top,
+    //     this.right,
+    //     this.bottom,
+    //     this.getSeed()
+    //   );
+    // }
   }
 }
 
@@ -2152,9 +2329,9 @@ class ConstraintManager {
   }
 }
 
-const constraintManager = ConstraintManager.getInstance();
+export const constraintManager = ConstraintManager.getInstance();
 
-const shapeInstantiator = new Instantiator({
+export const shapeInstantiator = new Instantiator({
   Shape: () => new Shape(),
   Doc: () => new Doc(),
   Page: () => new Page(),
@@ -2171,7 +2348,7 @@ const shapeInstantiator = new Instantiator({
   Embed: () => new Embed(),
 });
 
-type ObjProps = Partial<
+export type ObjProps = Partial<
   Shape &
     Doc &
     Page &
@@ -2186,35 +2363,3 @@ type ObjProps = Partial<
     Frame &
     Embed
 >;
-
-export {
-  type Constraint,
-  type Property,
-  type Script,
-  type ConstraintFn,
-  type PageSize,
-  ScriptType,
-  Movable,
-  Sizable,
-  FillStyle,
-  LineType,
-  LineEndType,
-  AlignmentKind,
-  Shape,
-  Doc,
-  Page,
-  Box,
-  Line,
-  Rectangle,
-  Ellipse,
-  Text,
-  Image,
-  Group,
-  Connector,
-  Freehand,
-  Frame,
-  Embed,
-  constraintManager,
-  shapeInstantiator,
-  type ObjProps,
-};

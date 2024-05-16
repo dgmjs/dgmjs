@@ -440,4 +440,41 @@ export class Transaction {
     }
     return false;
   }
+
+  /**
+   * Get all mutated objs
+   */
+  getMutated(): Obj[] {
+    const objs = new Set<Obj>();
+    for (let i = 0; i < this.mutations.length; i++) {
+      const mut = this.mutations[i];
+      switch (mut.type) {
+        case MutationType.CREATE:
+          objs.add((mut as CreateMutation).obj);
+          break;
+        case MutationType.DELETE:
+          objs.add((mut as DeleteMutation).obj);
+          break;
+        case MutationType.ASSIGN:
+          objs.add((mut as AssignMutation).obj);
+          break;
+        case MutationType.ASSIGN_REF:
+          objs.add((mut as AssignRefMutation).obj);
+          break;
+        case MutationType.INSERT_CHILD:
+          objs.add((mut as InsertChildMutation).obj);
+          objs.add((mut as InsertChildMutation).parent);
+          break;
+        case MutationType.REMOVE_CHILD:
+          objs.add((mut as RemoveChildMutation).obj);
+          objs.add((mut as RemoveChildMutation).parent);
+          break;
+        case MutationType.REORDER_CHILD:
+          objs.add((mut as ReorderChildMutation).obj);
+          objs.add((mut as ReorderChildMutation).parent);
+          break;
+      }
+    }
+    return Array.from(objs);
+  }
 }

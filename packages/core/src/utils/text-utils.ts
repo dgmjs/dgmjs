@@ -14,6 +14,7 @@
 import { Canvas } from "../graphics/graphics";
 import { Box, Shape, Text } from "../shapes";
 import * as utils from "../graphics/utils";
+import { MemoizationCanvas } from "../graphics/memoization-canvas";
 
 /**
  * Split a string into words at spaces(' ') and hypens('-').
@@ -398,8 +399,8 @@ export function preprocessTextNode(
 /**
  * Draw preprocessed text nodes
  */
-export function drawTextNode(
-  canvas: Canvas,
+export function renderTextDocNode(
+  canvas: MemoizationCanvas,
   node: any,
   shape: Text,
   left: number,
@@ -415,7 +416,7 @@ export function drawTextNode(
         let y = top;
         for (let i = 0; i < node.content.length; i++) {
           let block = node.content[i];
-          drawTextNode(canvas, block, shape, left, y, width, listIndent);
+          renderTextDocNode(canvas, block, shape, left, y, width, listIndent);
           y += block._height;
         }
       }
@@ -462,7 +463,7 @@ export function drawTextNode(
         let y = top;
         for (let i = 0; i < node.content.length; i++) {
           let block = node.content[i];
-          drawTextNode(
+          renderTextDocNode(
             canvas,
             block,
             shape,
@@ -481,7 +482,7 @@ export function drawTextNode(
         let y = top;
         for (let i = 0; i < node.content.length; i++) {
           let line = node.content[i];
-          drawTextNode(canvas, line, shape, left, y, width, listIndent);
+          renderTextDocNode(canvas, line, shape, left, y, width, listIndent);
           y += line._height;
         }
       }
@@ -512,7 +513,7 @@ export function drawTextNode(
           let inline = node.content[i];
           inline._gap = node._last ? 0 : inline._gap || 0;
           inline._width += inline._gap;
-          drawTextNode(
+          renderTextDocNode(
             canvas,
             inline,
             shape,
@@ -629,9 +630,8 @@ export function measureText(
   };
 }
 
-export function drawText(canvas: Canvas, shape: Box) {
-  canvas.storeState();
-  const textMetric = measureText(canvas, shape, shape.text);
+export function renderTextShape(canvas: MemoizationCanvas, shape: Box) {
+  const textMetric = measureText(canvas.canvas, shape, shape.text);
   let top = shape.innerTop;
   switch (shape.vertAlign) {
     case "top":
@@ -644,7 +644,7 @@ export function drawText(canvas: Canvas, shape: Box) {
       top = shape.innerBottom - textMetric.height;
       break;
   }
-  drawTextNode(
+  renderTextDocNode(
     canvas,
     textMetric.preprocessedDoc,
     shape,
@@ -653,7 +653,6 @@ export function drawText(canvas: Canvas, shape: Box) {
     shape.innerWidth,
     1.5
   );
-  canvas.restoreState();
 }
 
 /**

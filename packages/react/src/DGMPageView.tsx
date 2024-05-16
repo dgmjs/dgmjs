@@ -12,6 +12,7 @@ export interface DGMPageViewProps extends React.HTMLAttributes<HTMLDivElement> {
   darkMode?: boolean;
   maxScale?: number;
   scaleAdjust?: number;
+  update?: boolean;
   updateDOM?: boolean;
 }
 
@@ -26,6 +27,7 @@ export const DGMPageView = forwardRef<DGMPageViewHandle, DGMPageViewProps>(
       darkMode = false,
       maxScale = 1,
       scaleAdjust = 1,
+      update = false,
       updateDOM = false,
       style,
       children,
@@ -48,6 +50,7 @@ export const DGMPageView = forwardRef<DGMPageViewHandle, DGMPageViewProps>(
           [width, height],
           maxScale,
           scaleAdjust,
+          update,
           updateDOM
         );
       }

@@ -50,7 +50,7 @@ function getImageCanvas(page: Page, options: ExportImageOptions) {
   }
 
   // draw doc to the new canvas
-  page.render(canvas);
+  page.draw(canvas);
   return canvasElement;
 }
 
@@ -141,7 +141,7 @@ export async function getSVGImageData(
   }
 
   // Draw doc to the new canvas
-  page.render(svgCanvas);
+  page.draw(svgCanvas);
 
   // TODO: add fonts in defs (temporal impls)
   const svg: SVGSVGElement = ctx.getSvg();

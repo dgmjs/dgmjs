@@ -20,7 +20,14 @@ import {
 } from "@/components/ui/select";
 import { Toggle } from "@/components/ui/toggle";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Box, Text as TextShape } from "@dgmjs/core";
+import {
+  Box,
+  HorzAlign,
+  HorzAlignEnum,
+  Text as TextShape,
+  VertAlign,
+  VertAlignEnum,
+} from "@dgmjs/core";
 import {
   AlignCenterIcon,
   AlignLeftIcon,
@@ -130,25 +137,26 @@ export const TextPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
             size="sm"
             value={horzAlign}
             onValueChange={(value) => {
-              if (onChange && value) onChange({ horzAlign: value });
+              if (onChange && value)
+                onChange({ horzAlign: value as HorzAlignEnum });
             }}
           >
             <ToggleGroupItem
-              value="left"
+              value={HorzAlign.LEFT}
               className="h-8 w-8 p-0"
               title="Align Left"
             >
               <AlignLeftIcon size={16} />
             </ToggleGroupItem>
             <ToggleGroupItem
-              value="center"
+              value={HorzAlign.CENTER}
               className="h-8 w-8 p-0"
               title="Align Center"
             >
               <AlignCenterIcon size={16} />
             </ToggleGroupItem>
             <ToggleGroupItem
-              value="right"
+              value={HorzAlign.RIGHT}
               className="h-8 w-8 p-0"
               title="Align Right"
             >
@@ -160,25 +168,25 @@ export const TextPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
             size="sm"
             value={vertAlign}
             onValueChange={(value) => {
-              if (onChange && value) onChange({ vertAlign: value });
+              if (onChange && value) onChange({ vertAlign: value as VertAlignEnum });
             }}
           >
             <ToggleGroupItem
-              value="top"
+              value={VertAlign.TOP}
               className="h-8 w-8 p-0"
               title="Align Top"
             >
               <VerticalTopIcon size={16} />
             </ToggleGroupItem>
             <ToggleGroupItem
-              value="middle"
+              value={VertAlign.MIDDLE}
               className="h-8 w-8 p-0"
               title="Align Middle"
             >
               <VerticalMiddleIcon size={16} />
             </ToggleGroupItem>
             <ToggleGroupItem
-              value="bottom"
+              value={VertAlign.BOTTOM}
               className="h-8 w-8 p-0"
               title="Align Bottom"
             >
