@@ -19,7 +19,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Movable, Sizable, Box, Line } from "@dgmjs/core";
+import {
+  Movable,
+  Sizable,
+  Box,
+  Line,
+  MovableEnum,
+  SizableEnum,
+} from "@dgmjs/core";
 import React from "react";
 import { Panel } from "../common/panel";
 import { Label } from "@/components/ui/label";
@@ -185,7 +192,9 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
           </Label>
           <Select
             value={sizable}
-            onValueChange={(value) => onChange({ sizable: value })}
+            onValueChange={(value) =>
+              onChange({ sizable: value as SizableEnum })
+            }
           >
             <SelectTrigger id="shape-sizable-select" className="h-8">
               <SelectValue />
@@ -206,7 +215,7 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
         </Label>
         <Select
           value={movable}
-          onValueChange={(value) => onChange({ movable: value })}
+          onValueChange={(value) => onChange({ movable: value as MovableEnum })}
         >
           <SelectTrigger id="shape-movable-select" className="h-8">
             <SelectValue />

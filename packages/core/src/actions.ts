@@ -12,7 +12,7 @@
  */
 
 import type { Editor } from "./editor";
-import { Box, Group, type Shape, Line, type ObjProps, Page } from "./shapes";
+import { Box, Group, type Shape, Line, type ShapeProps, Page } from "./shapes";
 import * as geometry from "./graphics/geometry";
 import { Obj, filterDescendants } from "./core/obj";
 import { deserialize, serialize } from "./core/serialize";
@@ -143,7 +143,7 @@ export class Actions {
   /**
    * Update obj properties
    */
-  update(values: ObjProps, objs?: Obj[]) {
+  update(values: ShapeProps, objs?: Obj[]) {
     const page = this.editor.currentPage;
     if (page) {
       this.editor.transform.startAction("update");

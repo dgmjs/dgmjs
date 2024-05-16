@@ -2343,7 +2343,7 @@ export const shapeInstantiator = new Instantiator({
   Embed: () => new Embed(),
 });
 
-export type ObjProps = Partial<
+export type ShapeProps = Partial<
   Shape &
     Doc &
     Page &

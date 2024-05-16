@@ -1,4 +1,4 @@
-import { Editor, Page, Shape, ObjProps } from "@dgmjs/core";
+import { Editor, Page, Shape, ShapeProps } from "@dgmjs/core";
 import {
   YjsDocSyncPlugin,
   YjsUserPresencePlugin,
@@ -41,10 +41,10 @@ function App() {
       window.editor.newDoc();
     }
 
-    window.editor.transform.onTransaction.addListener((tx) => {
+    window.editor.transform.onTransaction.addListener(() => {
       // console.log("tx", tx);
     });
-    window.editor.transform.onAction.addListener((action) => {
+    window.editor.transform.onAction.addListener(() => {
       // console.log("action", action);
     });
 
@@ -100,7 +100,7 @@ function App() {
     window.editor.selection.select(selection);
   };
 
-  const handleValuesChange = (values: ObjProps) => {
+  const handleValuesChange = (values: ShapeProps) => {
     const shapes = window.editor.selection.getShapes();
     window.editor.actions.update(values);
     demoStore.setSelection([...shapes]);

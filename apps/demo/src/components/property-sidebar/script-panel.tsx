@@ -21,7 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Empty } from "../common/empty";
-import { ScriptType } from "@dgmjs/core";
+import { ScriptType, ScriptTypeEnum } from "@dgmjs/core";
 import { Button } from "@/components/ui/button";
 import { ShapeEditorProps } from "@/types";
 import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
@@ -79,7 +79,7 @@ export const ScriptPanel: React.FC<ShapeEditorProps> = ({
     if (onChange && !scripts.some((s) => s.id === id)) {
       let defaultScript = "";
       if (id === "draw") defaultScript = defaultDrawScript;
-      const s = { id, script: defaultScript };
+      const s = { id: id as ScriptTypeEnum, script: defaultScript };
       if (onChange) onChange({ scripts: [...scripts, s] });
     }
   };
