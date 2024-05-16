@@ -1,4 +1,4 @@
-import { Editor, Page, Shape, ObjProps, Transaction } from "@dgmjs/core";
+import { Editor, Page, Shape, ObjProps } from "@dgmjs/core";
 import {
   YjsDocSyncPlugin,
   YjsUserPresencePlugin,
@@ -91,7 +91,7 @@ function App() {
     demoStore.setActiveHandler(handlerId);
   };
 
-  const handleTransaction = (tx: Transaction) => {
+  const handleAction = () => {
     const data = window.editor.store.toJSON();
     localStorage.setItem("local-data", JSON.stringify(data));
   };
@@ -136,7 +136,7 @@ function App() {
         onSelectionChange={handleSelectionChange}
         onCurrentPageChange={handleCurrentPageChange}
         onActiveHandlerChange={handleActiveHandlerChange}
-        onTransaction={handleTransaction}
+        onAction={handleAction}
       />
       <div className="absolute top-2 left-60 right-60 h-10 border flex items-center justify-between bg-background">
         <Menus />
