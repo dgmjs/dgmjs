@@ -660,13 +660,13 @@ export class Shape extends Obj {
    * - Render: computing geometries how to draw the shape
    * - Draw: actual drawing the computed geometries of the shape on the canvas
    */
-  draw(canvas: Canvas, updateDOM: boolean = false) {
+  draw(canvas: Canvas, showDOM: boolean = false) {
     if (this.visible) {
       canvas.save();
       this.localTransform(canvas);
-      this.drawLink(canvas, updateDOM);
+      this.drawLink(canvas, showDOM);
       this._memoCanvas.draw(canvas);
-      this.children.forEach((s) => (s as Shape).draw(canvas, updateDOM));
+      this.children.forEach((s) => (s as Shape).draw(canvas, showDOM));
       canvas.restore();
     }
   }
@@ -674,27 +674,22 @@ export class Shape extends Obj {
   /**
    * Draw link
    */
-  drawLink(canvas: Canvas, updateDOM: boolean = false) {
-    // create linkDOM
-    if (this.link.length > 0 && !this._linkDOM) {
-      this._linkDOM = document.createElement("a");
-      this._linkDOM.style.position = "absolute";
-      this._linkDOM.style.color = "var(--colors-blue9)";
-      this._linkDOM.style.display = "flex";
-      this._linkDOM.style.alignItems = "center";
-      this._linkDOM.style.justifyContent = "center";
-      this._linkDOM.style.cursor = "pointer";
-      this._linkDOM.style.zIndex = "10";
-      this._linkDOM.setAttribute("target", "_blank");
-      this._linkDOM.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`;
-      canvas.element.parentElement?.appendChild(this._linkDOM);
-    }
-    // delete linkDOM
-    if (this.link.length === 0 && this._linkDOM) {
-      this.finalize(canvas);
-    }
-    // update linkDOM
-    if (updateDOM && this._linkDOM) {
+  drawLink(canvas: Canvas, showDOM: boolean = false) {
+    if (this.link.trim().length === 0) showDOM = false;
+    if (showDOM) {
+      if (!this._linkDOM) {
+        this._linkDOM = document.createElement("a");
+        this._linkDOM.style.position = "absolute";
+        this._linkDOM.style.color = "var(--colors-blue9)";
+        this._linkDOM.style.display = "flex";
+        this._linkDOM.style.alignItems = "center";
+        this._linkDOM.style.justifyContent = "center";
+        this._linkDOM.style.cursor = "pointer";
+        this._linkDOM.style.zIndex = "10";
+        this._linkDOM.setAttribute("target", "_blank");
+        this._linkDOM.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`;
+        canvas.element.parentElement?.appendChild(this._linkDOM);
+      }
       // update linkDOM parent element
       if (this._linkDOM.parentElement !== canvas.element.parentElement) {
         canvas.element.parentElement?.appendChild(this._linkDOM);
@@ -711,6 +706,8 @@ export class Shape extends Obj {
       this._linkDOM.style.height = `${size}px`;
       this._linkDOM.setAttribute("title", this.link);
       this._linkDOM.setAttribute("href", this.link);
+    } else {
+      this.finalize(canvas);
     }
   }
 
@@ -1014,11 +1011,11 @@ export class Page extends Shape {
   /**
    * Render this shape
    */
-  draw(canvas: Canvas, updateDOM: boolean = false) {
+  draw(canvas: Canvas, showDOM: boolean = false) {
     if (this.visible) {
       canvas.save();
       canvas.globalTransform();
-      this.children.forEach((s) => (s as Shape).draw(canvas, updateDOM));
+      this.children.forEach((s) => (s as Shape).draw(canvas, showDOM));
       canvas.restore();
     }
   }
@@ -2101,9 +2098,9 @@ export class Frame extends Box {
     this.containable = true;
   }
 
-  draw(canvas: Canvas, updateDOM: boolean = false) {
+  draw(canvas: Canvas, showDOM: boolean = false) {
     if (this.visible) {
-      this.drawLink(canvas, updateDOM);
+      this.drawLink(canvas, showDOM);
       canvas.save();
       this.localTransform(canvas);
       // const script = this.getScript(ScriptType.RENDER);
@@ -2139,7 +2136,7 @@ export class Frame extends Box {
       );
       canvas.context.clip();
       canvas.restoreState();
-      this.children.forEach((s) => (s as Shape).draw(canvas, updateDOM));
+      this.children.forEach((s) => (s as Shape).draw(canvas, showDOM));
       canvas.restore();
     }
   }
@@ -2198,21 +2195,17 @@ export class Embed extends Box {
   //   );
   // }
 
-  drawFrame(canvas: Canvas, updateDOM: boolean = false): void {
-    // create iframeDOM
-    if (this.src.length > 0 && !this._iframeDOM) {
-      this._iframeDOM = document.createElement("iframe");
-      this._iframeDOM.style.position = "absolute";
-      this._iframeDOM.style.pointerEvents = "none";
-      canvas.element.parentElement?.appendChild(this._iframeDOM);
-    }
-    // delete iframeDOM
-    if (this.src.length === 0 && this._iframeDOM) {
-      this.finalize(canvas);
-    }
-    // update iframeDOM
-    if (updateDOM && this._iframeDOM) {
-      // update iframeDOM parent element
+  drawFrame(canvas: Canvas, showDOM: boolean = false): void {
+    if (this.src.trim().length === 0) showDOM = false;
+    if (showDOM) {
+      // create iframeDOM
+      if (!this._iframeDOM) {
+        this._iframeDOM = document.createElement("iframe");
+        this._iframeDOM.style.position = "absolute";
+        this._iframeDOM.style.pointerEvents = "none";
+        canvas.element.parentElement?.appendChild(this._iframeDOM);
+      }
+      // update iframeDOM
       if (this._iframeDOM.parentElement !== canvas.element.parentElement) {
         canvas.element.parentElement?.appendChild(this._iframeDOM);
       }
@@ -2230,12 +2223,14 @@ export class Embed extends Box {
       this._iframeDOM.style.width = `${width}px`;
       this._iframeDOM.style.height = `${height}px`;
       this._iframeDOM.style.transform = `scale(${scale})`;
+    } else {
+      this.finalize(canvas);
     }
   }
 
-  renderDefault(canvas: MemoizationCanvas, updateDOM: boolean = false): void {
-    // this.drawLink(canvas, updateDOM);
-    // this.renderFrame(canvas, updateDOM);
+  renderDefault(canvas: MemoizationCanvas, showDOM: boolean = false): void {
+    // this.drawLink(canvas, showDOM);
+    // this.renderFrame(canvas, showDOM);
     // if (this.fillStyle !== FillStyle.NONE) {
     //   canvas.fillStyle = FillStyle.SOLID;
     //   canvas.fillColor = Color.FOREGROUND;

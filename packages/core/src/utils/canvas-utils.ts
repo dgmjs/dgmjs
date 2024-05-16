@@ -11,7 +11,7 @@ import { themeColors } from "../colors";
  * @param maxCanvasSize A number to indicate the maximum size of the canvas
  * @param scaleAdjust A number to adjust the scale
  * @param update A boolean value to indicate whether to update the shapes
- * @param updateDOM A boolean value to indicate whether to update the DOM
+ * @param showDOM A boolean value to indicate whether to update the DOM
  */
 export function renderOnCanvas(
   shapes: Shape[],
@@ -22,7 +22,7 @@ export function renderOnCanvas(
   maxScale: number = 1,
   scaleAdjust: number = 1,
   update: boolean = false,
-  updateDOM: boolean = false
+  showDOM: boolean = false
 ) {
   // get bounding box of given shapes and all their children
   const box = geometry.boundingRect(
@@ -75,7 +75,7 @@ export function renderOnCanvas(
   // draw shapes
   if (shapes.every((s) => !(s instanceof Page))) canvas.globalTransform();
   shapes.forEach((shape) => {
-    shape.draw(canvas, updateDOM);
+    shape.draw(canvas, showDOM);
   });
 
   canvas.restore();

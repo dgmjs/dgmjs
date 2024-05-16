@@ -15,7 +15,7 @@ export interface DGMShapeViewProps
   maxScale?: number;
   scaleAdjust?: number;
   update?: boolean;
-  updateDOM?: boolean;
+  showDOM?: boolean;
 }
 
 export interface DGMShapeViewHandle {
@@ -31,7 +31,7 @@ export const DGMShapeView = forwardRef<DGMShapeViewHandle, DGMShapeViewProps>(
       maxScale = 1,
       scaleAdjust = 1,
       update = false,
-      updateDOM = false,
+      showDOM = false,
       style,
       children,
       ...others
@@ -53,7 +53,7 @@ export const DGMShapeView = forwardRef<DGMShapeViewHandle, DGMShapeViewProps>(
           maxScale,
           scaleAdjust,
           update,
-          updateDOM
+          showDOM
         );
       }
     };
