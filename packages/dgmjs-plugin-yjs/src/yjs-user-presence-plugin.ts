@@ -392,7 +392,7 @@ export class YjsUserPresencePlugin extends Plugin {
             if (remoteUserState.selection.length > 0) {
               const shapes = remoteUserState.selection
                 .map((shapeId) => this.editor.store.getById(shapeId))
-                .filter((shape) => shape !== null) as Shape[];
+                .filter((shape) => shape && shape !== null) as Shape[];
               const shapeOutlineCCSs = shapes.map((shape) => {
                 return shape
                   .getOutline()
