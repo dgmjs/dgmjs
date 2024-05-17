@@ -943,9 +943,25 @@ export class MemoizationCanvas {
 
   /**
    * Draw a freehand stroke
+   *
+   * @param path
+   * @param thinning Thinning of the path
+   * @param tailTaper Taper at the start of the path. value must be 0~1
+   * @param headTaper Taper at the end of the path value must be 0~1
    */
-  strokeFreehand(path: number[][]) {
-    const stroke = getStroke(path, { size: this.strokeWidth });
+  strokeFreehand(
+    path: number[][],
+    thinning: number = 0,
+    tailTaper: number = 0,
+    headTaper: number = 0
+  ) {
+    const len = geometry.pathLength(path);
+    const stroke = getStroke(path, {
+      size: this.strokeWidth,
+      thinning,
+      start: tailTaper > 0 ? { taper: len * tailTaper } : undefined,
+      end: headTaper > 0 ? { taper: len * headTaper } : undefined,
+    });
     const pathData = getSvgPathFromStroke(stroke);
     const path2d = new Path2D(pathData);
     this.do.push({

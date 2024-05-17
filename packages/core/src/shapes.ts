@@ -2074,16 +2074,54 @@ export class Connector extends Line {
  * Freehand
  */
 export class Freehand extends Line {
+  /**
+   * Thinning
+   */
+  thinning: number;
+
+  /**
+   * Taper at the start of the path. The value must be between 0 and 1.
+   */
+  tailTaper: number;
+
+  /**
+   * Taper at the end of the path. The value must be between 0 and 1.
+   */
+  headTaper: number;
+
   constructor() {
     super();
     this.type = "Freehand";
+    this.thinning = 0.5;
+    this.tailTaper = 0;
+    this.headTaper = 0;
+  }
+
+  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
+    const json = super.toJSON(recursive, keepRefs);
+    json.thinning = this.thinning;
+    json.tailTaper = this.tailTaper;
+    json.headTaper = this.headTaper;
+    return json;
+  }
+
+  fromJSON(json: any) {
+    super.fromJSON(json);
+    this.thinning = json.thinning ?? this.thinning;
+    this.tailTaper = json.tailTaper ?? this.tailTaper;
+    this.headTaper = json.headTaper ?? this.headTaper;
   }
 
   renderDefault(canvas: MemoizationCanvas): void {
     if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
       canvas.fillPolygon(this.path, this.getSeed());
     }
-    canvas.strokeFreehand(this.path);
+    canvas.strokeFreehand(
+      this.path,
+      this.thinning,
+      this.tailTaper,
+      this.headTaper
+    );
   }
 }
 
@@ -2354,6 +2392,7 @@ export type ShapeProps = Partial<
     Text &
     Image &
     Connector &
+    Freehand &
     Group &
     Frame &
     Embed
