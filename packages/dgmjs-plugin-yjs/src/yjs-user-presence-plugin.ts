@@ -401,7 +401,7 @@ export class YjsUserPresencePlugin extends Plugin {
               shapeOutlineCCSs.forEach((outlineCCS) => {
                 canvas.polyline(outlineCCS);
               });
-              if (remoteUserState.selection.length > 1) {
+              if (shapes.length > 1) {
                 const boundingRect = shapeOutlineCCSs
                   .map((ccs) => geometry.boundingRect(ccs))
                   .reduce(geometry.unionRect);
