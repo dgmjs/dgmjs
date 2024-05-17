@@ -831,6 +831,7 @@ export class Editor {
       this.activeHandlerId = id;
       this.activeHandler = this.handlers[this.activeHandlerId];
       this.activeHandler.onActivate(this);
+      this.selection.deselectAll();
       this.onActiveHandlerChange.emit(this.activeHandlerId);
     }
   }
