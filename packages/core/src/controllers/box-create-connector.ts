@@ -23,7 +23,7 @@ import { lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { findConnectionAnchor, getControllerPosition } from "./utils";
-import { addShape, resolveAllConstraints, setLinePath } from "../macro";
+import { addShape, resolveAllConstraints, setPath } from "../macro";
 
 interface BoxCreateConnectorControllerOptions {
   position: string;
@@ -140,7 +140,7 @@ export class BoxCreateConnectorController extends Controller {
       );
       editor.transform.transact((tx) => {
         const page = editor.currentPage!;
-        setLinePath(tx, this.connector!, [
+        setPath(tx, this.connector!, [
           this.dragStartPointGCS,
           this.dragPointGCS,
         ]);

@@ -1,6 +1,6 @@
 import type { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Connector, Line, Shape } from "../shapes";
+import { Connector, Line, Path, Shape } from "../shapes";
 import { angleInCCS, lcs2ccs } from "../graphics/utils";
 import optjs from "optimization-js";
 import type { Editor } from "../editor";
@@ -117,7 +117,7 @@ export function findConnectionAnchor(
     ) ?? null;
   let anchor = [0.5, 0.5];
   if (!end?.connectable) end = null;
-  if (end instanceof Line && !end.isClosed()) {
+  if (end instanceof Path && !end.isClosed()) {
     const p = geometry.findNearestOnPath(
       point,
       end.path,
@@ -147,17 +147,17 @@ export function findConnectionAnchor(
  */
 export function findControlPoint(
   editor: Editor,
-  line: Line,
+  pathShape: Path,
   p: number[]
 ): number {
   const canvas = editor.canvas;
-  const path = line.path;
-  const angle = angleInCCS(canvas, line);
-  const pCCS = lcs2ccs(canvas, line, p);
+  const path = pathShape.path;
+  const angle = angleInCCS(canvas, pathShape);
+  const pCCS = lcs2ccs(canvas, pathShape, p);
   if (path.length > 1) {
     for (let i = 0; i < path.length; i++) {
       const cp = path[i];
-      const cpCCS = lcs2ccs(canvas, line, cp);
+      const cpCCS = lcs2ccs(canvas, pathShape, cp);
       if (inControlPoint(canvas, pCCS, cpCCS, angle)) return i;
     }
   }

@@ -23,9 +23,9 @@ import {
   Movable,
   Sizable,
   Box,
-  Line,
   MovableEnum,
   SizableEnum,
+  Path,
 } from "@dgmjs/core";
 import React from "react";
 import { Panel } from "../common/panel";
@@ -39,7 +39,7 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
   onChange,
 }) => {
   const isBox = shapes.every((s) => s instanceof Box);
-  const isLine = shapes.every((s) => s instanceof Line);
+  const isPath = shapes.every((s) => s instanceof Path);
 
   const enabled = merge(shapes.map((s) => s.enable));
   const visible = merge(shapes.map((s) => s.visible));
@@ -53,7 +53,7 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
     shapes.map((s) => (s instanceof Box ? s.textEditable : false))
   );
   const pathEditable = merge(
-    shapes.map((s) => (s instanceof Line ? s.pathEditable : false))
+    shapes.map((s) => (s instanceof Path ? s.pathEditable : false))
   );
   const anchored = merge(
     shapes.map((s) => (s instanceof Box ? s.anchored : false))
@@ -171,7 +171,7 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
           <Checkbox
             id="shape-path-editable-checkbox"
             checked={pathEditable}
-            disabled={!isLine}
+            disabled={!isPath}
             onCheckedChange={(checked) => {
               if (typeof checked === "boolean")
                 onChange({ pathEditable: checked });

@@ -12,7 +12,7 @@
  */
 
 import type { Editor } from "./editor";
-import { Box, Group, type Shape, Line, type ShapeProps, Page } from "./shapes";
+import { Box, Group, type Shape, type ShapeProps, Page, Path } from "./shapes";
 import * as geometry from "./graphics/geometry";
 import { Obj, filterDescendants } from "./core/obj";
 import { deserialize, serialize } from "./core/serialize";
@@ -517,7 +517,7 @@ export class Actions {
             if (s instanceof Box) {
               const dx = left - s.left;
               moveMultipleShapes(tx, page, [s], dx, 0);
-            } else if (s instanceof Line) {
+            } else if (s instanceof Path) {
               const dx = left - Math.min(...s.path.map((p) => p[0]));
               moveMultipleShapes(tx, page, [s], dx, 0);
             }
@@ -545,7 +545,7 @@ export class Actions {
             if (s instanceof Box) {
               const dx = right - s.right;
               moveMultipleShapes(tx, page, [s], dx, 0);
-            } else if (s instanceof Line) {
+            } else if (s instanceof Path) {
               const dx = right - Math.max(...s.path.map((p) => p[0]));
               moveMultipleShapes(tx, page, [s], dx, 0);
             }
@@ -576,7 +576,7 @@ export class Actions {
             if (s instanceof Box) {
               const dx = center - Math.round((s.left + s.right) / 2);
               moveMultipleShapes(tx, page, [s], dx, 0);
-            } else if (s instanceof Line) {
+            } else if (s instanceof Path) {
               const l = Math.min(...s.path.map((p) => p[0]));
               const r = Math.max(...s.path.map((p) => p[0]));
               const dx = center - Math.round((l + r) / 2);
@@ -606,7 +606,7 @@ export class Actions {
             if (s instanceof Box) {
               const dy = top - s.top;
               moveMultipleShapes(tx, page, [s], 0, dy);
-            } else if (s instanceof Line) {
+            } else if (s instanceof Path) {
               const dy = top - Math.min(...s.path.map((p) => p[1]));
               moveMultipleShapes(tx, page, [s], 0, dy);
             }
@@ -634,7 +634,7 @@ export class Actions {
             if (s instanceof Box) {
               const dy = bottom - s.bottom;
               moveMultipleShapes(tx, page, [s], 0, dy);
-            } else if (s instanceof Line) {
+            } else if (s instanceof Path) {
               const dy = bottom - Math.max(...s.path.map((p) => p[1]));
               moveMultipleShapes(tx, page, [s], 0, dy);
             }
@@ -665,7 +665,7 @@ export class Actions {
             if (s instanceof Box) {
               const dy = middle - Math.round((s.top + s.bottom) / 2);
               moveMultipleShapes(tx, page, [s], 0, dy);
-            } else if (s instanceof Line) {
+            } else if (s instanceof Path) {
               const t = Math.min(...s.path.map((p) => p[1]));
               const b = Math.max(...s.path.map((p) => p[1]));
               const dy = middle - Math.round((t + b) / 2);

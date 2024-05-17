@@ -11,12 +11,12 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { constraintManager, Shape, Line, Page } from "../shapes";
+import { constraintManager, Shape, Page, Path } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { z } from "zod";
 import { Transaction } from "../core/transaction";
-import { setLinePath } from "../macro";
+import { setPath } from "../macro";
 
 const schema = z.object({
   type: z.enum(["free", "horizontal", "vertical"]).default("free"),
@@ -32,7 +32,7 @@ function constraint(
   canvas: Canvas,
   args: z.infer<typeof schema>
 ) {
-  if (shape instanceof Line) {
+  if (shape instanceof Path) {
     const cp = shape.getCenter();
     let path = geometry.pathCopy(shape.path);
     switch (args.type) {
@@ -49,7 +49,7 @@ function constraint(
         ];
         break;
     }
-    return setLinePath(tx, shape, path);
+    return setPath(tx, shape, path);
   }
   return false;
 }

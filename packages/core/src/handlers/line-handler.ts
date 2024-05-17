@@ -16,7 +16,7 @@ import * as geometry from "../graphics/geometry";
 import { Line, Shape } from "../shapes";
 import { Editor, Handler } from "../editor";
 import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
-import { addShape, resolveAllConstraints, setLinePath } from "../macro";
+import { addShape, resolveAllConstraints, setPath } from "../macro";
 
 /**
  * Line Factory Handler
@@ -59,7 +59,7 @@ export class LineFactoryHandler extends Handler {
     if (page && this.shape) {
       const newPath = [...this.points, this.dragPoint];
       editor.transform.transact((tx) => {
-        setLinePath(tx, this.shape!, newPath);
+        setPath(tx, this.shape!, newPath);
         resolveAllConstraints(tx, page, editor.canvas);
       });
       editor.repaint();

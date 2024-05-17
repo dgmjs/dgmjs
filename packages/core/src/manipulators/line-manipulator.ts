@@ -16,17 +16,17 @@ import { Manipulator, manipulatorManager } from "../editor";
 import { BoxRotateController } from "../controllers/box-rotate";
 import { BoxSizeController } from "../controllers/box-size";
 import { BoxMoveController } from "../controllers/box-move";
-import { LineMovePointController } from "../controllers/line-move-point";
-import { LineAddPointController } from "../controllers/line-add-point";
+import { PathMovePointController } from "../controllers/path-move-point";
+import { PathAddPointController } from "../controllers/path-add-point";
 
 /**
- * LineManipulator
+ * PathManipulator
  */
-class LineManipulator extends Manipulator {
+class PathManipulator extends Manipulator {
   constructor() {
     super();
-    this.controllers.push(new LineMovePointController(this));
-    this.controllers.push(new LineAddPointController(this));
+    this.controllers.push(new PathMovePointController(this));
+    this.controllers.push(new PathAddPointController(this));
     this.controllers.push(new BoxRotateController(this));
     this.controllers.push(
       new BoxSizeController(this, { position: ControllerPosition.TOP })
@@ -68,7 +68,7 @@ class LineManipulator extends Manipulator {
   }
 }
 
-manipulatorManager.define("Line", new LineManipulator());
-manipulatorManager.define("Freehand", new LineManipulator());
+manipulatorManager.define("Line", new PathManipulator());
+manipulatorManager.define("Freehand", new PathManipulator());
 
-export { LineManipulator };
+export { PathManipulator };

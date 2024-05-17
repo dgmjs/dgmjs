@@ -13,7 +13,7 @@
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Shape, Box, Sizable, Line } from "../shapes";
+import { Shape, Box, Sizable, Path } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import {
   CONTROL_POINT_APOTHEM,
@@ -142,9 +142,9 @@ export class BoxSizeController extends Controller {
         break;
     }
     // don't allow resizing a single line
-    if (shape instanceof Line && shape.path.length === 2) value = false;
+    if (shape instanceof Path && shape.path.length === 2) value = false;
     // don't allow resizing when path editable
-    if (shape instanceof Line && shape.pathEditable) value = false;
+    if (shape instanceof Path && shape.pathEditable) value = false;
     return value;
   }
 
@@ -370,7 +370,7 @@ export class BoxSizeController extends Controller {
       );
 
       // resize path
-      if (shape instanceof Line) {
+      if (shape instanceof Path) {
         const newPath = geometry.projectPoints(
           initialShape.path,
           initialRect,
@@ -416,7 +416,7 @@ export class BoxSizeController extends Controller {
             const h = b - t;
             moveShape(tx, s, l - s.left, t - s.top);
             resizeShape(tx, s, w, h);
-            if (s instanceof Line) {
+            if (s instanceof Path) {
               const newPath = geometry.projectPoints(
                 initialChild.path,
                 initialChildRect,

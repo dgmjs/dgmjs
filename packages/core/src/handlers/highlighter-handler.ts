@@ -17,7 +17,7 @@ import { Editor, Handler } from "../editor";
 import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
 import { Line, LineType } from "../shapes";
 import simplifyPath from "simplify-path";
-import { addShape, resolveAllConstraints, setLinePath } from "../macro";
+import { addShape, resolveAllConstraints, setPath } from "../macro";
 
 /**
  * Highlighter Factory Handler
@@ -67,7 +67,7 @@ export class HighlighterFactoryHandler extends Handler {
     }
     editor.transform.transact((tx) => {
       if (page && this.shape) {
-        setLinePath(tx, this.shape, newPath);
+        setPath(tx, this.shape, newPath);
         resolveAllConstraints(tx, page, editor.canvas);
       }
     });

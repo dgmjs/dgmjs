@@ -12,7 +12,7 @@
  */
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
-import { Shape, Line } from "../shapes";
+import { Shape, Path } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import {
   Cursor,
@@ -25,20 +25,20 @@ import * as geometry from "../graphics/geometry";
 import { Snap } from "../manipulators/snap";
 import { findControlPoint } from "./utils";
 import { reducePath } from "../utils/route-utils";
-import { resolveAllConstraints, setLinePath } from "../macro";
+import { resolveAllConstraints, setPath } from "../macro";
 
-interface LineMovePointControllerOptions {
+interface PathMovePointControllerOptions {
   exceptEndPoints: boolean;
 }
 
 /**
- * MovePoint Controller
+ * PathMovePointController
  */
-export class LineMovePointController extends Controller {
+export class PathMovePointController extends Controller {
   /**
    * Options of the controller
    */
-  options: LineMovePointControllerOptions;
+  options: PathMovePointControllerOptions;
 
   /**
    * Snap support for controller
@@ -57,7 +57,7 @@ export class LineMovePointController extends Controller {
 
   constructor(
     manipulator: Manipulator,
-    options?: Partial<LineMovePointControllerOptions>
+    options?: Partial<PathMovePointControllerOptions>
   ) {
     super(manipulator);
     this.options = { exceptEndPoints: false, ...options };
@@ -73,7 +73,7 @@ export class LineMovePointController extends Controller {
     return (
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
-      shape instanceof Line &&
+      shape instanceof Path &&
       shape.pathEditable
     );
   }
@@ -83,9 +83,9 @@ export class LineMovePointController extends Controller {
    */
   mouseIn(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
     const p = ccs2lcs(editor.canvas, shape, [e.x, e.y]);
-    const idx = findControlPoint(editor, shape as Line, p);
+    const idx = findControlPoint(editor, shape as Path, p);
     return this.options.exceptEndPoints
-      ? idx > 0 && idx < (shape as Line).path.length - 1
+      ? idx > 0 && idx < (shape as Path).path.length - 1
       : idx >= 0;
   }
 
@@ -104,10 +104,10 @@ export class LineMovePointController extends Controller {
   initialize(editor: Editor, shape: Shape): void {
     this.controlPoint = findControlPoint(
       editor,
-      shape as Line,
+      shape as Path,
       this.dragStartPoint
     );
-    this.controlPath = geometry.pathCopy((shape as Line).path);
+    this.controlPath = geometry.pathCopy((shape as Path).path);
     editor.transform.startAction("repath");
   }
 
@@ -148,7 +148,7 @@ export class LineMovePointController extends Controller {
     editor.transform.transact((tx) => {
       const canvas = editor.canvas;
       const page = editor.currentPage!;
-      setLinePath(tx, shape as Line, newPath);
+      setPath(tx, shape as Path, newPath);
       resolveAllConstraints(tx, page, canvas);
     });
   }
@@ -156,7 +156,7 @@ export class LineMovePointController extends Controller {
   /**
    * Finalize shape by ghost
    */
-  finalize(editor: Editor, shape: Line) {
+  finalize(editor: Editor, shape: Path) {
     editor.transform.endAction();
   }
 
@@ -165,7 +165,7 @@ export class LineMovePointController extends Controller {
    */
   draw(editor: Editor, shape: Shape) {
     const canvas = editor.canvas;
-    const path = (shape as Line).path;
+    const path = (shape as Path).path;
     // draw control points
     const startPoint = this.options.exceptEndPoints ? 1 : 0;
     const endPoint = this.options.exceptEndPoints
@@ -178,7 +178,7 @@ export class LineMovePointController extends Controller {
       }
     }
     // draw filled junction control point if closed polygon
-    if ((shape as Line).isClosed()) {
+    if ((shape as Path).isClosed()) {
       const p = lcs2ccs(canvas, shape, path[0]);
       guide.drawControlPoint(canvas, p, 5);
     }

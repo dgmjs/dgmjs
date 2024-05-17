@@ -197,7 +197,7 @@ export class ShapeFactory {
   /**
    * Create a freehand lines
    */
-  createFreehand(points: number[][], closed: boolean = false): Line {
+  createFreehand(points: number[][], closed: boolean = false): Freehand {
     const freehand = new Freehand();
     const path = simplifyPath(points, 4);
     if (closed) {

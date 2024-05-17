@@ -1,5 +1,5 @@
 import * as Y from "yjs";
-import { Editor, Plugin, Doc, Page, Disposable, Shape } from "@dgmjs/core";
+import { Editor, Plugin, Doc, Page, Disposable } from "@dgmjs/core";
 import { YStore } from "./yjs-utils";
 import { handleYjsObserveDeep } from "./sync-to-store";
 import {

@@ -1,4 +1,4 @@
-import { Page, PageSize, canvasUtils } from "@dgmjs/core";
+import { Page, canvasUtils } from "@dgmjs/core";
 import {
   forwardRef,
   useEffect,

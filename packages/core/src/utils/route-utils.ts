@@ -13,7 +13,7 @@
 
 import { LINE_STRATIFY_ANGLE_THRESHOLD } from "../graphics/const";
 import * as geometry from "../graphics/geometry";
-import { Connector, Line } from "../shapes";
+import { Connector, Path } from "../shapes";
 
 /**
  * Move end point
@@ -70,7 +70,7 @@ export function adjustRoute(connector: Connector): number[][] {
     if (connector.tail) {
       const tp = connector.getTailAnchorPoint();
       const p = newPath[1];
-      if (connector.tail instanceof Line && !connector.tail.isClosed()) {
+      if (connector.tail instanceof Path && !connector.tail.isClosed()) {
         newPath[0] = geometry.getPointAtDistance(tp, p, connector.tailMargin);
       } else if (connector.tail) {
         const outline = connector.tail
@@ -88,7 +88,7 @@ export function adjustRoute(connector: Connector): number[][] {
     if (connector.head) {
       const hp = connector.getHeadAnchorPoint();
       const p = newPath[newPath.length - 2];
-      if (connector.head instanceof Line && !connector.head.isClosed()) {
+      if (connector.head instanceof Path && !connector.head.isClosed()) {
         newPath[newPath.length - 1] = geometry.getPointAtDistance(
           hp,
           p,

@@ -1407,7 +1407,7 @@ export class Box extends Shape {
     const target = this.parent;
     let startPoint = [0, 0];
     let endPoint = [0, 0];
-    if (target instanceof Line) {
+    if (target instanceof Path) {
       const outline = target.getOutline();
       const anchorPoint = geometry.getPointOnPath(outline, this.anchorPosition);
       const segment = geometry.getNearSegment(
@@ -1426,11 +1426,261 @@ export class Box extends Shape {
 }
 
 /**
- * Line shape
+ * Path shape
  */
-export class Line extends Shape {
+export class Path extends Shape {
   pathEditable: boolean;
   path: number[][];
+
+  constructor() {
+    super();
+    this.type = "Path";
+    this.pathEditable = true;
+    this.path = [];
+    this.containable = false;
+  }
+
+  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
+    const json = super.toJSON(recursive, keepRefs);
+    json.pathEditable = this.pathEditable;
+    json.path = structuredClone(this.path);
+    return json;
+  }
+
+  fromJSON(json: any) {
+    super.fromJSON(json);
+    this.pathEditable = json.pathEditable ?? this.pathEditable;
+    this.path = json.path ?? this.path;
+  }
+
+  /**
+   * Return is the path is closed
+   */
+  isClosed(): boolean {
+    return geometry.isClosed(this.path);
+  }
+
+  /**
+   * Return a segment of an end
+   * @param isHead
+   * @returns segment line to end
+   */
+  getEndSegment(isHead: boolean): number[][] {
+    let i1 = isHead ? this.path.length - 2 : 1;
+    let i2 = isHead ? this.path.length - 1 : 0;
+    return [this.path[i1], this.path[i2]];
+  }
+
+  /**
+   * Determines whether this shape contains a point in GCS
+   */
+  containsPoint(canvas: Canvas, point: number[]): boolean {
+    if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
+      const outline = this.getOutline().map((p) =>
+        this.localCoordTransform(canvas, p, true)
+      );
+      return geometry.inPolygon(point, outline);
+    } else {
+      const points = this.getOutline().map((p) =>
+        this.localCoordTransform(canvas, p, true)
+      );
+      return (
+        geometry.getNearSegment(
+          point,
+          points,
+          LINE_SELECTION_THRESHOLD * canvas.px
+        ) > -1
+      );
+    }
+  }
+
+  /**
+   * Determines whether this shape overlaps a given rect
+   */
+  overlapRect(canvas: Canvas, rect: number[][]): boolean {
+    for (let i = 0; i < this.path.length - 1; i++) {
+      if (geometry.lineOverlapRect([this.path[i], this.path[i + 1]], rect))
+        return true;
+    }
+    return false;
+  }
+
+  /**
+   * Return default outline
+   */
+  renderOutlineDefault(): number[][] {
+    return geometry.pathCopy(this.path);
+  }
+}
+
+/**
+ * Rectangle
+ */
+export class Rectangle extends Box {
+  constructor() {
+    super();
+    this.type = "Rectangle";
+  }
+}
+
+/**
+ * Ellipse
+ */
+export class Ellipse extends Box {
+  constructor() {
+    super();
+    this.type = "Ellipse";
+  }
+
+  renderDefault(canvas: MemoizationCanvas): void {
+    if (this.fillStyle !== FillStyle.NONE) {
+      canvas.fillEllipse(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.getSeed()
+      );
+    }
+    canvas.strokeEllipse(
+      this.left,
+      this.top,
+      this.right,
+      this.bottom,
+      this.getSeed()
+    );
+    this.renderText(canvas);
+  }
+
+  /**
+   * Return outline polygon
+   */
+  renderOutlineDefault(): number[][] {
+    const points = geometry.pointsOnEllipse(
+      this.getCenter(),
+      this.width / 2,
+      this.height / 2,
+      Math.max(Math.round((this.width + this.height) / 5), 30) // num of points
+    );
+    return points;
+  }
+}
+
+/**
+ * Text
+ */
+export class Text extends Box {
+  constructor() {
+    super();
+    this.type = "Text";
+    this.fillColor = "$transparent";
+    this.strokeColor = "$transparent";
+    this.horzAlign = HorzAlign.LEFT;
+    this.vertAlign = VertAlign.TOP;
+  }
+
+  /**
+   * Determines whether this shape contains a point in GCS
+   */
+  containsPoint(canvas: Canvas, point: number[]): boolean {
+    const outline = this.getOutline().map((p) =>
+      this.localCoordTransform(canvas, p, true)
+    );
+    return geometry.inPolygon(point, outline);
+  }
+
+  renderDefault(canvas: MemoizationCanvas): void {
+    if (this.fillStyle !== FillStyle.NONE) {
+      canvas.fillRoundRect(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.corners,
+        this.getSeed()
+      );
+    }
+    this.renderText(canvas);
+  }
+}
+
+/**
+ * Image
+ */
+export class Image extends Box {
+  imageData: string;
+  imageWidth: number;
+  imageHeight: number;
+
+  /**
+   * Image DOM element
+   */
+  _imageDOM: HTMLImageElement | null;
+
+  constructor() {
+    super();
+    this.type = "Image";
+    this.imageData = "";
+    this.imageWidth = 0;
+    this.imageHeight = 0;
+    this.sizable = Sizable.RATIO;
+    this._imageDOM = null;
+  }
+
+  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
+    const json = super.toJSON(recursive, keepRefs);
+    json.imageData = this.imageData;
+    json.imageWidth = this.imageWidth;
+    json.imageHeight = this.imageHeight;
+    return json;
+  }
+
+  fromJSON(json: any) {
+    super.fromJSON(json);
+    this.imageData = json.imageData ?? this.imageData;
+    this.imageWidth = json.imageWidth ?? this.imageWidth;
+    this.imageHeight = json.imageHeight ?? this.imageHeight;
+  }
+
+  renderDefault(canvas: MemoizationCanvas): void {
+    if (!this._imageDOM) {
+      this._imageDOM = new globalThis.Image();
+      this._imageDOM.src = this.imageData;
+    }
+    canvas.drawImage(
+      this._imageDOM,
+      this.left,
+      this.top,
+      this.width,
+      this.height,
+      this.corners
+    );
+  }
+}
+
+/**
+ * Group
+ */
+export class Group extends Box {
+  constructor() {
+    super();
+    this.type = "Group";
+  }
+
+  /**
+   * Pick a shape at specific position (x, y)
+   */
+  getShapeAt(canvas: Canvas, point: number[]): Shape | null {
+    if (this.visible && this.enable && this.containsPoint(canvas, point))
+      return this;
+    return null;
+  }
+}
+
+/**
+ * Line shape
+ */
+export class Line extends Path {
   lineType: LineTypeEnum;
   headEndType: LineEndTypeEnum;
   tailEndType: LineEndTypeEnum;
@@ -1438,8 +1688,6 @@ export class Line extends Shape {
   constructor() {
     super();
     this.type = "Line";
-    this.pathEditable = true;
-    this.path = [];
     this.lineType = LineType.STRAIGHT;
     this.headEndType = LineEndType.FLAT;
     this.tailEndType = LineEndType.FLAT;
@@ -1448,8 +1696,6 @@ export class Line extends Shape {
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
-    json.pathEditable = this.pathEditable;
-    json.path = structuredClone(this.path);
     json.lineType = this.lineType;
     json.headEndType = this.headEndType;
     json.tailEndType = this.tailEndType;
@@ -1458,18 +1704,9 @@ export class Line extends Shape {
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.pathEditable = json.pathEditable ?? this.pathEditable;
-    this.path = json.path ?? this.path;
     this.lineType = json.lineType ?? this.lineType;
     this.headEndType = json.headEndType ?? this.headEndType;
     this.tailEndType = json.tailEndType ?? this.tailEndType;
-  }
-
-  /**
-   * Return is the path is closed
-   */
-  isClosed(): boolean {
-    return geometry.isClosed(this.path);
   }
 
   /**
@@ -1700,51 +1937,6 @@ export class Line extends Shape {
   }
 
   /**
-   * Return a segment of an end
-   * @param isHead
-   * @returns segment line to end
-   */
-  getEndSegment(isHead: boolean): number[][] {
-    let i1 = isHead ? this.path.length - 2 : 1;
-    let i2 = isHead ? this.path.length - 1 : 0;
-    return [this.path[i1], this.path[i2]];
-  }
-
-  /**
-   * Determines whether this shape contains a point in GCS
-   */
-  containsPoint(canvas: Canvas, point: number[]): boolean {
-    if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
-      const outline = this.getOutline().map((p) =>
-        this.localCoordTransform(canvas, p, true)
-      );
-      return geometry.inPolygon(point, outline);
-    } else {
-      const points = this.getOutline().map((p) =>
-        this.localCoordTransform(canvas, p, true)
-      );
-      return (
-        geometry.getNearSegment(
-          point,
-          points,
-          LINE_SELECTION_THRESHOLD * canvas.px
-        ) > -1
-      );
-    }
-  }
-
-  /**
-   * Determines whether this shape overlaps a given rect
-   */
-  overlapRect(canvas: Canvas, rect: number[][]): boolean {
-    for (let i = 0; i < this.path.length - 1; i++) {
-      if (geometry.lineOverlapRect([this.path[i], this.path[i + 1]], rect))
-        return true;
-    }
-    return false;
-  }
-
-  /**
    * Return default outline
    */
   renderOutlineDefault(): number[][] {
@@ -1755,170 +1947,6 @@ export class Line extends Shape {
           : geometry.pathCopy(this.path);
     }
     return geometry.pathCopy(this.path);
-  }
-}
-
-/**
- * Rectangle
- */
-export class Rectangle extends Box {
-  constructor() {
-    super();
-    this.type = "Rectangle";
-  }
-}
-
-/**
- * Ellipse
- */
-export class Ellipse extends Box {
-  constructor() {
-    super();
-    this.type = "Ellipse";
-  }
-
-  renderDefault(canvas: MemoizationCanvas): void {
-    if (this.fillStyle !== FillStyle.NONE) {
-      canvas.fillEllipse(
-        this.left,
-        this.top,
-        this.right,
-        this.bottom,
-        this.getSeed()
-      );
-    }
-    canvas.strokeEllipse(
-      this.left,
-      this.top,
-      this.right,
-      this.bottom,
-      this.getSeed()
-    );
-    this.renderText(canvas);
-  }
-
-  /**
-   * Return outline polygon
-   */
-  renderOutlineDefault(): number[][] {
-    const points = geometry.pointsOnEllipse(
-      this.getCenter(),
-      this.width / 2,
-      this.height / 2,
-      Math.max(Math.round((this.width + this.height) / 5), 30) // num of points
-    );
-    return points;
-  }
-}
-
-/**
- * Text
- */
-export class Text extends Box {
-  constructor() {
-    super();
-    this.type = "Text";
-    this.fillColor = "$transparent";
-    this.strokeColor = "$transparent";
-    this.horzAlign = HorzAlign.LEFT;
-    this.vertAlign = VertAlign.TOP;
-  }
-
-  /**
-   * Determines whether this shape contains a point in GCS
-   */
-  containsPoint(canvas: Canvas, point: number[]): boolean {
-    const outline = this.getOutline().map((p) =>
-      this.localCoordTransform(canvas, p, true)
-    );
-    return geometry.inPolygon(point, outline);
-  }
-
-  renderDefault(canvas: MemoizationCanvas): void {
-    if (this.fillStyle !== FillStyle.NONE) {
-      canvas.fillRoundRect(
-        this.left,
-        this.top,
-        this.right,
-        this.bottom,
-        this.corners,
-        this.getSeed()
-      );
-    }
-    this.renderText(canvas);
-  }
-}
-
-/**
- * Image
- */
-export class Image extends Box {
-  imageData: string;
-  imageWidth: number;
-  imageHeight: number;
-
-  /**
-   * Image DOM element
-   */
-  _imageDOM: HTMLImageElement | null;
-
-  constructor() {
-    super();
-    this.type = "Image";
-    this.imageData = "";
-    this.imageWidth = 0;
-    this.imageHeight = 0;
-    this.sizable = Sizable.RATIO;
-    this._imageDOM = null;
-  }
-
-  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
-    const json = super.toJSON(recursive, keepRefs);
-    json.imageData = this.imageData;
-    json.imageWidth = this.imageWidth;
-    json.imageHeight = this.imageHeight;
-    return json;
-  }
-
-  fromJSON(json: any) {
-    super.fromJSON(json);
-    this.imageData = json.imageData ?? this.imageData;
-    this.imageWidth = json.imageWidth ?? this.imageWidth;
-    this.imageHeight = json.imageHeight ?? this.imageHeight;
-  }
-
-  renderDefault(canvas: MemoizationCanvas): void {
-    if (!this._imageDOM) {
-      this._imageDOM = new globalThis.Image();
-      this._imageDOM.src = this.imageData;
-    }
-    canvas.drawImage(
-      this._imageDOM,
-      this.left,
-      this.top,
-      this.width,
-      this.height,
-      this.corners
-    );
-  }
-}
-
-/**
- * Group
- */
-export class Group extends Box {
-  constructor() {
-    super();
-    this.type = "Group";
-  }
-
-  /**
-   * Pick a shape at specific position (x, y)
-   */
-  getShapeAt(canvas: Canvas, point: number[]): Shape | null {
-    if (this.visible && this.enable && this.containsPoint(canvas, point))
-      return this;
-    return null;
   }
 }
 
@@ -2023,7 +2051,7 @@ export class Connector extends Line {
    * Return head anchor point
    */
   getHeadAnchorPoint(): number[] {
-    if (this.head instanceof Line && !this.head.isClosed()) {
+    if (this.head instanceof Path && !this.head.isClosed()) {
       return geometry.getPointOnPath(this.head.path, this.headAnchor[0]);
     } else if (this.head) {
       const box = this.head?.getBoundingRect();
@@ -2041,7 +2069,7 @@ export class Connector extends Line {
    * Return tail anchor point
    */
   getTailAnchorPoint(): number[] {
-    if (this.tail instanceof Line && !this.tail.isClosed()) {
+    if (this.tail instanceof Path && !this.tail.isClosed()) {
       return geometry.getPointOnPath(this.tail.path, this.tailAnchor[0]);
     } else if (this.tail) {
       const box = this.tail.getBoundingRect();
@@ -2073,7 +2101,7 @@ export class Connector extends Line {
 /**
  * Freehand
  */
-export class Freehand extends Line {
+export class Freehand extends Path {
   /**
    * Thinning
    */
@@ -2369,6 +2397,7 @@ export const shapeInstantiator = new Instantiator({
   Doc: () => new Doc(),
   Page: () => new Page(),
   Box: () => new Box(),
+  Path: () => new Path(),
   Line: () => new Line(),
   Rectangle: () => new Rectangle(),
   Ellipse: () => new Ellipse(),
@@ -2386,6 +2415,7 @@ export type ShapeProps = Partial<
     Doc &
     Page &
     Box &
+    Path &
     Line &
     Rectangle &
     Ellipse &

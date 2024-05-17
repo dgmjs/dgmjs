@@ -13,7 +13,7 @@
 
 import type { Canvas, CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Shape, Box, Line } from "../shapes";
+import { Shape, Box, Path } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import {
   Cursor,
@@ -68,9 +68,9 @@ export class BoxRotateController extends Controller {
       editor.selection.isSelected(shape) &&
       shape.rotatable;
     // don't allow rotating a single line
-    if (shape instanceof Line && shape.path.length === 2) value = false;
+    if (shape instanceof Path && shape.path.length === 2) value = false;
     // don't allow resizing when path editable
-    if (shape instanceof Line && shape.pathEditable) value = false;
+    if (shape instanceof Path && shape.pathEditable) value = false;
     return value;
   }
 

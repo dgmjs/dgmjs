@@ -1,7 +1,7 @@
 import {
   constraintManager,
   Box,
-  Line,
+  Path,
   Shape,
   Connector,
   Page,
@@ -123,7 +123,7 @@ export function setLeft(tx: Transaction, shape: Shape, left: number): boolean {
   let changed = false;
   const dx = left - shape.left;
   changed = tx.assign(shape, "left", left) || changed;
-  if (shape instanceof Line) {
+  if (shape instanceof Path) {
     const path = shape.path.map((p) => [p[0] + dx, p[1]]);
     changed = tx.assign(shape, "path", path) || changed;
   }
@@ -163,7 +163,7 @@ export function setTop(tx: Transaction, shape: Shape, top: number): boolean {
   let changed = false;
   const dy = top - shape.top;
   changed = tx.assign(shape, "top", top) || changed;
-  if (shape instanceof Line) {
+  if (shape instanceof Path) {
     const path = shape.path.map((p) => [p[0], p[1] + dy]);
     changed = tx.assign(shape, "path", path) || changed;
   }
@@ -223,20 +223,20 @@ export function setHeight(
 }
 
 /**
- * A macro to set line's path (including left, top, width, height)
+ * A macro to set path (including left, top, width, height)
  */
-export function setLinePath(
+export function setPath(
   tx: Transaction,
-  line: Line,
+  pathShape: Path,
   path: number[][]
 ): boolean {
   let changed = false;
   const rect = geometry.boundingRect(path);
-  changed = assignPath(tx, line, "path", path) || changed;
-  changed = tx.assign(line, "left", rect[0][0]) || changed;
-  changed = tx.assign(line, "top", rect[0][1]) || changed;
-  changed = tx.assign(line, "width", geometry.width(rect)) || changed;
-  changed = tx.assign(line, "height", geometry.height(rect)) || changed;
+  changed = assignPath(tx, pathShape, "path", path) || changed;
+  changed = tx.assign(pathShape, "left", rect[0][0]) || changed;
+  changed = tx.assign(pathShape, "top", rect[0][1]) || changed;
+  changed = tx.assign(pathShape, "width", geometry.width(rect)) || changed;
+  changed = tx.assign(pathShape, "height", geometry.height(rect)) || changed;
   return changed;
 }
 
@@ -254,7 +254,7 @@ export function resizeShape(
   changed = tx.assign(shape, "height", height) || changed;
   const rect = shape.getBoundingRect();
   const rect2 = [rect[0], [rect[0][0] + width, rect[0][1] + height]];
-  if (shape instanceof Line) {
+  if (shape instanceof Path) {
     const ps = geometry.projectPoints(shape.path, rect, rect2);
     changed = assignPath(tx, shape, "path", ps) || changed;
   }
@@ -273,7 +273,7 @@ export function moveShape(
   let changed = false;
   changed = tx.assign(shape, "left", shape.left + dx) || changed;
   changed = tx.assign(shape, "top", shape.top + dy) || changed;
-  if (shape instanceof Line) {
+  if (shape instanceof Path) {
     changed =
       assignPath(
         tx,
@@ -434,7 +434,7 @@ export function adjustConnectorRoute(
 ): boolean {
   let changed = false;
   const newPath = adjustRoute(connector);
-  changed = setLinePath(tx, connector, newPath) || changed;
+  changed = setPath(tx, connector, newPath) || changed;
   return changed;
 }
 

@@ -13,7 +13,7 @@
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Shape, Line } from "../shapes";
+import { Shape, Line, Path } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import { Cursor, LINE_STRATIFY_ANGLE_THRESHOLD } from "../graphics/const";
 import { lcs2ccs, ccs2lcs, angleInCCS } from "../graphics/utils";
@@ -21,12 +21,12 @@ import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { findSegmentControlPoint, fitPathInCSS } from "./utils";
 import { reducePath } from "../utils/route-utils";
-import { resolveAllConstraints, setLinePath } from "../macro";
+import { resolveAllConstraints, setPath } from "../macro";
 
 /**
- * LineAddPointController
+ * PathAddPointController
  */
-export class LineAddPointController extends Controller {
+export class PathAddPointController extends Controller {
   /**
    * Snap support for controller
    */
@@ -56,7 +56,7 @@ export class LineAddPointController extends Controller {
     return (
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
-      shape instanceof Line &&
+      shape instanceof Path &&
       shape.pathEditable
     );
   }
@@ -116,7 +116,7 @@ export class LineAddPointController extends Controller {
     // transform shape
     editor.transform.transact((tx) => {
       const page = editor.currentPage!;
-      setLinePath(tx, shape as Line, newPath);
+      setPath(tx, shape as Line, newPath);
       resolveAllConstraints(tx, page, canvas);
     });
   }

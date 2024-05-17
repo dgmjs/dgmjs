@@ -12,7 +12,7 @@
  */
 
 import { CanvasPointerEvent } from "../graphics/graphics";
-import { Shape, Box, Movable, Line, Page } from "../shapes";
+import { Shape, Box, Movable, Page, Path } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { drawPolylineInLCS } from "../utils/guide";
 import { Snap } from "../manipulators/snap";
@@ -121,7 +121,7 @@ export class BoxMoveController extends Controller {
     const canvas = editor.canvas;
     if (
       !(
-        shape instanceof Line &&
+        shape instanceof Path &&
         (shape.path.length === 2 || shape.pathEditable)
       )
     ) {

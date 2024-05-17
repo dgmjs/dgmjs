@@ -14,8 +14,8 @@
 import { Manipulator, manipulatorManager } from "../editor";
 import { ConnectorReconnectController } from "../controllers/connector-reconnect";
 import { ConnectorMoveController } from "../controllers/connector-move";
-import { LineMovePointController } from "../controllers/line-move-point";
-import { LineAddPointController } from "../controllers/line-add-point";
+import { PathMovePointController } from "../controllers/path-move-point";
+import { PathAddPointController } from "../controllers/path-add-point";
 
 /**
  * ConnectorManipulator
@@ -25,9 +25,9 @@ class ConnectorManipulator extends Manipulator {
     super();
     this.controllers.push(new ConnectorReconnectController(this));
     this.controllers.push(
-      new LineMovePointController(this, { exceptEndPoints: true })
+      new PathMovePointController(this, { exceptEndPoints: true })
     );
-    this.controllers.push(new LineAddPointController(this));
+    this.controllers.push(new PathAddPointController(this));
     this.controllers.push(new ConnectorMoveController(this));
   }
 }

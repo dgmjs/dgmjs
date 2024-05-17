@@ -15,8 +15,8 @@ import { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { Editor, Handler } from "../editor";
 import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
-import { Line } from "../shapes";
-import { addShape, resolveAllConstraints, setLinePath } from "../macro";
+import { Freehand, Line } from "../shapes";
+import { addShape, resolveAllConstraints, setPath } from "../macro";
 
 /**
  * Freehand Factory Handler
@@ -27,7 +27,7 @@ export class FreehandFactoryHandler extends Handler {
   dragPoint: number[] = [-1, -1];
   draggingPoints: number[][] = [];
   closed: boolean = false;
-  shape: Line | null = null;
+  shape: Freehand | null = null;
 
   reset(): void {
     this.dragging = false;
@@ -62,7 +62,7 @@ export class FreehandFactoryHandler extends Handler {
     }
     editor.transform.transact((tx) => {
       if (page && this.shape) {
-        setLinePath(tx, this.shape, newPath);
+        setPath(tx, this.shape, newPath);
         resolveAllConstraints(tx, page, editor.canvas);
       }
     });
