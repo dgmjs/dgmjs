@@ -2052,7 +2052,10 @@ export class Connector extends Line {
    */
   getHeadAnchorPoint(): number[] {
     if (this.head instanceof Path && !this.head.isClosed()) {
-      return geometry.getPointOnPath(this.head.path, this.headAnchor[0]);
+      const pathGCS = this.head.path.map((p) =>
+        this.head!.localCoordTransform(null as any, p, true)
+      );
+      return geometry.getPointOnPath(pathGCS, this.headAnchor[0]);
     } else if (this.head) {
       const box = this.head?.getBoundingRect();
       const w = geometry.width(box);
@@ -2070,7 +2073,10 @@ export class Connector extends Line {
    */
   getTailAnchorPoint(): number[] {
     if (this.tail instanceof Path && !this.tail.isClosed()) {
-      return geometry.getPointOnPath(this.tail.path, this.tailAnchor[0]);
+      const pathGCS = this.tail.path.map((p) =>
+        this.tail!.localCoordTransform(null as any, p, true)
+      );
+      return geometry.getPointOnPath(pathGCS, this.tailAnchor[0]);
     } else if (this.tail) {
       const box = this.tail.getBoundingRect();
       const w = geometry.width(box);

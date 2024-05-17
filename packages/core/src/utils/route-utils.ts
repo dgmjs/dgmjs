@@ -94,7 +94,7 @@ export function adjustRoute(connector: Connector): number[][] {
           p,
           connector.headMargin
         );
-      } else {
+      } else if (connector.head) {
         const outline = connector.head
           .getOutline()
           .map((p) =>

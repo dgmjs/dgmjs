@@ -118,13 +118,16 @@ export function findConnectionAnchor(
   let anchor = [0.5, 0.5];
   if (!end?.connectable) end = null;
   if (end instanceof Path && !end.isClosed()) {
+    const pathGCS = end.path.map((p) =>
+      end!.localCoordTransform(null as any, p, true)
+    );
     const p = geometry.findNearestOnPath(
       point,
-      end.path,
+      pathGCS,
       CONTROL_POINT_APOTHEM * 2
     );
     if (p) {
-      const position = geometry.getPositionOnPath(end.path, p);
+      const position = geometry.getPositionOnPath(pathGCS, p);
       anchor = [position, 1 - position];
     } else {
       end = null;
