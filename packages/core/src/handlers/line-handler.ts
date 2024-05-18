@@ -67,10 +67,16 @@ export class LineFactoryHandler extends Handler {
   }
 
   finalize(editor: Editor, e?: CanvasPointerEvent): void {
-    if (this.shape) {
+    const page = editor.currentPage;
+    if (page && this.shape) {
       if (geometry.pathLength(this.shape.path) < 2) {
         editor.transform.cancelAction();
       } else {
+        editor.transform.transact((tx) => {
+          setPath(tx, this.shape!, structuredClone(this.points));
+          resolveAllConstraints(tx, page, editor.canvas);
+        });
+        this.shape?.update(editor.canvas);
         editor.transform.endAction();
         editor.factory.triggerCreate(this.shape as Shape);
       }
@@ -143,7 +149,7 @@ export class LineFactoryHandler extends Handler {
 
   keyDown(editor: Editor, e: KeyboardEvent): boolean {
     if (e.key === "Escape" && this.dragging) {
-      editor.transform.cancelAction();
+      this.finalize(editor);
       editor.repaint();
       this.reset();
       this.complete(editor);
@@ -157,9 +163,6 @@ export class LineFactoryHandler extends Handler {
   }
 
   onDeactivate(editor: Editor): void {
-    if (this.points.length > 1) {
-      // this.finalize(editor);
-    }
     this.reset();
     editor.setCursor(Cursor.DEFAULT);
   }
