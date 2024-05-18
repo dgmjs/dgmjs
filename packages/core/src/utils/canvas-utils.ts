@@ -2,6 +2,7 @@ import { Page, PageSize, Shape } from "../shapes";
 import * as geometry from "../graphics/geometry";
 import { Canvas, CanvasPointerEvent } from "../graphics/graphics";
 import { themeColors } from "../colors";
+import { getAllViewRect } from "./shape-utils";
 
 /**
  * Render the shape on the canvas element
@@ -24,14 +25,11 @@ export function renderOnCanvas(
   update: boolean = false,
   showDOM: boolean = false
 ) {
-  // get bounding box of given shapes and all their children
-  const box = geometry.boundingRect(
-    shapes
-      .map((s) => s.traverseSequence() as Shape[])
-      .flat()
-      .map((s) => (s as Shape).getBoundingRect())
-      .flat()
-  );
+  const px = window.devicePixelRatio ?? 1;
+  const canvas = new Canvas(canvasElement, px);
+
+  // get view rect including all shapes
+  const box = getAllViewRect(canvas, shapes);
   const bw = pageSize ? pageSize[0] : geometry.width(box);
   const bh = pageSize ? pageSize[1] : geometry.height(box);
 
@@ -46,7 +44,6 @@ export function renderOnCanvas(
   let scale = size[2] * scaleAdjust;
 
   // set canvas size
-  const px = window.devicePixelRatio ?? 1;
   const cw = w;
   const ch = h;
   const ox = pageSize ? 0 : -box[0][0] + (w / scale - bw) / 2;
@@ -57,7 +54,6 @@ export function renderOnCanvas(
   canvasElement.style.height = `${ch}px`;
 
   // draw shape on canvas
-  const canvas = new Canvas(canvasElement, px);
   canvas.colorVariables = themeColors[darkMode ? "dark" : "light"];
   canvas.origin = [ox, oy];
   canvas.scale = scale;

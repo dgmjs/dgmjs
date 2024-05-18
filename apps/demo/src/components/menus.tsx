@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { fileOpen } from "browser-fs-access";
 import { useDemoStore } from "@/demo-store";
+import { exportUtils } from "@dgmjs/core";
 
 export function Menus() {
   const { setDoc, setCurrentPage } = useDemoStore();
@@ -62,6 +63,29 @@ export function Menus() {
     setCurrentPage(page);
   };
 
+  /**
+   * Export doc image to a file
+   */
+  const handleExportImage = async () => {
+    const page = window.editor.currentPage!;
+    const exportOptions = {
+      scale: 1,
+      dark: false,
+      fillBackground: true,
+      format: "image/png" as exportUtils.ExportImageFormat,
+    };
+    const name = "dgm-export";
+    const fileName = `${name}.${
+      exportOptions.format === "image/png" ? "png" : "svg"
+    }`;
+    exportUtils.exportImageAsFile(
+      window.editor.canvas,
+      page,
+      fileName,
+      exportOptions
+    );
+  };
+
   return (
     <div className="flex justify-center items-center h-8 px-1">
       <DropdownMenu>
@@ -73,6 +97,9 @@ export function Menus() {
         <DropdownMenuContent>
           <DropdownMenuItem onSelect={handleNew}>New</DropdownMenuItem>
           <DropdownMenuItem onSelect={handleOpen}>Open...</DropdownMenuItem>
+          <DropdownMenuItem onSelect={handleExportImage}>
+            Export Image
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <Button variant="ghost" className="h-8 w-8 p-0" onClick={handleAddPage}>

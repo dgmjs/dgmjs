@@ -28,7 +28,7 @@ function getImageCanvas(page: Page, options: ExportImageOptions) {
   // make a new canvas element for making image data
   const canvasElement = document.createElement("canvas");
   const canvas = new Canvas(canvasElement, scale);
-  let boundingBox = page.getPageBoundingBox(canvas);
+  let boundingBox = page.geViewRect(canvas);
 
   // initialize new canvas
   boundingBox = geometry.expandRect(boundingBox, DEFAULT_MARGIN);
@@ -112,10 +112,7 @@ export async function getSVGImageData(
   const colorVariables = themeColors[theme];
 
   // Make a new SVG canvas for making SVG image data
-  const boundingBox = geometry.expandRect(
-    page.getPageBoundingBox(canvas),
-    margin
-  );
+  const boundingBox = geometry.expandRect(page.geViewRect(canvas), margin);
   const w = geometry.width(boundingBox);
   const h = geometry.height(boundingBox);
   const ctx = new Context(w * scale, h * scale);

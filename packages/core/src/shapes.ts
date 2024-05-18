@@ -729,6 +729,22 @@ export class Shape extends Obj {
   }
 
   /**
+   * Return a view rect in GCS.
+   * View rect is a rect that includes actually drawn area which includes
+   * stroke width, arrowheads, etc. So view rect is mostly larger than
+   * bounding rect.
+   */
+  getViewRect(canvas: Canvas): number[][] {
+    const outlineGCS = this.getOutline().map((p) =>
+      this.localCoordTransform(canvas, p, true)
+    );
+    return geometry.expandRect(
+      geometry.boundingRect(outlineGCS),
+      this.strokeWidth / 2
+    );
+  }
+
+  /**
    * Return a bounding box embracing children shapes
    */
   getChildrenBoundingRect(): number[][] {
@@ -1036,19 +1052,13 @@ export class Page extends Shape {
   }
 
   /**
-   * Return actual document bounding box in GCS
+   * Return the page's view rect in GCS
    */
-  getPageBoundingBox(canvas: Canvas): number[][] {
+  geViewRect(canvas: Canvas): number[][] {
     return this.children.length > 0
       ? this.traverseSequence()
           .filter((s) => s !== this)
-          .map((s) =>
-            geometry.boundingRect(
-              (s as Shape)
-                .getOutline()
-                .map((p) => (s as Shape).localCoordTransform(canvas, p, true))
-            )
-          )
+          .map((s) => (s as Shape).getViewRect(canvas))
           .reduce(geometry.unionRect)
       : [
           [0, 0],
@@ -1947,6 +1957,23 @@ export class Line extends Path {
           : geometry.pathCopy(this.path);
     }
     return geometry.pathCopy(this.path);
+  }
+
+  /**
+   * Return a view rect in GCS.
+   * View rect is a rect that includes actually drawn area which includes
+   * stroke width, arrowheads, etc. So view rect is mostly larger than
+   * bounding rect.
+   */
+  getViewRect(canvas: Canvas): number[][] {
+    const outlineGCS = this.getOutline().map((p) =>
+      this.localCoordTransform(canvas, p, true)
+    );
+    const arrowHeadSize = 12;
+    return geometry.expandRect(
+      geometry.boundingRect(outlineGCS),
+      Math.max(this.strokeWidth / 2, arrowHeadSize)
+    );
   }
 }
 
