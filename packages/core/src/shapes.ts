@@ -2160,6 +2160,20 @@ export class Freehand extends Path {
 }
 
 /**
+ * Highlighter
+ */
+export class Highlighter extends Path {
+  constructor() {
+    super();
+    this.type = "Highlighter";
+  }
+
+  renderDefault(canvas: MemoizationCanvas): void {
+    canvas.polyline(this.path, this.getSeed());
+  }
+}
+
+/**
  * Frame
  */
 export class Frame extends Box {
@@ -2411,6 +2425,7 @@ export const shapeInstantiator = new Instantiator({
   Image: () => new Image(),
   Connector: () => new Connector(),
   Freehand: () => new Freehand(),
+  Highlighter: () => new Highlighter(),
   Group: () => new Group(),
   Frame: () => new Frame(),
   Embed: () => new Embed(),
@@ -2429,6 +2444,7 @@ export type ShapeProps = Partial<
     Image &
     Connector &
     Freehand &
+    Highlighter &
     Group &
     Frame &
     Embed

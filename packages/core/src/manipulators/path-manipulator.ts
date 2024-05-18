@@ -70,5 +70,6 @@ class PathManipulator extends Manipulator {
 
 manipulatorManager.define("Line", new PathManipulator());
 manipulatorManager.define("Freehand", new PathManipulator());
+manipulatorManager.define("Highlighter", new PathManipulator());
 
 export { PathManipulator };

@@ -5,6 +5,7 @@ import {
   Embed,
   Frame,
   Freehand,
+  Highlighter,
   HorzAlign,
   Image,
   Line,
@@ -213,6 +214,29 @@ export class ShapeFactory {
     freehand.pathEditable = false;
     this.onShapeInitialize.emit(freehand);
     return freehand;
+  }
+
+  /**
+   * Create a freehand lines
+   */
+  createHighlighter(points: number[][]): Highlighter {
+    const highlighter = new Highlighter();
+    const path = simplifyPath(points, 4);
+    if (closed) {
+      path[path.length - 1] = geometry.copy(path[0]);
+    }
+    highlighter.strokeWidth = 28;
+    highlighter.strokeColor = "#FFE629";
+    highlighter.opacity = 0.5;
+    highlighter.pathEditable = false;
+    highlighter.path = path;
+    const rect = geometry.boundingRect(highlighter.path);
+    highlighter.left = rect[0][0];
+    highlighter.top = rect[0][1];
+    highlighter.width = geometry.width(rect);
+    highlighter.height = geometry.height(rect);
+    this.onShapeInitialize.emit(highlighter);
+    return highlighter;
   }
 
   createFrame(rect: number[][]): Frame {

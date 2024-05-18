@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 export const simplePalette: string[][] = [
   [
     "$red5",
-    "$pink5",
+    "$orange5",
     "$purple5",
     "$blue5",
     "$cyan5",
@@ -32,7 +32,7 @@ export const simplePalette: string[][] = [
   ],
   [
     "$red9",
-    "$pink9",
+    "$orange9",
     "$purple9",
     "$blue9",
     "$cyan9",
@@ -46,7 +46,7 @@ export const simplePalette: string[][] = [
   ],
   [
     "$red11",
-    "$pink11",
+    "$orange11",
     "$purple11",
     "$blue11",
     "$cyan11",

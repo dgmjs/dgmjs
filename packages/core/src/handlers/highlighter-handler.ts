@@ -14,8 +14,8 @@
 import { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { Editor, Handler } from "../editor";
-import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
-import { Line, LineType } from "../shapes";
+import { Mouse, Cursor } from "../graphics/const";
+import { Highlighter } from "../shapes";
 import simplifyPath from "simplify-path";
 import { addShape, resolveAllConstraints, setPath } from "../macro";
 
@@ -28,7 +28,7 @@ export class HighlighterFactoryHandler extends Handler {
   dragPoint: number[] = [-1, -1];
   draggingPoints: number[][] = [];
   closed: boolean = false;
-  shape: Line | null = null;
+  shape: Highlighter | null = null;
 
   reset(): void {
     this.dragging = false;
@@ -43,10 +43,7 @@ export class HighlighterFactoryHandler extends Handler {
     const page = editor.currentPage;
     if (page) {
       this.draggingPoints.push(this.dragStartPoint);
-      this.shape = editor.factory.createLine(this.draggingPoints, false);
-      this.shape.lineType = LineType.STRAIGHT;
-      this.shape.strokeWidth = 20;
-      this.shape.opacity = 0.5;
+      this.shape = editor.factory.createHighlighter(this.draggingPoints);
       editor.transform.startAction("create");
       editor.transform.transact((tx) => {
         addShape(tx, this.shape!, page);
@@ -57,14 +54,7 @@ export class HighlighterFactoryHandler extends Handler {
   update(editor: Editor, e: CanvasPointerEvent): void {
     const page = editor.currentPage;
     this.draggingPoints.push(this.dragPoint);
-    const newPath = structuredClone(this.draggingPoints);
-    this.closed =
-      geometry.distance(newPath[0], newPath[newPath.length - 1]) <=
-      MAGNET_THRESHOLD;
-
-    if (this.closed) {
-      newPath[newPath.length - 1] = geometry.copy(newPath[0]);
-    }
+    const newPath = simplifyPath(this.draggingPoints);
     editor.transform.transact((tx) => {
       if (page && this.shape) {
         setPath(tx, this.shape, newPath);
