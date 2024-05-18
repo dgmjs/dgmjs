@@ -88,6 +88,7 @@ export class ConnectorFactoryHandler extends Handler {
         tx.assign(this.shape as Shape, "headAnchor", this.headAnchor);
         resolveAllConstraints(tx, page, editor.canvas);
       });
+      this.shape?.update(editor.canvas);
     }
   }
 

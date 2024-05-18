@@ -54,13 +54,16 @@ export class HighlighterFactoryHandler extends Handler {
   update(editor: Editor, e: CanvasPointerEvent): void {
     const page = editor.currentPage;
     this.draggingPoints.push(this.dragPoint);
-    const newPath = simplifyPath(this.draggingPoints);
+    const newPath = structuredClone(this.draggingPoints);
+    console.time("highlighter");
     editor.transform.transact((tx) => {
       if (page && this.shape) {
         setPath(tx, this.shape, newPath);
         resolveAllConstraints(tx, page, editor.canvas);
       }
     });
+    this.shape?.update(editor.canvas);
+    console.timeEnd("highlighter");
   }
 
   finalize(editor: Editor, e: CanvasPointerEvent): void {

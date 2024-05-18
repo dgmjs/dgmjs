@@ -62,6 +62,7 @@ export class FrameFactoryHandler extends Handler {
         tx.assign(this.shape!, "height", geometry.height(rect));
         resolveAllConstraints(tx, page, editor.canvas);
       });
+      this.shape?.update(editor.canvas);
     }
   }
 

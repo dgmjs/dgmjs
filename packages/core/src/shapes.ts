@@ -2169,7 +2169,8 @@ export class Highlighter extends Path {
   }
 
   renderDefault(canvas: MemoizationCanvas): void {
-    canvas.polyline(this.path, this.getSeed());
+    // canvas.polyline(this.path, this.getSeed());
+    canvas.strokeFreehand(this.path);
   }
 }
 
