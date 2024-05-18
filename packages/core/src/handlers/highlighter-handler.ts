@@ -16,7 +16,6 @@ import * as geometry from "../graphics/geometry";
 import { Editor, Handler } from "../editor";
 import { Mouse, Cursor } from "../graphics/const";
 import { Highlighter } from "../shapes";
-import simplifyPath from "simplify-path";
 import { addShape, resolveAllConstraints, setPath } from "../macro";
 
 /**
@@ -55,7 +54,6 @@ export class HighlighterFactoryHandler extends Handler {
     const page = editor.currentPage;
     this.draggingPoints.push(this.dragPoint);
     const newPath = structuredClone(this.draggingPoints);
-    console.time("highlighter");
     editor.transform.transact((tx) => {
       if (page && this.shape) {
         setPath(tx, this.shape, newPath);
@@ -63,7 +61,6 @@ export class HighlighterFactoryHandler extends Handler {
       }
     });
     this.shape?.update(editor.canvas);
-    console.timeEnd("highlighter");
   }
 
   finalize(editor: Editor, e: CanvasPointerEvent): void {
@@ -117,7 +114,7 @@ export class HighlighterFactoryHandler extends Handler {
       this.finalize(editor, e);
       editor.repaint();
       this.reset();
-      this.done(editor);
+      this.complete(editor);
     }
   }
 
@@ -126,7 +123,7 @@ export class HighlighterFactoryHandler extends Handler {
       editor.transform.cancelAction();
       editor.repaint();
       this.reset();
-      this.done(editor);
+      this.complete(editor);
     }
     return false;
   }

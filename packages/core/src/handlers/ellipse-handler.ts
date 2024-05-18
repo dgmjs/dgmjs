@@ -108,7 +108,7 @@ export class EllipseFactoryHandler extends Handler {
       this.finalize(editor, e);
       editor.repaint();
       this.reset();
-      this.done(editor);
+      this.complete(editor);
     }
   }
 
@@ -117,7 +117,7 @@ export class EllipseFactoryHandler extends Handler {
       editor.transform.cancelAction();
       editor.repaint();
       this.reset();
-      this.done(editor);
+      this.complete(editor);
     }
     return false;
   }

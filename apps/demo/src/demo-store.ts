@@ -7,6 +7,7 @@ export interface DemoState {
   origin: number[];
   theme: "light" | "dark";
   activeHandler: string | null;
+  activeHandlerLock: boolean;
   doc: Doc | null;
   currentPage: Page | null;
   selection: Shape[];
@@ -15,6 +16,7 @@ export interface DemoState {
   setOrigin: (origin: [number, number]) => void;
   setTheme: (theme: "light" | "dark") => void;
   setActiveHandler: (handlerId: string | null) => void;
+  setActiveHandlerLock: (lock: boolean) => void;
   setDoc: (doc: Doc | null) => void;
   setCurrentPage: (page: Page | null) => void;
   setSelection: (selections: Shape[]) => void;
@@ -27,6 +29,7 @@ export const useDemoStore = create<DemoState>()(
       origin: [0, 0],
       theme: "light",
       activeHandler: "Select",
+      activeHandlerLock: false,
       doc: null,
       currentPage: null,
       selection: [],
@@ -41,6 +44,8 @@ export const useDemoStore = create<DemoState>()(
       },
       setActiveHandler: (handlerId) =>
         set((state) => ({ activeHandler: handlerId })),
+      setActiveHandlerLock: (lock) =>
+        set((state) => ({ activeHandlerLock: lock })),
       setDoc: (doc) => set((state) => ({ doc: doc })),
       setCurrentPage: (page) => set((state) => ({ currentPage: page })),
       setSelection: (selections) => set((state) => ({ selection: selections })),

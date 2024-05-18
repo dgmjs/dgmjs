@@ -72,6 +72,7 @@ export class Editor {
 
   onCurrentPageChange: TypedEvent<Page>;
   onActiveHandlerChange: TypedEvent<string>;
+  onActiveHandlerLockChange: TypedEvent<boolean>;
   onZoom: TypedEvent<number>;
   onScroll: TypedEvent<number[]>;
   onPointerDown: TypedEvent<CanvasPointerEvent>;
@@ -107,6 +108,7 @@ export class Editor {
   handlers: Record<string, Handler>;
   activeHandlerId: string | null;
   activeHandler: Handler | null;
+  activeHandlerLock: boolean;
   leftButtonDown: boolean;
   downX: number;
   downY: number;
@@ -144,6 +146,7 @@ export class Editor {
     // initialize event emitters
     this.onCurrentPageChange = new TypedEvent();
     this.onActiveHandlerChange = new TypedEvent();
+    this.onActiveHandlerLockChange = new TypedEvent();
     this.onZoom = new TypedEvent();
     this.onScroll = new TypedEvent();
     this.onPointerDown = new TypedEvent();
@@ -198,6 +201,7 @@ export class Editor {
     this.addHandlers(this.options.handlers ?? []);
     this.activeHandlerId = null;
     this.activeHandler = null;
+    this.activeHandlerLock = false;
     this.leftButtonDown = false; // To check mouse left button down in mouse move event.
     this.downX = 0;
     this.downY = 0;
@@ -827,10 +831,10 @@ export class Editor {
    */
   activateHandler(id: string) {
     if (this.activeHandlerId !== id) {
-      if (this.activeHandler) this.activeHandler.onDeactivate(this);
+      if (this.activeHandler) this.activeHandler.deactivate(this);
       this.activeHandlerId = id;
       this.activeHandler = this.handlers[this.activeHandlerId];
-      this.activeHandler.onActivate(this);
+      this.activeHandler.activate(this);
       this.selection.deselectAll();
       this.onActiveHandlerChange.emit(this.activeHandlerId);
     }
@@ -843,6 +847,23 @@ export class Editor {
     if (this.options.defaultHandlerId) {
       this.activateHandler(this.options.defaultHandlerId);
     }
+  }
+
+  /**
+   * Set active handler lock
+   */
+  setActiveHandlerLock(lock: boolean) {
+    if (this.activeHandlerLock !== lock) {
+      this.activeHandlerLock = lock;
+      this.onActiveHandlerLockChange.emit(lock);
+    }
+  }
+
+  /**
+   * Get active handler lock
+   */
+  getActiveHandlerLock(): boolean {
+    return this.activeHandlerLock;
   }
 
   /**
@@ -1074,7 +1095,7 @@ class ManipulatorManager {
 }
 
 export interface HandlerOptions {
-  lock: boolean;
+  defaultLock: boolean;
 }
 
 /**
@@ -1087,7 +1108,7 @@ export class Handler {
   constructor(id: string, options?: Partial<HandlerOptions>) {
     this.id = id;
     this.options = {
-      lock: false,
+      defaultLock: false,
       ...options,
     };
     this.reset();
@@ -1099,30 +1120,31 @@ export class Handler {
   reset() {}
 
   /**
-   * Get lock
+   * Trigger when the handler action is complete
    */
-  getLock(): boolean {
-    return this.options.lock;
-  }
-
-  /**
-   * Set lock
-   */
-  setLock(lock: boolean) {
-    this.options.lock = lock;
-  }
-
-  /**
-   * Call this method when the handler is done
-   */
-  done(editor: Editor) {
-    if (!this.options.lock) {
+  complete(editor: Editor) {
+    if (!editor.getActiveHandlerLock()) {
       editor.activateDefaultHandler();
     }
   }
 
   /**
-   * called when activated
+   * Activate the handler
+   */
+  activate(editor: Editor) {
+    editor.setActiveHandlerLock(this.options.defaultLock);
+    this.onActivate(editor);
+  }
+
+  /**
+   * Deactivate the handler
+   */
+  deactivate(editor: Editor) {
+    this.onDeactivate(editor);
+  }
+
+  /**
+   * Triggered when activated
    */
   onActivate(editor: Editor) {}
 

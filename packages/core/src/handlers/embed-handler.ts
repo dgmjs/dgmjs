@@ -70,7 +70,7 @@ export class EmbedFactoryHandler extends Handler {
       editor.actions.insert(shape);
       editor.factory.triggerCreate(shape);
       this.reset();
-      this.done(editor);
+      this.complete(editor);
     }
   }
 

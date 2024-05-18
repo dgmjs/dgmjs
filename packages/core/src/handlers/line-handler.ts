@@ -88,7 +88,7 @@ export class LineFactoryHandler extends Handler {
         if (this.closed) {
           this.finalize(editor, e);
           this.reset();
-          this.done(editor);
+          this.complete(editor);
         } else {
           const p = canvas.globalCoordTransformRev([e.x, e.y]);
           this.points.push(p);
@@ -135,7 +135,7 @@ export class LineFactoryHandler extends Handler {
         this.points.push(geometry.copy(this.dragPoint));
         this.finalize(editor, e);
         this.reset();
-        this.done(editor);
+        this.complete(editor);
         editor.repaint();
       }
     }
@@ -146,7 +146,7 @@ export class LineFactoryHandler extends Handler {
       editor.transform.cancelAction();
       editor.repaint();
       this.reset();
-      this.done(editor);
+      this.complete(editor);
     }
     return false;
   }

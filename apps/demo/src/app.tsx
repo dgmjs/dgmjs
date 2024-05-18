@@ -136,6 +136,9 @@ function App() {
         onSelectionChange={handleSelectionChange}
         onCurrentPageChange={handleCurrentPageChange}
         onActiveHandlerChange={handleActiveHandlerChange}
+        onActiveHandlerLockChange={(lock) =>
+          demoStore.setActiveHandlerLock(lock)
+        }
         onAction={handleAction}
       />
       <div className="absolute top-2 left-60 right-60 h-10 border flex items-center justify-between bg-background">

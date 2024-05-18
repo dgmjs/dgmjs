@@ -70,7 +70,7 @@ export class HandHandler extends Handler {
     if (e.button === Mouse.BUTTON1 && this.dragging) {
       editor.setCursor(Cursor.GRAB);
       this.reset();
-      this.done(editor);
+      this.complete(editor);
     }
   }
 

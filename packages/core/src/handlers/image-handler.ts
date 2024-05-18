@@ -46,7 +46,7 @@ export class ImageFactoryHandler extends Handler {
           });
           editor.transform.endAction();
           editor.factory.triggerCreate(shape);
-          this.done(editor);
+          this.complete(editor);
         }
       } catch (err) {
         // user cancelled
