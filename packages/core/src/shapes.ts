@@ -1685,6 +1685,8 @@ export class Group extends Box {
       return this;
     return null;
   }
+
+  renderDefault(canvas: MemoizationCanvas): void {}
 }
 
 /**
