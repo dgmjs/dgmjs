@@ -83,12 +83,22 @@ function App() {
     // });
   };
 
+  const handleShapeCreate = (shape: Shape) => {
+    if (!window.editor.activeHandlerLock) {
+      setTimeout(() => {
+        window.editor.selection.select([shape]);
+        window.editor.repaint();
+      }, 0);
+    }
+  };
+
   const handleSelectionChange = (selection: Shape[]) => {
     demoStore.setSelection([...selection]);
   };
 
   const handleActiveHandlerChange = (handlerId: string) => {
     demoStore.setActiveHandler(handlerId);
+    window.editor?.selection.deselectAll();
   };
 
   const handleAction = () => {
@@ -133,6 +143,7 @@ function App() {
         plugins={[new YjsDocSyncPlugin(), new YjsUserPresencePlugin()]}
         showGrid={true}
         onMount={handleMount}
+        onShapeCreate={handleShapeCreate}
         onSelectionChange={handleSelectionChange}
         onCurrentPageChange={handleCurrentPageChange}
         onActiveHandlerChange={handleActiveHandlerChange}

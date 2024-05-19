@@ -233,9 +233,6 @@ export class Editor {
     this.transform.onUndo.addListener(() => this.repaint());
     this.transform.onRedo.addListener(() => this.repaint());
     this.selection.onChange.addListener(() => this.repaint());
-    this.factory.onCreate.addListener((shape: Shape) => {
-      this.selection.select([shape]);
-    });
   }
 
   initializeCanvas() {
@@ -835,7 +832,6 @@ export class Editor {
       this.activeHandlerId = id;
       this.activeHandler = this.handlers[this.activeHandlerId];
       this.activeHandler.activate(this);
-      this.selection.deselectAll();
       this.onActiveHandlerChange.emit(this.activeHandlerId);
     }
   }
