@@ -66,7 +66,6 @@ export class FreehandFactoryHandler extends Handler {
         resolveAllConstraints(tx, page, editor.canvas);
       }
     });
-    this.shape?.update(editor.canvas);
   }
 
   finalize(editor: Editor, e: CanvasPointerEvent): void {

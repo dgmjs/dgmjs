@@ -62,7 +62,6 @@ export class LineFactoryHandler extends Handler {
         setPath(tx, this.shape!, newPath);
         resolveAllConstraints(tx, page, editor.canvas);
       });
-      this.shape?.update(editor.canvas);
     }
   }
 
