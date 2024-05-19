@@ -36,32 +36,12 @@ export class Action {
       tx.unapply();
     }
   }
-
-  getMutated() {
-    const mutated = new Set<Obj>();
-    this.transactions.forEach((tx) => {
-      tx.getMutated().forEach((m) => mutated.add(m));
-    });
-    return Array.from(mutated);
-  }
 }
-
-/**
- * Transform options
- */
-type TransformOptions = {
-  objUpdater?: (obj: Obj) => void;
-};
 
 /**
  * Transform
  */
 export class Transform {
-  /**
-   * Transform options
-   */
-  options: TransformOptions;
-
   /**
    * Shape store
    */
@@ -105,8 +85,7 @@ export class Transform {
   /**
    * constructor
    */
-  constructor(store: Store, options?: TransformOptions) {
-    this.options = options || {};
+  constructor(store: Store) {
     this.store = store;
     this.action = null;
     this.undoHistory = new Stack(MAX_STACK_SIZE);
@@ -134,12 +113,6 @@ export class Transform {
     const tx = new Transaction(this.store);
     fn(tx);
     if (tx.mutations.length > 0) {
-      if (this.options.objUpdater) {
-        const mutated = tx.getMutated();
-        for (let i = 0; i < mutated.length; i++) {
-          this.options.objUpdater(mutated[i]);
-        }
-      }
       this.onTransaction.emit(tx);
       if (this.action) {
         this.action.push(tx);
@@ -196,10 +169,6 @@ export class Transform {
       const action = this.undoHistory.pop();
       if (action) {
         action.unapply(this);
-        if (this.options.objUpdater) {
-          const mutated = action.getMutated();
-          for (let obj of mutated) this.options.objUpdater(obj);
-        }
         this.onUndo.emit(action);
         this.redoHistory.push(action);
       }
@@ -214,10 +183,6 @@ export class Transform {
       const action = this.redoHistory.pop();
       if (action) {
         action.apply(this);
-        if (this.options.objUpdater) {
-          const mutated = action.getMutated();
-          for (let obj of mutated) this.options.objUpdater(obj);
-        }
         this.onRedo.emit(action);
         this.undoHistory.push(action);
       }

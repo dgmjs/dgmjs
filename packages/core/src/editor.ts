@@ -170,12 +170,11 @@ export class Editor {
       objFinalizer: (o) => {
         if (o instanceof Shape) o.finalize(this.canvas);
       },
-    });
-    this.transform = new Transform(this.store, {
       objUpdater: (obj) => {
         if (obj instanceof Shape) obj.update(this.canvas);
       },
     });
+    this.transform = new Transform(this.store);
     this.clipboard = new Clipboard(this.store);
     this.selection = new SelectionManager(this);
     this.factory = new ShapeFactory(this);

@@ -19,6 +19,7 @@ import type { Obj } from "./obj";
 type StoreOptions = {
   objInitializer?: (obj: Obj) => void;
   objFinalizer?: (obj: Obj) => void;
+  objUpdater?: (obj: Obj) => void;
 };
 
 /**
@@ -96,6 +97,15 @@ export class Store {
           this.options.objFinalizer(o);
         }
       });
+    }
+  }
+
+  /**
+   * Update obj
+   */
+  update(obj: Obj) {
+    if (this.options.objUpdater) {
+      this.options.objUpdater(obj);
     }
   }
 
