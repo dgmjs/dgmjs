@@ -154,7 +154,7 @@ export class ShapeFactory {
    */
   createLine(points: number[][], closed: boolean = false): Line {
     const line = new Line();
-    const path = points;
+    const path = [...points];
     if (closed) {
       path[path.length - 1] = geometry.copy(path[0]);
     }
@@ -185,7 +185,7 @@ export class ShapeFactory {
     connector.tailAnchor = tailAnchor;
     connector.head = head;
     connector.headAnchor = headAnchor;
-    connector.path = points;
+    connector.path = [...points];
     const rect = geometry.boundingRect(connector.path);
     connector.left = rect[0][0];
     connector.top = rect[0][1];
@@ -200,7 +200,7 @@ export class ShapeFactory {
    */
   createFreehand(points: number[][], closed: boolean = false): Freehand {
     const freehand = new Freehand();
-    const path = simplifyPath(points, 4);
+    const path = [...points];
     if (closed) {
       path[path.length - 1] = geometry.copy(path[0]);
     }
@@ -221,7 +221,7 @@ export class ShapeFactory {
    */
   createHighlighter(points: number[][]): Highlighter {
     const highlighter = new Highlighter();
-    const path = simplifyPath(points, 4);
+    const path = [...points];
     if (closed) {
       path[path.length - 1] = geometry.copy(path[0]);
     }
