@@ -42,7 +42,7 @@ export class HighlighterFactoryHandler extends Handler {
     const page = editor.currentPage;
     if (page) {
       this.draggingPoints.push(this.dragStartPoint);
-      this.shape = editor.factory.createHighlighter(this.draggingPoints);
+      this.shape = editor.factory.createHighlighter([...this.draggingPoints]);
       editor.transform.startAction("create");
       editor.transform.transact((tx) => {
         addShape(tx, this.shape!, page);

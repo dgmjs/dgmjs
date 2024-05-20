@@ -46,7 +46,7 @@ export class LineFactoryHandler extends Handler {
     const page = editor.currentPage;
     if (page) {
       this.points = [this.dragStartPoint];
-      this.shape = editor.factory.createLine(this.points, false);
+      this.shape = editor.factory.createLine([...this.points], false);
       editor.transform.startAction("create");
       editor.transform.transact((tx) => {
         addShape(tx, this.shape!, page);

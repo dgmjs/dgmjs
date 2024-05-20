@@ -42,7 +42,10 @@ export class FreehandFactoryHandler extends Handler {
     const page = editor.currentPage;
     if (page) {
       this.draggingPoints.push(this.dragStartPoint);
-      this.shape = editor.factory.createFreehand(this.draggingPoints, false);
+      this.shape = editor.factory.createFreehand(
+        [...this.draggingPoints],
+        false
+      );
       editor.transform.startAction("create");
       editor.transform.transact((tx) => {
         addShape(tx, this.shape!, page);
