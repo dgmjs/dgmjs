@@ -29,7 +29,7 @@ Constructor
 
 #### Source
 
-[core/store.ts:59](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L59)
+[core/store.ts:59](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/store.ts#L59)
 
 ## Properties
 
@@ -41,7 +41,7 @@ History
 
 #### Source
 
-[core/store.ts:44](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L44)
+[core/store.ts:44](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/store.ts#L44)
 
 ***
 
@@ -53,7 +53,7 @@ Index for object.id
 
 #### Source
 
-[core/store.ts:49](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L49)
+[core/store.ts:49](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/store.ts#L49)
 
 ***
 
@@ -65,7 +65,7 @@ Shape instantiator
 
 #### Source
 
-[core/store.ts:39](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L39)
+[core/store.ts:39](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/store.ts#L39)
 
 ***
 
@@ -77,7 +77,7 @@ Store options
 
 #### Source
 
-[core/store.ts:34](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L34)
+[core/store.ts:34](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/store.ts#L34)
 
 ***
 
@@ -89,7 +89,7 @@ the root object
 
 #### Source
 
-[core/store.ts:54](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L54)
+[core/store.ts:54](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/store.ts#L54)
 
 ## Methods
 
@@ -109,7 +109,7 @@ Add to index for the object (with all descendants)
 
 #### Source
 
-[core/store.ts:78](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L78)
+[core/store.ts:78](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/store.ts#L78)
 
 ***
 
@@ -125,7 +125,7 @@ Clear the store
 
 #### Source
 
-[core/store.ts:70](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L70)
+[core/store.ts:70](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/store.ts#L70)
 
 ***
 
@@ -145,7 +145,7 @@ Set the root from JSON
 
 #### Source
 
-[core/store.ts:137](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L137)
+[core/store.ts:137](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/store.ts#L137)
 
 ***
 
@@ -165,7 +165,7 @@ Get an object by id
 
 #### Source
 
-[core/store.ts:115](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L115)
+[core/store.ts:115](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/store.ts#L115)
 
 ***
 
@@ -185,7 +185,7 @@ Test shape is exists in the store or not
 
 #### Source
 
-[core/store.ts:122](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L122)
+[core/store.ts:122](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/store.ts#L122)
 
 ***
 
@@ -205,7 +205,7 @@ Remove from index for the object (with all descendants)
 
 #### Source
 
-[core/store.ts:92](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L92)
+[core/store.ts:92](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/store.ts#L92)
 
 ***
 
@@ -225,7 +225,7 @@ Set the root object
 
 #### Source
 
-[core/store.ts:149](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L149)
+[core/store.ts:149](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/store.ts#L149)
 
 ***
 
@@ -241,7 +241,7 @@ Return JSON of the root
 
 #### Source
 
-[core/store.ts:130](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L130)
+[core/store.ts:130](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/store.ts#L130)
 
 ***
 
@@ -261,4 +261,4 @@ Update obj
 
 #### Source
 
-[core/store.ts:106](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L106)
+[core/store.ts:106](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/store.ts#L106)

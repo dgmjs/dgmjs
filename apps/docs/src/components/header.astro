@@ -1,13 +1,18 @@
 ---
-import { LogoIcon } from "./icons";
+// import { LogoIcon } from "./icons";
 import { siteConfig } from "../../site-config";
 ---
 
-<header class="container z-40 bg-background">
-  <div class="flex h-20 items-center justify-between py-6 w-full">
+<header class="z-40 bg-background">
+  <style>
+    header.header {
+      display: none !important;
+    }
+  </style>
+  <div class="flex h-12 items-center justify-between w-full">
     <div class="flex gap-6 md:gap-10 w-full justify-between">
-      <a href="/" class="flex items-center space-x-2">
-        <LogoIcon size={20} />
+      <a href="/" class="flex items-center space-x-2 no-underline">
+        <!-- <LogoIcon size={20} /> -->
         <span class="font-medium sm:inline-block hidden md:flex">
           {siteConfig.name}
         </span>
@@ -17,7 +22,7 @@ import { siteConfig } from "../../site-config";
           siteConfig.mainNav?.map((item, index) => (
             <a
               href={item.href}
-              class="flex items-center font-medium transition-colors hover:text-foreground/80 text-sm"
+              class="flex items-center font-medium transition-colors hover:text-foreground/80 text-sm no-underline"
               target={item.target ?? "_self"}
             >
               {item.title}

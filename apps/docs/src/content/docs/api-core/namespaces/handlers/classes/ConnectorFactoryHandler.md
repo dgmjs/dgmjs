@@ -33,7 +33,7 @@ Connector Factory Handler
 
 #### Source
 
-[editor.ts:1103](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1103)
+[editor.ts:1097](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1097)
 
 ## Properties
 
@@ -43,7 +43,7 @@ Connector Factory Handler
 
 #### Source
 
-[handlers/connector-handler.ts:30](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L30)
+[handlers/connector-handler.ts:30](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L30)
 
 ***
 
@@ -53,7 +53,7 @@ Connector Factory Handler
 
 #### Source
 
-[handlers/connector-handler.ts:29](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L29)
+[handlers/connector-handler.ts:29](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L29)
 
 ***
 
@@ -63,7 +63,7 @@ Connector Factory Handler
 
 #### Source
 
-[handlers/connector-handler.ts:28](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L28)
+[handlers/connector-handler.ts:28](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L28)
 
 ***
 
@@ -73,7 +73,7 @@ Connector Factory Handler
 
 #### Source
 
-[handlers/connector-handler.ts:34](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L34)
+[handlers/connector-handler.ts:34](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L34)
 
 ***
 
@@ -83,7 +83,7 @@ Connector Factory Handler
 
 #### Source
 
-[handlers/connector-handler.ts:33](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L33)
+[handlers/connector-handler.ts:33](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L33)
 
 ***
 
@@ -97,7 +97,7 @@ Connector Factory Handler
 
 #### Source
 
-[editor.ts:1100](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1100)
+[editor.ts:1094](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1094)
 
 ***
 
@@ -111,7 +111,7 @@ Connector Factory Handler
 
 #### Source
 
-[editor.ts:1101](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1101)
+[editor.ts:1095](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1095)
 
 ***
 
@@ -121,7 +121,7 @@ Connector Factory Handler
 
 #### Source
 
-[handlers/connector-handler.ts:35](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L35)
+[handlers/connector-handler.ts:35](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L35)
 
 ***
 
@@ -131,7 +131,7 @@ Connector Factory Handler
 
 #### Source
 
-[handlers/connector-handler.ts:32](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L32)
+[handlers/connector-handler.ts:32](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L32)
 
 ***
 
@@ -141,7 +141,7 @@ Connector Factory Handler
 
 #### Source
 
-[handlers/connector-handler.ts:31](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L31)
+[handlers/connector-handler.ts:31](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L31)
 
 ## Methods
 
@@ -165,7 +165,7 @@ Activate the handler
 
 #### Source
 
-[editor.ts:1129](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1129)
+[editor.ts:1123](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1123)
 
 ***
 
@@ -189,7 +189,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[editor.ts:1120](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1120)
+[editor.ts:1114](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1114)
 
 ***
 
@@ -213,7 +213,7 @@ Deactivate the handler
 
 #### Source
 
-[editor.ts:1137](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1137)
+[editor.ts:1131](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1131)
 
 ***
 
@@ -233,7 +233,7 @@ Deactivate the handler
 
 #### Source
 
-[handlers/connector-handler.ts:188](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L188)
+[handlers/connector-handler.ts:188](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L188)
 
 ***
 
@@ -253,7 +253,7 @@ Deactivate the handler
 
 #### Source
 
-[handlers/connector-handler.ts:177](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L177)
+[handlers/connector-handler.ts:177](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L177)
 
 ***
 
@@ -273,7 +273,7 @@ Deactivate the handler
 
 #### Source
 
-[handlers/connector-handler.ts:184](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L184)
+[handlers/connector-handler.ts:184](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L184)
 
 ***
 
@@ -297,7 +297,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[editor.ts:1182](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1182)
+[editor.ts:1176](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1176)
 
 ***
 
@@ -317,7 +317,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[handlers/connector-handler.ts:170](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L170)
+[handlers/connector-handler.ts:170](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L170)
 
 ***
 
@@ -337,7 +337,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[handlers/connector-handler.ts:94](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L94)
+[handlers/connector-handler.ts:94](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L94)
 
 ***
 
@@ -357,7 +357,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[handlers/connector-handler.ts:48](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L48)
+[handlers/connector-handler.ts:48](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L48)
 
 ***
 
@@ -383,7 +383,7 @@ keyDown
 
 #### Source
 
-[handlers/connector-handler.ts:152](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L152)
+[handlers/connector-handler.ts:152](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L152)
 
 ***
 
@@ -409,7 +409,7 @@ keyUp
 
 #### Source
 
-[editor.ts:1177](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1177)
+[editor.ts:1171](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1171)
 
 ***
 
@@ -433,7 +433,7 @@ Triggered when activated
 
 #### Source
 
-[handlers/connector-handler.ts:162](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L162)
+[handlers/connector-handler.ts:162](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L162)
 
 ***
 
@@ -457,7 +457,7 @@ Triggered when deactivate
 
 #### Source
 
-[handlers/connector-handler.ts:166](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L166)
+[handlers/connector-handler.ts:166](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L166)
 
 ***
 
@@ -483,7 +483,7 @@ pointerDown
 
 #### Source
 
-[handlers/connector-handler.ts:110](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L110)
+[handlers/connector-handler.ts:110](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L110)
 
 ***
 
@@ -509,7 +509,7 @@ pointerMove
 
 #### Source
 
-[handlers/connector-handler.ts:126](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L126)
+[handlers/connector-handler.ts:126](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L126)
 
 ***
 
@@ -535,7 +535,7 @@ pointerUp
 
 #### Source
 
-[handlers/connector-handler.ts:143](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L143)
+[handlers/connector-handler.ts:143](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L143)
 
 ***
 
@@ -555,7 +555,7 @@ Reset the states of handler
 
 #### Source
 
-[handlers/connector-handler.ts:37](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L37)
+[handlers/connector-handler.ts:37](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L37)
 
 ***
 
@@ -575,4 +575,4 @@ Reset the states of handler
 
 #### Source
 
-[handlers/connector-handler.ts:73](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/connector-handler.ts#L73)
+[handlers/connector-handler.ts:73](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L73)

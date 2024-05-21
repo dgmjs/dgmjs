@@ -34,12 +34,11 @@ export const siteConfig: SiteConfig = {
     },
     {
       title: "License",
-      href: "/license",
+      href: "/getting-started/license/",
     },
     {
       title: "Docs",
-      href: "https://docs.dgmjs.dev",
-      target: "_blank",
+      href: "/getting-started/quick-start/",
     },
   ],
 };

@@ -49,4 +49,4 @@ A boolean value to indicate whether to update the DOM
 
 ## Source
 
-[utils/canvas-utils.ts:17](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/utils/canvas-utils.ts#L17)
+[utils/canvas-utils.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/canvas-utils.ts#L17)

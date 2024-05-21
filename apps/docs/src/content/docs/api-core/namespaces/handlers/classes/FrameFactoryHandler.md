@@ -33,7 +33,7 @@ Frame Factory Handler
 
 #### Source
 
-[editor.ts:1103](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1103)
+[editor.ts:1097](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1097)
 
 ## Properties
 
@@ -43,7 +43,7 @@ Frame Factory Handler
 
 #### Source
 
-[handlers/frame-handler.ts:27](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/frame-handler.ts#L27)
+[handlers/frame-handler.ts:27](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/frame-handler.ts#L27)
 
 ***
 
@@ -53,7 +53,7 @@ Frame Factory Handler
 
 #### Source
 
-[handlers/frame-handler.ts:26](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/frame-handler.ts#L26)
+[handlers/frame-handler.ts:26](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/frame-handler.ts#L26)
 
 ***
 
@@ -63,7 +63,7 @@ Frame Factory Handler
 
 #### Source
 
-[handlers/frame-handler.ts:25](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/frame-handler.ts#L25)
+[handlers/frame-handler.ts:25](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/frame-handler.ts#L25)
 
 ***
 
@@ -77,7 +77,7 @@ Frame Factory Handler
 
 #### Source
 
-[editor.ts:1100](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1100)
+[editor.ts:1094](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1094)
 
 ***
 
@@ -91,7 +91,7 @@ Frame Factory Handler
 
 #### Source
 
-[editor.ts:1101](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1101)
+[editor.ts:1095](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1095)
 
 ***
 
@@ -101,7 +101,7 @@ Frame Factory Handler
 
 #### Source
 
-[handlers/frame-handler.ts:28](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/frame-handler.ts#L28)
+[handlers/frame-handler.ts:28](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/frame-handler.ts#L28)
 
 ## Methods
 
@@ -125,7 +125,7 @@ Activate the handler
 
 #### Source
 
-[editor.ts:1129](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1129)
+[editor.ts:1123](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1123)
 
 ***
 
@@ -149,7 +149,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[editor.ts:1120](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1120)
+[editor.ts:1114](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1114)
 
 ***
 
@@ -173,7 +173,7 @@ Deactivate the handler
 
 #### Source
 
-[editor.ts:1137](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1137)
+[editor.ts:1131](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1131)
 
 ***
 
@@ -197,7 +197,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[editor.ts:1182](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1182)
+[editor.ts:1176](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1176)
 
 ***
 
@@ -217,7 +217,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[handlers/frame-handler.ts:68](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/frame-handler.ts#L68)
+[handlers/frame-handler.ts:68](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/frame-handler.ts#L68)
 
 ***
 
@@ -237,7 +237,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[handlers/frame-handler.ts:37](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/frame-handler.ts#L37)
+[handlers/frame-handler.ts:37](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/frame-handler.ts#L37)
 
 ***
 
@@ -263,7 +263,7 @@ keyDown
 
 #### Source
 
-[handlers/frame-handler.ts:126](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/frame-handler.ts#L126)
+[handlers/frame-handler.ts:126](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/frame-handler.ts#L126)
 
 ***
 
@@ -289,7 +289,7 @@ keyUp
 
 #### Source
 
-[editor.ts:1177](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1177)
+[editor.ts:1171](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1171)
 
 ***
 
@@ -313,7 +313,7 @@ Triggered when activated
 
 #### Source
 
-[handlers/frame-handler.ts:136](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/frame-handler.ts#L136)
+[handlers/frame-handler.ts:136](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/frame-handler.ts#L136)
 
 ***
 
@@ -337,7 +337,7 @@ Triggered when deactivate
 
 #### Source
 
-[handlers/frame-handler.ts:140](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/frame-handler.ts#L140)
+[handlers/frame-handler.ts:140](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/frame-handler.ts#L140)
 
 ***
 
@@ -363,7 +363,7 @@ pointerDown
 
 #### Source
 
-[handlers/frame-handler.ts:86](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/frame-handler.ts#L86)
+[handlers/frame-handler.ts:86](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/frame-handler.ts#L86)
 
 ***
 
@@ -389,7 +389,7 @@ pointerMove
 
 #### Source
 
-[handlers/frame-handler.ts:101](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/frame-handler.ts#L101)
+[handlers/frame-handler.ts:101](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/frame-handler.ts#L101)
 
 ***
 
@@ -415,7 +415,7 @@ pointerUp
 
 #### Source
 
-[handlers/frame-handler.ts:117](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/frame-handler.ts#L117)
+[handlers/frame-handler.ts:117](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/frame-handler.ts#L117)
 
 ***
 
@@ -435,7 +435,7 @@ Reset the states of handler
 
 #### Source
 
-[handlers/frame-handler.ts:30](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/frame-handler.ts#L30)
+[handlers/frame-handler.ts:30](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/frame-handler.ts#L30)
 
 ***
 
@@ -455,4 +455,4 @@ Reset the states of handler
 
 #### Source
 
-[handlers/frame-handler.ts:51](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/frame-handler.ts#L51)
+[handlers/frame-handler.ts:51](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/frame-handler.ts#L51)

@@ -4,7 +4,7 @@ const { title, description } = Astro.props;
 
 <div class="mx-auto grid justify-center grid-cols-1 lg:grid-cols-2 gap-5">
   <div class="lg:order-first relative overflow-hidden">
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col">
       <h3 class="font-normal tracking-tight text-lg">{title}</h3>
       <p class="text-muted-foreground">
         {description}
@@ -12,7 +12,7 @@ const { title, description } = Astro.props;
     </div>
   </div>
   <div
-    class="order-first relative overflow-hidden rounded-lg border bg-slate-100 p-2"
+    class="order-first relative overflow-hidden rounded-lg border !mt-0 bg-slate-100 p-2"
   >
     <div class="h-64"></div>
   </div>

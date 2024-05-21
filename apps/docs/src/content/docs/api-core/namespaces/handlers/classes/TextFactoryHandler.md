@@ -33,7 +33,7 @@ Text Factory Handler
 
 #### Source
 
-[editor.ts:1103](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1103)
+[editor.ts:1097](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1097)
 
 ## Properties
 
@@ -47,7 +47,7 @@ Text Factory Handler
 
 #### Source
 
-[editor.ts:1100](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1100)
+[editor.ts:1094](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1094)
 
 ***
 
@@ -61,7 +61,7 @@ Text Factory Handler
 
 #### Source
 
-[editor.ts:1101](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1101)
+[editor.ts:1095](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1095)
 
 ***
 
@@ -71,7 +71,7 @@ Text Factory Handler
 
 #### Source
 
-[handlers/text-handler.ts:24](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/text-handler.ts#L24)
+[handlers/text-handler.ts:24](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/text-handler.ts#L24)
 
 ## Methods
 
@@ -95,7 +95,7 @@ Activate the handler
 
 #### Source
 
-[editor.ts:1129](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1129)
+[editor.ts:1123](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1123)
 
 ***
 
@@ -119,7 +119,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[editor.ts:1120](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1120)
+[editor.ts:1114](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1114)
 
 ***
 
@@ -143,7 +143,7 @@ Deactivate the handler
 
 #### Source
 
-[editor.ts:1137](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1137)
+[editor.ts:1131](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1131)
 
 ***
 
@@ -167,7 +167,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[editor.ts:1182](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1182)
+[editor.ts:1176](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1176)
 
 ***
 
@@ -193,7 +193,7 @@ keyDown
 
 #### Source
 
-[editor.ts:1172](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1172)
+[editor.ts:1166](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1166)
 
 ***
 
@@ -219,7 +219,7 @@ keyUp
 
 #### Source
 
-[editor.ts:1177](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1177)
+[editor.ts:1171](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1171)
 
 ***
 
@@ -243,7 +243,7 @@ Triggered when activated
 
 #### Source
 
-[handlers/text-handler.ts:46](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/text-handler.ts#L46)
+[handlers/text-handler.ts:46](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/text-handler.ts#L46)
 
 ***
 
@@ -267,7 +267,7 @@ Triggered when deactivate
 
 #### Source
 
-[handlers/text-handler.ts:50](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/text-handler.ts#L50)
+[handlers/text-handler.ts:50](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/text-handler.ts#L50)
 
 ***
 
@@ -293,7 +293,7 @@ pointerDown
 
 #### Source
 
-[handlers/text-handler.ts:34](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/text-handler.ts#L34)
+[handlers/text-handler.ts:34](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/text-handler.ts#L34)
 
 ***
 
@@ -321,7 +321,7 @@ pointerMove
 
 #### Source
 
-[editor.ts:1167](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1167)
+[editor.ts:1161](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1161)
 
 ***
 
@@ -349,7 +349,7 @@ pointerUp
 
 #### Source
 
-[editor.ts:1161](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1161)
+[editor.ts:1155](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1155)
 
 ***
 
@@ -369,4 +369,4 @@ Reset the states of handler
 
 #### Source
 
-[handlers/text-handler.ts:26](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/text-handler.ts#L26)
+[handlers/text-handler.ts:26](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/text-handler.ts#L26)

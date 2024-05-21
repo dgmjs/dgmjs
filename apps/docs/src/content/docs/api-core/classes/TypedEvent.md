@@ -37,7 +37,7 @@ passes through events as they happen. You will not get events from before you st
 
 #### Source
 
-[std/typed-event.ts:19](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/std/typed-event.ts#L19)
+[std/typed-event.ts:19](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/std/typed-event.ts#L19)
 
 ***
 
@@ -55,7 +55,7 @@ passes through events as they happen. You will not get events from before you st
 
 #### Source
 
-[std/typed-event.ts:26](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/std/typed-event.ts#L26)
+[std/typed-event.ts:26](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/std/typed-event.ts#L26)
 
 ***
 
@@ -73,7 +73,7 @@ passes through events as they happen. You will not get events from before you st
 
 #### Source
 
-[std/typed-event.ts:35](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/std/typed-event.ts#L35)
+[std/typed-event.ts:35](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/std/typed-event.ts#L35)
 
 ***
 
@@ -91,7 +91,7 @@ passes through events as they happen. You will not get events from before you st
 
 #### Source
 
-[std/typed-event.ts:47](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/std/typed-event.ts#L47)
+[std/typed-event.ts:47](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/std/typed-event.ts#L47)
 
 ***
 
@@ -109,4 +109,4 @@ passes through events as they happen. You will not get events from before you st
 
 #### Source
 
-[std/typed-event.ts:30](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/std/typed-event.ts#L30)
+[std/typed-event.ts:30](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/std/typed-event.ts#L30)

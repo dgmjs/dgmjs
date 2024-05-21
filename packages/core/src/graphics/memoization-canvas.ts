@@ -3,10 +3,16 @@ import { Drawable } from "roughjs/bin/core";
 import { RoughGenerator } from "roughjs/bin/generator";
 import type { Point } from "roughjs/bin/geometry";
 import { getStroke } from "perfect-freehand";
-import { Canvas, CanvasTextMetric, SVGPath, pathToString } from "./graphics";
+import {
+  FillStyle,
+  Canvas,
+  CanvasTextMetric,
+  SVGPath,
+  pathToString,
+} from "./graphics";
 import { roughDraw } from "./roughjs-draw";
 import * as geometry from "./geometry";
-import { Color, FillStyle } from "./const";
+import { Color } from "./const";
 import { getSvgPathFromStroke } from "./utils";
 
 const MIN_HACHURE_GAP = 4;

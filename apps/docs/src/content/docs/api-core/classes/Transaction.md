@@ -28,7 +28,7 @@ Note:
 
 #### Source
 
-[core/transaction.ts:316](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L316)
+[core/transaction.ts:316](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L316)
 
 ## Properties
 
@@ -38,7 +38,7 @@ Note:
 
 #### Source
 
-[core/transaction.ts:314](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L314)
+[core/transaction.ts:314](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L314)
 
 ***
 
@@ -48,7 +48,7 @@ Note:
 
 #### Source
 
-[core/transaction.ts:313](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L313)
+[core/transaction.ts:313](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L313)
 
 ## Methods
 
@@ -68,7 +68,7 @@ Atomic mutation to append an obj and returns true if changed
 
 #### Source
 
-[core/transaction.ts:354](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L354)
+[core/transaction.ts:354](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L354)
 
 ***
 
@@ -84,7 +84,7 @@ Apply transaction
 
 #### Source
 
-[core/transaction.ts:332](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L332)
+[core/transaction.ts:332](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L332)
 
 ***
 
@@ -108,7 +108,7 @@ Assign a value to shape's field and returns true if changed
 
 #### Source
 
-[core/transaction.ts:380](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L380)
+[core/transaction.ts:380](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L380)
 
 ***
 
@@ -132,7 +132,7 @@ Assign a ref to shape's field and returns true if changed
 
 #### Source
 
-[core/transaction.ts:403](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L403)
+[core/transaction.ts:403](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L403)
 
 ***
 
@@ -152,7 +152,7 @@ Atomic mutation to delete an obj and returns true if changed
 
 #### Source
 
-[core/transaction.ts:367](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L367)
+[core/transaction.ts:367](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L367)
 
 ***
 
@@ -176,7 +176,7 @@ Insert a child and returns true if changed
 
 #### Source
 
-[core/transaction.ts:426](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L426)
+[core/transaction.ts:426](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L426)
 
 ***
 
@@ -194,7 +194,7 @@ Insert a child and returns true if changed
 
 #### Source
 
-[core/transaction.ts:321](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L321)
+[core/transaction.ts:321](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L321)
 
 ***
 
@@ -216,7 +216,7 @@ Remove a child and returns true if changed
 
 #### Source
 
-[core/transaction.ts:439](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L439)
+[core/transaction.ts:439](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L439)
 
 ***
 
@@ -240,7 +240,7 @@ Reorder a child and returns true if changed
 
 #### Source
 
-[core/transaction.ts:452](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L452)
+[core/transaction.ts:452](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L452)
 
 ***
 
@@ -254,7 +254,7 @@ Reorder a child and returns true if changed
 
 #### Source
 
-[core/transaction.ts:325](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L325)
+[core/transaction.ts:325](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L325)
 
 ***
 
@@ -270,4 +270,4 @@ Unapply transaction
 
 #### Source
 
-[core/transaction.ts:343](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L343)
+[core/transaction.ts:343](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L343)

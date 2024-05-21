@@ -18,9 +18,10 @@ import {
 } from "./shapes";
 import { resizeImage } from "./utils/image-utils";
 import * as geometry from "./graphics/geometry";
-import { FillStyle, SHAPE_MIN_SIZE } from "./graphics/const";
+import { SHAPE_MIN_SIZE } from "./graphics/const";
 import { TypedEvent } from "./std/typed-event";
 import { convertStringToTextNode } from "./utils/text-utils";
+import { FillStyle } from "./graphics/graphics";
 
 /**
  * Shape factory
