@@ -9,7 +9,7 @@ import "@/styles/splash.css";
 
 <StarlightPage
   hasSidebar={false}
-  frontmatter={{ template: "splash", title: "My custom page", hero: {} }}
+  frontmatter={{ template: "splash", title: siteConfig.description, hero: {} }}
   class:list={["mx-auto"]}
 >
   <Header />
@@ -30,16 +30,16 @@ import "@/styles/splash.css";
   </section>
   <section class="text-center my-12">
     <div class="flex items-center justify-center gap-4">
-      <!-- <a
-        href="https://dgmjs.dev/getting-started/quick-start"
-        class={cn(buttonVariants({ variant: "default" }), "rounded-full px-8")}
-        >Get Started</a
+      <a
+        href="/getting-started/quick-start"
+        class="rounded-full px-8 py-2 !text-white bg-black no-underline"
+        )}>Get Started</a
       >
       <a
         href={siteConfig.social.github}
-        class={cn(buttonVariants({ variant: "secondary" }), "rounded-full")}
-        >View on Github</a
-      > -->
+        class="rounded-full border px-8 py-2 no-underline"
+        )}>View on Github</a
+      >
     </div>
   </section>
   <section class="my-10 flex justify-center">
