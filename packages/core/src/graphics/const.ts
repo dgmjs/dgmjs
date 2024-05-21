@@ -77,13 +77,6 @@ const Color = {
   YELLOW: "#FFFF00",
 } as const;
 
-const FillStyle = {
-  NONE: "none",
-  SOLID: "solid",
-  HACHURE: "hachure",
-  CROSS_HATCH: "cross-hatch",
-} as const;
-
 const StrokePattern = {
   SOLID: [],
   DOTTED: [3],
@@ -116,7 +109,6 @@ export {
   Cursor,
   Mouse,
   Color,
-  FillStyle,
   StrokePattern,
   ControllerPosition,
   FontSizes,

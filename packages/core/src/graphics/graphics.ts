@@ -11,7 +11,7 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { Color, FillStyle } from "./const";
+import { Color } from "./const";
 import * as geometry from "./geometry";
 import rough from "roughjs";
 import { roughDraw } from "./roughjs-draw";
@@ -65,6 +65,13 @@ type SVGPathCommand =
 
 type SVGPathItem = [SVGPathCommand, ...number[]];
 type SVGPath = SVGPathItem[];
+
+const FillStyle = {
+  NONE: "none",
+  SOLID: "solid",
+  HACHURE: "hachure",
+  CROSS_HATCH: "cross-hatch",
+} as const;
 
 /**
  * Convert path to a string (SVG path's d property)

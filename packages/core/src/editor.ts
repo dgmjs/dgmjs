@@ -11,15 +11,9 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { Canvas, CanvasPointerEvent } from "./graphics/graphics";
+import { Canvas, CanvasPointerEvent, FillStyle } from "./graphics/graphics";
 import { Connector, Doc, Shape, Page, shapeInstantiator } from "./shapes";
-import {
-  Cursor,
-  Color,
-  Mouse,
-  CONTROL_POINT_APOTHEM,
-  FillStyle,
-} from "./graphics/const";
+import { Cursor, Color, Mouse, CONTROL_POINT_APOTHEM } from "./graphics/const";
 import { assert } from "./std/assert";
 import * as geometry from "./graphics/geometry";
 import * as utils from "./graphics/utils";

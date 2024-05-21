@@ -104,9 +104,3 @@ title: "@dgmjs/core"
 
 - [basicSetup](/api-core/functions/basicsetup/)
 - [pathToString](/api-core/functions/pathtostring/)
-
-## References
-
-### FillStyle
-
-Re-exports [FillStyle](/api-core/namespaces/constants/variables/fillstyle/)

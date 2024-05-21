@@ -12,12 +12,11 @@
  */
 
 import { assert } from "./std/assert";
-import { Canvas } from "./graphics/graphics";
+import { FillStyle, Canvas } from "./graphics/graphics";
 import {
   CONTROL_POINT_APOTHEM,
   Color,
   DEFAULT_FONT_SIZE,
-  FillStyle,
   LINE_SELECTION_THRESHOLD,
   SYSTEM_FONT,
   SYSTEM_FONT_SIZE,
