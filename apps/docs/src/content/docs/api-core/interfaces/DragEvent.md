@@ -13,7 +13,7 @@ title: "DragEvent"
 
 #### Source
 
-[editor.ts:57](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L57)
+[editor.ts:56](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L56)
 
 ***
 
@@ -23,4 +23,4 @@ title: "DragEvent"
 
 #### Source
 
-[editor.ts:58](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L58)
+[editor.ts:57](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L57)

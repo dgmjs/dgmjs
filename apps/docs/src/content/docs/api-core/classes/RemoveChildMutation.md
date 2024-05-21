@@ -33,7 +33,7 @@ Remove a child
 
 #### Source
 
-[core/transaction.ts:200](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L200)
+[core/transaction.ts:212](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L212)
 
 ## Properties
 
@@ -43,7 +43,7 @@ Remove a child
 
 #### Source
 
-[core/transaction.ts:197](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L197)
+[core/transaction.ts:209](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L209)
 
 ***
 
@@ -53,7 +53,7 @@ Remove a child
 
 #### Source
 
-[core/transaction.ts:196](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L196)
+[core/transaction.ts:208](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L208)
 
 ***
 
@@ -63,7 +63,7 @@ Remove a child
 
 #### Source
 
-[core/transaction.ts:198](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L198)
+[core/transaction.ts:210](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L210)
 
 ***
 
@@ -77,7 +77,7 @@ Remove a child
 
 #### Source
 
-[core/transaction.ts:18](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L18)
+[core/transaction.ts:18](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L18)
 
 ## Methods
 
@@ -99,7 +99,7 @@ Remove a child
 
 #### Source
 
-[core/transaction.ts:212](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L212)
+[core/transaction.ts:224](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L224)
 
 ***
 
@@ -133,7 +133,7 @@ Remove a child
 
 #### Source
 
-[core/transaction.ts:226](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L226)
+[core/transaction.ts:242](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L242)
 
 ***
 
@@ -155,4 +155,4 @@ Remove a child
 
 #### Source
 
-[core/transaction.ts:219](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L219)
+[core/transaction.ts:233](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L233)

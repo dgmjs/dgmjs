@@ -23,7 +23,7 @@ Action
 
 #### Source
 
-[core/transform.ts:16](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transform.ts#L16)
+[core/transform.ts:17](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transform.ts#L17)
 
 ## Properties
 
@@ -33,7 +33,7 @@ Action
 
 #### Source
 
-[core/transform.ts:13](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transform.ts#L13)
+[core/transform.ts:14](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transform.ts#L14)
 
 ***
 
@@ -43,7 +43,7 @@ Action
 
 #### Source
 
-[core/transform.ts:14](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transform.ts#L14)
+[core/transform.ts:15](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transform.ts#L15)
 
 ## Methods
 
@@ -61,7 +61,7 @@ Action
 
 #### Source
 
-[core/transform.ts:25](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transform.ts#L25)
+[core/transform.ts:26](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transform.ts#L26)
 
 ***
 
@@ -79,7 +79,7 @@ Action
 
 #### Source
 
-[core/transform.ts:21](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transform.ts#L21)
+[core/transform.ts:22](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transform.ts#L22)
 
 ***
 
@@ -97,4 +97,4 @@ Action
 
 #### Source
 
-[core/transform.ts:32](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transform.ts#L32)
+[core/transform.ts:33](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transform.ts#L33)

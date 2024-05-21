@@ -33,7 +33,7 @@ Select Handler
 
 #### Source
 
-[editor.ts:1041](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1041)
+[editor.ts:1103](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1103)
 
 ## Properties
 
@@ -43,7 +43,7 @@ Select Handler
 
 #### Source
 
-[handlers/select-handler.ts:26](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/select-handler.ts#L26)
+[handlers/select-handler.ts:26](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/select-handler.ts#L26)
 
 ***
 
@@ -53,7 +53,7 @@ Select Handler
 
 #### Source
 
-[handlers/select-handler.ts:25](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/select-handler.ts#L25)
+[handlers/select-handler.ts:25](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/select-handler.ts#L25)
 
 ***
 
@@ -67,7 +67,7 @@ Select Handler
 
 #### Source
 
-[editor.ts:1038](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1038)
+[editor.ts:1100](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1100)
 
 ***
 
@@ -81,15 +81,15 @@ Select Handler
 
 #### Source
 
-[editor.ts:1039](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1039)
+[editor.ts:1101](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1101)
 
 ## Methods
 
-### done()
+### activate()
 
-> **done**(`editor`): `void`
+> **activate**(`editor`): `void`
 
-Call this method when the handler is done
+Activate the handler
 
 #### Parameters
 
@@ -101,11 +101,59 @@ Call this method when the handler is done
 
 #### Inherited from
 
-[`Handler`](/api-core/classes/handler/).[`done`](/api-core/classes/handler/#done)
+[`Handler`](/api-core/classes/handler/).[`activate`](/api-core/classes/handler/#activate)
 
 #### Source
 
-[editor.ts:1072](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1072)
+[editor.ts:1129](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1129)
+
+***
+
+### complete()
+
+> **complete**(`editor`): `void`
+
+Trigger when the handler action is complete
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`complete`](/api-core/classes/handler/#complete)
+
+#### Source
+
+[editor.ts:1120](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1120)
+
+***
+
+### deactivate()
+
+> **deactivate**(`editor`): `void`
+
+Deactivate the handler
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`deactivate`](/api-core/classes/handler/#deactivate)
+
+#### Source
+
+[editor.ts:1137](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1137)
 
 ***
 
@@ -129,27 +177,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[handlers/select-handler.ts:280](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/select-handler.ts#L280)
-
-***
-
-### getLock()
-
-> **getLock**(): `boolean`
-
-Get lock
-
-#### Returns
-
-`boolean`
-
-#### Inherited from
-
-[`Handler`](/api-core/classes/handler/).[`getLock`](/api-core/classes/handler/#getlock)
-
-#### Source
-
-[editor.ts:1058](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1058)
+[handlers/select-handler.ts:280](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/select-handler.ts#L280)
 
 ***
 
@@ -171,7 +199,7 @@ Returns a shape (with manipulator area) located at the position e.
 
 #### Source
 
-[handlers/select-handler.ts:36](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/select-handler.ts#L36)
+[handlers/select-handler.ts:36](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/select-handler.ts#L36)
 
 ***
 
@@ -197,7 +225,7 @@ keyDown
 
 #### Source
 
-[handlers/select-handler.ts:252](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/select-handler.ts#L252)
+[handlers/select-handler.ts:252](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/select-handler.ts#L252)
 
 ***
 
@@ -223,7 +251,7 @@ keyUp
 
 #### Source
 
-[handlers/select-handler.ts:275](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/select-handler.ts#L275)
+[handlers/select-handler.ts:275](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/select-handler.ts#L275)
 
 ***
 
@@ -231,7 +259,7 @@ keyUp
 
 > **onActivate**(`editor`): `void`
 
-called when activated
+Triggered when activated
 
 #### Parameters
 
@@ -247,7 +275,7 @@ called when activated
 
 #### Source
 
-[editor.ts:1081](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1081)
+[editor.ts:1144](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1144)
 
 ***
 
@@ -271,7 +299,7 @@ Triggered when deactivate
 
 #### Source
 
-[editor.ts:1086](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1086)
+[editor.ts:1149](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1149)
 
 ***
 
@@ -297,7 +325,7 @@ handle pointer down event
 
 #### Source
 
-[handlers/select-handler.ts:56](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/select-handler.ts#L56)
+[handlers/select-handler.ts:56](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/select-handler.ts#L56)
 
 ***
 
@@ -323,7 +351,7 @@ handle pointer move event
 
 #### Source
 
-[handlers/select-handler.ts:120](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/select-handler.ts#L120)
+[handlers/select-handler.ts:120](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/select-handler.ts#L120)
 
 ***
 
@@ -349,7 +377,7 @@ handle pointer up event
 
 #### Source
 
-[handlers/select-handler.ts:196](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/select-handler.ts#L196)
+[handlers/select-handler.ts:196](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/select-handler.ts#L196)
 
 ***
 
@@ -369,28 +397,4 @@ Reset the states of handler
 
 #### Source
 
-[handlers/select-handler.ts:28](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/select-handler.ts#L28)
-
-***
-
-### setLock()
-
-> **setLock**(`lock`): `void`
-
-Set lock
-
-#### Parameters
-
-• **lock**: `boolean`
-
-#### Returns
-
-`void`
-
-#### Inherited from
-
-[`Handler`](/api-core/classes/handler/).[`setLock`](/api-core/classes/handler/#setlock)
-
-#### Source
-
-[editor.ts:1065](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1065)
+[handlers/select-handler.ts:28](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/select-handler.ts#L28)

@@ -27,7 +27,7 @@ Doc
 
 #### Source
 
-[shapes.ts:733](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L733)
+[shapes.ts:965](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L965)
 
 ## Properties
 
@@ -41,7 +41,7 @@ Doc
 
 #### Source
 
-[core/obj.ts:27](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L27)
+[core/obj.ts:27](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L27)
 
 ***
 
@@ -55,17 +55,7 @@ Doc
 
 #### Source
 
-[core/obj.ts:24](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L24)
-
-***
-
-### pageSize
-
-> **pageSize**: [`PageSize`](/api-core/type-aliases/pagesize/)
-
-#### Source
-
-[shapes.ts:731](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L731)
+[core/obj.ts:24](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L24)
 
 ***
 
@@ -79,7 +69,7 @@ Doc
 
 #### Source
 
-[core/obj.ts:26](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L26)
+[core/obj.ts:26](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L26)
 
 ***
 
@@ -93,7 +83,7 @@ Doc
 
 #### Source
 
-[core/obj.ts:25](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L25)
+[core/obj.ts:25](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L25)
 
 ***
 
@@ -103,7 +93,7 @@ Doc
 
 #### Source
 
-[shapes.ts:730](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L730)
+[shapes.ts:963](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L963)
 
 ## Methods
 
@@ -127,7 +117,7 @@ Find an shape in breath-first order
 
 #### Source
 
-[core/obj.ts:123](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L123)
+[core/obj.ts:119](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L119)
 
 ***
 
@@ -151,7 +141,7 @@ Find an shape in depth-first order
 
 #### Source
 
-[core/obj.ts:136](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L136)
+[core/obj.ts:132](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L132)
 
 ***
 
@@ -175,7 +165,7 @@ Find a shape along with the parent-chain
 
 #### Source
 
-[core/obj.ts:149](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L149)
+[core/obj.ts:145](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L145)
 
 ***
 
@@ -197,25 +187,7 @@ Find a shape along with the parent-chain
 
 #### Source
 
-[shapes.ts:747](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L747)
-
-***
-
-### getSeed()
-
-> **getSeed**(): `number`
-
-#### Returns
-
-`number`
-
-#### Inherited from
-
-[`Obj`](/api-core/classes/obj/).[`getSeed`](/api-core/classes/obj/#getseed)
-
-#### Source
-
-[core/obj.ts:36](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L36)
+[shapes.ts:977](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L977)
 
 ***
 
@@ -239,7 +211,7 @@ Test whether the given shape is a descendant
 
 #### Source
 
-[core/obj.ts:159](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L159)
+[core/obj.ts:155](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L155)
 
 ***
 
@@ -269,7 +241,7 @@ assign null if not found
 
 #### Source
 
-[core/obj.ts:64](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L64)
+[core/obj.ts:60](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L60)
 
 ***
 
@@ -293,7 +265,7 @@ assign null if not found
 
 #### Source
 
-[shapes.ts:740](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L740)
+[shapes.ts:971](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L971)
 
 ***
 
@@ -319,7 +291,7 @@ Traverse all objects in breath-first order
 
 #### Source
 
-[core/obj.ts:77](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L77)
+[core/obj.ts:73](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L73)
 
 ***
 
@@ -345,7 +317,7 @@ Traverse all shapes in depth-first order
 
 #### Source
 
-[core/obj.ts:91](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L91)
+[core/obj.ts:87](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L87)
 
 ***
 
@@ -365,7 +337,7 @@ Returns an array of shapes in order of traverse sequence.
 
 #### Source
 
-[core/obj.ts:114](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L114)
+[core/obj.ts:110](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L110)
 
 ***
 
@@ -385,4 +357,4 @@ Returns an array of shapes in order of traverse sequence.
 
 #### Source
 
-[core/obj.ts:105](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L105)
+[core/obj.ts:101](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L101)

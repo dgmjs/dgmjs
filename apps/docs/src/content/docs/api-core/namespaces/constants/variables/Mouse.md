@@ -5,7 +5,7 @@ prev: false
 title: "Mouse"
 ---
 
-> `const` **Mouse**: `Readonly`\<`object`\>
+> `const` **Mouse**: `object`
 
 Mouse buttons constants
 Ref: https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
@@ -14,16 +14,16 @@ Ref: https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
 
 ### BUTTON1
 
-> **BUTTON1**: `0` = `0`
+> `readonly` **BUTTON1**: `0` = `0`
 
 ### BUTTON2
 
-> **BUTTON2**: `1` = `1`
+> `readonly` **BUTTON2**: `1` = `1`
 
 ### BUTTON3
 
-> **BUTTON3**: `2` = `2`
+> `readonly` **BUTTON3**: `2` = `2`
 
 ## Source
 
-[graphics/const.ts:52](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/graphics/const.ts#L52)
+[graphics/const.ts:52](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/graphics/const.ts#L52)

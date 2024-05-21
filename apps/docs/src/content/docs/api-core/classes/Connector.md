@@ -27,9 +27,73 @@ Connector
 
 #### Source
 
-[shapes.ts:1733](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1733)
+[shapes.ts:2009](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L2009)
 
 ## Properties
+
+### \_linkDOM
+
+> **\_linkDOM**: `null` \| `HTMLAnchorElement`
+
+Link DOM element
+
+#### Inherited from
+
+[`Line`](/api-core/classes/line/).[`_linkDOM`](/api-core/classes/line/#_linkdom)
+
+#### Source
+
+[shapes.ts:337](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L337)
+
+***
+
+### \_memoCanvas
+
+> **\_memoCanvas**: `MemoizationCanvas`
+
+Memoization canvas
+
+#### Inherited from
+
+[`Line`](/api-core/classes/line/).[`_memoCanvas`](/api-core/classes/line/#_memocanvas)
+
+#### Source
+
+[shapes.ts:327](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L327)
+
+***
+
+### \_memoOutline
+
+> **\_memoOutline**: `number`[][]
+
+Memoization outline
+
+#### Inherited from
+
+[`Line`](/api-core/classes/line/).[`_memoOutline`](/api-core/classes/line/#_memooutline)
+
+#### Source
+
+[shapes.ts:332](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L332)
+
+***
+
+### \_memoSeed
+
+> **\_memoSeed**: `null` \| `number`
+
+Memoize seed
+
+#### Inherited from
+
+[`Line`](/api-core/classes/line/).[`_memoSeed`](/api-core/classes/line/#_memoseed)
+
+#### Source
+
+[shapes.ts:322](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L322)
+
+***
 
 ### children
 
@@ -41,7 +105,7 @@ Connector
 
 #### Source
 
-[core/obj.ts:27](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L27)
+[core/obj.ts:27](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L27)
 
 ***
 
@@ -49,13 +113,15 @@ Connector
 
 > **connectable**: `boolean`
 
+Connectable flag
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`connectable`](/api-core/classes/line/#connectable)
 
 #### Source
 
-[shapes.ts:152](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L152)
+[shapes.ts:212](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L212)
 
 ***
 
@@ -63,13 +129,15 @@ Connector
 
 > **constraints**: [`Constraint`](/api-core/interfaces/constraint/)[]
 
+Shape's constraints
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`constraints`](/api-core/classes/line/#constraints)
 
 #### Source
 
-[shapes.ts:172](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L172)
+[shapes.ts:307](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L307)
 
 ***
 
@@ -77,13 +145,15 @@ Connector
 
 > **containable**: `boolean`
 
+Containable flag
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`containable`](/api-core/classes/line/#containable)
 
 #### Source
 
-[shapes.ts:150](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L150)
+[shapes.ts:202](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L202)
 
 ***
 
@@ -91,13 +161,15 @@ Connector
 
 > **containableFilter**: `string`
 
+Containable filter
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`containableFilter`](/api-core/classes/line/#containablefilter)
 
 #### Source
 
-[shapes.ts:151](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L151)
+[shapes.ts:207](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L207)
 
 ***
 
@@ -105,13 +177,15 @@ Connector
 
 > **description**: `string`
 
+Description of the shape
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`description`](/api-core/classes/line/#description)
 
 #### Source
 
-[shapes.ts:142](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L142)
+[shapes.ts:162](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L162)
 
 ***
 
@@ -119,13 +193,15 @@ Connector
 
 > **enable**: `boolean`
 
+Enable flag
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`enable`](/api-core/classes/line/#enable)
 
 #### Source
 
-[shapes.ts:145](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L145)
+[shapes.ts:177](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L177)
 
 ***
 
@@ -133,13 +209,15 @@ Connector
 
 > **fillColor**: `string`
 
+Fill color
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`fillColor`](/api-core/classes/line/#fillcolor)
 
 #### Source
 
-[shapes.ts:161](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L161)
+[shapes.ts:257](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L257)
 
 ***
 
@@ -147,13 +225,15 @@ Connector
 
 > **fillStyle**: `string`
 
+Fill style
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`fillStyle`](/api-core/classes/line/#fillstyle)
 
 #### Source
 
-[shapes.ts:162](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L162)
+[shapes.ts:262](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L262)
 
 ***
 
@@ -161,13 +241,15 @@ Connector
 
 > **fontColor**: `string`
 
+Font color
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`fontColor`](/api-core/classes/line/#fontcolor)
 
 #### Source
 
-[shapes.ts:163](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L163)
+[shapes.ts:267](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L267)
 
 ***
 
@@ -175,13 +257,15 @@ Connector
 
 > **fontFamily**: `string`
 
+Font family
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`fontFamily`](/api-core/classes/line/#fontfamily)
 
 #### Source
 
-[shapes.ts:164](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L164)
+[shapes.ts:272](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L272)
 
 ***
 
@@ -189,13 +273,15 @@ Connector
 
 > **fontSize**: `number`
 
+Font size
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`fontSize`](/api-core/classes/line/#fontsize)
 
 #### Source
 
-[shapes.ts:165](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L165)
+[shapes.ts:277](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L277)
 
 ***
 
@@ -203,13 +289,15 @@ Connector
 
 > **fontStyle**: `string`
 
+Font style
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`fontStyle`](/api-core/classes/line/#fontstyle)
 
 #### Source
 
-[shapes.ts:166](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L166)
+[shapes.ts:282](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L282)
 
 ***
 
@@ -217,13 +305,15 @@ Connector
 
 > **fontWeight**: `number`
 
+Font weight
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`fontWeight`](/api-core/classes/line/#fontweight)
 
 #### Source
 
-[shapes.ts:167](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L167)
+[shapes.ts:287](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L287)
 
 ***
 
@@ -233,7 +323,7 @@ Connector
 
 #### Source
 
-[shapes.ts:1710](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1710)
+[shapes.ts:1986](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L1986)
 
 ***
 
@@ -245,13 +335,13 @@ Head's anchor position
 
 #### Source
 
-[shapes.ts:1716](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1716)
+[shapes.ts:1992](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L1992)
 
 ***
 
 ### headEndType
 
-> **headEndType**: `string`
+> **headEndType**: [`LineEndTypeEnum`](/api-core/type-aliases/lineendtypeenum/)
 
 #### Inherited from
 
@@ -259,7 +349,7 @@ Head's anchor position
 
 #### Source
 
-[shapes.ts:1196](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1196)
+[shapes.ts:1697](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L1697)
 
 ***
 
@@ -271,7 +361,7 @@ Marginal space to head
 
 #### Source
 
-[shapes.ts:1726](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1726)
+[shapes.ts:2002](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L2002)
 
 ***
 
@@ -279,13 +369,15 @@ Marginal space to head
 
 > **height**: `number`
 
+Shape's height
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`height`](/api-core/classes/line/#height)
 
 #### Source
 
-[shapes.ts:156](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L156)
+[shapes.ts:232](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L232)
 
 ***
 
@@ -299,7 +391,7 @@ Marginal space to head
 
 #### Source
 
-[core/obj.ts:24](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L24)
+[core/obj.ts:24](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L24)
 
 ***
 
@@ -307,19 +399,21 @@ Marginal space to head
 
 > **left**: `number`
 
+Shape's left position
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`left`](/api-core/classes/line/#left)
 
 #### Source
 
-[shapes.ts:153](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L153)
+[shapes.ts:217](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L217)
 
 ***
 
 ### lineType
 
-> **lineType**: `string`
+> **lineType**: [`LineTypeEnum`](/api-core/type-aliases/linetypeenum/)
 
 #### Inherited from
 
@@ -327,7 +421,7 @@ Marginal space to head
 
 #### Source
 
-[shapes.ts:1195](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1195)
+[shapes.ts:1696](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L1696)
 
 ***
 
@@ -335,33 +429,23 @@ Marginal space to head
 
 > **link**: `string`
 
+Link
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`link`](/api-core/classes/line/#link)
 
 #### Source
 
-[shapes.ts:170](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L170)
-
-***
-
-### linkDOM
-
-> **linkDOM**: `null` \| `HTMLAnchorElement`
-
-#### Inherited from
-
-[`Line`](/api-core/classes/line/).[`linkDOM`](/api-core/classes/line/#linkdom)
-
-#### Source
-
-[shapes.ts:171](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L171)
+[shapes.ts:302](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L302)
 
 ***
 
 ### movable
 
-> **movable**: `string`
+> **movable**: [`MovableEnum`](/api-core/type-aliases/movableenum/)
+
+Indicate how this shape can be moved
 
 #### Inherited from
 
@@ -369,7 +453,7 @@ Marginal space to head
 
 #### Source
 
-[shapes.ts:147](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L147)
+[shapes.ts:187](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L187)
 
 ***
 
@@ -377,13 +461,15 @@ Marginal space to head
 
 > **name**: `string`
 
+Name of the shape
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`name`](/api-core/classes/line/#name)
 
 #### Source
 
-[shapes.ts:141](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L141)
+[shapes.ts:157](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L157)
 
 ***
 
@@ -391,13 +477,15 @@ Marginal space to head
 
 > **opacity**: `number`
 
+Opacity
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`opacity`](/api-core/classes/line/#opacity)
 
 #### Source
 
-[shapes.ts:168](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L168)
+[shapes.ts:292](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L292)
 
 ***
 
@@ -411,7 +499,7 @@ Marginal space to head
 
 #### Source
 
-[core/obj.ts:26](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L26)
+[core/obj.ts:26](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L26)
 
 ***
 
@@ -425,7 +513,7 @@ Marginal space to head
 
 #### Source
 
-[shapes.ts:1194](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1194)
+[shapes.ts:1443](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L1443)
 
 ***
 
@@ -439,7 +527,7 @@ Marginal space to head
 
 #### Source
 
-[shapes.ts:1193](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1193)
+[shapes.ts:1442](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L1442)
 
 ***
 
@@ -447,13 +535,15 @@ Marginal space to head
 
 > **properties**: [`Property`](/api-core/interfaces/property/)[]
 
+Shape's properties
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`properties`](/api-core/classes/line/#properties)
 
 #### Source
 
-[shapes.ts:173](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L173)
+[shapes.ts:312](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L312)
 
 ***
 
@@ -461,13 +551,15 @@ Marginal space to head
 
 > **proto**: `boolean`
 
+The flag to indicate this shape is a prototype or not
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`proto`](/api-core/classes/line/#proto)
 
 #### Source
 
-[shapes.ts:143](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L143)
+[shapes.ts:167](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L167)
 
 ***
 
@@ -475,13 +567,15 @@ Marginal space to head
 
 > **rotatable**: `boolean`
 
+Rotatable flag
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`rotatable`](/api-core/classes/line/#rotatable)
 
 #### Source
 
-[shapes.ts:149](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L149)
+[shapes.ts:197](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L197)
 
 ***
 
@@ -489,13 +583,15 @@ Marginal space to head
 
 > **rotate**: `number`
 
+Shape's rotation angle (in degree)
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`rotate`](/api-core/classes/line/#rotate)
 
 #### Source
 
-[shapes.ts:157](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L157)
+[shapes.ts:237](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L237)
 
 ***
 
@@ -503,13 +599,15 @@ Marginal space to head
 
 > **roughness**: `number`
 
+Roughness
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`roughness`](/api-core/classes/line/#roughness)
 
 #### Source
 
-[shapes.ts:169](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L169)
+[shapes.ts:297](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L297)
 
 ***
 
@@ -517,19 +615,23 @@ Marginal space to head
 
 > **scripts**: [`Script`](/api-core/interfaces/script/)[]
 
+Shape's scripts
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`scripts`](/api-core/classes/line/#scripts)
 
 #### Source
 
-[shapes.ts:174](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L174)
+[shapes.ts:317](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L317)
 
 ***
 
 ### sizable
 
-> **sizable**: `string`
+> **sizable**: [`SizableEnum`](/api-core/type-aliases/sizableenum/)
+
+Indicate how this shape can be resized
 
 #### Inherited from
 
@@ -537,7 +639,7 @@ Marginal space to head
 
 #### Source
 
-[shapes.ts:148](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L148)
+[shapes.ts:192](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L192)
 
 ***
 
@@ -545,13 +647,15 @@ Marginal space to head
 
 > **strokeColor**: `string`
 
+Stroke color
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`strokeColor`](/api-core/classes/line/#strokecolor)
 
 #### Source
 
-[shapes.ts:158](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L158)
+[shapes.ts:242](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L242)
 
 ***
 
@@ -559,13 +663,15 @@ Marginal space to head
 
 > **strokePattern**: `number`[]
 
+Stroke pattern
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`strokePattern`](/api-core/classes/line/#strokepattern)
 
 #### Source
 
-[shapes.ts:160](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L160)
+[shapes.ts:252](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L252)
 
 ***
 
@@ -573,13 +679,15 @@ Marginal space to head
 
 > **strokeWidth**: `number`
 
+Stroke width
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`strokeWidth`](/api-core/classes/line/#strokewidth)
 
 #### Source
 
-[shapes.ts:159](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L159)
+[shapes.ts:247](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L247)
 
 ***
 
@@ -587,13 +695,15 @@ Marginal space to head
 
 > **tags**: `string`[]
 
+Tags
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`tags`](/api-core/classes/line/#tags)
 
 #### Source
 
-[shapes.ts:144](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L144)
+[shapes.ts:172](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L172)
 
 ***
 
@@ -603,7 +713,7 @@ Marginal space to head
 
 #### Source
 
-[shapes.ts:1711](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1711)
+[shapes.ts:1987](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L1987)
 
 ***
 
@@ -615,13 +725,13 @@ Tail's anchor position
 
 #### Source
 
-[shapes.ts:1721](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1721)
+[shapes.ts:1997](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L1997)
 
 ***
 
 ### tailEndType
 
-> **tailEndType**: `string`
+> **tailEndType**: [`LineEndTypeEnum`](/api-core/type-aliases/lineendtypeenum/)
 
 #### Inherited from
 
@@ -629,7 +739,7 @@ Tail's anchor position
 
 #### Source
 
-[shapes.ts:1197](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1197)
+[shapes.ts:1698](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L1698)
 
 ***
 
@@ -641,7 +751,7 @@ Marginal space to tail
 
 #### Source
 
-[shapes.ts:1731](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1731)
+[shapes.ts:2007](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L2007)
 
 ***
 
@@ -649,13 +759,15 @@ Marginal space to tail
 
 > **top**: `number`
 
+Shape's top position
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`top`](/api-core/classes/line/#top)
 
 #### Source
 
-[shapes.ts:154](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L154)
+[shapes.ts:222](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L222)
 
 ***
 
@@ -669,7 +781,7 @@ Marginal space to tail
 
 #### Source
 
-[core/obj.ts:25](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L25)
+[core/obj.ts:25](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L25)
 
 ***
 
@@ -677,13 +789,15 @@ Marginal space to tail
 
 > **visible**: `boolean`
 
+Visible flag
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`visible`](/api-core/classes/line/#visible)
 
 #### Source
 
-[shapes.ts:146](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L146)
+[shapes.ts:182](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L182)
 
 ***
 
@@ -691,13 +805,15 @@ Marginal space to tail
 
 > **width**: `number`
 
+Shape's width
+
 #### Inherited from
 
 [`Line`](/api-core/classes/line/).[`width`](/api-core/classes/line/#width)
 
 #### Source
 
-[shapes.ts:155](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L155)
+[shapes.ts:227](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L227)
 
 ## Accessors
 
@@ -711,7 +827,7 @@ Marginal space to tail
 
 #### Source
 
-[shapes.ts:303](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L303)
+[shapes.ts:467](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L467)
 
 ***
 
@@ -725,7 +841,7 @@ Marginal space to tail
 
 #### Source
 
-[shapes.ts:299](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L299)
+[shapes.ts:463](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L463)
 
 ## Methods
 
@@ -733,11 +849,11 @@ Marginal space to tail
 
 > **assignStyles**(`canvas`): `void`
 
-Assign styles to canvas.
+Assign styles to memoization canvas.
 
 #### Parameters
 
-• **canvas**: [`Canvas`](/api-core/classes/canvas/)
+• **canvas**: `MemoizationCanvas`
 
 #### Returns
 
@@ -749,7 +865,7 @@ Assign styles to canvas.
 
 #### Source
 
-[shapes.ts:335](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L335)
+[shapes.ts:528](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L528)
 
 ***
 
@@ -773,7 +889,7 @@ Determine a given shape can be contained in this shape
 
 #### Source
 
-[shapes.ts:687](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L687)
+[shapes.ts:920](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L920)
 
 ***
 
@@ -799,53 +915,71 @@ Determines whether this shape contains a point in GCS
 
 #### Source
 
-[shapes.ts:1475](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1475)
+[shapes.ts:1487](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L1487)
 
 ***
 
-### drawLineEnd()
+### draw()
 
-> **drawLineEnd**(`canvas`, `edgeEndType`, `isHead`): `number`[]
+> **draw**(`canvas`, `showDOM`): `void`
 
-Draw line end types.
-All line-ends are drawn based on the point grid as below:
+Draw this shape
 
-        0 1 2 3 4 5 6 7 8 9 10
-0       • • • • • • • • • • •
-1       • • • • • • • • • • •
-2       • • • • • • • • • • •
-3  HEAD •-•-•-•-•-•-•-•-•-•-•---------- TAIL
-4       • • • • • • • • • • •
-5       • • • • • • • • • • •
-6       • • • • • • • • • • •
+Render vs Draw
+- Render: computing geometries how to draw the shape
+- Draw: actual drawing the computed geometries of the shape on the canvas
 
 #### Parameters
 
 • **canvas**: [`Canvas`](/api-core/classes/canvas/)
 
-• **edgeEndType**: `string`
-
-• **isHead**: `boolean`
+• **showDOM**: `boolean`= `false`
 
 #### Returns
 
-`number`[]
-
-an end point the path should be drawn to
+`void`
 
 #### Inherited from
 
-[`Line`](/api-core/classes/line/).[`drawLineEnd`](/api-core/classes/line/#drawlineend)
+[`Line`](/api-core/classes/line/).[`draw`](/api-core/classes/line/#draw)
 
 #### Source
 
-[shapes.ts:1286](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1286)
+[shapes.ts:663](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L663)
+
+***
+
+### drawLink()
+
+> **drawLink**(`canvas`, `showDOM`): `void`
+
+Draw link
+
+#### Parameters
+
+• **canvas**: [`Canvas`](/api-core/classes/canvas/)
+
+• **showDOM**: `boolean`= `false`
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Line`](/api-core/classes/line/).[`drawLink`](/api-core/classes/line/#drawlink)
+
+#### Source
+
+[shapes.ts:677](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L677)
 
 ***
 
 ### finalize()
 
 > **finalize**(`canvas`): `void`
+
+Finalize shape
 
 #### Parameters
 
@@ -861,7 +995,7 @@ an end point the path should be drawn to
 
 #### Source
 
-[shapes.ts:217](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L217)
+[shapes.ts:484](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L484)
 
 ***
 
@@ -885,7 +1019,7 @@ Find an shape in breath-first order
 
 #### Source
 
-[core/obj.ts:123](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L123)
+[core/obj.ts:119](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L119)
 
 ***
 
@@ -909,7 +1043,7 @@ Find all shapes matched with the query string
 
 #### Source
 
-[shapes.ts:677](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L677)
+[shapes.ts:910](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L910)
 
 ***
 
@@ -933,7 +1067,7 @@ Find a shape first matched with the query string
 
 #### Source
 
-[shapes.ts:664](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L664)
+[shapes.ts:897](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L897)
 
 ***
 
@@ -957,7 +1091,7 @@ Find an shape in depth-first order
 
 #### Source
 
-[core/obj.ts:136](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L136)
+[core/obj.ts:132](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L132)
 
 ***
 
@@ -981,13 +1115,15 @@ Find a shape along with the parent-chain
 
 #### Source
 
-[core/obj.ts:149](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L149)
+[core/obj.ts:145](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L145)
 
 ***
 
 ### fromJSON()
 
 > **fromJSON**(`json`): `void`
+
+Import shape from JSON
 
 #### Parameters
 
@@ -1003,7 +1139,7 @@ Find a shape along with the parent-chain
 
 #### Source
 
-[shapes.ts:1759](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1759)
+[shapes.ts:2035](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L2035)
 
 ***
 
@@ -1027,7 +1163,7 @@ Return a bounding rect.
 
 #### Source
 
-[shapes.ts:1790](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1790)
+[shapes.ts:2066](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L2066)
 
 ***
 
@@ -1047,7 +1183,7 @@ Returns the center point
 
 #### Source
 
-[shapes.ts:478](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L478)
+[shapes.ts:717](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L717)
 
 ***
 
@@ -1067,7 +1203,7 @@ Return a bounding box embracing children shapes
 
 #### Source
 
-[shapes.ts:517](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L517)
+[shapes.ts:750](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L750)
 
 ***
 
@@ -1087,7 +1223,7 @@ Return a enclosure
 
 #### Source
 
-[shapes.ts:551](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L551)
+[shapes.ts:784](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L784)
 
 ***
 
@@ -1113,7 +1249,7 @@ segment line to end
 
 #### Source
 
-[shapes.ts:1466](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1466)
+[shapes.ts:1478](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L1478)
 
 ***
 
@@ -1129,7 +1265,7 @@ Return head anchor point
 
 #### Source
 
-[shapes.ts:1806](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1806)
+[shapes.ts:2082](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L2082)
 
 ***
 
@@ -1145,7 +1281,7 @@ Return head's outline
 
 #### Source
 
-[shapes.ts:1842](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1842)
+[shapes.ts:2124](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L2124)
 
 ***
 
@@ -1165,27 +1301,7 @@ Return outline polygon.
 
 #### Source
 
-[shapes.ts:492](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L492)
-
-***
-
-### getOutlineDefault()
-
-> **getOutlineDefault**(): `number`[][]
-
-Return default outline
-
-#### Returns
-
-`number`[][]
-
-#### Inherited from
-
-[`Line`](/api-core/classes/line/).[`getOutlineDefault`](/api-core/classes/line/#getoutlinedefault)
-
-#### Source
-
-[shapes.ts:1509](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1509)
+[shapes.ts:652](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L652)
 
 ***
 
@@ -1209,7 +1325,7 @@ Get a property object
 
 #### Source
 
-[shapes.ts:699](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L699)
+[shapes.ts:932](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L932)
 
 ***
 
@@ -1233,7 +1349,7 @@ Get a property value
 
 #### Source
 
-[shapes.ts:709](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L709)
+[shapes.ts:942](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L942)
 
 ***
 
@@ -1262,7 +1378,7 @@ and don't forget to apply transform scale to the DOM element.
 
 #### Source
 
-[shapes.ts:530](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L530)
+[shapes.ts:763](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L763)
 
 ***
 
@@ -1286,7 +1402,7 @@ Get a property object
 
 #### Source
 
-[shapes.ts:717](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L717)
+[shapes.ts:950](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L950)
 
 ***
 
@@ -1304,7 +1420,7 @@ Get a property object
 
 #### Source
 
-[core/obj.ts:36](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L36)
+[shapes.ts:471](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L471)
 
 ***
 
@@ -1332,7 +1448,7 @@ Pick a shape at specific position (x, y)
 
 #### Source
 
-[shapes.ts:310](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L310)
+[shapes.ts:503](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L503)
 
 ***
 
@@ -1348,7 +1464,7 @@ Return tail anchor point
 
 #### Source
 
-[shapes.ts:1824](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1824)
+[shapes.ts:2103](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L2103)
 
 ***
 
@@ -1364,7 +1480,34 @@ Return head's outline
 
 #### Source
 
-[shapes.ts:1849](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1849)
+[shapes.ts:2131](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L2131)
+
+***
+
+### getViewRect()
+
+> **getViewRect**(`canvas`): `number`[][]
+
+Return a view rect in GCS.
+View rect is a rect that includes actually drawn area which includes
+stroke width, arrowheads, etc. So view rect is mostly larger than
+bounding rect.
+
+#### Parameters
+
+• **canvas**: [`Canvas`](/api-core/classes/canvas/)
+
+#### Returns
+
+`number`[][]
+
+#### Inherited from
+
+[`Line`](/api-core/classes/line/).[`getViewRect`](/api-core/classes/line/#getviewrect)
+
+#### Source
+
+[shapes.ts:1970](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L1970)
 
 ***
 
@@ -1384,13 +1527,15 @@ Return true if this shape is contained by a group (recursively)
 
 #### Source
 
-[shapes.ts:328](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L328)
+[shapes.ts:521](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L521)
 
 ***
 
 ### initialze()
 
 > **initialze**(`canvas`): `void`
+
+Initialize shape
 
 #### Parameters
 
@@ -1406,7 +1551,7 @@ Return true if this shape is contained by a group (recursively)
 
 #### Source
 
-[shapes.ts:215](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L215)
+[shapes.ts:479](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L479)
 
 ***
 
@@ -1426,7 +1571,7 @@ Return is the path is closed
 
 #### Source
 
-[shapes.ts:1232](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1232)
+[shapes.ts:1469](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L1469)
 
 ***
 
@@ -1450,7 +1595,7 @@ Test whether the given shape is a descendant
 
 #### Source
 
-[core/obj.ts:159](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L159)
+[core/obj.ts:155](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L155)
 
 ***
 
@@ -1479,7 +1624,7 @@ if recursive=true, transform to GCS (Global coord-system).
 
 #### Source
 
-[shapes.ts:371](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L371)
+[shapes.ts:564](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L564)
 
 ***
 
@@ -1508,7 +1653,7 @@ if recursive=true, transform GCS (Global coord-system) --> LCS.
 
 #### Source
 
-[shapes.ts:391](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L391)
+[shapes.ts:584](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L584)
 
 ***
 
@@ -1534,7 +1679,7 @@ Transform local context to parent's context
 
 #### Source
 
-[shapes.ts:355](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L355)
+[shapes.ts:548](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L548)
 
 ***
 
@@ -1558,7 +1703,7 @@ Returns true if query matches this shape
 
 #### Source
 
-[shapes.ts:639](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L639)
+[shapes.ts:872](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L872)
 
 ***
 
@@ -1584,7 +1729,7 @@ Determines whether this shape overlaps a given rect
 
 #### Source
 
-[shapes.ts:1498](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1498)
+[shapes.ts:1510](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L1510)
 
 ***
 
@@ -1621,21 +1766,23 @@ query object
 
 #### Source
 
-[shapes.ts:614](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L614)
+[shapes.ts:847](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L847)
 
 ***
 
 ### render()
 
-> **render**(`canvas`, `updateDOM`): `void`
+> **render**(`canvas`): `void`
 
 Render this shape
 
+Render vs Draw
+- Render: computing geometries how to draw the shape
+- Draw: actual drawing the computed geometries of the shape on the canvas
+
 #### Parameters
 
-• **canvas**: [`Canvas`](/api-core/classes/canvas/)
-
-• **updateDOM**: `boolean`= `false`
+• **canvas**: `MemoizationCanvas`
 
 #### Returns
 
@@ -1647,21 +1794,19 @@ Render this shape
 
 #### Source
 
-[shapes.ts:455](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L455)
+[shapes.ts:607](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L607)
 
 ***
 
 ### renderDefault()
 
-> **renderDefault**(`canvas`, `updateDOM`): `void`
+> **renderDefault**(`canvas`): `void`
 
 Draw this shape
 
 #### Parameters
 
-• **canvas**: [`Canvas`](/api-core/classes/canvas/)
-
-• **updateDOM**: `boolean`= `false`
+• **canvas**: `MemoizationCanvas`
 
 #### Returns
 
@@ -1673,19 +1818,59 @@ Draw this shape
 
 #### Source
 
-[shapes.ts:1239](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1239)
+[shapes.ts:1727](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L1727)
 
 ***
 
-### renderLink()
+### renderLineEnd()
 
-> **renderLink**(`canvas`, `updateDOM`): `void`
+> **renderLineEnd**(`canvas`, `edgeEndType`, `isHead`): `number`[]
+
+Draw line end types.
+All line-ends are drawn based on the point grid as below:
+
+        0 1 2 3 4 5 6 7 8 9 10
+0       • • • • • • • • • • •
+1       • • • • • • • • • • •
+2       • • • • • • • • • • •
+3  HEAD •-•-•-•-•-•-•-•-•-•-•---------- TAIL
+4       • • • • • • • • • • •
+5       • • • • • • • • • • •
+6       • • • • • • • • • • •
 
 #### Parameters
 
-• **canvas**: [`Canvas`](/api-core/classes/canvas/)
+• **canvas**: `MemoizationCanvas`
 
-• **updateDOM**: `boolean`= `false`
+• **edgeEndType**: `string`
+
+• **isHead**: `boolean`
+
+#### Returns
+
+`number`[]
+
+an end point the path should be drawn to
+
+#### Inherited from
+
+[`Line`](/api-core/classes/line/).[`renderLineEnd`](/api-core/classes/line/#renderlineend)
+
+#### Source
+
+[shapes.ts:1772](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L1772)
+
+***
+
+### renderOutline()
+
+> **renderOutline**(`canvas`): `void`
+
+Render this shape's outline
+
+#### Parameters
+
+• **canvas**: `MemoizationCanvas`
 
 #### Returns
 
@@ -1693,11 +1878,31 @@ Draw this shape
 
 #### Inherited from
 
-[`Line`](/api-core/classes/line/).[`renderLink`](/api-core/classes/line/#renderlink)
+[`Line`](/api-core/classes/line/).[`renderOutline`](/api-core/classes/line/#renderoutline)
 
 #### Source
 
-[shapes.ts:407](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L407)
+[shapes.ts:630](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L630)
+
+***
+
+### renderOutlineDefault()
+
+> **renderOutlineDefault**(): `number`[][]
+
+Return default outline
+
+#### Returns
+
+`number`[][]
+
+#### Inherited from
+
+[`Line`](/api-core/classes/line/).[`renderOutlineDefault`](/api-core/classes/line/#renderoutlinedefault)
+
+#### Source
+
+[shapes.ts:1954](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L1954)
 
 ***
 
@@ -1727,13 +1932,15 @@ assign null if not found
 
 #### Source
 
-[shapes.ts:1769](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1769)
+[shapes.ts:2045](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L2045)
 
 ***
 
 ### toJSON()
 
 > **toJSON**(`recursive`, `keepRefs`): `any`
+
+Export shape to JSON
 
 #### Parameters
 
@@ -1751,7 +1958,7 @@ assign null if not found
 
 #### Source
 
-[shapes.ts:1744](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L1744)
+[shapes.ts:2020](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L2020)
 
 ***
 
@@ -1777,7 +1984,7 @@ Traverse all objects in breath-first order
 
 #### Source
 
-[core/obj.ts:77](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L77)
+[core/obj.ts:73](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L73)
 
 ***
 
@@ -1803,7 +2010,7 @@ Traverse all shapes in depth-first order
 
 #### Source
 
-[core/obj.ts:91](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L91)
+[core/obj.ts:87](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L87)
 
 ***
 
@@ -1823,7 +2030,7 @@ Returns an array of shapes in order of traverse sequence.
 
 #### Source
 
-[core/obj.ts:114](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L114)
+[core/obj.ts:110](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L110)
 
 ***
 
@@ -1843,4 +2050,28 @@ Returns an array of shapes in order of traverse sequence.
 
 #### Source
 
-[core/obj.ts:105](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/obj.ts#L105)
+[core/obj.ts:101](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/obj.ts#L101)
+
+***
+
+### update()
+
+> **update**(`canvas`): `void`
+
+Update shape
+
+#### Parameters
+
+• **canvas**: [`Canvas`](/api-core/classes/canvas/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Line`](/api-core/classes/line/).[`update`](/api-core/classes/line/#update)
+
+#### Source
+
+[shapes.ts:494](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L494)

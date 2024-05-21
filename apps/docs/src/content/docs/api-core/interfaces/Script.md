@@ -9,11 +9,11 @@ title: "Script"
 
 ### id
 
-> **id**: `string`
+> **id**: [`ScriptTypeEnum`](/api-core/type-aliases/scripttypeenum/)
 
 #### Source
 
-[shapes.ts:50](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L50)
+[shapes.ts:60](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L60)
 
 ***
 
@@ -23,4 +23,4 @@ title: "Script"
 
 #### Source
 
-[shapes.ts:51](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L51)
+[shapes.ts:61](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L61)

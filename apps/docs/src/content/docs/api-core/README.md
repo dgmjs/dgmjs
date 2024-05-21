@@ -33,8 +33,10 @@ title: "@dgmjs/core"
 - [Ellipse](/api-core/classes/ellipse/)
 - [Embed](/api-core/classes/embed/)
 - [Frame](/api-core/classes/frame/)
+- [Freehand](/api-core/classes/freehand/)
 - [Group](/api-core/classes/group/)
 - [Handler](/api-core/classes/handler/)
+- [Highlighter](/api-core/classes/highlighter/)
 - [Image](/api-core/classes/image/)
 - [InsertChildMutation](/api-core/classes/insertchildmutation/)
 - [Line](/api-core/classes/line/)
@@ -42,6 +44,7 @@ title: "@dgmjs/core"
 - [Mutation](/api-core/classes/mutation/)
 - [Obj](/api-core/classes/obj/)
 - [Page](/api-core/classes/page/)
+- [Path](/api-core/classes/path/)
 - [Plugin](/api-core/classes/plugin/)
 - [Rectangle](/api-core/classes/rectangle/)
 - [RemoveChildMutation](/api-core/classes/removechildmutation/)
@@ -55,6 +58,7 @@ title: "@dgmjs/core"
 
 ## Interfaces
 
+- [CanvasTextMetric](/api-core/interfaces/canvastextmetric/)
 - [Constraint](/api-core/interfaces/constraint/)
 - [DblClickEvent](/api-core/interfaces/dblclickevent/)
 - [Disposable](/api-core/interfaces/disposable/)
@@ -70,19 +74,27 @@ title: "@dgmjs/core"
 
 - [Colors](/api-core/type-aliases/colors/)
 - [ConstraintFn](/api-core/type-aliases/constraintfn/)
-- [ObjProps](/api-core/type-aliases/objprops/)
+- [HorzAlignEnum](/api-core/type-aliases/horzalignenum/)
+- [LineEndTypeEnum](/api-core/type-aliases/lineendtypeenum/)
+- [LineTypeEnum](/api-core/type-aliases/linetypeenum/)
+- [MovableEnum](/api-core/type-aliases/movableenum/)
 - [PageSize](/api-core/type-aliases/pagesize/)
+- [SVGPath](/api-core/type-aliases/svgpath/)
+- [ScriptTypeEnum](/api-core/type-aliases/scripttypeenum/)
+- [ShapeProps](/api-core/type-aliases/shapeprops/)
+- [SizableEnum](/api-core/type-aliases/sizableenum/)
+- [VertAlignEnum](/api-core/type-aliases/vertalignenum/)
 
 ## Variables
 
-- [AlignmentKind](/api-core/variables/alignmentkind/)
-- [FillStyle](/api-core/variables/fillstyle/)
+- [HorzAlign](/api-core/variables/horzalign/)
 - [LineEndType](/api-core/variables/lineendtype/)
 - [LineType](/api-core/variables/linetype/)
 - [Movable](/api-core/variables/movable/)
 - [MutationType](/api-core/variables/mutationtype/)
 - [ScriptType](/api-core/variables/scripttype/)
 - [Sizable](/api-core/variables/sizable/)
+- [VertAlign](/api-core/variables/vertalign/)
 - [constraintManager](/api-core/variables/constraintmanager/)
 - [manipulatorManager](/api-core/variables/manipulatormanager/)
 - [shapeInstantiator](/api-core/variables/shapeinstantiator/)
@@ -91,3 +103,10 @@ title: "@dgmjs/core"
 ## Functions
 
 - [basicSetup](/api-core/functions/basicsetup/)
+- [pathToString](/api-core/functions/pathtostring/)
+
+## References
+
+### FillStyle
+
+Re-exports [FillStyle](/api-core/namespaces/constants/variables/fillstyle/)

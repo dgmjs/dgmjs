@@ -5,30 +5,30 @@ prev: false
 title: "Movable"
 ---
 
-> `const` **Movable**: `Readonly`\<`object`\>
+> `const` **Movable**: `object`
 
 ## Type declaration
 
 ### FREE
 
-> **FREE**: `"free"` = `"free"`
+> `readonly` **FREE**: `"free"` = `"free"`
 
 ### HORZ
 
-> **HORZ**: `"horz"` = `"horz"`
+> `readonly` **HORZ**: `"horz"` = `"horz"`
 
 ### NONE
 
-> **NONE**: `"none"` = `"none"`
+> `readonly` **NONE**: `"none"` = `"none"`
 
 ### PARENT
 
-> **PARENT**: `"parent"` = `"parent"`
+> `readonly` **PARENT**: `"parent"` = `"parent"`
 
 ### VERT
 
-> **VERT**: `"vert"` = `"vert"`
+> `readonly` **VERT**: `"vert"` = `"vert"`
 
 ## Source
 
-[shapes.ts:69](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L69)
+[shapes.ts:74](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L74)

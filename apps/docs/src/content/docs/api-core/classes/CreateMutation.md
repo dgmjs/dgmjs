@@ -31,7 +31,7 @@ Create an object
 
 #### Source
 
-[core/transaction.ts:35](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L35)
+[core/transaction.ts:35](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L35)
 
 ## Properties
 
@@ -41,7 +41,7 @@ Create an object
 
 #### Source
 
-[core/transaction.ts:33](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L33)
+[core/transaction.ts:33](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L33)
 
 ***
 
@@ -55,7 +55,7 @@ Create an object
 
 #### Source
 
-[core/transaction.ts:18](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L18)
+[core/transaction.ts:18](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L18)
 
 ## Methods
 
@@ -77,7 +77,7 @@ Create an object
 
 #### Source
 
-[core/transaction.ts:40](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L40)
+[core/transaction.ts:40](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L40)
 
 ***
 
@@ -95,7 +95,7 @@ Create an object
 
 #### Source
 
-[core/transaction.ts:48](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L48)
+[core/transaction.ts:50](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L50)
 
 ***
 
@@ -117,4 +117,4 @@ Create an object
 
 #### Source
 
-[core/transaction.ts:44](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L44)
+[core/transaction.ts:45](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L45)

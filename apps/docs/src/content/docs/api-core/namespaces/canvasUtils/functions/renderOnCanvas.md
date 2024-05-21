@@ -5,7 +5,7 @@ prev: false
 title: "renderOnCanvas"
 ---
 
-> **renderOnCanvas**(`shapes`, `canvasElement`, `darkMode`, `pageSize`, `maxCanvasSize`, `maxScale`, `scaleAdjust`, `updateDOM`): `void`
+> **renderOnCanvas**(`shapes`, `canvasElement`, `darkMode`, `pageSize`, `maxCanvasSize`, `maxScale`, `scaleAdjust`, `update`, `showDOM`): `void`
 
 Render the shape on the canvas element
 
@@ -35,7 +35,13 @@ A number to indicate the maximum size of the canvas
 
 A number to adjust the scale
 
-• **updateDOM**: `boolean`= `false`
+• **update**: `boolean`= `false`
+
+A boolean value to indicate whether to update the shapes
+
+• **showDOM**: `boolean`= `false`
+
+A boolean value to indicate whether to update the DOM
 
 ## Returns
 
@@ -43,4 +49,4 @@ A number to adjust the scale
 
 ## Source
 
-[utils/canvas-utils.ts:14](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/utils/canvas-utils.ts#L14)
+[utils/canvas-utils.ts:17](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/utils/canvas-utils.ts#L17)

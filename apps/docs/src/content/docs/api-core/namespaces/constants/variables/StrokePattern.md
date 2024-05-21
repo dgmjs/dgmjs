@@ -5,22 +5,22 @@ prev: false
 title: "StrokePattern"
 ---
 
-> `const` **StrokePattern**: `Readonly`\<`object`\>
+> `const` **StrokePattern**: `object`
 
 ## Type declaration
 
 ### DASHED
 
-> **DASHED**: `number`[]
+> `readonly` **DASHED**: readonly [`6`, `4`]
 
 ### DOTTED
 
-> **DOTTED**: `number`[]
+> `readonly` **DOTTED**: readonly [`3`]
 
 ### SOLID
 
-> **SOLID**: `never`[] = `[]`
+> `readonly` **SOLID**: readonly [] = `[]`
 
 ## Source
 
-[graphics/const.ts:80](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/graphics/const.ts#L80)
+[graphics/const.ts:87](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/graphics/const.ts#L87)

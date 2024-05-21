@@ -5,18 +5,18 @@ prev: false
 title: "LineType"
 ---
 
-> `const` **LineType**: `Readonly`\<`object`\>
+> `const` **LineType**: `object`
 
 ## Type declaration
 
 ### CURVE
 
-> **CURVE**: `"curve"` = `"curve"`
+> `readonly` **CURVE**: `"curve"` = `"curve"`
 
 ### STRAIGHT
 
-> **STRAIGHT**: `"straight"` = `"straight"`
+> `readonly` **STRAIGHT**: `"straight"` = `"straight"`
 
 ## Source
 
-[shapes.ts:92](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L92)
+[shapes.ts:94](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L94)

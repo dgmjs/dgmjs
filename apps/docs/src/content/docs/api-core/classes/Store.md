@@ -29,7 +29,7 @@ Constructor
 
 #### Source
 
-[core/store.ts:58](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/store.ts#L58)
+[core/store.ts:59](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L59)
 
 ## Properties
 
@@ -41,7 +41,7 @@ History
 
 #### Source
 
-[core/store.ts:43](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/store.ts#L43)
+[core/store.ts:44](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L44)
 
 ***
 
@@ -53,7 +53,7 @@ Index for object.id
 
 #### Source
 
-[core/store.ts:48](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/store.ts#L48)
+[core/store.ts:49](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L49)
 
 ***
 
@@ -65,7 +65,7 @@ Shape instantiator
 
 #### Source
 
-[core/store.ts:38](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/store.ts#L38)
+[core/store.ts:39](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L39)
 
 ***
 
@@ -77,7 +77,7 @@ Store options
 
 #### Source
 
-[core/store.ts:33](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/store.ts#L33)
+[core/store.ts:34](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L34)
 
 ***
 
@@ -89,7 +89,7 @@ the root object
 
 #### Source
 
-[core/store.ts:53](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/store.ts#L53)
+[core/store.ts:54](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L54)
 
 ## Methods
 
@@ -109,7 +109,7 @@ Add to index for the object (with all descendants)
 
 #### Source
 
-[core/store.ts:77](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/store.ts#L77)
+[core/store.ts:78](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L78)
 
 ***
 
@@ -125,7 +125,7 @@ Clear the store
 
 #### Source
 
-[core/store.ts:69](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/store.ts#L69)
+[core/store.ts:70](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L70)
 
 ***
 
@@ -145,7 +145,7 @@ Set the root from JSON
 
 #### Source
 
-[core/store.ts:127](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/store.ts#L127)
+[core/store.ts:137](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L137)
 
 ***
 
@@ -165,7 +165,7 @@ Get an object by id
 
 #### Source
 
-[core/store.ts:105](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/store.ts#L105)
+[core/store.ts:115](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L115)
 
 ***
 
@@ -185,7 +185,7 @@ Test shape is exists in the store or not
 
 #### Source
 
-[core/store.ts:112](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/store.ts#L112)
+[core/store.ts:122](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L122)
 
 ***
 
@@ -205,7 +205,7 @@ Remove from index for the object (with all descendants)
 
 #### Source
 
-[core/store.ts:91](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/store.ts#L91)
+[core/store.ts:92](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L92)
 
 ***
 
@@ -225,7 +225,7 @@ Set the root object
 
 #### Source
 
-[core/store.ts:139](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/store.ts#L139)
+[core/store.ts:149](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L149)
 
 ***
 
@@ -241,4 +241,24 @@ Return JSON of the root
 
 #### Source
 
-[core/store.ts:120](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/store.ts#L120)
+[core/store.ts:130](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L130)
+
+***
+
+### update()
+
+> **update**(`obj`): `void`
+
+Update obj
+
+#### Parameters
+
+• **obj**: [`Obj`](/api-core/classes/obj/)
+
+#### Returns
+
+`void`
+
+#### Source
+
+[core/store.ts:106](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/store.ts#L106)

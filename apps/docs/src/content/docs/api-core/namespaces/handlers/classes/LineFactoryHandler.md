@@ -33,7 +33,7 @@ Line Factory Handler
 
 #### Source
 
-[editor.ts:1041](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1041)
+[editor.ts:1103](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1103)
 
 ## Properties
 
@@ -43,7 +43,7 @@ Line Factory Handler
 
 #### Source
 
-[handlers/line-handler.ts:29](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/line-handler.ts#L29)
+[handlers/line-handler.ts:29](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/line-handler.ts#L29)
 
 ***
 
@@ -53,7 +53,7 @@ Line Factory Handler
 
 #### Source
 
-[handlers/line-handler.ts:27](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/line-handler.ts#L27)
+[handlers/line-handler.ts:27](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/line-handler.ts#L27)
 
 ***
 
@@ -63,7 +63,7 @@ Line Factory Handler
 
 #### Source
 
-[handlers/line-handler.ts:26](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/line-handler.ts#L26)
+[handlers/line-handler.ts:26](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/line-handler.ts#L26)
 
 ***
 
@@ -73,7 +73,7 @@ Line Factory Handler
 
 #### Source
 
-[handlers/line-handler.ts:25](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/line-handler.ts#L25)
+[handlers/line-handler.ts:25](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/line-handler.ts#L25)
 
 ***
 
@@ -83,7 +83,7 @@ Line Factory Handler
 
 #### Source
 
-[handlers/line-handler.ts:30](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/line-handler.ts#L30)
+[handlers/line-handler.ts:30](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/line-handler.ts#L30)
 
 ***
 
@@ -97,7 +97,7 @@ Line Factory Handler
 
 #### Source
 
-[editor.ts:1038](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1038)
+[editor.ts:1100](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1100)
 
 ***
 
@@ -107,7 +107,7 @@ Line Factory Handler
 
 #### Source
 
-[handlers/line-handler.ts:31](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/line-handler.ts#L31)
+[handlers/line-handler.ts:31](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/line-handler.ts#L31)
 
 ***
 
@@ -121,7 +121,7 @@ Line Factory Handler
 
 #### Source
 
-[editor.ts:1039](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1039)
+[editor.ts:1101](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1101)
 
 ***
 
@@ -131,7 +131,7 @@ Line Factory Handler
 
 #### Source
 
-[handlers/line-handler.ts:28](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/line-handler.ts#L28)
+[handlers/line-handler.ts:28](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/line-handler.ts#L28)
 
 ***
 
@@ -141,15 +141,15 @@ Line Factory Handler
 
 #### Source
 
-[handlers/line-handler.ts:32](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/line-handler.ts#L32)
+[handlers/line-handler.ts:32](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/line-handler.ts#L32)
 
 ## Methods
 
-### done()
+### activate()
 
-> **done**(`editor`): `void`
+> **activate**(`editor`): `void`
 
-Call this method when the handler is done
+Activate the handler
 
 #### Parameters
 
@@ -161,11 +161,59 @@ Call this method when the handler is done
 
 #### Inherited from
 
-[`Handler`](/api-core/classes/handler/).[`done`](/api-core/classes/handler/#done)
+[`Handler`](/api-core/classes/handler/).[`activate`](/api-core/classes/handler/#activate)
 
 #### Source
 
-[editor.ts:1072](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1072)
+[editor.ts:1129](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1129)
+
+***
+
+### complete()
+
+> **complete**(`editor`): `void`
+
+Trigger when the handler action is complete
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`complete`](/api-core/classes/handler/#complete)
+
+#### Source
+
+[editor.ts:1120](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1120)
+
+***
+
+### deactivate()
+
+> **deactivate**(`editor`): `void`
+
+Deactivate the handler
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`deactivate`](/api-core/classes/handler/#deactivate)
+
+#### Source
+
+[editor.ts:1137](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1137)
 
 ***
 
@@ -189,7 +237,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[editor.ts:1119](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1119)
+[editor.ts:1182](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1182)
 
 ***
 
@@ -209,27 +257,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[handlers/line-handler.ts:69](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/line-handler.ts#L69)
-
-***
-
-### getLock()
-
-> **getLock**(): `boolean`
-
-Get lock
-
-#### Returns
-
-`boolean`
-
-#### Inherited from
-
-[`Handler`](/api-core/classes/handler/).[`getLock`](/api-core/classes/handler/#getlock)
-
-#### Source
-
-[editor.ts:1058](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1058)
+[handlers/line-handler.ts:68](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/line-handler.ts#L68)
 
 ***
 
@@ -249,7 +277,7 @@ Get lock
 
 #### Source
 
-[handlers/line-handler.ts:45](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/line-handler.ts#L45)
+[handlers/line-handler.ts:45](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/line-handler.ts#L45)
 
 ***
 
@@ -275,7 +303,7 @@ keyDown
 
 #### Source
 
-[handlers/line-handler.ts:144](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/line-handler.ts#L144)
+[handlers/line-handler.ts:144](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/line-handler.ts#L144)
 
 ***
 
@@ -301,7 +329,7 @@ keyUp
 
 #### Source
 
-[editor.ts:1114](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1114)
+[editor.ts:1177](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1177)
 
 ***
 
@@ -309,7 +337,7 @@ keyUp
 
 > **onActivate**(`editor`): `void`
 
-called when activated
+Triggered when activated
 
 #### Parameters
 
@@ -325,7 +353,7 @@ called when activated
 
 #### Source
 
-[handlers/line-handler.ts:154](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/line-handler.ts#L154)
+[handlers/line-handler.ts:162](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/line-handler.ts#L162)
 
 ***
 
@@ -349,7 +377,7 @@ Triggered when deactivate
 
 #### Source
 
-[handlers/line-handler.ts:159](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/line-handler.ts#L159)
+[handlers/line-handler.ts:167](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/line-handler.ts#L167)
 
 ***
 
@@ -375,7 +403,7 @@ pointerDown
 
 #### Source
 
-[handlers/line-handler.ts:84](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/line-handler.ts#L84)
+[handlers/line-handler.ts:84](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/line-handler.ts#L84)
 
 ***
 
@@ -401,7 +429,7 @@ pointerMove
 
 #### Source
 
-[handlers/line-handler.ts:111](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/line-handler.ts#L111)
+[handlers/line-handler.ts:111](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/line-handler.ts#L111)
 
 ***
 
@@ -427,7 +455,7 @@ pointerUp
 
 #### Source
 
-[handlers/line-handler.ts:131](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/line-handler.ts#L131)
+[handlers/line-handler.ts:131](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/line-handler.ts#L131)
 
 ***
 
@@ -447,31 +475,7 @@ Reset the states of handler
 
 #### Source
 
-[handlers/line-handler.ts:34](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/line-handler.ts#L34)
-
-***
-
-### setLock()
-
-> **setLock**(`lock`): `void`
-
-Set lock
-
-#### Parameters
-
-• **lock**: `boolean`
-
-#### Returns
-
-`void`
-
-#### Inherited from
-
-[`Handler`](/api-core/classes/handler/).[`setLock`](/api-core/classes/handler/#setlock)
-
-#### Source
-
-[editor.ts:1065](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1065)
+[handlers/line-handler.ts:34](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/line-handler.ts#L34)
 
 ***
 
@@ -491,4 +495,4 @@ Set lock
 
 #### Source
 
-[handlers/line-handler.ts:57](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/line-handler.ts#L57)
+[handlers/line-handler.ts:57](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/line-handler.ts#L57)

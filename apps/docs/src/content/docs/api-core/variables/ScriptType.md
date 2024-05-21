@@ -5,18 +5,18 @@ prev: false
 title: "ScriptType"
 ---
 
-> `const` **ScriptType**: `Readonly`\<`object`\>
+> `const` **ScriptType**: `object`
 
 ## Type declaration
 
 ### OUTLINE
 
-> **OUTLINE**: `"outline"` = `"outline"`
+> `readonly` **OUTLINE**: `"outline"` = `"outline"`
 
 ### RENDER
 
-> **RENDER**: `"render"` = `"render"`
+> `readonly` **RENDER**: `"render"` = `"render"`
 
 ## Source
 
-[shapes.ts:64](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L64)
+[shapes.ts:40](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L40)

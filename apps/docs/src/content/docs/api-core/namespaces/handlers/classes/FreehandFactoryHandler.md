@@ -33,7 +33,7 @@ Freehand Factory Handler
 
 #### Source
 
-[editor.ts:1041](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1041)
+[editor.ts:1103](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1103)
 
 ## Properties
 
@@ -43,7 +43,7 @@ Freehand Factory Handler
 
 #### Source
 
-[handlers/freehand-handler.ts:30](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/freehand-handler.ts#L30)
+[handlers/freehand-handler.ts:29](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/freehand-handler.ts#L29)
 
 ***
 
@@ -53,7 +53,7 @@ Freehand Factory Handler
 
 #### Source
 
-[handlers/freehand-handler.ts:28](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/freehand-handler.ts#L28)
+[handlers/freehand-handler.ts:27](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/freehand-handler.ts#L27)
 
 ***
 
@@ -63,7 +63,7 @@ Freehand Factory Handler
 
 #### Source
 
-[handlers/freehand-handler.ts:27](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/freehand-handler.ts#L27)
+[handlers/freehand-handler.ts:26](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/freehand-handler.ts#L26)
 
 ***
 
@@ -73,7 +73,7 @@ Freehand Factory Handler
 
 #### Source
 
-[handlers/freehand-handler.ts:26](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/freehand-handler.ts#L26)
+[handlers/freehand-handler.ts:25](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/freehand-handler.ts#L25)
 
 ***
 
@@ -83,7 +83,7 @@ Freehand Factory Handler
 
 #### Source
 
-[handlers/freehand-handler.ts:29](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/freehand-handler.ts#L29)
+[handlers/freehand-handler.ts:28](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/freehand-handler.ts#L28)
 
 ***
 
@@ -97,7 +97,7 @@ Freehand Factory Handler
 
 #### Source
 
-[editor.ts:1038](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1038)
+[editor.ts:1100](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1100)
 
 ***
 
@@ -111,25 +111,25 @@ Freehand Factory Handler
 
 #### Source
 
-[editor.ts:1039](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1039)
+[editor.ts:1101](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1101)
 
 ***
 
 ### shape
 
-> **shape**: `null` \| [`Line`](/api-core/classes/line/) = `null`
+> **shape**: `null` \| [`Freehand`](/api-core/classes/freehand/) = `null`
 
 #### Source
 
-[handlers/freehand-handler.ts:31](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/freehand-handler.ts#L31)
+[handlers/freehand-handler.ts:30](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/freehand-handler.ts#L30)
 
 ## Methods
 
-### done()
+### activate()
 
-> **done**(`editor`): `void`
+> **activate**(`editor`): `void`
 
-Call this method when the handler is done
+Activate the handler
 
 #### Parameters
 
@@ -141,11 +141,59 @@ Call this method when the handler is done
 
 #### Inherited from
 
-[`Handler`](/api-core/classes/handler/).[`done`](/api-core/classes/handler/#done)
+[`Handler`](/api-core/classes/handler/).[`activate`](/api-core/classes/handler/#activate)
 
 #### Source
 
-[editor.ts:1072](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1072)
+[editor.ts:1129](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1129)
+
+***
+
+### complete()
+
+> **complete**(`editor`): `void`
+
+Trigger when the handler action is complete
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`complete`](/api-core/classes/handler/#complete)
+
+#### Source
+
+[editor.ts:1120](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1120)
+
+***
+
+### deactivate()
+
+> **deactivate**(`editor`): `void`
+
+Deactivate the handler
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`deactivate`](/api-core/classes/handler/#deactivate)
+
+#### Source
+
+[editor.ts:1137](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1137)
 
 ***
 
@@ -169,7 +217,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[editor.ts:1119](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1119)
+[editor.ts:1182](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1182)
 
 ***
 
@@ -189,27 +237,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[handlers/freehand-handler.ts:74](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/freehand-handler.ts#L74)
-
-***
-
-### getLock()
-
-> **getLock**(): `boolean`
-
-Get lock
-
-#### Returns
-
-`boolean`
-
-#### Inherited from
-
-[`Handler`](/api-core/classes/handler/).[`getLock`](/api-core/classes/handler/#getlock)
-
-#### Source
-
-[editor.ts:1058](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1058)
+[handlers/freehand-handler.ts:71](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/freehand-handler.ts#L71)
 
 ***
 
@@ -229,7 +257,7 @@ Get lock
 
 #### Source
 
-[handlers/freehand-handler.ts:42](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/freehand-handler.ts#L42)
+[handlers/freehand-handler.ts:41](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/freehand-handler.ts#L41)
 
 ***
 
@@ -255,7 +283,7 @@ keyDown
 
 #### Source
 
-[handlers/freehand-handler.ts:129](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/freehand-handler.ts#L129)
+[handlers/freehand-handler.ts:126](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/freehand-handler.ts#L126)
 
 ***
 
@@ -281,7 +309,7 @@ keyUp
 
 #### Source
 
-[editor.ts:1114](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1114)
+[editor.ts:1177](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1177)
 
 ***
 
@@ -289,7 +317,7 @@ keyUp
 
 > **onActivate**(`editor`): `void`
 
-called when activated
+Triggered when activated
 
 #### Parameters
 
@@ -305,7 +333,7 @@ called when activated
 
 #### Source
 
-[handlers/freehand-handler.ts:139](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/freehand-handler.ts#L139)
+[handlers/freehand-handler.ts:136](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/freehand-handler.ts#L136)
 
 ***
 
@@ -329,7 +357,7 @@ Triggered when deactivate
 
 #### Source
 
-[handlers/freehand-handler.ts:143](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/freehand-handler.ts#L143)
+[handlers/freehand-handler.ts:140](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/freehand-handler.ts#L140)
 
 ***
 
@@ -355,7 +383,7 @@ pointerDown
 
 #### Source
 
-[handlers/freehand-handler.ts:90](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/freehand-handler.ts#L90)
+[handlers/freehand-handler.ts:87](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/freehand-handler.ts#L87)
 
 ***
 
@@ -381,7 +409,7 @@ pointerMove
 
 #### Source
 
-[handlers/freehand-handler.ts:105](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/freehand-handler.ts#L105)
+[handlers/freehand-handler.ts:102](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/freehand-handler.ts#L102)
 
 ***
 
@@ -407,7 +435,7 @@ pointerUp
 
 #### Source
 
-[handlers/freehand-handler.ts:120](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/freehand-handler.ts#L120)
+[handlers/freehand-handler.ts:117](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/freehand-handler.ts#L117)
 
 ***
 
@@ -427,31 +455,7 @@ Reset the states of handler
 
 #### Source
 
-[handlers/freehand-handler.ts:33](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/freehand-handler.ts#L33)
-
-***
-
-### setLock()
-
-> **setLock**(`lock`): `void`
-
-Set lock
-
-#### Parameters
-
-• **lock**: `boolean`
-
-#### Returns
-
-`void`
-
-#### Inherited from
-
-[`Handler`](/api-core/classes/handler/).[`setLock`](/api-core/classes/handler/#setlock)
-
-#### Source
-
-[editor.ts:1065](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1065)
+[handlers/freehand-handler.ts:32](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/freehand-handler.ts#L32)
 
 ***
 
@@ -471,4 +475,4 @@ Set lock
 
 #### Source
 
-[handlers/freehand-handler.ts:54](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/freehand-handler.ts#L54)
+[handlers/freehand-handler.ts:53](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/freehand-handler.ts#L53)

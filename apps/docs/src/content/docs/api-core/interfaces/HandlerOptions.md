@@ -7,10 +7,10 @@ title: "HandlerOptions"
 
 ## Properties
 
-### lock
+### defaultLock
 
-> **lock**: `boolean`
+> **defaultLock**: `boolean`
 
 #### Source
 
-[editor.ts:1031](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1031)
+[editor.ts:1093](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1093)

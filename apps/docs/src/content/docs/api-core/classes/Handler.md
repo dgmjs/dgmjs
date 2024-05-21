@@ -17,6 +17,7 @@ Handler
 - [`ConnectorFactoryHandler`](/api-core/namespaces/handlers/classes/connectorfactoryhandler/)
 - [`LineFactoryHandler`](/api-core/namespaces/handlers/classes/linefactoryhandler/)
 - [`FreehandFactoryHandler`](/api-core/namespaces/handlers/classes/freehandfactoryhandler/)
+- [`HighlighterFactoryHandler`](/api-core/namespaces/handlers/classes/highlighterfactoryhandler/)
 - [`ImageFactoryHandler`](/api-core/namespaces/handlers/classes/imagefactoryhandler/)
 - [`FrameFactoryHandler`](/api-core/namespaces/handlers/classes/framefactoryhandler/)
 - [`EmbedFactoryHandler`](/api-core/namespaces/handlers/classes/embedfactoryhandler/)
@@ -39,7 +40,7 @@ Handler
 
 #### Source
 
-[editor.ts:1041](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1041)
+[editor.ts:1103](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1103)
 
 ## Properties
 
@@ -49,7 +50,7 @@ Handler
 
 #### Source
 
-[editor.ts:1038](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1038)
+[editor.ts:1100](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1100)
 
 ***
 
@@ -59,15 +60,15 @@ Handler
 
 #### Source
 
-[editor.ts:1039](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1039)
+[editor.ts:1101](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1101)
 
 ## Methods
 
-### done()
+### activate()
 
-> **done**(`editor`): `void`
+> **activate**(`editor`): `void`
 
-Call this method when the handler is done
+Activate the handler
 
 #### Parameters
 
@@ -79,7 +80,47 @@ Call this method when the handler is done
 
 #### Source
 
-[editor.ts:1072](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1072)
+[editor.ts:1129](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1129)
+
+***
+
+### complete()
+
+> **complete**(`editor`): `void`
+
+Trigger when the handler action is complete
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+#### Returns
+
+`void`
+
+#### Source
+
+[editor.ts:1120](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1120)
+
+***
+
+### deactivate()
+
+> **deactivate**(`editor`): `void`
+
+Deactivate the handler
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+#### Returns
+
+`void`
+
+#### Source
+
+[editor.ts:1137](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1137)
 
 ***
 
@@ -99,23 +140,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[editor.ts:1119](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1119)
-
-***
-
-### getLock()
-
-> **getLock**(): `boolean`
-
-Get lock
-
-#### Returns
-
-`boolean`
-
-#### Source
-
-[editor.ts:1058](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1058)
+[editor.ts:1182](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1182)
 
 ***
 
@@ -137,7 +162,7 @@ keyDown
 
 #### Source
 
-[editor.ts:1109](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1109)
+[editor.ts:1172](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1172)
 
 ***
 
@@ -159,7 +184,7 @@ keyUp
 
 #### Source
 
-[editor.ts:1114](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1114)
+[editor.ts:1177](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1177)
 
 ***
 
@@ -167,7 +192,7 @@ keyUp
 
 > **onActivate**(`editor`): `void`
 
-called when activated
+Triggered when activated
 
 #### Parameters
 
@@ -179,7 +204,7 @@ called when activated
 
 #### Source
 
-[editor.ts:1081](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1081)
+[editor.ts:1144](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1144)
 
 ***
 
@@ -199,7 +224,7 @@ Triggered when deactivate
 
 #### Source
 
-[editor.ts:1086](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1086)
+[editor.ts:1149](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1149)
 
 ***
 
@@ -223,7 +248,7 @@ pointerDown
 
 #### Source
 
-[editor.ts:1092](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1092)
+[editor.ts:1155](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1155)
 
 ***
 
@@ -247,7 +272,7 @@ pointerMove
 
 #### Source
 
-[editor.ts:1104](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1104)
+[editor.ts:1167](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1167)
 
 ***
 
@@ -271,7 +296,7 @@ pointerUp
 
 #### Source
 
-[editor.ts:1098](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1098)
+[editor.ts:1161](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1161)
 
 ***
 
@@ -287,24 +312,4 @@ Reset the states of handler
 
 #### Source
 
-[editor.ts:1053](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1053)
-
-***
-
-### setLock()
-
-> **setLock**(`lock`): `void`
-
-Set lock
-
-#### Parameters
-
-• **lock**: `boolean`
-
-#### Returns
-
-`void`
-
-#### Source
-
-[editor.ts:1065](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1065)
+[editor.ts:1115](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1115)

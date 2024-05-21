@@ -5,30 +5,30 @@ prev: false
 title: "Sizable"
 ---
 
-> `const` **Sizable**: `Readonly`\<`object`\>
+> `const` **Sizable**: `object`
 
 ## Type declaration
 
 ### FREE
 
-> **FREE**: `"free"` = `"free"`
+> `readonly` **FREE**: `"free"` = `"free"`
 
 ### HORZ
 
-> **HORZ**: `"horz"` = `"horz"`
+> `readonly` **HORZ**: `"horz"` = `"horz"`
 
 ### NONE
 
-> **NONE**: `"none"` = `"none"`
+> `readonly` **NONE**: `"none"` = `"none"`
 
 ### RATIO
 
-> **RATIO**: `"ratio"` = `"ratio"`
+> `readonly` **RATIO**: `"ratio"` = `"ratio"`
 
 ### VERT
 
-> **VERT**: `"vert"` = `"vert"`
+> `readonly` **VERT**: `"vert"` = `"vert"`
 
 ## Source
 
-[shapes.ts:77](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/shapes.ts#L77)
+[shapes.ts:84](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/shapes.ts#L84)

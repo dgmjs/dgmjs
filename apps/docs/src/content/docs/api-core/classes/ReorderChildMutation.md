@@ -35,7 +35,7 @@ Reorder a child
 
 #### Source
 
-[core/transaction.ts:245](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L245)
+[core/transaction.ts:261](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L261)
 
 ## Properties
 
@@ -45,7 +45,7 @@ Reorder a child
 
 #### Source
 
-[core/transaction.ts:242](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L242)
+[core/transaction.ts:258](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L258)
 
 ***
 
@@ -55,7 +55,7 @@ Reorder a child
 
 #### Source
 
-[core/transaction.ts:241](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L241)
+[core/transaction.ts:257](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L257)
 
 ***
 
@@ -65,7 +65,7 @@ Reorder a child
 
 #### Source
 
-[core/transaction.ts:243](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L243)
+[core/transaction.ts:259](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L259)
 
 ***
 
@@ -75,7 +75,7 @@ Reorder a child
 
 #### Source
 
-[core/transaction.ts:240](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L240)
+[core/transaction.ts:256](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L256)
 
 ***
 
@@ -89,7 +89,7 @@ Reorder a child
 
 #### Source
 
-[core/transaction.ts:18](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L18)
+[core/transaction.ts:18](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L18)
 
 ## Methods
 
@@ -111,7 +111,7 @@ Reorder a child
 
 #### Source
 
-[core/transaction.ts:257](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L257)
+[core/transaction.ts:273](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L273)
 
 ***
 
@@ -149,7 +149,7 @@ Reorder a child
 
 #### Source
 
-[core/transaction.ts:273](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L273)
+[core/transaction.ts:293](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L293)
 
 ***
 
@@ -171,4 +171,4 @@ Reorder a child
 
 #### Source
 
-[core/transaction.ts:265](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L265)
+[core/transaction.ts:283](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L283)

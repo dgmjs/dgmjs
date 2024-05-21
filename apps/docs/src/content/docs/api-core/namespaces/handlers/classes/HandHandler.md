@@ -33,7 +33,7 @@ Hand Handler
 
 #### Source
 
-[editor.ts:1041](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1041)
+[editor.ts:1103](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1103)
 
 ## Properties
 
@@ -43,7 +43,7 @@ Hand Handler
 
 #### Source
 
-[handlers/hand-handler.ts:25](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/hand-handler.ts#L25)
+[handlers/hand-handler.ts:25](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/hand-handler.ts#L25)
 
 ***
 
@@ -53,7 +53,7 @@ Hand Handler
 
 #### Source
 
-[handlers/hand-handler.ts:24](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/hand-handler.ts#L24)
+[handlers/hand-handler.ts:24](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/hand-handler.ts#L24)
 
 ***
 
@@ -63,7 +63,7 @@ Hand Handler
 
 #### Source
 
-[handlers/hand-handler.ts:23](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/hand-handler.ts#L23)
+[handlers/hand-handler.ts:23](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/hand-handler.ts#L23)
 
 ***
 
@@ -73,7 +73,7 @@ Hand Handler
 
 #### Source
 
-[handlers/hand-handler.ts:26](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/hand-handler.ts#L26)
+[handlers/hand-handler.ts:26](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/hand-handler.ts#L26)
 
 ***
 
@@ -83,7 +83,7 @@ Hand Handler
 
 #### Source
 
-[handlers/hand-handler.ts:27](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/hand-handler.ts#L27)
+[handlers/hand-handler.ts:27](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/hand-handler.ts#L27)
 
 ***
 
@@ -97,7 +97,7 @@ Hand Handler
 
 #### Source
 
-[editor.ts:1038](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1038)
+[editor.ts:1100](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1100)
 
 ***
 
@@ -111,15 +111,15 @@ Hand Handler
 
 #### Source
 
-[editor.ts:1039](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1039)
+[editor.ts:1101](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1101)
 
 ## Methods
 
-### done()
+### activate()
 
-> **done**(`editor`): `void`
+> **activate**(`editor`): `void`
 
-Call this method when the handler is done
+Activate the handler
 
 #### Parameters
 
@@ -131,11 +131,59 @@ Call this method when the handler is done
 
 #### Inherited from
 
-[`Handler`](/api-core/classes/handler/).[`done`](/api-core/classes/handler/#done)
+[`Handler`](/api-core/classes/handler/).[`activate`](/api-core/classes/handler/#activate)
 
 #### Source
 
-[editor.ts:1072](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1072)
+[editor.ts:1129](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1129)
+
+***
+
+### complete()
+
+> **complete**(`editor`): `void`
+
+Trigger when the handler action is complete
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`complete`](/api-core/classes/handler/#complete)
+
+#### Source
+
+[editor.ts:1120](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1120)
+
+***
+
+### deactivate()
+
+> **deactivate**(`editor`): `void`
+
+Deactivate the handler
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`deactivate`](/api-core/classes/handler/#deactivate)
+
+#### Source
+
+[editor.ts:1137](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1137)
 
 ***
 
@@ -159,27 +207,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[editor.ts:1119](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1119)
-
-***
-
-### getLock()
-
-> **getLock**(): `boolean`
-
-Get lock
-
-#### Returns
-
-`boolean`
-
-#### Inherited from
-
-[`Handler`](/api-core/classes/handler/).[`getLock`](/api-core/classes/handler/#getlock)
-
-#### Source
-
-[editor.ts:1058](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1058)
+[editor.ts:1182](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1182)
 
 ***
 
@@ -205,7 +233,7 @@ keyDown
 
 #### Source
 
-[editor.ts:1109](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1109)
+[editor.ts:1172](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1172)
 
 ***
 
@@ -231,7 +259,7 @@ keyUp
 
 #### Source
 
-[editor.ts:1114](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1114)
+[editor.ts:1177](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1177)
 
 ***
 
@@ -239,7 +267,7 @@ keyUp
 
 > **onActivate**(`editor`): `void`
 
-called when activated
+Triggered when activated
 
 #### Parameters
 
@@ -255,7 +283,7 @@ called when activated
 
 #### Source
 
-[handlers/hand-handler.ts:77](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/hand-handler.ts#L77)
+[handlers/hand-handler.ts:77](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/hand-handler.ts#L77)
 
 ***
 
@@ -279,7 +307,7 @@ Triggered when deactivate
 
 #### Source
 
-[handlers/hand-handler.ts:81](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/hand-handler.ts#L81)
+[handlers/hand-handler.ts:81](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/hand-handler.ts#L81)
 
 ***
 
@@ -305,7 +333,7 @@ handle pointer down event
 
 #### Source
 
-[handlers/hand-handler.ts:40](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/hand-handler.ts#L40)
+[handlers/hand-handler.ts:40](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/hand-handler.ts#L40)
 
 ***
 
@@ -331,7 +359,7 @@ handle pointer move event
 
 #### Source
 
-[handlers/hand-handler.ts:55](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/hand-handler.ts#L55)
+[handlers/hand-handler.ts:55](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/hand-handler.ts#L55)
 
 ***
 
@@ -357,7 +385,7 @@ handle pointer up event
 
 #### Source
 
-[handlers/hand-handler.ts:69](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/hand-handler.ts#L69)
+[handlers/hand-handler.ts:69](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/hand-handler.ts#L69)
 
 ***
 
@@ -377,28 +405,4 @@ Reset the states of handler
 
 #### Source
 
-[handlers/hand-handler.ts:29](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/handlers/hand-handler.ts#L29)
-
-***
-
-### setLock()
-
-> **setLock**(`lock`): `void`
-
-Set lock
-
-#### Parameters
-
-• **lock**: `boolean`
-
-#### Returns
-
-`void`
-
-#### Inherited from
-
-[`Handler`](/api-core/classes/handler/).[`setLock`](/api-core/classes/handler/#setlock)
-
-#### Source
-
-[editor.ts:1065](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/editor.ts#L1065)
+[handlers/hand-handler.ts:29](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/hand-handler.ts#L29)

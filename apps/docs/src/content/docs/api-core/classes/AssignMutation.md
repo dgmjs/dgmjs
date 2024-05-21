@@ -35,7 +35,7 @@ Assign a value to an object field
 
 #### Source
 
-[core/transaction.ts:86](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L86)
+[core/transaction.ts:90](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L90)
 
 ## Properties
 
@@ -45,7 +45,7 @@ Assign a value to an object field
 
 #### Source
 
-[core/transaction.ts:82](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L82)
+[core/transaction.ts:86](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L86)
 
 ***
 
@@ -55,7 +55,7 @@ Assign a value to an object field
 
 #### Source
 
-[core/transaction.ts:83](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L83)
+[core/transaction.ts:87](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L87)
 
 ***
 
@@ -65,7 +65,7 @@ Assign a value to an object field
 
 #### Source
 
-[core/transaction.ts:81](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L81)
+[core/transaction.ts:85](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L85)
 
 ***
 
@@ -75,7 +75,7 @@ Assign a value to an object field
 
 #### Source
 
-[core/transaction.ts:84](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L84)
+[core/transaction.ts:88](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L88)
 
 ***
 
@@ -89,7 +89,7 @@ Assign a value to an object field
 
 #### Source
 
-[core/transaction.ts:18](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L18)
+[core/transaction.ts:18](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L18)
 
 ## Methods
 
@@ -111,7 +111,7 @@ Assign a value to an object field
 
 #### Source
 
-[core/transaction.ts:94](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L94)
+[core/transaction.ts:98](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L98)
 
 ***
 
@@ -149,7 +149,7 @@ Assign a value to an object field
 
 #### Source
 
-[core/transaction.ts:102](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L102)
+[core/transaction.ts:108](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L108)
 
 ***
 
@@ -171,4 +171,4 @@ Assign a value to an object field
 
 #### Source
 
-[core/transaction.ts:98](https://github.com/dgmjs/dgmjs/blob/c296d113d513e412f08f9016159ca40d11e704cd/packages/core/src/core/transaction.ts#L98)
+[core/transaction.ts:103](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L103)
