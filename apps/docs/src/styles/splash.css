@@ -1,0 +1,7 @@
+body .page header.header {
+  display: none;
+}
+
+body .page div.main-frame {
+  padding-top: 0;
+}

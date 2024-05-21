@@ -18,6 +18,9 @@ export default defineConfig({
             collapsed: true,
             label: "@dgmjs/core",
           },
+          typeDoc: {
+            gitRevision: "main",
+          },
         }),
       ],
       social: {

@@ -35,7 +35,7 @@ Insert a child
 
 #### Source
 
-[core/transaction.ts:165](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L165)
+[core/transaction.ts:165](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L165)
 
 ## Properties
 
@@ -45,7 +45,7 @@ Insert a child
 
 #### Source
 
-[core/transaction.ts:162](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L162)
+[core/transaction.ts:162](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L162)
 
 ***
 
@@ -55,7 +55,7 @@ Insert a child
 
 #### Source
 
-[core/transaction.ts:161](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L161)
+[core/transaction.ts:161](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L161)
 
 ***
 
@@ -65,7 +65,7 @@ Insert a child
 
 #### Source
 
-[core/transaction.ts:163](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L163)
+[core/transaction.ts:163](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L163)
 
 ***
 
@@ -79,7 +79,7 @@ Insert a child
 
 #### Source
 
-[core/transaction.ts:18](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L18)
+[core/transaction.ts:18](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L18)
 
 ## Methods
 
@@ -101,7 +101,7 @@ Insert a child
 
 #### Source
 
-[core/transaction.ts:176](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L176)
+[core/transaction.ts:176](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L176)
 
 ***
 
@@ -135,7 +135,7 @@ Insert a child
 
 #### Source
 
-[core/transaction.ts:194](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L194)
+[core/transaction.ts:194](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L194)
 
 ***
 
@@ -157,4 +157,4 @@ Insert a child
 
 #### Source
 
-[core/transaction.ts:185](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L185)
+[core/transaction.ts:185](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L185)

@@ -31,7 +31,7 @@ Delete an object
 
 #### Source
 
-[core/transaction.ts:61](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L61)
+[core/transaction.ts:61](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L61)
 
 ## Properties
 
@@ -41,7 +41,7 @@ Delete an object
 
 #### Source
 
-[core/transaction.ts:59](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L59)
+[core/transaction.ts:59](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L59)
 
 ***
 
@@ -55,7 +55,7 @@ Delete an object
 
 #### Source
 
-[core/transaction.ts:18](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L18)
+[core/transaction.ts:18](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L18)
 
 ## Methods
 
@@ -77,7 +77,7 @@ Delete an object
 
 #### Source
 
-[core/transaction.ts:66](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L66)
+[core/transaction.ts:66](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L66)
 
 ***
 
@@ -95,7 +95,7 @@ Delete an object
 
 #### Source
 
-[core/transaction.ts:76](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L76)
+[core/transaction.ts:76](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L76)
 
 ***
 
@@ -117,4 +117,4 @@ Delete an object
 
 #### Source
 
-[core/transaction.ts:71](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/core/transaction.ts#L71)
+[core/transaction.ts:71](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L71)

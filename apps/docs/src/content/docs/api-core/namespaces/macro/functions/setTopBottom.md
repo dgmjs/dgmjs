@@ -25,4 +25,4 @@ A macro to set top
 
 ## Source
 
-[macro.ts:187](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/macro.ts#L187)
+[macro.ts:187](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L187)

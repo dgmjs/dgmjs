@@ -33,7 +33,7 @@ Ellipse Factory Handler
 
 #### Source
 
-[editor.ts:1103](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1103)
+[editor.ts:1103](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1103)
 
 ## Properties
 
@@ -43,7 +43,7 @@ Ellipse Factory Handler
 
 #### Source
 
-[handlers/ellipse-handler.ts:14](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/ellipse-handler.ts#L14)
+[handlers/ellipse-handler.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/ellipse-handler.ts#L14)
 
 ***
 
@@ -53,7 +53,7 @@ Ellipse Factory Handler
 
 #### Source
 
-[handlers/ellipse-handler.ts:13](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/ellipse-handler.ts#L13)
+[handlers/ellipse-handler.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/ellipse-handler.ts#L13)
 
 ***
 
@@ -63,7 +63,7 @@ Ellipse Factory Handler
 
 #### Source
 
-[handlers/ellipse-handler.ts:12](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/ellipse-handler.ts#L12)
+[handlers/ellipse-handler.ts:12](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/ellipse-handler.ts#L12)
 
 ***
 
@@ -77,7 +77,7 @@ Ellipse Factory Handler
 
 #### Source
 
-[editor.ts:1100](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1100)
+[editor.ts:1100](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1100)
 
 ***
 
@@ -91,7 +91,7 @@ Ellipse Factory Handler
 
 #### Source
 
-[editor.ts:1101](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1101)
+[editor.ts:1101](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1101)
 
 ***
 
@@ -101,7 +101,7 @@ Ellipse Factory Handler
 
 #### Source
 
-[handlers/ellipse-handler.ts:15](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/ellipse-handler.ts#L15)
+[handlers/ellipse-handler.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/ellipse-handler.ts#L15)
 
 ## Methods
 
@@ -125,7 +125,7 @@ Activate the handler
 
 #### Source
 
-[editor.ts:1129](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1129)
+[editor.ts:1129](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1129)
 
 ***
 
@@ -149,7 +149,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[editor.ts:1120](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1120)
+[editor.ts:1120](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1120)
 
 ***
 
@@ -173,7 +173,7 @@ Deactivate the handler
 
 #### Source
 
-[editor.ts:1137](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1137)
+[editor.ts:1137](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1137)
 
 ***
 
@@ -193,7 +193,7 @@ Deactivate the handler
 
 #### Source
 
-[handlers/ellipse-handler.ts:134](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/ellipse-handler.ts#L134)
+[handlers/ellipse-handler.ts:134](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/ellipse-handler.ts#L134)
 
 ***
 
@@ -213,7 +213,7 @@ Deactivate the handler
 
 #### Source
 
-[handlers/ellipse-handler.ts:132](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/ellipse-handler.ts#L132)
+[handlers/ellipse-handler.ts:132](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/ellipse-handler.ts#L132)
 
 ***
 
@@ -237,7 +237,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[editor.ts:1182](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1182)
+[editor.ts:1182](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1182)
 
 ***
 
@@ -257,7 +257,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[handlers/ellipse-handler.ts:55](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/ellipse-handler.ts#L55)
+[handlers/ellipse-handler.ts:55](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/ellipse-handler.ts#L55)
 
 ***
 
@@ -277,7 +277,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[handlers/ellipse-handler.ts:24](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/ellipse-handler.ts#L24)
+[handlers/ellipse-handler.ts:24](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/ellipse-handler.ts#L24)
 
 ***
 
@@ -303,7 +303,7 @@ keyDown
 
 #### Source
 
-[handlers/ellipse-handler.ts:114](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/ellipse-handler.ts#L114)
+[handlers/ellipse-handler.ts:114](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/ellipse-handler.ts#L114)
 
 ***
 
@@ -329,7 +329,7 @@ keyUp
 
 #### Source
 
-[editor.ts:1177](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/editor.ts#L1177)
+[editor.ts:1177](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1177)
 
 ***
 
@@ -353,7 +353,7 @@ Triggered when activated
 
 #### Source
 
-[handlers/ellipse-handler.ts:124](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/ellipse-handler.ts#L124)
+[handlers/ellipse-handler.ts:124](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/ellipse-handler.ts#L124)
 
 ***
 
@@ -377,7 +377,7 @@ Triggered when deactivate
 
 #### Source
 
-[handlers/ellipse-handler.ts:128](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/ellipse-handler.ts#L128)
+[handlers/ellipse-handler.ts:128](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/ellipse-handler.ts#L128)
 
 ***
 
@@ -403,7 +403,7 @@ pointerDown
 
 #### Source
 
-[handlers/ellipse-handler.ts:71](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/ellipse-handler.ts#L71)
+[handlers/ellipse-handler.ts:71](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/ellipse-handler.ts#L71)
 
 ***
 
@@ -429,7 +429,7 @@ pointerMove
 
 #### Source
 
-[handlers/ellipse-handler.ts:87](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/ellipse-handler.ts#L87)
+[handlers/ellipse-handler.ts:87](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/ellipse-handler.ts#L87)
 
 ***
 
@@ -455,7 +455,7 @@ pointerUp
 
 #### Source
 
-[handlers/ellipse-handler.ts:105](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/ellipse-handler.ts#L105)
+[handlers/ellipse-handler.ts:105](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/ellipse-handler.ts#L105)
 
 ***
 
@@ -475,7 +475,7 @@ Reset the states of handler
 
 #### Source
 
-[handlers/ellipse-handler.ts:17](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/ellipse-handler.ts#L17)
+[handlers/ellipse-handler.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/ellipse-handler.ts#L17)
 
 ***
 
@@ -495,4 +495,4 @@ Reset the states of handler
 
 #### Source
 
-[handlers/ellipse-handler.ts:38](https://github.com/dgmjs/dgmjs/blob/6298c851d69b83f472385d1ebb3c937ddb56985d/packages/core/src/handlers/ellipse-handler.ts#L38)
+[handlers/ellipse-handler.ts:38](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/ellipse-handler.ts#L38)

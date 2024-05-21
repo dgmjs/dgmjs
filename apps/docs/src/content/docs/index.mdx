@@ -16,4 +16,66 @@ hero:
       icon: external
 ---
 
-[Quick start](/getting-started/quick-start/)
+import "@/styles/splash.css";
+import Header from "@/components/header.astro";
+import Feature from "@/components/feature.astro";
+import { siteConfig } from "../../../site-config";
+
+<section class="w-full">
+  <div class="my-10">
+    <div class="mx-auto w-full text-center my-1">
+      <span class="text-center text-4xl font-semibold tracking-tighter">
+        dgm.js
+      </span>
+    </div>
+    <p class="text-xl text-muted-foreground text-center sm:leading-8">
+      {siteConfig.description}
+    </p>
+  </div>
+</section>
+
+<section class="flex items-center justify-center gap-4">
+  <a class="border no-underline px-5 py-3 rounded-full" href="/getting-started/quick-start/">Quick start</a>
+  <a class="border no-underline px-5 py-3 rounded-full" href="https://github.com/dgmjs/dgmjs">Github</a>
+</section>
+
+<section class="my-10 flex justify-center">
+  <div>
+    <img src="/images/cover.png" alt="Hero" class="w-full mx-auto" />
+  </div>
+</section>
+
+<section id="features" class="space-y-12">
+  <Feature
+    title="Smart shapes"
+    description="You can define a composite shape with constraints, exntended properties, and scripts, ..."
+  />
+  <Feature
+    title="Hand-drawn style"
+    description="dgm.js powered by awesome rough.js to support hand-drawn style shapes"
+  />
+  <Feature
+    title="Scripting support"
+    description="You can write a simple script to define how to render a shape instead of tedious compositing lots of shapes"
+  />
+  <Feature
+    title="Theme-adaptive colors"
+    description="Colors are automatically adapted to light or dark mode."
+  />
+  <Feature
+    title="Headless components"
+    description="dgm.js don't have it's own styles, do you can use with your own styles (CSS, tailwind CSS, styled-components, ...)"
+  />
+  <Feature
+    title="Image export"
+    description="You can export diagram to PNG, JPEG, SVG images"
+  />
+  <Feature
+    title="Realtime collaboration"
+    description="You can collaborate with your team in real-time."
+  />
+  <Feature
+    title="Another one-more feature"
+    description="another feature..."
+  />
+</section>
