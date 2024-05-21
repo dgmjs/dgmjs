@@ -9,4 +9,4 @@ title: "VertAlignEnum"
 
 ## Source
 
-[shapes.ts:141](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L141)
+[shapes.ts:140](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L140)

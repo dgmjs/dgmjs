@@ -87,6 +87,7 @@ title: "@dgmjs/core"
 
 ## Variables
 
+- [FillStyle](/api-core/variables/fillstyle/)
 - [HorzAlign](/api-core/variables/horzalign/)
 - [LineEndType](/api-core/variables/lineendtype/)
 - [LineType](/api-core/variables/linetype/)

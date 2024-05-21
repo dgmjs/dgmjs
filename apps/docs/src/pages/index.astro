@@ -15,15 +15,16 @@ import "@/styles/splash.css";
   <Header />
   <section class="w-full">
     <div class="my-10">
-      <div class="mx-auto w-full text-center my-1">
-        <span class="text-center text-4xl font-semibold tracking-tighter">
+      <div class="mx-auto w-full text-center relative">
+        <span class="text-center text-5xl font-semibold tracking-tighter">
           dgm.js
         </span>
-        <!-- <Badge variant="secondary" className="absolute font-normal ml-2"
-          >beta</Badge
-        > -->
+        <span
+          class="absolute bg-slate-200 text-slate-700 text-xs px-3 py-1 rounded-full ml-2"
+          >beta</span
+        >
       </div>
-      <p class="text-xl text-muted-foreground text-center sm:leading-8">
+      <p class="text-xl text-slate-500 text-center sm:leading-8 !mt-1">
         {siteConfig.description}
       </p>
     </div>
@@ -32,13 +33,13 @@ import "@/styles/splash.css";
     <div class="flex items-center justify-center gap-4">
       <a
         href="/getting-started/quick-start"
-        class="rounded-full px-8 py-2 !text-white bg-black no-underline"
+        class="rounded-full py-2 w-36 !text-white bg-black no-underline"
         )}>Get Started</a
       >
       <a
-        href={siteConfig.social.github}
-        class="rounded-full border px-8 py-2 no-underline"
-        )}>View on Github</a
+        href="https://dgm.sh/home"
+        class="rounded-full border px-8 py-2 no-underline w-36"
+        )}>App</a
       >
     </div>
   </section>

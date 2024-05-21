@@ -23,4 +23,4 @@ title: "StrokePattern"
 
 ## Source
 
-[graphics/const.ts:87](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/const.ts#L87)
+[graphics/const.ts:80](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/const.ts#L80)

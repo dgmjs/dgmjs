@@ -19,4 +19,4 @@ Convert path to a string (SVG path's d property)
 
 ## Source
 
-[graphics/graphics.ts:72](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L72)
+[graphics/graphics.ts:79](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L79)

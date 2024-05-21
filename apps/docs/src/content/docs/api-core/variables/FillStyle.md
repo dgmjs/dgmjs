@@ -27,4 +27,4 @@ title: "FillStyle"
 
 ## Source
 
-[graphics/const.ts:80](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/const.ts#L80)
+[graphics/graphics.ts:69](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L69)

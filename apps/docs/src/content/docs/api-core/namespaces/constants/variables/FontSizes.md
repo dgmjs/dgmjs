@@ -9,4 +9,4 @@ title: "FontSizes"
 
 ## Source
 
-[graphics/const.ts:104](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/const.ts#L104)
+[graphics/const.ts:97](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/const.ts#L97)
