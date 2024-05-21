@@ -22,7 +22,7 @@ import { FillPanel } from "./fill-panel";
 import { ControlPanel } from "./control-panel";
 import { StrokePanel } from "./stroke-panel";
 import { TagPanel } from "./tag-panel";
-import { Line, Box } from "@dgmjs/core";
+import { Line, Box, Freehand } from "@dgmjs/core";
 import { LinePanel } from "./line-panel";
 import { Empty } from "../common/empty";
 import { PrototypePanel } from "./prototype-panel";
@@ -30,6 +30,7 @@ import { ScriptPanel } from "./script-panel";
 import { AlignmentPanel } from "./alignment-panel";
 import { CommonPanel } from "./shape-panel";
 import { ShapeEditorProps } from "@/types";
+import { FreehandPanel } from "./freehand-panel";
 
 export const PropertySidebar: React.FC<ShapeEditorProps> = ({
   shapes,
@@ -56,6 +57,9 @@ export const PropertySidebar: React.FC<ShapeEditorProps> = ({
                   <BoxPanel shapes={shapes} onChange={onChange} />
                   <TextPanel shapes={shapes} onChange={onChange} />
                 </>
+              )}
+              {shapes.some((s) => s instanceof Freehand) && (
+                <FreehandPanel shapes={shapes} onChange={onChange} />
               )}
               {shapes.some((s) => s instanceof Line) && (
                 <LinePanel shapes={shapes} onChange={onChange} />

@@ -1,6 +1,6 @@
 {
   "name": "@dgmjs/core",
-  "version": "0.15.2",
+  "version": "0.19.11",
   "description": "An extensible diagramming library for the web",
   "type": "module",
   "main": "./dist/index.js",
@@ -41,6 +41,7 @@
     "keycode": "^2.2.1",
     "nanoid": "^5.0.5",
     "optimization-js": "^1.5.0",
+    "perfect-freehand": "^1.2.2",
     "roughjs": "^4.6.6",
     "simplify-path": "^1.1.0",
     "svgcanvas": "^2.5.0",

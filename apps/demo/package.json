@@ -7,12 +7,13 @@
     "dev": "vite --port 4321",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview --port 4321"
   },
   "dependencies": {
     "@dgmjs/core": "*",
-    "@dgmjs/react": "*",
     "@dgmjs/dgmjs-plugin-yjs": "*",
+    "@dgmjs/react": "*",
+    "@dgmjs/y-webrtc": "^10.1.8",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-context-menu": "^2.1.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
@@ -58,6 +59,7 @@
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "tiptap-extension-font-size": "^1.2.0",
+    "unique-names-generator": "^4.7.1",
     "zod-to-json-schema": "^3.22.4",
     "zustand": "^4.5.0"
   },

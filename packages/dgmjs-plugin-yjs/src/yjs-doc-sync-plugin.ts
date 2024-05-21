@@ -1,5 +1,5 @@
 import * as Y from "yjs";
-import { Editor, Plugin, Document, Page, Disposable } from "@dgmjs/core";
+import { Editor, Plugin, Doc, Page, Disposable } from "@dgmjs/core";
 import { YStore } from "./yjs-utils";
 import { handleYjsObserveDeep } from "./sync-to-store";
 import {
@@ -119,18 +119,20 @@ export class YjsDocSyncPlugin extends Plugin {
     // handle yjs observe deep
     const observeListener = (events: Y.YEvent<any>[], tr: any) => {
       if (this.yStore && !tr.local) {
-        const createdObjs = handleYjsObserveDeep(
+        const postprocess = handleYjsObserveDeep(
+          this.editor,
           this.editor.store,
           this.yStore,
           events
         );
-        // TODO: fix this
-        createdObjs.forEach((obj) => {
-          if (obj instanceof Document) {
-            this.editor.store.setDoc(obj);
-          }
-          if (!this.editor.currentPage && obj instanceof Page) {
-            this.editor.setCurrentPage(obj);
+        // set the store.doc
+        postprocess.created.forEach((obj) => {
+          if (obj instanceof Doc) {
+            const doc = obj;
+            this.editor.setDoc(doc);
+            if (doc.children.length > 0 && doc.children[0] instanceof Page) {
+              this.editor.setCurrentPage(doc.children[0] as Page);
+            }
           }
         });
         this.editor.repaint();
@@ -203,5 +205,33 @@ export class YjsDocSyncPlugin extends Plugin {
         `[${json.type}] id:${json.id}, parent:${json.parent}, order:${json["parent:order"]}`
       );
     });
+  }
+
+  /**
+   * Print the yStore objects
+   */
+  printPages() {
+    this.editor.getDoc()?.children.forEach((page) => {
+      const yPage = this.yStore?.get(page.id);
+      const json = yPage?.toJSON()!;
+      console.log(
+        `[${json.type}] id:${json.id}, parent:${json.parent}, order:${json["parent:order"]}`
+      );
+    });
+  }
+
+  /**
+   * Print the yStore objects
+   */
+  printCurrentPage() {
+    if (this.editor.currentPage) {
+      this.editor.currentPage.children.forEach((block) => {
+        const Obj = this.yStore?.get(block.id);
+        const json = Obj?.toJSON()!;
+        console.log(
+          `[${json.type}] id:${json.id}, parent:${json.parent}, order:${json["parent:order"]}`
+        );
+      });
+    }
   }
 }

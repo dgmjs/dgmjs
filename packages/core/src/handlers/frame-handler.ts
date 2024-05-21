@@ -16,7 +16,7 @@ import { Editor, Handler } from "../editor";
 import { CanvasPointerEvent } from "../graphics/graphics";
 import { Cursor, Mouse } from "../graphics/const";
 import { Frame, Shape } from "../shapes";
-import { addShape, resolveAllConstraints } from "../mutates";
+import { addShape, resolveAllConstraints } from "../macro";
 
 /**
  * Frame Factory Handler
@@ -119,7 +119,7 @@ export class FrameFactoryHandler extends Handler {
       this.finalize(editor, e);
       editor.repaint();
       this.reset();
-      this.done(editor);
+      this.complete(editor);
     }
   }
 
@@ -128,7 +128,7 @@ export class FrameFactoryHandler extends Handler {
       editor.transform.cancelAction();
       editor.repaint();
       this.reset();
-      this.done(editor);
+      this.complete(editor);
     }
     return false;
   }

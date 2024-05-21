@@ -19,7 +19,7 @@ import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import { Cursor } from "../graphics/const";
-import { moveAnchor, resolveAllConstraints } from "../mutates";
+import { moveAnchor, resolveAllConstraints } from "../macro";
 
 /**
  * BoxMoveAnchoredController

@@ -13,7 +13,7 @@
 
 import { Editor, Handler } from "../editor";
 import { fileOpen } from "browser-fs-access";
-import { addShape, resolveAllConstraints } from "../mutates";
+import { addShape, resolveAllConstraints } from "../macro";
 
 /**
  * Image Factory Handler
@@ -46,7 +46,7 @@ export class ImageFactoryHandler extends Handler {
           });
           editor.transform.endAction();
           editor.factory.triggerCreate(shape);
-          this.done(editor);
+          this.complete(editor);
         }
       } catch (err) {
         // user cancelled

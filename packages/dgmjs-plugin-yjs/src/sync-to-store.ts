@@ -1,12 +1,13 @@
 import * as Y from "yjs";
-import { Obj, Store } from "@dgmjs/core";
-import {
-  YObj,
-  YStore,
-  yGetChildren,
-  yGetPositionByOrder,
-  ySortByOrder,
-} from "./yjs-utils";
+import { Editor, Obj, Shape, Store } from "@dgmjs/core";
+import { YObj, YStore } from "./yjs-utils";
+
+interface Postprocess {
+  created: Set<Obj>;
+  updated: Set<Obj>;
+  deleted: Set<Obj>;
+  reorder: Set<Obj>;
+}
 
 /**
  * Convert a Yjs object to an editor object
@@ -41,49 +42,25 @@ function setParent(store: Store, obj: Obj, parentId: string | null) {
 }
 
 /**
- * Set the position of an obj in the parent's children array
- */
-function setPosition(obj: Obj, position: number) {
-  if (obj.parent) {
-    obj.parent.children.splice(obj.parent.children.indexOf(obj), 1);
-    obj.parent.children.splice(position, 0, obj);
-  }
-}
-
-/**
- * Set the position of an obj by order
- */
-function setPositionByOrder(
-  yStore: YStore,
-  obj: Obj,
-  parentId: string,
-  order: number = 0
-) {
-  const objId = obj.id;
-  const ySiblings = yGetChildren(yStore, parentId).filter(
-    (yObj) => yObj.get("id") !== objId
-  );
-  const ySortedSiblings = ySortByOrder(ySiblings);
-  const position = yGetPositionByOrder(ySortedSiblings, order);
-  setPosition(obj, position);
-}
-
-/**
  * Create an obj in the store from a Yjs object
  */
 export function createObj(
   store: Store,
   yStore: YStore,
-  yObj: YObj
+  yObj: YObj,
+  postprocess: Postprocess
 ): Obj | null {
   const objId = yObj.get("id");
   if (!store.getById(objId) && yObj) {
     const obj = yObjToObj(store, yObj);
     store.addToIndex(obj);
     const parentId = yObj.get("parent");
-    const order = yObj.get("parent:order");
     setParent(store, obj, parentId);
-    setPositionByOrder(yStore, obj, parentId, order);
+    postprocess.created.add(obj);
+    const parent = store.getById(parentId);
+    if (parent) {
+      postprocess.reorder.add(parent);
+    }
     return obj;
   }
   return null;
@@ -92,7 +69,11 @@ export function createObj(
 /**
  * Delete an obj from the store
  */
-export function deleteObj(store: Store, objId: string) {
+export function deleteObj(
+  store: Store,
+  objId: string,
+  postprocess: Postprocess
+) {
   const obj = store.getById(objId);
   if (obj) {
     setParent(store, obj, null);
@@ -109,20 +90,24 @@ export function updateObj(
   objId: string,
   field: string,
   oldValue: any,
-  newValue: any
+  newValue: any,
+  postprocess: Postprocess
 ) {
   const obj = store.getById(objId);
   const yObj = yStore.get(objId);
   if (obj && yObj) {
     if (field === "parent") {
       const parentId = yObj.get("parent");
-      const order = yObj.get("parent:order");
       setParent(store, obj, parentId);
-      setPositionByOrder(yStore, obj, parentId, order);
+      postprocess.updated.add(obj);
     } else if (field === "parent:order") {
       const parentId = yObj.get("parent");
-      const parentOrder = yObj.get("parent:order");
-      setPositionByOrder(yStore, obj, parentId, parentOrder);
+      const parent = store.getById(parentId);
+      postprocess.updated.add(obj);
+      if (parent) {
+        postprocess.updated.add(parent);
+        postprocess.reorder.add(parent);
+      }
     } else if (field === "head" || field === "tail") {
       if (newValue) {
         const ref = store.getById(newValue);
@@ -130,8 +115,10 @@ export function updateObj(
       } else {
         (obj as any)[field] = null;
       }
+      postprocess.updated.add(obj);
     } else {
       (obj as any)[field] = newValue;
+      postprocess.updated.add(obj);
     }
   }
 }
@@ -143,18 +130,15 @@ export function applyYjsEvent(
   event: Y.YEvent<any>,
   store: Store,
   yStore: YStore,
-  onObjCreate?: (obj: Obj) => void
+  postprocess: Postprocess
 ) {
   if (event.target === yStore) {
     event.changes.keys.forEach((change, key) => {
       if (change.action === "add") {
         const yObj = yStore.get(key);
-        const obj = createObj(store, yStore, yObj!);
-        if (obj && onObjCreate) {
-          onObjCreate(obj);
-        }
+        createObj(store, yStore, yObj!, postprocess);
       } else if (change.action === "delete") {
-        deleteObj(store, key);
+        deleteObj(store, key, postprocess);
       }
     });
   } else {
@@ -162,7 +146,15 @@ export function applyYjsEvent(
       if (change.action === "update") {
         const objId = event.target.get("id");
         const value = event.target.get(key);
-        updateObj(store, yStore, objId, key, change.oldValue, value);
+        updateObj(
+          store,
+          yStore,
+          objId,
+          key,
+          change.oldValue,
+          value,
+          postprocess
+        );
       }
     });
   }
@@ -172,26 +164,47 @@ export function applyYjsEvent(
  * Handle Yjs events and apply them to store
  */
 export function handleYjsObserveDeep(
+  editor: Editor,
   store: Store,
   yStore: YStore,
   events: Y.YEvent<any>[]
-): Obj[] {
-  const createdObjs: Obj[] = [];
+): Postprocess {
+  const postprocess: Postprocess = {
+    created: new Set(),
+    updated: new Set(),
+    deleted: new Set(),
+    reorder: new Set(),
+  };
 
   // apply all yjs events
   for (const event of events) {
-    applyYjsEvent(event, store, yStore, (createdObj) => {
-      createdObjs.push(createdObj);
-      if (createdObj instanceof Document) {
-        store.setDoc(createdObj);
-      }
-    });
+    applyYjsEvent(event, store, yStore, postprocess);
   }
 
-  // resolve refs for all created objects
-  createdObjs.forEach((obj) => {
+  // resolve refs for all created objs and update created objs
+  postprocess.created.forEach((obj) => {
     obj.resolveRefs(store.idIndex, true);
+    if (obj instanceof Shape) {
+      obj.update(editor.canvas);
+    }
   });
 
-  return createdObjs;
+  // update shapes
+  postprocess.updated.forEach((obj) => {
+    if (obj instanceof Shape) {
+      obj.update(editor.canvas);
+    }
+  });
+
+  // reorder children
+  postprocess.reorder.forEach((parent) => {
+    parent.children.sort((a, b) => {
+      const yA = yStore.get(a.id);
+      const yB = yStore.get(b.id);
+      if (!yA || !yB) return 0;
+      return yA.get("parent:order") - yB.get("parent:order");
+    });
+  });
+
+  return postprocess;
 }

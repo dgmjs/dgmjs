@@ -12,13 +12,13 @@
  */
 
 import React from "react";
-import { Document, Page, Shape } from "@dgmjs/core";
+import { Doc, Page, Shape } from "@dgmjs/core";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Layers } from "./layers";
 import { Pages } from "./pages";
 
 export interface ShapeSidebarProps {
-  doc: Document;
+  doc: Doc;
   currentPage: Page | null;
   onSelect?: (selection: Shape[]) => void;
   onPageSelect?: (page: Page) => void;

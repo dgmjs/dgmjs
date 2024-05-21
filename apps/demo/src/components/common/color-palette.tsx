@@ -12,13 +12,13 @@
  */
 
 import React from "react";
-import { colors } from "@dgmjs/core";
+import { themeColors } from "@dgmjs/core";
 import { cn } from "@/lib/utils";
 
 export const simplePalette: string[][] = [
   [
     "$red5",
-    "$pink5",
+    "$orange5",
     "$purple5",
     "$blue5",
     "$cyan5",
@@ -32,7 +32,7 @@ export const simplePalette: string[][] = [
   ],
   [
     "$red9",
-    "$pink9",
+    "$orange9",
     "$purple9",
     "$blue9",
     "$cyan9",
@@ -46,7 +46,7 @@ export const simplePalette: string[][] = [
   ],
   [
     "$red11",
-    "$pink11",
+    "$orange11",
     "$purple11",
     "$blue11",
     "$cyan11",
@@ -95,8 +95,8 @@ const ColorItem: React.FC<ColorItemProps> = ({
 }) => {
   const c = value.startsWith("$")
     ? theme === "dark"
-      ? colors.dark[value.substring(1)]
-      : colors.light[value.substring(1)]
+      ? themeColors.dark[value.substring(1)]
+      : themeColors.light[value.substring(1)]
     : value;
 
   return (

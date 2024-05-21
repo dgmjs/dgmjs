@@ -17,7 +17,7 @@ import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { Color, Cursor } from "../graphics/const";
 import { Snap } from "../manipulators/snap";
 import { lcs2ccs } from "../graphics/utils";
-import { moveMultipleShapes, resolveAllConstraints } from "../mutates";
+import { moveMultipleShapes, resolveAllConstraints } from "../macro";
 
 /**
  * SelectionsMoveController

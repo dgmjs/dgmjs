@@ -11,7 +11,7 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { generateId, hashStringToNumber } from "../std/id";
+import { generateId } from "../std/id";
 
 /**
  * Base object.
@@ -31,10 +31,6 @@ export class Obj {
     this.type = "Obj";
     this.parent = null;
     this.children = [];
-  }
-
-  getSeed(): number {
-    return hashStringToNumber(this.id);
   }
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
@@ -159,4 +155,12 @@ export class Obj {
   isDescendant(obj: Obj): boolean {
     return !!this.find((s) => s !== this && s === obj);
   }
+}
+
+export function filterDescendants(objs: Obj[]): Obj[] {
+  let filtered: Obj[] = [];
+  for (let obj of objs) {
+    if (!objs.some((o) => o.isDescendant(obj))) filtered.push(obj);
+  }
+  return filtered;
 }

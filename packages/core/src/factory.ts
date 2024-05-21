@@ -1,11 +1,12 @@
 import type { Editor } from "./editor";
 import {
-  AlignmentKind,
   Connector,
   Ellipse,
   Embed,
-  FillStyle,
   Frame,
+  Freehand,
+  Highlighter,
+  HorzAlign,
   Image,
   Line,
   LineType,
@@ -13,11 +14,11 @@ import {
   Shape,
   Sizable,
   Text,
+  VertAlign,
 } from "./shapes";
 import { resizeImage } from "./utils/image-utils";
 import * as geometry from "./graphics/geometry";
-import simplifyPath from "simplify-path";
-import { SHAPE_MIN_SIZE } from "./graphics/const";
+import { FillStyle, SHAPE_MIN_SIZE } from "./graphics/const";
 import { TypedEvent } from "./std/typed-event";
 import { convertStringToTextNode } from "./utils/text-utils";
 
@@ -51,8 +52,8 @@ export class ShapeFactory {
     let h = geometry.height(rect);
     rectangle.width = w;
     rectangle.height = h;
-    rectangle.horzAlign = AlignmentKind.CENTER;
-    rectangle.vertAlign = AlignmentKind.MIDDLE;
+    rectangle.horzAlign = HorzAlign.CENTER;
+    rectangle.vertAlign = VertAlign.MIDDLE;
     this.onShapeInitialize.emit(rectangle);
     return rectangle;
   }
@@ -68,8 +69,8 @@ export class ShapeFactory {
     let h = geometry.height(rect);
     ellipse.width = w;
     ellipse.height = h;
-    ellipse.horzAlign = AlignmentKind.CENTER;
-    ellipse.vertAlign = AlignmentKind.MIDDLE;
+    ellipse.horzAlign = HorzAlign.CENTER;
+    ellipse.vertAlign = VertAlign.MIDDLE;
     this.onShapeInitialize.emit(ellipse);
     return ellipse;
   }
@@ -89,8 +90,8 @@ export class ShapeFactory {
     let h = geometry.height(rect);
     text.width = w;
     text.height = h;
-    text.horzAlign = AlignmentKind.LEFT;
-    text.vertAlign = AlignmentKind.TOP;
+    text.horzAlign = HorzAlign.LEFT;
+    text.vertAlign = VertAlign.TOP;
     text.constraints.push({
       id: "set-size",
       width: "text",
@@ -109,8 +110,8 @@ export class ShapeFactory {
     text.strokeColor = "$foreground";
     text.fillColor = "$background";
     text.fillStyle = FillStyle.SOLID;
-    text.horzAlign = AlignmentKind.LEFT;
-    text.vertAlign = AlignmentKind.TOP;
+    text.horzAlign = HorzAlign.LEFT;
+    text.vertAlign = VertAlign.TOP;
     text.anchored = true;
     text.anchorPosition = anchorPosition;
     text.constraints.push({ id: "anchor-on-parent" });
@@ -152,7 +153,7 @@ export class ShapeFactory {
    */
   createLine(points: number[][], closed: boolean = false): Line {
     const line = new Line();
-    const path = points;
+    const path = structuredClone(points);
     if (closed) {
       path[path.length - 1] = geometry.copy(path[0]);
     }
@@ -164,27 +165,6 @@ export class ShapeFactory {
     line.height = geometry.height(rect);
     this.onShapeInitialize.emit(line);
     return line;
-  }
-
-  /**
-   * Create a freehand lines
-   */
-  createFreehand(points: number[][], closed: boolean = false): Line {
-    const freehand = new Line();
-    const path = simplifyPath(points, 4);
-    if (closed) {
-      path[path.length - 1] = geometry.copy(path[0]);
-    }
-    freehand.path = path;
-    freehand.lineType = LineType.CURVE;
-    const rect = geometry.boundingRect(freehand.path);
-    freehand.left = rect[0][0];
-    freehand.top = rect[0][1];
-    freehand.width = geometry.width(rect);
-    freehand.height = geometry.height(rect);
-    freehand.pathEditable = false;
-    this.onShapeInitialize.emit(freehand);
-    return freehand;
   }
 
   /**
@@ -204,7 +184,7 @@ export class ShapeFactory {
     connector.tailAnchor = tailAnchor;
     connector.head = head;
     connector.headAnchor = headAnchor;
-    connector.path = points;
+    connector.path = structuredClone(points);
     const rect = geometry.boundingRect(connector.path);
     connector.left = rect[0][0];
     connector.top = rect[0][1];
@@ -212,6 +192,50 @@ export class ShapeFactory {
     connector.height = geometry.height(rect);
     this.onShapeInitialize.emit(connector);
     return connector;
+  }
+
+  /**
+   * Create a freehand lines
+   */
+  createFreehand(points: number[][], closed: boolean = false): Freehand {
+    const freehand = new Freehand();
+    const path = structuredClone(points);
+    if (closed) {
+      path[path.length - 1] = geometry.copy(path[0]);
+    }
+    freehand.strokeWidth = 8;
+    freehand.path = path;
+    const rect = geometry.boundingRect(freehand.path);
+    freehand.left = rect[0][0];
+    freehand.top = rect[0][1];
+    freehand.width = geometry.width(rect);
+    freehand.height = geometry.height(rect);
+    freehand.pathEditable = false;
+    this.onShapeInitialize.emit(freehand);
+    return freehand;
+  }
+
+  /**
+   * Create a freehand lines
+   */
+  createHighlighter(points: number[][]): Highlighter {
+    const highlighter = new Highlighter();
+    const path = structuredClone(points);
+    if (closed) {
+      path[path.length - 1] = geometry.copy(path[0]);
+    }
+    highlighter.strokeWidth = 28;
+    highlighter.strokeColor = "#FFE629";
+    highlighter.opacity = 0.5;
+    highlighter.pathEditable = false;
+    highlighter.path = path;
+    const rect = geometry.boundingRect(highlighter.path);
+    highlighter.left = rect[0][0];
+    highlighter.top = rect[0][1];
+    highlighter.width = geometry.width(rect);
+    highlighter.height = geometry.height(rect);
+    this.onShapeInitialize.emit(highlighter);
+    return highlighter;
   }
 
   createFrame(rect: number[][]): Frame {
@@ -226,8 +250,8 @@ export class ShapeFactory {
     }
     frame.width = w;
     frame.height = h;
-    frame.horzAlign = AlignmentKind.CENTER;
-    frame.vertAlign = AlignmentKind.MIDDLE;
+    frame.horzAlign = HorzAlign.CENTER;
+    frame.vertAlign = VertAlign.MIDDLE;
     frame.textEditable = false;
     this.onShapeInitialize.emit(frame);
     return frame;
@@ -245,8 +269,8 @@ export class ShapeFactory {
     }
     embed.width = w;
     embed.height = h;
-    embed.horzAlign = AlignmentKind.CENTER;
-    embed.vertAlign = AlignmentKind.MIDDLE;
+    embed.horzAlign = HorzAlign.CENTER;
+    embed.vertAlign = VertAlign.MIDDLE;
     embed.textEditable = false;
     this.onShapeInitialize.emit(embed);
     return embed;

@@ -14,7 +14,7 @@
 import React from "react";
 import { Panel } from "../common/panel";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Connector, Line, LineType } from "@dgmjs/core";
+import { Connector, Line, LineEndTypeEnum, LineType, LineTypeEnum } from "@dgmjs/core";
 import { LineCurveIcon, LineStraightIcon } from "@/components/icons";
 import { SelectArrowhead } from "./fields/select-arrowhead";
 import { ShapeEditorProps } from "@/types";
@@ -41,7 +41,7 @@ export const LinePanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
             rotate={true}
             value={tailEndType}
             onValueChange={(value) => {
-              if (onChange) onChange({ tailEndType: value });
+              if (onChange) onChange({ tailEndType: value as LineEndTypeEnum });
             }}
           />
           <SelectArrowhead
@@ -49,7 +49,7 @@ export const LinePanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
             className="rounded-l-none ml-[-1px]"
             value={headEndType}
             onValueChange={(value) => {
-              if (onChange) onChange({ headEndType: value });
+              if (onChange) onChange({ headEndType: value as LineEndTypeEnum });
             }}
           />
         </div>
@@ -58,7 +58,7 @@ export const LinePanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
             type="single"
             value={lineType}
             onValueChange={(value) => {
-              if (onChange && value) onChange({ lineType: value });
+              if (onChange && value) onChange({ lineType: value as LineTypeEnum });
             }}
           >
             <ToggleGroupItem size="sm" value={LineType.STRAIGHT}>

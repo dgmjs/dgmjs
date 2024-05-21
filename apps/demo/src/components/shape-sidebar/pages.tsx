@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Document, Page } from "@dgmjs/core";
+import { Doc, Page } from "@dgmjs/core";
 import { DGMPageView, DGMShapeViewHandle } from "@dgmjs/react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
@@ -14,7 +14,7 @@ import {
 import { useDemoStore } from "@/demo-store";
 
 interface PageViewProps extends React.HTMLAttributes<HTMLDivElement> {
-  doc: Document;
+  doc: Doc;
   page: Page;
   idx: number;
 }
@@ -42,10 +42,9 @@ const PageView: React.FC<PageViewProps> = ({
         <DGMPageView
           ref={shapeViewRef}
           className="w-full border rounded"
-          pageSize={doc.pageSize}
           page={page}
           maxScale={1}
-          scaleAdjust={doc.pageSize ? 1 : 0.8}
+          scaleAdjust={page.size ? 1 : 0.8}
           darkMode={theme === "dark"}
         />
       </div>
@@ -112,7 +111,7 @@ const PageView: React.FC<PageViewProps> = ({
 };
 
 export interface PagesProps {
-  doc: Document;
+  doc: Doc;
   currentPage: Page | null;
   onPageSelect?: (page: Page) => void;
 }

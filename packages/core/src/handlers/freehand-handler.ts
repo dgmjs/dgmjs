@@ -15,9 +15,8 @@ import { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { Editor, Handler } from "../editor";
 import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
-import { Line } from "../shapes";
-import simplifyPath from "simplify-path";
-import { addShape, resolveAllConstraints, setLinePath } from "../mutates";
+import { Freehand, Line } from "../shapes";
+import { addShape, resolveAllConstraints, setPath } from "../macro";
 
 /**
  * Freehand Factory Handler
@@ -28,7 +27,7 @@ export class FreehandFactoryHandler extends Handler {
   dragPoint: number[] = [-1, -1];
   draggingPoints: number[][] = [];
   closed: boolean = false;
-  shape: Line | null = null;
+  shape: Freehand | null = null;
 
   reset(): void {
     this.dragging = false;
@@ -54,18 +53,16 @@ export class FreehandFactoryHandler extends Handler {
   update(editor: Editor, e: CanvasPointerEvent): void {
     const page = editor.currentPage;
     this.draggingPoints.push(this.dragPoint);
+    const newPath = structuredClone(this.draggingPoints);
     this.closed =
-      geometry.distance(
-        this.draggingPoints[0],
-        this.draggingPoints[this.draggingPoints.length - 1]
-      ) <= MAGNET_THRESHOLD;
-    const newPath = simplifyPath(this.draggingPoints, 5);
+      geometry.distance(newPath[0], newPath[newPath.length - 1]) <=
+      MAGNET_THRESHOLD;
     if (this.closed) {
       newPath[newPath.length - 1] = geometry.copy(newPath[0]);
     }
     editor.transform.transact((tx) => {
       if (page && this.shape) {
-        setLinePath(tx, this.shape, newPath);
+        setPath(tx, this.shape, newPath);
         resolveAllConstraints(tx, page, editor.canvas);
       }
     });
@@ -122,7 +119,7 @@ export class FreehandFactoryHandler extends Handler {
       this.finalize(editor, e);
       editor.repaint();
       this.reset();
-      this.done(editor);
+      this.complete(editor);
     }
   }
 
@@ -131,7 +128,7 @@ export class FreehandFactoryHandler extends Handler {
       editor.transform.cancelAction();
       editor.repaint();
       this.reset();
-      this.done(editor);
+      this.complete(editor);
     }
     return false;
   }

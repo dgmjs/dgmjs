@@ -3,7 +3,7 @@ import { Editor, Handler } from "../editor";
 import { CanvasPointerEvent } from "../graphics/graphics";
 import { Ellipse, Shape } from "../shapes";
 import { Cursor, Mouse } from "../graphics/const";
-import { addShape, resolveAllConstraints } from "../mutates";
+import { addShape, resolveAllConstraints } from "../macro";
 
 /**
  * Ellipse Factory Handler
@@ -107,7 +107,7 @@ export class EllipseFactoryHandler extends Handler {
       this.finalize(editor, e);
       editor.repaint();
       this.reset();
-      this.done(editor);
+      this.complete(editor);
     }
   }
 
@@ -116,7 +116,7 @@ export class EllipseFactoryHandler extends Handler {
       editor.transform.cancelAction();
       editor.repaint();
       this.reset();
-      this.done(editor);
+      this.complete(editor);
     }
     return false;
   }

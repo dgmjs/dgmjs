@@ -12,12 +12,12 @@
  */
 
 import type { CanvasPointerEvent } from "../graphics/graphics";
-import { Shape, Line, Movable, Connector, Page } from "../shapes";
+import { Shape, Line, Movable, Connector, Page, Path } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import { Snap } from "../manipulators/snap";
 import * as geometry from "../graphics/geometry";
 import { Cursor } from "../graphics/const";
-import { resolveAllConstraints, setLinePath } from "../mutates";
+import { resolveAllConstraints, setPath } from "../macro";
 
 /**
  * ConnectorMove Controller
@@ -64,7 +64,7 @@ export class ConnectorMoveController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
-    this.controlPath = geometry.pathCopy((shape as Line).path);
+    this.controlPath = geometry.pathCopy((shape as Path).path);
     editor.transform.startAction("repath");
   }
 
@@ -100,7 +100,7 @@ export class ConnectorMoveController extends Controller {
     // transform shape
     editor.transform.transact((tx) => {
       if (this.dx !== 0 || this.dy !== 0) {
-        setLinePath(tx, shape as Line, newPath);
+        setPath(tx, shape as Line, newPath);
         tx.assignRef(shape, "head", null);
         tx.assignRef(shape, "tail", null);
         resolveAllConstraints(tx, page, canvas);

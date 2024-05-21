@@ -1,6 +1,6 @@
-import { Shape, ObjProps } from "@dgmjs/core";
+import { Shape, ShapeProps } from "@dgmjs/core";
 
 export interface ShapeEditorProps {
   shapes: Shape[];
-  onChange: (values: ObjProps) => void;
+  onChange: (values: ShapeProps) => void;
 }

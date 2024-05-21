@@ -12,17 +12,9 @@
  */
 
 import type { Editor } from "./editor";
-import {
-  Box,
-  Group,
-  type Shape,
-  Line,
-  type ObjProps,
-  Page,
-  Document,
-} from "./shapes";
+import { Box, Group, type Shape, type ShapeProps, Page, Path } from "./shapes";
 import * as geometry from "./graphics/geometry";
-import { Obj } from "./core/obj";
+import { Obj, filterDescendants } from "./core/obj";
 import { deserialize, serialize } from "./core/serialize";
 import { extractTextFromShapes } from "./utils/text-utils";
 import {
@@ -44,7 +36,7 @@ import {
   setFontFamily,
   setFontSize,
   setHorzAlign,
-} from "./mutates";
+} from "./macro";
 
 /**
  * Editor actions
@@ -74,12 +66,15 @@ export class Actions {
    * Add a page
    */
   addPage(position?: number): Page {
-    position = position ?? this.editor.getPages().length;
+    const pages = this.editor.getPages();
+    position = position ?? pages.length;
+    const prevPage = pages[position - 1] ?? null;
     const page = new Page();
+    page.size = prevPage?.size ?? null; // set size to the previous page's size
     page.name = `Page ${position + 1}`;
     this.editor.transform.startAction("add-page");
     this.editor.transform.transact((tx) => {
-      addPage(tx, this.editor.store.doc as Document, page);
+      addPage(tx, this.editor.getDoc(), page);
       if (position >= 0 && position < this.editor.getPages().length) {
         reorderPage(tx, page, position);
       }
@@ -122,7 +117,7 @@ export class Actions {
     )[0] as Page;
     this.editor.transform.startAction("duplicate-page");
     this.editor.transform.transact((tx) => {
-      addPage(tx, this.editor.store.doc as Document, copied);
+      addPage(tx, this.editor.getDoc(), copied);
       reorderPage(tx, copied, position);
     });
     this.editor.transform.endAction();
@@ -148,7 +143,7 @@ export class Actions {
   /**
    * Update obj properties
    */
-  update(values: ObjProps, objs?: Obj[]) {
+  update(values: ShapeProps, objs?: Obj[]) {
     const page = this.editor.currentPage;
     if (page) {
       this.editor.transform.startAction("update");
@@ -370,12 +365,8 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       const box = this.editor.selection.getBoundingRect(this.editor.canvas);
-      // filter all descendants of one of grouping shapes
-      let filteredShapes: Shape[] = [];
-      for (let s of shapes) {
-        if (!shapes.some((s) => s.isDescendant(s))) filteredShapes.push(s);
-      }
-      if (filteredShapes.length > 1) {
+      let filtered = filterDescendants(shapes) as Shape[];
+      if (filtered.length > 1) {
         const group = new Group();
         group.left = box[0][0];
         group.top = box[0][1];
@@ -389,7 +380,7 @@ export class Actions {
             ?.traverseSequence()
             .reverse()
             .forEach((s) => {
-              if (filteredShapes.includes(s as Shape)) {
+              if (filtered.includes(s as Shape)) {
                 changeParent(tx, s, group);
               }
             });
@@ -526,7 +517,7 @@ export class Actions {
             if (s instanceof Box) {
               const dx = left - s.left;
               moveMultipleShapes(tx, page, [s], dx, 0);
-            } else if (s instanceof Line) {
+            } else if (s instanceof Path) {
               const dx = left - Math.min(...s.path.map((p) => p[0]));
               moveMultipleShapes(tx, page, [s], dx, 0);
             }
@@ -554,7 +545,7 @@ export class Actions {
             if (s instanceof Box) {
               const dx = right - s.right;
               moveMultipleShapes(tx, page, [s], dx, 0);
-            } else if (s instanceof Line) {
+            } else if (s instanceof Path) {
               const dx = right - Math.max(...s.path.map((p) => p[0]));
               moveMultipleShapes(tx, page, [s], dx, 0);
             }
@@ -585,7 +576,7 @@ export class Actions {
             if (s instanceof Box) {
               const dx = center - Math.round((s.left + s.right) / 2);
               moveMultipleShapes(tx, page, [s], dx, 0);
-            } else if (s instanceof Line) {
+            } else if (s instanceof Path) {
               const l = Math.min(...s.path.map((p) => p[0]));
               const r = Math.max(...s.path.map((p) => p[0]));
               const dx = center - Math.round((l + r) / 2);
@@ -615,7 +606,7 @@ export class Actions {
             if (s instanceof Box) {
               const dy = top - s.top;
               moveMultipleShapes(tx, page, [s], 0, dy);
-            } else if (s instanceof Line) {
+            } else if (s instanceof Path) {
               const dy = top - Math.min(...s.path.map((p) => p[1]));
               moveMultipleShapes(tx, page, [s], 0, dy);
             }
@@ -643,7 +634,7 @@ export class Actions {
             if (s instanceof Box) {
               const dy = bottom - s.bottom;
               moveMultipleShapes(tx, page, [s], 0, dy);
-            } else if (s instanceof Line) {
+            } else if (s instanceof Path) {
               const dy = bottom - Math.max(...s.path.map((p) => p[1]));
               moveMultipleShapes(tx, page, [s], 0, dy);
             }
@@ -674,7 +665,7 @@ export class Actions {
             if (s instanceof Box) {
               const dy = middle - Math.round((s.top + s.bottom) / 2);
               moveMultipleShapes(tx, page, [s], 0, dy);
-            } else if (s instanceof Line) {
+            } else if (s instanceof Path) {
               const t = Math.min(...s.path.map((p) => p[1]));
               const b = Math.max(...s.path.map((p) => p[1]));
               const dy = middle - Math.round((t + b) / 2);

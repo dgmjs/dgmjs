@@ -32,7 +32,7 @@ const CURSOR_ROTATE_SVG_DATA = `url('data:image/svg+xml;utf8,%3Csvg%20width%3D%2
 /**
  * Cursor for editor
  */
-const Cursor = Object.freeze({
+const Cursor = {
   RESIZE: `${CURSOR_RESIZE_SVG_DATA} 9 9, pointer`,
   ROTATE: `${CURSOR_ROTATE_SVG_DATA} 9 9, pointer`,
   DEFAULT: "default",
@@ -43,19 +43,19 @@ const Cursor = Object.freeze({
   GRABBING: "grabbing",
   MOVE: "move",
   POINTER: "pointer",
-});
+} as const;
 
 /**
  * Mouse buttons constants
  * Ref: https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
  */
-const Mouse = Object.freeze({
+const Mouse = {
   BUTTON1: 0, // main button (left button)
   BUTTON2: 1, // auxiliary button (wheel or middle button)
   BUTTON3: 2, // secondary button (right button)
-});
+} as const;
 
-const Color = Object.freeze({
+const Color = {
   BACKGROUND: "$background",
   FOREGROUND: "$foreground",
   TRANSPARENT: "$transparent",
@@ -75,15 +75,22 @@ const Color = Object.freeze({
   ORANGE: "#FFC800",
   PINK: "#FFAFAF",
   YELLOW: "#FFFF00",
-});
+} as const;
 
-const StrokePattern = Object.freeze({
+const FillStyle = {
+  NONE: "none",
+  SOLID: "solid",
+  HACHURE: "hachure",
+  CROSS_HATCH: "cross-hatch",
+} as const;
+
+const StrokePattern = {
   SOLID: [],
   DOTTED: [3],
   DASHED: [6, 4],
-});
+} as const;
 
-const ControllerPosition = Object.freeze({
+const ControllerPosition = {
   TOP: "t",
   RIGHT: "r",
   BOTTOM: "b",
@@ -92,7 +99,7 @@ const ControllerPosition = Object.freeze({
   RIGHT_TOP: "rt",
   RIGHT_BOTTOM: "rb",
   LEFT_BOTTOM: "lb",
-});
+} as const;
 
 const FontSizes = [12, 14, 16, 18, 20, 24, 30, 36, 48, 60, 72, 96, 128];
 
@@ -109,6 +116,7 @@ export {
   Cursor,
   Mouse,
   Color,
+  FillStyle,
   StrokePattern,
   ControllerPosition,
   FontSizes,

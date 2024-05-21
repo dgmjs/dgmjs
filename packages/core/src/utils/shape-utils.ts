@@ -13,6 +13,8 @@
 
 import { unique } from "../std/lambda";
 import { Connector, Page, type Shape } from "../shapes";
+import { Canvas } from "../graphics/graphics";
+import * as geometry from "../graphics/geometry";
 
 /**
  * Returns all descendants of the given set of objects including the given
@@ -62,4 +64,21 @@ export function getAllRelevants(page: Page, objs: Shape[]): Shape[] {
     size = set.length;
   }
   return set;
+}
+
+/**
+ * Returns the view rect including all shapes
+ */
+export function getAllViewRect(canvas: Canvas, shapes: Shape[]): number[][] {
+  // get view rect including all shapes
+  const allShapes = shapes.map((s) => s.traverseSequence() as Shape[]).flat();
+  const rects = allShapes.map((s) => (s as Shape).getViewRect(canvas));
+  const box =
+    rects.length > 0
+      ? rects.reduce(geometry.unionRect)
+      : [
+          [0, 0],
+          [0, 0],
+        ];
+  return box;
 }

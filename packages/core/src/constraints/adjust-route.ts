@@ -15,7 +15,7 @@ import { z } from "zod";
 import { Shape, constraintManager, Connector, Page } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import { Transaction } from "../core/transaction";
-import { adjustConnectorRoute } from "../mutates";
+import { adjustConnectorRoute } from "../macro";
 
 const schema = z.object({});
 

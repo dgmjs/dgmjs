@@ -39,7 +39,7 @@ export class TextFactoryHandler extends Handler {
       this.shape = editor.factory.createText(r);
       editor.actions.insert(this.shape);
       editor.factory.triggerCreate(this.shape);
-      this.done(editor);
+      this.complete(editor);
     }
   }
 

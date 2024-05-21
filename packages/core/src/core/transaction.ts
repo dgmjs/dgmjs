@@ -39,10 +39,12 @@ export class CreateMutation extends Mutation {
 
   apply(store: Store) {
     store.addToIndex(this.obj);
+    store.update(this.obj);
   }
 
   unapply(store: Store): void {
     store.removeFromIndex(this.obj);
+    store.update(this.obj);
   }
 
   toJSON(): any {
@@ -63,10 +65,12 @@ export class DeleteMutation extends Mutation {
 
   apply(store: Store) {
     store.removeFromIndex(this.obj);
+    store.update(this.obj);
   }
 
   unapply(store: Store): void {
     store.addToIndex(this.obj);
+    store.update(this.obj);
   }
 
   toJSON(): any {
@@ -93,10 +97,12 @@ export class AssignMutation extends Mutation {
 
   apply(store: Store) {
     (this.obj as Record<string, any>)[this.field] = this.newValue;
+    store.update(this.obj);
   }
 
   unapply(store: Store): void {
     (this.obj as Record<string, any>)[this.field] = this.oldValue;
+    store.update(this.obj);
   }
 
   toJSON() {
@@ -129,10 +135,12 @@ export class AssignRefMutation extends Mutation {
 
   apply(store: Store) {
     (this.obj as Record<string, any>)[this.field] = this.newValue;
+    store.update(this.obj);
   }
 
   unapply(store: Store): void {
     (this.obj as Record<string, any>)[this.field] = this.oldValue;
+    store.update(this.obj);
   }
 
   toJSON() {
@@ -170,6 +178,8 @@ export class InsertChildMutation extends Mutation {
       this.parent.children.splice(this.position, 0, this.obj);
       this.obj.parent = this.parent;
     }
+    store.update(this.parent);
+    store.update(this.obj);
   }
 
   unapply(store: Store): void {
@@ -177,6 +187,8 @@ export class InsertChildMutation extends Mutation {
       this.parent.children.splice(this.position, 1);
       this.obj.parent = null;
     }
+    store.update(this.parent);
+    store.update(this.obj);
   }
 
   toJSON() {
@@ -214,6 +226,8 @@ export class RemoveChildMutation extends Mutation {
       this.parent.children.splice(this.position, 1);
       this.obj.parent = null;
     }
+    store.update(this.parent);
+    store.update(this.obj);
   }
 
   unapply(store: Store): void {
@@ -221,6 +235,8 @@ export class RemoveChildMutation extends Mutation {
       this.parent.children.splice(this.position, 0, this.obj);
       this.obj.parent = this.parent;
     }
+    store.update(this.parent);
+    store.update(this.obj);
   }
 
   toJSON() {
@@ -260,6 +276,8 @@ export class ReorderChildMutation extends Mutation {
       array.splice(this.oldPosition, 1);
       array.splice(this.newPosition, 0, this.obj);
     }
+    store.update(this.parent);
+    store.update(this.obj);
   }
 
   unapply(store: Store): void {
@@ -268,6 +286,8 @@ export class ReorderChildMutation extends Mutation {
       array.splice(this.newPosition, 1);
       array.splice(this.oldPosition, 0, this.obj);
     }
+    store.update(this.parent);
+    store.update(this.obj);
   }
 
   toJSON() {

@@ -19,7 +19,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Movable, Sizable, Box, Line } from "@dgmjs/core";
+import {
+  Movable,
+  Sizable,
+  Box,
+  MovableEnum,
+  SizableEnum,
+  Path,
+} from "@dgmjs/core";
 import React from "react";
 import { Panel } from "../common/panel";
 import { Label } from "@/components/ui/label";
@@ -32,7 +39,7 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
   onChange,
 }) => {
   const isBox = shapes.every((s) => s instanceof Box);
-  const isLine = shapes.every((s) => s instanceof Line);
+  const isPath = shapes.every((s) => s instanceof Path);
 
   const enabled = merge(shapes.map((s) => s.enable));
   const visible = merge(shapes.map((s) => s.visible));
@@ -46,7 +53,7 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
     shapes.map((s) => (s instanceof Box ? s.textEditable : false))
   );
   const pathEditable = merge(
-    shapes.map((s) => (s instanceof Line ? s.pathEditable : false))
+    shapes.map((s) => (s instanceof Path ? s.pathEditable : false))
   );
   const anchored = merge(
     shapes.map((s) => (s instanceof Box ? s.anchored : false))
@@ -164,7 +171,7 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
           <Checkbox
             id="shape-path-editable-checkbox"
             checked={pathEditable}
-            disabled={!isLine}
+            disabled={!isPath}
             onCheckedChange={(checked) => {
               if (typeof checked === "boolean")
                 onChange({ pathEditable: checked });
@@ -185,7 +192,9 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
           </Label>
           <Select
             value={sizable}
-            onValueChange={(value) => onChange({ sizable: value })}
+            onValueChange={(value) =>
+              onChange({ sizable: value as SizableEnum })
+            }
           >
             <SelectTrigger id="shape-sizable-select" className="h-8">
               <SelectValue />
@@ -206,7 +215,7 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
         </Label>
         <Select
           value={movable}
-          onValueChange={(value) => onChange({ movable: value })}
+          onValueChange={(value) => onChange({ movable: value as MovableEnum })}
         >
           <SelectTrigger id="shape-movable-select" className="h-8">
             <SelectValue />

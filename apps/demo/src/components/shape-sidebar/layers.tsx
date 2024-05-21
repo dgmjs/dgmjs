@@ -59,7 +59,7 @@ const ShapeTreeNode: React.FC<ShapeTreeNodeProps> = ({
       item={
         <div className="flex flex-row items-center h-8">
           <div className="h-4 w-4 mr-2">
-            {shape.type === "Document" && <ShapesIcon size={16} />}
+            {shape.type === "Doc" && <ShapesIcon size={16} />}
             {shape.type === "Page" && <StickyNoteIcon size={16} />}
             {shape.type === "Rectangle" && <SquareIcon size={16} />}
             {shape.type === "Ellipse" && <CircleIcon size={16} />}

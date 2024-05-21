@@ -1,11 +1,4 @@
-import {
-  Document,
-  Editor,
-  Page,
-  Shape,
-  ObjProps,
-  Transaction,
-} from "@dgmjs/core";
+import { Editor, Page, Shape, ShapeProps } from "@dgmjs/core";
 import {
   YjsDocSyncPlugin,
   YjsUserPresencePlugin,
@@ -21,7 +14,7 @@ import { Font, fetchFonts, insertFontsToDocument } from "./font-manager";
 import { ShapeSidebar } from "./components/shape-sidebar";
 import { EditorWrapper } from "./editor";
 import { Button } from "./components/ui/button";
-import { collab } from "./collab";
+import { collab, generateUserIdentity } from "./collab";
 
 declare global {
   interface Window {
@@ -42,16 +35,16 @@ function App() {
     await fetchFonts(fontJson as Font[]);
 
     if (roomId) {
-      collab.start(window.editor, roomId);
+      collab.start(window.editor, roomId, generateUserIdentity());
       console.log("collab started with roomId", roomId);
     } else {
       window.editor.newDoc();
     }
 
-    window.editor.transform.onTransaction.addListener((tx) => {
+    window.editor.transform.onTransaction.addListener(() => {
       // console.log("tx", tx);
     });
-    window.editor.transform.onAction.addListener((action) => {
+    window.editor.transform.onAction.addListener(() => {
       // console.log("action", action);
     });
 
@@ -63,16 +56,24 @@ function App() {
     // });
 
     // load from local storage
-    // const localData = localStorage.getItem("local-data");
-    // if (localData) {
-    //   window.editor.loadFromJSON(JSON.parse(localData));
-    // }
-    demoStore.setDoc(window.editor.store.doc as Document);
+    const localData = localStorage.getItem("local-data");
+    if (localData) {
+      window.editor.loadFromJSON(JSON.parse(localData));
+    }
+    demoStore.setDoc(window.editor.getDoc());
     demoStore.setCurrentPage(window.editor.currentPage);
     // window.editor.fitToScreen();
 
     window.addEventListener("resize", () => {
       window.editor.fit();
+    });
+
+    collab.oDocReady.addListener(() => {
+      const doc = window.editor.getDoc();
+      if (doc) {
+        demoStore.setDoc(doc);
+        demoStore.setCurrentPage(window.editor.currentPage);
+      }
     });
 
     // forward key event to editor
@@ -82,15 +83,25 @@ function App() {
     // });
   };
 
+  const handleShapeCreate = (shape: Shape) => {
+    if (!window.editor.activeHandlerLock) {
+      setTimeout(() => {
+        window.editor.selection.select([shape]);
+        window.editor.repaint();
+      }, 0);
+    }
+  };
+
   const handleSelectionChange = (selection: Shape[]) => {
     demoStore.setSelection([...selection]);
   };
 
   const handleActiveHandlerChange = (handlerId: string) => {
     demoStore.setActiveHandler(handlerId);
+    window.editor?.selection.deselectAll();
   };
 
-  const handleTransaction = (tx: Transaction) => {
+  const handleAction = () => {
     const data = window.editor.store.toJSON();
     localStorage.setItem("local-data", JSON.stringify(data));
   };
@@ -99,7 +110,7 @@ function App() {
     window.editor.selection.select(selection);
   };
 
-  const handleValuesChange = (values: ObjProps) => {
+  const handleValuesChange = (values: ShapeProps) => {
     const shapes = window.editor.selection.getShapes();
     window.editor.actions.update(values);
     demoStore.setSelection([...shapes]);
@@ -110,8 +121,8 @@ function App() {
   };
 
   const handleShare = () => {
-    const roomId = nanoid(); // window.editor.store.doc?.id;
-    collab.start(window.editor, roomId!);
+    const roomId = nanoid();
+    collab.start(window.editor, roomId!, generateUserIdentity());
     collab.flush();
     window.history.pushState({}, "", `?roomId=${roomId}`);
   };
@@ -132,10 +143,14 @@ function App() {
         plugins={[new YjsDocSyncPlugin(), new YjsUserPresencePlugin()]}
         showGrid={true}
         onMount={handleMount}
+        onShapeCreate={handleShapeCreate}
         onSelectionChange={handleSelectionChange}
         onCurrentPageChange={handleCurrentPageChange}
         onActiveHandlerChange={handleActiveHandlerChange}
-        onTransaction={handleTransaction}
+        onActiveHandlerLockChange={(lock) =>
+          demoStore.setActiveHandlerLock(lock)
+        }
+        onAction={handleAction}
       />
       <div className="absolute top-2 left-60 right-60 h-10 border flex items-center justify-between bg-background">
         <Menus />

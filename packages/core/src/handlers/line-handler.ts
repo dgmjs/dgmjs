@@ -16,7 +16,7 @@ import * as geometry from "../graphics/geometry";
 import { Line, Shape } from "../shapes";
 import { Editor, Handler } from "../editor";
 import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
-import { addShape, resolveAllConstraints, setLinePath } from "../mutates";
+import { addShape, resolveAllConstraints, setPath } from "../macro";
 
 /**
  * Line Factory Handler
@@ -59,15 +59,15 @@ export class LineFactoryHandler extends Handler {
     if (page && this.shape) {
       const newPath = [...this.points, this.dragPoint];
       editor.transform.transact((tx) => {
-        setLinePath(tx, this.shape!, newPath);
+        setPath(tx, this.shape!, newPath);
         resolveAllConstraints(tx, page, editor.canvas);
       });
-      editor.repaint();
     }
   }
 
   finalize(editor: Editor, e?: CanvasPointerEvent): void {
-    if (this.shape) {
+    const page = editor.currentPage;
+    if (page && this.shape) {
       if (geometry.pathLength(this.shape.path) < 2) {
         editor.transform.cancelAction();
       } else {
@@ -88,7 +88,7 @@ export class LineFactoryHandler extends Handler {
         if (this.closed) {
           this.finalize(editor, e);
           this.reset();
-          this.done(editor);
+          this.complete(editor);
         } else {
           const p = canvas.globalCoordTransformRev([e.x, e.y]);
           this.points.push(p);
@@ -135,7 +135,7 @@ export class LineFactoryHandler extends Handler {
         this.points.push(geometry.copy(this.dragPoint));
         this.finalize(editor, e);
         this.reset();
-        this.done(editor);
+        this.complete(editor);
         editor.repaint();
       }
     }
@@ -143,10 +143,18 @@ export class LineFactoryHandler extends Handler {
 
   keyDown(editor: Editor, e: KeyboardEvent): boolean {
     if (e.key === "Escape" && this.dragging) {
-      editor.transform.cancelAction();
+      const page = editor.currentPage;
+      if (page && this.shape) {
+        editor.transform.transact((tx) => {
+          setPath(tx, this.shape!, structuredClone(this.points));
+          resolveAllConstraints(tx, page, editor.canvas);
+        });
+        this.shape.update(editor.canvas);
+      }
+      this.finalize(editor);
       editor.repaint();
       this.reset();
-      this.done(editor);
+      this.complete(editor);
     }
     return false;
   }
@@ -157,9 +165,6 @@ export class LineFactoryHandler extends Handler {
   }
 
   onDeactivate(editor: Editor): void {
-    if (this.points.length > 1) {
-      // this.finalize(editor);
-    }
     this.reset();
     editor.setCursor(Cursor.DEFAULT);
   }

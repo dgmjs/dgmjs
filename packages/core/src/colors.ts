@@ -42,7 +42,7 @@ import {
 
 export type Colors = Record<string, string>;
 
-export const colors: Record<string, Colors> = {
+export const themeColors: Record<string, Colors> = {
   light: {
     transparent: "#ffffff00",
     foreground: "#000000",

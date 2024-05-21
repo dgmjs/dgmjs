@@ -1,12 +1,25 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import tailwind from "@astrojs/tailwind";
+import starlightTypeDoc, { typeDocSidebarGroup } from "starlight-typedoc";
 
 // https://astro.build/config
 export default defineConfig({
   integrations: [
     starlight({
       title: "dgm.js",
+      plugins: [
+        // Generate the documentation.
+        starlightTypeDoc({
+          entryPoints: ["../../packages/core/src/index.ts"],
+          tsconfig: "../../packages/core/tsconfig.json",
+          output: "api-core",
+          sidebar: {
+            collapsed: true,
+            label: "@dgmjs/core",
+          },
+        }),
+      ],
       social: {
         github: "https://github.com/dgmjs/dgmjs",
         twitter: "https://twitter.com/dgm_sh",
@@ -25,6 +38,11 @@ export default defineConfig({
           label: "Reference",
           autogenerate: { directory: "reference" },
         },
+        {
+          label: "@dgmjs/react",
+          autogenerate: { directory: "api-react" },
+        },
+        typeDocSidebarGroup,
       ],
       customCss: [
         "./src/styles/globals.css",

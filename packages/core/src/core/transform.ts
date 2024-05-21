@@ -2,6 +2,7 @@ import { Store } from "./store";
 import { Stack } from "../std/collections";
 import { TypedEvent } from "../std/typed-event";
 import { Transaction } from "./transaction";
+import { Obj } from "./obj";
 
 // Maximum size of undo/redo stack
 const MAX_STACK_SIZE = 1000;

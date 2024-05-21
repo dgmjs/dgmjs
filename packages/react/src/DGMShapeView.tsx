@@ -1,4 +1,4 @@
-import { Shape, renderOnCanvas } from "@dgmjs/core";
+import { Shape, canvasUtils } from "@dgmjs/core";
 import {
   forwardRef,
   useEffect,
@@ -14,7 +14,8 @@ export interface DGMShapeViewProps
   darkMode?: boolean;
   maxScale?: number;
   scaleAdjust?: number;
-  updateDOM?: boolean;
+  update?: boolean;
+  showDOM?: boolean;
 }
 
 export interface DGMShapeViewHandle {
@@ -29,7 +30,8 @@ export const DGMShapeView = forwardRef<DGMShapeViewHandle, DGMShapeViewProps>(
       darkMode = false,
       maxScale = 1,
       scaleAdjust = 1,
-      updateDOM = false,
+      update = false,
+      showDOM = false,
       style,
       children,
       ...others
@@ -42,7 +44,7 @@ export const DGMShapeView = forwardRef<DGMShapeViewHandle, DGMShapeViewProps>(
 
     const repaint = (width: number, height: number) => {
       if (canvasRef.current) {
-        renderOnCanvas(
+        canvasUtils.renderOnCanvas(
           shapes,
           canvasRef.current,
           darkMode,
@@ -50,7 +52,8 @@ export const DGMShapeView = forwardRef<DGMShapeViewHandle, DGMShapeViewProps>(
           [width, height],
           maxScale,
           scaleAdjust,
-          updateDOM
+          update,
+          showDOM
         );
       }
     };

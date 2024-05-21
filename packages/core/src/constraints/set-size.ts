@@ -17,7 +17,7 @@ import * as geometry from "../graphics/geometry";
 import { z } from "zod";
 import { measureText } from "../utils/text-utils";
 import { Transaction } from "../core/transaction";
-import { resizeShape } from "../mutates";
+import { resizeShape } from "../macro";
 
 const schema = z.object({
   width: z

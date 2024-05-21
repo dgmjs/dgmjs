@@ -4,10 +4,9 @@ import {
   Shape,
   Box,
   Text,
-  measureText,
-  convertTextNodeToString,
+  textUtils,
   DblClickEvent,
-  resolveAllConstraints,
+  macro,
 } from "@dgmjs/core";
 import { useEffect, useRef, useState } from "react";
 import { moveToAboveOrBelow, textVertAlignToAlignItems } from "./utils";
@@ -117,7 +116,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
 
   const getTextRect = (textShape: Text, doc: any) => {
     const rect = textShape.getRectInDCS(editor.canvas);
-    const textMetric = measureText(editor.canvas, textShape, doc);
+    const textMetric = textUtils.measureText(editor.canvas, textShape, doc);
     const shapeWidth =
       textMetric.minWidth + state.padding[1] + state.padding[3];
     const shapeHeight = textMetric.height + state.padding[0] + state.padding[2];
@@ -155,6 +154,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
     if (editor.currentPage && textShape) {
       // disable shape's text rendering
       textShape._renderText = false;
+      textShape.update(editor.canvas);
       editor.repaint();
 
       // start transaction
@@ -179,7 +179,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
       // mutate text shape
       editor.transform.transact((tx: Transaction) => {
         tx.assign(textShape, "text", textValue);
-        resolveAllConstraints(tx, editor.currentPage!, editor.canvas);
+        macro.resolveAllConstraints(tx, editor.currentPage!, editor.canvas);
       });
 
       // update states
@@ -208,11 +208,14 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
   const close = () => {
     if (tiptapEditor && state.textShape) {
       editor.transform.endAction();
-      const textString = convertTextNodeToString(tiptapEditor.getJSON());
+      const textString = textUtils.convertTextNodeToString(
+        tiptapEditor.getJSON()
+      );
       if (state.textShape instanceof Text && textString.trim().length === 0) {
         editor.actions.remove([state.textShape]);
       }
       state.textShape._renderText = true;
+      state.textShape.update(editor.canvas);
       editor.repaint();
       setState((state) => ({ ...state, textShape: null }));
     }

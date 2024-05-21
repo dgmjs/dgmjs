@@ -25,6 +25,7 @@ export interface DGMEditorCoreProps
   onSelectionChange?: (selections: Shape[]) => void;
   onCurrentPageChange?: (page: Page) => void;
   onActiveHandlerChange?: (handlerId: string) => void;
+  onActiveHandlerLockChange?: (lock: boolean) => void;
   onShapeCreate?: (shape: Shape) => void;
   onShapeInitialize?: (shape: Shape) => void;
   onTransaction?: (tx: Transaction) => void;
@@ -48,6 +49,7 @@ export const DGMEditorCore: React.FC<DGMEditorCoreProps> = ({
   onSelectionChange,
   onCurrentPageChange,
   onActiveHandlerChange,
+  onActiveHandlerLockChange,
   onShapeCreate,
   onShapeInitialize,
   onTransaction,
@@ -83,6 +85,9 @@ export const DGMEditorCore: React.FC<DGMEditorCoreProps> = ({
       });
       editor.onActiveHandlerChange.addListener((handlerId) => {
         if (onActiveHandlerChange) onActiveHandlerChange(handlerId);
+      });
+      editor.onActiveHandlerLockChange.addListener((lock) => {
+        if (onActiveHandlerLockChange) onActiveHandlerLockChange(lock);
       });
       editor.factory.onCreate.addListener((shape: Shape) => {
         if (onShapeCreate) onShapeCreate(shape);

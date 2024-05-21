@@ -11,12 +11,10 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { Color } from "./const";
+import { Color, FillStyle } from "./const";
 import * as geometry from "./geometry";
-
 import rough from "roughjs";
 import { roughDraw } from "./roughjs-draw";
-import { FillStyle } from "../shapes";
 import type { Point } from "roughjs/bin/geometry";
 import type { RoughGenerator } from "roughjs/bin/generator";
 
@@ -435,6 +433,7 @@ class Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
     this.context.lineCap = "round";
+    this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
     if (this.roughness > 0) {
       const rd = this.generator.line(x1, y1, x2, y2, {
@@ -472,6 +471,7 @@ class Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
     this.context.lineCap = "round";
+    this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
     this.context.setLineDash(this.strokePattern);
     if (this.roughness > 0) {
@@ -562,6 +562,7 @@ class Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
     this.context.lineCap = "round";
+    this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
     this.context.setLineDash(this.strokePattern);
     if (this.roughness > 0) {
@@ -697,6 +698,7 @@ class Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
     this.context.lineCap = "round";
+    this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
     this.context.setLineDash(this.strokePattern);
     if (this.roughness > 0) {
@@ -791,6 +793,7 @@ class Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
     this.context.lineCap = "round";
+    this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
     this.context.setLineDash(this.strokePattern);
     if (this.roughness > 0) {
@@ -985,6 +988,7 @@ class Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
     this.context.lineCap = "round";
+    this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
     if (this.roughness > 0) {
       const rd = this.generator.curve(path as Point[], {
@@ -1066,6 +1070,7 @@ class Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
     this.context.lineCap = "round";
+    this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
     this.context.setLineDash(this.strokePattern);
     if (this.roughness > 0) {
@@ -1153,6 +1158,7 @@ class Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
     this.context.lineCap = "round";
+    this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
     this.context.setLineDash(this.strokePattern);
     if (this.roughness > 0) {
@@ -1233,6 +1239,7 @@ class Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
     this.context.lineCap = "round";
+    this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
     this.context.setLineDash(this.strokePattern);
     if (this.roughness > 0) {
@@ -1395,4 +1402,11 @@ class CanvasPointerEvent {
   }
 }
 
-export { Canvas, CanvasPointerEvent };
+export {
+  FillStyle,
+  SVGPath,
+  pathToString,
+  Canvas,
+  CanvasTextMetric,
+  CanvasPointerEvent,
+};

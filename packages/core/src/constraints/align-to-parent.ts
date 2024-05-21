@@ -12,10 +12,10 @@
  */
 
 import { z } from "zod";
-import { constraintManager, Page, Shape } from "../shapes";
+import { constraintManager, Doc, Page, Shape } from "../shapes";
 import type { Canvas } from "../graphics/graphics";
 import { Transaction } from "../core/transaction";
-import { moveMultipleShapes, resizeShape } from "../mutates";
+import { moveMultipleShapes, resizeShape } from "../macro";
 
 const schema = z.object({
   horz: z
@@ -66,7 +66,7 @@ function constraint(
 ) {
   let changed = false;
   const parent = shape.parent;
-  if (parent instanceof Shape && !(parent instanceof Document)) {
+  if (parent instanceof Shape && !(parent instanceof Doc)) {
     let horz = args.horz;
     let vert = args.vert;
     const l = parent.left;

@@ -12,21 +12,20 @@
  */
 
 import { Canvas, CanvasPointerEvent } from "./graphics/graphics";
+import { Connector, Doc, Shape, Page, shapeInstantiator } from "./shapes";
 import {
-  Connector,
-  Document,
-  Shape,
-  Page,
-  shapeInstantiator,
+  Cursor,
+  Color,
+  Mouse,
+  CONTROL_POINT_APOTHEM,
   FillStyle,
-} from "./shapes";
-import { Cursor, Color, Mouse, CONTROL_POINT_APOTHEM } from "./graphics/const";
+} from "./graphics/const";
 import { assert } from "./std/assert";
 import * as geometry from "./graphics/geometry";
 import * as utils from "./graphics/utils";
 import { ShapeFactory } from "./factory";
 import type { Obj } from "./core/obj";
-import { colors } from "./colors";
+import { themeColors } from "./colors";
 import { Actions } from "./actions";
 import { KeyMap, KeymapManager } from "./keymap-manager";
 import { AutoScroller } from "./utils/auto-scroller";
@@ -71,9 +70,9 @@ export class Editor {
   plugins: Record<string, Plugin>;
   platform: string;
 
-  onDocumentLoaded: TypedEvent<Document>;
   onCurrentPageChange: TypedEvent<Page>;
   onActiveHandlerChange: TypedEvent<string>;
+  onActiveHandlerLockChange: TypedEvent<boolean>;
   onZoom: TypedEvent<number>;
   onScroll: TypedEvent<number[]>;
   onPointerDown: TypedEvent<CanvasPointerEvent>;
@@ -85,6 +84,7 @@ export class Editor {
   onDrag: TypedEvent<DragEvent>;
   onDragEnd: TypedEvent<DragEvent>;
   onFileDrop: TypedEvent<FileDropEvent>;
+  onRepaint: TypedEvent<void>;
 
   store: Store;
   transform: Transform;
@@ -108,6 +108,7 @@ export class Editor {
   handlers: Record<string, Handler>;
   activeHandlerId: string | null;
   activeHandler: Handler | null;
+  activeHandlerLock: boolean;
   leftButtonDown: boolean;
   downX: number;
   downY: number;
@@ -143,9 +144,9 @@ export class Editor {
     });
 
     // initialize event emitters
-    this.onDocumentLoaded = new TypedEvent();
     this.onCurrentPageChange = new TypedEvent();
     this.onActiveHandlerChange = new TypedEvent();
+    this.onActiveHandlerLockChange = new TypedEvent();
     this.onZoom = new TypedEvent();
     this.onScroll = new TypedEvent();
     this.onPointerDown = new TypedEvent();
@@ -157,13 +158,20 @@ export class Editor {
     this.onDrag = new TypedEvent();
     this.onDragEnd = new TypedEvent();
     this.onFileDrop = new TypedEvent();
+    this.onRepaint = new TypedEvent();
 
     this.store = new Store(shapeInstantiator, {
       objInitializer: (o) => {
-        if (o instanceof Shape) o.initialze(this.canvas);
+        if (o instanceof Shape) {
+          o.initialze(this.canvas);
+          o.update(this.canvas);
+        }
       },
       objFinalizer: (o) => {
         if (o instanceof Shape) o.finalize(this.canvas);
+      },
+      objUpdater: (obj) => {
+        if (obj instanceof Shape) obj.update(this.canvas);
       },
     });
     this.transform = new Transform(this.store);
@@ -192,6 +200,7 @@ export class Editor {
     this.addHandlers(this.options.handlers ?? []);
     this.activeHandlerId = null;
     this.activeHandler = null;
+    this.activeHandlerLock = false;
     this.leftButtonDown = false; // To check mouse left button down in mouse move event.
     this.downX = 0;
     this.downY = 0;
@@ -223,9 +232,6 @@ export class Editor {
     this.transform.onUndo.addListener(() => this.repaint());
     this.transform.onRedo.addListener(() => this.repaint());
     this.selection.onChange.addListener(() => this.repaint());
-    this.factory.onCreate.addListener((shape: Shape) => {
-      this.selection.select([shape]);
-    });
   }
 
   initializeCanvas() {
@@ -238,7 +244,7 @@ export class Editor {
     // if (!context) throw new Error("Failed to create context2d");
     const pixelRatio = window.devicePixelRatio ?? 1;
     this.canvas = new Canvas(this.canvasElement, pixelRatio);
-    this.canvas.colorVariables = { ...colors["light"] };
+    this.canvas.colorVariables = { ...themeColors["light"] };
 
     // pointer down handler
     this.canvasElement.addEventListener("pointerdown", (e) => {
@@ -521,8 +527,16 @@ export class Editor {
     if (this.currentPage !== page) {
       if (this.currentPage) {
         this.currentPage.finalize(this.canvas);
+        this.selection.deselectAll();
       }
       this.currentPage = page;
+      if (page._origin) {
+        this.setOrigin(page._origin[0], page._origin[1]);
+      } else {
+        this.scrollToCenter();
+        this.currentPage._origin = this.getOrigin();
+      }
+      this.setScale(page._scale);
       this.repaint();
       this.onCurrentPageChange.emit(page);
     }
@@ -532,8 +546,8 @@ export class Editor {
    * Get pages
    */
   getPages(): Page[] {
-    if (this.store.doc) {
-      return this.store.doc.children as Page[];
+    if (this.store.root) {
+      return this.store.root.children as Page[];
     }
     return [];
   }
@@ -551,8 +565,9 @@ export class Editor {
   setDarkMode(dark: boolean) {
     this.darkMode = dark;
     this.canvas.colorVariables = {
-      ...colors[this.darkMode ? "dark" : "light"],
+      ...themeColors[this.darkMode ? "dark" : "light"],
     };
+    this.update();
     this.repaint();
   }
 
@@ -643,7 +658,10 @@ export class Editor {
    */
   setOrigin(x: number, y: number) {
     this.canvas.origin = [x, y];
-    this.repaint();
+    if (this.currentPage) {
+      this.currentPage._origin = [x, y];
+      this.repaint();
+    }
     this.onScroll.emit([x, y]);
   }
 
@@ -667,7 +685,10 @@ export class Editor {
       scale = 10;
     }
     this.canvas.scale = scale;
-    this.repaint();
+    if (this.currentPage) {
+      this.currentPage._scale = scale;
+      this.repaint();
+    }
     this.onZoom.emit(scale);
   }
 
@@ -694,11 +715,10 @@ export class Editor {
   fitToScreen(scaleAdjust: number = 1, maxScale: number = 1) {
     if (this.currentPage) {
       // doc size in GCS
-      const doc = this.store.doc as Document;
       const page = this.currentPage;
-      let box = Array.isArray(doc.pageSize)
-        ? [[0, 0], doc.pageSize]
-        : page.getPageBoundingBox(this.canvas);
+      let box = Array.isArray(page.size)
+        ? [[0, 0], page.size]
+        : page.geViewRect(this.canvas);
       const center = geometry.center(box);
       const dw = geometry.width(box);
       const dh = geometry.height(box);
@@ -709,7 +729,6 @@ export class Editor {
       const scale = Math.min(sw / dw, sh / dh, maxScale);
       this.setScale(scale * scaleAdjust);
       this.scrollCenterTo(center);
-      this.repaint();
     }
   }
 
@@ -718,7 +737,6 @@ export class Editor {
    */
   scroll(dx: number, dy: number) {
     this.moveOrigin(dx, dy);
-    this.repaint();
   }
 
   /**
@@ -729,11 +747,10 @@ export class Editor {
   scrollCenterTo(center?: number[]) {
     if (this.currentPage) {
       // doc size in GCS
-      const doc = this.store.doc as Document;
       const page = this.currentPage;
-      let box = Array.isArray(doc.pageSize)
-        ? [[0, 0], doc.pageSize]
-        : page.getPageBoundingBox(this.canvas);
+      let box = Array.isArray(page.size)
+        ? [[0, 0], page.size]
+        : page.geViewRect(this.canvas);
       if (!center) {
         center = geometry.center(box);
       }
@@ -747,6 +764,20 @@ export class Editor {
       const px = Math.round(center[0] - zsw / 2);
       const py = Math.round(center[1] - zsh / 2);
       this.setOrigin(-px, -py);
+    }
+  }
+
+  /**
+   * Scroll to center of the shapes
+   */
+  scrollToCenter() {
+    if (this.currentPage) {
+      const page = this.currentPage;
+      let box = Array.isArray(page.size)
+        ? [[0, 0], page.size]
+        : page.geViewRect(this.canvas);
+      const center = geometry.center(box);
+      this.scrollCenterTo(center);
     }
   }
 
@@ -796,10 +827,10 @@ export class Editor {
    */
   activateHandler(id: string) {
     if (this.activeHandlerId !== id) {
-      if (this.activeHandler) this.activeHandler.onDeactivate(this);
+      if (this.activeHandler) this.activeHandler.deactivate(this);
       this.activeHandlerId = id;
       this.activeHandler = this.handlers[this.activeHandlerId];
-      this.activeHandler.onActivate(this);
+      this.activeHandler.activate(this);
       this.onActiveHandlerChange.emit(this.activeHandlerId);
     }
   }
@@ -814,14 +845,32 @@ export class Editor {
   }
 
   /**
+   * Set active handler lock
+   */
+  setActiveHandlerLock(lock: boolean) {
+    if (this.activeHandlerLock !== lock) {
+      this.activeHandlerLock = lock;
+      this.onActiveHandlerLockChange.emit(lock);
+    }
+  }
+
+  /**
+   * Get active handler lock
+   */
+  getActiveHandlerLock(): boolean {
+    return this.activeHandlerLock;
+  }
+
+  /**
    * Clear canvas background
    */
   clearBackground(canvas: Canvas) {
     const g = canvas.context;
-    const docSize = (this.store.doc as Document)?.pageSize;
+    const pageSize = this.currentPage?.size;
     g.fillStyle = this.canvas.resolveColor(
-      docSize ? Color.CANVAS : Color.BACKGROUND
+      pageSize ? Color.CANVAS : Color.BACKGROUND
     );
+    g.globalAlpha = 1;
     g.fillRect(0, 0, this.canvasElement.width, this.canvasElement.height);
   }
 
@@ -830,18 +879,18 @@ export class Editor {
    */
   drawGrid(canvas: Canvas) {
     const scale = this.getScale();
-    const docSize = (this.store.doc as Document).pageSize;
+    const pageSize = this.currentPage?.size;
 
     canvas.save();
     canvas.globalTransform();
 
     // draw document background
-    if (docSize) {
+    if (pageSize) {
       canvas.roughness = 0;
       canvas.alpha = 1;
       canvas.fillStyle = FillStyle.SOLID;
       canvas.fillColor = this.canvas.resolveColor(Color.BACKGROUND);
-      canvas.fillRect(0, 0, docSize[0], docSize[1]);
+      canvas.fillRect(0, 0, pageSize[0], pageSize[1]);
     }
 
     // draw grid
@@ -880,13 +929,13 @@ export class Editor {
     }
 
     // draw document border
-    if (docSize) {
+    if (pageSize) {
       canvas.strokeColor = this.canvas.resolveColor(Color.BORDER);
       canvas.strokeWidth = 1 / scale;
       canvas.strokePattern = [];
       canvas.roughness = 0;
       canvas.alpha = 1;
-      canvas.strokeRect(0, 0, docSize[0], docSize[1]);
+      canvas.strokeRect(0, 0, pageSize[0], pageSize[1]);
     }
 
     canvas.restore();
@@ -902,15 +951,31 @@ export class Editor {
   }
 
   /**
+   * Update all shapes
+   */
+  update() {
+    if (this.store.root) {
+      this.store.root.traverse((obj) => {
+        if (obj instanceof Shape) {
+          obj.update(this.canvas);
+        }
+      });
+    }
+  }
+
+  /**
    * Repaint diagram
    */
   repaint(drawSelection: boolean = true) {
+    // console.time("repaint");
     this.clearBackground(this.canvas);
     if (this.currentPage) {
       this.drawGrid(this.canvas);
-      this.currentPage.render(this.canvas, true);
+      this.currentPage.draw(this.canvas, true);
       if (drawSelection) this.drawSelection();
+      this.onRepaint.emit();
     }
+    // console.timeEnd("repaint");
   }
 
   /**
@@ -924,27 +989,26 @@ export class Editor {
   /**
    * Get the document
    */
-  getDoc(): Document {
-    return this.store.doc as Document;
+  getDoc(): Doc {
+    return this.store.root as Doc;
   }
 
   /**
    * Set the document
    */
-  setDoc(doc: Document) {
-    this.store.setDoc(doc);
+  setDoc(doc: Doc) {
+    this.store.setRoot(doc);
   }
 
   /**
    * Create a new document
    */
-  newDoc(): Document {
-    const doc = new Document();
+  newDoc(): Doc {
+    const doc = new Doc();
     const page = new Page();
     doc.children.push(page);
     page.parent = doc;
-    this.store.setDoc(doc);
-    this.onDocumentLoaded.emit(this.store.doc as Document);
+    this.store.setRoot(doc);
     this.setCurrentPage(doc.children[0] as Page);
     return doc;
   }
@@ -956,13 +1020,12 @@ export class Editor {
     if (json) {
       this.selection.deselectAll();
       this.store.fromJSON(json);
-      this.onDocumentLoaded.emit(this.store.doc as Document);
       if (
-        this.store.doc instanceof Document &&
-        this.store.doc.children.length > 0 &&
-        this.store.doc.children[0] instanceof Page
+        this.store.root instanceof Doc &&
+        this.store.root.children.length > 0 &&
+        this.store.root.children[0] instanceof Page
       ) {
-        this.setCurrentPage(this.store.doc.children[0] as Page);
+        this.setCurrentPage(this.store.root.children[0] as Page);
       }
     }
   }
@@ -1027,7 +1090,7 @@ class ManipulatorManager {
 }
 
 export interface HandlerOptions {
-  lock: boolean;
+  defaultLock: boolean;
 }
 
 /**
@@ -1040,7 +1103,7 @@ export class Handler {
   constructor(id: string, options?: Partial<HandlerOptions>) {
     this.id = id;
     this.options = {
-      lock: false,
+      defaultLock: false,
       ...options,
     };
     this.reset();
@@ -1052,30 +1115,31 @@ export class Handler {
   reset() {}
 
   /**
-   * Get lock
+   * Trigger when the handler action is complete
    */
-  getLock(): boolean {
-    return this.options.lock;
-  }
-
-  /**
-   * Set lock
-   */
-  setLock(lock: boolean) {
-    this.options.lock = lock;
-  }
-
-  /**
-   * Call this method when the handler is done
-   */
-  done(editor: Editor) {
-    if (!this.options.lock) {
+  complete(editor: Editor) {
+    if (!editor.getActiveHandlerLock()) {
       editor.activateDefaultHandler();
     }
   }
 
   /**
-   * called when activated
+   * Activate the handler
+   */
+  activate(editor: Editor) {
+    editor.setActiveHandlerLock(this.options.defaultLock);
+    this.onActivate(editor);
+  }
+
+  /**
+   * Deactivate the handler
+   */
+  deactivate(editor: Editor) {
+    this.onDeactivate(editor);
+  }
+
+  /**
+   * Triggered when activated
    */
   onActivate(editor: Editor) {}
 

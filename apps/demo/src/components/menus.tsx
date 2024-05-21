@@ -21,14 +21,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { fileOpen } from "browser-fs-access";
 import { useDemoStore } from "@/demo-store";
-import { Document } from "@dgmjs/core";
+import { exportUtils } from "@dgmjs/core";
 
 export function Menus() {
   const { setDoc, setCurrentPage } = useDemoStore();
 
   const handleNew = () => {
     window.editor.newDoc();
-    setDoc(window.editor.store.doc as Document);
+    setDoc(window.editor.getDoc());
   };
 
   const handleOpen = async () => {
@@ -46,9 +46,9 @@ export function Menus() {
         const data = await file.text();
         const json = JSON.parse(data);
         window.editor.loadFromJSON(json);
-        setDoc(window.editor.store.doc as Document);
+        setDoc(window.editor.getDoc());
         setCurrentPage(window.editor.currentPage);
-        window.editor.fitToScreen();
+        window.editor.scrollToCenter();
         window.editor.repaint();
       }
     } catch {
@@ -63,6 +63,29 @@ export function Menus() {
     setCurrentPage(page);
   };
 
+  /**
+   * Export doc image to a file
+   */
+  const handleExportImage = async () => {
+    const page = window.editor.currentPage!;
+    const exportOptions = {
+      scale: 1,
+      dark: false,
+      fillBackground: true,
+      format: "image/png" as exportUtils.ExportImageFormat,
+    };
+    const name = "dgm-export";
+    const fileName = `${name}.${
+      exportOptions.format === "image/png" ? "png" : "svg"
+    }`;
+    exportUtils.exportImageAsFile(
+      window.editor.canvas,
+      page,
+      fileName,
+      exportOptions
+    );
+  };
+
   return (
     <div className="flex justify-center items-center h-8 px-1">
       <DropdownMenu>
@@ -74,6 +97,9 @@ export function Menus() {
         <DropdownMenuContent>
           <DropdownMenuItem onSelect={handleNew}>New</DropdownMenuItem>
           <DropdownMenuItem onSelect={handleOpen}>Open...</DropdownMenuItem>
+          <DropdownMenuItem onSelect={handleExportImage}>
+            Export Image
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <Button variant="ghost" className="h-8 w-8 p-0" onClick={handleAddPage}>
