@@ -23,10 +23,10 @@ import {
   bringForward,
   bringToFront,
   changeParent,
-  deleteMultipleShapes,
-  deleteShape,
+  deleteShapes,
+  deleteSingleShape,
   moveAnchor,
-  moveMultipleShapes,
+  moveShapes,
   removePage,
   reorderPage,
   resolveAllConstraints,
@@ -187,7 +187,7 @@ export class Actions {
       this.editor.transform.startAction("delete");
       this.editor.transform.transact((tx) => {
         shapes = shapes ?? this.editor.selection.getShapes();
-        deleteMultipleShapes(tx, page, shapes);
+        deleteShapes(tx, page, shapes);
         resolveAllConstraints(tx, page, this.editor.canvas);
       });
       this.editor.transform.endAction();
@@ -221,7 +221,7 @@ export class Actions {
       });
       this.editor.transform.startAction("cut");
       this.editor.transform.transact((tx) => {
-        deleteMultipleShapes(tx, page, shapes!);
+        deleteShapes(tx, page, shapes!);
       });
       this.editor.transform.endAction();
       this.editor.selection.deselectAll();
@@ -255,7 +255,7 @@ export class Actions {
             tx.appendObj(shape);
             changeParent(tx, shape, currentPage);
           });
-          moveMultipleShapes(tx, currentPage, shapes, dx, dy);
+          moveShapes(tx, currentPage, shapes, dx, dy);
         });
         this.editor.transform.endAction();
         this.editor.selection.select(shapes);
@@ -312,7 +312,7 @@ export class Actions {
             tx.appendObj(shape);
             changeParent(tx, shape, page);
           });
-          moveMultipleShapes(tx, page, copied, 30, 30);
+          moveShapes(tx, page, copied, 30, 30);
         });
         this.editor.transform.endAction();
         this.editor.selection.select(copied);
@@ -348,7 +348,7 @@ export class Actions {
               }
             }
           } else {
-            moveMultipleShapes(tx, page, shapes!, dx, dy);
+            moveShapes(tx, page, shapes!, dx, dy);
           }
           resolveAllConstraints(tx, page, this.editor.canvas);
         });
@@ -410,7 +410,7 @@ export class Actions {
                 children.push(child as Shape);
                 changeParent(tx, child, s.parent as Shape);
               }
-              deleteShape(tx, page, s);
+              deleteSingleShape(tx, page, s);
             }
           }
           resolveAllConstraints(tx, page, this.editor.canvas);
@@ -516,10 +516,10 @@ export class Actions {
           for (const s of shapes!) {
             if (s instanceof Box) {
               const dx = left - s.left;
-              moveMultipleShapes(tx, page, [s], dx, 0);
+              moveShapes(tx, page, [s], dx, 0);
             } else if (s instanceof Path) {
               const dx = left - Math.min(...s.path.map((p) => p[0]));
-              moveMultipleShapes(tx, page, [s], dx, 0);
+              moveShapes(tx, page, [s], dx, 0);
             }
           }
           resolveAllConstraints(tx, page, this.editor.canvas);
@@ -544,10 +544,10 @@ export class Actions {
           for (const s of shapes!) {
             if (s instanceof Box) {
               const dx = right - s.right;
-              moveMultipleShapes(tx, page, [s], dx, 0);
+              moveShapes(tx, page, [s], dx, 0);
             } else if (s instanceof Path) {
               const dx = right - Math.max(...s.path.map((p) => p[0]));
-              moveMultipleShapes(tx, page, [s], dx, 0);
+              moveShapes(tx, page, [s], dx, 0);
             }
           }
           resolveAllConstraints(tx, page, this.editor.canvas);
@@ -575,12 +575,12 @@ export class Actions {
           for (const s of shapes!) {
             if (s instanceof Box) {
               const dx = center - Math.round((s.left + s.right) / 2);
-              moveMultipleShapes(tx, page, [s], dx, 0);
+              moveShapes(tx, page, [s], dx, 0);
             } else if (s instanceof Path) {
               const l = Math.min(...s.path.map((p) => p[0]));
               const r = Math.max(...s.path.map((p) => p[0]));
               const dx = center - Math.round((l + r) / 2);
-              moveMultipleShapes(tx, page, [s], dx, 0);
+              moveShapes(tx, page, [s], dx, 0);
             }
           }
           resolveAllConstraints(tx, page, this.editor.canvas);
@@ -605,10 +605,10 @@ export class Actions {
           for (const s of shapes!) {
             if (s instanceof Box) {
               const dy = top - s.top;
-              moveMultipleShapes(tx, page, [s], 0, dy);
+              moveShapes(tx, page, [s], 0, dy);
             } else if (s instanceof Path) {
               const dy = top - Math.min(...s.path.map((p) => p[1]));
-              moveMultipleShapes(tx, page, [s], 0, dy);
+              moveShapes(tx, page, [s], 0, dy);
             }
           }
           resolveAllConstraints(tx, page, this.editor.canvas);
@@ -633,10 +633,10 @@ export class Actions {
           for (const s of shapes!) {
             if (s instanceof Box) {
               const dy = bottom - s.bottom;
-              moveMultipleShapes(tx, page, [s], 0, dy);
+              moveShapes(tx, page, [s], 0, dy);
             } else if (s instanceof Path) {
               const dy = bottom - Math.max(...s.path.map((p) => p[1]));
-              moveMultipleShapes(tx, page, [s], 0, dy);
+              moveShapes(tx, page, [s], 0, dy);
             }
           }
           resolveAllConstraints(tx, page, this.editor.canvas);
@@ -664,12 +664,12 @@ export class Actions {
           for (const s of shapes!) {
             if (s instanceof Box) {
               const dy = middle - Math.round((s.top + s.bottom) / 2);
-              moveMultipleShapes(tx, page, [s], 0, dy);
+              moveShapes(tx, page, [s], 0, dy);
             } else if (s instanceof Path) {
               const t = Math.min(...s.path.map((p) => p[1]));
               const b = Math.max(...s.path.map((p) => p[1]));
               const dy = middle - Math.round((t + b) / 2);
-              moveMultipleShapes(tx, page, [s], 0, dy);
+              moveShapes(tx, page, [s], 0, dy);
             }
           }
           resolveAllConstraints(tx, page, this.editor.canvas);

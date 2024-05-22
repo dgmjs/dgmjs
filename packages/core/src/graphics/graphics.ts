@@ -18,8 +18,6 @@ import { roughDraw } from "./roughjs-draw";
 import type { Point } from "roughjs/bin/geometry";
 import type { RoughGenerator } from "roughjs/bin/generator";
 
-// TODO: Change CanvasMouseEvent to EditorMouseEvent, move to /editor.js
-
 interface CanvasState {
   strokeColor: string;
   strokeWidth: number;
@@ -1411,6 +1409,8 @@ class CanvasPointerEvent {
 
 export {
   FillStyle,
+  SVGPathCommand,
+  SVGPathItem,
   SVGPath,
   pathToString,
   Canvas,

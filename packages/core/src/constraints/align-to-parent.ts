@@ -15,7 +15,7 @@ import { z } from "zod";
 import { constraintManager, Doc, Page, Shape } from "../shapes";
 import type { Canvas } from "../graphics/graphics";
 import { Transaction } from "../core/transaction";
-import { moveMultipleShapes, resizeShape } from "../macro";
+import { moveShapes, resizeShape } from "../macro";
 
 const schema = z.object({
   horz: z
@@ -194,7 +194,7 @@ function constraint(
     }
     dx += args.horzOffset || 0;
     dy += args.vertOffset || 0;
-    changed = moveMultipleShapes(tx, page, [shape], dx, dy);
+    changed = moveShapes(tx, page, [shape], dx, dy);
     if (width > -1 || height > -1) {
       changed =
         resizeShape(

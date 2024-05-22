@@ -35,6 +35,8 @@ import { Instantiator } from "./core/instantiator";
 import { Transaction } from "./core/transaction";
 import { MemoizationCanvas } from "./graphics/memoization-canvas";
 import { hashStringToNumber } from "./std/id";
+import { themeColors } from "./colors";
+import { getAllViewRect } from "./utils/shape-utils";
 
 export const ScriptType = {
   RENDER: "render",
@@ -2440,6 +2442,79 @@ class ConstraintManager {
 }
 
 export const constraintManager = ConstraintManager.getInstance();
+
+/**
+ * Draw the shapes on the canvas element
+ * @param shapes An array of shapes
+ * @param canvasElement A <canvas> HTML element
+ * @param darkMode A boolean value to indicate dark mode
+ * @param maxCanvasSize A number to indicate the maximum size of the canvas
+ * @param scaleAdjust A number to adjust the scale
+ * @param update A boolean value to indicate whether to update the shapes
+ * @param showDOM A boolean value to indicate whether to update the DOM
+ */
+export function drawShapesOnCanvas(
+  shapes: Shape[],
+  canvasElement: HTMLCanvasElement,
+  darkMode: boolean = false,
+  pageSize: PageSize = [960, 720],
+  maxCanvasSize: number[] = [200, 150],
+  maxScale: number = 1,
+  scaleAdjust: number = 1,
+  update: boolean = false,
+  showDOM: boolean = false
+) {
+  const px = window.devicePixelRatio ?? 1;
+  const canvas = new Canvas(canvasElement, px);
+
+  // get view rect including all shapes
+  const box = getAllViewRect(canvas, shapes);
+  const bw = pageSize ? pageSize[0] : geometry.width(box);
+  const bh = pageSize ? pageSize[1] : geometry.height(box);
+
+  // get scaled size
+  const size = geometry.fitScaleTo(
+    [bw, bh],
+    [maxCanvasSize[0], maxCanvasSize[1]],
+    maxScale
+  );
+  let w = size[0];
+  let h = size[1];
+  let scale = size[2] * scaleAdjust;
+
+  // set canvas size
+  const cw = w;
+  const ch = h;
+  const ox = pageSize ? 0 : -box[0][0] + (w / scale - bw) / 2;
+  const oy = pageSize ? 0 : -box[0][1] + (h / scale - bh) / 2;
+  canvasElement.setAttribute("width", (cw * px).toString());
+  canvasElement.setAttribute("height", (ch * px).toString());
+  canvasElement.style.width = `${cw}px`;
+  canvasElement.style.height = `${ch}px`;
+
+  // draw shape on canvas
+  canvas.colorVariables = themeColors[darkMode ? "dark" : "light"];
+  canvas.origin = [ox, oy];
+  canvas.scale = scale;
+  canvas.save();
+
+  // update shapes
+  if (update) {
+    shapes.forEach((shape) => {
+      shape.traverse((s) => {
+        if (s instanceof Shape) s.update(canvas);
+      });
+    });
+  }
+
+  // draw shapes
+  if (shapes.every((s) => !(s instanceof Page))) canvas.globalTransform();
+  shapes.forEach((shape) => {
+    shape.draw(canvas, showDOM);
+  });
+
+  canvas.restore();
+}
 
 export const shapeInstantiator = new Instantiator({
   Shape: () => new Shape(),

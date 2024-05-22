@@ -2,10 +2,10 @@
 editUrl: false
 next: false
 prev: false
-title: "deleteMultipleShapes"
+title: "deleteShapes"
 ---
 
-> **deleteMultipleShapes**(`tx`, `page`, `shapes`): `boolean`
+> **deleteShapes**(`tx`, `page`, `shapes`): `boolean`
 
 A macro to delete shapes
 

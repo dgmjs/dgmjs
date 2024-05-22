@@ -25,4 +25,4 @@ title: "ConstraintFn"
 
 ## Source
 
-[shapes.ts:63](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L63)
+[shapes.ts:65](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L65)

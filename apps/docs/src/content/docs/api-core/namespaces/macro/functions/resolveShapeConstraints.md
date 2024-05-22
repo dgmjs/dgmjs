@@ -2,10 +2,10 @@
 editUrl: false
 next: false
 prev: false
-title: "resolveConstraints"
+title: "resolveShapeConstraints"
 ---
 
-> **resolveConstraints**(`tx`, `page`, `shape`, `canvas`): `boolean`
+> **resolveShapeConstraints**(`tx`, `page`, `shape`, `canvas`): `boolean`
 
 A macro to resolve a shape's constraints
 

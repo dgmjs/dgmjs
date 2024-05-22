@@ -16,7 +16,7 @@ import { constraintManager, Box, Shape, Page, Doc } from "../shapes";
 import * as geometry from "../graphics/geometry";
 import { Canvas } from "../graphics/graphics";
 import { Transaction } from "../core/transaction";
-import { moveMultipleShapes } from "../macro";
+import { moveShapes } from "../macro";
 
 const schema = z.object({});
 
@@ -48,7 +48,7 @@ function constraint(
     const top = shapeCenter[1] - shape.height / 2;
     const dx = left - shape.left;
     const dy = top - shape.top;
-    changed = moveMultipleShapes(tx, page, [shape], dx, dy);
+    changed = moveShapes(tx, page, [shape], dx, dy);
   }
   return changed;
 }

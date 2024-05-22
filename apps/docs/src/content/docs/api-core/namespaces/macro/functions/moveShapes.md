@@ -2,10 +2,10 @@
 editUrl: false
 next: false
 prev: false
-title: "moveMultipleShapes"
+title: "moveShapes"
 ---
 
-> **moveMultipleShapes**(`tx`, `page`, `shapes`, `dx`, `dy`, `container`): `boolean`
+> **moveShapes**(`tx`, `page`, `shapes`, `dx`, `dy`, `container`): `boolean`
 
 A macro to move shapes
 

@@ -9,7 +9,7 @@ title: "renderTextShape"
 
 ## Parameters
 
-• **canvas**: `MemoizationCanvas`
+• **canvas**: [`MemoizationCanvas`](/api-core/classes/memoizationcanvas/)
 
 • **shape**: [`Box`](/api-core/classes/box/)
 

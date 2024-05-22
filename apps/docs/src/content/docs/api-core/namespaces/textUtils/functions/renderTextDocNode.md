@@ -11,7 +11,7 @@ Draw preprocessed text nodes
 
 ## Parameters
 
-• **canvas**: `MemoizationCanvas`
+• **canvas**: [`MemoizationCanvas`](/api-core/classes/memoizationcanvas/)
 
 • **node**: `any`
 

@@ -23,7 +23,6 @@ import { themeColors } from "./colors";
 import { Actions } from "./actions";
 import { KeyMap, KeymapManager } from "./keymap-manager";
 import { AutoScroller } from "./utils/auto-scroller";
-import { createPointerEvent, createTouchEvent } from "./utils/canvas-utils";
 import { Store } from "./core/store";
 import { SelectionManager } from "./selection-manager";
 import { Clipboard } from "./core/clipboard";
@@ -54,6 +53,64 @@ export interface DragEvent {
 export interface FileDropEvent {
   event: CanvasPointerEvent;
   dataTransfer: DataTransfer;
+}
+
+/**
+ * Create a touch event
+ * @param element A <canvas> HTML element
+ * @param canvas A canvas object
+ * @param e An event of canvas element
+ */
+function createTouchEvent(
+  element: HTMLCanvasElement,
+  canvas: Canvas,
+  e: TouchEvent
+): CanvasPointerEvent {
+  const rect = element.getBoundingClientRect();
+  // average of touch points if multi-touch
+  const cx =
+    e.touches.length === 2
+      ? (e.touches[0].clientX + e.touches[1].clientX) / 2
+      : e.touches[0].clientX;
+  const cy =
+    e.touches.length === 2
+      ? (e.touches[0].clientY + e.touches[1].clientY) / 2
+      : e.touches[0].clientY;
+  let _p = [cx - rect.left, cy - rect.top];
+  // transform pointer event point to CCS (canvas coord-system)
+  let p = [_p[0] * canvas.ratio, _p[1] * canvas.ratio];
+  const options = {
+    button: 0,
+    shiftKey: false,
+    altKey: false,
+    ctrlKey: false,
+    metaKey: false,
+    touchDistance: 0,
+  };
+  if (e.touches.length === 2) {
+    const xd = e.touches[0].clientX - e.touches[1].clientX;
+    const yd = e.touches[0].clientY - e.touches[1].clientY;
+    options.touchDistance = Math.sqrt(xd * xd + yd * yd);
+  }
+  return new CanvasPointerEvent(p[0], p[1], options);
+}
+
+/**
+ * Create a pointer event
+ * @param element A <canvas> HTML element
+ * @param canvas A canvas object
+ * @param e An event of canvas element
+ */
+function createPointerEvent(
+  element: HTMLCanvasElement,
+  canvas: Canvas,
+  e: MouseEvent
+): CanvasPointerEvent {
+  const rect = element.getBoundingClientRect();
+  let _p = [e.clientX - rect.left, e.clientY - rect.top];
+  // transform pointer event point to CCS (canvas coord-system)
+  let p = [_p[0] * canvas.ratio, _p[1] * canvas.ratio];
+  return new CanvasPointerEvent(p[0], p[1], e);
 }
 
 /**

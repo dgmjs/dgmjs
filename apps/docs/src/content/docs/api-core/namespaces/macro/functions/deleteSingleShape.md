@@ -2,10 +2,10 @@
 editUrl: false
 next: false
 prev: false
-title: "deleteShape"
+title: "deleteSingleShape"
 ---
 
-> **deleteShape**(`tx`, `page`, `shape`): `boolean`
+> **deleteSingleShape**(`tx`, `page`, `shape`): `boolean`
 
 A macro to delete a shape
 

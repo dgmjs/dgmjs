@@ -29,8 +29,8 @@ import {
 import { Snap } from "../manipulators/snap";
 import { fitEnclosureInCSS, getControllerPosition } from "./utils";
 import {
-  moveShape,
-  moveMultipleShapes,
+  moveSingleShape,
+  moveShapes,
   resizeShape,
   resolveAllConstraints,
 } from "../macro";
@@ -361,7 +361,7 @@ export class BoxSizeController extends Controller {
     editor.transform.transact((tx) => {
       const page = editor.currentPage!;
       resizeShape(tx, shape, targetWidth, targetHeight);
-      moveMultipleShapes(
+      moveShapes(
         tx,
         page,
         [shape],
@@ -414,7 +414,7 @@ export class BoxSizeController extends Controller {
             const b = targetChildRect[1][1];
             const w = r - l;
             const h = b - t;
-            moveShape(tx, s, l - s.left, t - s.top);
+            moveSingleShape(tx, s, l - s.left, t - s.top);
             resizeShape(tx, s, w, h);
             if (s instanceof Path) {
               const newPath = geometry.projectPoints(

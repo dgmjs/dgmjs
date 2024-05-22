@@ -264,7 +264,7 @@ export function resizeShape(
 /**
  * A macro to move a single shape
  */
-export function moveShape(
+export function moveSingleShape(
   tx: Transaction,
   shape: Shape,
   dx: number,
@@ -445,7 +445,7 @@ export function adjustConnectorRoute(
 /**
  * A macro to move shapes
  */
-export function moveMultipleShapes(
+export function moveShapes(
   tx: Transaction,
   page: Page,
   shapes: Shape[],
@@ -461,7 +461,7 @@ export function moveMultipleShapes(
   // move all children and descendants
   let targets = getAllDescendant(filtered) as Shape[];
   targets.forEach((s) => {
-    changed = moveShape(tx, s as Shape, dx, dy) || changed;
+    changed = moveSingleShape(tx, s as Shape, dx, dy) || changed;
   });
 
   // move ends of edges which is not in targets
@@ -474,7 +474,7 @@ export function moveMultipleShapes(
         targets.includes(s.tail as Shape) &&
         targets.includes(s.head as Shape)
       ) {
-        changed = moveShape(tx, s, dx, dy) || changed;
+        changed = moveSingleShape(tx, s, dx, dy) || changed;
       } else if (
         targets.includes(s.tail as Shape) &&
         !targets.includes(s.head as Shape)
@@ -502,7 +502,7 @@ export function moveMultipleShapes(
 /**
  * A macro to delete a shape
  */
-export function deleteShape(
+export function deleteSingleShape(
   tx: Transaction,
   page: Page,
   shape: Shape
@@ -527,14 +527,14 @@ export function deleteShape(
 /**
  * A macro to delete shapes
  */
-export function deleteMultipleShapes(
+export function deleteShapes(
   tx: Transaction,
   page: Page,
   shapes: Shape[]
 ): boolean {
   let changed = false;
   shapes.forEach((s) => {
-    changed = deleteShape(tx, page, s) || changed;
+    changed = deleteSingleShape(tx, page, s) || changed;
   });
   return changed;
 }
@@ -598,7 +598,7 @@ export function sendBackward(tx: Transaction, shape: Shape): boolean {
 /**
  * A macro to resolve a shape's constraints
  */
-export function resolveConstraints(
+export function resolveShapeConstraints(
   tx: Transaction,
   page: Page,
   shape: Shape,
@@ -628,7 +628,8 @@ export function resolveAllConstraints(
   let changed = false;
   for (let i = 0; i < maxIteration; i++) {
     page.traverse((s) => {
-      changed = resolveConstraints(tx, page, s as Shape, canvas) || changed;
+      changed =
+        resolveShapeConstraints(tx, page, s as Shape, canvas) || changed;
     });
     if (!changed) return false;
     changed = false;

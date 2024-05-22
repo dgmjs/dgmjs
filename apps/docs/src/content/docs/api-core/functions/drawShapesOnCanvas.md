@@ -2,12 +2,12 @@
 editUrl: false
 next: false
 prev: false
-title: "renderOnCanvas"
+title: "drawShapesOnCanvas"
 ---
 
-> **renderOnCanvas**(`shapes`, `canvasElement`, `darkMode`, `pageSize`, `maxCanvasSize`, `maxScale`, `scaleAdjust`, `update`, `showDOM`): `void`
+> **drawShapesOnCanvas**(`shapes`, `canvasElement`, `darkMode`, `pageSize`, `maxCanvasSize`, `maxScale`, `scaleAdjust`, `update`, `showDOM`): `void`
 
-Render the shape on the canvas element
+Draw the shapes on the canvas element
 
 ## Parameters
 
@@ -49,4 +49,4 @@ A boolean value to indicate whether to update the DOM
 
 ## Source
 
-[utils/canvas-utils.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/canvas-utils.ts#L17)
+[shapes.ts:2456](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2456)

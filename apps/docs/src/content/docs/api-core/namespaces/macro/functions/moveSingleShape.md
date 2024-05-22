@@ -2,10 +2,10 @@
 editUrl: false
 next: false
 prev: false
-title: "moveShape"
+title: "moveSingleShape"
 ---
 
-> **moveShape**(`tx`, `shape`, `dx`, `dy`): `boolean`
+> **moveSingleShape**(`tx`, `shape`, `dx`, `dy`): `boolean`
 
 A macro to move a single shape
 
