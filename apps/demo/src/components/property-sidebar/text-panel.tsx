@@ -58,6 +58,7 @@ import { Button } from "@/components/ui/button";
 import { merge, unique } from "@/utils";
 import { ShapeEditorProps } from "@/types";
 import fontJson from "@/fonts.json";
+import { FONT_SIZES } from "@/const";
 
 export const TextPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
   const fontFamilies = unique(fontJson.map((f) => f.family));
@@ -118,7 +119,7 @@ export const TextPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              {constants.FontSizes.map((size) => (
+              {FONT_SIZES.map((size) => (
                 <DropdownMenuItem
                   key={size}
                   onSelect={() => onChange({ fontSize: size })}
@@ -168,7 +169,8 @@ export const TextPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
             size="sm"
             value={vertAlign}
             onValueChange={(value) => {
-              if (onChange && value) onChange({ vertAlign: value as VertAlignEnum });
+              if (onChange && value)
+                onChange({ vertAlign: value as VertAlignEnum });
             }}
           >
             <ToggleGroupItem

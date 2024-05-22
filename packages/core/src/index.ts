@@ -2,7 +2,6 @@ import "./manipulators";
 import "./constraints";
 export * from "./std/typed-event";
 export * as geometry from "./graphics/geometry";
-export * as constants from "./graphics/const";
 export * from "./graphics/graphics";
 export * as utils from "./graphics/utils";
 export * from "./core";

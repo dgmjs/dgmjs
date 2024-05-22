@@ -8,7 +8,6 @@ title: "@dgmjs/core"
 ## Namespaces
 
 - [canvasUtils](/api-core/namespaces/canvasutils/readme/)
-- [constants](/api-core/namespaces/constants/readme/)
 - [exportUtils](/api-core/namespaces/exportutils/readme/)
 - [geometry](/api-core/namespaces/geometry/readme/)
 - [handlers](/api-core/namespaces/handlers/readme/)

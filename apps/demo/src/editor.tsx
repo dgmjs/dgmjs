@@ -1,7 +1,6 @@
 import { Box } from "@dgmjs/core";
 import { useState, useEffect } from "react";
 import { TiptapEditor, DGMEditor, DGMEditorProps } from "@dgmjs/react";
-import { constants } from "@dgmjs/core";
 import { Toggle } from "@/components/ui/toggle";
 import {
   AlignCenterIcon,
@@ -23,6 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ColorPalette, simplePalette } from "@/components/common/color-palette";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { DEFAULT_FONT_SIZE } from "@/const";
 
 export function TextInplaceEditorToolbar({
   tiptapEditor,
@@ -34,7 +34,7 @@ export function TextInplaceEditorToolbar({
   shape: Box | null;
 }) {
   const [state, setState] = useState({
-    fontSize: constants.DEFAULT_FONT_SIZE.toString(),
+    fontSize: DEFAULT_FONT_SIZE.toString(),
     bold: false,
     italic: false,
     underline: false,
@@ -50,7 +50,7 @@ export function TextInplaceEditorToolbar({
         fontSize:
           tr.editor.getAttributes("textStyle").fontSize?.trim().slice(0, -2) ??
           shape?.fontSize.toString() ??
-          constants.DEFAULT_FONT_SIZE.toString(),
+          DEFAULT_FONT_SIZE.toString(),
         bold: tr.editor.isActive("bold"),
         italic: tr.editor.isActive("italic"),
         underline: tr.editor.isActive("underline"),
