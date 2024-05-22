@@ -17,7 +17,7 @@ import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { Color, Cursor } from "../graphics/const";
 import { Snap } from "../manipulators/snap";
 import { lcs2ccs } from "../graphics/utils";
-import { moveMultipleShapes, resolveAllConstraints } from "../macro";
+import { moveShapes, resolveAllConstraints } from "../macro";
 
 /**
  * SelectionsMoveController
@@ -93,7 +93,7 @@ export class SelectionsMoveController extends Controller {
     // move shapes
     editor.transform.transact((tx) => {
       const page = editor.currentPage!;
-      moveMultipleShapes(
+      moveShapes(
         tx,
         page,
         selections,

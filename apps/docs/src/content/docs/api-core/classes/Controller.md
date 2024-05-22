@@ -23,7 +23,7 @@ Controller
 
 #### Source
 
-[editor.ts:1275](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1275)
+[editor.ts:1332](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1332)
 
 ## Properties
 
@@ -35,7 +35,7 @@ Current drag point in shape's LCS
 
 #### Source
 
-[editor.ts:1223](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1223)
+[editor.ts:1280](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1280)
 
 ***
 
@@ -47,7 +47,7 @@ Current drag point in shape's CCS
 
 #### Source
 
-[editor.ts:1233](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1233)
+[editor.ts:1290](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1290)
 
 ***
 
@@ -59,7 +59,7 @@ Current drag point in shape's GCS
 
 #### Source
 
-[editor.ts:1228](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1228)
+[editor.ts:1285](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1285)
 
 ***
 
@@ -71,7 +71,7 @@ Previous drag point in shape's LCS
 
 #### Source
 
-[editor.ts:1208](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1208)
+[editor.ts:1265](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1265)
 
 ***
 
@@ -83,7 +83,7 @@ Previous drag point in shape's CCS
 
 #### Source
 
-[editor.ts:1218](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1218)
+[editor.ts:1275](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1275)
 
 ***
 
@@ -95,7 +95,7 @@ Previous drag point in shape's GCS
 
 #### Source
 
-[editor.ts:1213](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1213)
+[editor.ts:1270](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1270)
 
 ***
 
@@ -107,7 +107,7 @@ Drag start point in shape's LCS
 
 #### Source
 
-[editor.ts:1193](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1193)
+[editor.ts:1250](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1250)
 
 ***
 
@@ -119,7 +119,7 @@ Drag start point in shape's CCS
 
 #### Source
 
-[editor.ts:1203](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1203)
+[editor.ts:1260](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1260)
 
 ***
 
@@ -131,7 +131,7 @@ Drag start point in shape's GCS
 
 #### Source
 
-[editor.ts:1198](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1198)
+[editor.ts:1255](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1255)
 
 ***
 
@@ -143,7 +143,7 @@ Indicates whether this controller is dragging or not
 
 #### Source
 
-[editor.ts:1188](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1188)
+[editor.ts:1245](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1245)
 
 ***
 
@@ -155,7 +155,7 @@ X-distance from dragStartPoint to dragPoint in shape's LCS
 
 #### Source
 
-[editor.ts:1238](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1238)
+[editor.ts:1295](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1295)
 
 ***
 
@@ -167,7 +167,7 @@ X-distance from dragStartPoint to dragPoint in GCS
 
 #### Source
 
-[editor.ts:1258](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1258)
+[editor.ts:1315](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1315)
 
 ***
 
@@ -179,7 +179,7 @@ X-distance from dragPrevPoint to dragPoint in shape's LCS
 
 #### Source
 
-[editor.ts:1248](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1248)
+[editor.ts:1305](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1305)
 
 ***
 
@@ -191,7 +191,7 @@ X-distance from dragPrevPoint to dragPoint in GCS
 
 #### Source
 
-[editor.ts:1268](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1268)
+[editor.ts:1325](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1325)
 
 ***
 
@@ -203,7 +203,7 @@ Y-distance from dragStartPoint to dragPoint in shape's LCS
 
 #### Source
 
-[editor.ts:1243](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1243)
+[editor.ts:1300](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1300)
 
 ***
 
@@ -215,7 +215,7 @@ Y-distance from dragStartPoint to dragPoint in GCS
 
 #### Source
 
-[editor.ts:1263](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1263)
+[editor.ts:1320](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1320)
 
 ***
 
@@ -227,7 +227,7 @@ Y-distance from dragPrevPoint to dragPoint in shape's LCS
 
 #### Source
 
-[editor.ts:1253](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1253)
+[editor.ts:1310](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1310)
 
 ***
 
@@ -239,7 +239,7 @@ Y-distance from dragPrevPoint to dragPoint in GCS
 
 #### Source
 
-[editor.ts:1273](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1273)
+[editor.ts:1330](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1330)
 
 ***
 
@@ -249,7 +249,7 @@ Y-distance from dragPrevPoint to dragPoint in GCS
 
 #### Source
 
-[editor.ts:1183](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1183)
+[editor.ts:1240](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1240)
 
 ## Methods
 
@@ -271,7 +271,7 @@ Indicates the controller is active or not
 
 #### Source
 
-[editor.ts:1304](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1304)
+[editor.ts:1361](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1361)
 
 ***
 
@@ -293,7 +293,7 @@ Draw controller
 
 #### Source
 
-[editor.ts:1333](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1333)
+[editor.ts:1390](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1390)
 
 ***
 
@@ -317,7 +317,7 @@ Draw on dragging
 
 #### Source
 
-[editor.ts:1338](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1338)
+[editor.ts:1395](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1395)
 
 ***
 
@@ -341,7 +341,7 @@ Draw on hovering
 
 #### Source
 
-[editor.ts:1343](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1343)
+[editor.ts:1400](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1400)
 
 ***
 
@@ -363,7 +363,7 @@ Finalize shape by ghost
 
 #### Source
 
-[editor.ts:1358](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1358)
+[editor.ts:1415](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1415)
 
 ***
 
@@ -385,7 +385,7 @@ Initialize before dragging
 
 #### Source
 
-[editor.ts:1348](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1348)
+[editor.ts:1405](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1405)
 
 ***
 
@@ -411,7 +411,7 @@ handled or not
 
 #### Source
 
-[editor.ts:1449](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1449)
+[editor.ts:1506](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1506)
 
 ***
 
@@ -437,7 +437,7 @@ handled or not
 
 #### Source
 
-[editor.ts:1463](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1463)
+[editor.ts:1520](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1520)
 
 ***
 
@@ -463,7 +463,7 @@ cursor object (null is default cursor)
 
 #### Source
 
-[editor.ts:1322](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1322)
+[editor.ts:1379](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1379)
 
 ***
 
@@ -488,7 +488,7 @@ Default implementation returns true if the point inside the shape.
 
 #### Source
 
-[editor.ts:1312](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1312)
+[editor.ts:1369](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1369)
 
 ***
 
@@ -514,7 +514,7 @@ handled or not
 
 #### Source
 
-[editor.ts:1364](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1364)
+[editor.ts:1421](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1421)
 
 ***
 
@@ -540,7 +540,7 @@ handled or not
 
 #### Source
 
-[editor.ts:1396](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1396)
+[editor.ts:1453](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1453)
 
 ***
 
@@ -566,7 +566,7 @@ handled or not
 
 #### Source
 
-[editor.ts:1430](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1430)
+[editor.ts:1487](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1487)
 
 ***
 
@@ -580,7 +580,7 @@ handled or not
 
 #### Source
 
-[editor.ts:1280](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1280)
+[editor.ts:1337](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1337)
 
 ***
 
@@ -602,4 +602,4 @@ Update ghost
 
 #### Source
 
-[editor.ts:1353](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1353)
+[editor.ts:1410](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1410)

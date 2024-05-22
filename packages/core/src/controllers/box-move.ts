@@ -17,7 +17,7 @@ import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { drawPolylineInLCS } from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { Cursor } from "../graphics/const";
-import { moveMultipleShapes, resolveAllConstraints } from "../macro";
+import { moveShapes, resolveAllConstraints } from "../macro";
 
 /**
  * BoxMoveController
@@ -95,7 +95,7 @@ export class BoxMoveController extends Controller {
     // update
     const page = editor.currentPage!;
     editor.transform.transact((tx) => {
-      moveMultipleShapes(
+      moveShapes(
         tx,
         page,
         [targetShape],

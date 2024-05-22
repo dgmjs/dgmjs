@@ -273,7 +273,7 @@ interface RoughDO extends BaseDO {
 /**
  * Memoization Canvas
  */
-export class MemoizationCanvas {
+class MemoizationCanvas {
   canvas: Canvas = null!;
   do: DO[];
   generator: RoughGenerator;
@@ -1378,3 +1378,5 @@ export class MemoizationCanvas {
     }
   }
 }
+
+export { MemoizationCanvas };

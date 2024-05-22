@@ -7,9 +7,6 @@ title: "@dgmjs/core"
 
 ## Namespaces
 
-- [canvasUtils](/api-core/namespaces/canvasutils/readme/)
-- [constants](/api-core/namespaces/constants/readme/)
-- [exportUtils](/api-core/namespaces/exportutils/readme/)
 - [geometry](/api-core/namespaces/geometry/readme/)
 - [handlers](/api-core/namespaces/handlers/readme/)
 - [macro](/api-core/namespaces/macro/readme/)
@@ -41,6 +38,7 @@ title: "@dgmjs/core"
 - [InsertChildMutation](/api-core/classes/insertchildmutation/)
 - [Line](/api-core/classes/line/)
 - [Manipulator](/api-core/classes/manipulator/)
+- [MemoizationCanvas](/api-core/classes/memoizationcanvas/)
 - [Mutation](/api-core/classes/mutation/)
 - [Obj](/api-core/classes/obj/)
 - [Page](/api-core/classes/page/)
@@ -80,6 +78,8 @@ title: "@dgmjs/core"
 - [MovableEnum](/api-core/type-aliases/movableenum/)
 - [PageSize](/api-core/type-aliases/pagesize/)
 - [SVGPath](/api-core/type-aliases/svgpath/)
+- [SVGPathCommand](/api-core/type-aliases/svgpathcommand/)
+- [SVGPathItem](/api-core/type-aliases/svgpathitem/)
 - [ScriptTypeEnum](/api-core/type-aliases/scripttypeenum/)
 - [ShapeProps](/api-core/type-aliases/shapeprops/)
 - [SizableEnum](/api-core/type-aliases/sizableenum/)
@@ -104,4 +104,5 @@ title: "@dgmjs/core"
 ## Functions
 
 - [basicSetup](/api-core/functions/basicsetup/)
+- [drawShapesOnCanvas](/api-core/functions/drawshapesoncanvas/)
 - [pathToString](/api-core/functions/pathtostring/)
