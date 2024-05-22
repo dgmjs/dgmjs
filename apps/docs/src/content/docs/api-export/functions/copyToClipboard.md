@@ -23,4 +23,4 @@ Copy page image to clipboard
 
 ## Source
 
-index.ts:188
+[index.ts:188](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L188)
