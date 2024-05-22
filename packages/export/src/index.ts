@@ -1,16 +1,13 @@
-import type { Page } from "../shapes";
-import { Canvas } from "../graphics/graphics";
-import * as geometry from "../graphics/geometry";
+import { Page, Canvas, geometry, themeColors } from "@dgmjs/core";
 import fileSaverPkg from "file-saver";
-import { themeColors } from "../colors";
 import { Context } from "svgcanvas";
 const { saveAs } = fileSaverPkg;
 
-export const DEFAULT_MARGIN = 10;
+const DEFAULT_MARGIN = 10;
 
-export type ExportImageFormat = "image/png" | "image/svg+xml";
+type ExportImageFormat = "image/png" | "image/svg+xml";
 
-export type ExportImageOptions = {
+type ExportImageOptions = {
   scale: number;
   dark: boolean;
   fillBackground: boolean;
@@ -57,7 +54,7 @@ function getImageCanvas(page: Page, options: ExportImageOptions) {
 /**
  * Get Base64-encoded image data of doc
  */
-export async function getImageDataUrl(
+async function getImageDataUrl(
   page: Page,
   options: Partial<ExportImageOptions>
 ): Promise<string> {
@@ -74,7 +71,7 @@ export async function getImageDataUrl(
 /**
  * Get Blob image data of doc
  */
-export async function getImageBlob(
+async function getImageBlob(
   page: Page,
   options: Partial<ExportImageOptions>
 ): Promise<Blob | null> {
@@ -95,7 +92,7 @@ export async function getImageBlob(
 /**
  * Get SVG image data of doc
  */
-export async function getSVGImageData(
+async function getSVGImageData(
   canvas: Canvas,
   page: Page,
   options: Partial<ExportImageOptions>,
@@ -159,7 +156,7 @@ export async function getSVGImageData(
 /**
  * Export doc image as a file
  */
-export async function exportImageAsFile(
+async function exportImageAsFile(
   canvas: Canvas,
   page: Page,
   fileName: string,
@@ -188,7 +185,7 @@ export async function exportImageAsFile(
 /**
  * Copy page image to clipboard
  */
-export async function copyToClipboard(
+async function copyToClipboard(
   canvas: Canvas,
   page: Page,
   options: Partial<ExportImageOptions>
@@ -211,3 +208,13 @@ export async function copyToClipboard(
     }
   }
 }
+
+export {
+  ExportImageFormat,
+  ExportImageOptions,
+  getImageDataUrl,
+  getImageBlob,
+  getSVGImageData,
+  exportImageAsFile,
+  copyToClipboard,
+};

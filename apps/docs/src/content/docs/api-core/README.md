@@ -7,7 +7,6 @@ title: "@dgmjs/core"
 
 ## Namespaces
 
-- [exportUtils](/api-core/namespaces/exportutils/readme/)
 - [geometry](/api-core/namespaces/geometry/readme/)
 - [handlers](/api-core/namespaces/handlers/readme/)
 - [macro](/api-core/namespaces/macro/readme/)

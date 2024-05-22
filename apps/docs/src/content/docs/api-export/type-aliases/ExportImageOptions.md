@@ -19,7 +19,7 @@ title: "ExportImageOptions"
 
 ### format
 
-> **format**: [`ExportImageFormat`](/api-core/namespaces/exportutils/type-aliases/exportimageformat/)
+> **format**: [`ExportImageFormat`](/api-export/type-aliases/exportimageformat/)
 
 ### scale
 
@@ -27,4 +27,4 @@ title: "ExportImageOptions"
 
 ## Source
 
-[utils/export-utils.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/export-utils.ts#L13)
+index.ts:10

@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { fileOpen } from "browser-fs-access";
 import { useDemoStore } from "@/demo-store";
-import { exportUtils } from "@dgmjs/core";
+import { ExportImageFormat, exportImageAsFile } from "@dgmjs/export";
 
 export function Menus() {
   const { setDoc, setCurrentPage } = useDemoStore();
@@ -72,18 +72,13 @@ export function Menus() {
       scale: 1,
       dark: false,
       fillBackground: true,
-      format: "image/png" as exportUtils.ExportImageFormat,
+      format: "image/png" as ExportImageFormat,
     };
     const name = "dgm-export";
     const fileName = `${name}.${
       exportOptions.format === "image/png" ? "png" : "svg"
     }`;
-    exportUtils.exportImageAsFile(
-      window.editor.canvas,
-      page,
-      fileName,
-      exportOptions
-    );
+    exportImageAsFile(window.editor.canvas, page, fileName, exportOptions);
   };
 
   return (

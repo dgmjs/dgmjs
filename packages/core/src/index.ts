@@ -11,6 +11,5 @@ export * from "./shapes";
 export * from "./editor";
 export * as handlers from "./handlers";
 export * as macro from "./macro";
-export * as exportUtils from "./utils/export-utils";
 export * as textUtils from "./utils/text-utils";
 export { basicSetup } from "./basic-setup";
