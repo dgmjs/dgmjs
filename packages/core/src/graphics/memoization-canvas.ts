@@ -310,6 +310,78 @@ class MemoizationCanvas {
   }
 
   /**
+   * Set stroke color
+   */
+  setStrokeColor(color: string) {
+    this.strokeColor = color;
+    return this;
+  }
+
+  /**
+   * Set stroke width
+   */
+  setStrokeWidth(width: number) {
+    this.strokeWidth = width;
+    return this;
+  }
+
+  /**
+   * Set stroke pattern
+   */
+  setStrokePattern(pattern: number[]) {
+    this.strokePattern = pattern;
+    return this;
+  }
+
+  /**
+   * Set fill color
+   */
+  setFillColor(color: string) {
+    this.fillColor = color;
+    return this;
+  }
+
+  /**
+   * Set fill style
+   */
+  setFillStyle(style: string) {
+    this.fillStyle = style;
+    return this;
+  }
+
+  /**
+   * Set font color
+   */
+  setFontColor(color: string) {
+    this.fontColor = color;
+    return this;
+  }
+
+  /**
+   * Set font
+   */
+  setFont(font: string) {
+    this.font = font;
+    return this;
+  }
+
+  /**
+   * Set alpha
+   */
+  setAlpha(alpha: number) {
+    this.alpha = alpha;
+    return this;
+  }
+
+  /**
+   * Set roughness
+   */
+  setRoughness(roughness: number) {
+    this.roughness = roughness;
+    return this;
+  }
+
+  /**
    * Draw a line
    */
   line(x1: number, y1: number, x2: number, y2: number, seed: number = 1) {

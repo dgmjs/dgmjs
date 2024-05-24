@@ -1806,7 +1806,6 @@ export class Line extends Path {
         const t = th + (iy < 0 ? -c : c);
         let p = [l * Math.cos(t) + rt[0][0], l * Math.sin(t) + rt[0][1]];
         if (ix === 0 && iy === 0) p = rt[0];
-        // canvas.pixel(p, Color.RED, 0.5);
         column.push(p);
       }
       grid.push(column);
