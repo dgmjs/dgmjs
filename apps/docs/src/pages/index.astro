@@ -14,12 +14,11 @@ import "@/styles/splash.css";
   frontmatter={{ template: "splash", title: siteConfig.description, hero: {} }}
   class:list={["mx-auto"]}
 >
-  <!-- <style set:html={getFontsInStyle()}></style> -->
   <Header />
   <section class="w-full py-12">
     <div class="my-8">
       <div class="mx-auto w-full text-center relative">
-        <span class="text-center text-4xl font-bold tracking-tighter">
+        <span class="text-center text-5xl font-bold tracking-tighter">
           dgm.js
         </span>
         <span
@@ -64,11 +63,21 @@ import "@/styles/splash.css";
     <Feature
       title="Smart shapes"
       description="You can define a composite shape with constraints, exntended properties, and scripts, ..."
-    />
+    >
+      <img src="/images/feat-smart-shapes.png" alt="Smart shapes" />
+    </Feature>
     <Feature
       title="Hand-drawn style"
       description="dgm.js powered by awesome rough.js to support hand-drawn style shapes"
-    />
+    >
+      <img src="/images/feat-hand-drawn.png" alt="Hand-drawn" />
+    </Feature>
+    <Feature
+      title="Real-time collaboration"
+      description="You can collaborate with your team in real-time."
+    >
+      <img src="/images/feat-collab.png" alt="Collaboration" />
+    </Feature>
     <Feature
       title="Scripting support"
       description="You can write a simple script to define how to render a shape instead of tedious compositing lots of shapes"
@@ -85,10 +94,7 @@ import "@/styles/splash.css";
       title="Image export"
       description="You can export diagram to PNG, JPEG, SVG images"
     />
-    <Feature
-      title="Realtime collaboration"
-      description="You can collaborate with your team in real-time."
-    />
+
     <Feature
       title="Another one-more feature"
       description="another feature..."

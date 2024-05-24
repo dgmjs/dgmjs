@@ -19,7 +19,7 @@ export type SiteConfig = {
 export const siteConfig: SiteConfig = {
   name: "dgm.js",
   title: "dgm.js",
-  description: "An infinite canvas library with smart shapes",
+  description: "A web-based diagramming library supporting smart shapes",
   url: "https://dgmjs.dev",
   ogImage: "https://dgmjs.dev/og.jpg",
   social: {

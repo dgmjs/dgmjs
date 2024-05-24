@@ -1363,7 +1363,7 @@ bounding rect.
 
 #### Source
 
-[shapes.ts:1971](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1971)
+[shapes.ts:1970](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1970)
 
 ***
 
@@ -1754,7 +1754,7 @@ Return default outline
 
 #### Source
 
-[shapes.ts:1955](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1955)
+[shapes.ts:1954](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1954)
 
 ***
 

@@ -12,8 +12,10 @@ const { title, description } = Astro.props;
     </div>
   </div>
   <div
-    class="order-first relative overflow-hidden rounded-lg border !mt-0 bg-slate-100 p-2"
+    class="order-first relative overflow-hidden rounded-lg border !mt-0 bg-slate-100 p-0"
   >
-    <div class="h-64"></div>
+    <div class="aspect-video">
+      <slot />
+    </div>
   </div>
 </div>

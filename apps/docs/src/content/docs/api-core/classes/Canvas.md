@@ -632,30 +632,6 @@ Draw a path with fill and stroke
 
 ***
 
-### pixel()
-
-> **pixel**(`point`, `color`, `size`): [`Canvas`](/api-core/classes/canvas/)
-
-Put a pixel
-
-#### Parameters
-
-• **point**: `number`[]
-
-• **color**: `string`
-
-• **size**: `number`= `1`
-
-#### Returns
-
-[`Canvas`](/api-core/classes/canvas/)
-
-#### Source
-
-[graphics/graphics.ts:421](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L421)
-
-***
-
 ### polygon()
 
 > **polygon**(`path`, `seed`): [`Canvas`](/api-core/classes/canvas/)

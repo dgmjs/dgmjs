@@ -27,7 +27,7 @@ Frame
 
 #### Source
 
-[shapes.ts:2211](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2211)
+[shapes.ts:2210](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2210)
 
 ## Properties
 
@@ -1140,7 +1140,7 @@ Render vs Draw
 
 #### Source
 
-[shapes.ts:2218](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2218)
+[shapes.ts:2217](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2217)
 
 ***
 

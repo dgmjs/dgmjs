@@ -27,7 +27,7 @@ Embed
 
 #### Source
 
-[shapes.ts:2273](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2273)
+[shapes.ts:2272](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2272)
 
 ## Properties
 
@@ -39,7 +39,7 @@ Iframe DOM element
 
 #### Source
 
-[shapes.ts:2271](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2271)
+[shapes.ts:2270](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2270)
 
 ***
 
@@ -731,7 +731,7 @@ Indicate how this shape can be resized
 
 #### Source
 
-[shapes.ts:2266](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2266)
+[shapes.ts:2265](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2265)
 
 ***
 
@@ -1184,7 +1184,7 @@ Determines whether this shape contains a point in GCS
 
 #### Source
 
-[shapes.ts:2315](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2315)
+[shapes.ts:2314](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2314)
 
 ***
 
@@ -1234,7 +1234,7 @@ Finalize shape
 
 #### Source
 
-[shapes.ts:2280](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2280)
+[shapes.ts:2279](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2279)
 
 ***
 
@@ -1378,7 +1378,7 @@ Import shape from JSON
 
 #### Source
 
-[shapes.ts:2294](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2294)
+[shapes.ts:2293](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2293)
 
 ***
 
@@ -2027,7 +2027,7 @@ Default render this shape
 
 #### Source
 
-[shapes.ts:2348](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2348)
+[shapes.ts:2347](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2347)
 
 ***
 
@@ -2149,7 +2149,7 @@ Export shape to JSON
 
 #### Source
 
-[shapes.ts:2288](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2288)
+[shapes.ts:2287](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2287)
 
 ***
 
