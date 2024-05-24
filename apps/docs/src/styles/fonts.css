@@ -1,0 +1,74 @@
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/Inter-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  src: url("/fonts/Inter-Medium.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  src: url("/fonts/Inter-Bold.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 800;
+  src: url("/fonts/Inter-ExtraBold.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Source Serif Pro";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/SourceSerifPro-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Source Serif Pro";
+  font-style: normal;
+  font-weight: 700;
+  src: url("/fonts/SourceSerifPro-Bold.ttf") format("truetype");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/IBMPlexMono-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: italic;
+  font-weight: 400;
+  src: url("/fonts/IBMPlexMono-Italic.ttf") format("truetype");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 700;
+  src: url("/fonts/IBMPlexMono-Bold.ttf") format("truetype");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: italic;
+  font-weight: 700;
+  src: url("/fonts/IBMPlexMono-BoldItalic.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Gloria Hallelujah";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/GloriaHallelujah-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Gloria Hallelujah";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/NanumHimnaeraneunmalbodan-Regular.ttf") format("truetype");
+  unicode-range: U+AC00-D7A3;
+  size-adjust: 130%;
+}

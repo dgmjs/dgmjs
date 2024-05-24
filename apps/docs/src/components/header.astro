@@ -3,7 +3,7 @@
 import { siteConfig } from "../../site-config";
 ---
 
-<header class="z-40 bg-background">
+<header class="z-40 bg-background !mt-0">
   <style>
     header.header {
       display: none !important;
@@ -11,9 +11,9 @@ import { siteConfig } from "../../site-config";
   </style>
   <div class="flex h-12 items-center justify-between w-full">
     <div class="flex gap-6 md:gap-10 w-full justify-between">
-      <a href="/" class="flex items-center space-x-2 no-underline">
-        <!-- <LogoIcon size={20} /> -->
-        <span class="font-medium sm:inline-block hidden md:flex">
+      <a href="/" class="flex gap-2 items-center no-underline">
+        <img class="h-5 w-5" alt="logo" src="/logo-light.svg" />
+        <span class="flex items-center font-medium">
           {siteConfig.name}
         </span>
       </a>

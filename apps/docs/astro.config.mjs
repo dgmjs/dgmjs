@@ -1,4 +1,5 @@
 import { defineConfig } from "astro/config";
+import react from "@astrojs/react";
 import starlight from "@astrojs/starlight";
 import tailwind from "@astrojs/tailwind";
 import { createStarlightTypeDocPlugin } from "starlight-typedoc";
@@ -10,6 +11,7 @@ const [ExportStarlightTypeDoc, ExportTypeDocSidebarGroup] =
 // https://astro.build/config
 export default defineConfig({
   integrations: [
+    react(),
     starlight({
       title: "dgm.js",
       plugins: [

@@ -4,6 +4,8 @@ import Header from "@/components/header.astro";
 import Footer from "@/components/footer.astro";
 import Feature from "@/components/feature.astro";
 import { siteConfig } from "../../site-config";
+import App from "@/components/app/app";
+import "@/styles/fonts.css";
 import "@/styles/splash.css";
 ---
 
@@ -12,11 +14,12 @@ import "@/styles/splash.css";
   frontmatter={{ template: "splash", title: siteConfig.description, hero: {} }}
   class:list={["mx-auto"]}
 >
+  <!-- <style set:html={getFontsInStyle()}></style> -->
   <Header />
-  <section class="w-full">
-    <div class="my-10">
+  <section class="w-full py-12">
+    <div class="my-8">
       <div class="mx-auto w-full text-center relative">
-        <span class="text-center text-5xl font-semibold tracking-tighter">
+        <span class="text-center text-4xl font-bold tracking-tighter">
           dgm.js
         </span>
         <span
@@ -24,28 +27,37 @@ import "@/styles/splash.css";
           >beta</span
         >
       </div>
-      <p class="text-xl text-slate-500 text-center sm:leading-8 !mt-1">
+      <p
+        class="text-2xl text-slate-400 text-center sm:leading-8 mt-1 font-hand"
+      >
         {siteConfig.description}
       </p>
     </div>
-  </section>
-  <section class="text-center my-12">
     <div class="flex items-center justify-center gap-4">
       <a
         href="/getting-started/quick-start"
-        class="rounded-full py-2 w-36 !text-white bg-black no-underline"
+        class="rounded-full font-medium py-3 w-40 !text-white bg-black no-underline text-sm flex justify-center"
         )}>Get Started</a
       >
       <a
-        href="https://dgm.sh/home"
-        class="rounded-full border px-8 py-2 no-underline w-36"
-        )}>App</a
+        href="https://dgm.sh"
+        class="rounded-full font-medium py-3 no-underline w-40 flex gap-2 items-center justify-center text-sm bg-slate-200"
+        target="_blank"
+        )}
       >
+        <img class="h-5 w-5" alt="logo" src="/logo-light.svg" />
+        <span>DGM App</span>
+      </a>
     </div>
   </section>
-  <section class="my-10 flex justify-center">
-    <div>
-      <img src="/images/cover.png" alt="Hero" class="w-full mx-auto" />
+  <section class="my-10 justify-center hidden lg:flex">
+    <div class="relative w-full h-[640px]">
+      <App client:only />
+    </div>
+  </section>
+  <section class="my-10 flex justify-center lg:hidden">
+    <div class="relative w-full h-[640px]">
+      <img src="https://fs.dgm.sh/i/7GS5SV8W3uojHd3cbfVzJ/lf@1x.png" alt="" />
     </div>
   </section>
   <section id="features" class="space-y-12">

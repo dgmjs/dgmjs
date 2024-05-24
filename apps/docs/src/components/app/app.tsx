@@ -1,15 +1,3 @@
----
-title: Getting Started
-description: shapes ...
-sidebar:
-  order: 1
----
-
-```sh
-npm i @dgmjs/core @dgmjs/react
-```
-
-```ts
 import { Editor } from "@dgmjs/core";
 import { DGMEditor } from "@dgmjs/react";
 import data from "./data.json";
@@ -32,4 +20,3 @@ function App() {
 }
 
 export default App;
-```
