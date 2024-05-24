@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "docs": "typedoc",
-    "docs-all": "npm run docs --workspaces --if-present"
+    "docs-all": "npm run docs --workspaces --if-present",
+    "build-all": "npm run build --workspaces --if-present"
   },
   "keywords": [],
   "author": "",

@@ -33,7 +33,7 @@ Select Handler
 
 #### Source
 
-[editor.ts:1154](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1154)
+[editor.ts:1155](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1155)
 
 ## Properties
 
@@ -67,7 +67,7 @@ Select Handler
 
 #### Source
 
-[editor.ts:1151](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1151)
+[editor.ts:1152](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1152)
 
 ***
 
@@ -81,7 +81,7 @@ Select Handler
 
 #### Source
 
-[editor.ts:1152](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1152)
+[editor.ts:1153](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1153)
 
 ## Methods
 
@@ -105,7 +105,7 @@ Activate the handler
 
 #### Source
 
-[editor.ts:1180](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1180)
+[editor.ts:1181](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1181)
 
 ***
 
@@ -129,7 +129,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[editor.ts:1171](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1171)
+[editor.ts:1172](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1172)
 
 ***
 
@@ -153,7 +153,7 @@ Deactivate the handler
 
 #### Source
 
-[editor.ts:1188](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1188)
+[editor.ts:1189](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1189)
 
 ***
 
@@ -275,7 +275,7 @@ Triggered when activated
 
 #### Source
 
-[editor.ts:1195](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1195)
+[editor.ts:1196](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1196)
 
 ***
 
@@ -299,7 +299,7 @@ Triggered when deactivate
 
 #### Source
 
-[editor.ts:1200](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1200)
+[editor.ts:1201](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1201)
 
 ***
 

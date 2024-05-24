@@ -16,6 +16,7 @@ body div.sl-markdown-content {
 body div.sl-markdown-content section,
 body div.sl-markdown-content canvas,
 body div.sl-markdown-content header,
+body div.sl-markdown-content button,
 body div.sl-markdown-content img {
   margin-top: 0;
 }

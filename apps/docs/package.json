@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build",
+    "check": "astro check",
+    "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -15,9 +16,12 @@
     "@astrojs/starlight": "^0.22.1",
     "@astrojs/starlight-tailwind": "^2.0.2",
     "@astrojs/tailwind": "^5.1.0",
+    "@dgmjs/core": "*",
+    "@dgmjs/react": "*",
     "@fontsource/ibm-plex-mono": "^5.0.12",
     "@fontsource/inter": "^5.0.17",
-    "astro": "^4.7.1",
+    "astro": "^4.9.1",
+    "lucide-react": "^0.379.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "sharp": "^0.32.5",

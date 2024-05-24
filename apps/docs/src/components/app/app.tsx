@@ -12,10 +12,12 @@ function App() {
   };
 
   return (
-    <DGMEditor
-      className="absolute inset-0 border rounded-lg"
-      onMount={handleMount}
-    />
+    <>
+      <DGMEditor
+        className="absolute inset-0 border rounded-lg"
+        onMount={handleMount}
+      />
+    </>
   );
 }
 
