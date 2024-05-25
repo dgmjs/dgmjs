@@ -197,9 +197,9 @@ export const EditorWrapper: React.FC<EditorWrapperProps> = ({
             shape={editingText}
           />
         }
-        shapeToolbar={
+        floatingToolbar={
           <div className="bg-foreground text-background px-3 shadow-sm h-10 rounded border flex items-center">
-            Toolbar
+            Floating Toolbar
           </div>
         }
         onTextInplaceEditorMount={(tiptapEditor) => {
@@ -208,7 +208,7 @@ export const EditorWrapper: React.FC<EditorWrapperProps> = ({
         onTextInplaceEditorOpen={(shape) => {
           setEditingText(shape as Box);
         }}
-        onShapeToolbarMove={(onBelow: boolean) => {}}
+        onFloatingToolbarMove={(onBelow: boolean) => {}}
         {...props}
       />
     </>

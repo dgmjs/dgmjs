@@ -2,7 +2,7 @@ import { Editor, Shape, geometry } from "@dgmjs/core";
 import { useEffect, useRef, useState } from "react";
 import { moveToAboveOrBelow } from "./utils";
 
-interface DGMShapeToolbarHolderProps
+interface DGMFloatingToolbarHolderProps
   extends React.HTMLAttributes<HTMLDivElement> {
   editor?: Editor;
   toolbar?: React.ReactNode;
@@ -26,13 +26,9 @@ function getSelectionRectInDCS(editor: Editor): number[][] {
   ];
 }
 
-export const DGMShapeToolbarHolder: React.FC<DGMShapeToolbarHolderProps> = ({
-  editor,
-  toolbar,
-  distance = 46,
-  onMove,
-  ...others
-}) => {
+export const DGMFloatingToolbarHolder: React.FC<
+  DGMFloatingToolbarHolderProps
+> = ({ editor, toolbar, distance = 46, onMove, ...others }) => {
   const toolbarHolderRef = useRef<HTMLDivElement>(null);
 
   const [origin, setOrigin] = useState<number[]>([0, 0]);
