@@ -1,22 +1,21 @@
 # dgm.js
 
-The __dgm.js__ is an web-based diagramming library supporting _smart shapes_. It supports:
+An infinite canvas with _smart shapes_. It supports:
 
 - 💡 Smart shapes (scripting, constraints, extended properties)
-- 🔧 Various shape tools (rectangle, ellipse, line, polygon, connectors, highlighter, freehand, ...)
+- 🔧 Headless components
 - 🔥 Infinite canvas
 - 📑 Multi-page support
 - 👍 Hand-drawn styles
 - 👥 Real-time collaboration
-- 🎨 Adaptive colors for light and dark modes
+- 🎨 Dark mode (adaptive colors)
 - 📸 Export to image (PNG, SVG)
+- 🔤 Rich text
+- 🧑🏻‍💻 JSON export/import
 
-## Run demo
+## Getting started
 
-```sh
-npm run build --workspaces
-npm run dev -w apps/demo
-```
+👉 [Getting started](https://dgmjs.dev/getting-started/quick-start/)
 
 ## License
 

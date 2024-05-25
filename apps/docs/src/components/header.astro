@@ -1,5 +1,6 @@
 ---
 // import { LogoIcon } from "./icons";
+import Logo from "@/components/logo.astro";
 import { siteConfig } from "../../site-config";
 ---
 
@@ -12,10 +13,7 @@ import { siteConfig } from "../../site-config";
   <div class="flex h-12 items-center justify-between w-full">
     <div class="flex gap-6 md:gap-10 w-full justify-between">
       <a href="/" class="flex gap-2 items-center no-underline">
-        <img class="h-5 w-5" alt="logo" src="/logo-light.svg" />
-        <span class="flex items-center font-medium">
-          {siteConfig.name}
-        </span>
+        <Logo />
       </a>
       <nav class="flex items-center gap-3 md:gap-6">
         {

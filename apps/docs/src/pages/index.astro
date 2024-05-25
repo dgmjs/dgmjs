@@ -4,6 +4,14 @@ import Header from "@/components/header.astro";
 import Footer from "@/components/footer.astro";
 import Feature from "@/components/feature.astro";
 import { siteConfig } from "../../site-config";
+import {
+  BaselineIcon,
+  BracesIcon,
+  CodeIcon,
+  ImageIcon,
+  LayersIcon,
+  MoonIcon,
+} from "lucide-react";
 import App from "@/components/app/app";
 import "@/styles/fonts.css";
 import "@/styles/splash.css";
@@ -11,94 +19,205 @@ import "@/styles/splash.css";
 
 <StarlightPage
   hasSidebar={false}
-  frontmatter={{ template: "splash", title: siteConfig.description, hero: {} }}
+  frontmatter={{
+    template: "splash",
+    title: `${siteConfig.name} | ${siteConfig.title}`,
+    hero: {},
+  }}
   class:list={["mx-auto"]}
 >
   <Header />
-  <section class="w-full py-12">
+  <div class="h-0 text-transparent font-hand">(to pre-load fonts)</div>
+  <section class="w-full py-8 md:py-20">
     <div class="my-8">
-      <div class="mx-auto w-full text-center relative">
-        <span class="text-center text-5xl font-bold tracking-tighter">
-          dgm.js
-        </span>
-        <span
-          class="absolute bg-slate-200 text-slate-700 text-xs px-3 py-1 rounded-full ml-2"
-          >beta</span
-        >
-      </div>
-      <p
-        class="text-2xl text-slate-400 text-center sm:leading-8 mt-1 font-hand"
+      <div
+        class="relative mx-auto w-full text-center text-3xl md:text-5xl font-bold tracking-tighter"
       >
-        {siteConfig.description}
-      </p>
+        An infinite canvas with
+        <span class="relative whitespace-nowrap"
+          >smart shapes
+          <div
+            class="absolute right-0 -bottom-1 text-transparent border-green-400 opacity-50 whitespace-nowrap"
+            style={{ borderBottomWidth: "12px" }}
+          >
+            smart shapes
+          </div>
+        </span>
+      </div>
+      <div class="flex justify-center pt-4">
+        <p
+          class="text-lg md:text-xl text-slate-500 text-center tracking-tighter max-w-2xl px-4"
+        >
+          {siteConfig.description}
+        </p>
+      </div>
     </div>
-    <div class="flex items-center justify-center gap-4">
+    <div class="flex items-center justify-center gap-4 pt-0 md:pt-4">
       <a
-        href="/getting-started/quick-start"
-        class="rounded-full font-medium py-3 w-40 !text-white bg-black no-underline text-sm flex justify-center"
-        )}>Get Started</a
+        href="https://github.com/dgmjs/dgmjs"
+        class="rounded-full font-medium py-3 w-48 !text-white bg-black no-underline text-sm flex justify-center"
+        )}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="w-5 h-5 mr-1"
+          ><path
+            d="M12.001 2C6.47598 2 2.00098 6.475 2.00098 12C2.00098 16.425 4.86348 20.1625 8.83848 21.4875C9.33848 21.575 9.52598 21.275 9.52598 21.0125C9.52598 20.775 9.51348 19.9875 9.51348 19.15C7.00098 19.6125 6.35098 18.5375 6.15098 17.975C6.03848 17.6875 5.55098 16.8 5.12598 16.5625C4.77598 16.375 4.27598 15.9125 5.11348 15.9C5.90098 15.8875 6.46348 16.625 6.65098 16.925C7.55098 18.4375 8.98848 18.0125 9.56348 17.75C9.65098 17.1 9.91348 16.6625 10.201 16.4125C7.97598 16.1625 5.65098 15.3 5.65098 11.475C5.65098 10.3875 6.03848 9.4875 6.67598 8.7875C6.57598 8.5375 6.22598 7.5125 6.77598 6.1375C6.77598 6.1375 7.61348 5.875 9.52598 7.1625C10.326 6.9375 11.176 6.825 12.026 6.825C12.876 6.825 13.726 6.9375 14.526 7.1625C16.4385 5.8625 17.276 6.1375 17.276 6.1375C17.826 7.5125 17.476 8.5375 17.376 8.7875C18.0135 9.4875 18.401 10.375 18.401 11.475C18.401 15.3125 16.0635 16.1625 13.8385 16.4125C14.201 16.725 14.5135 17.325 14.5135 18.2625C14.5135 19.6 14.501 20.675 14.501 21.0125C14.501 21.275 14.6885 21.5875 15.1885 21.4875C19.259 20.1133 21.9999 16.2963 22.001 12C22.001 6.475 17.526 2 12.001 2Z"
+          ></path></svg
+        >
+        View on Github</a
       >
       <a
         href="https://dgm.sh"
-        class="rounded-full font-medium py-3 no-underline w-40 flex gap-2 items-center justify-center text-sm bg-slate-200"
+        class="rounded-full font-medium py-3 no-underline w-48 flex gap-2 items-center justify-center text-sm bg-slate-200"
         target="_blank"
         )}
       >
-        <img class="h-5 w-5" alt="logo" src="/logo-light.svg" />
+        <img class="h-4 w-4" alt="logo" src="/logo-light.svg" />
         <span>DGM App</span>
       </a>
     </div>
   </section>
-  <section class="my-10 justify-center hidden lg:flex px-8 py-8">
+
+  <section class="my-10 justify-center hidden lg:flex px-2">
     <div class="relative w-full h-[640px]">
       <App client:only />
     </div>
   </section>
-  <section class="my-10 flex justify-center lg:hidden">
-    <div class="relative w-full h-[640px]">
+
+  <section class="md:my-10 flex justify-center lg:hidden">
+    <div class="relative w-full">
       <img src="https://fs.dgm.sh/i/7GS5SV8W3uojHd3cbfVzJ/lf@1x.png" alt="" />
     </div>
   </section>
-  <section id="features" class="space-y-12">
-    <Feature
-      title="Smart shapes"
-      description="You can define a composite shape with constraints, exntended properties, and scripts, ..."
-    >
-      <img src="/images/feat-smart-shapes.png" alt="Smart shapes" />
-    </Feature>
-    <Feature
-      title="Hand-drawn style"
-      description="dgm.js powered by awesome rough.js to support hand-drawn style shapes"
-    >
-      <img src="/images/feat-hand-drawn.png" alt="Hand-drawn" />
-    </Feature>
-    <Feature
-      title="Real-time collaboration"
-      description="You can collaborate with your team in real-time."
-    >
-      <img src="/images/feat-collab.png" alt="Collaboration" />
-    </Feature>
-    <Feature
-      title="Scripting support"
-      description="You can write a simple script to define how to render a shape instead of tedious compositing lots of shapes"
-    />
-    <Feature
-      title="Theme-adaptive colors"
-      description="Colors are automatically adapted to light or dark mode."
-    />
-    <Feature
-      title="Headless components"
-      description="dgm.js don't have it's own styles, do you can use with your own styles (CSS, tailwind CSS, styled-components, ...)"
-    />
-    <Feature
-      title="Image export"
-      description="You can export diagram to PNG, JPEG, SVG images"
-    />
 
-    <Feature
-      title="Another one-more feature"
-      description="another feature..."
-    />
+  <section id="features0" class="py-12 space-y-12">
+    <div class="">
+      <h2>Features</h2>
+    </div>
+    <Feature title="Smart shapes">
+      <div slot="description">
+        Smart shapes help you easily create diagrams with complex notations and
+        you can also define your-own smart shapes using <a href="#">scripts</a>,
+        <a href="#">constraints</a>, and <a href="#">extended properties</a>.
+        For example, drawing an ERD using primitive shapes is terrible. Smart
+        shapes help preconfigure elements of the notation and make them easily
+        replicable.
+      </div>
+      <img
+        slot="image"
+        src="/images/feat-smart-shapes.png"
+        alt="Smart shapes"
+      />
+    </Feature>
+    <Feature title="Hand-drawn style">
+      <div slot="description">
+        The dgm.js supports hand-drawn style shapes and fonts, as well as
+        freehand sketches. Of course, it also supports solid styles. The reason
+        for providing such diverse styles is to support <u>multi-fidelity</u>.
+        When using it for whiteboarding, it is better to draw low-fidelity
+        pictures in a hand-drawn style, but solid style is needed for creating
+        diagrams for documentation.
+      </div>
+      <img slot="image" src="/images/feat-hand-drawn.png" alt="Hand-drawn" />
+    </Feature>
+    <Feature title="Real-time collaboration">
+      <div slot="description">
+        The dgm.js supports real-time collaboration with multiple users. This is
+        based on <a href="#">Yjs</a>, an awesome CRDY implementation library.
+        Use the <a href="#">dgmjs's yjs plugin</a> for enable real-time collaboration
+        in your app. It supports real-time synchronization of the documents as well
+        as multiple cursors and selections.
+      </div>
+      <img slot="image" src="/images/feat-collab.png" alt="Collaboration" />
+    </Feature>
+    <div class="grid grid-cols-3 gap-8">
+      <div class="border rounded-lg px-5 py-6">
+        <div class="flex mb-2">
+          <div class="bg-slate-100 p-2 rounded-full">
+            <CodeIcon className="w-6 h-6" />
+          </div>
+        </div>
+        <div class="text-base tracking-tight font-semibold my-4">
+          Headless component
+        </div>
+        <div class="text-sm">
+          Provides React headless components, so you can make your own UI and
+          styles without any builtin styles
+        </div>
+      </div>
+      <div class="border rounded-lg px-5 py-6">
+        <div class="flex mb-2">
+          <div class="bg-slate-100 p-2 rounded-full">
+            <ImageIcon className="w-6 h-6" />
+          </div>
+        </div>
+        <div class="text-base tracking-tight font-semibold my-4">
+          Image export
+        </div>
+        <div class="text-sm">
+          Allows to export canvas shapes to various image formats including PNG,
+          SVG and to clipboard.
+        </div>
+      </div>
+      <div class="border rounded-lg px-5 py-6">
+        <div class="flex mb-2">
+          <div class="bg-slate-100 p-2 rounded-full">
+            <LayersIcon className="w-6 h-6" />
+          </div>
+        </div>
+        <div class="text-base tracking-tight font-semibold my-4">
+          Multiple pages
+        </div>
+        <div class="text-sm">
+          Supports multiple pages in a single document and each page can have
+          different page size. (infinite, 4:3, 16:9, etc.)
+        </div>
+      </div>
+      <div class="border rounded-lg px-5 py-6">
+        <div class="flex mb-2">
+          <div class="bg-slate-100 p-2 rounded-full">
+            <MoonIcon className="w-6 h-6" />
+          </div>
+        </div>
+        <div class="text-base tracking-tight font-semibold my-4">Dark mode</div>
+        <div class="text-sm">
+          Support dark mode and all colors are adaptive to light mode or dark
+          mode. Even if you draw in light mode, it will be displayed in dark
+          mode automatically.
+        </div>
+      </div>
+      <div class="border rounded-lg px-5 py-6">
+        <div class="flex mb-2">
+          <div class="bg-slate-100 p-2 rounded-full">
+            <BaselineIcon className="w-6 h-6" />
+          </div>
+        </div>
+        <div class="text-base tracking-tight font-semibold my-4">Rich text</div>
+        <div class="text-sm">
+          Text shapes support rich text. Therefore, users can apply different
+          styles such as bold, underline, italic, and even different colors to
+          parts of the text.
+        </div>
+      </div>
+      <div class="border rounded-lg px-5 py-6">
+        <div class="flex mb-2">
+          <div class="bg-slate-100 p-2 rounded-full">
+            <BracesIcon className="w-6 h-6" />
+          </div>
+        </div>
+        <div class="text-base tracking-tight font-semibold my-4">
+          JSON format
+        </div>
+        <div class="text-sm">
+          Shapes on the canvas can be easily exported to or imported from JSON
+          format. The JSON format is very simple and intuitive so it is easy to
+          handle.
+        </div>
+      </div>
+    </div>
   </section>
   <Footer />
 </StarlightPage>

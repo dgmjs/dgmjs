@@ -1,0 +1,12 @@
+---
+import { siteConfig } from "site-config";
+---
+
+<div class="flex items-center justify-start">
+  <img class="light:sl-hidden h-5 w-auto" alt="logo" src="/logo-dark.svg" />
+  <img class="dark:sl-hidden h-5 w-auto" alt="logo" src="/logo-light.svg" />
+  <span class="text-base font-semibold ml-1.5">{siteConfig.name}</span>
+  <span class="bg-slate-200 text-slate-700 text-xs px-3 py-1 rounded-full ml-2"
+    >beta</span
+  >
+</div>
