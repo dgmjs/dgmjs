@@ -11,7 +11,6 @@ import {
   SquareIcon,
   TypeIcon,
 } from "lucide-react";
-import { useEffect, useState } from "react";
 
 interface ToolItemProps extends React.HTMLAttributes<HTMLButtonElement> {
   active: boolean;
@@ -36,88 +35,92 @@ function Separator() {
 }
 
 interface ToolbarProps {
+  activeHandler?: string;
+  onActiveHandlerChange?: (handler: string) => void;
   editor: Editor | null;
 }
 
-export function Toolbar({ editor }: ToolbarProps) {
-  const [handler, setHandler] = useState<string>("Select");
-
-  useEffect(() => {
-    editor?.onActiveHandlerChange.addListener((handler) => setHandler(handler));
-  }, [editor]);
+export function Toolbar({
+  activeHandler = "Select",
+  onActiveHandlerChange,
+  editor,
+}: ToolbarProps) {
+  const setActiveHandler = (handler: string) => {
+    if (onActiveHandlerChange) onActiveHandlerChange(handler);
+  };
 
   return (
     <div className="absolute bottom-4 w-full flex justify-center items-center pointer-events-none">
       <div className="flex gap-1 border p-1 rounded-md pointer-events-auto bg-white drop-shadow">
         <ToolItem
           title="Select"
-          active={handler === "Select"}
-          onClick={() => editor?.activateHandler("Select")}
+          active={activeHandler === "Select"}
+          onClick={() => setActiveHandler("Select")}
         >
           <MousePointer2Icon className="w-4 h-4" />
         </ToolItem>
         <ToolItem
           title="Hand"
-          active={handler === "Hand"}
-          onClick={() => editor?.activateHandler("Hand")}
+          active={activeHandler === "Hand"}
+          onClick={() => setActiveHandler("Hand")}
         >
           <HandIcon className="w-4 h-4" />
         </ToolItem>
         <Separator />
         <ToolItem
           title="Rectangle"
-          active={handler === "Rectangle"}
-          onClick={() => editor?.activateHandler("Rectangle")}
+          active={activeHandler === "Rectangle"}
+          onClick={() => setActiveHandler("Rectangle")}
         >
           <SquareIcon className="w-4 h-4" />
         </ToolItem>
         <ToolItem
           title="Ellipse"
-          active={handler === "Ellipse"}
-          onClick={() => editor?.activateHandler("Ellipse")}
+          active={activeHandler === "Ellipse"}
+          onClick={() => setActiveHandler("Ellipse")}
         >
           <CircleIcon className="w-4 h-4" />
         </ToolItem>
         <ToolItem
           title="Text"
-          active={handler === "Text"}
-          onClick={() => editor?.activateHandler("Text")}
+          active={activeHandler === "Text"}
+          onClick={() => setActiveHandler("Text")}
         >
           <TypeIcon className="w-4 h-4" />
         </ToolItem>
         <ToolItem
           title="Image"
-          active={handler === "Image"}
-          onClick={() => editor?.activateHandler("Image")}
+          active={activeHandler === "Image"}
+          onClick={() => setActiveHandler("Image")}
         >
           <ImageIcon className="w-4 h-4" />
         </ToolItem>
         <Separator />
         <ToolItem
           title="Line"
-          active={handler === "Line"}
-          onClick={() => editor?.activateHandler("Line")}
+          active={activeHandler === "Line"}
+          onClick={() => setActiveHandler("Line")}
         >
           <SlashIcon className="w-4 h-4" />
         </ToolItem>
         <ToolItem
           title="Connector"
-          active={handler === "Connector"}
-          onClick={() => editor?.activateHandler("Connector")}
+          active={activeHandler === "Connector"}
+          onClick={() => setActiveHandler("Connector")}
         >
           <SplineIcon className="w-4 h-4" />
         </ToolItem>
         <ToolItem
           title="Freehand"
-          active={handler === "Freehand"}
-          onClick={() => editor?.activateHandler("Freehand")}
+          active={activeHandler === "Freehand"}
+          onClick={() => setActiveHandler("Freehand")}
         >
           <PencilIcon className="w-4 h-4" />
         </ToolItem>
         <ToolItem
           title="Highlighter"
-          active={handler === "Highlighter"}
-          onClick={() => editor?.activateHandler("Highlighter")}
+          active={activeHandler === "Highlighter"}
+          onClick={() => setActiveHandler("Highlighter")}
         >
           <HighlighterIcon className="w-4 h-4" />
         </ToolItem>
