@@ -1,9 +1,11 @@
+![dgm.js](https://fs.dgm.sh/i/o8O6ttXomERQ5UW3cZOg9/lf@2x.png)
+
 # dgm.js
 
 An infinite canvas with _smart shapes_. It supports:
 
 - 💡 Smart shapes (scripting, constraints, extended properties)
-- 🔧 Headless components
+- 🔧 Headless components (React)
 - 🔥 Infinite canvas
 - 📑 Multi-page support
 - 👍 Hand-drawn styles
@@ -15,7 +17,8 @@ An infinite canvas with _smart shapes_. It supports:
 
 ## Getting started
 
-👉 [Getting started](https://dgmjs.dev/getting-started/quick-start/)
+- [Quick start](https://dgmjs.dev/getting-started/quick-start/)
+- [DGM: Full-featured App](https://dgm.sh/home)
 
 ## License
 
