@@ -2,6 +2,9 @@
 
 # dgm.js
 
+![npm](https://img.shields.io/npm/v/@dgmjs/core.svg)
+
+
 An infinite canvas with _smart shapes_. It supports:
 
 - 💡 Smart shapes (scripting, constraints, extended properties)
@@ -18,6 +21,7 @@ An infinite canvas with _smart shapes_. It supports:
 ## Getting started
 
 - [Quick start](https://dgmjs.dev/getting-started/quick-start/)
+- [Minimal example (StackBlitz)](https://stackblitz.com/edit/dgmjs-example?file=src%2Fapp.tsx)
 - [DGM: Full-featured App](https://dgm.sh/home)
 
 ## License

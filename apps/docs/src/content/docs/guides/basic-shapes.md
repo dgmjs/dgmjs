@@ -3,16 +3,16 @@ title: Shapes
 description: shapes ...
 ---
 
-Basically, In DGM, you can create a diagram by combining the basic shapes. Supported shape objects are:
+Basically, In dgm.js, you can create a diagram by combining the primitive shapes. Supported shape objects are:
 
 - Rectangle
 - Ellipse
 - Text
 - Image
-- Line (Freehand)
+- Line
 - Connector
+- Freehand
+- Highlighter
 - Group
-
-Each shape can be created using the corresponding tools in the __Palette Toolbar__, located at the bottom center of the screen.
 
 ![DGM Shapes](https://fs.dgm.sh/i/PDjwDulCiBNXE8FzQ0aS0/lf@2x.png)

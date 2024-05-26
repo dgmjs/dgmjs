@@ -1,21 +1,15 @@
 ---
-const { title } = Astro.props;
+
 ---
 
-<div class="mx-auto grid justify-center grid-cols-1 lg:grid-cols-2 gap-5">
-  <div class="lg:order-first relative overflow-hidden">
-    <div class="flex flex-col">
-      <div class="font-semibold tracking-tight text-xl">{title}</div>
-      <p class="text-muted-foreground">
-        <slot name="description" />
-      </p>
-    </div>
+<div class="flex flex-col">
+  <div class="mb-4 rounded-lg border overflow-hidden">
+    <slot name="image" />
   </div>
-  <div
-    class="order-first relative overflow-hidden rounded-lg border !mt-0 bg-slate-100 p-0"
-  >
-    <div class="aspect-video">
-      <slot name="image" />
-    </div>
+  <div class="text-base tracking-tight font-semibold mb-2">
+    <slot name="title" />
+  </div>
+  <div class="text-sm">
+    <slot name="description" />
   </div>
 </div>

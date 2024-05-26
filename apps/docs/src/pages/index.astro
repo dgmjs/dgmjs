@@ -3,16 +3,7 @@ import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
 import Header from "@/components/header.astro";
 import Footer from "@/components/footer.astro";
 import Feature from "@/components/feature.astro";
-import Feat from "@/components/feat.astro";
 import { siteConfig } from "../../site-config";
-import {
-  BaselineIcon,
-  BracesIcon,
-  CodeIcon,
-  ImageIcon,
-  LayersIcon,
-  MoonIcon,
-} from "lucide-react";
 import App from "@/components/app/app";
 import "@/styles/fonts.css";
 import "@/styles/splash.css";
@@ -99,7 +90,7 @@ import "@/styles/splash.css";
       <h2>Features</h2>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <Feat>
+      <Feature>
         <img
           slot="image"
           src="/images/feat-smart-shapes.png"
@@ -111,8 +102,8 @@ import "@/styles/splash.css";
           and you can also define your-own smart shapes using <b>scripts</b>,
           <b>constraints</b>, and <b>extended properties</b>.
         </div>
-      </Feat>
-      <Feat>
+      </Feature>
+      <Feature>
         <img slot="image" src="/images/feat-props.png" alt="Collaboration" />
         <div slot="title">Extended properties</div>
         <div slot="description">
@@ -120,8 +111,8 @@ import "@/styles/splash.css";
           to be stored in the shapes, which can be used in scripts or
           constraints.
         </div>
-      </Feat>
-      <Feat>
+      </Feature>
+      <Feature>
         <img
           slot="image"
           src="/images/feat-constraints.png"
@@ -132,9 +123,9 @@ import "@/styles/splash.css";
           Constraints are used to define the behavior of shapes. For example, a
           shape can be constrained to be aligned, hidden, sized or else.
         </div>
-      </Feat>
+      </Feature>
 
-      <Feat>
+      <Feature>
         <img slot="image" src="/images/feat-script.png" alt="Collaboration" />
         <div slot="title">Shape scripting</div>
         <div slot="description">
@@ -144,8 +135,8 @@ import "@/styles/splash.css";
             target="_blank">a simple Clojure-inspired LISP-like language</a
           >.
         </div>
-      </Feat>
-      <Feat>
+      </Feature>
+      <Feature>
         <img slot="image" src="/images/feat-hand-drawn.png" alt="Hand-drawn" />
         <div slot="title">Hand-drawn style</div>
         <div slot="description">
@@ -157,8 +148,8 @@ import "@/styles/splash.css";
             target="_blank">roughjs</a
           >.
         </div>
-      </Feat>
-      <Feat>
+      </Feature>
+      <Feature>
         <img slot="image" src="/images/feat-collab.png" alt="Collaboration" />
         <div slot="title">Real-time collaboration</div>
         <div slot="description">
@@ -168,9 +159,9 @@ import "@/styles/splash.css";
           > for enable real-time collaboration in your app. It supports real-time
           synchronization of the documents as well as multiple cursors and selections.
         </div>
-      </Feat>
+      </Feature>
 
-      <Feat>
+      <Feature>
         <img slot="image" src="/images/feat-freehand.png" alt="Hand-drawn" />
         <div slot="title">Freehand drawing</div>
         <div slot="description">
@@ -180,8 +171,8 @@ import "@/styles/splash.css";
           >. This allows you to adjust the thinning and the taperness of the
           ends.
         </div>
-      </Feat>
-      <Feat>
+      </Feature>
+      <Feature>
         <img slot="image" src="/images/feat-export.png" alt="Hand-drawn" />
         <div slot="title">Image export</div>
         <div slot="description">
@@ -189,17 +180,17 @@ import "@/styles/splash.css";
           can also be copied to the clipboard for direct pasting into other
           apps.
         </div>
-      </Feat>
-      <Feat>
+      </Feature>
+      <Feature>
         <img slot="image" src="/images/feat-pages.png" alt="Hand-drawn" />
         <div slot="title">Multiple pages</div>
         <div slot="description">
           Supports multiple pages in a single document and each page can have
           different page size. (infinite, 4:3, 16:9, etc.)
         </div>
-      </Feat>
+      </Feature>
 
-      <Feat>
+      <Feature>
         <img slot="image" src="/images/feat-dark-mode.png" alt="Hand-drawn" />
         <div slot="title">Dark mode</div>
         <div slot="description">
@@ -207,8 +198,8 @@ import "@/styles/splash.css";
           mode. Even if you draw in light mode, it will be displayed in dark
           mode automatically.
         </div>
-      </Feat>
-      <Feat>
+      </Feature>
+      <Feature>
         <img slot="image" src="/images/feat-richtext.png" alt="Hand-drawn" />
         <div slot="title">Rich text</div>
         <div slot="description">
@@ -216,8 +207,8 @@ import "@/styles/splash.css";
           styles such as bold, underline, italic, and even different colors to
           parts of the text.
         </div>
-      </Feat>
-      <Feat>
+      </Feature>
+      <Feature>
         <img slot="image" src="/images/feat-json.png" alt="Hand-drawn" />
         <div slot="title">JSON format</div>
         <div slot="description">
@@ -225,7 +216,7 @@ import "@/styles/splash.css";
           format. The JSON format is very simple and intuitive so it is easy to
           handle.
         </div>
-      </Feat>
+      </Feature>
     </div>
   </section>
   <Footer />
