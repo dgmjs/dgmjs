@@ -3,6 +3,7 @@ import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
 import Header from "@/components/header.astro";
 import Footer from "@/components/footer.astro";
 import Feature from "@/components/feature.astro";
+import Feat from "@/components/feat.astro";
 import { siteConfig } from "../../site-config";
 import {
   BaselineIcon,
@@ -88,8 +89,8 @@ import "@/styles/splash.css";
   </section>
 
   <section class="md:my-10 flex justify-center lg:hidden">
-    <div class="relative w-full">
-      <img src="https://fs.dgm.sh/i/7GS5SV8W3uojHd3cbfVzJ/lf@1x.png" alt="" />
+    <div class="relative w-full border rounded-lg overflow-hidden">
+      <img src="/images/cover.png" alt="" />
     </div>
   </section>
 
@@ -97,126 +98,134 @@ import "@/styles/splash.css";
     <div class="">
       <h2>Features</h2>
     </div>
-    <Feature title="Smart shapes">
-      <div slot="description">
-        Smart shapes help you easily create diagrams with complex notations and
-        you can also define your-own smart shapes using <a href="#">scripts</a>,
-        <a href="#">constraints</a>, and <a href="#">extended properties</a>.
-        For example, drawing an ERD using primitive shapes is terrible. Smart
-        shapes help preconfigure elements of the notation and make them easily
-        replicable.
-      </div>
-      <img
-        slot="image"
-        src="/images/feat-smart-shapes.png"
-        alt="Smart shapes"
-      />
-    </Feature>
-    <Feature title="Hand-drawn style">
-      <div slot="description">
-        The dgm.js supports hand-drawn style shapes and fonts, as well as
-        freehand sketches. Of course, it also supports solid styles. The reason
-        for providing such diverse styles is to support <u>multi-fidelity</u>.
-        When using it for whiteboarding, it is better to draw low-fidelity
-        pictures in a hand-drawn style, but solid style is needed for creating
-        diagrams for documentation.
-      </div>
-      <img slot="image" src="/images/feat-hand-drawn.png" alt="Hand-drawn" />
-    </Feature>
-    <Feature title="Real-time collaboration">
-      <div slot="description">
-        The dgm.js supports real-time collaboration with multiple users. This is
-        based on <a href="#">Yjs</a>, an awesome CRDY implementation library.
-        Use the <a href="#">dgmjs's yjs plugin</a> for enable real-time collaboration
-        in your app. It supports real-time synchronization of the documents as well
-        as multiple cursors and selections.
-      </div>
-      <img slot="image" src="/images/feat-collab.png" alt="Collaboration" />
-    </Feature>
-    <div class="grid grid-cols-3 gap-8">
-      <div class="border rounded-lg px-5 py-6">
-        <div class="flex mb-2">
-          <div class="bg-slate-100 p-2 rounded-full">
-            <CodeIcon className="w-6 h-6" />
-          </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <Feat>
+        <img
+          slot="image"
+          src="/images/feat-smart-shapes.png"
+          alt="Smart shapes"
+        />
+        <div slot="title">Smart shapes</div>
+        <div slot="description">
+          Smart shapes help you easily create diagrams with complex notations
+          and you can also define your-own smart shapes using <b>scripts</b>,
+          <b>constraints</b>, and <b>extended properties</b>.
         </div>
-        <div class="text-base tracking-tight font-semibold my-4">
-          Headless component
+      </Feat>
+      <Feat>
+        <img slot="image" src="/images/feat-props.png" alt="Collaboration" />
+        <div slot="title">Extended properties</div>
+        <div slot="description">
+          Shapes can have extended properties. This allows additional metadata
+          to be stored in the shapes, which can be used in scripts or
+          constraints.
         </div>
-        <div class="text-sm">
-          Provides React headless components, so you can make your own UI and
-          styles without any builtin styles
+      </Feat>
+      <Feat>
+        <img
+          slot="image"
+          src="/images/feat-constraints.png"
+          alt="Constraints"
+        />
+        <div slot="title">Shape constraints</div>
+        <div slot="description">
+          Constraints are used to define the behavior of shapes. For example, a
+          shape can be constrained to be aligned, hidden, sized or else.
         </div>
-      </div>
-      <div class="border rounded-lg px-5 py-6">
-        <div class="flex mb-2">
-          <div class="bg-slate-100 p-2 rounded-full">
-            <ImageIcon className="w-6 h-6" />
-          </div>
+      </Feat>
+
+      <Feat>
+        <img slot="image" src="/images/feat-script.png" alt="Collaboration" />
+        <div slot="title">Shape scripting</div>
+        <div slot="description">
+          Shapes can have scripts that can be used to define how the shape is
+          drawn or outlined. The scripts are written in <a
+            href="https://github.com/kanaka/mal"
+            target="_blank">a simple Clojure-inspired LISP-like language</a
+          >.
         </div>
-        <div class="text-base tracking-tight font-semibold my-4">
-          Image export
+      </Feat>
+      <Feat>
+        <img slot="image" src="/images/feat-hand-drawn.png" alt="Hand-drawn" />
+        <div slot="title">Hand-drawn style</div>
+        <div slot="description">
+          Supports hand-drawn style shapes as well as solid stype. The reason
+          for providing such diverse styles is to support <b>multi-fidelity</b>.
+          It is better to draw low-fidelity pictures in a hand-drawn style, and
+          high-fidelity pictures in a solid style. Hand-draw style is powered by <a
+            href="https://roughjs.com/"
+            target="_blank">roughjs</a
+          >.
         </div>
-        <div class="text-sm">
-          Allows to export canvas shapes to various image formats including PNG,
-          SVG and to clipboard.
+      </Feat>
+      <Feat>
+        <img slot="image" src="/images/feat-collab.png" alt="Collaboration" />
+        <div slot="title">Real-time collaboration</div>
+        <div slot="description">
+          Use the <a
+            href="https://github.com/dgmjs/dgmjs/tree/main/packages/dgmjs-plugin-yjs"
+            target="_blank">dgmjs's yjs plugin</a
+          > for enable real-time collaboration in your app. It supports real-time
+          synchronization of the documents as well as multiple cursors and selections.
         </div>
-      </div>
-      <div class="border rounded-lg px-5 py-6">
-        <div class="flex mb-2">
-          <div class="bg-slate-100 p-2 rounded-full">
-            <LayersIcon className="w-6 h-6" />
-          </div>
+      </Feat>
+
+      <Feat>
+        <img slot="image" src="/images/feat-freehand.png" alt="Hand-drawn" />
+        <div slot="title">Freehand drawing</div>
+        <div slot="description">
+          Supports freehand drawing on the canvas powered by <a
+            href="https://github.com/steveruizok/perfect-freehand"
+            >perfect-freehand</a
+          >. This allows you to adjust the thinning and the taperness of the
+          ends.
         </div>
-        <div class="text-base tracking-tight font-semibold my-4">
-          Multiple pages
+      </Feat>
+      <Feat>
+        <img slot="image" src="/images/feat-export.png" alt="Hand-drawn" />
+        <div slot="title">Image export</div>
+        <div slot="description">
+          Shapes on the canvas can be exported in PNG and SVG formats, and they
+          can also be copied to the clipboard for direct pasting into other
+          apps.
         </div>
-        <div class="text-sm">
+      </Feat>
+      <Feat>
+        <img slot="image" src="/images/feat-pages.png" alt="Hand-drawn" />
+        <div slot="title">Multiple pages</div>
+        <div slot="description">
           Supports multiple pages in a single document and each page can have
           different page size. (infinite, 4:3, 16:9, etc.)
         </div>
-      </div>
-      <div class="border rounded-lg px-5 py-6">
-        <div class="flex mb-2">
-          <div class="bg-slate-100 p-2 rounded-full">
-            <MoonIcon className="w-6 h-6" />
-          </div>
-        </div>
-        <div class="text-base tracking-tight font-semibold my-4">Dark mode</div>
-        <div class="text-sm">
+      </Feat>
+
+      <Feat>
+        <img slot="image" src="/images/feat-dark-mode.png" alt="Hand-drawn" />
+        <div slot="title">Dark mode</div>
+        <div slot="description">
           Support dark mode and all colors are adaptive to light mode or dark
           mode. Even if you draw in light mode, it will be displayed in dark
           mode automatically.
         </div>
-      </div>
-      <div class="border rounded-lg px-5 py-6">
-        <div class="flex mb-2">
-          <div class="bg-slate-100 p-2 rounded-full">
-            <BaselineIcon className="w-6 h-6" />
-          </div>
-        </div>
-        <div class="text-base tracking-tight font-semibold my-4">Rich text</div>
-        <div class="text-sm">
+      </Feat>
+      <Feat>
+        <img slot="image" src="/images/feat-richtext.png" alt="Hand-drawn" />
+        <div slot="title">Rich text</div>
+        <div slot="description">
           Text shapes support rich text. Therefore, users can apply different
           styles such as bold, underline, italic, and even different colors to
           parts of the text.
         </div>
-      </div>
-      <div class="border rounded-lg px-5 py-6">
-        <div class="flex mb-2">
-          <div class="bg-slate-100 p-2 rounded-full">
-            <BracesIcon className="w-6 h-6" />
-          </div>
-        </div>
-        <div class="text-base tracking-tight font-semibold my-4">
-          JSON format
-        </div>
-        <div class="text-sm">
+      </Feat>
+      <Feat>
+        <img slot="image" src="/images/feat-json.png" alt="Hand-drawn" />
+        <div slot="title">JSON format</div>
+        <div slot="description">
           Shapes on the canvas can be easily exported to or imported from JSON
           format. The JSON format is very simple and intuitive so it is easy to
           handle.
         </div>
-      </div>
+      </Feat>
     </div>
   </section>
   <Footer />

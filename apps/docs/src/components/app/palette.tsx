@@ -75,6 +75,12 @@ export function Palette({ onPropsChange }: PaletteProps) {
           XL
         </Button>
       </div>
+
+      <div>
+        <a href="https://dgm.sh" target="_blank" className="px-2">
+          more...
+        </a>
+      </div>
     </div>
   );
 }
