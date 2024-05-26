@@ -1,27 +1,21 @@
-# dgmjs
+# dgm.js
 
-An extensible diagramming library for the web
+An infinite canvas with _smart shapes_. It supports:
 
-## Build and publish
+- 💡 Smart shapes (scripting, constraints, extended properties)
+- 🔧 Headless components
+- 🔥 Infinite canvas
+- 📑 Multi-page support
+- 👍 Hand-drawn styles
+- 👥 Real-time collaboration
+- 🎨 Dark mode (adaptive colors)
+- 📸 Export to image (PNG, SVG)
+- 🔤 Rich text
+- 🧑🏻‍💻 JSON export/import
 
-```sh
-cd packages/dgmjs
-npm run build
-npm publish
-```
+## Getting started
 
-## Run demo
-
-```sh
-npm run dev -w apps/demo
-```
-
-## Dev mode
-
-```sh
-npm run watch -w @dgmjs/core
-npm run dev -w demo
-```
+👉 [Getting started](https://dgmjs.dev/getting-started/quick-start/)
 
 ## License
 

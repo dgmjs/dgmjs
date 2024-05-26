@@ -1,11 +1,10 @@
 ---
 import type { Props } from "@astrojs/starlight/props";
+import Logo from "./logo.astro";
 ---
 
 <a href="/" class="site-title sl-flex">
-  <img class="light:sl-hidden h-5 w-auto" alt="logo" src="/logo-dark.svg" />
-  <img class="dark:sl-hidden h-5 w-auto" alt="logo" src="/logo-light.svg" />
-  <span class="text-base font-semibold">dgm.js</span>
+  <Logo />
 </a>
 
 <style>

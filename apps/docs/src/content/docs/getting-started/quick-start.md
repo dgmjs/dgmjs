@@ -5,16 +5,31 @@ sidebar:
   order: 1
 ---
 
-Basically, In DGM, you can create a diagram by combining the basic shapes. Supported shape objects are:
+```sh
+npm i @dgmjs/core @dgmjs/react
+```
 
-- Rectangle
-- Ellipse
-- Text
-- Image
-- Line (Freehand)
-- Connector
-- Group
+```ts
+import { Editor } from "@dgmjs/core";
+import { DGMEditor } from "@dgmjs/react";
+import data from "./data.json";
 
-Each shape can be created using the corresponding tools in the __Palette Toolbar__, located at the bottom center of the screen.
+function App() {
+  const handleMount = async (editor: Editor) => {
+    editor.loadFromJSON(data);
+    editor.fitToScreen();
+    window.addEventListener("resize", () => {
+      editor.fit();
+    });
+  };
 
-![DGM Shapes](https://fs.dgm.sh/i/PDjwDulCiBNXE8FzQ0aS0/lf@2x.png)
+  return (
+    <DGMEditor
+      className="absolute inset-0 border rounded-lg"
+      onMount={handleMount}
+    />
+  );
+}
+
+export default App;
+```

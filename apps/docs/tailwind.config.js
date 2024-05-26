@@ -6,10 +6,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        // Your preferred text font. Starlight uses a system font stack by default.
-        sans: ['"Inter"'],
-        // Your preferred code font. Starlight uses system monospace fonts by default.
-        mono: ['"IBM Plex Mono"'],
+        sans: ["Inter"],
+        mono: ["IBM Plex Mono"],
+        hand: ["Gloria Hallelujah"],
       },
     },
   },

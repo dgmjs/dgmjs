@@ -27,7 +27,7 @@ Highlighter
 
 #### Source
 
-[shapes.ts:2196](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2196)
+[shapes.ts:2195](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2195)
 
 ## Properties
 
@@ -1644,7 +1644,7 @@ Default render this shape
 
 #### Source
 
-[shapes.ts:2201](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2201)
+[shapes.ts:2200](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2200)
 
 ***
 

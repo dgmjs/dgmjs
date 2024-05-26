@@ -418,12 +418,12 @@ class Canvas {
   /**
    * Put a pixel
    */
-  pixel(point: number[], color: string, size: number = 1): Canvas {
-    this.context.fillStyle = this.resolveColor(color);
-    this.context.globalAlpha = this.alpha;
-    this.context.fillRect(point[0] - size, point[1] - size, size * 2, size * 2);
-    return this;
-  }
+  // pixel(point: number[], color: string, size: number = 1): Canvas {
+  //   this.context.fillStyle = this.resolveColor(color);
+  //   this.context.globalAlpha = this.alpha;
+  //   this.context.fillRect(point[0] - size, point[1] - size, size * 2, size * 2);
+  //   return this;
+  // }
 
   /**
    * Draw a line

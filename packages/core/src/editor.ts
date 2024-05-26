@@ -485,6 +485,7 @@ export class Editor {
           this.moveOrigin(dx, dy);
         }
       }
+      e.preventDefault();
     });
 
     // mouse drag over event

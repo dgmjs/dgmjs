@@ -21,4 +21,4 @@ Get Base64-encoded image data of doc
 
 ## Source
 
-index.ts:57
+[index.ts:57](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L57)

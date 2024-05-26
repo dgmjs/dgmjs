@@ -27,7 +27,7 @@ Connector
 
 #### Source
 
-[shapes.ts:2010](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2010)
+[shapes.ts:2009](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2009)
 
 ## Properties
 
@@ -323,7 +323,7 @@ Font weight
 
 #### Source
 
-[shapes.ts:1987](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1987)
+[shapes.ts:1986](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1986)
 
 ***
 
@@ -335,7 +335,7 @@ Head's anchor position
 
 #### Source
 
-[shapes.ts:1993](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1993)
+[shapes.ts:1992](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1992)
 
 ***
 
@@ -361,7 +361,7 @@ Marginal space to head
 
 #### Source
 
-[shapes.ts:2003](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2003)
+[shapes.ts:2002](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2002)
 
 ***
 
@@ -713,7 +713,7 @@ Tags
 
 #### Source
 
-[shapes.ts:1988](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1988)
+[shapes.ts:1987](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1987)
 
 ***
 
@@ -725,7 +725,7 @@ Tail's anchor position
 
 #### Source
 
-[shapes.ts:1998](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1998)
+[shapes.ts:1997](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1997)
 
 ***
 
@@ -751,7 +751,7 @@ Marginal space to tail
 
 #### Source
 
-[shapes.ts:2008](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2008)
+[shapes.ts:2007](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2007)
 
 ***
 
@@ -1139,7 +1139,7 @@ Import shape from JSON
 
 #### Source
 
-[shapes.ts:2036](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2036)
+[shapes.ts:2035](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2035)
 
 ***
 
@@ -1163,7 +1163,7 @@ Return a bounding rect.
 
 #### Source
 
-[shapes.ts:2067](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2067)
+[shapes.ts:2066](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2066)
 
 ***
 
@@ -1265,7 +1265,7 @@ Return head anchor point
 
 #### Source
 
-[shapes.ts:2083](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2083)
+[shapes.ts:2082](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2082)
 
 ***
 
@@ -1281,7 +1281,7 @@ Return head's outline
 
 #### Source
 
-[shapes.ts:2125](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2125)
+[shapes.ts:2124](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2124)
 
 ***
 
@@ -1464,7 +1464,7 @@ Return tail anchor point
 
 #### Source
 
-[shapes.ts:2104](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2104)
+[shapes.ts:2103](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2103)
 
 ***
 
@@ -1480,7 +1480,7 @@ Return head's outline
 
 #### Source
 
-[shapes.ts:2132](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2132)
+[shapes.ts:2131](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2131)
 
 ***
 
@@ -1507,7 +1507,7 @@ bounding rect.
 
 #### Source
 
-[shapes.ts:1971](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1971)
+[shapes.ts:1970](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1970)
 
 ***
 
@@ -1902,7 +1902,7 @@ Return default outline
 
 #### Source
 
-[shapes.ts:1955](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1955)
+[shapes.ts:1954](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1954)
 
 ***
 
@@ -1932,7 +1932,7 @@ assign null if not found
 
 #### Source
 
-[shapes.ts:2046](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2046)
+[shapes.ts:2045](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2045)
 
 ***
 
@@ -1958,7 +1958,7 @@ Export shape to JSON
 
 #### Source
 
-[shapes.ts:2021](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2021)
+[shapes.ts:2020](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2020)
 
 ***
 

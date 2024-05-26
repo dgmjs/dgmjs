@@ -27,7 +27,7 @@ Freehand
 
 #### Source
 
-[shapes.ts:2156](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2156)
+[shapes.ts:2155](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2155)
 
 ## Properties
 
@@ -325,7 +325,7 @@ Taper at the end of the path. The value must be between 0 and 1.
 
 #### Source
 
-[shapes.ts:2154](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2154)
+[shapes.ts:2153](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2153)
 
 ***
 
@@ -665,7 +665,7 @@ Taper at the start of the path. The value must be between 0 and 1.
 
 #### Source
 
-[shapes.ts:2149](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2149)
+[shapes.ts:2148](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2148)
 
 ***
 
@@ -677,7 +677,7 @@ Thinning
 
 #### Source
 
-[shapes.ts:2144](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2144)
+[shapes.ts:2143](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2143)
 
 ***
 
@@ -1065,7 +1065,7 @@ Import shape from JSON
 
 #### Source
 
-[shapes.ts:2172](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2172)
+[shapes.ts:2171](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2171)
 
 ***
 
@@ -1680,7 +1680,7 @@ Default render this shape
 
 #### Source
 
-[shapes.ts:2179](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2179)
+[shapes.ts:2178](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2178)
 
 ***
 
@@ -1780,7 +1780,7 @@ Export shape to JSON
 
 #### Source
 
-[shapes.ts:2164](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2164)
+[shapes.ts:2163](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2163)
 
 ***
 
