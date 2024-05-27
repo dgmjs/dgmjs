@@ -26,7 +26,7 @@ const PageView: React.FC<PageViewProps> = ({
   className,
   ...others
 }) => {
-  const { theme } = useDemoStore();
+  const { darkMode } = useDemoStore();
   const shapeViewRef = useRef<DGMShapeViewHandle>(null);
 
   return (
@@ -45,7 +45,7 @@ const PageView: React.FC<PageViewProps> = ({
           page={page}
           maxScale={1}
           scaleAdjust={page.size ? 1 : 0.8}
-          darkMode={theme === "dark"}
+          darkMode={darkMode}
         />
       </div>
       <div className="flex flex-col items-center">

@@ -146,15 +146,39 @@ export class Editor {
   keymap: KeymapManager;
   autoScroller: AutoScroller;
 
-  enabled: boolean;
   currentPage: Page | null;
   parent: HTMLElement;
   canvasElement: HTMLCanvasElement;
   canvas: Canvas;
+
+  /**
+   * The enabled state
+   */
+  enabled: boolean;
+
+  /**
+   * The dark mode
+   */
   darkMode: boolean;
+
+  /**
+   * The grid size
+   */
   gridSize: number[];
+
+  /**
+   * The show grid option
+   */
   showGrid: boolean;
+
+  /**
+   * The snap to grid option
+   */
   snapToGrid: boolean;
+
+  /**
+   * The snap to object option (Not implemented yet)
+   */
   snapToObject: boolean;
   handlers: Record<string, Handler>;
   activeHandlerId: string | null;
@@ -233,7 +257,6 @@ export class Editor {
     this.keymap = new KeymapManager(this);
 
     this.platform = this.detectPlatform();
-    this.enabled = true;
     this.currentPage = null;
     this.parent = editorHolder;
     this.parent.style.overflow = "hidden";
@@ -242,6 +265,7 @@ export class Editor {
     // initialize properties
     this.canvasElement = null as any;
     this.canvas = null as any;
+    this.enabled = true;
     this.darkMode = false;
     this.gridSize = [8, 8];
     this.showGrid = false;
