@@ -1,4 +1,4 @@
-import { Page, Canvas, geometry, themeColors } from "@dgmjs/core";
+import { Page, Canvas, geometry, themeColors, Shape } from "@dgmjs/core";
 import fileSaverPkg from "file-saver";
 import { Context } from "svgcanvas";
 const { saveAs } = fileSaverPkg;
@@ -45,6 +45,11 @@ function getImageCanvas(page: Page, options: ExportImageOptions) {
     canvas.context.fillStyle = canvas.resolveColor("$background");
     canvas.context.fillRect(0, 0, canvasElement.width, canvasElement.height);
   }
+
+  // update page
+  page.traverse((s) => {
+    if (s instanceof Shape) s.update(canvas);
+  });
 
   // draw doc to the new canvas
   page.draw(canvas);
@@ -133,6 +138,11 @@ async function getSVGImageData(
     svgCanvas.context.fillStyle = svgCanvas.resolveColor("$background");
     svgCanvas.context.fillRect(0, 0, svgCanvasWidth, svgCanvasHeight);
   }
+
+  // update page
+  page.traverse((s) => {
+    if (s instanceof Shape) s.update(svgCanvas);
+  });
 
   // Draw doc to the new canvas
   page.draw(svgCanvas);
