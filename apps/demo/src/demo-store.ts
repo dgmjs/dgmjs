@@ -5,7 +5,7 @@ import { devtools } from "zustand/middleware";
 export interface DemoState {
   scale: number;
   origin: number[];
-  theme: "light" | "dark";
+  darkMode: boolean;
   activeHandler: string | null;
   activeHandlerLock: boolean;
   doc: Doc | null;
@@ -14,7 +14,7 @@ export interface DemoState {
   libraries: Doc[];
   setScale: (scale: number) => void;
   setOrigin: (origin: [number, number]) => void;
-  setTheme: (theme: "light" | "dark") => void;
+  setDarkMode: (darkMode: boolean) => void;
   setActiveHandler: (handlerId: string | null) => void;
   setActiveHandlerLock: (lock: boolean) => void;
   setDoc: (doc: Doc | null) => void;
@@ -27,7 +27,7 @@ export const useDemoStore = create<DemoState>()(
     (set) => ({
       scale: 1,
       origin: [0, 0],
-      theme: "light",
+      darkMode: false,
       activeHandler: "Select",
       activeHandlerLock: false,
       doc: null,
@@ -36,11 +36,11 @@ export const useDemoStore = create<DemoState>()(
       libraries: [],
       setScale: (scale) => set((state) => ({ scale })),
       setOrigin: (origin) => set((state) => ({ origin })),
-      setTheme: (theme) => {
+      setDarkMode: (darkMode) => {
         const root = window.document.documentElement;
-        root.classList.remove("light", "dark");
-        root.classList.add(theme);
-        set((state) => ({ theme }));
+        root.classList.remove("dark");
+        if (darkMode) root.classList.add("dark");
+        set((state) => ({ darkMode }));
       },
       setActiveHandler: (handlerId) =>
         set((state) => ({ activeHandler: handlerId })),
