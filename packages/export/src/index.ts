@@ -1,4 +1,4 @@
-import { Page, Canvas, geometry, themeColors, Shape } from "@dgmjs/core";
+import { Page, Canvas, geometry, themeColors } from "@dgmjs/core";
 import fileSaverPkg from "file-saver";
 import { Context } from "svgcanvas";
 const { saveAs } = fileSaverPkg;
@@ -17,70 +17,80 @@ type ExportImageOptions = {
 /**
  * Create and return a new canvas element with document rendered
  */
-function getImageCanvas(page: Page, options: ExportImageOptions) {
+function getImageCanvas(
+  canvas: Canvas,
+  page: Page,
+  options: ExportImageOptions
+): HTMLCanvasElement {
   const { scale, dark, fillBackground } = options;
   const theme = dark ? "dark" : "light";
   const colorVariables = themeColors[theme];
 
   // make a new canvas element for making image data
-  const canvasElement = document.createElement("canvas");
-  const canvas = new Canvas(canvasElement, scale);
-  let boundingBox = page.geViewRect(canvas);
+  const newCanvasElement = document.createElement("canvas");
+  const newCanvas = new Canvas(newCanvasElement, scale);
+  let boundingBox = page.geViewRect(newCanvas);
 
   // initialize new canvas
   boundingBox = geometry.expandRect(boundingBox, DEFAULT_MARGIN);
   const w = geometry.width(boundingBox);
   const h = geometry.height(boundingBox);
-  canvas.origin = [-boundingBox[0][0], -boundingBox[0][1]];
-  canvas.ratio = scale;
-  canvas.scale = 1;
-  canvas.colorVariables = colorVariables;
-  canvasElement.width = w * canvas.ratio;
-  canvasElement.height = h * canvas.ratio;
-  canvasElement.style.width = w + "px";
-  canvasElement.style.height = h + "px";
+  newCanvas.origin = [-boundingBox[0][0], -boundingBox[0][1]];
+  newCanvas.ratio = scale;
+  newCanvas.scale = 1;
+  newCanvas.colorVariables = colorVariables;
+  newCanvasElement.width = w * newCanvas.ratio;
+  newCanvasElement.height = h * newCanvas.ratio;
+  newCanvasElement.style.width = w + "px";
+  newCanvasElement.style.height = h + "px";
 
   // fill background
   if (fillBackground) {
-    canvas.context.fillStyle = canvas.resolveColor("$background");
-    canvas.context.fillRect(0, 0, canvasElement.width, canvasElement.height);
+    newCanvas.context.fillStyle = newCanvas.resolveColor("$background");
+    newCanvas.context.fillRect(
+      0,
+      0,
+      newCanvasElement.width,
+      newCanvasElement.height
+    );
   }
 
-  // update page
-  page.traverse((s) => {
-    if (s instanceof Shape) s.update(canvas);
-  });
+  // update and draw page to the new canvas
+  page.updateShapes(newCanvas);
+  page.draw(newCanvas);
 
-  // draw doc to the new canvas
-  page.draw(canvas);
-  return canvasElement;
+  // update page to (existing) canvas
+  page.updateShapes(canvas);
+  return newCanvasElement;
 }
 
 /**
  * Get Base64-encoded image data of doc
  */
 async function getImageDataUrl(
+  canvas: Canvas,
   page: Page,
   options: Partial<ExportImageOptions>
 ): Promise<string> {
-  const canvas = getImageCanvas(page, {
+  const canvasElement = getImageCanvas(canvas, page, {
     scale: 1,
     dark: false,
     fillBackground: true,
     format: "image/png",
     ...options,
   });
-  return canvas.toDataURL(options.format);
+  return canvasElement.toDataURL(options.format);
 }
 
 /**
  * Get Blob image data of doc
  */
 async function getImageBlob(
+  canvas: Canvas,
   page: Page,
   options: Partial<ExportImageOptions>
 ): Promise<Blob | null> {
-  const canvas = getImageCanvas(page, {
+  const canvasElement = getImageCanvas(canvas, page, {
     scale: 1,
     dark: false,
     fillBackground: true,
@@ -88,7 +98,7 @@ async function getImageBlob(
     ...options,
   });
   return new Promise((resolve) => {
-    canvas.toBlob((blob) => {
+    canvasElement.toBlob((blob) => {
       resolve(blob);
     }, options.format);
   });
@@ -139,12 +149,8 @@ async function getSVGImageData(
     svgCanvas.context.fillRect(0, 0, svgCanvasWidth, svgCanvasHeight);
   }
 
-  // update page
-  page.traverse((s) => {
-    if (s instanceof Shape) s.update(svgCanvas);
-  });
-
-  // Draw doc to the new canvas
+  // update and draw page to the new canvas
+  page.updateShapes(svgCanvas);
   page.draw(svgCanvas);
 
   // TODO: add fonts in defs (temporal impls)
@@ -159,6 +165,9 @@ async function getSVGImageData(
 
   // Return the SVG data
   const data = ctx.getSerializedSvg(true);
+
+  // update page to existing canvas
+  page.updateShapes(canvas);
 
   return data;
 }
@@ -175,7 +184,7 @@ async function exportImageAsFile(
 ) {
   switch (options.format) {
     case "image/png": {
-      const data = await getImageBlob(page, options);
+      const data = await getImageBlob(canvas, page, options);
       if (data) {
         saveAs(data, fileName);
       }
@@ -202,7 +211,7 @@ async function copyToClipboard(
 ) {
   switch (options.format) {
     case "image/png": {
-      const data = await getImageBlob(page, options);
+      const data = await getImageBlob(canvas, page, options);
       if (data) {
         navigator.clipboard.write([
           new ClipboardItem({
