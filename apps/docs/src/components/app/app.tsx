@@ -23,6 +23,9 @@ function App() {
     window.addEventListener("resize", () => {
       editor.fit();
     });
+    setTimeout(() => {
+      editor.repaint();
+    }, 100);
   };
 
   const handleShapeInitialize = (shape: Shape) => {
