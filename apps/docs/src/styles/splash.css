@@ -17,11 +17,8 @@ body div.sl-markdown-content {
   margin-top: 0;
 }
 
-body div.sl-markdown-content section,
-body div.sl-markdown-content canvas,
-body div.sl-markdown-content header,
-body div.sl-markdown-content button,
-body div.sl-markdown-content div,
-body div.sl-markdown-content img {
+.sl-markdown-content
+  :not(a, strong, em, del, span, input, code)
+  + :not(a, strong, em, del, span, input, code, :where(.not-content *)) {
   margin-top: 0;
 }
