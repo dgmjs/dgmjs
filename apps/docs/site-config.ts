@@ -35,11 +35,11 @@ export const siteConfig: SiteConfig = {
     },
     {
       title: "License",
-      href: "/getting-started/license/",
+      href: "/overview/license/",
     },
     {
       title: "Docs",
-      href: "/getting-started/quick-start/",
+      href: "/overview/getting-started/",
     },
   ],
 };

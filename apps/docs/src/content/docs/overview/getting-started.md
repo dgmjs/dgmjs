@@ -1,11 +1,10 @@
 ---
-title: Quick start
-description: shapes ...
+title: Getting started
 sidebar:
   order: 1
 ---
 
-This page explains how to quickly embed the dgm.js editor into the web.
+This page explains how to quickly embed the DGM.js editor into the web.
 
 ## Create React project
 
@@ -41,9 +40,9 @@ export default {
 @tailwind utilities;
 ```
 
-## Install dgm.js
+## Install packages
 
-To use dgm.js, you need to install two packages as below.
+To use DGM.js, you need to install two packages as below.
 
 ```sh
 npm i @dgmjs/core @dgmjs/react
@@ -65,11 +64,11 @@ Before inserting the actual component, first update the `index.html`. Here, appl
       rel="stylesheet"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>dgm.js example</title>
+    <title>DGM.js example</title>
   </head>
   <body>
     <div class="text-4xl p-2 text-center">
-      <a href="https://dgmjs.dev" class="underline" target="_blank">dgm.js</a> example
+      <a href="https://dgmjs.dev" class="underline" target="_blank">DGM.js</a> example
     </h1>
     <div id="root" class="absolute top-16 left-8 right-8 h-96"></div>
     <script type="module" src="/src/main.tsx"></script>
@@ -113,4 +112,4 @@ npm run dev
 
 Let's add a toolbar for adding shapes and a palette for editing styles. You can find simple code for this on StackBlitz below.
 
-[StackBlitz - dgm.js example](https://stackblitz.com/edit/dgmjs-example?file=src%2Fapp.tsx)
+[StackBlitz - DGM.js example](https://stackblitz.com/edit/dgmjs-example?file=src%2Fapp.tsx)

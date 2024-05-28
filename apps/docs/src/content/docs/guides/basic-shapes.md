@@ -3,7 +3,7 @@ title: Shapes
 description: shapes ...
 ---
 
-Basically, In dgm.js, you can create a diagram by combining the primitive shapes. Supported shape objects are:
+Basically, In DGM.js, you can create a diagram by combining the primitive shapes. Supported shape objects are:
 
 - Rectangle
 - Ellipse

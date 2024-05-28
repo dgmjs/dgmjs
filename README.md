@@ -19,7 +19,7 @@ An infinite canvas with _smart shapes_. It supports:
 
 ## Getting started
 
-- [Quick start](https://dgmjs.dev/getting-started/quick-start/)
+- [Get started](https://dgmjs.dev/overview/getting-started/)
 - [Minimal example (StackBlitz)](https://stackblitz.com/edit/dgmjs-example?file=src%2Fapp.tsx)
 - [DGM: Full-featured App](https://dgm.sh/home)
 
