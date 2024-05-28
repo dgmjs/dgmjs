@@ -1,9 +1,10 @@
 ---
 title: License
-description: shapes ...
+sidebar:
+  order: 4
 ---
 
-The **dgm.js** is an open-source library. However, using it for commercial purposes is prohibited. If you want to use it for commercial purposes, please contact contact@dgm.sh.
+The **DGM.js** is an open-source library. However, using it for commercial purposes is prohibited. If you want to use it for commercial purposes, please contact contact@dgm.sh.
 
 ---
 

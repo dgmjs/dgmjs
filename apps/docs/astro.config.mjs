@@ -13,7 +13,7 @@ export default defineConfig({
   integrations: [
     react(),
     starlight({
-      title: "dgm.js",
+      title: "DGM.js",
       plugins: [
         // Generate the documentation.
         CoreStarlightTypeDoc({
@@ -48,8 +48,8 @@ export default defineConfig({
       },
       sidebar: [
         {
-          label: "Getting started",
-          autogenerate: { directory: "getting-started" },
+          label: "Overview",
+          autogenerate: { directory: "overview" },
         },
         {
           label: "Guides",
