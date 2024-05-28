@@ -1,9 +1,8 @@
-![dgm.js](https://fs.dgm.sh/i/o8O6ttXomERQ5UW3cZOg9/lf@2x.png)
+![DGM.js](https://fs.dgm.sh/i/7GS5SV8W3uojHd3cbfVzJ/lwpx3u3x@2x.png)
 
-# dgm.js
+# DGM.js
 
 ![npm](https://img.shields.io/npm/v/@dgmjs/core.svg)
-
 
 An infinite canvas with _smart shapes_. It supports:
 
@@ -26,4 +25,4 @@ An infinite canvas with _smart shapes_. It supports:
 
 ## License
 
-DGM.js's source code and distributed packages are provided under the non-commercial DGM license. This license does not permit commercial use. If you wish to use dgm.js in a commercial product or enterprise, you will need to purchase a commercial license. To obtain a commercial license, please contact us at contact@dgm.sh.
+DGM.js's source code and distributed packages are provided under the non-commercial DGM license. This license does not permit commercial use. If you wish to use DGM.js in a commercial product or enterprise, you will need to purchase a commercial license. To obtain a commercial license, please contact us at contact@dgm.sh.

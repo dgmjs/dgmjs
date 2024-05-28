@@ -9,10 +9,10 @@ This page explains how to quickly embed the dgm.js editor into the web.
 
 ## Create React project
 
-First, create a React project. Here, Vite is used.
+First, create a React with TypeScript project. Here, Vite is used.
 
 ```sh
-npm create vite@latest my-project -- --template react
+npm create vite@latest my-project -- --template react-ts
 cd my-project
 ```
 

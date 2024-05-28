@@ -1,1 +1,1 @@
-# dgm.js demo
+# DGM.js demo
