@@ -1,6 +1,6 @@
 {
   "entryPoints": ["packages/*"],
-  "name": "dgm.js",
+  "name": "DGM.js",
   "entryPointStrategy": "packages",
   "includeVersion": false,
   "excludeExternals": true,

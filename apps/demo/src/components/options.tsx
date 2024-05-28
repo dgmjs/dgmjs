@@ -16,7 +16,7 @@ import { useDemoStore } from "@/demo-store";
 import { Button } from "./ui/button";
 
 export function Options() {
-  const { theme, setTheme } = useDemoStore();
+  const { darkMode, setDarkMode } = useDemoStore();
   return (
     <div className="flex justify-center items-center h-8 px-1">
       <Button
@@ -24,12 +24,11 @@ export function Options() {
         variant="ghost"
         className="h-8 w-8 p-0"
         onClick={() => {
-          const newTheme = theme === "light" ? "dark" : "light";
-          window.editor.setDarkMode(newTheme === "dark");
-          setTheme(newTheme);
+          window.editor.setDarkMode(!darkMode);
+          setDarkMode(!darkMode);
         }}
       >
-        {theme === "dark" ? <MoonIcon size={16} /> : <SunIcon size={16} />}
+        {darkMode ? <MoonIcon size={16} /> : <SunIcon size={16} />}
       </Button>
     </div>
   );

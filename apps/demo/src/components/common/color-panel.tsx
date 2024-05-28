@@ -24,7 +24,7 @@ interface ColorPanelProps {
 }
 
 export const ColorPanel: React.FC<ColorPanelProps> = ({ value, onChange }) => {
-  const { theme } = useDemoStore();
+  const { darkMode } = useDemoStore();
 
   const handleColorChange = (color: string) => {
     if (onChange) onChange(color);
@@ -40,7 +40,7 @@ export const ColorPanel: React.FC<ColorPanelProps> = ({ value, onChange }) => {
       <TabsContent value="basic">
         <div className="flex items-center justify-center py-2">
           <ColorPalette
-            theme={theme}
+            theme={darkMode ? "dark" : "light"}
             palette={simplePalette}
             onClick={handleColorChange}
           />
@@ -49,7 +49,7 @@ export const ColorPanel: React.FC<ColorPanelProps> = ({ value, onChange }) => {
       <TabsContent value="all">
         <div className="flex items-center justify-center py-2">
           <ColorPalette
-            theme={theme}
+            theme={darkMode ? "dark" : "light"}
             palette={fullPalette}
             className="gap-0"
             itemClassName="h-4 w-4 rounded-none hover:border"

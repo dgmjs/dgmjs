@@ -1026,6 +1026,15 @@ export class Page extends Shape {
   }
 
   /**
+   * Update shapes in the page. The page itself is also updated.
+   */
+  updateShapes(canvas: Canvas): void {
+    this.traverse((s) => {
+      if (s instanceof Shape) s.update(canvas);
+    });
+  }
+
+  /**
    * Render this shape
    */
   draw(canvas: Canvas, showDOM: boolean = false) {

@@ -9,4 +9,4 @@ title: "shapeInstantiator"
 
 ## Source
 
-[shapes.ts:2518](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2518)
+[shapes.ts:2527](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2527)

@@ -43,9 +43,12 @@ export const ColorField: React.FC<ColorFieldProps> = ({
   onValueChange,
   ...others
 }) => {
-  const { theme } = useDemoStore();
+  const { darkMode } = useDemoStore();
   const [color, setColor] = useState<string | undefined>(undefined);
-  const colorValue = evaluateColor(theme, color ?? "$background");
+  const colorValue = evaluateColor(
+    darkMode ? "dark" : "light",
+    color ?? "$background"
+  );
 
   useEffect(() => {
     setColor(value);
@@ -81,7 +84,10 @@ export const ColorField: React.FC<ColorFieldProps> = ({
             className="w-fit text-center"
           >
             <ColorPanel
-              value={value ?? evaluateColor(theme, "$background")}
+              value={
+                value ??
+                evaluateColor(darkMode ? "dark" : "light", "$background")
+              }
               onChange={(color) => setColor(color)}
             />
           </PopoverContent>

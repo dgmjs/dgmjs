@@ -27,7 +27,7 @@ Line shape
 
 #### Source
 
-[shapes.ts:1701](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1701)
+[shapes.ts:1710](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1710)
 
 ## Properties
 
@@ -323,7 +323,7 @@ Font weight
 
 #### Source
 
-[shapes.ts:1698](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1698)
+[shapes.ts:1707](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1707)
 
 ***
 
@@ -379,7 +379,7 @@ Shape's left position
 
 #### Source
 
-[shapes.ts:1697](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1697)
+[shapes.ts:1706](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1706)
 
 ***
 
@@ -471,7 +471,7 @@ Opacity
 
 #### Source
 
-[shapes.ts:1444](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1444)
+[shapes.ts:1453](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1453)
 
 ***
 
@@ -485,7 +485,7 @@ Opacity
 
 #### Source
 
-[shapes.ts:1443](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1443)
+[shapes.ts:1452](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1452)
 
 ***
 
@@ -671,7 +671,7 @@ Tags
 
 #### Source
 
-[shapes.ts:1699](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1699)
+[shapes.ts:1708](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1708)
 
 ***
 
@@ -835,7 +835,7 @@ Determines whether this shape contains a point in GCS
 
 #### Source
 
-[shapes.ts:1488](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1488)
+[shapes.ts:1497](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1497)
 
 ***
 
@@ -1059,7 +1059,7 @@ Import shape from JSON
 
 #### Source
 
-[shapes.ts:1718](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1718)
+[shapes.ts:1727](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1727)
 
 ***
 
@@ -1169,7 +1169,7 @@ segment line to end
 
 #### Source
 
-[shapes.ts:1479](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1479)
+[shapes.ts:1488](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1488)
 
 ***
 
@@ -1363,7 +1363,7 @@ bounding rect.
 
 #### Source
 
-[shapes.ts:1970](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1970)
+[shapes.ts:1979](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1979)
 
 ***
 
@@ -1427,7 +1427,7 @@ Return is the path is closed
 
 #### Source
 
-[shapes.ts:1470](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1470)
+[shapes.ts:1479](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1479)
 
 ***
 
@@ -1585,7 +1585,7 @@ Determines whether this shape overlaps a given rect
 
 #### Source
 
-[shapes.ts:1511](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1511)
+[shapes.ts:1520](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1520)
 
 ***
 
@@ -1674,7 +1674,7 @@ Draw this shape
 
 #### Source
 
-[shapes.ts:1728](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1728)
+[shapes.ts:1737](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1737)
 
 ***
 
@@ -1710,7 +1710,7 @@ an end point the path should be drawn to
 
 #### Source
 
-[shapes.ts:1773](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1773)
+[shapes.ts:1782](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1782)
 
 ***
 
@@ -1754,7 +1754,7 @@ Return default outline
 
 #### Source
 
-[shapes.ts:1954](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1954)
+[shapes.ts:1963](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1963)
 
 ***
 
@@ -1810,7 +1810,7 @@ Export shape to JSON
 
 #### Source
 
-[shapes.ts:1710](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1710)
+[shapes.ts:1719](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1719)
 
 ***
 

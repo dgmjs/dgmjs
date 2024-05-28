@@ -20,7 +20,11 @@ export interface DGMEditorCoreProps
   > {
   options?: Partial<EditorOptions>;
   plugins?: Plugin[];
+  enabled?: boolean;
+  darkMode?: boolean;
   showGrid?: boolean;
+  snapToGrid?: boolean;
+  // snapToObject?: boolean;
   onMount?: (editor: Editor) => void;
   onSelectionChange?: (selections: Shape[]) => void;
   onCurrentPageChange?: (page: Page) => void;
@@ -44,7 +48,11 @@ export interface DGMEditorCoreProps
 export const DGMEditorCore: React.FC<DGMEditorCoreProps> = ({
   options,
   plugins,
+  enabled = true,
+  darkMode = false,
   showGrid = false,
+  snapToGrid = false,
+  // snapToObject = false,
   onMount,
   onSelectionChange,
   onCurrentPageChange,
@@ -143,8 +151,20 @@ export const DGMEditorCore: React.FC<DGMEditorCoreProps> = ({
   }, []);
 
   useEffect(() => {
+    editorRef.current?.setEnabled(enabled);
+  }, [enabled]);
+
+  useEffect(() => {
+    editorRef.current?.setDarkMode(darkMode);
+  }, [darkMode]);
+
+  useEffect(() => {
     editorRef.current?.setShowGrid(showGrid);
   }, [showGrid]);
+
+  useEffect(() => {
+    editorRef.current?.setSnapToGrid(snapToGrid);
+  }, [snapToGrid]);
 
   return <div ref={editorHolderRef} {...others} />;
 };

@@ -33,7 +33,7 @@ Rectangle Factory Handler
 
 #### Source
 
-[editor.ts:1155](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1155)
+[editor.ts:1179](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1179)
 
 ## Properties
 
@@ -77,7 +77,7 @@ Rectangle Factory Handler
 
 #### Source
 
-[editor.ts:1152](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1152)
+[editor.ts:1176](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1176)
 
 ***
 
@@ -91,7 +91,7 @@ Rectangle Factory Handler
 
 #### Source
 
-[editor.ts:1153](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1153)
+[editor.ts:1177](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1177)
 
 ***
 
@@ -125,7 +125,7 @@ Activate the handler
 
 #### Source
 
-[editor.ts:1181](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1181)
+[editor.ts:1205](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1205)
 
 ***
 
@@ -149,7 +149,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[editor.ts:1172](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1172)
+[editor.ts:1196](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1196)
 
 ***
 
@@ -173,7 +173,7 @@ Deactivate the handler
 
 #### Source
 
-[editor.ts:1189](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1189)
+[editor.ts:1213](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1213)
 
 ***
 
@@ -237,7 +237,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[editor.ts:1234](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1234)
+[editor.ts:1258](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1258)
 
 ***
 
@@ -329,7 +329,7 @@ keyUp
 
 #### Source
 
-[editor.ts:1229](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1229)
+[editor.ts:1253](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1253)
 
 ***
 

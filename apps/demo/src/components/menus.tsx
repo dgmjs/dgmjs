@@ -24,7 +24,7 @@ import { useDemoStore } from "@/demo-store";
 import { ExportImageFormat, exportImageAsFile } from "@dgmjs/export";
 
 export function Menus() {
-  const { setDoc, setCurrentPage } = useDemoStore();
+  const { setDoc, setCurrentPage, darkMode } = useDemoStore();
 
   const handleNew = () => {
     window.editor.newDoc();
@@ -70,7 +70,7 @@ export function Menus() {
     const page = window.editor.currentPage!;
     const exportOptions = {
       scale: 1,
-      dark: false,
+      dark: darkMode,
       fillBackground: true,
       format: "image/png" as ExportImageFormat,
     };

@@ -1,7 +1,7 @@
 {
   "name": "@dgmjs/export",
-  "version": "0.1.0",
-  "description": "Image export utilities for dgm.js",
+  "version": "0.4.0",
+  "description": "Image export utilities for DGM.js",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

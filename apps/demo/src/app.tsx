@@ -136,7 +136,7 @@ function App() {
     <div className="absolute inset-0 h-[calc(100dvh)] select-none">
       <EditorWrapper
         className="absolute inset-y-0 left-56 right-56"
-        theme={demoStore.theme}
+        darkMode={demoStore.darkMode}
         options={{
           keymapEventTarget: window,
         }}

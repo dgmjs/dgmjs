@@ -26,11 +26,11 @@ import { DEFAULT_FONT_SIZE } from "@/const";
 
 export function TextInplaceEditorToolbar({
   tiptapEditor,
-  theme,
+  darkMode,
   shape,
 }: {
   tiptapEditor: TiptapEditor;
-  theme: "light" | "dark";
+  darkMode: boolean;
   shape: Box | null;
 }) {
   const [state, setState] = useState({
@@ -76,7 +76,7 @@ export function TextInplaceEditorToolbar({
         </PopoverTrigger>
         <PopoverContent sideOffset={8} className="w-fit dark:bg-slate-950">
           <ColorPalette
-            theme={theme}
+            theme={darkMode ? "dark" : "light"}
             palette={simplePalette}
             onClick={(value: any) => {
               (tiptapEditor.chain().focus() as any).setColor(value).run();
@@ -172,12 +172,8 @@ export function TextInplaceEditorToolbar({
   );
 }
 
-interface EditorWrapperProps extends DGMEditorProps {
-  theme: "light" | "dark";
-}
-
-export const EditorWrapper: React.FC<EditorWrapperProps> = ({
-  theme,
+export const EditorWrapper: React.FC<DGMEditorProps> = ({
+  darkMode = false,
   onMount,
   ...props
 }) => {
@@ -192,7 +188,7 @@ export const EditorWrapper: React.FC<EditorWrapperProps> = ({
         }}
         textInplaceEditorToolbar={
           <TextInplaceEditorToolbar
-            theme={theme}
+            darkMode={darkMode}
             tiptapEditor={tiptapEditor}
             shape={editingText}
           />

@@ -5,11 +5,13 @@ prev: false
 title: "getImageBlob"
 ---
 
-> **getImageBlob**(`page`, `options`): `Promise`\<`Blob` \| `null`\>
+> **getImageBlob**(`canvas`, `page`, `options`): `Promise`\<`Blob` \| `null`\>
 
 Get Blob image data of doc
 
 ## Parameters
+
+• **canvas**: `Canvas`
 
 • **page**: `Page`
 
@@ -21,4 +23,4 @@ Get Blob image data of doc
 
 ## Source
 
-[index.ts:74](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L74)
+[index.ts:88](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L88)
