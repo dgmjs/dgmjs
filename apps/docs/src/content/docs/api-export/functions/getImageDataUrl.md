@@ -5,11 +5,13 @@ prev: false
 title: "getImageDataUrl"
 ---
 
-> **getImageDataUrl**(`page`, `options`): `Promise`\<`string`\>
+> **getImageDataUrl**(`canvas`, `page`, `options`): `Promise`\<`string`\>
 
 Get Base64-encoded image data of doc
 
 ## Parameters
+
+• **canvas**: `Canvas`
 
 • **page**: `Page`
 
@@ -21,4 +23,4 @@ Get Base64-encoded image data of doc
 
 ## Source
 
-[index.ts:57](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L57)
+[index.ts:70](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L70)

@@ -25,4 +25,4 @@ Get SVG image data of doc
 
 ## Source
 
-[index.ts:95](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L95)
+[index.ts:110](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L110)

@@ -811,7 +811,7 @@ Page do not contain a point
 
 #### Source
 
-[shapes.ts:1073](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1073)
+[shapes.ts:1082](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1082)
 
 ***
 
@@ -837,7 +837,7 @@ Render this shape
 
 #### Source
 
-[shapes.ts:1031](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1031)
+[shapes.ts:1040](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1040)
 
 ***
 
@@ -1051,7 +1051,7 @@ Return the page's view rect in GCS
 
 #### Source
 
-[shapes.ts:1058](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1058)
+[shapes.ts:1067](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1067)
 
 ***
 
@@ -1071,7 +1071,7 @@ Returns a bounding box containing all shapes in the doc
 
 #### Source
 
-[shapes.ts:1043](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1043)
+[shapes.ts:1052](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1052)
 
 ***
 
@@ -1527,7 +1527,7 @@ Page do not overlap with anything
 
 #### Source
 
-[shapes.ts:1080](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1080)
+[shapes.ts:1089](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1089)
 
 ***
 
@@ -1833,3 +1833,23 @@ Update shape
 #### Source
 
 [shapes.ts:495](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L495)
+
+***
+
+### updateShapes()
+
+> **updateShapes**(`canvas`): `void`
+
+Update shapes in the page. The page itself is also updated.
+
+#### Parameters
+
+• **canvas**: [`Canvas`](/api-core/classes/canvas/)
+
+#### Returns
+
+`void`
+
+#### Source
+
+[shapes.ts:1031](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1031)
