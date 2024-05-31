@@ -14,6 +14,7 @@
 import { Store } from "./store";
 import type { Obj } from "./obj";
 import { deserialize, serialize } from "./serialize";
+import { Base64 } from "js-base64";
 
 interface ClipboardData {
   objs?: Obj[];
@@ -38,7 +39,7 @@ class Clipboard {
     const clipboardItem: Record<string, Blob> = {};
     if (Array.isArray(data.objs)) {
       const buffer = serialize(data.objs);
-      const encoded = `<dgm>${btoa(JSON.stringify(buffer))}</dgm>`;
+      const encoded = `<dgm>${Base64.encode(JSON.stringify(buffer))}</dgm>`;
       const blob = new Blob([encoded], { type: "text/html" });
       clipboardItem["text/html"] = blob;
     }
@@ -65,7 +66,7 @@ class Clipboard {
           const text = await blob.text();
           const match = text.match(/<dgm>(.*)<\/dgm>/);
           if (match) {
-            const buffer = JSON.parse(atob(match[1]));
+            const buffer = JSON.parse(Base64.decode(match[1]));
             data.objs = deserialize(this.store.instantiator, buffer);
           }
         }
