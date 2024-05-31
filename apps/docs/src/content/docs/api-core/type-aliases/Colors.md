@@ -9,4 +9,4 @@ title: "Colors"
 
 ## Source
 
-[colors.ts:43](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/colors.ts#L43)
+[colors.ts:141](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/colors.ts#L141)
