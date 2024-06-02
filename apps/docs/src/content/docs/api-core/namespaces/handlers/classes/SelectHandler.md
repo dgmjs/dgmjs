@@ -33,7 +33,7 @@ Select Handler
 
 #### Source
 
-[editor.ts:1209](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1209)
+[editor.ts:1390](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1390)
 
 ## Properties
 
@@ -67,7 +67,7 @@ Select Handler
 
 #### Source
 
-[editor.ts:1206](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1206)
+[editor.ts:1387](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1387)
 
 ***
 
@@ -81,7 +81,7 @@ Select Handler
 
 #### Source
 
-[editor.ts:1207](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1207)
+[editor.ts:1388](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1388)
 
 ## Methods
 
@@ -105,7 +105,7 @@ Activate the handler
 
 #### Source
 
-[editor.ts:1235](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1235)
+[editor.ts:1416](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1416)
 
 ***
 
@@ -129,7 +129,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[editor.ts:1226](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1226)
+[editor.ts:1407](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1407)
 
 ***
 
@@ -153,7 +153,7 @@ Deactivate the handler
 
 #### Source
 
-[editor.ts:1243](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1243)
+[editor.ts:1424](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1424)
 
 ***
 
@@ -275,7 +275,7 @@ Triggered when activated
 
 #### Source
 
-[editor.ts:1250](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1250)
+[editor.ts:1431](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1431)
 
 ***
 
@@ -299,7 +299,7 @@ Triggered when deactivate
 
 #### Source
 
-[editor.ts:1255](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1255)
+[editor.ts:1436](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1436)
 
 ***
 

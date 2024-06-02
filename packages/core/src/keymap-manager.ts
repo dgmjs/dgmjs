@@ -328,7 +328,7 @@ export class KeymapManager {
     eventTarget.addEventListener(
       "keydown",
       (event) => {
-        if (this.editor.enabled) {
+        if (this.editor.getEnabled()) {
           // Disable Keymap in Input/TextArea/CodeMirror/ProseMirror or Modal Dialog
           if (this.inEditMode() || this.inModalDialog()) {
             // Allow default browser's actions

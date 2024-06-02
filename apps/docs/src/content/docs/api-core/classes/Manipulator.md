@@ -19,7 +19,7 @@ Manipulator
 
 #### Source
 
-[editor.ts:1594](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1594)
+[editor.ts:1775](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1775)
 
 ## Properties
 
@@ -31,7 +31,7 @@ Controllers of the manipulator
 
 #### Source
 
-[editor.ts:1587](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1587)
+[editor.ts:1768](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1768)
 
 ***
 
@@ -43,7 +43,7 @@ Dragging controller
 
 #### Source
 
-[editor.ts:1592](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1592)
+[editor.ts:1773](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1773)
 
 ## Methods
 
@@ -65,7 +65,7 @@ Draw controllers
 
 #### Source
 
-[editor.ts:1718](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1718)
+[editor.ts:1899](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1899)
 
 ***
 
@@ -89,7 +89,7 @@ Draw hovering for the shape
 
 #### Source
 
-[editor.ts:1730](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1730)
+[editor.ts:1911](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1911)
 
 ***
 
@@ -105,7 +105,7 @@ Returns one of controllers is dragging or not
 
 #### Source
 
-[editor.ts:1602](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1602)
+[editor.ts:1783](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1783)
 
 ***
 
@@ -131,7 +131,7 @@ handled or not
 
 #### Source
 
-[editor.ts:1685](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1685)
+[editor.ts:1866](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1866)
 
 ***
 
@@ -157,7 +157,7 @@ handled or not
 
 #### Source
 
-[editor.ts:1702](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1702)
+[editor.ts:1883](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1883)
 
 ***
 
@@ -183,7 +183,7 @@ cursor object
 
 #### Source
 
-[editor.ts:1619](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1619)
+[editor.ts:1800](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1800)
 
 ***
 
@@ -207,7 +207,7 @@ Returns true if mouse cursor is inside the shape or control points
 
 #### Source
 
-[editor.ts:1609](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1609)
+[editor.ts:1790](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1790)
 
 ***
 
@@ -233,7 +233,7 @@ handled or not
 
 #### Source
 
-[editor.ts:1639](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1639)
+[editor.ts:1820](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1820)
 
 ***
 
@@ -259,7 +259,7 @@ handled or not
 
 #### Source
 
-[editor.ts:1657](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1657)
+[editor.ts:1838](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1838)
 
 ***
 
@@ -285,4 +285,4 @@ handled or not
 
 #### Source
 
-[editor.ts:1672](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1672)
+[editor.ts:1853](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1853)

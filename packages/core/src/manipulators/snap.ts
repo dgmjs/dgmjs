@@ -509,7 +509,7 @@ class Snap {
   toGrid(editor: Editor, point: number[]) {
     if (editor.snapToGrid) {
       if (this.x < 0) {
-        const gx = editor.gridSize[0];
+        const gx = editor.getGridSize()[0];
         let mx = Math.round(point[0] / gx) * gx;
         this.x = point[0];
         this.snappedX = mx;
@@ -517,7 +517,7 @@ class Snap {
         this.typeX = "grid";
       }
       if (this.y < 0) {
-        const gy = editor.gridSize[1];
+        const gy = editor.getGridSize()[1];
         let my = Math.round(point[1] / gy) * gy;
         this.y = point[1];
         this.snappedY = my;

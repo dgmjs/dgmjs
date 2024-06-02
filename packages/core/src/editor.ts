@@ -117,79 +117,243 @@ function createPointerEvent(
  * The editor
  */
 export class Editor {
+  /**
+   * The editor options
+   * @private
+   */
   options: EditorOptions;
+
+  /**
+   * The plugins
+   */
   plugins: Record<string, Plugin>;
+
+  /**
+   * The platform
+   */
   platform: string;
 
+  /**
+   * The event emitter for current page change
+   */
   onCurrentPageChange: TypedEvent<Page>;
+
+  /**
+   * The event emitter for active handler change
+   */
   onActiveHandlerChange: TypedEvent<string>;
+
+  /**
+   * The event emitter for active handler lock change
+   */
   onActiveHandlerLockChange: TypedEvent<boolean>;
+
+  /**
+   * The event emitter for zoom
+   */
   onZoom: TypedEvent<number>;
+
+  /**
+   * The event emitter for scroll
+   */
   onScroll: TypedEvent<number[]>;
+
+  /**
+   * The event emitter for pointer down
+   */
   onPointerDown: TypedEvent<CanvasPointerEvent>;
+
+  /**
+   * The event emitter for pointer move
+   */
   onPointerMove: TypedEvent<CanvasPointerEvent>;
+
+  /**
+   * The event emitter for pointer up
+   */
   onPointerUp: TypedEvent<CanvasPointerEvent>;
+
+  /**
+   * The event emitter for double click
+   */
   onDblClick: TypedEvent<DblClickEvent>;
+
+  /**
+   * The event emitter for key down
+   */
   onKeyDown: TypedEvent<KeyboardEvent>;
+
+  /**
+   * The event emitter for drag start
+   */
   onDragStart: TypedEvent<DragEvent>;
+
+  /**
+   * The event emitter for drag
+   */
   onDrag: TypedEvent<DragEvent>;
+
+  /**
+   * The event emitter for drag end
+   */
   onDragEnd: TypedEvent<DragEvent>;
+
+  /**
+   * The event emitter for file drop
+   */
   onFileDrop: TypedEvent<FileDropEvent>;
+
+  /**
+   * The event emitter for repaint
+   */
   onRepaint: TypedEvent<void>;
 
+  /**
+   * The store object
+   */
   store: Store;
+
+  /**
+   * The transform object
+   */
   transform: Transform;
+
+  /**
+   * The clipboard object
+   */
   clipboard: Clipboard;
+
+  /**
+   * The selection manager
+   */
   selection: SelectionManager;
+
+  /**
+   * The shape factory
+   */
   factory: ShapeFactory;
+
+  /**
+   * The actions
+   */
   actions: Actions;
+
+  /**
+   * The keymap manager
+   */
   keymap: KeymapManager;
+
+  /**
+   * The auto scroller
+   * @private
+   */
   autoScroller: AutoScroller;
 
+  /**
+   * The current page
+   */
   currentPage: Page | null;
+
+  /**
+   * The parent element
+   */
   parent: HTMLElement;
+
+  /**
+   * The canvas element
+   */
   canvasElement: HTMLCanvasElement;
+
+  /**
+   * The canvas object
+   */
   canvas: Canvas;
 
   /**
    * The enabled state
+   * @private
    */
   enabled: boolean;
 
   /**
    * The dark mode
+   * @private
    */
   darkMode: boolean;
 
   /**
    * The grid size
+   * @private
    */
   gridSize: number[];
 
   /**
    * The show grid option
+   * @private
    */
   showGrid: boolean;
 
   /**
    * The snap to grid option
+   * @private
    */
   snapToGrid: boolean;
 
   /**
    * The snap to object option (Not implemented yet)
+   * @private
    */
   snapToObject: boolean;
+
+  /**
+   * The handlers
+   * @private
+   */
   handlers: Record<string, Handler>;
-  activeHandlerId: string | null;
+
+  /**
+   * The active handler
+   */
   activeHandler: Handler | null;
+
+  /**
+   * The active handler lock
+   */
   activeHandlerLock: boolean;
+
+  /**
+   * @private
+   */
   leftButtonDown: boolean;
+
+  /**
+   * @private
+   */
   downX: number;
+
+  /**
+   * @private
+   */
   downY: number;
+
+  /**
+   * @private
+   */
   isPinching: boolean;
+
+  /**
+   * @private
+   */
   initialScale: number;
+
+  /**
+   * @private
+   */
   initialDistance: number;
+
+  /**
+   * @private
+   */
   touchPoint: number[];
 
   /**
@@ -272,8 +436,6 @@ export class Editor {
     this.snapToGrid = false;
     this.snapToObject = false;
     this.handlers = {};
-    this.addHandlers(this.options.handlers ?? []);
-    this.activeHandlerId = null;
     this.activeHandler = null;
     this.activeHandlerLock = false;
     this.leftButtonDown = false; // To check mouse left button down in mouse move event.
@@ -284,12 +446,16 @@ export class Editor {
     this.initialDistance = 0;
     this.touchPoint = [-1, -1];
     this.initializeState();
+    this.initializeHandlers();
     this.initializeCanvas();
     this.initializeKeymap();
     this.activatePlugins();
     if (this.options.onReady) this.options.onReady(this);
   }
 
+  /**
+   * @private
+   */
   detectPlatform(): string {
     const p = navigator.platform.toLowerCase();
     if (p.indexOf("mac") > -1) {
@@ -310,6 +476,18 @@ export class Editor {
     this.transform.onUndo.addListener(() => this.repaint());
     this.transform.onRedo.addListener(() => this.repaint());
     this.selection.onChange.addListener(() => this.repaint());
+  }
+
+  /**
+   * @private
+   */
+  initializeHandlers() {
+    this.options.handlers.forEach((handler) => {
+      this.handlers[handler.id] = handler;
+    });
+    if (!this.options.defaultHandlerId && this.options.handlers.length > 0) {
+      this.options.defaultHandlerId = this.options.handlers[0].id;
+    }
   }
 
   /**
@@ -574,6 +752,7 @@ export class Editor {
 
   /**
    * Activate plugins
+   * @private
    */
   activatePlugins() {
     for (const plugin of Object.values(this.plugins)) {
@@ -583,6 +762,7 @@ export class Editor {
 
   /**
    * Deactivate plugins
+   * @private
    */
   deactivatePlugins() {
     for (const plugin of Object.values(this.plugins)) {
@@ -598,7 +778,14 @@ export class Editor {
   }
 
   /**
-   * Set enable or disable
+   * Get enabled state
+   */
+  getEnabled(): boolean {
+    return this.enabled;
+  }
+
+  /**
+   * Set enabled state
    */
   setEnabled(enabled: boolean) {
     this.enabled = enabled;
@@ -652,6 +839,13 @@ export class Editor {
   }
 
   /**
+   * Get dark mode
+   */
+  getDarkMode(): boolean {
+    return this.darkMode;
+  }
+
+  /**
    * Set dark mode
    */
   setDarkMode(dark: boolean) {
@@ -664,11 +858,25 @@ export class Editor {
   }
 
   /**
+   * Get grid size
+   */
+  getGridSize(): number[] {
+    return this.gridSize;
+  }
+
+  /**
    * Set grid size
    */
   setGridSize(gridSize: number[]) {
     this.gridSize = gridSize;
     this.repaint();
+  }
+
+  /**
+   * Get show grid state
+   */
+  getShowGrid(): boolean {
+    return this.showGrid;
   }
 
   /**
@@ -680,10 +888,24 @@ export class Editor {
   }
 
   /**
+   * Get snap to grid
+   */
+  getSnapToGrid(): boolean {
+    return this.snapToGrid;
+  }
+
+  /**
    * Set snap to grid
    */
   setSnapToGrid(value: boolean) {
     this.snapToGrid = value;
+  }
+
+  /**
+   * Get snap to object
+   */
+  getSnapToObject(): boolean {
+    return this.snapToObject;
   }
 
   /**
@@ -702,47 +924,10 @@ export class Editor {
   }
 
   /**
-   * Set canvas element size
-   */
-  setSize(width: number, height: number) {
-    this.canvasElement.width = width;
-    this.canvasElement.height = height;
-    // Setup for High-DPI (Retina) Display
-    this.canvasElement.width = Math.floor(width * this.canvas.ratio);
-    this.canvasElement.height = Math.floor(height * this.canvas.ratio);
-    this.canvasElement.style.width = width + "px";
-    this.canvasElement.style.height = height + "px";
-    this.repaint();
-  }
-
-  /**
-   * Return the size of canvas element in CCS
-   */
-  getSize(): number[] {
-    return [this.canvasElement.width, this.canvasElement.height];
-  }
-
-  /**
    * Get origin point in CCS
    */
   getOrigin(): number[] {
     return this.canvas.origin;
-  }
-
-  /**
-   * Get screen center point in GCS
-   */
-  getCenter(): number[] {
-    const sz = this.getSize();
-    return this.canvas.globalCoordTransformRev([sz[0] / 2, sz[1] / 2]);
-  }
-
-  /**
-   * Get bounding rect in GCS
-   */
-  getBoundingRect(): number[][] {
-    const rect: number[][] = [[0, 0], this.getSize()];
-    return rect.map((p) => this.canvas.globalCoordTransformRev(p));
   }
 
   /**
@@ -762,6 +947,50 @@ export class Editor {
    */
   moveOrigin(dx: number, dy: number) {
     this.setOrigin(this.canvas.origin[0] + dx, this.canvas.origin[1] + dy);
+  }
+
+  /**
+   * Return the size of canvas element in CCS
+   */
+  getSize(): number[] {
+    return [this.canvasElement.width, this.canvasElement.height];
+  }
+
+  /**
+   * Set canvas element size
+   */
+  setSize(width: number, height: number) {
+    this.canvasElement.width = width;
+    this.canvasElement.height = height;
+    // Setup for High-DPI (Retina) Display
+    this.canvasElement.width = Math.floor(width * this.canvas.ratio);
+    this.canvasElement.height = Math.floor(height * this.canvas.ratio);
+    this.canvasElement.style.width = width + "px";
+    this.canvasElement.style.height = height + "px";
+    this.repaint();
+  }
+
+  /**
+   * Get screen center point in GCS
+   */
+  getCenter(): number[] {
+    const sz = this.getSize();
+    return this.canvas.globalCoordTransformRev([sz[0] / 2, sz[1] / 2]);
+  }
+
+  /**
+   * Get bounding rect in GCS
+   */
+  getBoundingRect(): number[][] {
+    const rect: number[][] = [[0, 0], this.getSize()];
+    return rect.map((p) => this.canvas.globalCoordTransformRev(p));
+  }
+
+  /**
+   * Get scale
+   */
+  getScale(): number {
+    return this.canvas.scale;
   }
 
   /**
@@ -785,14 +1014,7 @@ export class Editor {
   }
 
   /**
-   * Get scale
-   */
-  getScale(): number {
-    return this.canvas.scale;
-  }
-
-  /**
-   * Set zoom
+   * Set zoom scale while keeping the screen center
    */
   zoom(scale: number = 1) {
     const center = this.getCenter();
@@ -874,40 +1096,6 @@ export class Editor {
   }
 
   /**
-   * Add an array of handlers
-   * Note: the first handler is set as default handler
-   */
-  addHandlers(handlers: Handler[]) {
-    handlers.forEach((handler, index) => {
-      this.addHandler(handler);
-    });
-    if (!this.options.defaultHandlerId && handlers.length > 0) {
-      this.options.defaultHandlerId = handlers[0].id;
-    }
-  }
-
-  /**
-   * Add a handler
-   */
-  addHandler(handler: Handler) {
-    this.handlers[handler.id] = handler;
-  }
-
-  /**
-   * Remove a handler by id
-   */
-  removeHandler(id: string) {
-    delete this.handlers[id];
-  }
-
-  /**
-   * Get a handler by id
-   */
-  getHandler(id: string): Handler {
-    return this.handlers[id];
-  }
-
-  /**
    * Get the active handler
    */
   getActiveHandler(): Handler | null {
@@ -915,29 +1103,19 @@ export class Editor {
   }
 
   /**
-   * Get the active handler id
-   */
-  getActiveHandlerId(): string | null {
-    return this.activeHandlerId;
-  }
-
-  /**
-   * Clear all handlers
-   */
-  clearHandlers() {
-    this.handlers = {};
-  }
-
-  /**
    * Activate a handler by id
    */
   activateHandler(id: string) {
-    if (this.activeHandlerId !== id) {
-      if (this.activeHandler) this.activeHandler.deactivate(this);
-      this.activeHandlerId = id;
-      this.activeHandler = this.handlers[this.activeHandlerId];
-      this.activeHandler.activate(this);
-      this.onActiveHandlerChange.emit(this.activeHandlerId);
+    const handler = this.handlers[id];
+    if (this.activeHandler !== handler) {
+      if (this.activeHandler) {
+        this.activeHandler.deactivate(this);
+      }
+      if (handler) {
+        this.activeHandler = handler;
+        this.activeHandler.activate(this);
+        this.onActiveHandlerChange.emit(handler.id);
+      }
     }
   }
 
@@ -969,6 +1147,7 @@ export class Editor {
 
   /**
    * Clear canvas background
+   * @private
    */
   clearBackground(canvas: Canvas) {
     const g = canvas.context;
@@ -982,6 +1161,7 @@ export class Editor {
 
   /**
    * Draw the grid
+   * @private
    */
   drawGrid(canvas: Canvas) {
     const scale = this.getScale();
@@ -1049,6 +1229,7 @@ export class Editor {
 
   /**
    * Draw selection
+   * @private
    */
   drawSelection() {
     if (this.activeHandler) {
