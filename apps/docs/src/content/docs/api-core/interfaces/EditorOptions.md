@@ -59,7 +59,7 @@ title: "EditorOptions"
 
 ### keymap
 
-> **keymap**: `KeyMap`
+> **keymap**: [`KeyMap`](/api-core/type-aliases/keymap/)
 
 #### Source
 

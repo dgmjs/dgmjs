@@ -52,7 +52,7 @@ function Editor() {
 
 | Prop | Type | Default |
 | ---- | ---- | ------- |
-| `editor` | `Editor` | |
+| `editor` | [`Editor`](/api-core/classes/editor/) | |
 | `toolbar` | `React.ReactNode` | |
-| `onMount` | `(tiptapEditor: TiptapEditor) => void` | |
-| `onOpen` | `(shape: Box) => void` | |
+| `onMount` | (`tiptapEditor`: [`TiptapEditor`](https://tiptap.dev/docs/editor/api/editor)) => `void` | |
+| `onOpen` | (`shape`: [`Box`](/api-core/classes/box/)) => `void` | |

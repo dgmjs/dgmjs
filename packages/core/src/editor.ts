@@ -302,6 +302,9 @@ export class Editor {
     return "unknown";
   }
 
+  /**
+   * @private
+   */
   initializeState() {
     this.transform.onTransaction.addListener(() => this.repaint());
     this.transform.onUndo.addListener(() => this.repaint());
@@ -309,6 +312,9 @@ export class Editor {
     this.selection.onChange.addListener(() => this.repaint());
   }
 
+  /**
+   * @private
+   */
   initializeCanvas() {
     this.canvasElement = document.createElement("canvas");
     this.canvasElement.tabIndex = 0; // enable focus
@@ -541,6 +547,9 @@ export class Editor {
     });
   }
 
+  /**
+   * @private
+   */
   initializeKeymap() {
     this.keymap.bind(this.options.keymap ?? {});
     // handle global key events
@@ -594,6 +603,13 @@ export class Editor {
   setEnabled(enabled: boolean) {
     this.enabled = enabled;
     this.canvasElement.style.opacity = enabled ? "1" : "0.5";
+  }
+
+  /**
+   * Get current page
+   */
+  getCurrentPage(): Page | null {
+    return this.currentPage;
   }
 
   /**
@@ -889,6 +905,20 @@ export class Editor {
    */
   getHandler(id: string): Handler {
     return this.handlers[id];
+  }
+
+  /**
+   * Get the active handler
+   */
+  getActiveHandler(): Handler | null {
+    return this.activeHandler;
+  }
+
+  /**
+   * Get the active handler id
+   */
+  getActiveHandlerId(): string | null {
+    return this.activeHandlerId;
   }
 
   /**

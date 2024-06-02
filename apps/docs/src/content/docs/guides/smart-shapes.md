@@ -117,7 +117,8 @@ The script bound to `render` should code how to draw the shape. The below code i
   (def! t (. shape :top))
   (def! b (. shape :bottom))
   (def! xc (/ (+ l r) 2))
-  (. canvas :polygon [[xc t] [r b] [l b]])
+  (def! seed (. shape :getSeed))
+  (. canvas :polygon [[xc t] [r b] [l b]] seed)
   (. shape :renderText canvas))
 ```
 
@@ -129,9 +130,10 @@ You can use the shape's default rendering behavor. The below code is draw the cr
   (def! r (. shape :right))
   (def! t (. shape :top))
   (def! b (. shape :bottom))
+  (def! seed (. shape :getSeed))
   (. shape :renderDefault canvas)
-  (. canvas :line l t r b)
-  (. canvas :line r t l b))
+  (. canvas :line l t r b seed)
+  (. canvas :line r t l b seed))
 ```
 
 ### outline

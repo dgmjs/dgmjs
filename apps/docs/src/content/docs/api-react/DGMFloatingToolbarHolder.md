@@ -37,7 +37,7 @@ function Editor() {
 
 | Prop | Type | Default |
 | ---- | ---- | ------- |
-| `editor` | `Editor` | |
+| `editor` | [`Editor`](/api-core/classes/editor/) | |
 | `toolbar` | `React.ReactNode` | |
 | `distance` | `number` | |
-| `onMove` | `(onBelow: boolean) => void` | |
+| `onMove` | (`onBelow`: `boolean`) => `void` | |

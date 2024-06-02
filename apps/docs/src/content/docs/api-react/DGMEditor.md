@@ -17,6 +17,6 @@ Provides all properties of `DGMEditorCore` with following additional properties:
 | `textInplaceEditorToolbar` |  `React.ReactNode` | |
 | `floatingToolbar` |  `React.ReactNode` | |
 | `floatingToolbarDistance` |  `number` | |
-| `onTextInplaceEditorMount` |  `(tiptapEditor: TiptapEditor) => void` | |
-| `onTextInplaceEditorOpen` |  `(shape: Box) => void` | |
-| `onFloatingToolbarMove` |  `(onBelow: boolean) => void` | |
+| `onTextInplaceEditorMount` |  (`tiptapEditor`: [`TiptapEditor`](https://tiptap.dev/docs/editor/api/editor)) => `void` | |
+| `onTextInplaceEditorOpen` |  (`shape`: `Box`) => `void` | |
+| `onFloatingToolbarMove` |  (`onBelow`: `boolean`) => `void` | |

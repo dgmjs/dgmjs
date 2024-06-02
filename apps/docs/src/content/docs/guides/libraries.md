@@ -1,6 +1,5 @@
 ---
 title: Libraries (WIP)
-description: libraries
 ---
 
 You can create a your-own library. A library is a specially type of diagram and should include a collection of prototype shapes.

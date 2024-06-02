@@ -1,5 +1,7 @@
 ---
 title: Handlers
+sidebar:
+  order: 3
 ---
 
 ## Handlers

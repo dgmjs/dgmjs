@@ -12,7 +12,7 @@ A component to show a set of shapes.
 
 | Prop | Type | Default |
 | ---- | ---- | ------- |
-| `shapes?` |  `Shape[]` | |
+| `shapes?` |  [`Shape`](/api-core/classes/shape/)[] | |
 | `heightRatio?` |  `number` | `0.75` (4:3) |
 | `darkMode?` |  `boolean` | `false` |
 | `maxScale?` |  `number` | `1` |

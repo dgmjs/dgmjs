@@ -1,6 +1,5 @@
 ---
-title: Shape Properties
-description: Shape's basic and advanced properties
+title: Shape properties
 ---
 
 ## Basic properties

@@ -1,6 +1,5 @@
 ---
 title: "Script Language"
-description: script language.
 ---
 
 DGMScript is a tiny clojure-inspired LISP language which is based on the [Mal](https://github.com/kanaka/mal) interpreter. Here is the [online playground](https://kanaka.github.io/mal/) for Mal interpreter.

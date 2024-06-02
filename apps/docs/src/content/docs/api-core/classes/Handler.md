@@ -40,7 +40,7 @@ Handler
 
 #### Source
 
-[editor.ts:1179](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1179)
+[editor.ts:1209](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1209)
 
 ## Properties
 
@@ -50,7 +50,7 @@ Handler
 
 #### Source
 
-[editor.ts:1176](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1176)
+[editor.ts:1206](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1206)
 
 ***
 
@@ -60,7 +60,7 @@ Handler
 
 #### Source
 
-[editor.ts:1177](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1177)
+[editor.ts:1207](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1207)
 
 ## Methods
 
@@ -80,7 +80,7 @@ Activate the handler
 
 #### Source
 
-[editor.ts:1205](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1205)
+[editor.ts:1235](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1235)
 
 ***
 
@@ -100,7 +100,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[editor.ts:1196](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1196)
+[editor.ts:1226](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1226)
 
 ***
 
@@ -120,7 +120,7 @@ Deactivate the handler
 
 #### Source
 
-[editor.ts:1213](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1213)
+[editor.ts:1243](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1243)
 
 ***
 
@@ -140,7 +140,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[editor.ts:1258](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1258)
+[editor.ts:1288](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1288)
 
 ***
 
@@ -162,7 +162,7 @@ keyDown
 
 #### Source
 
-[editor.ts:1248](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1248)
+[editor.ts:1278](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1278)
 
 ***
 
@@ -184,7 +184,7 @@ keyUp
 
 #### Source
 
-[editor.ts:1253](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1253)
+[editor.ts:1283](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1283)
 
 ***
 
@@ -204,7 +204,7 @@ Triggered when activated
 
 #### Source
 
-[editor.ts:1220](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1220)
+[editor.ts:1250](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1250)
 
 ***
 
@@ -224,7 +224,7 @@ Triggered when deactivate
 
 #### Source
 
-[editor.ts:1225](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1225)
+[editor.ts:1255](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1255)
 
 ***
 
@@ -248,7 +248,7 @@ pointerDown
 
 #### Source
 
-[editor.ts:1231](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1231)
+[editor.ts:1261](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1261)
 
 ***
 
@@ -272,7 +272,7 @@ pointerMove
 
 #### Source
 
-[editor.ts:1243](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1243)
+[editor.ts:1273](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1273)
 
 ***
 
@@ -296,7 +296,7 @@ pointerUp
 
 #### Source
 
-[editor.ts:1237](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1237)
+[editor.ts:1267](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1267)
 
 ***
 
@@ -312,4 +312,4 @@ Reset the states of handler
 
 #### Source
 
-[editor.ts:1191](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1191)
+[editor.ts:1221](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1221)
