@@ -12,6 +12,7 @@ export * from "./editor";
 export * from "./actions";
 export * from "./selection-manager";
 export * from "./keymap-manager";
+export * from "./factory";
 export * as handlers from "./handlers";
 export * as macro from "./macro";
 export * as textUtils from "./utils/text-utils";

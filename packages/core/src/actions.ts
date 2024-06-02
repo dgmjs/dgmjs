@@ -126,7 +126,9 @@ export class Actions {
   }
 
   /**
-   * Insert a shape into document or another shape
+   * Insert a shape into the current page or another shape
+   * @param shape - The shape to insert
+   * @param parent - The parent shape to insert the shape into. If not provided, the shape will be inserted into the current page
    */
   insert(shape: Shape, parent?: Shape) {
     const page = this.editor.currentPage;

@@ -84,7 +84,7 @@ function App() {
   };
 
   const handleShapeCreate = (shape: Shape) => {
-    if (!window.editor.activeHandlerLock) {
+    if (!window.editor.getActiveHandlerLock()) {
       setTimeout(() => {
         window.editor.selection.select([shape]);
         window.editor.repaint();

@@ -119,7 +119,6 @@ function createPointerEvent(
 export class Editor {
   /**
    * The editor options
-   * @private
    */
   options: EditorOptions;
 
@@ -245,14 +244,8 @@ export class Editor {
 
   /**
    * The auto scroller
-   * @private
    */
-  autoScroller: AutoScroller;
-
-  /**
-   * The current page
-   */
-  currentPage: Page | null;
+  private autoScroller: AutoScroller;
 
   /**
    * The parent element
@@ -270,91 +263,62 @@ export class Editor {
   canvas: Canvas;
 
   /**
-   * The enabled state
-   * @private
+   * The current page
    */
-  enabled: boolean;
+  currentPage: Page | null;
+
+  /**
+   * The enabled state
+   */
+  private enabled: boolean;
 
   /**
    * The dark mode
-   * @private
    */
-  darkMode: boolean;
+  private darkMode: boolean;
 
   /**
    * The grid size
-   * @private
    */
-  gridSize: number[];
+  private gridSize: number[];
 
   /**
    * The show grid option
-   * @private
    */
-  showGrid: boolean;
+  private showGrid: boolean;
 
   /**
    * The snap to grid option
-   * @private
    */
-  snapToGrid: boolean;
+  private snapToGrid: boolean;
 
   /**
    * The snap to object option (Not implemented yet)
-   * @private
    */
-  snapToObject: boolean;
+  private snapToObject: boolean;
 
   /**
    * The handlers
-   * @private
    */
-  handlers: Record<string, Handler>;
+  private handlers: Record<string, Handler>;
 
   /**
    * The active handler
    */
-  activeHandler: Handler | null;
+  private activeHandler: Handler | null;
 
   /**
    * The active handler lock
    */
-  activeHandlerLock: boolean;
+  private activeHandlerLock: boolean;
 
-  /**
-   * @private
-   */
-  leftButtonDown: boolean;
-
-  /**
-   * @private
-   */
-  downX: number;
-
-  /**
-   * @private
-   */
-  downY: number;
-
-  /**
-   * @private
-   */
-  isPinching: boolean;
-
-  /**
-   * @private
-   */
-  initialScale: number;
-
-  /**
-   * @private
-   */
-  initialDistance: number;
-
-  /**
-   * @private
-   */
-  touchPoint: number[];
+  private leftButtonDown: boolean;
+  private downX: number;
+  private downY: number;
+  private isPinching: boolean;
+  private initialScale: number;
+  private initialDistance: number;
+  private touchPoint: number[];
 
   /**
    * constructor
@@ -453,10 +417,7 @@ export class Editor {
     if (this.options.onReady) this.options.onReady(this);
   }
 
-  /**
-   * @private
-   */
-  detectPlatform(): string {
+  private detectPlatform(): string {
     const p = navigator.platform.toLowerCase();
     if (p.indexOf("mac") > -1) {
       return "darwin";
@@ -468,20 +429,14 @@ export class Editor {
     return "unknown";
   }
 
-  /**
-   * @private
-   */
-  initializeState() {
+  private initializeState() {
     this.transform.onTransaction.addListener(() => this.repaint());
     this.transform.onUndo.addListener(() => this.repaint());
     this.transform.onRedo.addListener(() => this.repaint());
     this.selection.onChange.addListener(() => this.repaint());
   }
 
-  /**
-   * @private
-   */
-  initializeHandlers() {
+  private initializeHandlers() {
     this.options.handlers.forEach((handler) => {
       this.handlers[handler.id] = handler;
     });
@@ -490,10 +445,7 @@ export class Editor {
     }
   }
 
-  /**
-   * @private
-   */
-  initializeCanvas() {
+  private initializeCanvas() {
     this.canvasElement = document.createElement("canvas");
     this.canvasElement.tabIndex = 0; // enable focus
     this.canvasElement.style.touchAction = "none"; // prevent pointer cancel event in mobile
@@ -725,10 +677,7 @@ export class Editor {
     });
   }
 
-  /**
-   * @private
-   */
-  initializeKeymap() {
+  private initializeKeymap() {
     this.keymap.bind(this.options.keymap ?? {});
     // handle global key events
     this.canvasElement.addEventListener("keydown", (e) => {
@@ -752,9 +701,8 @@ export class Editor {
 
   /**
    * Activate plugins
-   * @private
    */
-  activatePlugins() {
+  private activatePlugins() {
     for (const plugin of Object.values(this.plugins)) {
       plugin.activate(this);
     }
@@ -762,9 +710,8 @@ export class Editor {
 
   /**
    * Deactivate plugins
-   * @private
    */
-  deactivatePlugins() {
+  private deactivatePlugins() {
     for (const plugin of Object.values(this.plugins)) {
       plugin.deactivate(this);
     }
@@ -809,13 +756,13 @@ export class Editor {
         this.selection.deselectAll();
       }
       this.currentPage = page;
-      if (page._origin) {
-        this.setOrigin(page._origin[0], page._origin[1]);
+      if (page.pageOrigin) {
+        this.setOrigin(page.pageOrigin[0], page.pageOrigin[1]);
       } else {
         this.scrollToCenter();
-        this.currentPage._origin = this.getOrigin();
+        this.currentPage.pageOrigin = this.getOrigin();
       }
-      this.setScale(page._scale);
+      this.setScale(page.pageScale);
       this.repaint();
       this.onCurrentPageChange.emit(page);
     }
@@ -936,7 +883,7 @@ export class Editor {
   setOrigin(x: number, y: number) {
     this.canvas.origin = [x, y];
     if (this.currentPage) {
-      this.currentPage._origin = [x, y];
+      this.currentPage.pageOrigin = [x, y];
       this.repaint();
     }
     this.onScroll.emit([x, y]);
@@ -1007,7 +954,7 @@ export class Editor {
     }
     this.canvas.scale = scale;
     if (this.currentPage) {
-      this.currentPage._scale = scale;
+      this.currentPage.pageScale = scale;
       this.repaint();
     }
     this.onZoom.emit(scale);
@@ -1147,9 +1094,8 @@ export class Editor {
 
   /**
    * Clear canvas background
-   * @private
    */
-  clearBackground(canvas: Canvas) {
+  private clearBackground(canvas: Canvas) {
     const g = canvas.context;
     const pageSize = this.currentPage?.size;
     g.fillStyle = this.canvas.resolveColor(
@@ -1161,9 +1107,8 @@ export class Editor {
 
   /**
    * Draw the grid
-   * @private
    */
-  drawGrid(canvas: Canvas) {
+  private drawGrid(canvas: Canvas) {
     const scale = this.getScale();
     const pageSize = this.currentPage?.size;
 
@@ -1229,7 +1174,6 @@ export class Editor {
 
   /**
    * Draw selection
-   * @private
    */
   drawSelection() {
     if (this.activeHandler) {

@@ -56,10 +56,6 @@ export default defineConfig({
           autogenerate: { directory: "guides" },
         },
         {
-          label: "Reference",
-          autogenerate: { directory: "reference" },
-        },
-        {
           label: "@dgmjs/react",
           autogenerate: { directory: "api-react" },
         },

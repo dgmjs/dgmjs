@@ -24,7 +24,7 @@ All primitive shapes are [smart shapes](/guides/smart-shapes).
 
 ## Editor
 
-The DGM.js editor is composed of the following parts.
+The DGM.js [Editor](/api-core/classes/editor/) is composed of the following parts.
 
 - store - manages shape objects for access and persistency.
 - handlers - handle the user inputs (mouse, touch, keyboard).

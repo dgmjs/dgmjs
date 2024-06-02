@@ -51,6 +51,7 @@ title: "@dgmjs/core"
 - [ReorderChildMutation](/api-core/classes/reorderchildmutation/)
 - [SelectionManager](/api-core/classes/selectionmanager/)
 - [Shape](/api-core/classes/shape/)
+- [ShapeFactory](/api-core/classes/shapefactory/)
 - [Store](/api-core/classes/store/)
 - [Text](/api-core/classes/text/)
 - [Transaction](/api-core/classes/transaction/)

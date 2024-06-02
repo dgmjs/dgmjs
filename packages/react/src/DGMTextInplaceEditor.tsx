@@ -153,7 +153,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
   const open = (textShape: Box) => {
     if (editor.currentPage && textShape) {
       // disable shape's text rendering
-      textShape._renderText = false;
+      textShape.allowRenderText = false;
       textShape.update(editor.canvas);
       editor.repaint();
 
@@ -214,7 +214,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
       if (state.textShape instanceof Text && textString.trim().length === 0) {
         editor.actions.remove([state.textShape]);
       }
-      state.textShape._renderText = true;
+      state.textShape.allowRenderText = true;
       state.textShape.update(editor.canvas);
       editor.repaint();
       setState((state) => ({ ...state, textShape: null }));
