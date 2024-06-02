@@ -100,7 +100,7 @@ export class SelectionManager {
       [x2, y2],
     ]);
     this.shapes = [];
-    this.editor.currentPage?.traverse((s) => {
+    this.editor.getCurrentPage()?.traverse((s) => {
       if (
         (s as Shape).visible &&
         (s as Shape).enable &&
@@ -118,7 +118,7 @@ export class SelectionManager {
    */
   selectAll() {
     this.shapes = [];
-    this.editor.currentPage?.traverse((s) => {
+    this.editor.getCurrentPage()?.traverse((s) => {
       if ((s as Shape).visible && (s as Shape).enable) {
         this.shapes.push(s as Shape);
       }

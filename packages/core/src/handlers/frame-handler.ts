@@ -35,7 +35,7 @@ export class FrameFactoryHandler extends Handler {
   }
 
   initialize(editor: Editor, e: CanvasPointerEvent): void {
-    const page = editor.currentPage;
+    const page = editor.getCurrentPage();
     if (page) {
       this.shape = editor.factory.createFrame([
         this.dragStartPoint,
@@ -49,7 +49,7 @@ export class FrameFactoryHandler extends Handler {
   }
 
   update(editor: Editor, e: CanvasPointerEvent): void {
-    const page = editor.currentPage;
+    const page = editor.getCurrentPage();
     if (page && this.shape) {
       const rect = geometry.normalizeRect([
         this.dragStartPoint,

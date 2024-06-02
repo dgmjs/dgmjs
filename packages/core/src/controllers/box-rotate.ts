@@ -158,7 +158,7 @@ export class BoxRotateController extends Controller {
     let angle = Math.round(geometry.normalizeAngle(shape.rotate + delta));
     // transform shapes
     editor.transform.transact((tx) => {
-      const page = editor.currentPage!;
+      const page = editor.getCurrentPage()!;
       tx.assign(shape, "rotate", angle);
       resolveAllConstraints(tx, page, editor.canvas);
     });

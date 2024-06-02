@@ -195,7 +195,7 @@ class RemoteUserState implements UserState {
       }
     }
     // show cursor only on the same page
-    const currentPageId = this.editor.currentPage?.id ?? null;
+    const currentPageId = this.editor.getCurrentPage()?.id ?? null;
     if (currentPageId && currentPageId === state.pageId) {
       this.showCursor();
     } else {
@@ -289,7 +289,7 @@ export class YjsUserPresencePlugin extends Plugin {
       this.yAwareness.clientID,
       userIdentity.name,
       userIdentity.color,
-      this.editor.currentPage?.id ?? null
+      this.editor.getCurrentPage()?.id ?? null
     );
 
     // this.logChanges();
@@ -378,7 +378,7 @@ export class YjsUserPresencePlugin extends Plugin {
 
     this.disposables.push(
       this.editor.onRepaint.addListener(() => {
-        const currentPageId = this.editor.currentPage?.id ?? null;
+        const currentPageId = this.editor.getCurrentPage()?.id ?? null;
         const canvas = this.editor.canvas;
         canvas.storeState();
         canvas.strokeWidth = canvas.px * 3;

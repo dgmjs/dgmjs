@@ -61,7 +61,7 @@ function App() {
       window.editor.loadFromJSON(JSON.parse(localData));
     }
     demoStore.setDoc(window.editor.getDoc());
-    demoStore.setCurrentPage(window.editor.currentPage);
+    demoStore.setCurrentPage(window.editor.getCurrentPage());
     // window.editor.fitToScreen();
 
     window.addEventListener("resize", () => {
@@ -72,7 +72,7 @@ function App() {
       const doc = window.editor.getDoc();
       if (doc) {
         demoStore.setDoc(doc);
-        demoStore.setCurrentPage(window.editor.currentPage);
+        demoStore.setCurrentPage(window.editor.getCurrentPage());
       }
     });
 

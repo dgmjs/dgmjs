@@ -265,7 +265,7 @@ export class Editor {
   /**
    * The current page
    */
-  currentPage: Page | null;
+  private currentPage: Page | null;
 
   /**
    * The enabled state
@@ -312,7 +312,10 @@ export class Editor {
    */
   private activeHandlerLock: boolean;
 
-  private leftButtonDown: boolean;
+  /**
+   * @private
+   */
+  leftButtonDown: boolean;
   private downX: number;
   private downY: number;
   private isPinching: boolean;

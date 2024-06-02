@@ -151,7 +151,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
   };
 
   const open = (textShape: Box) => {
-    if (editor.currentPage && textShape) {
+    if (editor.getCurrentPage() && textShape) {
       // disable shape's text rendering
       textShape.allowRenderText = false;
       textShape.update(editor.canvas);
@@ -175,11 +175,15 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
   };
 
   const update = (textShape: Box, textValue: any) => {
-    if (editor.currentPage) {
+    if (editor.getCurrentPage()) {
       // mutate text shape
       editor.transform.transact((tx: Transaction) => {
         tx.assign(textShape, "text", textValue);
-        macro.resolveAllConstraints(tx, editor.currentPage!, editor.canvas);
+        macro.resolveAllConstraints(
+          tx,
+          editor.getCurrentPage()!,
+          editor.canvas
+        );
       });
 
       // update states

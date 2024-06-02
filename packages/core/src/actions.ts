@@ -131,7 +131,7 @@ export class Actions {
    * @param parent - The parent shape to insert the shape into. If not provided, the shape will be inserted into the current page
    */
   insert(shape: Shape, parent?: Shape) {
-    const page = this.editor.currentPage;
+    const page = this.editor.getCurrentPage();
     if (page) {
       this.editor.transform.startAction("insert");
       this.editor.transform.transact((tx) => {
@@ -146,7 +146,7 @@ export class Actions {
    * Update obj properties
    */
   update(values: ShapeProps, objs?: Obj[]) {
-    const page = this.editor.currentPage;
+    const page = this.editor.getCurrentPage();
     if (page) {
       this.editor.transform.startAction("update");
       this.editor.transform.transact((tx) => {
@@ -184,7 +184,7 @@ export class Actions {
    * Remove selected shapes
    */
   remove(shapes?: Shape[]) {
-    const page = this.editor.currentPage;
+    const page = this.editor.getCurrentPage();
     if (page) {
       this.editor.transform.startAction("delete");
       this.editor.transform.transact((tx) => {
@@ -213,7 +213,7 @@ export class Actions {
    * Cut selected shapes
    */
   async cut(shapes?: Shape[]) {
-    const page = this.editor.currentPage;
+    const page = this.editor.getCurrentPage();
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       const clipboard = this.editor.clipboard;
@@ -234,7 +234,7 @@ export class Actions {
    * Paste
    */
   async paste(page?: Page) {
-    const currentPage = page ?? this.editor.currentPage;
+    const currentPage = page ?? this.editor.getCurrentPage();
     if (currentPage) {
       const canvas = this.editor.canvas;
       const clipboard = this.editor.clipboard;
@@ -299,7 +299,7 @@ export class Actions {
    * Duplicate shapes
    */
   duplicate(shapes?: Shape[]) {
-    const page = this.editor.currentPage;
+    const page = this.editor.getCurrentPage();
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       const buffer: any[] = serialize(shapes);
@@ -326,7 +326,7 @@ export class Actions {
    * Move selected shapes
    */
   move(dx: number, dy: number, shapes?: Shape[]) {
-    const page = this.editor.currentPage;
+    const page = this.editor.getCurrentPage();
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
@@ -363,7 +363,7 @@ export class Actions {
    * Group selected shapes
    */
   group(shapes?: Shape[]) {
-    const page = this.editor.currentPage;
+    const page = this.editor.getCurrentPage();
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       const box = this.editor.selection.getBoundingRect(this.editor.canvas);
@@ -398,7 +398,7 @@ export class Actions {
    * Ungroup selected shapes
    */
   ungroup(shapes?: Shape[]) {
-    const page = this.editor.currentPage;
+    const page = this.editor.getCurrentPage();
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       const children: Shape[] = [];
@@ -427,7 +427,7 @@ export class Actions {
    * Bring selected shapes to front
    */
   bringToFront(shapes?: Shape[]) {
-    const page = this.editor.currentPage;
+    const page = this.editor.getCurrentPage();
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
@@ -447,7 +447,7 @@ export class Actions {
    * Send selected shapes to back
    */
   sendToBack(shapes?: Shape[]) {
-    const page = this.editor.currentPage;
+    const page = this.editor.getCurrentPage();
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
@@ -467,7 +467,7 @@ export class Actions {
    * Bring selected shapes forward
    */
   bringForward(shapes?: Shape[]) {
-    const page = this.editor.currentPage;
+    const page = this.editor.getCurrentPage();
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
@@ -487,7 +487,7 @@ export class Actions {
    * Send selected shapes backward
    */
   sendBackward(shapes?: Shape[]) {
-    const page = this.editor.currentPage;
+    const page = this.editor.getCurrentPage();
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
@@ -507,7 +507,7 @@ export class Actions {
    * Align selected shapes to left
    */
   alignLeft(shapes?: Shape[]) {
-    const page = this.editor.currentPage;
+    const page = this.editor.getCurrentPage();
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
@@ -535,7 +535,7 @@ export class Actions {
    * Align selected shapes to right
    */
   alignRight(shapes?: Shape[]) {
-    const page = this.editor.currentPage;
+    const page = this.editor.getCurrentPage();
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
@@ -563,7 +563,7 @@ export class Actions {
    * Align selected shapes to horizontally center
    */
   alignCenter(shapes?: Shape[]) {
-    const page = this.editor.currentPage;
+    const page = this.editor.getCurrentPage();
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
@@ -596,7 +596,7 @@ export class Actions {
    * Align selected shapes to top
    */
   alignTop(shapes?: Shape[]) {
-    const page = this.editor.currentPage;
+    const page = this.editor.getCurrentPage();
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
@@ -624,7 +624,7 @@ export class Actions {
    * Align selected shapes to bottom
    */
   alignBottom(shapes?: Shape[]) {
-    const page = this.editor.currentPage;
+    const page = this.editor.getCurrentPage();
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
@@ -652,7 +652,7 @@ export class Actions {
    * Align selected shapes to vertically middle
    */
   alignMiddle(shapes?: Shape[]) {
-    const page = this.editor.currentPage;
+    const page = this.editor.getCurrentPage();
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {

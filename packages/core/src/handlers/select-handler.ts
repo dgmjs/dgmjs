@@ -14,7 +14,7 @@
 import { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { Shape } from "../shapes";
-import { Editor, Handler, HandlerOptions, manipulatorManager } from "../editor";
+import { Editor, Handler, manipulatorManager } from "../editor";
 import { Mouse, Color, Cursor } from "../graphics/const";
 import * as guide from "../utils/guide";
 
@@ -35,7 +35,8 @@ export class SelectHandler extends Handler {
    */
   getShapeAt(editor: Editor, e: CanvasPointerEvent): Shape | null {
     const canvas = editor.canvas;
-    if (editor.currentPage) {
+    const page = editor.getCurrentPage();
+    if (page) {
       let p = canvas.globalCoordTransformRev([e.x, e.y]);
       // find in selected shapes' manipulators
       for (let s of editor.selection.getShapes()) {
@@ -45,7 +46,7 @@ export class SelectHandler extends Handler {
         }
       }
       // find in document
-      return editor.currentPage.getShapeAt(canvas, p);
+      return page.getShapeAt(canvas, p);
     }
     return null;
   }
@@ -55,6 +56,7 @@ export class SelectHandler extends Handler {
    */
   pointerDown(editor: Editor, e: CanvasPointerEvent) {
     const canvas = editor.canvas;
+    const page = editor.getCurrentPage();
     if (e.button === Mouse.BUTTON1) {
       const shape = this.getShapeAt(editor, e);
       if (shape) {
@@ -85,14 +87,13 @@ export class SelectHandler extends Handler {
     // delegates to manipulators
     editor.repaint(false); // do not draw selections
     let cursor: [string, number] = [Cursor.DEFAULT, 0];
-    if (editor.currentPage) {
+    if (page) {
       if (editor.selection.size() > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) {
-          manipulator.pointerDown(editor, editor.currentPage, e);
-          if (manipulator.mouseIn(editor, editor.currentPage, e)) {
-            cursor =
-              manipulator.mouseCursor(editor, editor.currentPage, e) ?? cursor;
+          manipulator.pointerDown(editor, page, e);
+          if (manipulator.mouseIn(editor, page, e)) {
+            cursor = manipulator.mouseCursor(editor, page, e) ?? cursor;
           }
         }
       }
@@ -119,10 +120,11 @@ export class SelectHandler extends Handler {
    */
   pointerMove(editor: Editor, e: CanvasPointerEvent) {
     const canvas = editor.canvas;
+    const page = editor.getCurrentPage();
     const p = canvas.globalCoordTransformRev([e.x, e.y]);
     editor.repaint(false); // do not draw selections
 
-    if (editor.currentPage) {
+    if (page) {
       // selecting area
       if (this.dragging) {
         const p1 = canvas.globalCoordTransform(this.dragStartPoint);
@@ -136,7 +138,7 @@ export class SelectHandler extends Handler {
         canvas.strokeRect(rect[0][0], rect[0][1], rect[1][0], rect[1][1]);
 
         // hovering shapes overlaps selecting area
-        for (let shape of editor.currentPage.children) {
+        for (let shape of page.children) {
           const s = shape as Shape;
           let box = geometry.normalizeRect([this.dragStartPoint, p]);
           if (s.overlapRect(canvas, box)) {
@@ -149,7 +151,7 @@ export class SelectHandler extends Handler {
         editor.onDrag.emit({ controller: null, dragPoint: p });
       } else if (!e.leftButtonDown) {
         // other shape hovering
-        const shape = editor.currentPage.getShapeAt(canvas, p);
+        const shape = page.getShapeAt(canvas, p);
         if (shape && !editor.selection.isSelected(shape)) {
           guide.drawHovering(editor, shape, e);
         }
@@ -161,14 +163,13 @@ export class SelectHandler extends Handler {
 
     // delegates to manipulators
     let cursor: [string, number] = [Cursor.DEFAULT, 0];
-    if (editor.currentPage) {
+    if (page) {
       if (editor.selection.getShapes().length > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) {
-          manipulator.pointerMove(editor, editor.currentPage, e);
-          if (manipulator.mouseIn(editor, editor.currentPage, e)) {
-            cursor =
-              manipulator.mouseCursor(editor, editor.currentPage, e) ?? cursor;
+          manipulator.pointerMove(editor, page, e);
+          if (manipulator.mouseIn(editor, page, e)) {
+            cursor = manipulator.mouseCursor(editor, page, e) ?? cursor;
           }
         }
       }
@@ -195,6 +196,7 @@ export class SelectHandler extends Handler {
    */
   pointerUp(editor: Editor, e: CanvasPointerEvent) {
     const canvas = editor.canvas;
+    const page = editor.getCurrentPage();
     const p = canvas.globalCoordTransformRev([e.x, e.y]);
     // select area
     if (e.button === Mouse.BUTTON1 && this.dragging) {
@@ -207,15 +209,14 @@ export class SelectHandler extends Handler {
     }
     // delegates to manipulators
     let cursor: [string, number] = [Cursor.DEFAULT, 0];
-    if (editor.currentPage) {
+    if (page) {
       if (editor.selection.getShapes().length > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) {
-          if (manipulator.mouseIn(editor, editor.currentPage, e)) {
-            cursor =
-              manipulator.mouseCursor(editor, editor.currentPage, e) ?? cursor;
+          if (manipulator.mouseIn(editor, page, e)) {
+            cursor = manipulator.mouseCursor(editor, page, e) ?? cursor;
           }
-          manipulator.pointerUp(editor, editor.currentPage, e);
+          manipulator.pointerUp(editor, page, e);
         }
       }
       if (editor.selection.size() === 1) {
@@ -251,14 +252,15 @@ export class SelectHandler extends Handler {
    */
   keyDown(editor: Editor, e: KeyboardEvent) {
     // delegates to manipulators
-    if (editor.currentPage) {
+    const page = editor.getCurrentPage();
+    if (page) {
       if (editor.selection.getShapes().length === 1) {
         const shape = editor.selection.getShapes()[0];
         const manipulator = manipulatorManager.get(shape.type);
         if (manipulator) manipulator.keyDown(editor, shape, e);
       } else if (editor.selection.getShapes().length > 1) {
         const manipulator = manipulatorManager.get("selections");
-        if (manipulator) manipulator.keyDown(editor, editor.currentPage, e);
+        if (manipulator) manipulator.keyDown(editor, page, e);
       }
     }
     if (e.key === "Escape") {
@@ -278,13 +280,14 @@ export class SelectHandler extends Handler {
    * Draw ghost for the selected shape
    */
   drawSelection(editor: Editor) {
-    if (editor.currentPage) {
+    const page = editor.getCurrentPage();
+    if (page) {
       // delegates to manipulators
       if (editor.selection.getShapes().length > 1) {
         const manipulator = manipulatorManager.get("selections");
-        if (manipulator) manipulator.draw(editor, editor.currentPage);
+        if (manipulator) manipulator.draw(editor, page);
       }
-      editor.currentPage.traverse((shape) => {
+      page.traverse((shape) => {
         const s = shape as Shape;
         const manipulator = manipulatorManager.get(s.type);
         if (manipulator && editor.selection.isSelected(s)) {

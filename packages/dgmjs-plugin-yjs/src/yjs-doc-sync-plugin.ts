@@ -224,8 +224,9 @@ export class YjsDocSyncPlugin extends Plugin {
    * Print the yStore objects
    */
   printCurrentPage() {
-    if (this.editor.currentPage) {
-      this.editor.currentPage.children.forEach((block) => {
+    const page = this.editor.getCurrentPage();
+    if (page) {
+      page.children.forEach((block) => {
         const Obj = this.yStore?.get(block.id);
         const json = Obj?.toJSON()!;
         console.log(

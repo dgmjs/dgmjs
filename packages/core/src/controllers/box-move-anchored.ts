@@ -81,7 +81,7 @@ export class BoxMoveAnchoredController extends Controller {
     const length = geometry.distance(shapeCenter, anchorPoint);
     // transform shape
     editor.transform.transact((tx) => {
-      const page = editor.currentPage!;
+      const page = editor.getCurrentPage()!;
       moveAnchor(tx, shape as Box, angle, length);
       resolveAllConstraints(tx, page, canvas);
     });
