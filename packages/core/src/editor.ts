@@ -117,80 +117,211 @@ function createPointerEvent(
  * The editor
  */
 export class Editor {
+  /**
+   * The editor options
+   */
   options: EditorOptions;
+
+  /**
+   * The plugins
+   */
   plugins: Record<string, Plugin>;
+
+  /**
+   * The platform
+   */
   platform: string;
 
+  /**
+   * The event emitter for current page change
+   */
   onCurrentPageChange: TypedEvent<Page>;
+
+  /**
+   * The event emitter for active handler change
+   */
   onActiveHandlerChange: TypedEvent<string>;
+
+  /**
+   * The event emitter for active handler lock change
+   */
   onActiveHandlerLockChange: TypedEvent<boolean>;
+
+  /**
+   * The event emitter for zoom
+   */
   onZoom: TypedEvent<number>;
+
+  /**
+   * The event emitter for scroll
+   */
   onScroll: TypedEvent<number[]>;
+
+  /**
+   * The event emitter for pointer down
+   */
   onPointerDown: TypedEvent<CanvasPointerEvent>;
+
+  /**
+   * The event emitter for pointer move
+   */
   onPointerMove: TypedEvent<CanvasPointerEvent>;
+
+  /**
+   * The event emitter for pointer up
+   */
   onPointerUp: TypedEvent<CanvasPointerEvent>;
+
+  /**
+   * The event emitter for double click
+   */
   onDblClick: TypedEvent<DblClickEvent>;
+
+  /**
+   * The event emitter for key down
+   */
   onKeyDown: TypedEvent<KeyboardEvent>;
+
+  /**
+   * The event emitter for drag start
+   */
   onDragStart: TypedEvent<DragEvent>;
+
+  /**
+   * The event emitter for drag
+   */
   onDrag: TypedEvent<DragEvent>;
+
+  /**
+   * The event emitter for drag end
+   */
   onDragEnd: TypedEvent<DragEvent>;
+
+  /**
+   * The event emitter for file drop
+   */
   onFileDrop: TypedEvent<FileDropEvent>;
+
+  /**
+   * The event emitter for repaint
+   */
   onRepaint: TypedEvent<void>;
 
+  /**
+   * The store object
+   */
   store: Store;
-  transform: Transform;
-  clipboard: Clipboard;
-  selection: SelectionManager;
-  factory: ShapeFactory;
-  actions: Actions;
-  keymap: KeymapManager;
-  autoScroller: AutoScroller;
 
-  currentPage: Page | null;
+  /**
+   * The transform object
+   */
+  transform: Transform;
+
+  /**
+   * The clipboard object
+   */
+  clipboard: Clipboard;
+
+  /**
+   * The selection manager
+   */
+  selection: SelectionManager;
+
+  /**
+   * The shape factory
+   */
+  factory: ShapeFactory;
+
+  /**
+   * The actions
+   */
+  actions: Actions;
+
+  /**
+   * The keymap manager
+   */
+  keymap: KeymapManager;
+
+  /**
+   * The auto scroller
+   */
+  private autoScroller: AutoScroller;
+
+  /**
+   * The parent element
+   */
   parent: HTMLElement;
+
+  /**
+   * The canvas element
+   */
   canvasElement: HTMLCanvasElement;
+
+  /**
+   * The canvas object
+   */
   canvas: Canvas;
+
+  /**
+   * The current page
+   */
+  private currentPage: Page | null;
 
   /**
    * The enabled state
    */
-  enabled: boolean;
+  private enabled: boolean;
 
   /**
    * The dark mode
    */
-  darkMode: boolean;
+  private darkMode: boolean;
 
   /**
    * The grid size
    */
-  gridSize: number[];
+  private gridSize: number[];
 
   /**
    * The show grid option
    */
-  showGrid: boolean;
+  private showGrid: boolean;
 
   /**
    * The snap to grid option
    */
-  snapToGrid: boolean;
+  private snapToGrid: boolean;
 
   /**
    * The snap to object option (Not implemented yet)
    */
-  snapToObject: boolean;
-  handlers: Record<string, Handler>;
-  activeHandlerId: string | null;
-  activeHandler: Handler | null;
-  activeHandlerLock: boolean;
+  private snapToObject: boolean;
+
+  /**
+   * The handlers
+   */
+  private handlers: Record<string, Handler>;
+
+  /**
+   * The active handler
+   */
+  private activeHandler: Handler | null;
+
+  /**
+   * The active handler lock
+   */
+  private activeHandlerLock: boolean;
+
+  /**
+   * @private
+   */
   leftButtonDown: boolean;
-  downX: number;
-  downY: number;
-  isPinching: boolean;
-  initialScale: number;
-  initialDistance: number;
-  touchPoint: number[];
+  private downX: number;
+  private downY: number;
+  private isPinching: boolean;
+  private initialScale: number;
+  private initialDistance: number;
+  private touchPoint: number[];
 
   /**
    * constructor
@@ -272,8 +403,6 @@ export class Editor {
     this.snapToGrid = false;
     this.snapToObject = false;
     this.handlers = {};
-    this.addHandlers(this.options.handlers ?? []);
-    this.activeHandlerId = null;
     this.activeHandler = null;
     this.activeHandlerLock = false;
     this.leftButtonDown = false; // To check mouse left button down in mouse move event.
@@ -284,13 +413,14 @@ export class Editor {
     this.initialDistance = 0;
     this.touchPoint = [-1, -1];
     this.initializeState();
+    this.initializeHandlers();
     this.initializeCanvas();
     this.initializeKeymap();
     this.activatePlugins();
     if (this.options.onReady) this.options.onReady(this);
   }
 
-  detectPlatform(): string {
+  private detectPlatform(): string {
     const p = navigator.platform.toLowerCase();
     if (p.indexOf("mac") > -1) {
       return "darwin";
@@ -302,14 +432,23 @@ export class Editor {
     return "unknown";
   }
 
-  initializeState() {
+  private initializeState() {
     this.transform.onTransaction.addListener(() => this.repaint());
     this.transform.onUndo.addListener(() => this.repaint());
     this.transform.onRedo.addListener(() => this.repaint());
     this.selection.onChange.addListener(() => this.repaint());
   }
 
-  initializeCanvas() {
+  private initializeHandlers() {
+    this.options.handlers.forEach((handler) => {
+      this.handlers[handler.id] = handler;
+    });
+    if (!this.options.defaultHandlerId && this.options.handlers.length > 0) {
+      this.options.defaultHandlerId = this.options.handlers[0].id;
+    }
+  }
+
+  private initializeCanvas() {
     this.canvasElement = document.createElement("canvas");
     this.canvasElement.tabIndex = 0; // enable focus
     this.canvasElement.style.touchAction = "none"; // prevent pointer cancel event in mobile
@@ -541,7 +680,7 @@ export class Editor {
     });
   }
 
-  initializeKeymap() {
+  private initializeKeymap() {
     this.keymap.bind(this.options.keymap ?? {});
     // handle global key events
     this.canvasElement.addEventListener("keydown", (e) => {
@@ -566,7 +705,7 @@ export class Editor {
   /**
    * Activate plugins
    */
-  activatePlugins() {
+  private activatePlugins() {
     for (const plugin of Object.values(this.plugins)) {
       plugin.activate(this);
     }
@@ -575,7 +714,7 @@ export class Editor {
   /**
    * Deactivate plugins
    */
-  deactivatePlugins() {
+  private deactivatePlugins() {
     for (const plugin of Object.values(this.plugins)) {
       plugin.deactivate(this);
     }
@@ -589,11 +728,25 @@ export class Editor {
   }
 
   /**
-   * Set enable or disable
+   * Get enabled state
+   */
+  getEnabled(): boolean {
+    return this.enabled;
+  }
+
+  /**
+   * Set enabled state
    */
   setEnabled(enabled: boolean) {
     this.enabled = enabled;
     this.canvasElement.style.opacity = enabled ? "1" : "0.5";
+  }
+
+  /**
+   * Get current page
+   */
+  getCurrentPage(): Page | null {
+    return this.currentPage;
   }
 
   /**
@@ -606,13 +759,13 @@ export class Editor {
         this.selection.deselectAll();
       }
       this.currentPage = page;
-      if (page._origin) {
-        this.setOrigin(page._origin[0], page._origin[1]);
+      if (page.pageOrigin) {
+        this.setOrigin(page.pageOrigin[0], page.pageOrigin[1]);
       } else {
         this.scrollToCenter();
-        this.currentPage._origin = this.getOrigin();
+        this.currentPage.pageOrigin = this.getOrigin();
       }
-      this.setScale(page._scale);
+      this.setScale(page.pageScale);
       this.repaint();
       this.onCurrentPageChange.emit(page);
     }
@@ -636,6 +789,13 @@ export class Editor {
   }
 
   /**
+   * Get dark mode
+   */
+  getDarkMode(): boolean {
+    return this.darkMode;
+  }
+
+  /**
    * Set dark mode
    */
   setDarkMode(dark: boolean) {
@@ -648,11 +808,25 @@ export class Editor {
   }
 
   /**
+   * Get grid size
+   */
+  getGridSize(): number[] {
+    return this.gridSize;
+  }
+
+  /**
    * Set grid size
    */
   setGridSize(gridSize: number[]) {
     this.gridSize = gridSize;
     this.repaint();
+  }
+
+  /**
+   * Get show grid state
+   */
+  getShowGrid(): boolean {
+    return this.showGrid;
   }
 
   /**
@@ -664,10 +838,24 @@ export class Editor {
   }
 
   /**
+   * Get snap to grid
+   */
+  getSnapToGrid(): boolean {
+    return this.snapToGrid;
+  }
+
+  /**
    * Set snap to grid
    */
   setSnapToGrid(value: boolean) {
     this.snapToGrid = value;
+  }
+
+  /**
+   * Get snap to object
+   */
+  getSnapToObject(): boolean {
+    return this.snapToObject;
   }
 
   /**
@@ -686,6 +874,39 @@ export class Editor {
   }
 
   /**
+   * Get origin point in CCS
+   */
+  getOrigin(): number[] {
+    return this.canvas.origin;
+  }
+
+  /**
+   * Set origin point
+   */
+  setOrigin(x: number, y: number) {
+    this.canvas.origin = [x, y];
+    if (this.currentPage) {
+      this.currentPage.pageOrigin = [x, y];
+      this.repaint();
+    }
+    this.onScroll.emit([x, y]);
+  }
+
+  /**
+   * Move origin point
+   */
+  moveOrigin(dx: number, dy: number) {
+    this.setOrigin(this.canvas.origin[0] + dx, this.canvas.origin[1] + dy);
+  }
+
+  /**
+   * Return the size of canvas element in CCS
+   */
+  getSize(): number[] {
+    return [this.canvasElement.width, this.canvasElement.height];
+  }
+
+  /**
    * Set canvas element size
    */
   setSize(width: number, height: number) {
@@ -697,20 +918,6 @@ export class Editor {
     this.canvasElement.style.width = width + "px";
     this.canvasElement.style.height = height + "px";
     this.repaint();
-  }
-
-  /**
-   * Return the size of canvas element in CCS
-   */
-  getSize(): number[] {
-    return [this.canvasElement.width, this.canvasElement.height];
-  }
-
-  /**
-   * Get origin point in CCS
-   */
-  getOrigin(): number[] {
-    return this.canvas.origin;
   }
 
   /**
@@ -730,22 +937,10 @@ export class Editor {
   }
 
   /**
-   * Set origin point
+   * Get scale
    */
-  setOrigin(x: number, y: number) {
-    this.canvas.origin = [x, y];
-    if (this.currentPage) {
-      this.currentPage._origin = [x, y];
-      this.repaint();
-    }
-    this.onScroll.emit([x, y]);
-  }
-
-  /**
-   * Move origin point
-   */
-  moveOrigin(dx: number, dy: number) {
-    this.setOrigin(this.canvas.origin[0] + dx, this.canvas.origin[1] + dy);
+  getScale(): number {
+    return this.canvas.scale;
   }
 
   /**
@@ -762,21 +957,14 @@ export class Editor {
     }
     this.canvas.scale = scale;
     if (this.currentPage) {
-      this.currentPage._scale = scale;
+      this.currentPage.pageScale = scale;
       this.repaint();
     }
     this.onZoom.emit(scale);
   }
 
   /**
-   * Get scale
-   */
-  getScale(): number {
-    return this.canvas.scale;
-  }
-
-  /**
-   * Set zoom
+   * Set zoom scale while keeping the screen center
    */
   zoom(scale: number = 1) {
     const center = this.getCenter();
@@ -858,56 +1046,26 @@ export class Editor {
   }
 
   /**
-   * Add an array of handlers
-   * Note: the first handler is set as default handler
+   * Get the active handler
    */
-  addHandlers(handlers: Handler[]) {
-    handlers.forEach((handler, index) => {
-      this.addHandler(handler);
-    });
-    if (!this.options.defaultHandlerId && handlers.length > 0) {
-      this.options.defaultHandlerId = handlers[0].id;
-    }
-  }
-
-  /**
-   * Add a handler
-   */
-  addHandler(handler: Handler) {
-    this.handlers[handler.id] = handler;
-  }
-
-  /**
-   * Remove a handler by id
-   */
-  removeHandler(id: string) {
-    delete this.handlers[id];
-  }
-
-  /**
-   * Get a handler by id
-   */
-  getHandler(id: string): Handler {
-    return this.handlers[id];
-  }
-
-  /**
-   * Clear all handlers
-   */
-  clearHandlers() {
-    this.handlers = {};
+  getActiveHandler(): Handler | null {
+    return this.activeHandler;
   }
 
   /**
    * Activate a handler by id
    */
   activateHandler(id: string) {
-    if (this.activeHandlerId !== id) {
-      if (this.activeHandler) this.activeHandler.deactivate(this);
-      this.activeHandlerId = id;
-      this.activeHandler = this.handlers[this.activeHandlerId];
-      this.activeHandler.activate(this);
-      this.onActiveHandlerChange.emit(this.activeHandlerId);
+    const handler = this.handlers[id];
+    if (this.activeHandler !== handler) {
+      if (this.activeHandler) {
+        this.activeHandler.deactivate(this);
+      }
+      if (handler) {
+        this.activeHandler = handler;
+        this.activeHandler.activate(this);
+        this.onActiveHandlerChange.emit(handler.id);
+      }
     }
   }
 
@@ -940,7 +1098,7 @@ export class Editor {
   /**
    * Clear canvas background
    */
-  clearBackground(canvas: Canvas) {
+  private clearBackground(canvas: Canvas) {
     const g = canvas.context;
     const pageSize = this.currentPage?.size;
     g.fillStyle = this.canvas.resolveColor(
@@ -953,7 +1111,7 @@ export class Editor {
   /**
    * Draw the grid
    */
-  drawGrid(canvas: Canvas) {
+  private drawGrid(canvas: Canvas) {
     const scale = this.getScale();
     const pageSize = this.currentPage?.size;
 

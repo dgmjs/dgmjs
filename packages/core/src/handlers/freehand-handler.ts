@@ -39,7 +39,7 @@ export class FreehandFactoryHandler extends Handler {
   }
 
   initialize(editor: Editor, e: CanvasPointerEvent): void {
-    const page = editor.currentPage;
+    const page = editor.getCurrentPage();
     if (page) {
       this.draggingPoints.push(this.dragStartPoint);
       this.shape = editor.factory.createFreehand(this.draggingPoints, false);
@@ -51,7 +51,7 @@ export class FreehandFactoryHandler extends Handler {
   }
 
   update(editor: Editor, e: CanvasPointerEvent): void {
-    const page = editor.currentPage;
+    const page = editor.getCurrentPage();
     this.draggingPoints.push(this.dragPoint);
     const newPath = structuredClone(this.draggingPoints);
     this.closed =

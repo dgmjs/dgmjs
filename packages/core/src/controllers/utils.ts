@@ -110,11 +110,9 @@ export function findConnectionAnchor(
 ): [Shape | null, number[]] {
   const canvas = editor.canvas;
   let end =
-    editor.currentPage?.getShapeAt(
-      canvas,
-      point,
-      connector ? [connector] : []
-    ) ?? null;
+    editor
+      .getCurrentPage()
+      ?.getShapeAt(canvas, point, connector ? [connector] : []) ?? null;
   let anchor = [0.5, 0.5];
   if (!end?.connectable) end = null;
   if (end instanceof Path && !end.isClosed()) {

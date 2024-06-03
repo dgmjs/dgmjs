@@ -115,7 +115,7 @@ export class PathAddPointController extends Controller {
 
     // transform shape
     editor.transform.transact((tx) => {
-      const page = editor.currentPage!;
+      const page = editor.getCurrentPage()!;
       setPath(tx, shape as Line, newPath);
       resolveAllConstraints(tx, page, canvas);
     });

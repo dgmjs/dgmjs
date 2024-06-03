@@ -33,7 +33,7 @@ Freehand Factory Handler
 
 #### Source
 
-[editor.ts:1179](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1179)
+[editor.ts:1337](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1337)
 
 ## Properties
 
@@ -97,7 +97,7 @@ Freehand Factory Handler
 
 #### Source
 
-[editor.ts:1176](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1176)
+[editor.ts:1334](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1334)
 
 ***
 
@@ -111,7 +111,7 @@ Freehand Factory Handler
 
 #### Source
 
-[editor.ts:1177](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1177)
+[editor.ts:1335](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1335)
 
 ***
 
@@ -145,7 +145,7 @@ Activate the handler
 
 #### Source
 
-[editor.ts:1205](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1205)
+[editor.ts:1363](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1363)
 
 ***
 
@@ -169,7 +169,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[editor.ts:1196](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1196)
+[editor.ts:1354](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1354)
 
 ***
 
@@ -193,7 +193,7 @@ Deactivate the handler
 
 #### Source
 
-[editor.ts:1213](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1213)
+[editor.ts:1371](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1371)
 
 ***
 
@@ -217,7 +217,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[editor.ts:1258](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1258)
+[editor.ts:1416](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1416)
 
 ***
 
@@ -309,7 +309,7 @@ keyUp
 
 #### Source
 
-[editor.ts:1253](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1253)
+[editor.ts:1411](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1411)
 
 ***
 

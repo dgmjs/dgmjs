@@ -16,6 +16,7 @@ title: "@dgmjs/core"
 ## Classes
 
 - [Action](/api-core/classes/action/)
+- [Actions](/api-core/classes/actions/)
 - [AssignMutation](/api-core/classes/assignmutation/)
 - [AssignRefMutation](/api-core/classes/assignrefmutation/)
 - [Box](/api-core/classes/box/)
@@ -36,6 +37,7 @@ title: "@dgmjs/core"
 - [Highlighter](/api-core/classes/highlighter/)
 - [Image](/api-core/classes/image/)
 - [InsertChildMutation](/api-core/classes/insertchildmutation/)
+- [KeymapManager](/api-core/classes/keymapmanager/)
 - [Line](/api-core/classes/line/)
 - [Manipulator](/api-core/classes/manipulator/)
 - [MemoizationCanvas](/api-core/classes/memoizationcanvas/)
@@ -47,7 +49,9 @@ title: "@dgmjs/core"
 - [Rectangle](/api-core/classes/rectangle/)
 - [RemoveChildMutation](/api-core/classes/removechildmutation/)
 - [ReorderChildMutation](/api-core/classes/reorderchildmutation/)
+- [SelectionManager](/api-core/classes/selectionmanager/)
 - [Shape](/api-core/classes/shape/)
+- [ShapeFactory](/api-core/classes/shapefactory/)
 - [Store](/api-core/classes/store/)
 - [Text](/api-core/classes/text/)
 - [Transaction](/api-core/classes/transaction/)
@@ -73,6 +77,7 @@ title: "@dgmjs/core"
 - [Colors](/api-core/type-aliases/colors/)
 - [ConstraintFn](/api-core/type-aliases/constraintfn/)
 - [HorzAlignEnum](/api-core/type-aliases/horzalignenum/)
+- [KeyMap](/api-core/type-aliases/keymap/)
 - [LineEndTypeEnum](/api-core/type-aliases/lineendtypeenum/)
 - [LineTypeEnum](/api-core/type-aliases/linetypeenum/)
 - [MovableEnum](/api-core/type-aliases/movableenum/)

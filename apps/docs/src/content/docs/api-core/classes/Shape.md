@@ -38,54 +38,6 @@ A shape object has following features:
 
 ## Properties
 
-### \_linkDOM
-
-> **\_linkDOM**: `null` \| `HTMLAnchorElement`
-
-Link DOM element
-
-#### Source
-
-[shapes.ts:338](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L338)
-
-***
-
-### \_memoCanvas
-
-> **\_memoCanvas**: [`MemoizationCanvas`](/api-core/classes/memoizationcanvas/)
-
-Memoization canvas
-
-#### Source
-
-[shapes.ts:328](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L328)
-
-***
-
-### \_memoOutline
-
-> **\_memoOutline**: `number`[][]
-
-Memoization outline
-
-#### Source
-
-[shapes.ts:333](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L333)
-
-***
-
-### \_memoSeed
-
-> **\_memoSeed**: `null` \| `number`
-
-Memoize seed
-
-#### Source
-
-[shapes.ts:323](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L323)
-
-***
-
 ### children
 
 > **children**: [`Obj`](/api-core/classes/obj/)[]

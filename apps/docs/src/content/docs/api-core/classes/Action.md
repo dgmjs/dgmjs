@@ -5,7 +5,7 @@ prev: false
 title: "Action"
 ---
 
-Action
+Action is a collection of transactions, which can be undone/redone as a whole.
 
 ## Constructors
 
@@ -23,7 +23,7 @@ Action
 
 #### Source
 
-[core/transform.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L17)
+[core/transform.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L16)
 
 ## Properties
 
@@ -33,7 +33,7 @@ Action
 
 #### Source
 
-[core/transform.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L14)
+[core/transform.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L13)
 
 ***
 
@@ -43,7 +43,7 @@ Action
 
 #### Source
 
-[core/transform.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L15)
+[core/transform.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L14)
 
 ## Methods
 
@@ -61,7 +61,7 @@ Action
 
 #### Source
 
-[core/transform.ts:26](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L26)
+[core/transform.ts:25](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L25)
 
 ***
 
@@ -79,7 +79,7 @@ Action
 
 #### Source
 
-[core/transform.ts:22](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L22)
+[core/transform.ts:21](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L21)
 
 ***
 
@@ -97,4 +97,4 @@ Action
 
 #### Source
 
-[core/transform.ts:33](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L33)
+[core/transform.ts:32](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L32)

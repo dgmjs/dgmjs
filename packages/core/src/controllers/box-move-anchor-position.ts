@@ -148,7 +148,7 @@ export class BoxMoveAnchorPositionController extends Controller {
 
     // transform shape
     editor.transform.transact((tx) => {
-      const page = editor.currentPage!;
+      const page = editor.getCurrentPage()!;
       tx.assign(shape, "anchorPosition", this.anchorPosition);
       resolveAllConstraints(tx, page, canvas);
     });

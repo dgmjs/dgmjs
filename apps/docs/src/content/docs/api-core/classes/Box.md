@@ -27,85 +27,9 @@ Box shape
 
 #### Source
 
-[shapes.ts:1193](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1193)
+[shapes.ts:1194](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1194)
 
 ## Properties
-
-### \_linkDOM
-
-> **\_linkDOM**: `null` \| `HTMLAnchorElement`
-
-Link DOM element
-
-#### Inherited from
-
-[`Shape`](/api-core/classes/shape/).[`_linkDOM`](/api-core/classes/shape/#_linkdom)
-
-#### Source
-
-[shapes.ts:338](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L338)
-
-***
-
-### \_memoCanvas
-
-> **\_memoCanvas**: [`MemoizationCanvas`](/api-core/classes/memoizationcanvas/)
-
-Memoization canvas
-
-#### Inherited from
-
-[`Shape`](/api-core/classes/shape/).[`_memoCanvas`](/api-core/classes/shape/#_memocanvas)
-
-#### Source
-
-[shapes.ts:328](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L328)
-
-***
-
-### \_memoOutline
-
-> **\_memoOutline**: `number`[][]
-
-Memoization outline
-
-#### Inherited from
-
-[`Shape`](/api-core/classes/shape/).[`_memoOutline`](/api-core/classes/shape/#_memooutline)
-
-#### Source
-
-[shapes.ts:333](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L333)
-
-***
-
-### \_memoSeed
-
-> **\_memoSeed**: `null` \| `number`
-
-Memoize seed
-
-#### Inherited from
-
-[`Shape`](/api-core/classes/shape/).[`_memoSeed`](/api-core/classes/shape/#_memoseed)
-
-#### Source
-
-[shapes.ts:323](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L323)
-
-***
-
-### \_renderText
-
-> **\_renderText**: `boolean`
-
-Indicate render text or not (just for internal use)
-
-#### Source
-
-[shapes.ts:1191](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1191)
-
-***
 
 ### anchorAngle
 
@@ -896,7 +820,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:1261](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1261)
+[shapes.ts:1262](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1262)
 
 ***
 
@@ -910,7 +834,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:1269](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1269)
+[shapes.ts:1270](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1270)
 
 ***
 
@@ -924,7 +848,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:1249](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1249)
+[shapes.ts:1250](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1250)
 
 ***
 
@@ -938,7 +862,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:1253](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1253)
+[shapes.ts:1254](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1254)
 
 ***
 
@@ -952,7 +876,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:1257](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1257)
+[shapes.ts:1258](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1258)
 
 ***
 
@@ -966,7 +890,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:1265](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1265)
+[shapes.ts:1266](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1266)
 
 ***
 
@@ -1278,7 +1202,7 @@ Import shape from JSON
 
 #### Source
 
-[shapes.ts:1232](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1232)
+[shapes.ts:1233](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1233)
 
 ***
 
@@ -1309,7 +1233,7 @@ will be rotated as the angle of (base angle + anchor angle) at start point.
 
 #### Source
 
-[shapes.ts:1426](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1426)
+[shapes.ts:1427](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1427)
 
 ***
 
@@ -1865,7 +1789,7 @@ Preprocessed document content grammar (BNF):
 
 #### Source
 
-[shapes.ts:1320](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1320)
+[shapes.ts:1321](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1321)
 
 ***
 
@@ -1917,7 +1841,7 @@ Default render this shape
 
 #### Source
 
-[shapes.ts:1273](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1273)
+[shapes.ts:1274](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1274)
 
 ***
 
@@ -1961,7 +1885,7 @@ Return outline polygon
 
 #### Source
 
-[shapes.ts:1401](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1401)
+[shapes.ts:1402](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1402)
 
 ***
 
@@ -1979,7 +1903,7 @@ Return outline polygon
 
 #### Source
 
-[shapes.ts:1295](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1295)
+[shapes.ts:1296](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1296)
 
 ***
 
@@ -2035,7 +1959,7 @@ Export shape to JSON
 
 #### Source
 
-[shapes.ts:1214](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1214)
+[shapes.ts:1215](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1215)
 
 ***
 
@@ -2175,4 +2099,4 @@ Compute size of text with word-wrap and new line chars
 
 #### Source
 
-[shapes.ts:1325](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1325)
+[shapes.ts:1326](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1326)

@@ -27,8 +27,20 @@ import { FillStyle } from "./graphics/graphics";
  * Shape factory
  */
 export class ShapeFactory {
+  /**
+   * Editor instance
+   * @private
+   */
   editor: Editor;
+
+  /**
+   * Event emitter for shape creation
+   */
   onCreate: TypedEvent<Shape>;
+
+  /**
+   * Event emitter for shape initialization
+   */
   onShapeInitialize: TypedEvent<Shape>;
 
   constructor(editor: Editor) {
@@ -38,6 +50,10 @@ export class ShapeFactory {
   }
 
   // TODO: Consider to move to editor.on("create", shape)
+  /**
+   * Trigger create event
+   * @private
+   */
   triggerCreate(shape: Shape) {
     this.onCreate.emit(shape);
   }
@@ -239,6 +255,9 @@ export class ShapeFactory {
     return highlighter;
   }
 
+  /**
+   * Create a frame
+   */
   createFrame(rect: number[][]): Frame {
     const frame = new Frame();
     frame.left = rect[0][0];
@@ -258,6 +277,9 @@ export class ShapeFactory {
     return frame;
   }
 
+  /**
+   * Create an embed
+   */
   createEmbed(rect: number[][]): Embed {
     const embed = new Embed();
     embed.left = rect[0][0];

@@ -47,7 +47,7 @@ export function Menus() {
         const json = JSON.parse(data);
         window.editor.loadFromJSON(json);
         setDoc(window.editor.getDoc());
-        setCurrentPage(window.editor.currentPage);
+        setCurrentPage(window.editor.getCurrentPage());
         window.editor.scrollToCenter();
         window.editor.repaint();
       }
@@ -67,7 +67,7 @@ export function Menus() {
    * Export doc image to a file
    */
   const handleExportImage = async () => {
-    const page = window.editor.currentPage!;
+    const page = window.editor.getCurrentPage()!;
     const exportOptions = {
       scale: 1,
       dark: darkMode,

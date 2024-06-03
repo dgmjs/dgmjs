@@ -22,7 +22,7 @@ export class ImageFactoryHandler extends Handler {
   onActivate(editor: Editor): void {
     const asyncFn = async () => {
       try {
-        const page = editor.currentPage;
+        const page = editor.getCurrentPage();
         if (page) {
           const file = await fileOpen([
             {

@@ -95,7 +95,7 @@ export class ConnectorMoveController extends Controller {
 
     // apply movable property
     const canvas = editor.canvas;
-    const page = editor.currentPage!;
+    const page = editor.getCurrentPage()!;
 
     // transform shape
     editor.transform.transact((tx) => {

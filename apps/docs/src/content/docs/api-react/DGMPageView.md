@@ -12,7 +12,7 @@ A component to show a page object.
 
 | Prop | Type | Default |
 | ---- | ---- | ------- |
-| `page` | `Page` | |
+| `page` | [`Page`](/api-core/classes/page/) | |
 | `darkMode` | `boolean` | `false` |
 | `maxScale` | `number` | `1` |
 | `scaleAdjust` | `number` | `1` |

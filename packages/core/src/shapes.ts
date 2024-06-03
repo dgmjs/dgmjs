@@ -320,22 +320,22 @@ export class Shape extends Obj {
   /**
    * Memoize seed
    */
-  _memoSeed: number | null;
+  private _memoSeed: number | null;
 
   /**
    * Memoization canvas
    */
-  _memoCanvas: MemoizationCanvas;
+  private _memoCanvas: MemoizationCanvas;
 
   /**
    * Memoization outline
    */
-  _memoOutline: number[][];
+  private _memoOutline: number[][];
 
   /**
    * Link DOM element
    */
-  _linkDOM: HTMLAnchorElement | null;
+  private _linkDOM: HTMLAnchorElement | null;
 
   constructor() {
     super();
@@ -990,12 +990,12 @@ export class Page extends Shape {
   /**
    * Page's scroll transient state
    */
-  _origin: number[] | null;
+  pageOrigin: number[] | null;
 
   /**
    * Page's zoom transient state
    */
-  _scale: number;
+  pageScale: number;
 
   constructor() {
     super();
@@ -1004,8 +1004,8 @@ export class Page extends Shape {
     this.size = null; // null = infinite, [960, 720] = 4:3, [960, 540] = 16:9
 
     // transient states
-    this._origin = null;
-    this._scale = 1;
+    this.pageOrigin = null;
+    this.pageScale = 1;
   }
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
@@ -1186,9 +1186,10 @@ export class Box extends Shape {
   paragraphSpacing: number;
 
   /**
-   * Indicate render text or not (just for internal use)
+   * Allow render text or not (just for internal use)
+   * @private
    */
-  _renderText: boolean;
+  allowRenderText: boolean;
 
   constructor() {
     super();
@@ -1208,7 +1209,7 @@ export class Box extends Shape {
     this.vertAlign = VertAlign.MIDDLE;
     this.lineHeight = 1.2;
     this.paragraphSpacing = 0;
-    this._renderText = true;
+    this.allowRenderText = true;
   }
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
@@ -1293,7 +1294,7 @@ export class Box extends Shape {
   }
 
   renderText(canvas: MemoizationCanvas): void {
-    if (this._renderText) {
+    if (this.allowRenderText) {
       renderTextShape(canvas, this);
     }
   }
@@ -1635,7 +1636,7 @@ export class Image extends Box {
   /**
    * Image DOM element
    */
-  _imageDOM: HTMLImageElement | null;
+  private _imageDOM: HTMLImageElement | null;
 
   constructor() {
     super();
@@ -2276,7 +2277,7 @@ export class Embed extends Box {
   /**
    * Iframe DOM element
    */
-  _iframeDOM: HTMLIFrameElement | null;
+  private _iframeDOM: HTMLIFrameElement | null;
 
   constructor() {
     super();

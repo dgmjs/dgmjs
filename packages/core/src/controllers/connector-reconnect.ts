@@ -120,7 +120,7 @@ export class ConnectorReconnectController extends Controller {
     const isHead = this.controlPoint > 0;
     // transform shape
     editor.transform.transact((tx) => {
-      const page = editor.currentPage!;
+      const page = editor.getCurrentPage()!;
       setPath(tx, shape as Line, newPath);
       tx.assignRef(shape, isHead ? "head" : "tail", newEnd);
       tx.assign(shape, isHead ? "headAnchor" : "tailAnchor", anchor);

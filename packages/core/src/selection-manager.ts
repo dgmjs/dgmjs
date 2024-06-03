@@ -91,7 +91,7 @@ export class SelectionManager {
   }
 
   /**
-   * Select shapes in area
+   * Select shapes overlap the given area in the current page.
    */
   selectArea(x1: number, y1: number, x2: number, y2: number) {
     const canvas = this.editor.canvas;
@@ -100,7 +100,7 @@ export class SelectionManager {
       [x2, y2],
     ]);
     this.shapes = [];
-    this.editor.currentPage?.traverse((s) => {
+    this.editor.getCurrentPage()?.traverse((s) => {
       if (
         (s as Shape).visible &&
         (s as Shape).enable &&
@@ -114,11 +114,11 @@ export class SelectionManager {
   }
 
   /**
-   * Select all
+   * Select all shapes in the current page
    */
   selectAll() {
     this.shapes = [];
-    this.editor.currentPage?.traverse((s) => {
+    this.editor.getCurrentPage()?.traverse((s) => {
       if ((s as Shape).visible && (s as Shape).enable) {
         this.shapes.push(s as Shape);
       }
@@ -127,7 +127,7 @@ export class SelectionManager {
   }
 
   /**
-   * Deselect shapes
+   * Deselect the given shapes.
    */
   deselect(shapes: Shape[]) {
     for (let shape of shapes) {

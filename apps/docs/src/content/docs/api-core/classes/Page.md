@@ -31,94 +31,6 @@ Page
 
 ## Properties
 
-### \_linkDOM
-
-> **\_linkDOM**: `null` \| `HTMLAnchorElement`
-
-Link DOM element
-
-#### Inherited from
-
-[`Shape`](/api-core/classes/shape/).[`_linkDOM`](/api-core/classes/shape/#_linkdom)
-
-#### Source
-
-[shapes.ts:338](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L338)
-
-***
-
-### \_memoCanvas
-
-> **\_memoCanvas**: [`MemoizationCanvas`](/api-core/classes/memoizationcanvas/)
-
-Memoization canvas
-
-#### Inherited from
-
-[`Shape`](/api-core/classes/shape/).[`_memoCanvas`](/api-core/classes/shape/#_memocanvas)
-
-#### Source
-
-[shapes.ts:328](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L328)
-
-***
-
-### \_memoOutline
-
-> **\_memoOutline**: `number`[][]
-
-Memoization outline
-
-#### Inherited from
-
-[`Shape`](/api-core/classes/shape/).[`_memoOutline`](/api-core/classes/shape/#_memooutline)
-
-#### Source
-
-[shapes.ts:333](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L333)
-
-***
-
-### \_memoSeed
-
-> **\_memoSeed**: `null` \| `number`
-
-Memoize seed
-
-#### Inherited from
-
-[`Shape`](/api-core/classes/shape/).[`_memoSeed`](/api-core/classes/shape/#_memoseed)
-
-#### Source
-
-[shapes.ts:323](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L323)
-
-***
-
-### \_origin
-
-> **\_origin**: `null` \| `number`[]
-
-Page's scroll transient state
-
-#### Source
-
-[shapes.ts:993](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L993)
-
-***
-
-### \_scale
-
-> **\_scale**: `number`
-
-Page's zoom transient state
-
-#### Source
-
-[shapes.ts:998](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L998)
-
-***
-
 ### children
 
 > **children**: [`Obj`](/api-core/classes/obj/)[]
@@ -448,6 +360,30 @@ Opacity
 #### Source
 
 [shapes.ts:293](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L293)
+
+***
+
+### pageOrigin
+
+> **pageOrigin**: `null` \| `number`[]
+
+Page's scroll transient state
+
+#### Source
+
+[shapes.ts:993](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L993)
+
+***
+
+### pageScale
+
+> **pageScale**: `number`
+
+Page's zoom transient state
+
+#### Source
+
+[shapes.ts:998](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L998)
 
 ***
 

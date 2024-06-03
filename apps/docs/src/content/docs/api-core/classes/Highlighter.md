@@ -27,73 +27,9 @@ Highlighter
 
 #### Source
 
-[shapes.ts:2204](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2204)
+[shapes.ts:2205](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2205)
 
 ## Properties
-
-### \_linkDOM
-
-> **\_linkDOM**: `null` \| `HTMLAnchorElement`
-
-Link DOM element
-
-#### Inherited from
-
-[`Path`](/api-core/classes/path/).[`_linkDOM`](/api-core/classes/path/#_linkdom)
-
-#### Source
-
-[shapes.ts:338](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L338)
-
-***
-
-### \_memoCanvas
-
-> **\_memoCanvas**: [`MemoizationCanvas`](/api-core/classes/memoizationcanvas/)
-
-Memoization canvas
-
-#### Inherited from
-
-[`Path`](/api-core/classes/path/).[`_memoCanvas`](/api-core/classes/path/#_memocanvas)
-
-#### Source
-
-[shapes.ts:328](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L328)
-
-***
-
-### \_memoOutline
-
-> **\_memoOutline**: `number`[][]
-
-Memoization outline
-
-#### Inherited from
-
-[`Path`](/api-core/classes/path/).[`_memoOutline`](/api-core/classes/path/#_memooutline)
-
-#### Source
-
-[shapes.ts:333](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L333)
-
-***
-
-### \_memoSeed
-
-> **\_memoSeed**: `null` \| `number`
-
-Memoize seed
-
-#### Inherited from
-
-[`Path`](/api-core/classes/path/).[`_memoSeed`](/api-core/classes/path/#_memoseed)
-
-#### Source
-
-[shapes.ts:323](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L323)
-
-***
 
 ### children
 
@@ -451,7 +387,7 @@ Opacity
 
 #### Source
 
-[shapes.ts:1453](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1453)
+[shapes.ts:1454](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1454)
 
 ***
 
@@ -465,7 +401,7 @@ Opacity
 
 #### Source
 
-[shapes.ts:1452](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1452)
+[shapes.ts:1453](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1453)
 
 ***
 
@@ -805,7 +741,7 @@ Determines whether this shape contains a point in GCS
 
 #### Source
 
-[shapes.ts:1497](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1497)
+[shapes.ts:1498](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1498)
 
 ***
 
@@ -1029,7 +965,7 @@ Import shape from JSON
 
 #### Source
 
-[shapes.ts:1470](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1470)
+[shapes.ts:1471](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1471)
 
 ***
 
@@ -1139,7 +1075,7 @@ segment line to end
 
 #### Source
 
-[shapes.ts:1488](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1488)
+[shapes.ts:1489](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1489)
 
 ***
 
@@ -1397,7 +1333,7 @@ Return is the path is closed
 
 #### Source
 
-[shapes.ts:1479](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1479)
+[shapes.ts:1480](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1480)
 
 ***
 
@@ -1555,7 +1491,7 @@ Determines whether this shape overlaps a given rect
 
 #### Source
 
-[shapes.ts:1520](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1520)
+[shapes.ts:1521](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1521)
 
 ***
 
@@ -1644,7 +1580,7 @@ Default render this shape
 
 #### Source
 
-[shapes.ts:2209](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2209)
+[shapes.ts:2210](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2210)
 
 ***
 
@@ -1688,7 +1624,7 @@ Return default outline
 
 #### Source
 
-[shapes.ts:1531](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1531)
+[shapes.ts:1532](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1532)
 
 ***
 
@@ -1744,7 +1680,7 @@ Export shape to JSON
 
 #### Source
 
-[shapes.ts:1463](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1463)
+[shapes.ts:1464](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1464)
 
 ***
 

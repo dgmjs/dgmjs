@@ -46,7 +46,7 @@ export class ConnectorFactoryHandler extends Handler {
   }
 
   initialize(editor: Editor, e: CanvasPointerEvent): void {
-    const page = editor.currentPage;
+    const page = editor.getCurrentPage();
     if (page) {
       const [end, anchor] = findConnectionAnchor(
         editor,
@@ -71,7 +71,7 @@ export class ConnectorFactoryHandler extends Handler {
   }
 
   update(editor: Editor, e: CanvasPointerEvent): void {
-    const page = editor.currentPage;
+    const page = editor.getCurrentPage();
     if (page) {
       const [end, anchor] = findConnectionAnchor(
         editor,

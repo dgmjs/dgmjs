@@ -56,7 +56,7 @@ export const DGMFloatingToolbarHolder: React.FC<
   }, [editor]);
 
   useEffect(() => {
-    if (editor && editor.currentPage && toolbarHolderRef.current) {
+    if (editor && editor.getCurrentPage() && toolbarHolderRef.current) {
       const canvasWidth = editor.canvasElement?.offsetWidth || 0;
       const canvasHeight = editor.canvasElement?.offsetHeight || 0;
       let visible = selection.length > 0;

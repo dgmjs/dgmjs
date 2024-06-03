@@ -33,7 +33,7 @@ Select Handler
 
 #### Source
 
-[editor.ts:1179](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1179)
+[editor.ts:1337](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1337)
 
 ## Properties
 
@@ -67,7 +67,7 @@ Select Handler
 
 #### Source
 
-[editor.ts:1176](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1176)
+[editor.ts:1334](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1334)
 
 ***
 
@@ -81,7 +81,7 @@ Select Handler
 
 #### Source
 
-[editor.ts:1177](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1177)
+[editor.ts:1335](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1335)
 
 ## Methods
 
@@ -105,7 +105,7 @@ Activate the handler
 
 #### Source
 
-[editor.ts:1205](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1205)
+[editor.ts:1363](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1363)
 
 ***
 
@@ -129,7 +129,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[editor.ts:1196](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1196)
+[editor.ts:1354](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1354)
 
 ***
 
@@ -153,7 +153,7 @@ Deactivate the handler
 
 #### Source
 
-[editor.ts:1213](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1213)
+[editor.ts:1371](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1371)
 
 ***
 
@@ -177,7 +177,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[handlers/select-handler.ts:280](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L280)
+[handlers/select-handler.ts:282](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L282)
 
 ***
 
@@ -225,7 +225,7 @@ keyDown
 
 #### Source
 
-[handlers/select-handler.ts:252](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L252)
+[handlers/select-handler.ts:253](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L253)
 
 ***
 
@@ -251,7 +251,7 @@ keyUp
 
 #### Source
 
-[handlers/select-handler.ts:275](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L275)
+[handlers/select-handler.ts:277](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L277)
 
 ***
 
@@ -275,7 +275,7 @@ Triggered when activated
 
 #### Source
 
-[editor.ts:1220](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1220)
+[editor.ts:1378](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1378)
 
 ***
 
@@ -299,7 +299,7 @@ Triggered when deactivate
 
 #### Source
 
-[editor.ts:1225](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1225)
+[editor.ts:1383](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1383)
 
 ***
 
@@ -325,7 +325,7 @@ handle pointer down event
 
 #### Source
 
-[handlers/select-handler.ts:56](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L56)
+[handlers/select-handler.ts:57](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L57)
 
 ***
 
@@ -351,7 +351,7 @@ handle pointer move event
 
 #### Source
 
-[handlers/select-handler.ts:120](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L120)
+[handlers/select-handler.ts:121](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L121)
 
 ***
 
@@ -377,7 +377,7 @@ handle pointer up event
 
 #### Source
 
-[handlers/select-handler.ts:196](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L196)
+[handlers/select-handler.ts:197](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L197)
 
 ***
 

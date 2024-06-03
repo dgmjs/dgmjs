@@ -28,9 +28,11 @@ import * as guide from "../utils/guide";
 function getGuideBoxes(editor: Editor, shape: Shape): Box[] {
   const canvas = editor.canvas;
   return (
-    (editor.currentPage?.children.filter(
-      (s) => s !== shape && s instanceof Box && angleInCCS(canvas, s) === 0
-    ) as Box[]) ?? []
+    (editor
+      .getCurrentPage()
+      ?.children.filter(
+        (s) => s !== shape && s instanceof Box && angleInCCS(canvas, s) === 0
+      ) as Box[]) ?? []
   );
 }
 
@@ -46,16 +48,18 @@ function getBoxesInRow(editor: Editor, shape: Shape, box: number[][]): Box[] {
   const t = box[0][1];
   const b = box[1][1];
   return (
-    (editor.currentPage?.children.filter(
-      (s) =>
-        s !== shape &&
-        s instanceof Box &&
-        angleInCCS(canvas, s) === 0 &&
-        ((s.top >= t && s.top <= b) ||
-          (t >= s.top && t <= s.bottom) ||
-          (s.bottom >= t && s.bottom <= b) ||
-          (b >= s.top && b <= s.bottom))
-    ) as Box[]) ?? []
+    (editor
+      .getCurrentPage()
+      ?.children.filter(
+        (s) =>
+          s !== shape &&
+          s instanceof Box &&
+          angleInCCS(canvas, s) === 0 &&
+          ((s.top >= t && s.top <= b) ||
+            (t >= s.top && t <= s.bottom) ||
+            (s.bottom >= t && s.bottom <= b) ||
+            (b >= s.top && b <= s.bottom))
+      ) as Box[]) ?? []
   );
 }
 
@@ -75,16 +79,18 @@ function getBoxesInColumn(
   const l = box[0][0];
   const r = box[1][0];
   return (
-    (editor.currentPage?.children.filter(
-      (s) =>
-        s !== shape &&
-        s instanceof Box &&
-        angleInCCS(canvas, s) === 0 &&
-        ((s.left >= l && s.left <= r) ||
-          (l >= s.left && l <= s.right) ||
-          (s.right >= l && s.right <= r) ||
-          (r >= s.left && r <= s.right))
-    ) as Box[]) ?? []
+    (editor
+      .getCurrentPage()
+      ?.children.filter(
+        (s) =>
+          s !== shape &&
+          s instanceof Box &&
+          angleInCCS(canvas, s) === 0 &&
+          ((s.left >= l && s.left <= r) ||
+            (l >= s.left && l <= s.right) ||
+            (s.right >= l && s.right <= r) ||
+            (r >= s.left && r <= s.right))
+      ) as Box[]) ?? []
   );
 }
 
@@ -280,7 +286,7 @@ class Snap {
     sizingPosition: string
   ) {
     const canvas = editor.canvas;
-    if (editor.snapToObject && angleInCCS(canvas, shape) === 0) {
+    if (editor.getSnapToGrid() && angleInCCS(canvas, shape) === 0) {
       const snapXs: number[] = [];
       const snapYs: number[] = [];
       getGuideBoxes(editor, shape).forEach((s) => {
@@ -358,7 +364,7 @@ class Snap {
    */
   toGap(editor: Editor, shape: Shape, box: number[][]) {
     const canvas = editor.canvas;
-    if (editor.snapToObject && angleInCCS(canvas, shape) === 0) {
+    if (editor.getSnapToGrid() && angleInCCS(canvas, shape) === 0) {
       // 1. snap to gaps in row
       const ROW = getBoxesInRow(editor, shape, box);
       // 1.1 compute gaps on lefts
@@ -470,7 +476,7 @@ class Snap {
    * @param ys y-coords to snap
    */
   toPath(editor: Editor, shape: Line, xs: number[], ys: number[]) {
-    if (editor.snapToObject) {
+    if (editor.getSnapToObject()) {
       const snapXs = shape.path.map((p) => p[0]);
       const snapYs = shape.path.map((p) => p[1]);
       this.toXY(editor, xs, ys, snapXs, snapYs, "path");
@@ -486,7 +492,7 @@ class Snap {
    */
   toOutline(editor: Editor, shape: Shape, xs: number[], ys: number[]) {
     const canvas = editor.canvas;
-    if (editor.snapToObject && angleInCCS(canvas, shape) === 0) {
+    if (editor.getSnapToObject() && angleInCCS(canvas, shape) === 0) {
       const snapXs: number[] = [];
       const snapYs: number[] = [];
       getGuideBoxes(editor, shape).forEach((s) => {
@@ -507,9 +513,9 @@ class Snap {
    * Snap to grid
    */
   toGrid(editor: Editor, point: number[]) {
-    if (editor.snapToGrid) {
+    if (editor.getSnapToGrid()) {
       if (this.x < 0) {
-        const gx = editor.gridSize[0];
+        const gx = editor.getGridSize()[0];
         let mx = Math.round(point[0] / gx) * gx;
         this.x = point[0];
         this.snappedX = mx;
@@ -517,7 +523,7 @@ class Snap {
         this.typeX = "grid";
       }
       if (this.y < 0) {
-        const gy = editor.gridSize[1];
+        const gy = editor.getGridSize()[1];
         let my = Math.round(point[1] / gy) * gy;
         this.y = point[1];
         this.snappedY = my;

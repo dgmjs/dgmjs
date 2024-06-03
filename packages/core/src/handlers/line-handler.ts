@@ -43,7 +43,7 @@ export class LineFactoryHandler extends Handler {
   }
 
   initialize(editor: Editor, e: CanvasPointerEvent): void {
-    const page = editor.currentPage;
+    const page = editor.getCurrentPage();
     if (page) {
       this.points = [this.dragStartPoint];
       this.shape = editor.factory.createLine(this.points, false);
@@ -55,7 +55,7 @@ export class LineFactoryHandler extends Handler {
   }
 
   update(editor: Editor, e: CanvasPointerEvent): void {
-    const page = editor.currentPage;
+    const page = editor.getCurrentPage();
     if (page && this.shape) {
       const newPath = [...this.points, this.dragPoint];
       editor.transform.transact((tx) => {
@@ -66,7 +66,7 @@ export class LineFactoryHandler extends Handler {
   }
 
   finalize(editor: Editor, e?: CanvasPointerEvent): void {
-    const page = editor.currentPage;
+    const page = editor.getCurrentPage();
     if (page && this.shape) {
       if (geometry.pathLength(this.shape.path) < 2) {
         editor.transform.cancelAction();
@@ -143,7 +143,7 @@ export class LineFactoryHandler extends Handler {
 
   keyDown(editor: Editor, e: KeyboardEvent): boolean {
     if (e.key === "Escape" && this.dragging) {
-      const page = editor.currentPage;
+      const page = editor.getCurrentPage();
       if (page && this.shape) {
         editor.transform.transact((tx) => {
           setPath(tx, this.shape!, structuredClone(this.points));
