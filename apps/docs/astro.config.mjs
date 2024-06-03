@@ -46,7 +46,6 @@ export default defineConfig({
       social: {
         github: "https://github.com/dgmjs/dgmjs",
         twitter: "https://twitter.com/dgm_sh",
-        discord: "https://discord.gg/dA4RnpKrQ9",
       },
       sidebar: [
         {
