@@ -3,6 +3,7 @@ import react from "@astrojs/react";
 import starlight from "@astrojs/starlight";
 import tailwind from "@astrojs/tailwind";
 import { createStarlightTypeDocPlugin } from "starlight-typedoc";
+import { siteConfig } from "./site-config";
 const [CoreStarlightTypeDoc, CoreTypeDocSidebarGroup] =
   createStarlightTypeDocPlugin();
 const [ExportStarlightTypeDoc, ExportTypeDocSidebarGroup] =
@@ -10,6 +11,7 @@ const [ExportStarlightTypeDoc, ExportTypeDocSidebarGroup] =
 
 // https://astro.build/config
 export default defineConfig({
+  site: siteConfig.url,
   integrations: [
     react(),
     starlight({
