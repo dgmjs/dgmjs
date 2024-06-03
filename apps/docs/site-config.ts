@@ -7,7 +7,6 @@ export type SiteConfig = {
   social: {
     github: string;
     twitter: string;
-    discord: string;
   };
   mainNav: {
     title: string;
@@ -26,7 +25,6 @@ export const siteConfig: SiteConfig = {
   social: {
     github: "https://github.com/dgmjs/dgmjs",
     twitter: "dgm_sh",
-    discord: "https://discord.gg/S2qWnqFJG2",
   },
   mainNav: [
     {
