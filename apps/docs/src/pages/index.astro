@@ -15,6 +15,22 @@ import "@/styles/splash.css";
     template: "splash",
     title: `${siteConfig.name} | ${siteConfig.title}`,
     hero: {},
+    head: [
+      {
+        tag: "meta",
+        attrs: {
+          property: "og:image",
+          content: siteConfig.ogImage,
+        },
+      },
+      {
+        tag: "meta",
+        attrs: {
+          property: "twitter:image",
+          content: siteConfig.ogImage,
+        },
+      },
+    ],
   }}
   class:list={["mx-auto"]}
 >
