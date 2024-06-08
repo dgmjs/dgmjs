@@ -25,4 +25,4 @@ An infinite canvas with _smart shapes_. It supports:
 
 ## License
 
-DGM.js's source code and distributed packages are provided under the non-commercial DGM license. This license does not permit commercial use. If you wish to use DGM.js in a commercial product or enterprise, you will need to purchase a commercial license. To obtain a commercial license, please contact us at contact@dgm.sh.
+DGM.js is distributed under the _GPLv3 license_. If you want non-GPL license, please see our [licensing options](https://dgmjs.dev/overview/license/).
