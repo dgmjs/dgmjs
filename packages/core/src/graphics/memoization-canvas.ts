@@ -520,6 +520,7 @@ class MemoizationCanvas {
           stroke: this.canvas.resolveColor(this.strokeColor),
           strokeWidth: this.strokeWidth,
           strokeLineDash: this.strokePattern,
+          preserveVertices: true,
         }
       );
       this.do.push({ type: "rough", alpha: this.alpha, rd });
@@ -576,6 +577,7 @@ class MemoizationCanvas {
           hachureGap: Math.max(MIN_HACHURE_GAP, this.strokeWidth * 3),
           stroke: this.canvas.resolveColor("$transparent"),
           strokeWidth: this.strokeWidth,
+          preserveVertices: true,
         }
       );
       this.do.push({ type: "rough", alpha: this.alpha, rd });
@@ -966,6 +968,7 @@ class MemoizationCanvas {
         stroke: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
+        preserveVertices: true,
       });
       this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
@@ -996,6 +999,7 @@ class MemoizationCanvas {
         hachureGap: Math.max(MIN_HACHURE_GAP, this.strokeWidth * 3),
         stroke: this.canvas.resolveColor("$transparent"),
         strokeWidth: this.strokeWidth,
+        preserveVertices: true,
       });
       this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
