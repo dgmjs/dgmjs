@@ -585,6 +585,7 @@ class Canvas {
           stroke: this.resolveColor(this.strokeColor),
           strokeWidth: this.strokeWidth,
           strokeLineDash: this.strokePattern,
+          preserveVertices: true,
         }
       );
       roughDraw(this.context, rd);
@@ -643,6 +644,7 @@ class Canvas {
           fillLineDash: [],
           stroke: this.resolveColor("$transparent"),
           strokeWidth: this.strokeWidth,
+          preserveVertices: true,
         }
       );
       roughDraw(this.context, rd);
@@ -1255,6 +1257,7 @@ class Canvas {
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
+        preserveVertices: true,
       });
       roughDraw(this.context, rd);
     } else {
@@ -1282,6 +1285,7 @@ class Canvas {
         fillLineDash: [],
         stroke: this.resolveColor("$transparent"),
         strokeWidth: this.strokeWidth,
+        preserveVertices: true,
       });
       roughDraw(this.context, rd);
     } else {
