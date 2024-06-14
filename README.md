@@ -24,6 +24,10 @@ An infinite canvas with _smart shapes_. It supports:
 - [Run demo app](https://github.com/dgmjs/dgmjs/blob/main/apps/demo/README.md)
 - [DGM: Full-featured App](https://dgm.sh/home)
 
+## Contribution
+
+Please note that this project is **not open contribution**, so we do not accept any pull requests.
+
 ## License
 
 DGM.js is distributed under the _GPLv3 license_. If you want non-GPL license, please see our [licensing options](https://dgmjs.dev/overview/license/).
