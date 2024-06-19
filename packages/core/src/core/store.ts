@@ -11,7 +11,7 @@
  * from MKLabs (niklaus.lee@gmail.com).
  */
 
-import { convertToLatestVersion } from "../utils/document-compatibility";
+import { fixJson, fixDoc } from "../utils/document-compatibility";
 import { Transform } from "./transform";
 import { Instantiator } from "./instantiator";
 import type { Obj } from "./obj";
@@ -135,9 +135,10 @@ export class Store {
    * Set the root from JSON
    */
   fromJSON(json: any) {
-    const latestVersionJson = convertToLatestVersion(json);
+    const latestVersionJson = fixJson(json);
     this.root = this.instantiator.createFromJson(latestVersionJson);
     if (this.root) {
+      fixDoc(this.root);
       this.idIndex = {};
       this.addToIndex(this.root);
     }
