@@ -37,13 +37,12 @@ class Clipboard {
    */
   async write(data: ClipboardData): Promise<void> {
     const clipboardItem: Record<string, Blob> = {};
-    if (Array.isArray(data.objs)) {
+    if (Array.isArray(data.objs) && data.objs.length > 0) {
       const buffer = serialize(data.objs);
       const encoded = `<dgm>${Base64.encode(JSON.stringify(buffer))}</dgm>`;
       const blob = new Blob([encoded], { type: "text/plain" });
       clipboardItem["text/plain"] = blob;
-    }
-    if (data.text && data.text.length > 0) {
+    } else if (data.text && data.text.length > 0) {
       const blob = new Blob([data.text], { type: "text/plain" });
       clipboardItem["text/plain"] = blob;
     }
@@ -64,6 +63,7 @@ class Clipboard {
         if (type === "text/plain") {
           const blob = await item.getType(type);
           const text = await blob.text();
+          console.log(text);
           const dgmMatch = text.match(/<dgm>(.*)<\/dgm>/);
           const svgMatch = text.match(/<svg.*<\/svg>/);
           if (dgmMatch) {
