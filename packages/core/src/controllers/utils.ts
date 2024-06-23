@@ -139,6 +139,10 @@ export function findConnectionAnchor(
     const h = geometry.height(box);
     anchor = [(point[0] - l) / w, (point[1] - t) / h];
   }
+  if (anchor[0] < 0) anchor[0] = 0;
+  if (anchor[0] > 1) anchor[0] = 1;
+  if (anchor[1] < 0) anchor[1] = 0;
+  if (anchor[1] > 1) anchor[1] = 1;
   return [end, anchor];
 }
 

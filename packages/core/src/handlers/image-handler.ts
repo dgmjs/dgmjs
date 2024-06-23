@@ -50,6 +50,7 @@ export class ImageFactoryHandler extends Handler {
         }
       } catch (err) {
         // user cancelled
+        this.complete(editor);
       }
     };
     asyncFn();

@@ -169,7 +169,7 @@ Draw an arc
 
 #### Source
 
-[graphics/memoization-canvas.ts:944](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L944)
+[graphics/memoization-canvas.ts:946](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L946)
 
 ***
 
@@ -205,7 +205,7 @@ Draw a curve
 
 #### Source
 
-[graphics/memoization-canvas.ts:790](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L790)
+[graphics/memoization-canvas.ts:792](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L792)
 
 ***
 
@@ -225,7 +225,7 @@ Draw memoized drawing objects
 
 #### Source
 
-[graphics/memoization-canvas.ts:1111](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1111)
+[graphics/memoization-canvas.ts:1115](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1115)
 
 ***
 
@@ -255,7 +255,7 @@ Draw Image
 
 #### Source
 
-[graphics/memoization-canvas.ts:1076](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1076)
+[graphics/memoization-canvas.ts:1080](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1080)
 
 ***
 
@@ -283,7 +283,7 @@ Draw an ellipse
 
 #### Source
 
-[graphics/memoization-canvas.ts:701](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L701)
+[graphics/memoization-canvas.ts:703](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L703)
 
 ***
 
@@ -313,7 +313,7 @@ Draw filled arc. angles are started from 12'clock in degree.
 
 #### Source
 
-[graphics/memoization-canvas.ts:903](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L903)
+[graphics/memoization-canvas.ts:905](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L905)
 
 ***
 
@@ -335,7 +335,7 @@ Draw filled curved lines
 
 #### Source
 
-[graphics/memoization-canvas.ts:762](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L762)
+[graphics/memoization-canvas.ts:764](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L764)
 
 ***
 
@@ -363,7 +363,7 @@ Draw a filled ellipse
 
 #### Source
 
-[graphics/memoization-canvas.ts:658](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L658)
+[graphics/memoization-canvas.ts:660](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L660)
 
 ***
 
@@ -385,7 +385,7 @@ Draw filled path
 
 #### Source
 
-[graphics/memoization-canvas.ts:987](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L987)
+[graphics/memoization-canvas.ts:990](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L990)
 
 ***
 
@@ -407,7 +407,7 @@ Draw filled polygon
 
 #### Source
 
-[graphics/memoization-canvas.ts:825](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L825)
+[graphics/memoization-canvas.ts:827](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L827)
 
 ***
 
@@ -465,7 +465,7 @@ Draw a filled round rect
 
 #### Source
 
-[graphics/memoization-canvas.ts:546](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L546)
+[graphics/memoization-canvas.ts:547](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L547)
 
 ***
 
@@ -491,7 +491,7 @@ text baseline (metric.ascent - not the top of text)
 
 #### Source
 
-[graphics/memoization-canvas.ts:1060](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1060)
+[graphics/memoization-canvas.ts:1064](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1064)
 
 ***
 
@@ -541,7 +541,7 @@ Draw a path
 
 #### Source
 
-[graphics/memoization-canvas.ts:1016](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1016)
+[graphics/memoization-canvas.ts:1020](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1020)
 
 ***
 
@@ -563,7 +563,7 @@ Draw a polygon
 
 #### Source
 
-[graphics/memoization-canvas.ts:853](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L853)
+[graphics/memoization-canvas.ts:855](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L855)
 
 ***
 
@@ -585,7 +585,7 @@ Draw polyline
 
 #### Source
 
-[graphics/memoization-canvas.ts:710](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L710)
+[graphics/memoization-canvas.ts:712](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L712)
 
 ***
 
@@ -643,7 +643,7 @@ Draw a round rect
 
 #### Source
 
-[graphics/memoization-canvas.ts:601](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L601)
+[graphics/memoization-canvas.ts:603](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L603)
 
 ***
 
@@ -871,7 +871,7 @@ Draw an arc. angles are started from 3'clock in degree (0~360).
 
 #### Source
 
-[graphics/memoization-canvas.ts:862](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L862)
+[graphics/memoization-canvas.ts:864](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L864)
 
 ***
 
@@ -893,7 +893,7 @@ Draw curved lines
 
 #### Source
 
-[graphics/memoization-canvas.ts:736](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L736)
+[graphics/memoization-canvas.ts:738](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L738)
 
 ***
 
@@ -921,7 +921,7 @@ Draw an ellipse
 
 #### Source
 
-[graphics/memoization-canvas.ts:617](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L617)
+[graphics/memoization-canvas.ts:619](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L619)
 
 ***
 
@@ -953,7 +953,7 @@ Taper at the end of the path value must be 0~1
 
 #### Source
 
-[graphics/memoization-canvas.ts:1030](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1030)
+[graphics/memoization-canvas.ts:1034](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1034)
 
 ***
 
@@ -975,7 +975,7 @@ Draw a path
 
 #### Source
 
-[graphics/memoization-canvas.ts:960](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L960)
+[graphics/memoization-canvas.ts:962](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L962)
 
 ***
 
@@ -997,7 +997,7 @@ Draw polygon
 
 #### Source
 
-[graphics/memoization-canvas.ts:799](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L799)
+[graphics/memoization-canvas.ts:801](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L801)
 
 ***
 
@@ -1075,4 +1075,4 @@ Get Text Metric
 
 #### Source
 
-[graphics/memoization-canvas.ts:1103](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1103)
+[graphics/memoization-canvas.ts:1107](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1107)

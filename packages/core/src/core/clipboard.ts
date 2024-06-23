@@ -40,8 +40,8 @@ class Clipboard {
     if (Array.isArray(data.objs)) {
       const buffer = serialize(data.objs);
       const encoded = `<dgm>${Base64.encode(JSON.stringify(buffer))}</dgm>`;
-      const blob = new Blob([encoded], { type: "text/html" });
-      clipboardItem["text/html"] = blob;
+      const blob = new Blob([encoded], { type: "text/plain" });
+      clipboardItem["text/plain"] = blob;
     }
     if (data.text && data.text.length > 0) {
       const blob = new Blob([data.text], { type: "text/plain" });
@@ -61,20 +61,15 @@ class Clipboard {
     const data: ClipboardData = {};
     for (let item of clipboardItem) {
       for (let type of item.types) {
-        if (type === "text/html") {
-          const blob = await item.getType(type);
-          const text = await blob.text();
-          const match = text.match(/<dgm>(.*)<\/dgm>/);
-          if (match) {
-            const buffer = JSON.parse(Base64.decode(match[1]));
-            data.objs = deserialize(this.store.instantiator, buffer);
-          }
-        }
         if (type === "text/plain") {
           const blob = await item.getType(type);
           const text = await blob.text();
+          const dgmMatch = text.match(/<dgm>(.*)<\/dgm>/);
           const svgMatch = text.match(/<svg.*<\/svg>/);
-          if (svgMatch) {
+          if (dgmMatch) {
+            const buffer = JSON.parse(Base64.decode(dgmMatch[1]));
+            data.objs = deserialize(this.store.instantiator, buffer);
+          } else if (svgMatch) {
             data.image = new Blob([svgMatch[0]], { type: "image/svg+xml" });
           } else {
             data.text = text;
