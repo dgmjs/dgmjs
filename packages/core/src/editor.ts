@@ -1670,9 +1670,9 @@ export class Controller {
   pointerUp(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
     let handled = false;
     if (e.button === Mouse.BUTTON1 && this.dragging) {
+      this.finalize(editor, shape);
       this.reset();
       handled = true;
-      this.finalize(editor, shape);
       editor.repaint();
       editor.onDragEnd.emit({
         controller: this,

@@ -82,8 +82,10 @@ export class BoxMoveController extends Controller {
     )
       this.dyStepGCS = 0;
 
-    // determine container
-    // (container shouldn't be itself of a descendant of target)
+    // return if no change
+    if (this.dxStepGCS === 0 && this.dyStepGCS === 0) return;
+
+    // determine container (shouldn't be itself of a descendant of target)
     const canvas = editor.canvas;
     let p2 = targetShape.localCoordTransform(canvas, this.dragPoint, false);
     let container = editor.getCurrentPage()?.getShapeAt(canvas, p2, [shape]);
