@@ -63,7 +63,6 @@ class Clipboard {
         if (type === "text/plain") {
           const blob = await item.getType(type);
           const text = await blob.text();
-          console.log(text);
           const dgmMatch = text.match(/<dgm>(.*)<\/dgm>/);
           const svgMatch = text.match(/<svg.*<\/svg>/);
           if (dgmMatch) {
