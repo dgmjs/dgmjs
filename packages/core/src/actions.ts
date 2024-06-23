@@ -205,7 +205,6 @@ export class Actions {
     const clipboard = this.editor.clipboard;
     await clipboard.write({
       objs: shapes,
-      text: extractTextFromShapes(shapes),
     });
   }
 
@@ -219,7 +218,6 @@ export class Actions {
       const clipboard = this.editor.clipboard;
       await clipboard.write({
         objs: shapes,
-        text: extractTextFromShapes(shapes),
       });
       this.editor.transform.startAction("cut");
       this.editor.transform.transact((tx) => {
