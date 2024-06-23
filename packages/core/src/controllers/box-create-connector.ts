@@ -155,7 +155,11 @@ export class BoxCreateConnectorController extends Controller {
    * Finalize shape by ghost
    */
   finalize(editor: Editor, shape: Box) {
-    editor.transform.endAction();
+    if (this.dx === 0 && this.dy === 0) {
+      editor.transform.cancelAction();
+    } else {
+      editor.transform.endAction();
+    }
   }
 
   /**
