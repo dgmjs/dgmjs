@@ -464,7 +464,7 @@ export class Editor {
         this.autoScroller.pointerDown(event);
         if (this.midButtonDown || (event.ModDown && this.leftButtonDown)) {
           // viewpoint move
-          this.setCursor(Cursor.MOVE);
+          this.setCursor(Cursor.GRABBING);
           this.downX = e.offsetX;
           this.downY = e.offsetY;
         } else if (!this.isPinching && this.activeHandler) {
@@ -1201,6 +1201,13 @@ export class Editor {
       this.onRepaint.emit();
     }
     // console.timeEnd("repaint");
+  }
+
+  /**
+   * Get cursor
+   */
+  getCursor() {
+    return this.canvasElement.style.cursor;
   }
 
   /**
