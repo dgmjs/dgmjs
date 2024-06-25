@@ -19,4 +19,4 @@ Returns width of the rect
 
 ## Source
 
-[graphics/geometry.ts:311](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L311)
+[graphics/geometry.ts:298](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L298)

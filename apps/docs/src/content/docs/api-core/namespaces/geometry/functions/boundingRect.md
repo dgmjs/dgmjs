@@ -19,4 +19,4 @@ Get a bounding rect of a path
 
 ## Source
 
-[graphics/geometry.ts:512](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L512)
+[graphics/geometry.ts:499](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L499)

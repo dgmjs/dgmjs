@@ -21,4 +21,4 @@ Get svg path from stroke points from `perfect-freehand`
 
 ## Source
 
-[graphics/utils.ts:143](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/utils.ts#L143)
+[graphics/utils.ts:130](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/utils.ts#L130)

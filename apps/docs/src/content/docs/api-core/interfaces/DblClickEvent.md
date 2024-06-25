@@ -13,7 +13,7 @@ title: "DblClickEvent"
 
 #### Source
 
-[editor.ts:45](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L45)
+[editor.ts:32](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L32)
 
 ***
 
@@ -23,4 +23,4 @@ title: "DblClickEvent"
 
 #### Source
 
-[editor.ts:44](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L44)
+[editor.ts:31](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L31)

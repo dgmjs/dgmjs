@@ -21,4 +21,4 @@ Return the bounding box of shape in CCS
 
 ## Source
 
-[graphics/utils.ts:102](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/utils.ts#L102)
+[graphics/utils.ts:89](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/utils.ts#L89)

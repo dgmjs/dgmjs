@@ -31,4 +31,4 @@ title: "Sizable"
 
 ## Source
 
-[shapes.ts:85](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L85)
+[shapes.ts:72](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L72)

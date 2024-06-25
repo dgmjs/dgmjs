@@ -19,4 +19,4 @@ Get a bounding rect polygon of path
 
 ## Source
 
-[graphics/geometry.ts:524](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L524)
+[graphics/geometry.ts:511](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L511)

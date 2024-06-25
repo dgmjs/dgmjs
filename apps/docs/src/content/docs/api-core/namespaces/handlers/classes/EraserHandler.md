@@ -2,10 +2,10 @@
 editUrl: false
 next: false
 prev: false
-title: "TextFactoryHandler"
+title: "EraserHandler"
 ---
 
-Text Factory Handler
+Eraser Handler
 
 ## Extends
 
@@ -13,9 +13,9 @@ Text Factory Handler
 
 ## Constructors
 
-### new TextFactoryHandler()
+### new EraserHandler()
 
-> **new TextFactoryHandler**(`id`, `options`?): [`TextFactoryHandler`](/api-core/namespaces/handlers/classes/textfactoryhandler/)
+> **new EraserHandler**(`id`, `options`?): [`EraserHandler`](/api-core/namespaces/handlers/classes/eraserhandler/)
 
 #### Parameters
 
@@ -25,7 +25,7 @@ Text Factory Handler
 
 #### Returns
 
-[`TextFactoryHandler`](/api-core/namespaces/handlers/classes/textfactoryhandler/)
+[`EraserHandler`](/api-core/namespaces/handlers/classes/eraserhandler/)
 
 #### Inherited from
 
@@ -36,6 +36,66 @@ Text Factory Handler
 [editor.ts:1328](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1328)
 
 ## Properties
+
+### deletingShapes
+
+> **deletingShapes**: [`Shape`](/api-core/classes/shape/)[] = `[]`
+
+#### Source
+
+[handlers/eraser-handler.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L17)
+
+***
+
+### dragPoint
+
+> **dragPoint**: `number`[]
+
+#### Source
+
+[handlers/eraser-handler.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L14)
+
+***
+
+### dragStartPoint
+
+> **dragStartPoint**: `number`[]
+
+#### Source
+
+[handlers/eraser-handler.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L13)
+
+***
+
+### dragging
+
+> **dragging**: `boolean` = `false`
+
+#### Source
+
+[handlers/eraser-handler.ts:12](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L12)
+
+***
+
+### dx
+
+> **dx**: `number` = `0`
+
+#### Source
+
+[handlers/eraser-handler.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L15)
+
+***
+
+### dy
+
+> **dy**: `number` = `0`
+
+#### Source
+
+[handlers/eraser-handler.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L16)
+
+***
 
 ### id
 
@@ -63,16 +123,6 @@ Text Factory Handler
 
 [editor.ts:1326](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1326)
 
-***
-
-### shape
-
-> **shape**: `null` \| [`Text`](/api-core/classes/text/) = `null`
-
-#### Source
-
-[handlers/text-handler.ts:11](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/text-handler.ts#L11)
-
 ## Methods
 
 ### activate()
@@ -96,6 +146,26 @@ Activate the handler
 #### Source
 
 [editor.ts:1354](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1354)
+
+***
+
+### addToDeletingShapes()
+
+> **addToDeletingShapes**(`editor`, `point`): `void`
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **point**: `number`[]
+
+#### Returns
+
+`void`
+
+#### Source
+
+[handlers/eraser-handler.ts:28](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L28)
 
 ***
 
@@ -171,9 +241,49 @@ Draw ghost for the selected shape
 
 ***
 
+### finalize()
+
+> **finalize**(`editor`, `e`): `void`
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Source
+
+[handlers/eraser-handler.ts:51](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L51)
+
+***
+
+### initialize()
+
+> **initialize**(`editor`, `e`): `void`
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Source
+
+[handlers/eraser-handler.ts:42](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L42)
+
+***
+
 ### keyDown()
 
-> **keyDown**(`editor`, `e`): `void`
+> **keyDown**(`editor`, `e`): `boolean`
 
 keyDown
 
@@ -185,15 +295,15 @@ keyDown
 
 #### Returns
 
-`void`
+`boolean`
 
-#### Inherited from
+#### Overrides
 
 [`Handler`](/api-core/classes/handler/).[`keyDown`](/api-core/classes/handler/#keydown)
 
 #### Source
 
-[editor.ts:1397](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1397)
+[handlers/eraser-handler.ts:103](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L103)
 
 ***
 
@@ -243,7 +353,7 @@ Triggered when activated
 
 #### Source
 
-[handlers/text-handler.ts:33](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/text-handler.ts#L33)
+[handlers/eraser-handler.ts:113](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L113)
 
 ***
 
@@ -267,7 +377,7 @@ Triggered when deactivate
 
 #### Source
 
-[handlers/text-handler.ts:37](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/text-handler.ts#L37)
+[handlers/eraser-handler.ts:117](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L117)
 
 ***
 
@@ -275,7 +385,7 @@ Triggered when deactivate
 
 > **pointerDown**(`editor`, `e`): `void`
 
-pointerDown
+handle pointer down event
 
 #### Parameters
 
@@ -293,7 +403,7 @@ pointerDown
 
 #### Source
 
-[handlers/text-handler.ts:21](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/text-handler.ts#L21)
+[handlers/eraser-handler.ts:65](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L65)
 
 ***
 
@@ -301,7 +411,7 @@ pointerDown
 
 > **pointerMove**(`editor`, `e`): `void`
 
-pointerMove
+handle pointer move event
 
 #### Parameters
 
@@ -313,15 +423,13 @@ pointerMove
 
 `void`
 
-#### Inherited from
+#### Overrides
 
 [`Handler`](/api-core/classes/handler/).[`pointerMove`](/api-core/classes/handler/#pointermove)
 
-#### Abstract
-
 #### Source
 
-[editor.ts:1392](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1392)
+[handlers/eraser-handler.ts:80](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L80)
 
 ***
 
@@ -329,7 +437,7 @@ pointerMove
 
 > **pointerUp**(`editor`, `e`): `void`
 
-pointerUp
+handle pointer up event
 
 #### Parameters
 
@@ -341,15 +449,13 @@ pointerUp
 
 `void`
 
-#### Inherited from
+#### Overrides
 
 [`Handler`](/api-core/classes/handler/).[`pointerUp`](/api-core/classes/handler/#pointerup)
 
-#### Abstract
-
 #### Source
 
-[editor.ts:1386](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1386)
+[handlers/eraser-handler.ts:94](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L94)
 
 ***
 
@@ -369,4 +475,24 @@ Reset the states of handler
 
 #### Source
 
-[handlers/text-handler.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/text-handler.ts#L13)
+[handlers/eraser-handler.ts:19](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L19)
+
+***
+
+### update()
+
+> **update**(`editor`, `e`): `void`
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Source
+
+[handlers/eraser-handler.ts:47](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L47)

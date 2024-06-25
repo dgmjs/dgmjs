@@ -27,7 +27,7 @@ Doc
 
 #### Source
 
-[shapes.ts:966](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L966)
+[shapes.ts:953](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L953)
 
 ## Properties
 
@@ -41,7 +41,7 @@ Doc
 
 #### Source
 
-[core/obj.ts:27](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L27)
+[core/obj.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L14)
 
 ***
 
@@ -55,7 +55,7 @@ Doc
 
 #### Source
 
-[core/obj.ts:24](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L24)
+[core/obj.ts:11](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L11)
 
 ***
 
@@ -69,7 +69,7 @@ Doc
 
 #### Source
 
-[core/obj.ts:26](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L26)
+[core/obj.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L13)
 
 ***
 
@@ -83,7 +83,7 @@ Doc
 
 #### Source
 
-[core/obj.ts:25](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L25)
+[core/obj.ts:12](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L12)
 
 ***
 
@@ -93,7 +93,7 @@ Doc
 
 #### Source
 
-[shapes.ts:964](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L964)
+[shapes.ts:951](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L951)
 
 ## Methods
 
@@ -117,7 +117,7 @@ Find an shape in breath-first order
 
 #### Source
 
-[core/obj.ts:119](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L119)
+[core/obj.ts:106](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L106)
 
 ***
 
@@ -141,7 +141,7 @@ Find an shape in depth-first order
 
 #### Source
 
-[core/obj.ts:132](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L132)
+[core/obj.ts:119](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L119)
 
 ***
 
@@ -165,7 +165,7 @@ Find a shape along with the parent-chain
 
 #### Source
 
-[core/obj.ts:145](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L145)
+[core/obj.ts:132](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L132)
 
 ***
 
@@ -187,7 +187,7 @@ Find a shape along with the parent-chain
 
 #### Source
 
-[shapes.ts:978](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L978)
+[shapes.ts:965](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L965)
 
 ***
 
@@ -211,7 +211,7 @@ Test whether the given shape is a descendant
 
 #### Source
 
-[core/obj.ts:155](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L155)
+[core/obj.ts:142](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L142)
 
 ***
 
@@ -241,7 +241,7 @@ assign null if not found
 
 #### Source
 
-[core/obj.ts:60](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L60)
+[core/obj.ts:47](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L47)
 
 ***
 
@@ -265,7 +265,7 @@ assign null if not found
 
 #### Source
 
-[shapes.ts:972](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L972)
+[shapes.ts:959](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L959)
 
 ***
 
@@ -291,7 +291,7 @@ Traverse all objects in breath-first order
 
 #### Source
 
-[core/obj.ts:73](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L73)
+[core/obj.ts:60](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L60)
 
 ***
 
@@ -317,7 +317,7 @@ Traverse all shapes in depth-first order
 
 #### Source
 
-[core/obj.ts:87](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L87)
+[core/obj.ts:74](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L74)
 
 ***
 
@@ -337,7 +337,7 @@ Returns an array of shapes in order of traverse sequence.
 
 #### Source
 
-[core/obj.ts:110](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L110)
+[core/obj.ts:97](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L97)
 
 ***
 
@@ -357,4 +357,4 @@ Returns an array of shapes in order of traverse sequence.
 
 #### Source
 
-[core/obj.ts:101](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L101)
+[core/obj.ts:88](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L88)

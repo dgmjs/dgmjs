@@ -19,4 +19,4 @@ Strip unit string from a given string
 
 ## Source
 
-[utils/text-utils.ts:41](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L41)
+[utils/text-utils.ts:28](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L28)

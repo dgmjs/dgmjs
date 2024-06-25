@@ -19,4 +19,4 @@ title: "ScriptType"
 
 ## Source
 
-[shapes.ts:41](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L41)
+[shapes.ts:28](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L28)

@@ -1,5 +1,6 @@
 import { HandHandler } from "./hand-handler";
 import { SelectHandler } from "./select-handler";
+import { EraserHandler } from "./eraser-handler";
 import { RectangleFactoryHandler } from "./rectangle-handler";
 import { EllipseFactoryHandler } from "./ellipse-handler";
 import { TextFactoryHandler } from "./text-handler";
@@ -14,6 +15,7 @@ import { EmbedFactoryHandler } from "./embed-handler";
 export {
   HandHandler,
   SelectHandler,
+  EraserHandler,
   RectangleFactoryHandler,
   EllipseFactoryHandler,
   TextFactoryHandler,

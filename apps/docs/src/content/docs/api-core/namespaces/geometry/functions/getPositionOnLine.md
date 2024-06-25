@@ -26,4 +26,4 @@ and returns 1 if the point is same with the end point of the line.
 
 ## Source
 
-[graphics/geometry.ts:837](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L837)
+[graphics/geometry.ts:824](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L824)

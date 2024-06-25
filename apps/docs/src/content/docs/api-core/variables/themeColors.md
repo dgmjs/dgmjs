@@ -9,4 +9,4 @@ title: "themeColors"
 
 ## Source
 
-[colors.ts:143](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/colors.ts#L143)
+[colors.ts:130](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/colors.ts#L130)

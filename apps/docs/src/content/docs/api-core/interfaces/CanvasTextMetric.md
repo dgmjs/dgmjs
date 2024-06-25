@@ -13,7 +13,7 @@ title: "CanvasTextMetric"
 
 #### Source
 
-[graphics/graphics.ts:38](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L38)
+[graphics/graphics.ts:25](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L25)
 
 ***
 
@@ -23,7 +23,7 @@ title: "CanvasTextMetric"
 
 #### Source
 
-[graphics/graphics.ts:39](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L39)
+[graphics/graphics.ts:26](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L26)
 
 ***
 
@@ -33,7 +33,7 @@ title: "CanvasTextMetric"
 
 #### Source
 
-[graphics/graphics.ts:36](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L36)
+[graphics/graphics.ts:23](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L23)
 
 ***
 
@@ -43,7 +43,7 @@ title: "CanvasTextMetric"
 
 #### Source
 
-[graphics/graphics.ts:37](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L37)
+[graphics/graphics.ts:24](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L24)
 
 ***
 
@@ -53,7 +53,7 @@ title: "CanvasTextMetric"
 
 #### Source
 
-[graphics/graphics.ts:35](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L35)
+[graphics/graphics.ts:22](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L22)
 
 ***
 
@@ -63,4 +63,4 @@ title: "CanvasTextMetric"
 
 #### Source
 
-[graphics/graphics.ts:34](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L34)
+[graphics/graphics.ts:21](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L21)

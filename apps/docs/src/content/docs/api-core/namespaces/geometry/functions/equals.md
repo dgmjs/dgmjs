@@ -21,4 +21,4 @@ Test point1 equals to point2
 
 ## Source
 
-[graphics/geometry.ts:50](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L50)
+[graphics/geometry.ts:37](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L37)

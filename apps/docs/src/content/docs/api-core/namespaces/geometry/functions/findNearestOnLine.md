@@ -23,4 +23,4 @@ nearest point on line
 
 ## Source
 
-[graphics/geometry.ts:277](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L277)
+[graphics/geometry.ts:264](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L264)

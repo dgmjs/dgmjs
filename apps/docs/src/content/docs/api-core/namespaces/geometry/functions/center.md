@@ -19,4 +19,4 @@ Get a center point of rect
 
 ## Source
 
-[graphics/geometry.ts:439](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L439)
+[graphics/geometry.ts:426](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L426)

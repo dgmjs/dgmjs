@@ -19,4 +19,4 @@ Returns an copy of the rect
 
 ## Source
 
-[graphics/geometry.ts:325](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L325)
+[graphics/geometry.ts:312](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L312)

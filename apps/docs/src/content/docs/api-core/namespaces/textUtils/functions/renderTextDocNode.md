@@ -31,4 +31,4 @@ Draw preprocessed text nodes
 
 ## Source
 
-[utils/text-utils.ts:402](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L402)
+[utils/text-utils.ts:389](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L389)

@@ -9,4 +9,4 @@ title: "SVGPathCommand"
 
 ## Source
 
-[graphics/graphics.ts:42](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L42)
+[graphics/graphics.ts:29](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L29)

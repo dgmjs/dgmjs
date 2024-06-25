@@ -13,7 +13,7 @@ title: "EditorOptions"
 
 #### Source
 
-[editor.ts:37](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L37)
+[editor.ts:24](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L24)
 
 ***
 
@@ -23,7 +23,7 @@ title: "EditorOptions"
 
 #### Source
 
-[editor.ts:38](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L38)
+[editor.ts:25](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L25)
 
 ***
 
@@ -33,7 +33,7 @@ title: "EditorOptions"
 
 #### Source
 
-[editor.ts:39](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L39)
+[editor.ts:26](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L26)
 
 ***
 
@@ -43,7 +43,7 @@ title: "EditorOptions"
 
 #### Source
 
-[editor.ts:34](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L34)
+[editor.ts:21](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L21)
 
 ***
 
@@ -53,7 +53,7 @@ title: "EditorOptions"
 
 #### Source
 
-[editor.ts:33](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L33)
+[editor.ts:20](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L20)
 
 ***
 
@@ -63,7 +63,7 @@ title: "EditorOptions"
 
 #### Source
 
-[editor.ts:35](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L35)
+[editor.ts:22](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L22)
 
 ***
 
@@ -73,7 +73,7 @@ title: "EditorOptions"
 
 #### Source
 
-[editor.ts:36](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L36)
+[editor.ts:23](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L23)
 
 ***
 
@@ -91,4 +91,4 @@ title: "EditorOptions"
 
 #### Source
 
-[editor.ts:40](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L40)
+[editor.ts:27](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L27)

@@ -21,4 +21,4 @@ Returns an scaled rect
 
 ## Source
 
-[graphics/geometry.ts:352](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L352)
+[graphics/geometry.ts:339](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L339)
