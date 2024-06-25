@@ -1,20 +1,13 @@
-/*
- * Copyright (c) 2022 MKLabs. All rights reserved.
- *
- * NOTICE:  All information contained herein is, and remains the
- * property of MKLabs. The intellectual and technical concepts
- * contained herein are proprietary to MKLabs and may be covered
- * by Republic of Korea and Foreign Patents, patents in process,
- * and are protected by trade secret or copyright law.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from MKLabs (niklaus.lee@gmail.com).
- */
-
 import React from "react";
 import { Panel } from "../common/panel";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Connector, Line, LineEndTypeEnum, LineType, LineTypeEnum } from "@dgmjs/core";
+import {
+  Connector,
+  Line,
+  LineEndTypeEnum,
+  LineType,
+  LineTypeEnum,
+} from "@dgmjs/core";
 import { LineCurveIcon, LineStraightIcon } from "@/components/icons";
 import { SelectArrowhead } from "./fields/select-arrowhead";
 import { ShapeEditorProps } from "@/types";
@@ -58,7 +51,8 @@ export const LinePanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
             type="single"
             value={lineType}
             onValueChange={(value) => {
-              if (onChange && value) onChange({ lineType: value as LineTypeEnum });
+              if (onChange && value)
+                onChange({ lineType: value as LineTypeEnum });
             }}
           >
             <ToggleGroupItem size="sm" value={LineType.STRAIGHT}>

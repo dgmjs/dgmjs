@@ -1,18 +1,6 @@
-/*
- * Copyright (c) 2023 MKLabs. All rights reserved.
- *
- * NOTICE:  All information contained herein is, and remains the
- * property of MKLabs. The intellectual and technical concepts
- * contained herein are proprietary to MKLabs and may be covered
- * by Republic of Korea and Foreign Patents, patents in process,
- * and are protected by trade secret or copyright law.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from MKLabs (niklaus.lee@gmail.com).
- */
-
 import {
   CircleIcon,
+  EraserIcon,
   FrameIcon,
   HandIcon,
   HighlighterIcon,
@@ -76,11 +64,8 @@ export function PaletteToolbar() {
         <PaletteItem handlerId="Hand">
           <HandIcon size={16} />
         </PaletteItem>
-        <PaletteItem handlerId="Frame">
-          <FrameIcon size={16} />
-        </PaletteItem>
-        <PaletteItem handlerId="Embed">
-          <ScanIcon size={16} />
+        <PaletteItem handlerId="Eraser">
+          <EraserIcon size={16} />
         </PaletteItem>
         <Separator orientation="vertical" className="dark:bg-gray-700 mx-0.5" />
         <PaletteItem handlerId="Rectangle">
@@ -107,6 +92,13 @@ export function PaletteToolbar() {
         </PaletteItem>
         <PaletteItem handlerId="Highlighter">
           <HighlighterIcon size={16} />
+        </PaletteItem>
+        <Separator orientation="vertical" className="dark:bg-gray-700 mx-0.5" />
+        <PaletteItem handlerId="Frame">
+          <FrameIcon size={16} />
+        </PaletteItem>
+        <PaletteItem handlerId="Embed">
+          <ScanIcon size={16} />
         </PaletteItem>
       </div>
     </div>

@@ -2,68 +2,65 @@ import { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { Editor, Handler } from "../editor";
 import { Mouse, Cursor } from "../graphics/const";
-import { Highlighter } from "../shapes";
-import { addShape, resolveAllConstraints, setPath } from "../macro";
+import { deleteShapes, resolveAllConstraints } from "../macro";
+import { Shape } from "../shapes";
 
 /**
- * Highlighter Factory Handler
+ * Eraser Handler
  */
-export class HighlighterFactoryHandler extends Handler {
+export class EraserHandler extends Handler {
   dragging: boolean = false;
   dragStartPoint: number[] = [-1, -1];
   dragPoint: number[] = [-1, -1];
-  draggingPoints: number[][] = [];
-  closed: boolean = false;
-  shape: Highlighter | null = null;
+  dx: number = 0;
+  dy: number = 0;
+  deletingShapes: Shape[] = [];
 
   reset(): void {
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
     this.dragPoint = [-1, -1];
-    this.draggingPoints = [];
-    this.closed = false;
-    this.shape = null;
+    this.dx = 0;
+    this.dy = 0;
+    this.deletingShapes = [];
+  }
+
+  addToDeletingShapes(editor: Editor, point: number[]) {
+    const page = editor.getCurrentPage();
+    if (page) {
+      const shape = page.getShapeAt(editor.canvas, point);
+      if (shape && !this.deletingShapes.includes(shape)) {
+        editor.transform.transact((tx) => {
+          tx.assign(shape, "opacity", shape.opacity * 0.15);
+          resolveAllConstraints(tx, page, editor.canvas);
+        });
+        this.deletingShapes.push(shape);
+      }
+    }
   }
 
   initialize(editor: Editor, e: CanvasPointerEvent): void {
-    const page = editor.getCurrentPage();
-    if (page) {
-      this.draggingPoints.push(this.dragStartPoint);
-      this.shape = editor.factory.createHighlighter(this.draggingPoints);
-      editor.transform.startAction("create");
-      editor.transform.transact((tx) => {
-        addShape(tx, this.shape!, page);
-      });
-    }
+    editor.transform.startAction("erase");
+    this.addToDeletingShapes(editor, this.dragStartPoint);
   }
 
   update(editor: Editor, e: CanvasPointerEvent): void {
-    const page = editor.getCurrentPage();
-    this.draggingPoints.push(this.dragPoint);
-    const newPath = structuredClone(this.draggingPoints);
-    editor.transform.transact((tx) => {
-      if (page && this.shape) {
-        setPath(tx, this.shape, newPath);
-        resolveAllConstraints(tx, page, editor.canvas);
-      }
-    });
+    this.addToDeletingShapes(editor, this.dragPoint);
   }
 
   finalize(editor: Editor, e: CanvasPointerEvent): void {
-    if (this.shape) {
-      const MIN_SIZE = 2;
-      if (geometry.pathLength(this.draggingPoints) < MIN_SIZE) {
-        editor.transform.cancelAction();
-      } else {
-        editor.transform.endAction();
-        editor.factory.triggerCreate(this.shape);
-      }
+    const page = editor.getCurrentPage();
+    if (page) {
+      editor.transform.transact((tx) => {
+        deleteShapes(tx, page, this.deletingShapes);
+        resolveAllConstraints(tx, page, editor.canvas);
+      });
     }
+    editor.transform.endAction();
   }
 
   /**
-   * pointerDown
-   * @override
+   * handle pointer down event
    */
   pointerDown(editor: Editor, e: CanvasPointerEvent) {
     if (e.button === Mouse.BUTTON1) {
@@ -71,29 +68,28 @@ export class HighlighterFactoryHandler extends Handler {
       this.dragging = true;
       this.dragStartPoint = canvas.globalCoordTransformRev([e.x, e.y]);
       this.dragPoint = geometry.copy(this.dragStartPoint);
+      this.dx = 0;
+      this.dy = 0;
       this.initialize(editor, e);
-      editor.repaint();
     }
   }
 
   /**
-   * pointerMove
-   * @override
+   * handle pointer move event
    */
   pointerMove(editor: Editor, e: CanvasPointerEvent) {
+    editor.repaint();
     if (this.dragging) {
       const canvas = editor.canvas;
       this.dragPoint = canvas.globalCoordTransformRev([e.x, e.y]);
+      this.dx = this.dragPoint[0] - this.dragStartPoint[0];
+      this.dy = this.dragPoint[1] - this.dragStartPoint[1];
       this.update(editor, e);
-      editor.repaint();
-    } else {
-      editor.repaint();
     }
   }
 
   /**
-   * pointerUp
-   * @override
+   * handle pointer up event
    */
   pointerUp(editor: Editor, e: CanvasPointerEvent) {
     if (e.button === Mouse.BUTTON1 && this.dragging) {
