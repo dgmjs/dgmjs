@@ -19,4 +19,4 @@ Convert radian to degree
 
 ## Source
 
-[graphics/geometry.ts:665](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L665)
+[graphics/geometry.ts:652](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L652)

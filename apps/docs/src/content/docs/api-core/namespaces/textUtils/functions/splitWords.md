@@ -19,4 +19,4 @@ Split a string into words at spaces(' ') and hypens('-').
 
 ## Source
 
-[utils/text-utils.ts:22](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L22)
+[utils/text-utils.ts:9](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L9)

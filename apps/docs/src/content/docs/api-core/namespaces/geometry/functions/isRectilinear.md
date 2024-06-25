@@ -19,4 +19,4 @@ Return wether is this rectilinear line or not
 
 ## Source
 
-[graphics/geometry.ts:619](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L619)
+[graphics/geometry.ts:606](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L606)

@@ -19,4 +19,4 @@ Returns height of the rect
 
 ## Source
 
-[graphics/geometry.ts:318](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L318)
+[graphics/geometry.ts:305](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L305)

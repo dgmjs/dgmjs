@@ -21,4 +21,4 @@ Returns an expanded the rect as the delta
 
 ## Source
 
-[graphics/geometry.ts:332](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L332)
+[graphics/geometry.ts:319](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L319)

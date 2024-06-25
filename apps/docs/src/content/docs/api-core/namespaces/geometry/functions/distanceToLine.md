@@ -21,4 +21,4 @@ Shortest distance from a point to line
 
 ## Source
 
-[graphics/geometry.ts:171](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L171)
+[graphics/geometry.ts:158](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L158)

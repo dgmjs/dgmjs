@@ -33,7 +33,7 @@ Embed Factory Handler
 
 #### Source
 
-[editor.ts:1337](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1337)
+[editor.ts:1328](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1328)
 
 ## Properties
 
@@ -43,7 +43,7 @@ Embed Factory Handler
 
 #### Source
 
-[handlers/embed-handler.ts:25](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L25)
+[handlers/embed-handler.ts:12](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L12)
 
 ***
 
@@ -53,7 +53,7 @@ Embed Factory Handler
 
 #### Source
 
-[handlers/embed-handler.ts:24](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L24)
+[handlers/embed-handler.ts:11](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L11)
 
 ***
 
@@ -63,7 +63,7 @@ Embed Factory Handler
 
 #### Source
 
-[handlers/embed-handler.ts:23](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L23)
+[handlers/embed-handler.ts:10](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L10)
 
 ***
 
@@ -77,7 +77,7 @@ Embed Factory Handler
 
 #### Source
 
-[editor.ts:1334](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1334)
+[editor.ts:1325](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1325)
 
 ***
 
@@ -91,7 +91,7 @@ Embed Factory Handler
 
 #### Source
 
-[editor.ts:1335](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1335)
+[editor.ts:1326](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1326)
 
 ## Methods
 
@@ -115,7 +115,7 @@ Activate the handler
 
 #### Source
 
-[editor.ts:1363](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1363)
+[editor.ts:1354](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1354)
 
 ***
 
@@ -139,7 +139,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[editor.ts:1354](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1354)
+[editor.ts:1345](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1345)
 
 ***
 
@@ -163,7 +163,7 @@ Deactivate the handler
 
 #### Source
 
-[editor.ts:1371](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1371)
+[editor.ts:1362](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1362)
 
 ***
 
@@ -183,7 +183,7 @@ Deactivate the handler
 
 #### Source
 
-[handlers/embed-handler.ts:87](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L87)
+[handlers/embed-handler.ts:74](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L74)
 
 ***
 
@@ -203,7 +203,7 @@ Deactivate the handler
 
 #### Source
 
-[handlers/embed-handler.ts:85](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L85)
+[handlers/embed-handler.ts:72](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L72)
 
 ***
 
@@ -227,7 +227,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[editor.ts:1416](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1416)
+[editor.ts:1407](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1407)
 
 ***
 
@@ -253,7 +253,7 @@ keyDown
 
 #### Source
 
-[editor.ts:1406](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1406)
+[editor.ts:1397](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1397)
 
 ***
 
@@ -279,7 +279,7 @@ keyUp
 
 #### Source
 
-[editor.ts:1411](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1411)
+[editor.ts:1402](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1402)
 
 ***
 
@@ -303,7 +303,7 @@ Triggered when activated
 
 #### Source
 
-[handlers/embed-handler.ts:77](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L77)
+[handlers/embed-handler.ts:64](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L64)
 
 ***
 
@@ -327,7 +327,7 @@ Triggered when deactivate
 
 #### Source
 
-[handlers/embed-handler.ts:81](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L81)
+[handlers/embed-handler.ts:68](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L68)
 
 ***
 
@@ -353,7 +353,7 @@ pointerDown
 
 #### Source
 
-[handlers/embed-handler.ts:37](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L37)
+[handlers/embed-handler.ts:24](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L24)
 
 ***
 
@@ -379,7 +379,7 @@ pointerMove
 
 #### Source
 
-[handlers/embed-handler.ts:51](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L51)
+[handlers/embed-handler.ts:38](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L38)
 
 ***
 
@@ -405,7 +405,7 @@ pointerUp
 
 #### Source
 
-[handlers/embed-handler.ts:66](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L66)
+[handlers/embed-handler.ts:53](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L53)
 
 ***
 
@@ -425,4 +425,4 @@ Reset the states of handler
 
 #### Source
 
-[handlers/embed-handler.ts:27](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L27)
+[handlers/embed-handler.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/embed-handler.ts#L14)

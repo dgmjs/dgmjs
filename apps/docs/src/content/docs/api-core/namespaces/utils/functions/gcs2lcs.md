@@ -23,4 +23,4 @@ Transform global coord to local coord (GCS --> LCS)
 
 ## Source
 
-[graphics/utils.ts:70](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/utils.ts#L70)
+[graphics/utils.ts:57](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/utils.ts#L57)

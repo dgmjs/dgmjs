@@ -19,4 +19,4 @@ Copy a point
 
 ## Source
 
-[graphics/geometry.ts:34](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L34)
+[graphics/geometry.ts:21](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L21)

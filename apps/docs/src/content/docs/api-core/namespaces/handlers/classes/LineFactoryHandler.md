@@ -33,7 +33,7 @@ Line Factory Handler
 
 #### Source
 
-[editor.ts:1337](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1337)
+[editor.ts:1328](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1328)
 
 ## Properties
 
@@ -43,7 +43,7 @@ Line Factory Handler
 
 #### Source
 
-[handlers/line-handler.ts:29](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L29)
+[handlers/line-handler.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L16)
 
 ***
 
@@ -53,7 +53,7 @@ Line Factory Handler
 
 #### Source
 
-[handlers/line-handler.ts:27](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L27)
+[handlers/line-handler.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L14)
 
 ***
 
@@ -63,7 +63,7 @@ Line Factory Handler
 
 #### Source
 
-[handlers/line-handler.ts:26](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L26)
+[handlers/line-handler.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L13)
 
 ***
 
@@ -73,7 +73,7 @@ Line Factory Handler
 
 #### Source
 
-[handlers/line-handler.ts:25](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L25)
+[handlers/line-handler.ts:12](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L12)
 
 ***
 
@@ -83,7 +83,7 @@ Line Factory Handler
 
 #### Source
 
-[handlers/line-handler.ts:30](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L30)
+[handlers/line-handler.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L17)
 
 ***
 
@@ -97,7 +97,7 @@ Line Factory Handler
 
 #### Source
 
-[editor.ts:1334](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1334)
+[editor.ts:1325](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1325)
 
 ***
 
@@ -107,7 +107,7 @@ Line Factory Handler
 
 #### Source
 
-[handlers/line-handler.ts:31](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L31)
+[handlers/line-handler.ts:18](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L18)
 
 ***
 
@@ -121,7 +121,7 @@ Line Factory Handler
 
 #### Source
 
-[editor.ts:1335](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1335)
+[editor.ts:1326](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1326)
 
 ***
 
@@ -131,7 +131,7 @@ Line Factory Handler
 
 #### Source
 
-[handlers/line-handler.ts:28](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L28)
+[handlers/line-handler.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L15)
 
 ***
 
@@ -141,7 +141,7 @@ Line Factory Handler
 
 #### Source
 
-[handlers/line-handler.ts:32](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L32)
+[handlers/line-handler.ts:19](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L19)
 
 ## Methods
 
@@ -165,7 +165,7 @@ Activate the handler
 
 #### Source
 
-[editor.ts:1363](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1363)
+[editor.ts:1354](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1354)
 
 ***
 
@@ -189,7 +189,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[editor.ts:1354](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1354)
+[editor.ts:1345](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1345)
 
 ***
 
@@ -213,7 +213,7 @@ Deactivate the handler
 
 #### Source
 
-[editor.ts:1371](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1371)
+[editor.ts:1362](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1362)
 
 ***
 
@@ -237,7 +237,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[editor.ts:1416](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1416)
+[editor.ts:1407](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1407)
 
 ***
 
@@ -257,7 +257,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[handlers/line-handler.ts:68](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L68)
+[handlers/line-handler.ts:55](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L55)
 
 ***
 
@@ -277,7 +277,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[handlers/line-handler.ts:45](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L45)
+[handlers/line-handler.ts:32](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L32)
 
 ***
 
@@ -303,7 +303,7 @@ keyDown
 
 #### Source
 
-[handlers/line-handler.ts:144](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L144)
+[handlers/line-handler.ts:131](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L131)
 
 ***
 
@@ -329,7 +329,7 @@ keyUp
 
 #### Source
 
-[editor.ts:1411](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1411)
+[editor.ts:1402](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1402)
 
 ***
 
@@ -353,7 +353,7 @@ Triggered when activated
 
 #### Source
 
-[handlers/line-handler.ts:162](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L162)
+[handlers/line-handler.ts:149](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L149)
 
 ***
 
@@ -377,7 +377,7 @@ Triggered when deactivate
 
 #### Source
 
-[handlers/line-handler.ts:167](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L167)
+[handlers/line-handler.ts:154](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L154)
 
 ***
 
@@ -403,7 +403,7 @@ pointerDown
 
 #### Source
 
-[handlers/line-handler.ts:84](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L84)
+[handlers/line-handler.ts:71](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L71)
 
 ***
 
@@ -429,7 +429,7 @@ pointerMove
 
 #### Source
 
-[handlers/line-handler.ts:111](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L111)
+[handlers/line-handler.ts:98](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L98)
 
 ***
 
@@ -455,7 +455,7 @@ pointerUp
 
 #### Source
 
-[handlers/line-handler.ts:131](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L131)
+[handlers/line-handler.ts:118](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L118)
 
 ***
 
@@ -475,7 +475,7 @@ Reset the states of handler
 
 #### Source
 
-[handlers/line-handler.ts:34](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L34)
+[handlers/line-handler.ts:21](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L21)
 
 ***
 
@@ -495,4 +495,4 @@ Reset the states of handler
 
 #### Source
 
-[handlers/line-handler.ts:57](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L57)
+[handlers/line-handler.ts:44](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L44)

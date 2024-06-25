@@ -13,7 +13,7 @@ title: "FileDropEvent"
 
 #### Source
 
-[editor.ts:55](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L55)
+[editor.ts:42](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L42)
 
 ***
 
@@ -23,4 +23,4 @@ title: "FileDropEvent"
 
 #### Source
 
-[editor.ts:54](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L54)
+[editor.ts:41](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L41)

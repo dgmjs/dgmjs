@@ -21,4 +21,4 @@ assign point2 to point1
 
 ## Source
 
-[graphics/geometry.ts:41](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L41)
+[graphics/geometry.ts:28](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L28)

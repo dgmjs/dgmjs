@@ -17,4 +17,4 @@ title: "basicSetup"
 
 ## Source
 
-[basic-setup.ts:30](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/basic-setup.ts#L30)
+[basic-setup.ts:18](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/basic-setup.ts#L18)

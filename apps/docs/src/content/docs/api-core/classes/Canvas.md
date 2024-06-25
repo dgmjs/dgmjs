@@ -25,7 +25,7 @@ Canvas
 
 #### Source
 
-[graphics/graphics.ts:212](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L212)
+[graphics/graphics.ts:199](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L199)
 
 ## Properties
 
@@ -35,7 +35,7 @@ Canvas
 
 #### Source
 
-[graphics/graphics.ts:207](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L207)
+[graphics/graphics.ts:194](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L194)
 
 ***
 
@@ -45,7 +45,7 @@ Canvas
 
 #### Source
 
-[graphics/graphics.ts:195](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L195)
+[graphics/graphics.ts:182](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L182)
 
 ***
 
@@ -55,7 +55,7 @@ Canvas
 
 #### Source
 
-[graphics/graphics.ts:194](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L194)
+[graphics/graphics.ts:181](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L181)
 
 ***
 
@@ -65,7 +65,7 @@ Canvas
 
 #### Source
 
-[graphics/graphics.ts:193](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L193)
+[graphics/graphics.ts:180](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L180)
 
 ***
 
@@ -75,7 +75,7 @@ Canvas
 
 #### Source
 
-[graphics/graphics.ts:203](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L203)
+[graphics/graphics.ts:190](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L190)
 
 ***
 
@@ -85,7 +85,7 @@ Canvas
 
 #### Source
 
-[graphics/graphics.ts:204](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L204)
+[graphics/graphics.ts:191](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L191)
 
 ***
 
@@ -95,7 +95,7 @@ Canvas
 
 #### Source
 
-[graphics/graphics.ts:206](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L206)
+[graphics/graphics.ts:193](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L193)
 
 ***
 
@@ -105,7 +105,7 @@ Canvas
 
 #### Source
 
-[graphics/graphics.ts:205](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L205)
+[graphics/graphics.ts:192](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L192)
 
 ***
 
@@ -115,7 +115,7 @@ Canvas
 
 #### Source
 
-[graphics/graphics.ts:196](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L196)
+[graphics/graphics.ts:183](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L183)
 
 ***
 
@@ -125,7 +125,7 @@ Canvas
 
 #### Source
 
-[graphics/graphics.ts:209](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L209)
+[graphics/graphics.ts:196](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L196)
 
 ***
 
@@ -135,7 +135,7 @@ Canvas
 
 #### Source
 
-[graphics/graphics.ts:198](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L198)
+[graphics/graphics.ts:185](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L185)
 
 ***
 
@@ -145,7 +145,7 @@ Canvas
 
 #### Source
 
-[graphics/graphics.ts:197](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L197)
+[graphics/graphics.ts:184](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L184)
 
 ***
 
@@ -155,7 +155,7 @@ Canvas
 
 #### Source
 
-[graphics/graphics.ts:208](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L208)
+[graphics/graphics.ts:195](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L195)
 
 ***
 
@@ -165,7 +165,7 @@ Canvas
 
 #### Source
 
-[graphics/graphics.ts:210](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L210)
+[graphics/graphics.ts:197](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L197)
 
 ***
 
@@ -175,7 +175,7 @@ Canvas
 
 #### Source
 
-[graphics/graphics.ts:199](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L199)
+[graphics/graphics.ts:186](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L186)
 
 ***
 
@@ -185,7 +185,7 @@ Canvas
 
 #### Source
 
-[graphics/graphics.ts:200](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L200)
+[graphics/graphics.ts:187](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L187)
 
 ***
 
@@ -195,7 +195,7 @@ Canvas
 
 #### Source
 
-[graphics/graphics.ts:202](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L202)
+[graphics/graphics.ts:189](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L189)
 
 ***
 
@@ -205,7 +205,7 @@ Canvas
 
 #### Source
 
-[graphics/graphics.ts:201](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L201)
+[graphics/graphics.ts:188](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L188)
 
 ## Methods
 
@@ -236,7 +236,7 @@ angles are started from 12'clock in degree.
 
 #### Source
 
-[graphics/graphics.ts:1229](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1229)
+[graphics/graphics.ts:1216](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1216)
 
 ***
 
@@ -258,7 +258,7 @@ Draw a curved lines with fill and stroke
 
 #### Source
 
-[graphics/graphics.ts:1067](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1067)
+[graphics/graphics.ts:1054](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1054)
 
 ***
 
@@ -286,7 +286,7 @@ Draw Image
 
 #### Source
 
-[graphics/graphics.ts:1326](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1326)
+[graphics/graphics.ts:1313](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1313)
 
 ***
 
@@ -314,7 +314,7 @@ Draw an ellipse with fill and stroke
 
 #### Source
 
-[graphics/graphics.ts:784](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L784)
+[graphics/graphics.ts:771](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L771)
 
 ***
 
@@ -344,7 +344,7 @@ Draw filled arc. angles are started from 12'clock in degree.
 
 #### Source
 
-[graphics/graphics.ts:1193](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1193)
+[graphics/graphics.ts:1180](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1180)
 
 ***
 
@@ -366,7 +366,7 @@ Draw filled curved lines
 
 #### Source
 
-[graphics/graphics.ts:1027](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1027)
+[graphics/graphics.ts:1014](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1014)
 
 ***
 
@@ -394,7 +394,7 @@ Draw a filled ellipse
 
 #### Source
 
-[graphics/graphics.ts:736](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L736)
+[graphics/graphics.ts:723](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L723)
 
 ***
 
@@ -416,7 +416,7 @@ Draw filled path
 
 #### Source
 
-[graphics/graphics.ts:1274](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1274)
+[graphics/graphics.ts:1261](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1261)
 
 ***
 
@@ -438,7 +438,7 @@ Draw filled polygon
 
 #### Source
 
-[graphics/graphics.ts:1113](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1113)
+[graphics/graphics.ts:1100](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1100)
 
 ***
 
@@ -466,7 +466,7 @@ Draw a filled rect
 
 #### Source
 
-[graphics/graphics.ts:503](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L503)
+[graphics/graphics.ts:490](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L490)
 
 ***
 
@@ -496,7 +496,7 @@ Draw a filled and rounded rect
 
 #### Source
 
-[graphics/graphics.ts:612](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L612)
+[graphics/graphics.ts:599](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L599)
 
 ***
 
@@ -522,7 +522,7 @@ text baseline (metric.ascent - not the top of text)
 
 #### Source
 
-[graphics/graphics.ts:1314](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1314)
+[graphics/graphics.ts:1301](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1301)
 
 ***
 
@@ -542,7 +542,7 @@ Transform global coord to canvas coord (GCS --> CCS)
 
 #### Source
 
-[graphics/graphics.ts:300](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L300)
+[graphics/graphics.ts:287](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L287)
 
 ***
 
@@ -562,7 +562,7 @@ Transform canvas coord to global coord (CCS --> GCS)
 
 #### Source
 
-[graphics/graphics.ts:309](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L309)
+[graphics/graphics.ts:296](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L296)
 
 ***
 
@@ -578,7 +578,7 @@ Transform global context to canvas context (origin, scale)
 
 #### Source
 
-[graphics/graphics.ts:288](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L288)
+[graphics/graphics.ts:275](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L275)
 
 ***
 
@@ -606,7 +606,7 @@ Draw a line
 
 #### Source
 
-[graphics/graphics.ts:431](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L431)
+[graphics/graphics.ts:418](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L418)
 
 ***
 
@@ -628,7 +628,7 @@ Draw a path with fill and stroke
 
 #### Source
 
-[graphics/graphics.ts:1302](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1302)
+[graphics/graphics.ts:1289](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1289)
 
 ***
 
@@ -650,7 +650,7 @@ Draw a polygon with fill and stroke
 
 #### Source
 
-[graphics/graphics.ts:1146](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1146)
+[graphics/graphics.ts:1133](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1133)
 
 ***
 
@@ -672,7 +672,7 @@ Draw polyline
 
 #### Source
 
-[graphics/graphics.ts:799](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L799)
+[graphics/graphics.ts:786](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L786)
 
 ***
 
@@ -700,7 +700,7 @@ Draw a rect with fill and stroke
 
 #### Source
 
-[graphics/graphics.ts:537](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L537)
+[graphics/graphics.ts:524](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L524)
 
 ***
 
@@ -720,7 +720,7 @@ Resolve color variable to hex color string
 
 #### Source
 
-[graphics/graphics.ts:241](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L241)
+[graphics/graphics.ts:228](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L228)
 
 ***
 
@@ -736,7 +736,7 @@ Restore context
 
 #### Source
 
-[graphics/graphics.ts:326](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L326)
+[graphics/graphics.ts:313](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L313)
 
 ***
 
@@ -752,7 +752,7 @@ Restore the canvas states from a stack
 
 #### Source
 
-[graphics/graphics.ts:269](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L269)
+[graphics/graphics.ts:256](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L256)
 
 ***
 
@@ -774,7 +774,7 @@ anti-clockwise in degree
 
 #### Source
 
-[graphics/graphics.ts:342](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L342)
+[graphics/graphics.ts:329](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L329)
 
 ***
 
@@ -804,7 +804,7 @@ Draw a rounded rect with fill and stroke
 
 #### Source
 
-[graphics/graphics.ts:671](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L671)
+[graphics/graphics.ts:658](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L658)
 
 ***
 
@@ -826,7 +826,7 @@ Draw rounded rect line
 
 #### Source
 
-[graphics/graphics.ts:834](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L834)
+[graphics/graphics.ts:821](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L821)
 
 ***
 
@@ -842,7 +842,7 @@ Save context
 
 #### Source
 
-[graphics/graphics.ts:318](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L318)
+[graphics/graphics.ts:305](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L305)
 
 ***
 
@@ -862,7 +862,7 @@ Set alpha
 
 #### Source
 
-[graphics/graphics.ts:405](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L405)
+[graphics/graphics.ts:392](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L392)
 
 ***
 
@@ -882,7 +882,7 @@ Set fill color
 
 #### Source
 
-[graphics/graphics.ts:373](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L373)
+[graphics/graphics.ts:360](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L360)
 
 ***
 
@@ -902,7 +902,7 @@ Set fill style
 
 #### Source
 
-[graphics/graphics.ts:381](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L381)
+[graphics/graphics.ts:368](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L368)
 
 ***
 
@@ -922,7 +922,7 @@ Set font
 
 #### Source
 
-[graphics/graphics.ts:397](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L397)
+[graphics/graphics.ts:384](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L384)
 
 ***
 
@@ -942,7 +942,7 @@ Set font color
 
 #### Source
 
-[graphics/graphics.ts:389](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L389)
+[graphics/graphics.ts:376](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L376)
 
 ***
 
@@ -962,7 +962,7 @@ Set roughness
 
 #### Source
 
-[graphics/graphics.ts:413](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L413)
+[graphics/graphics.ts:400](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L400)
 
 ***
 
@@ -982,7 +982,7 @@ Set stroke color
 
 #### Source
 
-[graphics/graphics.ts:349](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L349)
+[graphics/graphics.ts:336](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L336)
 
 ***
 
@@ -1002,7 +1002,7 @@ Set stroke pattern
 
 #### Source
 
-[graphics/graphics.ts:365](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L365)
+[graphics/graphics.ts:352](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L352)
 
 ***
 
@@ -1022,7 +1022,7 @@ Set stroke width
 
 #### Source
 
-[graphics/graphics.ts:357](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L357)
+[graphics/graphics.ts:344](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L344)
 
 ***
 
@@ -1038,7 +1038,7 @@ Store current canvas state into a stack
 
 #### Source
 
-[graphics/graphics.ts:250](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L250)
+[graphics/graphics.ts:237](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L237)
 
 ***
 
@@ -1068,7 +1068,7 @@ Draw an arc. angles are started from 3'clock in degree (0~360).
 
 #### Source
 
-[graphics/graphics.ts:1155](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1155)
+[graphics/graphics.ts:1142](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1142)
 
 ***
 
@@ -1090,7 +1090,7 @@ Draw curved lines
 
 #### Source
 
-[graphics/graphics.ts:994](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L994)
+[graphics/graphics.ts:981](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L981)
 
 ***
 
@@ -1118,7 +1118,7 @@ Draw an ellipse
 
 #### Source
 
-[graphics/graphics.ts:687](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L687)
+[graphics/graphics.ts:674](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L674)
 
 ***
 
@@ -1140,7 +1140,7 @@ Draw a path
 
 #### Source
 
-[graphics/graphics.ts:1245](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1245)
+[graphics/graphics.ts:1232](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1232)
 
 ***
 
@@ -1162,7 +1162,7 @@ Draw polygon
 
 #### Source
 
-[graphics/graphics.ts:1076](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1076)
+[graphics/graphics.ts:1063](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1063)
 
 ***
 
@@ -1190,7 +1190,7 @@ Draw a rect
 
 #### Source
 
-[graphics/graphics.ts:465](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L465)
+[graphics/graphics.ts:452](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L452)
 
 ***
 
@@ -1220,7 +1220,7 @@ Draw a rounded rect
 
 #### Source
 
-[graphics/graphics.ts:552](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L552)
+[graphics/graphics.ts:539](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L539)
 
 ***
 
@@ -1253,7 +1253,7 @@ Hints:
 
 #### Source
 
-[graphics/graphics.ts:1354](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1354)
+[graphics/graphics.ts:1341](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1341)
 
 ***
 
@@ -1275,4 +1275,4 @@ Translate transform
 
 #### Source
 
-[graphics/graphics.ts:334](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L334)
+[graphics/graphics.ts:321](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L321)
