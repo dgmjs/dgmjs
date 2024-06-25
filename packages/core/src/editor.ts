@@ -316,6 +316,12 @@ export class Editor {
    * @private
    */
   leftButtonDown: boolean;
+
+  /**
+   * @private
+   */
+  midButtonDown: boolean;
+
   private downX: number;
   private downY: number;
   private isPinching: boolean;
@@ -405,7 +411,8 @@ export class Editor {
     this.handlers = {};
     this.activeHandler = null;
     this.activeHandlerLock = false;
-    this.leftButtonDown = false; // To check mouse left button down in mouse move event.
+    this.leftButtonDown = false;
+    this.midButtonDown = false;
     this.downX = 0;
     this.downY = 0;
     this.isPinching = false;
@@ -465,18 +472,16 @@ export class Editor {
       if (this.enabled) {
         this.focus();
         if (e.button === Mouse.BUTTON1) this.leftButtonDown = true;
+        if (e.button === Mouse.BUTTON2) this.midButtonDown = true;
         const event = createPointerEvent(this.canvasElement, this.canvas, e);
         this.autoScroller.pointerDown(event);
-        if (event.ModDown) {
+        if (this.midButtonDown || (event.ModDown && this.leftButtonDown)) {
           // viewpoint move
-          // TODO: viewpoint move need to be moved to Handler (SelectHandler or CreateHandler)
-          if (this.leftButtonDown) {
-            this.setCursor(Cursor.MOVE);
-            this.downX = e.offsetX;
-            this.downY = e.offsetY;
-          }
+          this.setCursor(Cursor.MOVE);
+          this.downX = e.offsetX;
+          this.downY = e.offsetY;
         } else if (!this.isPinching && this.activeHandler) {
-          // 모바일에서는 pointerMove 발생하지 않으므로, pointerMove 한번 호출해준다.
+          // In mobile devices pointerMove is not triggered, so need to trigger pointerMove once
           this.activeHandler.pointerMove(this, event);
           this.activeHandler.pointerDown(this, event);
         }
@@ -490,15 +495,13 @@ export class Editor {
         const event = createPointerEvent(this.canvasElement, this.canvas, e);
         event.leftButtonDown = this.leftButtonDown;
         this.autoScroller.pointerMove(event);
-        if (event.ModDown) {
+        if (this.midButtonDown || (event.ModDown && this.leftButtonDown)) {
           // viewpoint move
-          if (this.leftButtonDown) {
-            let dx = (e.offsetX - this.downX) / this.getScale();
-            let dy = (e.offsetY - this.downY) / this.getScale();
-            this.moveOrigin(dx, dy);
-            this.downX = e.offsetX;
-            this.downY = e.offsetY;
-          }
+          let dx = (e.offsetX - this.downX) / this.getScale();
+          let dy = (e.offsetY - this.downY) / this.getScale();
+          this.moveOrigin(dx, dy);
+          this.downX = e.offsetX;
+          this.downY = e.offsetY;
         } else if (!this.isPinching && this.activeHandler) {
           this.activeHandler.pointerMove(this, event);
         }
@@ -509,17 +512,18 @@ export class Editor {
     // pointer up  handler
     this.canvasElement.addEventListener("pointerup", (e) => {
       if (this.enabled) {
-        if (e.button === Mouse.BUTTON1) this.leftButtonDown = false;
         const event = createPointerEvent(this.canvasElement, this.canvas, e);
-        this.autoScroller.pointerUp(event);
-        if (event.ModDown) {
-          // viewpoint move
+        if (this.midButtonDown || (event.ModDown && this.leftButtonDown)) {
           this.setCursor(Cursor.DEFAULT);
           this.downX = 0;
           this.downY = 0;
-        } else if (!this.isPinching && this.activeHandler) {
+        }
+        this.autoScroller.pointerUp(event);
+        if (!this.isPinching && this.activeHandler) {
           this.activeHandler.pointerUp(this, event);
         }
+        if (e.button === Mouse.BUTTON1) this.leftButtonDown = false;
+        if (e.button === Mouse.BUTTON2) this.midButtonDown = false;
         this.onPointerUp.emit(event);
       }
     });
