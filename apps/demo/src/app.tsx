@@ -99,6 +99,7 @@ function App() {
   const handleActiveHandlerChange = (handlerId: string) => {
     demoStore.setActiveHandler(handlerId);
     window.editor?.selection.deselectAll();
+    window.editor?.focus();
   };
 
   const handleAction = () => {
