@@ -139,27 +139,9 @@ export class Actions {
       this.editor.transform.transact((tx) => {
         objs = objs ?? this.editor.selection.getShapes();
         for (let key in values) {
-          if (key === "horzAlign") {
-            objs.forEach((s) => {
-              if (s instanceof Box) setHorzAlign(tx, s, (values as any)[key]);
-            });
-          } else if (key === "fontSize") {
-            objs.forEach((s) => {
-              if (s instanceof Box) setFontSize(tx, s, (values as any)[key]);
-            });
-          } else if (key === "fontFamily") {
-            objs.forEach((s) => {
-              if (s instanceof Box) setFontFamily(tx, s, (values as any)[key]);
-            });
-          } else if (key === "fontColor") {
-            objs.forEach((s) => {
-              if (s instanceof Box) setFontColor(tx, s, (values as any)[key]);
-            });
-          } else {
-            objs.forEach((s) => {
-              tx.assign(s, key, (values as any)[key]);
-            });
-          }
+          objs.forEach((s) => {
+            if (s.hasOwnProperty(key)) tx.assign(s, key, (values as any)[key]);
+          });
         }
         resolveAllConstraints(tx, page, this.editor.canvas);
       });
