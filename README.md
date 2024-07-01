@@ -22,7 +22,12 @@ An infinite canvas with _smart shapes_. It supports:
 - [Get started](https://dgmjs.dev/overview/getting-started/)
 - [Minimal example (StackBlitz)](https://stackblitz.com/edit/dgmjs-example?file=src%2Fapp.tsx)
 - [Run demo app](https://github.com/dgmjs/dgmjs/blob/main/apps/demo/README.md)
-- [DGM: Full-featured App](https://dgm.sh/home)
+
+## Showcase
+
+- [DGM App](https://dgm.sh/home) - Full-featured web-based sketchnotes app
+- [draw2app](https://draw2app.pages.dev/) - Generate web app from low-fidelity sketch by OpenAI.
+
 
 ## Contribution
 
