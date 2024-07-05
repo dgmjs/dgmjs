@@ -425,6 +425,7 @@ class MemoizationCanvas {
         stroke: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
@@ -520,6 +521,7 @@ class MemoizationCanvas {
           stroke: this.canvas.resolveColor(this.strokeColor),
           strokeWidth: this.strokeWidth,
           strokeLineDash: this.strokePattern,
+          disableMultiStroke: this.strokePattern.length > 1,
           preserveVertices: true,
         }
       );
@@ -636,6 +638,7 @@ class MemoizationCanvas {
         stroke: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
@@ -716,7 +719,8 @@ class MemoizationCanvas {
         roughness: this.roughness,
         stroke: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokeLineDash: structuredClone(this.strokePattern),
+        strokeLineDash: this.strokePattern,
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
@@ -724,7 +728,7 @@ class MemoizationCanvas {
         type: "polyline",
         strokeColor: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokePattern: structuredClone(this.strokePattern),
+        strokePattern: this.strokePattern,
         alpha: this.alpha,
         path: path,
       });
@@ -743,6 +747,7 @@ class MemoizationCanvas {
         stroke: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
@@ -806,6 +811,7 @@ class MemoizationCanvas {
         stroke: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
@@ -880,6 +886,7 @@ class MemoizationCanvas {
         stroke: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
@@ -968,6 +975,7 @@ class MemoizationCanvas {
         stroke: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
+        disableMultiStroke: this.strokePattern.length > 1,
         preserveVertices: true,
       });
       this.do.push({ type: "rough", alpha: this.alpha, rd });

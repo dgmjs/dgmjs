@@ -11,7 +11,7 @@ const SCREEN_BOTTOM_MARGIN = 16;
  * Return array which eliminates duplications
  * e.g.) unique([1, 2, 2, 3, 4, 4]) --> [1, 2, 3, 4]
  */
-export function unique(A: Array<any>): Array<any> {
+export function unique<T>(A: Array<T>): Array<T> {
   return Array.from(new Set(A).values());
 }
 
@@ -24,13 +24,13 @@ export function merge<T>(
   stringifiedCompare: boolean = false,
   initial: T | undefined = undefined
 ): T | undefined {
-  const vs = unique(
-    stringifiedCompare ? values.map((v) => JSON.stringify(v)) : values
-  );
+  const vs = stringifiedCompare
+    ? unique<string>(values.map((v) => JSON.stringify(v)))
+    : unique<T>(values);
   return vs.length !== 1
     ? initial
     : stringifiedCompare
-    ? JSON.parse(vs[0])
+    ? JSON.parse(vs[0] as string)
     : vs[0];
 }
 

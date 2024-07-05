@@ -434,6 +434,7 @@ class Canvas {
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       roughDraw(this.context, rd);
     } else {
@@ -473,6 +474,7 @@ class Canvas {
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       roughDraw(this.context, rd);
     } else {
@@ -572,6 +574,7 @@ class Canvas {
           stroke: this.resolveColor(this.strokeColor),
           strokeWidth: this.strokeWidth,
           strokeLineDash: this.strokePattern,
+          disableMultiStroke: this.strokePattern.length > 1,
           preserveVertices: true,
         }
       );
@@ -702,6 +705,7 @@ class Canvas {
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       roughDraw(this.context, rd);
     } else {
@@ -797,6 +801,7 @@ class Canvas {
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       roughDraw(this.context, rd);
     } else {
@@ -830,6 +835,7 @@ class Canvas {
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       roughDraw(this.context, rd);
     } else {
@@ -991,6 +997,7 @@ class Canvas {
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       roughDraw(this.context, rd);
     } else {
@@ -1074,6 +1081,7 @@ class Canvas {
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       roughDraw(this.context, rd);
     } else {
@@ -1164,6 +1172,7 @@ class Canvas {
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       roughDraw(this.context, rd);
     } else {
@@ -1244,6 +1253,7 @@ class Canvas {
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern,
+        disableMultiStroke: this.strokePattern.length > 1,
         preserveVertices: true,
       });
       roughDraw(this.context, rd);
