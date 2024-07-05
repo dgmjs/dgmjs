@@ -72,7 +72,7 @@ export class BoxSizeController extends Controller {
    * Indicates the controller is active or not
    */
   active(editor: Editor, shape: Shape): boolean {
-    const MIN1 = CONTROL_POINT_APOTHEM * 8;
+    const MIN1 = CONTROL_POINT_APOTHEM * 4;
     const MIN2 = CONTROL_POINT_APOTHEM * 4;
     let value =
       editor.selection.size() === 1 && editor.selection.isSelected(shape);
