@@ -72,7 +72,7 @@ interface LineDO extends BaseDO {
   type: "line";
   strokeColor: string;
   strokeWidth: number;
-  strokePattern: number[];
+  strokeLineDash: number[];
   alpha: number;
   x1: number;
   y1: number;
@@ -84,7 +84,7 @@ interface StrokeRectDO extends BaseDO {
   type: "strokeRect";
   strokeColor: string;
   strokeWidth: number;
-  strokePattern: number[];
+  strokeLineDash: number[];
   alpha: number;
   x: number;
   y: number;
@@ -107,7 +107,7 @@ interface StrokeRoundRectDO extends BaseDO {
   type: "strokeRoundRect";
   strokeColor: string;
   strokeWidth: number;
-  strokePattern: number[];
+  strokeLineDash: number[];
   alpha: number;
   x: number;
   y: number;
@@ -132,7 +132,7 @@ interface StrokeEllipseDO extends BaseDO {
   type: "strokeEllipse";
   strokeColor: string;
   strokeWidth: number;
-  strokePattern: number[];
+  strokeLineDash: number[];
   alpha: number;
   x: number;
   y: number;
@@ -155,7 +155,7 @@ interface PolylineDO extends BaseDO {
   type: "polyline";
   strokeColor: string;
   strokeWidth: number;
-  strokePattern: number[];
+  strokeLineDash: number[];
   alpha: number;
   path: number[][];
 }
@@ -164,7 +164,7 @@ interface StrokeCurveDO extends BaseDO {
   type: "strokeCurve";
   strokeColor: string;
   strokeWidth: number;
-  strokePattern: number[];
+  strokeLineDash: number[];
   alpha: number;
   path: number[][];
 }
@@ -181,7 +181,7 @@ interface StrokePolygonDO extends BaseDO {
   type: "strokePolygon";
   strokeColor: string;
   strokeWidth: number;
-  strokePattern: number[];
+  strokeLineDash: number[];
   alpha: number;
   path: number[][];
 }
@@ -198,7 +198,7 @@ interface StrokeArcDO extends BaseDO {
   type: "strokeArc";
   strokeColor: string;
   strokeWidth: number;
-  strokePattern: number[];
+  strokeLineDash: number[];
   alpha: number;
   x: number;
   y: number;
@@ -223,7 +223,7 @@ interface StrokePathDO extends BaseDO {
   type: "strokePath";
   strokeColor: string;
   strokeWidth: number;
-  strokePattern: number[];
+  strokeLineDash: number[];
   alpha: number;
   path: SVGPath;
 }
@@ -391,7 +391,7 @@ class MemoizationCanvas {
         roughness: this.roughness,
         stroke: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
       });
       this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
@@ -399,7 +399,7 @@ class MemoizationCanvas {
         type: "line",
         strokeColor: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokePattern: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         alpha: this.alpha,
         x1,
         y1,
@@ -424,7 +424,8 @@ class MemoizationCanvas {
         roughness: this.roughness,
         stroke: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
@@ -432,7 +433,7 @@ class MemoizationCanvas {
         type: "strokeRect",
         strokeColor: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokePattern: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         alpha: this.alpha,
         x,
         y,
@@ -519,7 +520,8 @@ class MemoizationCanvas {
           roughness: this.roughness,
           stroke: this.canvas.resolveColor(this.strokeColor),
           strokeWidth: this.strokeWidth,
-          strokeLineDash: this.strokePattern,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          disableMultiStroke: this.strokePattern.length > 1,
           preserveVertices: true,
         }
       );
@@ -529,7 +531,7 @@ class MemoizationCanvas {
         type: "strokeRoundRect",
         strokeColor: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokePattern: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         alpha: this.alpha,
         x,
         y,
@@ -635,7 +637,8 @@ class MemoizationCanvas {
         roughness: this.roughness,
         stroke: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
@@ -643,7 +646,7 @@ class MemoizationCanvas {
         type: "strokeEllipse",
         strokeColor: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokePattern: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         alpha: this.alpha,
         x,
         y,
@@ -716,7 +719,8 @@ class MemoizationCanvas {
         roughness: this.roughness,
         stroke: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokeLineDash: structuredClone(this.strokePattern),
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
@@ -724,7 +728,7 @@ class MemoizationCanvas {
         type: "polyline",
         strokeColor: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokePattern: structuredClone(this.strokePattern),
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         alpha: this.alpha,
         path: path,
       });
@@ -742,7 +746,8 @@ class MemoizationCanvas {
         roughness: this.roughness,
         stroke: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
@@ -750,7 +755,7 @@ class MemoizationCanvas {
         type: "strokeCurve",
         strokeColor: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokePattern: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         alpha: this.alpha,
         path: path,
       });
@@ -805,7 +810,8 @@ class MemoizationCanvas {
         roughness: this.roughness,
         stroke: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
@@ -813,7 +819,7 @@ class MemoizationCanvas {
         type: "strokePolygon",
         strokeColor: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokePattern: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         alpha: this.alpha,
         path: path,
       });
@@ -879,7 +885,8 @@ class MemoizationCanvas {
         roughness: this.roughness,
         stroke: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       this.do.push({ type: "rough", alpha: this.alpha, rd });
     } else {
@@ -887,7 +894,7 @@ class MemoizationCanvas {
         type: "strokeArc",
         strokeColor: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokePattern: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         alpha: this.alpha,
         x,
         y,
@@ -967,7 +974,8 @@ class MemoizationCanvas {
         roughness: this.roughness,
         stroke: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+        disableMultiStroke: this.strokePattern.length > 1,
         preserveVertices: true,
       });
       this.do.push({ type: "rough", alpha: this.alpha, rd });
@@ -976,7 +984,7 @@ class MemoizationCanvas {
         type: "strokePath",
         strokeColor: this.canvas.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokePattern: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         alpha: this.alpha,
         path,
       });
@@ -1120,7 +1128,7 @@ class MemoizationCanvas {
         case "line": {
           canvas.context.strokeStyle = d.strokeColor;
           canvas.context.lineWidth = d.strokeWidth;
-          canvas.context.setLineDash(d.strokePattern);
+          canvas.context.setLineDash(d.strokeLineDash);
           canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           canvas.context.moveTo(d.x1, d.y1);
@@ -1132,7 +1140,7 @@ class MemoizationCanvas {
         case "strokeRect": {
           canvas.context.strokeStyle = d.strokeColor;
           canvas.context.lineWidth = d.strokeWidth;
-          canvas.context.setLineDash(d.strokePattern);
+          canvas.context.setLineDash(d.strokeLineDash);
           canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           canvas.context.rect(d.x, d.y, d.w, d.h);
@@ -1149,7 +1157,7 @@ class MemoizationCanvas {
         case "strokeRoundRect": {
           canvas.context.strokeStyle = d.strokeColor;
           canvas.context.lineWidth = d.strokeWidth;
-          canvas.context.setLineDash(d.strokePattern);
+          canvas.context.setLineDash(d.strokeLineDash);
           canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           canvas.context.moveTo(d.x + d.radius[0], d.y);
@@ -1215,7 +1223,7 @@ class MemoizationCanvas {
         case "strokeEllipse": {
           canvas.context.strokeStyle = d.strokeColor;
           canvas.context.lineWidth = d.strokeWidth;
-          canvas.context.setLineDash(d.strokePattern);
+          canvas.context.setLineDash(d.strokeLineDash);
           canvas.context.globalAlpha = d.alpha;
           const kappa = 0.5522848;
           const ox = (d.w / 2.0) * kappa;
@@ -1257,7 +1265,7 @@ class MemoizationCanvas {
         case "polyline": {
           canvas.context.strokeStyle = d.strokeColor;
           canvas.context.lineWidth = d.strokeWidth;
-          canvas.context.setLineDash(d.strokePattern);
+          canvas.context.setLineDash(d.strokeLineDash);
           canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           for (let i = 0, len = d.path.length; i < len; i++) {
@@ -1274,7 +1282,7 @@ class MemoizationCanvas {
         case "strokeCurve": {
           canvas.context.strokeStyle = d.strokeColor;
           canvas.context.lineWidth = d.strokeWidth;
-          canvas.context.setLineDash(d.strokePattern);
+          canvas.context.setLineDash(d.strokeLineDash);
           canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           if (d.path.length > 2) {
@@ -1317,7 +1325,7 @@ class MemoizationCanvas {
         case "strokePolygon": {
           canvas.context.strokeStyle = d.strokeColor;
           canvas.context.lineWidth = d.strokeWidth;
-          canvas.context.setLineDash(d.strokePattern);
+          canvas.context.setLineDash(d.strokeLineDash);
           canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           let start: number[] = [-1, -1];
@@ -1352,7 +1360,7 @@ class MemoizationCanvas {
         case "strokeArc": {
           canvas.context.strokeStyle = d.strokeColor;
           canvas.context.lineWidth = d.strokeWidth;
-          canvas.context.setLineDash(d.strokePattern);
+          canvas.context.setLineDash(d.strokeLineDash);
           canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           canvas.context.arc(d.x, d.y, d.r, d.startAngle, d.endAngle, false);
@@ -1370,7 +1378,7 @@ class MemoizationCanvas {
         case "strokePath": {
           canvas.context.strokeStyle = d.strokeColor;
           canvas.context.lineWidth = d.strokeWidth;
-          canvas.context.setLineDash(d.strokePattern);
+          canvas.context.setLineDash(d.strokeLineDash);
           canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           const path2d = new Path2D(pathToString(d.path));

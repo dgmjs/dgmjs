@@ -427,18 +427,21 @@ class Canvas {
     this.context.lineCap = "round";
     this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
+    this.context.setLineDash(
+      this.strokePattern.map((v) => v * this.strokeWidth)
+    );
     if (this.roughness > 0) {
       const rd = this.generator.line(x1, y1, x2, y2, {
         seed,
         roughness: this.roughness,
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       roughDraw(this.context, rd);
     } else {
       this.context.beginPath();
-      this.context.setLineDash(this.strokePattern);
       this.context.moveTo(x1, y1);
       this.context.lineTo(x2, y2);
       this.context.stroke();
@@ -465,14 +468,17 @@ class Canvas {
     this.context.lineCap = "round";
     this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
-    this.context.setLineDash(this.strokePattern);
+    this.context.setLineDash(
+      this.strokePattern.map((v) => v * this.strokeWidth)
+    );
     if (this.roughness > 0) {
       const rd = this.generator.rectangle(x, y, w, h, {
         seed,
         roughness: this.roughness,
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       roughDraw(this.context, rd);
     } else {
@@ -556,7 +562,9 @@ class Canvas {
     this.context.lineCap = "round";
     this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
-    this.context.setLineDash(this.strokePattern);
+    this.context.setLineDash(
+      this.strokePattern.map((v) => v * this.strokeWidth)
+    );
     if (this.roughness > 0) {
       const rd = this.generator.path(
         `M${x + rs[0]},${y} L${x + w - rs[1]},${y} Q${x + w},${y} ${x + w},${
@@ -571,7 +579,8 @@ class Canvas {
           roughness: this.roughness,
           stroke: this.resolveColor(this.strokeColor),
           strokeWidth: this.strokeWidth,
-          strokeLineDash: this.strokePattern,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          disableMultiStroke: this.strokePattern.length > 1,
           preserveVertices: true,
         }
       );
@@ -694,14 +703,17 @@ class Canvas {
     this.context.lineCap = "round";
     this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
-    this.context.setLineDash(this.strokePattern);
+    this.context.setLineDash(
+      this.strokePattern.map((v) => v * this.strokeWidth)
+    );
     if (this.roughness > 0) {
       const rd = this.generator.ellipse(xm, ym, w, h, {
         seed,
         roughness: this.roughness,
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       roughDraw(this.context, rd);
     } else {
@@ -789,14 +801,17 @@ class Canvas {
     this.context.lineCap = "round";
     this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
-    this.context.setLineDash(this.strokePattern);
+    this.context.setLineDash(
+      this.strokePattern.map((v) => v * this.strokeWidth)
+    );
     if (this.roughness > 0) {
       const rd = this.generator.linearPath(path as Point[], {
         seed,
         roughness: this.roughness,
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       roughDraw(this.context, rd);
     } else {
@@ -823,18 +838,21 @@ class Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
     this.context.globalAlpha = this.alpha;
+    this.context.setLineDash(
+      this.strokePattern.map((v) => v * this.strokeWidth)
+    );
     if (this.roughness > 0) {
       const rd = this.generator.linearPath(path as Point[], {
         seed,
         roughness: this.roughness,
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       roughDraw(this.context, rd);
     } else {
       this.context.beginPath();
-      this.context.setLineDash(this.strokePattern);
       if (path.length > 0) {
         var p, prev, next, pdir, ndir;
         const p0 = path[0];
@@ -984,18 +1002,21 @@ class Canvas {
     this.context.lineCap = "round";
     this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
+    this.context.setLineDash(
+      this.strokePattern.map((v) => v * this.strokeWidth)
+    );
     if (this.roughness > 0) {
       const rd = this.generator.curve(path as Point[], {
         seed,
         roughness: this.roughness,
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       roughDraw(this.context, rd);
     } else {
       this.context.beginPath();
-      this.context.setLineDash(this.strokePattern);
       if (path.length > 2) {
         const ps = geometry.curvePathPoints(path);
         this.polyline(ps);
@@ -1066,14 +1087,17 @@ class Canvas {
     this.context.lineCap = "round";
     this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
-    this.context.setLineDash(this.strokePattern);
+    this.context.setLineDash(
+      this.strokePattern.map((v) => v * this.strokeWidth)
+    );
     if (this.roughness > 0) {
       const rd = this.generator.polygon(path as Point[], {
         seed,
         roughness: this.roughness,
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       roughDraw(this.context, rd);
     } else {
@@ -1154,7 +1178,9 @@ class Canvas {
     this.context.lineCap = "round";
     this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
-    this.context.setLineDash(this.strokePattern);
+    this.context.setLineDash(
+      this.strokePattern.map((v) => v * this.strokeWidth)
+    );
     if (this.roughness > 0) {
       // To avoid system stuck due to the bug of roughjs
       if (startAngle === 0 && endAngle === 360) return this;
@@ -1163,7 +1189,8 @@ class Canvas {
         roughness: this.roughness,
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+        disableMultiStroke: this.strokePattern.length > 1,
       });
       roughDraw(this.context, rd);
     } else {
@@ -1235,7 +1262,9 @@ class Canvas {
     this.context.lineCap = "round";
     this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
-    this.context.setLineDash(this.strokePattern);
+    this.context.setLineDash(
+      this.strokePattern.map((v) => v * this.strokeWidth)
+    );
     if (this.roughness > 0) {
       const d = pathToString(path);
       const rd = this.generator.path(d, {
@@ -1243,7 +1272,8 @@ class Canvas {
         roughness: this.roughness,
         stroke: this.resolveColor(this.strokeColor),
         strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern,
+        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+        disableMultiStroke: this.strokePattern.length > 1,
         preserveVertices: true,
       });
       roughDraw(this.context, rd);
