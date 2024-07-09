@@ -9,7 +9,7 @@ import { FillPanel } from "./fill-panel";
 import { ControlPanel } from "./control-panel";
 import { StrokePanel } from "./stroke-panel";
 import { TagPanel } from "./tag-panel";
-import { Line, Box, Freehand } from "@dgmjs/core";
+import { Line, Box, Freehand, Doc, Shape } from "@dgmjs/core";
 import { LinePanel } from "./line-panel";
 import { Empty } from "../common/empty";
 import { PrototypePanel } from "./prototype-panel";
@@ -18,10 +18,18 @@ import { AlignmentPanel } from "./alignment-panel";
 import { CommonPanel } from "./shape-panel";
 import { ShapeEditorProps } from "@/types";
 import { FreehandPanel } from "./freehand-panel";
+import { ExtraPanel } from "./extra-panel";
 
-export const PropertySidebar: React.FC<ShapeEditorProps> = ({
+export interface PropertySidebarProps extends ShapeEditorProps {
+  doc: Doc;
+  onReferenceChange: (shape: Shape, reference: Shape | null) => void;
+}
+
+export const PropertySidebar: React.FC<PropertySidebarProps> = ({
+  doc,
   shapes,
   onChange,
+  onReferenceChange,
 }) => {
   return (
     <div className="absolute inset-y-0 right-0 w-56 bg-background border-l p-2">
@@ -66,6 +74,12 @@ export const PropertySidebar: React.FC<ShapeEditorProps> = ({
               {shapes.length === 1 && (
                 <>
                   <PrototypePanel shapes={shapes} onChange={onChange} />
+                  <ExtraPanel
+                    doc={doc}
+                    shapes={shapes}
+                    onChange={onChange}
+                    onReferenceChange={onReferenceChange}
+                  />
                   <ExtendedPropertyPanel shapes={shapes} onChange={onChange} />
                   <ConstraintPanel shapes={shapes} onChange={onChange} />
                   <ScriptPanel shapes={shapes} onChange={onChange} />

@@ -12,8 +12,8 @@
   "dependencies": {
     "@dgmjs/core": "*",
     "@dgmjs/dgmjs-plugin-yjs": "*",
-    "@dgmjs/react": "*",
     "@dgmjs/export": "*",
+    "@dgmjs/react": "*",
     "@dgmjs/y-webrtc": "^10.1.8",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-context-menu": "^2.1.5",
@@ -50,7 +50,7 @@
     "browser-fs-access": "^0.35.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
-    "lucide-react": "^0.323.0",
+    "lucide-react": "^0.403.0",
     "nanoid": "^5.0.7",
     "next-themes": "^0.2.1",
     "react": "^18.2.0",

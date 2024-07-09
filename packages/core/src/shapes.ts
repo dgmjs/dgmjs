@@ -290,6 +290,11 @@ export class Shape extends Obj {
   link: string;
 
   /**
+   * A reference to shape
+   */
+  reference: Shape | null;
+
+  /**
    * Shape's constraints
    */
   constraints: Constraint[];
@@ -357,6 +362,7 @@ export class Shape extends Obj {
     this.opacity = 1;
     this.roughness = 0;
     this.link = "";
+    this.reference = null;
     this.constraints = [];
     this.properties = [];
     this.scripts = [];
@@ -402,6 +408,7 @@ export class Shape extends Obj {
     json.opacity = this.opacity;
     json.roughness = this.roughness;
     json.link = this.link;
+    json.reference = this.reference ? this.reference.id : null;
     json.constraints = structuredClone(this.constraints);
     json.properties = structuredClone(this.properties);
     json.scripts = structuredClone(this.scripts);
@@ -443,9 +450,21 @@ export class Shape extends Obj {
     this.opacity = json.opacity ?? this.opacity;
     this.roughness = json.roughness ?? this.roughness;
     this.link = json.link ?? this.link;
+    this.reference = json.reference ?? this.reference;
     this.constraints = json.constraints ?? this.constraints;
     this.properties = json.properties ?? this.properties;
     this.scripts = json.scripts ?? this.scripts;
+  }
+
+  resolveRefs(idMap: Record<string, Shape>, nullIfNotFound: boolean = false) {
+    super.resolveRefs(idMap);
+    if (typeof this.reference === "string") {
+      if (idMap[this.reference]) {
+        this.reference = idMap[this.reference];
+      } else if (nullIfNotFound) {
+        this.reference = null;
+      }
+    }
   }
 
   get right(): number {

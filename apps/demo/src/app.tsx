@@ -117,6 +117,12 @@ function App() {
     demoStore.setSelection([...shapes]);
   };
 
+  const handleReferenceChange = (shape: Shape, reference: Shape | null) => {
+    const shapes = window.editor.selection.getShapes();
+    window.editor.actions.setReference(reference, [shape]);
+    demoStore.setSelection([...shapes]);
+  };
+
   const handleCurrentPageChange = (page: Page) => {
     demoStore.setCurrentPage(page);
   };
@@ -169,8 +175,10 @@ function App() {
         }}
       />
       <PropertySidebar
+        doc={demoStore.doc!}
         shapes={demoStore.selection}
         onChange={handleValuesChange}
+        onReferenceChange={handleReferenceChange}
       />
     </div>
   );

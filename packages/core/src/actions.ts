@@ -3,7 +3,6 @@ import { Box, Group, type Shape, type ShapeProps, Page, Path } from "./shapes";
 import * as geometry from "./graphics/geometry";
 import { Obj, filterDescendants } from "./core/obj";
 import { deserialize, serialize } from "./core/serialize";
-import { extractTextFromShapes } from "./utils/text-utils";
 import {
   addPage,
   addShape,
@@ -19,10 +18,6 @@ import {
   resolveAllConstraints,
   sendBackward,
   sendToBack,
-  setFontColor,
-  setFontFamily,
-  setFontSize,
-  setHorzAlign,
 } from "./macro";
 
 /**
@@ -143,6 +138,24 @@ export class Actions {
             if (s.hasOwnProperty(key)) tx.assign(s, key, (values as any)[key]);
           });
         }
+        resolveAllConstraints(tx, page, this.editor.canvas);
+      });
+      this.editor.transform.endAction();
+    }
+  }
+
+  /**
+   * Set reference
+   */
+  setReference(reference: Shape | null, shapes: Shape[]) {
+    const page = this.editor.getCurrentPage();
+    if (page) {
+      this.editor.transform.startAction("set-reference");
+      this.editor.transform.transact((tx) => {
+        shapes = shapes ?? this.editor.selection.getShapes();
+        shapes.forEach((s) => {
+          tx.assignRef(s, "reference", reference);
+        });
         resolveAllConstraints(tx, page, this.editor.canvas);
       });
       this.editor.transform.endAction();
