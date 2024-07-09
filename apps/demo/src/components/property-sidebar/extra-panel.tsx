@@ -16,14 +16,12 @@ import { ScrollArea } from "../ui/scroll-area";
 
 export interface ExtraPanelProps extends ShapeEditorProps {
   doc: Doc;
-  onReferenceChange: (shape: Shape, reference: Shape | null) => void;
 }
 
 export const ExtraPanel: React.FC<ExtraPanelProps> = ({
   doc,
   shapes,
   onChange,
-  onReferenceChange,
 }) => {
   const link = shapes[0].link;
   const reference = shapes[0].reference;
@@ -60,7 +58,7 @@ export const ExtraPanel: React.FC<ExtraPanelProps> = ({
               size="icon"
               className="h-8 w-8 px-2"
               onClick={() => {
-                if (onReferenceChange) onReferenceChange(shapes[0], null);
+                onChange({ reference: null });
               }}
             >
               <XIcon size={16} />
@@ -82,9 +80,7 @@ export const ExtraPanel: React.FC<ExtraPanelProps> = ({
                     shapes={doc ? (doc.children as Shape[]) : []}
                     selections={[]}
                     onSelect={(shape) => {
-                      console.log("shape", shape);
-                      if (onReferenceChange)
-                        onReferenceChange(shapes[0], shape);
+                      onChange({ reference: shape });
                     }}
                   />
                 </ScrollArea>

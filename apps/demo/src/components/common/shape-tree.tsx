@@ -6,6 +6,7 @@ import {
   ComponentIcon,
   FrameIcon,
   GroupIcon,
+  HighlighterIcon,
   PencilIcon,
   ScanIcon,
   ShapesIcon,
@@ -13,7 +14,7 @@ import {
   StickyNoteIcon,
   TypeIcon,
 } from "lucide-react";
-import { LineIcon } from "@/components/icons";
+import { ConnectorIcon, LineIcon } from "@/components/icons";
 
 interface ShapeTreeNodeProps {
   level: number;
@@ -50,8 +51,10 @@ const ShapeTreeNode: React.FC<ShapeTreeNodeProps> = ({
             {shape.type === "Ellipse" && <CircleIcon size={16} />}
             {shape.type === "Text" && <TypeIcon size={16} />}
             {shape.type === "Group" && <GroupIcon size={16} />}
-            {shape.type === "Connector" && <LineIcon size={16} />}
-            {shape.type === "Line" && <PencilIcon size={16} />}
+            {shape.type === "Connector" && <ConnectorIcon size={16} />}
+            {shape.type === "Line" && <LineIcon size={16} />}
+            {shape.type === "Freehand" && <PencilIcon size={16} />}
+            {shape.type === "Highlighter" && <HighlighterIcon size={16} />}
             {shape.type === "Embed" && <ScanIcon size={16} />}
             {shape.type === "Frame" && <FrameIcon size={16} />}
           </div>
