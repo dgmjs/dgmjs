@@ -134,28 +134,21 @@ export class Actions {
       this.editor.transform.transact((tx) => {
         objs = objs ?? this.editor.selection.getShapes();
         for (let key in values) {
-          objs.forEach((s) => {
-            if (s.hasOwnProperty(key)) tx.assign(s, key, (values as any)[key]);
-          });
+          switch (key) {
+            case "reference": {
+              objs.forEach((s) => {
+                if (s.hasOwnProperty(key))
+                  tx.assignRef(s, key, (values as any)[key]);
+              });
+              break;
+            }
+            default:
+              objs.forEach((s) => {
+                if (s.hasOwnProperty(key))
+                  tx.assign(s, key, (values as any)[key]);
+              });
+          }
         }
-        resolveAllConstraints(tx, page, this.editor.canvas);
-      });
-      this.editor.transform.endAction();
-    }
-  }
-
-  /**
-   * Set reference
-   */
-  setReference(reference: Shape | null, shapes: Shape[]) {
-    const page = this.editor.getCurrentPage();
-    if (page) {
-      this.editor.transform.startAction("set-reference");
-      this.editor.transform.transact((tx) => {
-        shapes = shapes ?? this.editor.selection.getShapes();
-        shapes.forEach((s) => {
-          tx.assignRef(s, "reference", reference);
-        });
         resolveAllConstraints(tx, page, this.editor.canvas);
       });
       this.editor.transform.endAction();
