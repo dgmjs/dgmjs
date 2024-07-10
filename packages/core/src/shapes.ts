@@ -2101,8 +2101,8 @@ export class Connector extends Line {
         this.head!.localCoordTransform(null as any, p, true)
       );
       return geometry.getPointOnPath(pathGCS, this.headAnchor[0]);
-    } else if (this.head) {
-      const box = this.head?.getBoundingRect();
+    } else if (this.head instanceof Shape) {
+      const box = this.head.getBoundingRect();
       const w = geometry.width(box);
       const h = geometry.height(box);
       return [
@@ -2122,7 +2122,7 @@ export class Connector extends Line {
         this.tail!.localCoordTransform(null as any, p, true)
       );
       return geometry.getPointOnPath(pathGCS, this.tailAnchor[0]);
-    } else if (this.tail) {
+    } else if (this.tail instanceof Shape) {
       const box = this.tail.getBoundingRect();
       const w = geometry.width(box);
       const h = geometry.height(box);
