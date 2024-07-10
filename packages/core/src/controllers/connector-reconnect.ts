@@ -42,7 +42,8 @@ export class ConnectorReconnectController extends Controller {
     return (
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
-      shape instanceof Connector
+      shape instanceof Connector &&
+      !editor.pointerDownUnselectedShape
     );
   }
 

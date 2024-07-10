@@ -132,6 +132,8 @@ export class BoxSizeController extends Controller {
     if (shape instanceof Path && shape.path.length === 2) value = false;
     // don't allow resizing when path editable
     if (shape instanceof Path && shape.pathEditable) value = false;
+    // don't allow resizing when pointer down on unselected shape
+    if (editor.pointerDownUnselectedShape) value = false;
     return value;
   }
 

@@ -309,6 +309,19 @@ export class Editor {
    */
   midButtonDown: boolean;
 
+  /**
+   * @private
+   *
+   * This indicates that the user has mouse pointer down on an unselected shape.
+   * This is required to deactivate controllers (box-sizing) before the shape is
+   * clearly selected after mouse pointer up.
+   *
+   * When the shape is too small, it is so hard to move the shape because the
+   * box-sizing controller is activated. This flag is used to prevent this issue.
+   * (See issue #169)
+   */
+  pointerDownUnselectedShape: boolean;
+
   private downX: number;
   private downY: number;
   private isPinching: boolean;
@@ -406,6 +419,7 @@ export class Editor {
     this.initialScale = 1;
     this.initialDistance = 0;
     this.touchPoint = [-1, -1];
+    this.pointerDownUnselectedShape = false;
     this.initializeState();
     this.initializeHandlers();
     this.initializeCanvas();

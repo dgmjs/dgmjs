@@ -44,7 +44,8 @@ export class PathAddPointController extends Controller {
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
       shape instanceof Path &&
-      shape.pathEditable
+      shape.pathEditable &&
+      !editor.pointerDownUnselectedShape
     );
   }
 

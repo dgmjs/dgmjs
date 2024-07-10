@@ -44,6 +44,7 @@ export class SelectHandler extends Handler {
   pointerDown(editor: Editor, e: CanvasPointerEvent) {
     const canvas = editor.canvas;
     const page = editor.getCurrentPage();
+    editor.pointerDownUnselectedShape = false;
     if (e.button === Mouse.BUTTON1) {
       const shape = this.getShapeAt(editor, e);
       if (shape) {
@@ -56,6 +57,7 @@ export class SelectHandler extends Handler {
           }
         } else {
           if (!editor.selection.isSelected(shape)) {
+            editor.pointerDownUnselectedShape = true;
             editor.selection.select([shape]);
           }
         }
@@ -232,6 +234,7 @@ export class SelectHandler extends Handler {
 
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
+    editor.pointerDownUnselectedShape = false;
   }
 
   /**
