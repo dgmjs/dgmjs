@@ -29,14 +29,18 @@ export function Menus() {
         },
       ]);
       if (fileWithHandle && fileWithHandle.handle) {
-        const file = await fileWithHandle.handle.getFile();
-        const data = await file.text();
-        const json = JSON.parse(data);
-        window.editor.loadFromJSON(json);
-        setDoc(window.editor.getDoc());
-        setCurrentPage(window.editor.getCurrentPage());
-        window.editor.scrollToCenter();
-        window.editor.repaint();
+        try {
+          const file = await fileWithHandle.handle.getFile();
+          const data = await file.text();
+          const json = JSON.parse(data);
+          window.editor.loadFromJSON(json);
+          setDoc(window.editor.getDoc());
+          setCurrentPage(window.editor.getCurrentPage());
+          window.editor.scrollToCenter();
+          window.editor.repaint();
+        } catch (err) {
+          console.error(err);
+        }
       }
     } catch {
       // user canceled
