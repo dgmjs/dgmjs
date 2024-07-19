@@ -57,6 +57,28 @@ title: "EditorOptions"
 
 ***
 
+### imageResize
+
+> **imageResize**: `object`
+
+#### maxHeight?
+
+> `optional` **maxHeight**: `number`
+
+#### maxWidth?
+
+> `optional` **maxWidth**: `number`
+
+#### quality?
+
+> `optional` **quality**: `number`
+
+#### Source
+
+[editor.ts:27](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L27)
+
+***
+
 ### keymap
 
 > **keymap**: [`KeyMap`](/api-core/type-aliases/keymap/)
@@ -91,4 +113,4 @@ title: "EditorOptions"
 
 #### Source
 
-[editor.ts:27](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L27)
+[editor.ts:32](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L32)

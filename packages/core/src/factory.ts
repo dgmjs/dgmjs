@@ -148,7 +148,10 @@ export class ShapeFactory {
     fileOrBlob: File | Blob,
     position: number[]
   ): Promise<Image> {
-    const imageElement = await resizeImage(fileOrBlob);
+    const imageElement = await resizeImage(
+      fileOrBlob,
+      this.editor.options.imageResize
+    );
     const image = new Image();
     const w = imageElement.width;
     const h = imageElement.height;

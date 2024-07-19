@@ -140,6 +140,11 @@ function App() {
         darkMode={demoStore.darkMode}
         options={{
           keymapEventTarget: window,
+          imageResize: {
+            quality: 1,
+            maxWidth: 2800,
+            maxHeight: 2800,
+          },
         }}
         plugins={[new YjsDocSyncPlugin(), new YjsUserPresencePlugin()]}
         showGrid={true}
