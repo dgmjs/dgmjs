@@ -27,7 +27,7 @@ Doc
 
 #### Source
 
-[shapes.ts:953](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L953)
+[shapes.ts:972](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L972)
 
 ## Properties
 
@@ -93,7 +93,7 @@ Doc
 
 #### Source
 
-[shapes.ts:951](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L951)
+[shapes.ts:970](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L970)
 
 ## Methods
 
@@ -187,7 +187,7 @@ Find a shape along with the parent-chain
 
 #### Source
 
-[shapes.ts:965](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L965)
+[shapes.ts:984](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L984)
 
 ***
 
@@ -265,7 +265,7 @@ assign null if not found
 
 #### Source
 
-[shapes.ts:959](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L959)
+[shapes.ts:978](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L978)
 
 ***
 

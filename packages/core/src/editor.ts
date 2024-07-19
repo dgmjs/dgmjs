@@ -24,6 +24,11 @@ export interface EditorOptions {
   allowAutoScroll: boolean;
   allowCreateTextOnCanvas: boolean;
   allowCreateTextOnConnector: boolean;
+  imageResize: {
+    quality?: number;
+    maxWidth?: number;
+    maxHeight?: number;
+  };
   onReady: (editor: Editor) => void;
 }
 
@@ -345,6 +350,11 @@ export class Editor {
       allowAutoScroll: true,
       allowCreateTextOnCanvas: true,
       allowCreateTextOnConnector: true,
+      imageResize: {
+        quality: 0.7,
+        maxWidth: 800,
+        maxHeight: 800,
+      },
       onReady: () => {},
       ...options,
     };

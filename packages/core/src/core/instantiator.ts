@@ -32,7 +32,7 @@ export class Instantiator {
           idMap[o.id] = o;
         });
         obj.traverse((o) => {
-          o.resolveRefs(idMap, true);
+          o.resolveRefs(idMap, false); // don't assign null for next resolve
         });
         return obj;
       } else {

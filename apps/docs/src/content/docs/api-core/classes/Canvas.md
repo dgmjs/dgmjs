@@ -236,7 +236,7 @@ angles are started from 12'clock in degree.
 
 #### Source
 
-[graphics/graphics.ts:1216](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1216)
+[graphics/graphics.ts:1243](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1243)
 
 ***
 
@@ -258,7 +258,7 @@ Draw a curved lines with fill and stroke
 
 #### Source
 
-[graphics/graphics.ts:1054](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1054)
+[graphics/graphics.ts:1075](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1075)
 
 ***
 
@@ -286,7 +286,7 @@ Draw Image
 
 #### Source
 
-[graphics/graphics.ts:1313](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1313)
+[graphics/graphics.ts:1343](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1343)
 
 ***
 
@@ -314,7 +314,7 @@ Draw an ellipse with fill and stroke
 
 #### Source
 
-[graphics/graphics.ts:771](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L771)
+[graphics/graphics.ts:783](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L783)
 
 ***
 
@@ -344,7 +344,7 @@ Draw filled arc. angles are started from 12'clock in degree.
 
 #### Source
 
-[graphics/graphics.ts:1180](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1180)
+[graphics/graphics.ts:1207](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1207)
 
 ***
 
@@ -366,7 +366,7 @@ Draw filled curved lines
 
 #### Source
 
-[graphics/graphics.ts:1014](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1014)
+[graphics/graphics.ts:1035](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1035)
 
 ***
 
@@ -394,7 +394,7 @@ Draw a filled ellipse
 
 #### Source
 
-[graphics/graphics.ts:723](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L723)
+[graphics/graphics.ts:735](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L735)
 
 ***
 
@@ -416,7 +416,7 @@ Draw filled path
 
 #### Source
 
-[graphics/graphics.ts:1261](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1261)
+[graphics/graphics.ts:1291](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1291)
 
 ***
 
@@ -438,7 +438,7 @@ Draw filled polygon
 
 #### Source
 
-[graphics/graphics.ts:1100](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1100)
+[graphics/graphics.ts:1124](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1124)
 
 ***
 
@@ -466,7 +466,7 @@ Draw a filled rect
 
 #### Source
 
-[graphics/graphics.ts:490](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L490)
+[graphics/graphics.ts:496](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L496)
 
 ***
 
@@ -496,7 +496,7 @@ Draw a filled and rounded rect
 
 #### Source
 
-[graphics/graphics.ts:599](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L599)
+[graphics/graphics.ts:608](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L608)
 
 ***
 
@@ -522,7 +522,7 @@ text baseline (metric.ascent - not the top of text)
 
 #### Source
 
-[graphics/graphics.ts:1301](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1301)
+[graphics/graphics.ts:1331](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1331)
 
 ***
 
@@ -628,7 +628,7 @@ Draw a path with fill and stroke
 
 #### Source
 
-[graphics/graphics.ts:1289](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1289)
+[graphics/graphics.ts:1319](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1319)
 
 ***
 
@@ -650,7 +650,7 @@ Draw a polygon with fill and stroke
 
 #### Source
 
-[graphics/graphics.ts:1133](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1133)
+[graphics/graphics.ts:1157](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1157)
 
 ***
 
@@ -672,7 +672,7 @@ Draw polyline
 
 #### Source
 
-[graphics/graphics.ts:786](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L786)
+[graphics/graphics.ts:798](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L798)
 
 ***
 
@@ -700,7 +700,7 @@ Draw a rect with fill and stroke
 
 #### Source
 
-[graphics/graphics.ts:524](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L524)
+[graphics/graphics.ts:530](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L530)
 
 ***
 
@@ -804,7 +804,7 @@ Draw a rounded rect with fill and stroke
 
 #### Source
 
-[graphics/graphics.ts:658](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L658)
+[graphics/graphics.ts:667](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L667)
 
 ***
 
@@ -826,7 +826,7 @@ Draw rounded rect line
 
 #### Source
 
-[graphics/graphics.ts:821](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L821)
+[graphics/graphics.ts:836](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L836)
 
 ***
 
@@ -1068,7 +1068,7 @@ Draw an arc. angles are started from 3'clock in degree (0~360).
 
 #### Source
 
-[graphics/graphics.ts:1142](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1142)
+[graphics/graphics.ts:1166](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1166)
 
 ***
 
@@ -1090,7 +1090,7 @@ Draw curved lines
 
 #### Source
 
-[graphics/graphics.ts:981](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L981)
+[graphics/graphics.ts:999](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L999)
 
 ***
 
@@ -1118,7 +1118,7 @@ Draw an ellipse
 
 #### Source
 
-[graphics/graphics.ts:674](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L674)
+[graphics/graphics.ts:683](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L683)
 
 ***
 
@@ -1140,7 +1140,7 @@ Draw a path
 
 #### Source
 
-[graphics/graphics.ts:1232](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1232)
+[graphics/graphics.ts:1259](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1259)
 
 ***
 
@@ -1162,7 +1162,7 @@ Draw polygon
 
 #### Source
 
-[graphics/graphics.ts:1063](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1063)
+[graphics/graphics.ts:1084](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1084)
 
 ***
 
@@ -1190,7 +1190,7 @@ Draw a rect
 
 #### Source
 
-[graphics/graphics.ts:452](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L452)
+[graphics/graphics.ts:455](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L455)
 
 ***
 
@@ -1220,7 +1220,7 @@ Draw a rounded rect
 
 #### Source
 
-[graphics/graphics.ts:539](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L539)
+[graphics/graphics.ts:545](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L545)
 
 ***
 
@@ -1253,7 +1253,7 @@ Hints:
 
 #### Source
 
-[graphics/graphics.ts:1341](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1341)
+[graphics/graphics.ts:1371](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1371)
 
 ***
 

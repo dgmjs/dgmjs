@@ -97,7 +97,7 @@ Create a connector
 
 #### Source
 
-[factory.ts:190](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L190)
+[factory.ts:193](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L193)
 
 ***
 
@@ -137,7 +137,7 @@ Create an embed
 
 #### Source
 
-[factory.ts:283](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L283)
+[factory.ts:286](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L286)
 
 ***
 
@@ -157,7 +157,7 @@ Create a frame
 
 #### Source
 
-[factory.ts:261](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L261)
+[factory.ts:264](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L264)
 
 ***
 
@@ -179,7 +179,7 @@ Create a freehand lines
 
 #### Source
 
-[factory.ts:217](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L217)
+[factory.ts:220](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L220)
 
 ***
 
@@ -199,7 +199,7 @@ Create a freehand lines
 
 #### Source
 
-[factory.ts:238](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L238)
+[factory.ts:241](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L241)
 
 ***
 
@@ -243,7 +243,7 @@ create a line (or polygon)
 
 #### Source
 
-[factory.ts:171](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L171)
+[factory.ts:174](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L174)
 
 ***
 
