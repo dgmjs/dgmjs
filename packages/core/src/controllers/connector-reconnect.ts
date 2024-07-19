@@ -30,6 +30,7 @@ export class ConnectorReconnectController extends Controller {
 
   constructor(manipulator: Manipulator) {
     super(manipulator);
+    this.hasHandle = true;
     this.snap = new Snap();
     this.controlPoint = -1;
     this.controlPath = [];

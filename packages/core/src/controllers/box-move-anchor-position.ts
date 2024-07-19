@@ -39,6 +39,7 @@ export class BoxMoveAnchorPositionController extends Controller {
 
   constructor(manipulator: Manipulator) {
     super(manipulator);
+    this.hasHandle = true;
     this.snap = new Snap();
     this.ghost = [];
     this.anchorPosition = 0.5;

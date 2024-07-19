@@ -57,6 +57,7 @@ export class BoxSizeController extends Controller {
     options: Partial<BoxSizeControllerOptions>
   ) {
     super(manipulator);
+    this.hasHandle = true;
     this.options = {
       position: ControllerPosition.RIGHT_BOTTOM,
       doScale: false,

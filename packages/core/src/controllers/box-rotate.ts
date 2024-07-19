@@ -38,6 +38,7 @@ export class BoxRotateController extends Controller {
     options?: Partial<BoxRotateControllerOptions>
   ) {
     super(manipulator);
+    this.hasHandle = true;
     this.snap = new Snap();
     this.options = {
       position: ControllerPosition.LEFT_TOP,

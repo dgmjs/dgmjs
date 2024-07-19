@@ -41,6 +41,7 @@ export class BoxCreateConnectorController extends Controller {
     options?: Partial<BoxCreateConnectorControllerOptions>
   ) {
     super(manipulator);
+    this.hasHandle = true;
     this.snap = new Snap();
     this.connector = null;
     this.options = {

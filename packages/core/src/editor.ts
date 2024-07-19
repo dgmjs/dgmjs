@@ -1435,6 +1435,11 @@ export class Controller {
   manipulator: Manipulator;
 
   /**
+   * Indicates whether this controller has handles or not
+   */
+  hasHandle: boolean = false;
+
+  /**
    * Indicates whether this controller is dragging or not
    */
   dragging: boolean = false;
@@ -1749,6 +1754,16 @@ export class Manipulator {
   mouseIn(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
     return this.controllers.some(
       (cp) => cp.active(editor, shape) && cp.mouseIn(editor, shape, e)
+    );
+  }
+
+  /**
+   * Returns true if mouse cursor is inside the controller's handles
+   */
+  mouseInHandles(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
+    return this.controllers.some(
+      (cp) =>
+        cp.hasHandle && cp.active(editor, shape) && cp.mouseIn(editor, shape, e)
     );
   }
 

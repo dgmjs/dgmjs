@@ -47,6 +47,7 @@ export class PathMovePointController extends Controller {
     options?: Partial<PathMovePointControllerOptions>
   ) {
     super(manipulator);
+    this.hasHandle = true;
     this.options = { exceptEndPoints: false, ...options };
     this.snap = new Snap();
     this.controlPoint = 0;

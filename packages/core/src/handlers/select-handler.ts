@@ -25,14 +25,14 @@ export class SelectHandler extends Handler {
     const page = editor.getCurrentPage();
     if (page) {
       let p = canvas.globalCoordTransformRev([e.x, e.y]);
-      // find in selected shapes' manipulators
+      // find in selected contoller's handles
       for (let s of editor.selection.getShapes()) {
         const manipulator = manipulatorManager.get(s.type);
-        if (manipulator && manipulator.mouseIn(editor, s, e)) {
+        if (manipulator && manipulator.mouseInHandles(editor, s, e)) {
           return s;
         }
       }
-      // find in document
+      // find in the current page
       return page.getShapeAt(canvas, p);
     }
     return null;
