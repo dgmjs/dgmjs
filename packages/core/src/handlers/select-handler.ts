@@ -184,6 +184,7 @@ export class SelectHandler extends Handler {
    * handle pointer up event
    */
   pointerUp(editor: Editor, e: CanvasPointerEvent) {
+    editor.pointerDownUnselectedShape = false;
     const canvas = editor.canvas;
     const page = editor.getCurrentPage();
     const p = canvas.globalCoordTransformRev([e.x, e.y]);
@@ -234,7 +235,6 @@ export class SelectHandler extends Handler {
 
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
-    editor.pointerDownUnselectedShape = false;
   }
 
   /**
