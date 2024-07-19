@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { constraintManager, Doc, Page, Shape } from "../shapes";
+import { constraintManager, Page, Shape } from "../shapes";
 import type { Canvas } from "../graphics/graphics";
 import { Transaction } from "../core/transaction";
 import { moveShapes, resizeShape } from "../macro";
@@ -53,7 +53,7 @@ function constraint(
 ) {
   let changed = false;
   const parent = shape.parent;
-  if (parent instanceof Shape && !(parent instanceof Doc)) {
+  if (parent instanceof Shape && !(parent instanceof Page)) {
     let horz = args.horz;
     let vert = args.vert;
     const l = parent.left;

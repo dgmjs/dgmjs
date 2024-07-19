@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { constraintManager, Box, Shape, Page, Doc } from "../shapes";
+import { constraintManager, Box, Shape, Page } from "../shapes";
 import * as geometry from "../graphics/geometry";
 import { Canvas } from "../graphics/graphics";
 import { Transaction } from "../core/transaction";
@@ -21,9 +21,14 @@ function constraint(
   args: z.infer<typeof schema>
 ) {
   let changed = false;
-  if (shape instanceof Box && !(shape.parent instanceof Doc)) {
+  const parent = shape.parent;
+  if (
+    shape instanceof Box &&
+    parent instanceof Shape &&
+    !(parent instanceof Page)
+  ) {
     const anchorPoint = geometry.getPointOnPath(
-      (shape.parent as Shape).getOutline() ?? [],
+      parent.getOutline() ?? [],
       shape.anchorPosition
     );
     const shapeCenter = geometry.rotate(
