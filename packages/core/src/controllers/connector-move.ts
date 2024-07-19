@@ -22,6 +22,7 @@ export class ConnectorMoveController extends Controller {
 
   constructor(manipulator: Manipulator) {
     super(manipulator);
+    this.hasHandle = false;
     this.snap = new Snap();
     this.controlPath = [];
   }

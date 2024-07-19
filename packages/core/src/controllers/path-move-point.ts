@@ -47,6 +47,7 @@ export class PathMovePointController extends Controller {
     options?: Partial<PathMovePointControllerOptions>
   ) {
     super(manipulator);
+    this.hasHandle = true;
     this.options = { exceptEndPoints: false, ...options };
     this.snap = new Snap();
     this.controlPoint = 0;
@@ -61,7 +62,8 @@ export class PathMovePointController extends Controller {
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
       shape instanceof Path &&
-      shape.pathEditable
+      shape.pathEditable &&
+      !editor.pointerDownUnselectedShape
     );
   }
 

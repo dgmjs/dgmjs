@@ -31,6 +31,7 @@ export class PathAddPointController extends Controller {
 
   constructor(manipulator: Manipulator) {
     super(manipulator);
+    this.hasHandle = true;
     this.snap = new Snap();
     this.controlPoint = -1;
     this.controlPath = [];
@@ -44,7 +45,8 @@ export class PathAddPointController extends Controller {
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
       shape instanceof Path &&
-      shape.pathEditable
+      shape.pathEditable &&
+      !editor.pointerDownUnselectedShape
     );
   }
 

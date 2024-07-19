@@ -457,7 +457,7 @@ export class Shape extends Obj {
   }
 
   resolveRefs(idMap: Record<string, Shape>, nullIfNotFound: boolean = false) {
-    super.resolveRefs(idMap);
+    super.resolveRefs(idMap, nullIfNotFound);
     if (typeof this.reference === "string") {
       if (idMap[this.reference]) {
         this.reference = idMap[this.reference];
@@ -2059,7 +2059,7 @@ export class Connector extends Line {
   }
 
   resolveRefs(idMap: Record<string, Shape>, nullIfNotFound: boolean = false) {
-    super.resolveRefs(idMap);
+    super.resolveRefs(idMap, nullIfNotFound);
     if (typeof this.tail === "string") {
       if (idMap[this.tail]) {
         this.tail = idMap[this.tail];

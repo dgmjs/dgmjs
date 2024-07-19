@@ -25,14 +25,14 @@ export class SelectHandler extends Handler {
     const page = editor.getCurrentPage();
     if (page) {
       let p = canvas.globalCoordTransformRev([e.x, e.y]);
-      // find in selected shapes' manipulators
+      // find in selected contoller's handles
       for (let s of editor.selection.getShapes()) {
         const manipulator = manipulatorManager.get(s.type);
-        if (manipulator && manipulator.mouseIn(editor, s, e)) {
+        if (manipulator && manipulator.mouseInHandles(editor, s, e)) {
           return s;
         }
       }
-      // find in document
+      // find in the current page
       return page.getShapeAt(canvas, p);
     }
     return null;
@@ -44,6 +44,7 @@ export class SelectHandler extends Handler {
   pointerDown(editor: Editor, e: CanvasPointerEvent) {
     const canvas = editor.canvas;
     const page = editor.getCurrentPage();
+    editor.pointerDownUnselectedShape = false;
     if (e.button === Mouse.BUTTON1) {
       const shape = this.getShapeAt(editor, e);
       if (shape) {
@@ -56,6 +57,7 @@ export class SelectHandler extends Handler {
           }
         } else {
           if (!editor.selection.isSelected(shape)) {
+            editor.pointerDownUnselectedShape = true;
             editor.selection.select([shape]);
           }
         }
@@ -182,6 +184,7 @@ export class SelectHandler extends Handler {
    * handle pointer up event
    */
   pointerUp(editor: Editor, e: CanvasPointerEvent) {
+    editor.pointerDownUnselectedShape = false;
     const canvas = editor.canvas;
     const page = editor.getCurrentPage();
     const p = canvas.globalCoordTransformRev([e.x, e.y]);

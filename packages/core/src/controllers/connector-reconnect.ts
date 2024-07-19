@@ -30,6 +30,7 @@ export class ConnectorReconnectController extends Controller {
 
   constructor(manipulator: Manipulator) {
     super(manipulator);
+    this.hasHandle = true;
     this.snap = new Snap();
     this.controlPoint = -1;
     this.controlPath = [];
@@ -42,7 +43,8 @@ export class ConnectorReconnectController extends Controller {
     return (
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
-      shape instanceof Connector
+      shape instanceof Connector &&
+      !editor.pointerDownUnselectedShape
     );
   }
 

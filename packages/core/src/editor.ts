@@ -309,6 +309,19 @@ export class Editor {
    */
   midButtonDown: boolean;
 
+  /**
+   * @private
+   *
+   * This indicates that the user has mouse pointer down on an unselected shape.
+   * This is required to deactivate controllers (box-sizing) before the shape is
+   * clearly selected after mouse pointer up.
+   *
+   * When the shape is too small, it is so hard to move the shape because the
+   * box-sizing controller is activated. This flag is used to prevent this issue.
+   * (See issue #169)
+   */
+  pointerDownUnselectedShape: boolean;
+
   private downX: number;
   private downY: number;
   private isPinching: boolean;
@@ -406,6 +419,7 @@ export class Editor {
     this.initialScale = 1;
     this.initialDistance = 0;
     this.touchPoint = [-1, -1];
+    this.pointerDownUnselectedShape = false;
     this.initializeState();
     this.initializeHandlers();
     this.initializeCanvas();
@@ -1421,6 +1435,11 @@ export class Controller {
   manipulator: Manipulator;
 
   /**
+   * Indicates whether this controller has handles or not
+   */
+  hasHandle: boolean = false;
+
+  /**
    * Indicates whether this controller is dragging or not
    */
   dragging: boolean = false;
@@ -1735,6 +1754,16 @@ export class Manipulator {
   mouseIn(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
     return this.controllers.some(
       (cp) => cp.active(editor, shape) && cp.mouseIn(editor, shape, e)
+    );
+  }
+
+  /**
+   * Returns true if mouse cursor is inside the controller's handles
+   */
+  mouseInHandles(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
+    return this.controllers.some(
+      (cp) =>
+        cp.hasHandle && cp.active(editor, shape) && cp.mouseIn(editor, shape, e)
     );
   }
 

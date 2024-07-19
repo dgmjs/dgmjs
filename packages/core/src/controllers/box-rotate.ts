@@ -38,6 +38,7 @@ export class BoxRotateController extends Controller {
     options?: Partial<BoxRotateControllerOptions>
   ) {
     super(manipulator);
+    this.hasHandle = true;
     this.snap = new Snap();
     this.options = {
       position: ControllerPosition.LEFT_TOP,
@@ -53,7 +54,8 @@ export class BoxRotateController extends Controller {
     let value =
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
-      shape.rotatable;
+      shape.rotatable &&
+      !editor.pointerDownUnselectedShape;
     // don't allow rotating a single line
     if (shape instanceof Path && shape.path.length === 2) value = false;
     // don't allow resizing when path editable
