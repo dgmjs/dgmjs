@@ -110,5 +110,13 @@ export function fixDoc(doc: Obj): any {
         headPoint[1] = hp[1];
       }
     }
+    // if parent ref is broken
+    if (obj.parent === null) {
+      doc.traverse((o) => {
+        if (Array.isArray(o.children) && o.children.includes(obj)) {
+          obj.parent = o;
+        }
+      });
+    }
   });
 }
