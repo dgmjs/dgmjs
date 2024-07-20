@@ -18,6 +18,8 @@ export interface DGMPageViewProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export interface DGMPageViewHandle {
   repaint: () => void;
+  focus: () => void;
+  getWrapperRef: () => HTMLDivElement | null;
 }
 
 export const DGMPageView = forwardRef<DGMPageViewHandle, DGMPageViewProps>(
@@ -58,6 +60,8 @@ export const DGMPageView = forwardRef<DGMPageViewHandle, DGMPageViewProps>(
 
     useImperativeHandle(ref, () => ({
       repaint: () => repaint(size[0], size[1]),
+      focus: () => wrapperRef.current?.focus(),
+      getWrapperRef: () => wrapperRef.current,
     }));
 
     useEffect(() => {
