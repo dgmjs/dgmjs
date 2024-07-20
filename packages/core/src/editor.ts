@@ -1262,6 +1262,7 @@ export class Editor {
   newDoc(): Doc {
     const doc = new Doc();
     const page = new Page();
+    page.name = "Page 1";
     doc.children.push(page);
     page.parent = doc;
     this.store.setRoot(doc);
