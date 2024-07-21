@@ -2294,6 +2294,8 @@ export class Frame extends Box {
       // fill background
       canvas.fillColor = this.fillColor;
       canvas.fillStyle = this.fillStyle;
+      canvas.strokeWidth = this.strokeWidth;
+      canvas.roughness = this.roughness;
       if (this.fillStyle !== FillStyle.NONE) {
         canvas.fillRoundRect(
           this.left,
