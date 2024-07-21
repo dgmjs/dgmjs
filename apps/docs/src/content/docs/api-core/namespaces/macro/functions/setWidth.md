@@ -23,4 +23,4 @@ A macro to set width
 
 ## Source
 
-[macro.ts:202](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L202)
+[macro.ts:206](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L206)

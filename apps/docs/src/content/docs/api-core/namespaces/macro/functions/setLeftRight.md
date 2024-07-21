@@ -25,4 +25,4 @@ A macro to set left and right
 
 ## Source
 
-[macro.ts:147](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L147)
+[macro.ts:151](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L151)

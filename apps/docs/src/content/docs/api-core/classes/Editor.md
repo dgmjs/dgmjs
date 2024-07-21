@@ -567,7 +567,7 @@ Get cursor
 
 #### Source
 
-[editor.ts:1233](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1233)
+[editor.ts:1231](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1231)
 
 ***
 
@@ -599,7 +599,7 @@ Get the document
 
 #### Source
 
-[editor.ts:1248](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1248)
+[editor.ts:1246](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1246)
 
 ***
 
@@ -783,7 +783,7 @@ Load from JSON
 
 #### Source
 
-[editor.ts:1275](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1275)
+[editor.ts:1274](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1274)
 
 ***
 
@@ -821,7 +821,7 @@ Create a new document
 
 #### Source
 
-[editor.ts:1262](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1262)
+[editor.ts:1260](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1260)
 
 ***
 
@@ -841,7 +841,7 @@ Repaint diagram
 
 #### Source
 
-[editor.ts:1218](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1218)
+[editor.ts:1216](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1216)
 
 ***
 
@@ -857,7 +857,7 @@ Save to JSON
 
 #### Source
 
-[editor.ts:1292](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1292)
+[editor.ts:1291](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1291)
 
 ***
 
@@ -980,7 +980,7 @@ Set cursor
 
 #### Source
 
-[editor.ts:1240](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1240)
+[editor.ts:1238](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1238)
 
 ***
 
@@ -1020,7 +1020,7 @@ Set the document
 
 #### Source
 
-[editor.ts:1255](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1255)
+[editor.ts:1253](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1253)
 
 ***
 

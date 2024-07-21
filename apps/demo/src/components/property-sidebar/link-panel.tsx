@@ -1,7 +1,6 @@
 import React from "react";
 import { TextField } from "./fields/text-field";
 import { Panel } from "../common/panel";
-import { Label } from "@/components/ui/label";
 import { ShapeEditorProps } from "@/types";
 import { Doc } from "@dgmjs/core";
 

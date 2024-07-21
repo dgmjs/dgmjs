@@ -27,4 +27,4 @@ A macro to move an connector's end
 
 ## Source
 
-[macro.ts:415](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L415)
+[macro.ts:419](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L419)

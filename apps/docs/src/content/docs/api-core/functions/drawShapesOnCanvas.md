@@ -49,4 +49,4 @@ A boolean value to indicate whether to update the DOM
 
 ## Source
 
-[shapes.ts:2471](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2471)
+[shapes.ts:2539](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2539)

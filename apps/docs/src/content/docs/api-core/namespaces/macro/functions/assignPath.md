@@ -26,4 +26,4 @@ returns true if changed
 
 ## Source
 
-[macro.ts:26](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L26)
+[macro.ts:30](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L30)
