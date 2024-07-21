@@ -49,10 +49,11 @@ export class EraserHandler extends Handler {
   }
 
   finalize(editor: Editor, e: CanvasPointerEvent): void {
+    const doc = editor.getDoc();
     const page = editor.getCurrentPage();
     if (page) {
       editor.transform.transact((tx) => {
-        deleteShapes(tx, page, this.deletingShapes);
+        deleteShapes(tx, doc, page, this.deletingShapes);
         resolveAllConstraints(tx, page, editor.canvas);
       });
     }

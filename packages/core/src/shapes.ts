@@ -2,11 +2,8 @@ import { assert } from "./std/assert";
 import { FillStyle, Canvas } from "./graphics/graphics";
 import {
   CONTROL_POINT_APOTHEM,
-  Color,
   DEFAULT_FONT_SIZE,
   LINE_SELECTION_THRESHOLD,
-  SYSTEM_FONT,
-  SYSTEM_FONT_SIZE,
 } from "./graphics/const";
 import * as geometry from "./graphics/geometry";
 import * as utils from "./graphics/utils";
@@ -313,22 +310,22 @@ export class Shape extends Obj {
   /**
    * Memoize seed
    */
-  private _memoSeed: number | null;
+  protected _memoSeed: number | null;
 
   /**
    * Memoization canvas
    */
-  private _memoCanvas: MemoizationCanvas;
+  protected _memoCanvas: MemoizationCanvas;
 
   /**
    * Memoization outline
    */
-  private _memoOutline: number[][];
+  protected _memoOutline: number[][];
 
   /**
    * Link DOM element
    */
-  private _linkDOM: HTMLAnchorElement | null;
+  protected _linkDOM: HTMLAnchorElement | null;
 
   constructor() {
     super();
@@ -521,6 +518,22 @@ export class Shape extends Obj {
     if (this.visible && this.enable && this.containsPoint(canvas, point))
       return this;
     return null;
+  }
+
+  /**
+   * Visit all shapes in breath-first order. The difference from traverse()
+   * is that each shape determine visit into children or not.
+   * (e.g. Group and Frame doens't visit into children)
+   */
+  visit(
+    fun: (shape: Shape, parent: Shape | null) => void,
+    parent: Shape | null = null
+  ) {
+    fun(this, parent);
+    for (let i = this.children.length - 1; i >= 0; i--) {
+      const s = this.children[i] as Shape;
+      s.visit(fun, this);
+    }
   }
 
   /**
@@ -1704,6 +1717,18 @@ export class Group extends Box {
     return null;
   }
 
+  /**
+   * Visit all shapes in breath-first order. The difference from traverse()
+   * is that each shape determine visit into children or not.
+   * (e.g. Group and Frame doens't visit into children)
+   */
+  visit(
+    fun: (shape: Shape, parent: Shape | null) => void,
+    parent: Shape | null = null
+  ) {
+    fun(this, parent);
+  }
+
   renderDefault(canvas: MemoizationCanvas): void {}
 }
 
@@ -2231,35 +2256,59 @@ export class Frame extends Box {
     this.containable = true;
   }
 
+  /**
+   * Pick a shape at specific position (x, y)
+   */
+  getShapeAt(
+    canvas: Canvas,
+    point: number[],
+    exceptions: Shape[] = []
+  ): Shape | null {
+    if (this.visible && this.enable && this.containsPoint(canvas, point)) {
+      for (let i = this.children.length - 1; i >= 0; i--) {
+        const s: Shape = this.children[i] as Shape;
+        const r = s.getShapeAt(canvas, point, exceptions);
+        if (r && !exceptions.includes(r)) return r;
+      }
+      return this;
+    }
+    return null;
+  }
+
+  /**
+   * Visit all shapes in breath-first order. The difference from traverse()
+   * is that each shape determine visit into children or not.
+   * (e.g. Group and Frame doens't visit into children)
+   */
+  visit(
+    fun: (shape: Shape, parent: Shape | null) => void,
+    parent: Shape | null = null
+  ) {
+    fun(this, parent);
+  }
+
   draw(canvas: Canvas, showDOM: boolean = false) {
     if (this.visible) {
       this.drawLink(canvas, showDOM);
       canvas.save();
       this.localTransform(canvas);
-      // const script = this.getScript(ScriptType.RENDER);
-      // if (script) {
-      //   try {
-      //     evalScript({ canvas: canvas, shape: this }, script);
-      //   } catch (err) {
-      //     console.log("[Script Error]", err);
-      //   }
-      // } else {
-      //   this.renderDefault(canvas);
-      // }
-      canvas.storeState();
-      canvas.fillColor = Color.BACKGROUND;
+      // fill background
+      canvas.fillColor = this.fillColor;
+      canvas.fillStyle = this.fillStyle;
+      if (this.fillStyle !== FillStyle.NONE) {
+        canvas.fillRoundRect(
+          this.left,
+          this.top,
+          this.right,
+          this.bottom,
+          this.corners,
+          this.getSeed()
+        );
+      }
+      // clip children
+      canvas.fillColor = "$transparent";
       canvas.fillStyle = FillStyle.SOLID;
-      canvas.strokeColor = Color.FOREGROUND;
-      canvas.strokePattern = [];
-      canvas.strokeWidth = 1 / canvas.scale;
-      canvas.fontColor = Color.FOREGROUND;
-      const fontSize = SYSTEM_FONT_SIZE / canvas.scale;
-      canvas.font = utils.toCssFont("normal", 400, fontSize, SYSTEM_FONT);
-      canvas.alpha = 1;
-      canvas.roughness = 0;
-
-      canvas.fillText(this.left, this.top - fontSize / 2, this.name);
-      canvas.roundRect(
+      canvas.fillRoundRect(
         this.left,
         this.top,
         this.right,
@@ -2268,10 +2317,29 @@ export class Frame extends Box {
         this.getSeed()
       );
       canvas.context.clip();
-      canvas.restoreState();
+      // draw children
       this.children.forEach((s) => (s as Shape).draw(canvas, showDOM));
       canvas.restore();
+      // draw rendered
+      this._memoCanvas.draw(canvas);
     }
+  }
+
+  /**
+   * Default render this shape
+   */
+  renderDefault(canvas: MemoizationCanvas) {
+    const tm = canvas.textMetric(this.name);
+    const margin = tm.descent * 1.2;
+    canvas.fillText(this.left, this.top - margin, this.name);
+    canvas.strokeRoundRect(
+      this.left,
+      this.top,
+      this.right,
+      this.bottom,
+      this.corners,
+      this.getSeed()
+    );
   }
 }
 
