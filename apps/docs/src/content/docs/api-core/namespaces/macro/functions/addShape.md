@@ -23,4 +23,4 @@ A macro to add a shape to a parent
 
 ## Source
 
-[macro.ts:108](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L108)
+[macro.ts:112](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L112)

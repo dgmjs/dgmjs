@@ -33,7 +33,7 @@ Frame Factory Handler
 
 #### Source
 
-[editor.ts:1359](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1359)
+[editor.ts:1358](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1358)
 
 ## Properties
 
@@ -77,7 +77,7 @@ Frame Factory Handler
 
 #### Source
 
-[editor.ts:1356](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1356)
+[editor.ts:1355](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1355)
 
 ***
 
@@ -91,7 +91,7 @@ Frame Factory Handler
 
 #### Source
 
-[editor.ts:1357](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1357)
+[editor.ts:1356](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1356)
 
 ***
 
@@ -125,7 +125,7 @@ Activate the handler
 
 #### Source
 
-[editor.ts:1385](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1385)
+[editor.ts:1384](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1384)
 
 ***
 
@@ -149,7 +149,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[editor.ts:1376](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1376)
+[editor.ts:1375](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1375)
 
 ***
 
@@ -173,7 +173,7 @@ Deactivate the handler
 
 #### Source
 
-[editor.ts:1393](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1393)
+[editor.ts:1392](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1392)
 
 ***
 
@@ -197,7 +197,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[editor.ts:1438](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1438)
+[editor.ts:1437](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1437)
 
 ***
 
@@ -289,7 +289,7 @@ keyUp
 
 #### Source
 
-[editor.ts:1433](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1433)
+[editor.ts:1432](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1432)
 
 ***
 

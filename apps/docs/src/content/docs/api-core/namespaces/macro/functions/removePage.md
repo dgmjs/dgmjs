@@ -21,4 +21,4 @@ A macro to remove a page from doc
 
 ## Source
 
-[macro.ts:72](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L72)
+[macro.ts:76](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L76)

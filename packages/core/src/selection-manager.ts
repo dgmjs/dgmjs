@@ -87,14 +87,14 @@ export class SelectionManager {
       [x2, y2],
     ]);
     this.shapes = [];
-    this.editor.getCurrentPage()?.traverse((s) => {
+    this.editor.getCurrentPage()?.visit((s) => {
       if (
-        (s as Shape).visible &&
-        (s as Shape).enable &&
-        (s as Shape).overlapRect(canvas, r) &&
-        !this.isSelected(s as Shape)
+        s.visible &&
+        s.enable &&
+        s.overlapRect(canvas, r) &&
+        !this.isSelected(s)
       ) {
-        this.shapes.push(s as Shape);
+        this.shapes.push(s);
       }
     });
     this.onChange.emit(this.shapes);
@@ -105,9 +105,9 @@ export class SelectionManager {
    */
   selectAll() {
     this.shapes = [];
-    this.editor.getCurrentPage()?.traverse((s) => {
-      if ((s as Shape).visible && (s as Shape).enable) {
-        this.shapes.push(s as Shape);
+    this.editor.getCurrentPage()?.visit((s) => {
+      if (s.visible && s.enable) {
+        this.shapes.push(s);
       }
     });
     this.onChange.emit(this.shapes);

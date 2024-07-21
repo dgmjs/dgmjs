@@ -1,5 +1,5 @@
 import { unique } from "../std/lambda";
-import { Connector, Page, type Shape } from "../shapes";
+import { Connector, Doc, Page, Shape } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 
@@ -33,24 +33,16 @@ export function getAllConnectorsTo(page: Page, objs: Shape[]): Shape[] {
 }
 
 /**
- * Returns all descendants and connected edges of the given set of objects
- * including descendant's edges as well as edge's descendants recursively.
- *
- * The results are the candidates to be changed when the given objects due to
- * the constraints (edge, align children, ...)
+ * Returns all shapes referencing to a shape of the given set of objects
  */
-export function getAllRelevants(page: Page, objs: Shape[]): Shape[] {
-  let size = 0;
-  let set = unique(objs);
-  while (set.length > size) {
-    set = unique([
-      ...set,
-      ...getAllDescendant(set),
-      ...getAllConnectorsTo(page, set),
-    ]);
-    size = set.length;
-  }
-  return set;
+export function getAllReferers(doc: Doc, objs: Shape[]): Shape[] {
+  const referers: Shape[] = [];
+  doc.traverse((shape) => {
+    if (shape instanceof Shape && objs.find((o) => shape.reference === o)) {
+      referers.push(shape);
+    }
+  });
+  return referers;
 }
 
 /**

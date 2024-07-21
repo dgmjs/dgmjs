@@ -25,4 +25,4 @@ A macro to resize a shape (width, height, path)
 
 ## Source
 
-[macro.ts:246](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L246)
+[macro.ts:250](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L250)

@@ -56,11 +56,11 @@ function getImageCanvas(
   }
 
   // update and draw page to the new canvas
-  page.updateShapes(newCanvas);
+  page.update(newCanvas);
   page.draw(newCanvas);
 
   // update page to (existing) canvas
-  page.updateShapes(canvas);
+  page.update(canvas);
   return newCanvasElement;
 }
 
@@ -150,7 +150,7 @@ async function getSVGImageData(
   }
 
   // update and draw page to the new canvas
-  page.updateShapes(svgCanvas);
+  page.update(svgCanvas);
   page.draw(svgCanvas);
 
   // TODO: add fonts in defs (temporal impls)
@@ -167,7 +167,7 @@ async function getSVGImageData(
   const data = ctx.getSerializedSvg(true);
 
   // update page to existing canvas
-  page.updateShapes(canvas);
+  page.update(canvas);
 
   return data;
 }

@@ -25,4 +25,4 @@ A macro to move an anchored box
 
 ## Source
 
-[macro.ts:291](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L291)
+[macro.ts:295](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L295)

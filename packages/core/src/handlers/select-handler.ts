@@ -188,6 +188,7 @@ export class SelectHandler extends Handler {
     const canvas = editor.canvas;
     const page = editor.getCurrentPage();
     const p = canvas.globalCoordTransformRev([e.x, e.y]);
+
     // select area
     if (e.button === Mouse.BUTTON1 && this.dragging) {
       editor.selection.selectArea(
@@ -197,6 +198,7 @@ export class SelectHandler extends Handler {
         p[1]
       );
     }
+
     // delegates to manipulators
     let cursor: [string, number] = [Cursor.DEFAULT, 0];
     if (page) {

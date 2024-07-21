@@ -1204,10 +1204,8 @@ export class Editor {
    */
   update() {
     if (this.store.root) {
-      this.store.root.traverse((obj) => {
-        if (obj instanceof Shape) {
-          obj.update(this.canvas);
-        }
+      this.store.root.children.forEach((obj) => {
+        if (obj instanceof Shape) obj.update(this.canvas);
       });
     }
   }

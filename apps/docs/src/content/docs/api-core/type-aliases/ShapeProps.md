@@ -9,4 +9,4 @@ title: "ShapeProps"
 
 ## Source
 
-[shapes.ts:2553](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2553)
+[shapes.ts:2619](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2619)
