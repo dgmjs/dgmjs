@@ -40,6 +40,7 @@ export interface Constraint {
 export interface Property {
   name: string;
   type: "string" | "boolean" | "number" | "enum" | "text";
+  hidden: boolean;
   options?: string[];
   value: any;
 }
