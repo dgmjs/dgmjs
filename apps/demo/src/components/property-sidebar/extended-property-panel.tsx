@@ -30,6 +30,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { ShapeEditorProps } from "@/types";
+import { cn } from "@/lib/utils";
 
 export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
   shapes,
@@ -51,6 +52,7 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
     if (onChange) {
       const newProp: Property = {
         name: "NewProperty",
+        hidden: false,
         type: "string",
         value: "",
       };
@@ -82,7 +84,12 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
       {properties.map((property, i) => (
         <div key={i} className="flex items-center justify-between h-8 rounded">
           <div className="grid w-full grid-cols-2">
-            <div className="h-8 w-full border border-r-0 rounded-l pl-2 flex items-center truncate text-sm">
+            <div
+              className={cn(
+                "h-8 w-full border border-r-0 rounded-l pl-2 flex items-center truncate text-sm",
+                property.hidden && "text-muted-foreground/40"
+              )}
+            >
               {property.name}
             </div>
             <div className="h-8 flex items-center border border-r-0">
@@ -213,6 +220,23 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
                         <SelectItem value="text">text</SelectItem>
                       </SelectContent>
                     </Select>
+                  </div>
+                  <div className="grid grid-cols-2 w-full items-center">
+                    <Label
+                      htmlFor="extended-property-hidden"
+                      className="font-normal"
+                    >
+                      Hidden
+                    </Label>
+                    <div className="flex items-center justify-end">
+                      <Switch
+                        id="extended-property-hidden"
+                        checked={property.hidden}
+                        onCheckedChange={(checked) =>
+                          changeProperty(i, { ...property, hidden: checked })
+                        }
+                      />
+                    </div>
                   </div>
                   {property.type === "enum" && (
                     <div className="grid grid-cols-2 w-full items-center">
