@@ -159,12 +159,13 @@ export class Actions {
    * Remove selected shapes
    */
   remove(shapes?: Shape[]) {
+    const doc = this.editor.getDoc();
     const page = this.editor.getCurrentPage();
     if (page) {
       this.editor.transform.startAction("delete");
       this.editor.transform.transact((tx) => {
         shapes = shapes ?? this.editor.selection.getShapes();
-        deleteShapes(tx, page, shapes);
+        deleteShapes(tx, doc, page, shapes);
         resolveAllConstraints(tx, page, this.editor.canvas);
       });
       this.editor.transform.endAction();
@@ -187,6 +188,7 @@ export class Actions {
    * Cut selected shapes
    */
   async cut(shapes?: Shape[]) {
+    const doc = this.editor.getDoc();
     const page = this.editor.getCurrentPage();
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
@@ -196,7 +198,7 @@ export class Actions {
       });
       this.editor.transform.startAction("cut");
       this.editor.transform.transact((tx) => {
-        deleteShapes(tx, page, shapes!);
+        deleteShapes(tx, doc, page, shapes!);
       });
       this.editor.transform.endAction();
       this.editor.selection.deselectAll();
@@ -371,6 +373,7 @@ export class Actions {
    * Ungroup selected shapes
    */
   ungroup(shapes?: Shape[]) {
+    const doc = this.editor.getDoc();
     const page = this.editor.getCurrentPage();
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
@@ -385,7 +388,7 @@ export class Actions {
                 children.push(child as Shape);
                 changeParent(tx, child, s.parent as Shape);
               }
-              deleteSingleShape(tx, page, s);
+              deleteSingleShape(tx, doc, page, s);
             }
           }
           resolveAllConstraints(tx, page, this.editor.canvas);

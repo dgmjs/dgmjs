@@ -15,6 +15,7 @@ import { ShapeSidebar } from "./components/shape-sidebar";
 import { EditorWrapper } from "./editor";
 import { Button } from "./components/ui/button";
 import { collab, generateUserIdentity } from "./collab";
+import { SelectShapeDialog } from "./components/dialogs/select-shape-dialog";
 
 declare global {
   interface Window {
@@ -178,6 +179,7 @@ function App() {
         shapes={demoStore.selection}
         onChange={handleValuesChange}
       />
+      <SelectShapeDialog />
     </div>
   );
 }

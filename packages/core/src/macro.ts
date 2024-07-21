@@ -11,7 +11,11 @@ import { Canvas } from "./graphics/graphics";
 import * as geometry from "./graphics/geometry";
 import { moveEndPoint, adjustRoute } from "./utils/route-utils";
 import { filterDescendants, type Obj } from "./core/obj";
-import { getAllConnectorsTo, getAllDescendant } from "./utils/shape-utils";
+import {
+  getAllConnectorsTo,
+  getAllDescendant,
+  getAllReferers,
+} from "./utils/shape-utils";
 import { visitTextNodes } from "./utils/text-utils";
 import { Transaction } from "./core/transaction";
 
@@ -504,6 +508,7 @@ export function moveShapes(
  */
 export function deleteSingleShape(
   tx: Transaction,
+  doc: Doc,
   page: Page,
   shape: Shape
 ): boolean {
@@ -515,6 +520,12 @@ export function deleteSingleShape(
       changed = tx.assignRef(edge, "head", null) || changed;
     if (edge.tail === shape)
       changed = tx.assignRef(edge, "tail", null) || changed;
+  }
+  // set null to all references to the shape
+  const referers = getAllReferers(doc, [shape]);
+  for (let referer of referers) {
+    if (referer.reference === shape)
+      changed = tx.assignRef(referer, "reference", null) || changed;
   }
   // delete the shape from store
   if (shape.parent) {
@@ -529,12 +540,13 @@ export function deleteSingleShape(
  */
 export function deleteShapes(
   tx: Transaction,
+  doc: Doc,
   page: Page,
   shapes: Shape[]
 ): boolean {
   let changed = false;
   shapes.forEach((s) => {
-    changed = deleteSingleShape(tx, page, s) || changed;
+    changed = deleteSingleShape(tx, doc, page, s) || changed;
   });
   return changed;
 }

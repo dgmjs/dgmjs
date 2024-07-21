@@ -18,7 +18,8 @@ import { AlignmentPanel } from "./alignment-panel";
 import { CommonPanel } from "./shape-panel";
 import { ShapeEditorProps } from "@/types";
 import { FreehandPanel } from "./freehand-panel";
-import { ExtraPanel } from "./extra-panel";
+import { LinkPanel } from "./link-panel";
+import { ReferencePanel } from "./reference-panel";
 
 export interface PropertySidebarProps extends ShapeEditorProps {
   doc: Doc;
@@ -72,11 +73,16 @@ export const PropertySidebar: React.FC<PropertySidebarProps> = ({
               {shapes.length === 1 && (
                 <>
                   <PrototypePanel shapes={shapes} onChange={onChange} />
-                  <ExtraPanel doc={doc} shapes={shapes} onChange={onChange} />
                   <ExtendedPropertyPanel shapes={shapes} onChange={onChange} />
                   <ConstraintPanel shapes={shapes} onChange={onChange} />
                   <ScriptPanel shapes={shapes} onChange={onChange} />
                   <TagPanel shapes={shapes} onChange={onChange} />
+                  <LinkPanel doc={doc} shapes={shapes} onChange={onChange} />
+                  <ReferencePanel
+                    doc={doc}
+                    shapes={shapes}
+                    onChange={onChange}
+                  />
                 </>
               )}
               <ControlPanel shapes={shapes} onChange={onChange} />
