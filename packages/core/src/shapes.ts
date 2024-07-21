@@ -500,6 +500,7 @@ export class Shape extends Obj {
     this._memoCanvas.clear();
     this._memoCanvas.setCanvas(canvas);
     this.render(this._memoCanvas);
+    this.children.forEach((s) => (s as Shape).update(canvas));
   }
 
   /**
@@ -536,11 +537,11 @@ export class Shape extends Obj {
     }
   }
 
-  /**
-   * Return true if this shape is contained by a group (recursively)
-   */
-  inGroup() {
-    return this.findParent((s) => s instanceof Group);
+  computeOpacity(): number {
+    if (this.parent instanceof Group || this.parent instanceof Frame) {
+      return this.opacity * this.parent.computeOpacity();
+    }
+    return this.opacity;
   }
 
   /**
@@ -560,7 +561,7 @@ export class Shape extends Obj {
       this.fontFamily
     );
     canvas.roughness = this.roughness;
-    canvas.alpha = this.opacity;
+    canvas.alpha = this.computeOpacity(); // this.opacity;
   }
 
   /**
@@ -1046,12 +1047,10 @@ export class Page extends Shape {
   }
 
   /**
-   * Update shapes in the page. The page itself is also updated.
+   * Update all shapes in this page
    */
-  updateShapes(canvas: Canvas): void {
-    this.traverse((s) => {
-      if (s instanceof Shape) s.update(canvas);
-    });
+  update(canvas: Canvas) {
+    this.children.forEach((s) => (s as Shape).update(canvas));
   }
 
   /**
@@ -2584,10 +2583,8 @@ export function drawShapesOnCanvas(
 
   // update shapes
   if (update) {
-    shapes.forEach((shape) => {
-      shape.traverse((s) => {
-        if (s instanceof Shape) s.update(canvas);
-      });
+    shapes.forEach((s) => {
+      if (s instanceof Shape) s.update(canvas);
     });
   }
 

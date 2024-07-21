@@ -23,7 +23,7 @@ function constraint(
   let changed = false;
   const parent = shape.parent as Shape;
   if (parent && !(parent instanceof Doc)) {
-    changed = tx.assign(shape, "opacity", parent.opacity) || changed;
+    changed = tx.assign(shape, "opacity", parent.computeOpacity()) || changed;
     if (args.stroke) {
       changed = tx.assign(shape, "strokeColor", parent.strokeColor) || changed;
       changed = tx.assign(shape, "strokeWidth", parent.strokeWidth) || changed;
