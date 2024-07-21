@@ -6,6 +6,7 @@ import { getStroke } from "perfect-freehand";
 import {
   FillStyle,
   Canvas,
+  CanvasState,
   CanvasTextMetric,
   SVGPath,
   pathToString,
@@ -275,6 +276,7 @@ interface RoughDO extends BaseDO {
  */
 class MemoizationCanvas {
   canvas: Canvas = null!;
+  stateStack: CanvasState[];
   do: DO[];
   generator: RoughGenerator;
   strokeColor: string;
@@ -289,6 +291,7 @@ class MemoizationCanvas {
 
   constructor() {
     this.do = [];
+    this.stateStack = [];
     this.generator = rough.generator();
     this.strokeColor = Color.FOREGROUND;
     this.strokeWidth = 1;
@@ -299,6 +302,42 @@ class MemoizationCanvas {
     this.font = "13px sans-serif";
     this.alpha = 1.0;
     this.roughness = 0;
+  }
+
+  /**
+   * Store current canvas state into a stack
+   */
+  storeState() {
+    const state: CanvasState = {
+      strokeColor: this.strokeColor,
+      strokeWidth: this.strokeWidth,
+      strokePattern: this.strokePattern,
+      fillColor: this.fillColor,
+      fillStyle: this.fillStyle,
+      fontColor: this.fontColor,
+      font: this.font,
+      alpha: this.alpha,
+      roughness: this.roughness,
+    };
+    this.stateStack.push(state);
+  }
+
+  /**
+   * Restore the canvas states from a stack
+   */
+  restoreState() {
+    const state = this.stateStack.pop();
+    if (state) {
+      this.strokeColor = state.strokeColor;
+      this.strokeWidth = state.strokeWidth;
+      this.strokePattern = state.strokePattern;
+      this.fillColor = state.fillColor;
+      this.fillStyle = state.fillStyle;
+      this.fontColor = state.fontColor;
+      this.font = state.font;
+      this.alpha = state.alpha;
+      this.roughness = state.roughness;
+    }
   }
 
   clear() {

@@ -5,7 +5,7 @@ import { roughDraw } from "./roughjs-draw";
 import type { Point } from "roughjs/bin/geometry";
 import type { RoughGenerator } from "roughjs/bin/generator";
 
-interface CanvasState {
+export interface CanvasState {
   strokeColor: string;
   strokeWidth: number;
   strokePattern: number[];
