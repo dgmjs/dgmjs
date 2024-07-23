@@ -410,6 +410,9 @@ export class Shape extends Obj {
     json.constraints = structuredClone(this.constraints);
     json.properties = structuredClone(this.properties);
     json.scripts = structuredClone(this.scripts);
+    if (keepRefs) {
+      json.reference = this.reference;
+    }
     return json;
   }
 
@@ -2294,6 +2297,8 @@ export class Frame extends Box {
       // fill background
       canvas.fillColor = this.fillColor;
       canvas.fillStyle = this.fillStyle;
+      canvas.strokeWidth = this.strokeWidth;
+      canvas.roughness = this.roughness;
       if (this.fillStyle !== FillStyle.NONE) {
         canvas.fillRoundRect(
           this.left,

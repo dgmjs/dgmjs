@@ -631,6 +631,7 @@ export function renderTextShape(canvas: MemoizationCanvas, shape: Box) {
       top = shape.innerBottom - textMetric.height;
       break;
   }
+  canvas.storeState();
   renderTextDocNode(
     canvas,
     textMetric.preprocessedDoc,
@@ -640,6 +641,7 @@ export function renderTextShape(canvas: MemoizationCanvas, shape: Box) {
     shape.innerWidth,
     1.5
   );
+  canvas.restoreState();
 }
 
 /**
