@@ -410,6 +410,9 @@ export class Shape extends Obj {
     json.constraints = structuredClone(this.constraints);
     json.properties = structuredClone(this.properties);
     json.scripts = structuredClone(this.scripts);
+    if (keepRefs) {
+      json.reference = this.reference;
+    }
     return json;
   }
 
