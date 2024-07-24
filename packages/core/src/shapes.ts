@@ -25,6 +25,7 @@ import { getAllViewport } from "./utils/shape-utils";
 export const ScriptType = {
   RENDER: "render",
   OUTLINE: "outline",
+  VIEWPORT: "viewport",
 } as const;
 
 export type ScriptTypeEnum = (typeof ScriptType)[keyof typeof ScriptType];
@@ -323,6 +324,11 @@ export class Shape extends Obj {
   protected _memoOutline: number[][];
 
   /**
+   * Memoization viewport
+   */
+  protected _memoViewport: number[][];
+
+  /**
    * Link DOM element
    */
   protected _linkDOM: HTMLAnchorElement | null;
@@ -368,6 +374,7 @@ export class Shape extends Obj {
     this._memoSeed = null;
     this._memoCanvas = new MemoizationCanvas();
     this._memoOutline = [];
+    this._memoViewport = [];
     this._linkDOM = null;
   }
 
@@ -632,6 +639,7 @@ export class Shape extends Obj {
   render(canvas: MemoizationCanvas) {
     this.assignStyles(canvas);
     this.renderOutline(canvas);
+    this.renderViewport(canvas);
     const script = this.getScript(ScriptType.RENDER);
     if (script) {
       try {
@@ -660,14 +668,15 @@ export class Shape extends Obj {
       } catch (err) {
         console.error("[Script Error]", err);
       }
+    } else {
+      this._memoOutline = this.renderOutlineDefault(canvas);
     }
-    this._memoOutline = this.renderOutlineDefault();
   }
 
   /**
    * Render default outline
    */
-  renderOutlineDefault(): number[][] {
+  renderOutlineDefault(canvas: MemoizationCanvas): number[][] {
     return [];
   }
 
@@ -754,19 +763,42 @@ export class Shape extends Obj {
   }
 
   /**
+   * Return this shape's viewport
+   */
+  renderViewport(canvas: MemoizationCanvas) {
+    const script = this.getScript(ScriptType.VIEWPORT);
+    if (script) {
+      try {
+        this._memoViewport = evalScript({ shape: this }, script);
+      } catch (err) {
+        console.error("[Script Error]", err);
+      }
+    } else {
+      this._memoViewport = this.renderViewportDefault(canvas);
+    }
+  }
+
+  /**
+   * Render default viewport
+   */
+  renderViewportDefault(canvas: MemoizationCanvas): number[][] {
+    const outlineGCS = this.getOutline().map((p) =>
+      this.localCoordTransform(canvas.canvas, p, true)
+    );
+    return geometry.expandRect(
+      geometry.boundingRect(outlineGCS),
+      this.strokeWidth / 2
+    );
+  }
+
+  /**
    * Return a viewport in GCS.
    * Viewport is a rect that includes actually drawn area which includes
    * stroke width, arrowheads, etc. So viewport is mostly larger than
    * bounding rect.
    */
   getViewport(canvas: Canvas): number[][] {
-    const outlineGCS = this.getOutline().map((p) =>
-      this.localCoordTransform(canvas, p, true)
-    );
-    return geometry.expandRect(
-      geometry.boundingRect(outlineGCS),
-      this.strokeWidth / 2
-    );
+    return this._memoViewport;
   }
 
   /**
@@ -1101,7 +1133,7 @@ export class Page extends Shape {
   }
 
   /**
-   * Return the page's view rect in GCS
+   * Return the page's viewport in GCS
    */
   getViewport(canvas: Canvas): number[][] {
     return this.children.length > 0
@@ -1440,7 +1472,7 @@ export class Box extends Shape {
   /**
    * Return outline polygon
    */
-  renderOutlineDefault(): number[][] {
+  renderOutlineDefault(canvas: MemoizationCanvas): number[][] {
     return [
       [this.left, this.top],
       [this.right, this.top],
@@ -1570,7 +1602,7 @@ export class Path extends Shape {
   /**
    * Return default outline
    */
-  renderOutlineDefault(): number[][] {
+  renderOutlineDefault(canvas: MemoizationCanvas): number[][] {
     return geometry.pathCopy(this.path);
   }
 }
@@ -1619,7 +1651,7 @@ export class Ellipse extends Box {
   /**
    * Return outline polygon
    */
-  renderOutlineDefault(): number[][] {
+  renderOutlineDefault(canvas: MemoizationCanvas): number[][] {
     const points = geometry.pointsOnEllipse(
       this.getCenter(),
       this.width / 2,
@@ -2025,7 +2057,7 @@ export class Line extends Path {
   /**
    * Return default outline
    */
-  renderOutlineDefault(): number[][] {
+  renderOutlineDefault(canvas: MemoizationCanvas): number[][] {
     switch (this.lineType) {
       case LineType.CURVE:
         return this.path.length > 2
@@ -2036,14 +2068,11 @@ export class Line extends Path {
   }
 
   /**
-   * Return a view rect in GCS.
-   * View rect is a rect that includes actually drawn area which includes
-   * stroke width, arrowheads, etc. So view rect is mostly larger than
-   * bounding rect.
+   * Render default viewport
    */
-  getViewport(canvas: Canvas): number[][] {
+  renderViewportDefault(canvas: MemoizationCanvas): number[][] {
     const outlineGCS = this.getOutline().map((p) =>
-      this.localCoordTransform(canvas, p, true)
+      this.localCoordTransform(canvas.canvas, p, true)
     );
     const arrowHeadSize = 12;
     return geometry.expandRect(
