@@ -2627,6 +2627,7 @@ export function drawShapesOnCanvas(
   const canvas = new Canvas(canvasElement, px);
 
   // get view rect including all shapes
+  shapes.forEach((s) => s.update(canvas));
   const box = getAllViewport(canvas, shapes);
   const bw = pageSize ? pageSize[0] : geometry.width(box);
   const bh = pageSize ? pageSize[1] : geometry.height(box);
