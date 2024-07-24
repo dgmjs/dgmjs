@@ -127,13 +127,14 @@ export class SelectHandler extends Handler {
         canvas.strokeRect(rect[0][0], rect[0][1], rect[1][0], rect[1][1]);
 
         // hovering shapes overlaps selecting area
-        for (let shape of page.children) {
-          const s = shape as Shape;
-          let box = geometry.normalizeRect([this.dragStartPoint, p]);
-          if (s.overlapRect(canvas, box)) {
-            const manipulator = manipulatorManager.get(s.type);
-            if (manipulator) manipulator.drawHovering(editor, s, e);
-          }
+        for (let shape of page.children as Shape[]) {
+          shape.visit((s) => {
+            let box = geometry.normalizeRect([this.dragStartPoint, p]);
+            if (s.overlapRect(canvas, box)) {
+              const manipulator = manipulatorManager.get(s.type);
+              if (manipulator) manipulator.drawHovering(editor, s, e);
+            }
+          });
         }
 
         // propagate drag event
