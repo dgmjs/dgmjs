@@ -4,6 +4,7 @@ import { Canvas } from "../graphics/graphics";
 import { Transaction } from "../core/transaction";
 
 const schema = z.object({
+  opacity: z.boolean().default(false),
   stroke: z.boolean().default(false),
   fill: z.boolean().default(false),
   font: z.boolean().default(false),
@@ -23,7 +24,9 @@ function constraint(
   let changed = false;
   const parent = shape.parent as Shape;
   if (parent && !(parent instanceof Doc)) {
-    changed = tx.assign(shape, "opacity", parent.computeOpacity()) || changed;
+    if (args.opacity) {
+      changed = tx.assign(shape, "opacity", parent.computeOpacity()) || changed;
+    }
     if (args.stroke) {
       changed = tx.assign(shape, "strokeColor", parent.strokeColor) || changed;
       changed = tx.assign(shape, "strokeWidth", parent.strokeWidth) || changed;

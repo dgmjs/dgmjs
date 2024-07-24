@@ -837,6 +837,16 @@ export class Shape extends Obj {
   }
 
   /**
+   * Determines whether the given rect overlaps this shape's clipping area.
+   * If the shape don't have clipping area, return true.
+   * If the shape has clipping area, return true if the rect overlaps the
+   * clipping area. (e.g. Frame)
+   */
+  overlapClippingArea(canvas: Canvas, rect: number[][]): boolean {
+    return true;
+  }
+
+  /**
    * Determines whether this shape overlaps a given rect
    */
   overlapRect(canvas: Canvas, rect: number[][]): boolean {
@@ -850,7 +860,14 @@ export class Shape extends Obj {
       }
       return false;
     }
-    return geometry.overlapRect(rect, this.getBoundingRect());
+    const overlapParentClippingArea =
+      this.parent instanceof Shape
+        ? this.parent.overlapClippingArea(canvas, rect)
+        : true;
+    return (
+      overlapParentClippingArea &&
+      geometry.overlapRect(rect, this.getBoundingRect())
+    );
   }
 
   /**
@@ -1304,14 +1321,16 @@ export class Box extends Shape {
         this.getSeed()
       );
     }
-    canvas.strokeRoundRect(
-      this.left,
-      this.top,
-      this.right,
-      this.bottom,
-      this.corners,
-      this.getSeed()
-    );
+    if (this.strokeWidth > 0) {
+      canvas.strokeRoundRect(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.corners,
+        this.getSeed()
+      );
+    }
     this.renderText(canvas);
   }
 
@@ -1585,13 +1604,15 @@ export class Ellipse extends Box {
         this.getSeed()
       );
     }
-    canvas.strokeEllipse(
-      this.left,
-      this.top,
-      this.right,
-      this.bottom,
-      this.getSeed()
-    );
+    if (this.strokeWidth > 0) {
+      canvas.strokeEllipse(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.getSeed()
+      );
+    }
     this.renderText(canvas);
   }
 
@@ -1720,6 +1741,14 @@ export class Group extends Box {
   }
 
   /**
+   * Determines whether the given rect overlaps this shape's clipping area.
+   * Group do not allow to overlap with children shapes.
+   */
+  overlapClippingArea(canvas: Canvas, rect: number[][]): boolean {
+    return false;
+  }
+
+  /**
    * Visit all shapes in breath-first order. The difference from traverse()
    * is that each shape determine visit into children or not.
    * (e.g. Group and Frame doens't visit into children)
@@ -1781,13 +1810,14 @@ export class Line extends Path {
     if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
       switch (this.lineType) {
         case LineType.STRAIGHT:
-          canvas.polygon(path, this.getSeed());
+          canvas.fillPolygon(path, this.getSeed());
           break;
         case LineType.CURVE:
-          canvas.curve(path, this.getSeed());
+          canvas.fillCurve(path, this.getSeed());
           break;
       }
-    } else {
+    }
+    if (this.strokeWidth > 0) {
       switch (this.lineType) {
         case LineType.STRAIGHT:
           canvas.polyline(path, this.getSeed());
@@ -2199,7 +2229,7 @@ export class Freehand extends Path {
   constructor() {
     super();
     this.type = "Freehand";
-    this.thinning = 0.5;
+    this.thinning = 0;
     this.tailTaper = 0;
     this.headTaper = 0;
   }
@@ -2223,12 +2253,14 @@ export class Freehand extends Path {
     if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
       canvas.fillPolygon(this.path, this.getSeed());
     }
-    canvas.strokeFreehand(
-      this.path,
-      this.thinning,
-      this.tailTaper,
-      this.headTaper
-    );
+    if (this.strokeWidth > 0) {
+      canvas.strokeFreehand(
+        this.path,
+        this.thinning,
+        this.tailTaper,
+        this.headTaper
+      );
+    }
   }
 }
 
@@ -2242,8 +2274,9 @@ export class Highlighter extends Path {
   }
 
   renderDefault(canvas: MemoizationCanvas): void {
-    // canvas.polyline(this.path, this.getSeed());
-    canvas.strokeFreehand(this.path);
+    if (this.strokeWidth > 0) {
+      canvas.strokeFreehand(this.path);
+    }
   }
 }
 
@@ -2278,15 +2311,21 @@ export class Frame extends Box {
   }
 
   /**
-   * Visit all shapes in breath-first order. The difference from traverse()
-   * is that each shape determine visit into children or not.
-   * (e.g. Group and Frame doens't visit into children)
+   * Determines whether the given rect overlaps this shape's clipping area.
+   * If the shape don't have clipping area, return true.
+   * If the shape has clipping area, return true if the rect overlaps the
+   * clipping area. (e.g. Frame)
    */
-  visit(
-    fun: (shape: Shape, parent: Shape | null) => void,
-    parent: Shape | null = null
-  ) {
-    fun(this, parent);
+  overlapClippingArea(canvas: Canvas, rect: number[][]): boolean {
+    return geometry.overlapRect(rect, this.getBoundingRect());
+  }
+
+  /**
+   * Determines whether this shape overlaps a given rect
+   * In the case of Frame, it returns true only if the rect includes the frame.
+   */
+  overlapRect(canvas: Canvas, rect: number[][]): boolean {
+    return geometry.includeRect(rect, this.getBoundingRect());
   }
 
   draw(canvas: Canvas, showDOM: boolean = false) {
@@ -2336,14 +2375,16 @@ export class Frame extends Box {
     const tm = canvas.textMetric(this.name);
     const margin = tm.descent * 1.2;
     canvas.fillText(this.left, this.top - margin, this.name);
-    canvas.strokeRoundRect(
-      this.left,
-      this.top,
-      this.right,
-      this.bottom,
-      this.corners,
-      this.getSeed()
-    );
+    if (this.strokeWidth > 0) {
+      canvas.strokeRoundRect(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.corners,
+        this.getSeed()
+      );
+    }
   }
 }
 

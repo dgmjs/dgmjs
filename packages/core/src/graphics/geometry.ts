@@ -377,6 +377,18 @@ function overlapRect(rect1: number[][], rect2: number[][]): boolean {
 }
 
 /**
+ * Test whether rect1 includes rect2 or not
+ */
+function includeRect(rect1: number[][], rect2: number[][]): boolean {
+  return (
+    rect1[0][0] <= rect2[0][0] &&
+    rect1[0][1] <= rect2[0][1] &&
+    rect1[1][0] >= rect2[1][0] &&
+    rect1[1][1] >= rect2[1][1]
+  );
+}
+
+/**
  * Returns a normalized rect
  */
 function normalizeRect(rect: number[][]): number[][] {
@@ -961,6 +973,7 @@ export {
   scaleRect,
   fitScaleTo,
   overlapRect,
+  includeRect,
   normalizeRect,
   rectToPolygon,
   center,
