@@ -2351,6 +2351,7 @@ export class Frame extends Box {
       // clip children
       canvas.fillColor = "$transparent";
       canvas.fillStyle = FillStyle.SOLID;
+      canvas.roughness = 0;
       canvas.fillRoundRect(
         this.left,
         this.top,
