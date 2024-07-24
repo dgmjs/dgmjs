@@ -20,7 +20,7 @@ import { Transaction } from "./core/transaction";
 import { MemoizationCanvas } from "./graphics/memoization-canvas";
 import { hashStringToNumber } from "./std/id";
 import { themeColors } from "./colors";
-import { getAllViewRect } from "./utils/shape-utils";
+import { getAllViewport } from "./utils/shape-utils";
 
 export const ScriptType = {
   RENDER: "render",
@@ -754,12 +754,12 @@ export class Shape extends Obj {
   }
 
   /**
-   * Return a view rect in GCS.
-   * View rect is a rect that includes actually drawn area which includes
-   * stroke width, arrowheads, etc. So view rect is mostly larger than
+   * Return a viewport in GCS.
+   * Viewport is a rect that includes actually drawn area which includes
+   * stroke width, arrowheads, etc. So viewport is mostly larger than
    * bounding rect.
    */
-  getViewRect(canvas: Canvas): number[][] {
+  getViewport(canvas: Canvas): number[][] {
     const outlineGCS = this.getOutline().map((p) =>
       this.localCoordTransform(canvas, p, true)
     );
@@ -1103,11 +1103,11 @@ export class Page extends Shape {
   /**
    * Return the page's view rect in GCS
    */
-  geViewRect(canvas: Canvas): number[][] {
+  getViewport(canvas: Canvas): number[][] {
     return this.children.length > 0
       ? this.traverseSequence()
           .filter((s) => s !== this)
-          .map((s) => (s as Shape).getViewRect(canvas))
+          .map((s) => (s as Shape).getViewport(canvas))
           .reduce(geometry.unionRect)
       : [
           [0, 0],
@@ -2041,7 +2041,7 @@ export class Line extends Path {
    * stroke width, arrowheads, etc. So view rect is mostly larger than
    * bounding rect.
    */
-  getViewRect(canvas: Canvas): number[][] {
+  getViewport(canvas: Canvas): number[][] {
     const outlineGCS = this.getOutline().map((p) =>
       this.localCoordTransform(canvas, p, true)
     );
@@ -2598,7 +2598,7 @@ export function drawShapesOnCanvas(
   const canvas = new Canvas(canvasElement, px);
 
   // get view rect including all shapes
-  const box = getAllViewRect(canvas, shapes);
+  const box = getAllViewport(canvas, shapes);
   const bw = pageSize ? pageSize[0] : geometry.width(box);
   const bh = pageSize ? pageSize[1] : geometry.height(box);
 

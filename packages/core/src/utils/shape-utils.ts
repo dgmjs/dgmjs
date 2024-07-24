@@ -46,12 +46,12 @@ export function getAllReferers(doc: Doc, objs: Shape[]): Shape[] {
 }
 
 /**
- * Returns the view rect including all shapes
+ * Returns the viewport including all shapes
  */
-export function getAllViewRect(canvas: Canvas, shapes: Shape[]): number[][] {
+export function getAllViewport(canvas: Canvas, shapes: Shape[]): number[][] {
   // get view rect including all shapes
   const allShapes = shapes.map((s) => s.traverseSequence() as Shape[]).flat();
-  const rects = allShapes.map((s) => (s as Shape).getViewRect(canvas));
+  const rects = allShapes.map((s) => (s as Shape).getViewport(canvas));
   const box =
     rects.length > 0
       ? rects.reduce(geometry.unionRect)
