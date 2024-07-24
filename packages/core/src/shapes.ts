@@ -1321,14 +1321,16 @@ export class Box extends Shape {
         this.getSeed()
       );
     }
-    canvas.strokeRoundRect(
-      this.left,
-      this.top,
-      this.right,
-      this.bottom,
-      this.corners,
-      this.getSeed()
-    );
+    if (this.strokeWidth > 0) {
+      canvas.strokeRoundRect(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.corners,
+        this.getSeed()
+      );
+    }
     this.renderText(canvas);
   }
 
@@ -1602,13 +1604,15 @@ export class Ellipse extends Box {
         this.getSeed()
       );
     }
-    canvas.strokeEllipse(
-      this.left,
-      this.top,
-      this.right,
-      this.bottom,
-      this.getSeed()
-    );
+    if (this.strokeWidth > 0) {
+      canvas.strokeEllipse(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.getSeed()
+      );
+    }
     this.renderText(canvas);
   }
 
@@ -1806,13 +1810,14 @@ export class Line extends Path {
     if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
       switch (this.lineType) {
         case LineType.STRAIGHT:
-          canvas.polygon(path, this.getSeed());
+          canvas.fillPolygon(path, this.getSeed());
           break;
         case LineType.CURVE:
-          canvas.curve(path, this.getSeed());
+          canvas.fillCurve(path, this.getSeed());
           break;
       }
-    } else {
+    }
+    if (this.strokeWidth > 0) {
       switch (this.lineType) {
         case LineType.STRAIGHT:
           canvas.polyline(path, this.getSeed());
@@ -2224,7 +2229,7 @@ export class Freehand extends Path {
   constructor() {
     super();
     this.type = "Freehand";
-    this.thinning = 0.5;
+    this.thinning = 0;
     this.tailTaper = 0;
     this.headTaper = 0;
   }
@@ -2248,12 +2253,14 @@ export class Freehand extends Path {
     if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
       canvas.fillPolygon(this.path, this.getSeed());
     }
-    canvas.strokeFreehand(
-      this.path,
-      this.thinning,
-      this.tailTaper,
-      this.headTaper
-    );
+    if (this.strokeWidth > 0) {
+      canvas.strokeFreehand(
+        this.path,
+        this.thinning,
+        this.tailTaper,
+        this.headTaper
+      );
+    }
   }
 }
 
@@ -2267,7 +2274,9 @@ export class Highlighter extends Path {
   }
 
   renderDefault(canvas: MemoizationCanvas): void {
-    canvas.strokeFreehand(this.path);
+    if (this.strokeWidth > 0) {
+      canvas.strokeFreehand(this.path);
+    }
   }
 }
 
@@ -2366,14 +2375,16 @@ export class Frame extends Box {
     const tm = canvas.textMetric(this.name);
     const margin = tm.descent * 1.2;
     canvas.fillText(this.left, this.top - margin, this.name);
-    canvas.strokeRoundRect(
-      this.left,
-      this.top,
-      this.right,
-      this.bottom,
-      this.corners,
-      this.getSeed()
-    );
+    if (this.strokeWidth > 0) {
+      canvas.strokeRoundRect(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.corners,
+        this.getSeed()
+      );
+    }
   }
 }
 
