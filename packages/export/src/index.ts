@@ -29,7 +29,7 @@ function getImageCanvas(
   // make a new canvas element for making image data
   const newCanvasElement = document.createElement("canvas");
   const newCanvas = new Canvas(newCanvasElement, scale);
-  let boundingBox = page.geViewRect(newCanvas);
+  let boundingBox = page.getViewport(newCanvas);
 
   // initialize new canvas
   boundingBox = geometry.expandRect(boundingBox, DEFAULT_MARGIN);
@@ -124,7 +124,7 @@ async function getSVGImageData(
   const colorVariables = themeColors[theme];
 
   // Make a new SVG canvas for making SVG image data
-  const boundingBox = geometry.expandRect(page.geViewRect(canvas), margin);
+  const boundingBox = geometry.expandRect(page.getViewport(canvas), margin);
   const w = geometry.width(boundingBox);
   const h = geometry.height(boundingBox);
   const ctx = new Context(w * scale, h * scale);

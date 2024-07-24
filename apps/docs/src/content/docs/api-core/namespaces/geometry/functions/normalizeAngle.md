@@ -19,4 +19,4 @@ Returns a normalized (0~360) angle.
 
 ## Source
 
-[graphics/geometry.ts:636](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L636)
+[graphics/geometry.ts:648](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L648)

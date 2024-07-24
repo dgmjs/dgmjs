@@ -177,7 +177,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[handlers/select-handler.ts:274](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L274)
+[handlers/select-handler.ts:275](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L275)
 
 ***
 
@@ -225,7 +225,7 @@ keyDown
 
 #### Source
 
-[handlers/select-handler.ts:245](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L245)
+[handlers/select-handler.ts:246](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L246)
 
 ***
 
@@ -251,7 +251,7 @@ keyUp
 
 #### Source
 
-[handlers/select-handler.ts:269](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L269)
+[handlers/select-handler.ts:270](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L270)
 
 ***
 
@@ -377,7 +377,7 @@ handle pointer up event
 
 #### Source
 
-[handlers/select-handler.ts:186](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L186)
+[handlers/select-handler.ts:187](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L187)
 
 ***
 

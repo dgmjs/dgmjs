@@ -112,7 +112,7 @@ export const ScriptPanel: React.FC<ShapeEditorProps> = ({
                   <Settings2Icon size={16} />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent side="top" className="w-80">
+              <PopoverContent side="top" className="w-[640px]">
                 <ScriptEditor
                   script={script.script}
                   onChange={(value) => {

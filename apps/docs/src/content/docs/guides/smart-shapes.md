@@ -150,3 +150,16 @@ The script bound to `outline` should express a vector of points that constitutes
   [[xc t] [r b] [l b] [xc t]])
 ```
 
+### viewport
+
+The script bound to `outline` should express the area of the shape's viewport. The viewport of shape is the area where the shape is rendered. Shapes are sometimes drawn beyond the bounding box, and the viewport must contain all of this area. Otherwise, any area beyond the viewport will be cropped when the image is exported.
+
+```clojure title="viewport (expanded as 10)"
+(do
+  (def! l (. shape :left))
+  (def! r (. shape :right))
+  (def! t (. shape :top))
+  (def! b (. shape :bottom))
+  (def! g 10)
+  [[(- l g) (- t g)] [(+ r g) (+ b g)]])
+```

@@ -997,7 +997,7 @@ export class Editor {
       const page = this.currentPage;
       let box = Array.isArray(page.size)
         ? [[0, 0], page.size]
-        : page.geViewRect(this.canvas);
+        : page.getViewport(this.canvas);
       const center = geometry.center(box);
       const dw = geometry.width(box);
       const dh = geometry.height(box);
@@ -1029,7 +1029,7 @@ export class Editor {
       const page = this.currentPage;
       let box = Array.isArray(page.size)
         ? [[0, 0], page.size]
-        : page.geViewRect(this.canvas);
+        : page.getViewport(this.canvas);
       if (!center) {
         center = geometry.center(box);
       }
@@ -1054,7 +1054,7 @@ export class Editor {
       const page = this.currentPage;
       let box = Array.isArray(page.size)
         ? [[0, 0], page.size]
-        : page.geViewRect(this.canvas);
+        : page.getViewport(this.canvas);
       const center = geometry.center(box);
       this.scrollCenterTo(center);
     }

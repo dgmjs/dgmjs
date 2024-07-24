@@ -19,4 +19,4 @@ Extract text from shapes and return as a concatenated single string
 
 ## Source
 
-[utils/text-utils.ts:661](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L661)
+[utils/text-utils.ts:663](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L663)

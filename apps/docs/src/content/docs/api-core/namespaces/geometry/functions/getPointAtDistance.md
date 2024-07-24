@@ -24,4 +24,4 @@ the direction towards an end point.
 
 ## Source
 
-[graphics/geometry.ts:760](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L760)
+[graphics/geometry.ts:772](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L772)

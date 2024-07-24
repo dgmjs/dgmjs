@@ -171,7 +171,7 @@ Canvas
 
 ### stateStack
 
-> **stateStack**: `CanvasState`[]
+> **stateStack**: [`CanvasState`](/api-core/interfaces/canvasstate/)[]
 
 #### Source
 

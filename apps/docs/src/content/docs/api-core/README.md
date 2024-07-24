@@ -60,6 +60,7 @@ title: "@dgmjs/core"
 
 ## Interfaces
 
+- [CanvasState](/api-core/interfaces/canvasstate/)
 - [CanvasTextMetric](/api-core/interfaces/canvastextmetric/)
 - [Constraint](/api-core/interfaces/constraint/)
 - [DblClickEvent](/api-core/interfaces/dblclickevent/)
