@@ -19,4 +19,4 @@ title: "LineType"
 
 ## Source
 
-[shapes.ts:80](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L80)
+[shapes.ts:81](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L81)

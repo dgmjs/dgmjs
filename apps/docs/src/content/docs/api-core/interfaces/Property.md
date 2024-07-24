@@ -13,7 +13,7 @@ title: "Property"
 
 #### Source
 
-[shapes.ts:40](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L40)
+[shapes.ts:41](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L41)
 
 ***
 
@@ -23,7 +23,7 @@ title: "Property"
 
 #### Source
 
-[shapes.ts:38](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L38)
+[shapes.ts:39](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L39)
 
 ***
 
@@ -33,7 +33,7 @@ title: "Property"
 
 #### Source
 
-[shapes.ts:41](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L41)
+[shapes.ts:42](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L42)
 
 ***
 
@@ -43,7 +43,7 @@ title: "Property"
 
 #### Source
 
-[shapes.ts:39](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L39)
+[shapes.ts:40](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L40)
 
 ***
 
@@ -53,4 +53,4 @@ title: "Property"
 
 #### Source
 
-[shapes.ts:42](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L42)
+[shapes.ts:43](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L43)

@@ -9,4 +9,4 @@ title: "ScriptTypeEnum"
 
 ## Source
 
-[shapes.ts:30](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L30)
+[shapes.ts:31](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L31)

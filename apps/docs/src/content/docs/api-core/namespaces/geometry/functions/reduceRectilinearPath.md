@@ -19,4 +19,4 @@ title: "reduceRectilinearPath"
 
 ## Source
 
-[graphics/geometry.ts:886](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L886)
+[graphics/geometry.ts:898](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L898)

@@ -19,4 +19,4 @@ Copy a path
 
 ## Source
 
-[graphics/geometry.ts:466](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L466)
+[graphics/geometry.ts:478](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L478)

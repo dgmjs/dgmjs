@@ -27,4 +27,4 @@ Returns a path
 
 ## Source
 
-[graphics/geometry.ts:583](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L583)
+[graphics/geometry.ts:595](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L595)

@@ -25,4 +25,4 @@ polygon
 
 ## Source
 
-[graphics/geometry.ts:410](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L410)
+[graphics/geometry.ts:422](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L422)

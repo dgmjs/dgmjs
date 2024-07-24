@@ -19,4 +19,4 @@ Returns a centroid of the given polygon
 
 ## Source
 
-[graphics/geometry.ts:919](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L919)
+[graphics/geometry.ts:931](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L931)

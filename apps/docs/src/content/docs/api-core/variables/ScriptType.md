@@ -17,6 +17,10 @@ title: "ScriptType"
 
 > `readonly` **RENDER**: `"render"` = `"render"`
 
+### VIEWPORT
+
+> `readonly` **VIEWPORT**: `"viewport"` = `"viewport"`
+
 ## Source
 
 [shapes.ts:25](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L25)

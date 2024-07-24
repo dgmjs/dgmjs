@@ -19,4 +19,4 @@ Return total length of the given path
 
 ## Source
 
-[graphics/geometry.ts:473](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L473)
+[graphics/geometry.ts:485](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L485)
