@@ -204,6 +204,7 @@ class Canvas {
     this.colorVariables = {
       background: "#ffffff",
       foreground: "#000000",
+      transparent: "#ffffff00",
     };
     this.generator = rough.generator();
     this.ratio = pixelRatio;

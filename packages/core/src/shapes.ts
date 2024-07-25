@@ -2625,6 +2625,7 @@ export function drawShapesOnCanvas(
 ) {
   const px = window.devicePixelRatio ?? 1;
   const canvas = new Canvas(canvasElement, px);
+  canvas.colorVariables = themeColors[darkMode ? "dark" : "light"];
 
   // get view rect including all shapes
   shapes.forEach((s) => s.update(canvas));
@@ -2653,7 +2654,6 @@ export function drawShapesOnCanvas(
   canvasElement.style.height = `${ch}px`;
 
   // draw shape on canvas
-  canvas.colorVariables = themeColors[darkMode ? "dark" : "light"];
   canvas.origin = [ox, oy];
   canvas.scale = scale;
   canvas.save();
