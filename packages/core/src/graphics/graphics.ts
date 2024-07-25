@@ -13,6 +13,10 @@ export interface CanvasState {
   fillStyle: string;
   fontColor: string;
   font: string;
+  shadowColor: string;
+  shadowBlur: number;
+  shadowOffsetX: number;
+  shadowOffsetY: number;
   alpha: number;
   roughness: number;
 }
@@ -191,6 +195,10 @@ class Canvas {
   fillStyle: string;
   fontColor: string;
   font: string;
+  shadowColor: string;
+  shadowBlur: number;
+  shadowOffsetX: number;
+  shadowOffsetY: number;
   alpha: number;
   roughness: number;
   origin: number[];
@@ -217,6 +225,10 @@ class Canvas {
     this.fillStyle = FillStyle.SOLID;
     this.fontColor = Color.FOREGROUND;
     this.font = "13px sans-serif";
+    this.shadowColor = Color.TRANSPARENT;
+    this.shadowBlur = 0;
+    this.shadowOffsetX = 0;
+    this.shadowOffsetY = 0;
     this.alpha = 1.0;
     this.roughness = 0;
     this.origin = [0.0, 0.0];
@@ -244,6 +256,10 @@ class Canvas {
       fillStyle: this.fillStyle,
       fontColor: this.fontColor,
       font: this.font,
+      shadowColor: this.shadowColor,
+      shadowBlur: this.shadowBlur,
+      shadowOffsetX: this.shadowOffsetX,
+      shadowOffsetY: this.shadowOffsetY,
       alpha: this.alpha,
       roughness: this.roughness,
     };
@@ -264,6 +280,10 @@ class Canvas {
       this.fillStyle = state.fillStyle;
       this.fontColor = state.fontColor;
       this.font = state.font;
+      this.shadowColor = state.shadowColor;
+      this.shadowBlur = state.shadowBlur;
+      this.shadowOffsetX = state.shadowOffsetX;
+      this.shadowOffsetY = state.shadowOffsetY;
       this.alpha = state.alpha;
       this.roughness = state.roughness;
     }
@@ -329,6 +349,20 @@ class Canvas {
    */
   rotate(angle: number) {
     this.context.rotate(geometry.toRadian(angle));
+  }
+
+  /**
+   * Clear shadow effect
+   */
+  clearShadow() {
+    this.shadowColor = Color.TRANSPARENT;
+    this.shadowBlur = 0;
+    this.shadowOffsetX = 0;
+    this.shadowOffsetY = 0;
+    this.context.shadowColor = this.resolveColor(this.shadowColor);
+    this.context.shadowBlur = this.shadowBlur;
+    this.context.shadowOffsetX = this.shadowOffsetX;
+    this.context.shadowOffsetY = this.shadowOffsetY;
   }
 
   /**
@@ -428,6 +462,10 @@ class Canvas {
     this.context.lineCap = "round";
     this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
+    this.context.shadowColor = this.resolveColor(this.shadowColor);
+    this.context.shadowBlur = this.shadowBlur;
+    this.context.shadowOffsetX = this.shadowOffsetX;
+    this.context.shadowOffsetY = this.shadowOffsetY;
     this.context.setLineDash(
       this.strokePattern.map((v) => v * this.strokeWidth)
     );
@@ -469,6 +507,10 @@ class Canvas {
     this.context.lineCap = "round";
     this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
+    this.context.shadowColor = this.resolveColor(this.shadowColor);
+    this.context.shadowBlur = this.shadowBlur;
+    this.context.shadowOffsetX = this.shadowOffsetX;
+    this.context.shadowOffsetY = this.shadowOffsetY;
     this.context.setLineDash(
       this.strokePattern.map((v) => v * this.strokeWidth)
     );
@@ -508,6 +550,10 @@ class Canvas {
     this.context.fillStyle = this.resolveColor(this.fillColor);
     this.context.globalAlpha = this.alpha;
     this.context.lineWidth = this.strokeWidth;
+    this.context.shadowColor = this.resolveColor(this.shadowColor);
+    this.context.shadowBlur = this.shadowBlur;
+    this.context.shadowOffsetX = this.shadowOffsetX;
+    this.context.shadowOffsetY = this.shadowOffsetY;
     if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const rd = this.generator.rectangle(x, y, w, h, {
         seed,
@@ -563,6 +609,10 @@ class Canvas {
     this.context.lineCap = "round";
     this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
+    this.context.shadowColor = this.resolveColor(this.shadowColor);
+    this.context.shadowBlur = this.shadowBlur;
+    this.context.shadowOffsetX = this.shadowOffsetX;
+    this.context.shadowOffsetY = this.shadowOffsetY;
     this.context.setLineDash(
       this.strokePattern.map((v) => v * this.strokeWidth)
     );
@@ -624,6 +674,10 @@ class Canvas {
     this.context.fillStyle = this.resolveColor(this.fillColor);
     this.context.lineWidth = this.strokeWidth;
     this.context.globalAlpha = this.alpha;
+    this.context.shadowColor = this.resolveColor(this.shadowColor);
+    this.context.shadowBlur = this.shadowBlur;
+    this.context.shadowOffsetX = this.shadowOffsetX;
+    this.context.shadowOffsetY = this.shadowOffsetY;
     if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const rd = this.generator.path(
         `M${x + rs[0]},${y} L${x + w - rs[1]},${y} Q${x + w},${y} ${x + w},${
@@ -704,6 +758,10 @@ class Canvas {
     this.context.lineCap = "round";
     this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
+    this.context.shadowColor = this.resolveColor(this.shadowColor);
+    this.context.shadowBlur = this.shadowBlur;
+    this.context.shadowOffsetX = this.shadowOffsetX;
+    this.context.shadowOffsetY = this.shadowOffsetY;
     this.context.setLineDash(
       this.strokePattern.map((v) => v * this.strokeWidth)
     );
@@ -754,6 +812,10 @@ class Canvas {
     this.context.fillStyle = this.resolveColor(this.fillColor);
     this.context.lineWidth = this.strokeWidth;
     this.context.globalAlpha = this.alpha;
+    this.context.shadowColor = this.resolveColor(this.shadowColor);
+    this.context.shadowBlur = this.shadowBlur;
+    this.context.shadowOffsetX = this.shadowOffsetX;
+    this.context.shadowOffsetY = this.shadowOffsetY;
     if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const rd = this.generator.ellipse(xm, ym, w, h, {
         seed,
@@ -802,6 +864,10 @@ class Canvas {
     this.context.lineCap = "round";
     this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
+    this.context.shadowColor = this.resolveColor(this.shadowColor);
+    this.context.shadowBlur = this.shadowBlur;
+    this.context.shadowOffsetX = this.shadowOffsetX;
+    this.context.shadowOffsetY = this.shadowOffsetY;
     this.context.setLineDash(
       this.strokePattern.map((v) => v * this.strokeWidth)
     );
@@ -839,6 +905,10 @@ class Canvas {
     this.context.strokeStyle = this.resolveColor(this.strokeColor);
     this.context.lineWidth = this.strokeWidth;
     this.context.globalAlpha = this.alpha;
+    this.context.shadowColor = this.resolveColor(this.shadowColor);
+    this.context.shadowBlur = this.shadowBlur;
+    this.context.shadowOffsetX = this.shadowOffsetX;
+    this.context.shadowOffsetY = this.shadowOffsetY;
     this.context.setLineDash(
       this.strokePattern.map((v) => v * this.strokeWidth)
     );
@@ -1003,6 +1073,10 @@ class Canvas {
     this.context.lineCap = "round";
     this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
+    this.context.shadowColor = this.resolveColor(this.shadowColor);
+    this.context.shadowBlur = this.shadowBlur;
+    this.context.shadowOffsetX = this.shadowOffsetX;
+    this.context.shadowOffsetY = this.shadowOffsetY;
     this.context.setLineDash(
       this.strokePattern.map((v) => v * this.strokeWidth)
     );
@@ -1037,6 +1111,10 @@ class Canvas {
     this.context.fillStyle = this.resolveColor(this.fillColor);
     this.context.globalAlpha = this.alpha;
     this.context.lineWidth = this.strokeWidth;
+    this.context.shadowColor = this.resolveColor(this.shadowColor);
+    this.context.shadowBlur = this.shadowBlur;
+    this.context.shadowOffsetX = this.shadowOffsetX;
+    this.context.shadowOffsetY = this.shadowOffsetY;
     if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const rd = this.generator.curve([...path, path[0]] as Point[], {
         seed,
@@ -1088,6 +1166,10 @@ class Canvas {
     this.context.lineCap = "round";
     this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
+    this.context.shadowColor = this.resolveColor(this.shadowColor);
+    this.context.shadowBlur = this.shadowBlur;
+    this.context.shadowOffsetX = this.shadowOffsetX;
+    this.context.shadowOffsetY = this.shadowOffsetY;
     this.context.setLineDash(
       this.strokePattern.map((v) => v * this.strokeWidth)
     );
@@ -1126,6 +1208,10 @@ class Canvas {
     this.context.fillStyle = this.resolveColor(this.fillColor);
     this.context.globalAlpha = this.alpha;
     this.context.lineWidth = this.strokeWidth;
+    this.context.shadowColor = this.resolveColor(this.shadowColor);
+    this.context.shadowBlur = this.shadowBlur;
+    this.context.shadowOffsetX = this.shadowOffsetX;
+    this.context.shadowOffsetY = this.shadowOffsetY;
     if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const rd = this.generator.polygon(path as Point[], {
         seed,
@@ -1179,6 +1265,10 @@ class Canvas {
     this.context.lineCap = "round";
     this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
+    this.context.shadowColor = this.resolveColor(this.shadowColor);
+    this.context.shadowBlur = this.shadowBlur;
+    this.context.shadowOffsetX = this.shadowOffsetX;
+    this.context.shadowOffsetY = this.shadowOffsetY;
     this.context.setLineDash(
       this.strokePattern.map((v) => v * this.strokeWidth)
     );
@@ -1217,6 +1307,10 @@ class Canvas {
     const ea = geometry.toRadian(geometry.normalizeAngle(endAngle));
     this.context.fillStyle = this.resolveColor(this.fillColor);
     this.context.globalAlpha = this.alpha;
+    this.context.shadowColor = this.resolveColor(this.shadowColor);
+    this.context.shadowBlur = this.shadowBlur;
+    this.context.shadowOffsetX = this.shadowOffsetX;
+    this.context.shadowOffsetY = this.shadowOffsetY;
     this.context.lineWidth = this.strokeWidth;
     if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const rd = this.generator.arc(x, y, r * 2, r * 2, sa, ea, true, {
@@ -1263,6 +1357,10 @@ class Canvas {
     this.context.lineCap = "round";
     this.context.lineJoin = "round";
     this.context.globalAlpha = this.alpha;
+    this.context.shadowColor = this.resolveColor(this.shadowColor);
+    this.context.shadowBlur = this.shadowBlur;
+    this.context.shadowOffsetX = this.shadowOffsetX;
+    this.context.shadowOffsetY = this.shadowOffsetY;
     this.context.setLineDash(
       this.strokePattern.map((v) => v * this.strokeWidth)
     );
@@ -1293,6 +1391,10 @@ class Canvas {
     this.context.fillStyle = this.resolveColor(this.fillColor);
     this.context.globalAlpha = this.alpha;
     this.context.lineWidth = this.strokeWidth;
+    this.context.shadowColor = this.resolveColor(this.shadowColor);
+    this.context.shadowBlur = this.shadowBlur;
+    this.context.shadowOffsetX = this.shadowOffsetX;
+    this.context.shadowOffsetY = this.shadowOffsetY;
     if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const d = pathToString(path);
       const rd = this.generator.path(d, {
@@ -1330,6 +1432,10 @@ class Canvas {
    * @param text
    */
   fillText(x: number, y: number, text: string): Canvas {
+    this.context.shadowColor = this.resolveColor(this.shadowColor);
+    this.context.shadowBlur = this.shadowBlur;
+    this.context.shadowOffsetX = this.shadowOffsetX;
+    this.context.shadowOffsetY = this.shadowOffsetY;
     this.context.fillStyle = this.resolveColor(this.fontColor);
     this.context.globalAlpha = this.alpha;
     this.context.font = this.font;
@@ -1348,6 +1454,10 @@ class Canvas {
     width: number,
     height: number
   ): Canvas {
+    this.context.shadowColor = this.resolveColor(this.shadowColor);
+    this.context.shadowBlur = this.shadowBlur;
+    this.context.shadowOffsetX = this.shadowOffsetX;
+    this.context.shadowOffsetY = this.shadowOffsetY;
     this.context.globalAlpha = this.alpha;
     this.context.drawImage(image, x, y, width, height);
     return this;

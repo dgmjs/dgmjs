@@ -11,6 +11,7 @@ import { HighlighterFactoryHandler } from "./highlighter-handler";
 import { ImageFactoryHandler } from "./image-handler";
 import { FrameFactoryHandler } from "./frame-handler";
 import { EmbedFactoryHandler } from "./embed-handler";
+import { NoteFactoryHandler } from "./note-handler";
 
 export {
   HandHandler,
@@ -26,4 +27,5 @@ export {
   ImageFactoryHandler,
   FrameFactoryHandler,
   EmbedFactoryHandler,
+  NoteFactoryHandler,
 };

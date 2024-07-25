@@ -284,6 +284,26 @@ export class Shape extends Obj {
   roughness: number;
 
   /**
+   * Shadow color
+   */
+  shadowColor: string;
+
+  /**
+   * Shadow blur
+   */
+  shadowBlur: number;
+
+  /**
+   * Shadow offset x
+   */
+  shadowOffsetX: number;
+
+  /**
+   * Shadow offset y
+   */
+  shadowOffsetY: number;
+
+  /**
    * Link
    */
   link: string;
@@ -365,6 +385,10 @@ export class Shape extends Obj {
     this.fontWeight = 400;
     this.opacity = 1;
     this.roughness = 0;
+    this.shadowColor = "$transparent";
+    this.shadowBlur = 0;
+    this.shadowOffsetX = 0;
+    this.shadowOffsetY = 0;
     this.link = "";
     this.reference = null;
     this.constraints = [];
@@ -412,6 +436,10 @@ export class Shape extends Obj {
     json.fontWeight = this.fontWeight;
     json.opacity = this.opacity;
     json.roughness = this.roughness;
+    json.shadowColor = this.shadowColor;
+    json.shadowBlur = this.shadowBlur;
+    json.shadowOffsetX = this.shadowOffsetX;
+    json.shadowOffsetY = this.shadowOffsetY;
     json.link = this.link;
     json.reference = this.reference ? this.reference.id : null;
     json.constraints = structuredClone(this.constraints);
@@ -457,6 +485,10 @@ export class Shape extends Obj {
     this.fontWeight = json.fontWeight ?? this.fontWeight;
     this.opacity = json.opacity ?? this.opacity;
     this.roughness = json.roughness ?? this.roughness;
+    this.shadowColor = json.shadowColor ?? this.shadowColor;
+    this.shadowBlur = json.shadowBlur ?? this.shadowBlur;
+    this.shadowOffsetX = json.shadowOffsetX ?? this.shadowOffsetX;
+    this.shadowOffsetY = json.shadowOffsetY ?? this.shadowOffsetY;
     this.link = json.link ?? this.link;
     this.reference = json.reference ?? this.reference;
     this.constraints = json.constraints ?? this.constraints;
@@ -571,6 +603,10 @@ export class Shape extends Obj {
       this.fontFamily
     );
     canvas.roughness = this.roughness;
+    canvas.shadowColor = this.shadowColor;
+    canvas.shadowBlur = this.shadowBlur;
+    canvas.shadowOffsetX = this.shadowOffsetX;
+    canvas.shadowOffsetY = this.shadowOffsetY;
     canvas.alpha = this.computeOpacity(); // this.opacity;
   }
 
@@ -785,10 +821,15 @@ export class Shape extends Obj {
     const outlineGCS = this.getOutline().map((p) =>
       this.localCoordTransform(canvas.canvas, p, true)
     );
-    return geometry.expandRect(
+    let vp = geometry.expandRect(
       geometry.boundingRect(outlineGCS),
       this.strokeWidth / 2
     );
+    if (this.shadowOffsetX < 0) vp[0][0] += this.shadowOffsetX;
+    if (this.shadowOffsetX > 0) vp[1][0] += this.shadowOffsetX;
+    if (this.shadowOffsetY < 0) vp[0][1] += this.shadowOffsetY;
+    if (this.shadowOffsetY > 0) vp[1][1] += this.shadowOffsetY;
+    return vp;
   }
 
   /**
@@ -1352,6 +1393,7 @@ export class Box extends Shape {
         this.corners,
         this.getSeed()
       );
+      canvas.clearShadow();
     }
     if (this.strokeWidth > 0) {
       canvas.strokeRoundRect(
@@ -1368,6 +1410,7 @@ export class Box extends Shape {
 
   renderText(canvas: MemoizationCanvas): void {
     if (this.allowRenderText) {
+      canvas.clearShadow();
       renderTextShape(canvas, this);
     }
   }
@@ -1697,6 +1740,12 @@ export class Text extends Box {
       );
     }
     this.renderText(canvas);
+  }
+
+  renderText(canvas: MemoizationCanvas): void {
+    if (this.allowRenderText) {
+      renderTextShape(canvas, this);
+    }
   }
 }
 
@@ -2075,10 +2124,15 @@ export class Line extends Path {
       this.localCoordTransform(canvas.canvas, p, true)
     );
     const arrowHeadSize = 12;
-    return geometry.expandRect(
+    let vp = geometry.expandRect(
       geometry.boundingRect(outlineGCS),
       Math.max(this.strokeWidth / 2, arrowHeadSize)
     );
+    if (this.shadowOffsetX < 0) vp[0][0] += this.shadowOffsetX;
+    if (this.shadowOffsetX > 0) vp[1][0] += this.shadowOffsetX;
+    if (this.shadowOffsetY < 0) vp[0][1] += this.shadowOffsetY;
+    if (this.shadowOffsetY > 0) vp[1][1] += this.shadowOffsetY;
+    return vp;
   }
 }
 
@@ -2523,6 +2577,22 @@ export class Embed extends Box {
 }
 
 /**
+ * Note
+ */
+export class Note extends Box {
+  constructor() {
+    super();
+    this.type = "Note";
+    this.fillColor = "$yellow5";
+    this.strokeWidth = 0;
+    this.shadowColor = "#0f171f33"; // "rgba(15, 23, 31, 0.2)";
+    this.shadowOffsetX = 0;
+    this.shadowOffsetY = 13.91;
+    this.shadowBlur = 30;
+  }
+}
+
+/**
  * Constraint Manager
  */
 class ConstraintManager {
@@ -2691,6 +2761,7 @@ export const shapeInstantiator = new Instantiator({
   Group: () => new Group(),
   Frame: () => new Frame(),
   Embed: () => new Embed(),
+  Note: () => new Note(),
 });
 
 export type ShapeProps = Partial<
@@ -2709,5 +2780,6 @@ export type ShapeProps = Partial<
     Highlighter &
     Group &
     Frame &
-    Embed
+    Embed &
+    Note
 >;

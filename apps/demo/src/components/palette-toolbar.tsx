@@ -10,6 +10,7 @@ import {
   Pencil,
   ScanIcon,
   SquareIcon,
+  StickyNoteIcon,
   TypeIcon,
 } from "lucide-react";
 import { ConnectorIcon, LineIcon } from "@/components/icons";
@@ -99,6 +100,9 @@ export function PaletteToolbar() {
         </PaletteItem>
         <PaletteItem handlerId="Embed">
           <ScanIcon size={16} />
+        </PaletteItem>
+        <PaletteItem handlerId="Note">
+          <StickyNoteIcon size={16} />
         </PaletteItem>
       </div>
     </div>

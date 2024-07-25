@@ -10,10 +10,11 @@ import {
   FreehandFactoryHandler,
   HighlighterFactoryHandler,
   ImageFactoryHandler,
+  FrameFactoryHandler,
   EmbedFactoryHandler,
+  NoteFactoryHandler,
   EraserHandler,
 } from "./handlers";
-import { FrameFactoryHandler } from "./handlers/frame-handler";
 
 export function basicSetup(
   options?: Partial<EditorOptions>
@@ -33,6 +34,7 @@ export function basicSetup(
       new ImageFactoryHandler("Image", { defaultLock: false }),
       new FrameFactoryHandler("Frame", { defaultLock: false }),
       new EmbedFactoryHandler("Embed", { defaultLock: false }),
+      new NoteFactoryHandler("Note", { defaultLock: false }),
     ],
     defaultHandlerId: "Select",
     keymap: {

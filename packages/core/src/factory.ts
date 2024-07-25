@@ -10,6 +10,7 @@ import {
   Image,
   Line,
   LineType,
+  Note,
   Rectangle,
   Shape,
   Sizable,
@@ -300,5 +301,22 @@ export class ShapeFactory {
     embed.textEditable = false;
     this.onShapeInitialize.emit(embed);
     return embed;
+  }
+
+  /**
+   * Create a note
+   */
+  createNote(rect: number[][]): Note {
+    const note = new Note();
+    note.left = rect[0][0];
+    note.top = rect[0][1];
+    let w = geometry.width(rect);
+    let h = geometry.height(rect);
+    note.width = w;
+    note.height = h;
+    note.horzAlign = HorzAlign.CENTER;
+    note.vertAlign = VertAlign.MIDDLE;
+    this.onShapeInitialize.emit(note);
+    return note;
   }
 }

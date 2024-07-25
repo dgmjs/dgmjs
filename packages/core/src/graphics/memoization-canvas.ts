@@ -67,6 +67,10 @@ type DOType =
 
 interface BaseDO {
   type: DOType;
+  shadowColor: string;
+  shadowBlur: number;
+  shadowOffsetX: number;
+  shadowOffsetY: number;
 }
 
 interface LineDO extends BaseDO {
@@ -286,6 +290,10 @@ class MemoizationCanvas {
   fillStyle: string;
   fontColor: string;
   font: string;
+  shadowColor: string;
+  shadowBlur: number;
+  shadowOffsetX: number;
+  shadowOffsetY: number;
   alpha: number;
   roughness: number;
 
@@ -300,6 +308,10 @@ class MemoizationCanvas {
     this.fillStyle = FillStyle.SOLID;
     this.fontColor = Color.FOREGROUND;
     this.font = "13px sans-serif";
+    this.shadowColor = Color.TRANSPARENT;
+    this.shadowBlur = 0;
+    this.shadowOffsetX = 0;
+    this.shadowOffsetY = 0;
     this.alpha = 1.0;
     this.roughness = 0;
   }
@@ -316,6 +328,10 @@ class MemoizationCanvas {
       fillStyle: this.fillStyle,
       fontColor: this.fontColor,
       font: this.font,
+      shadowColor: this.shadowColor,
+      shadowBlur: this.shadowBlur,
+      shadowOffsetX: this.shadowOffsetX,
+      shadowOffsetY: this.shadowOffsetY,
       alpha: this.alpha,
       roughness: this.roughness,
     };
@@ -335,6 +351,10 @@ class MemoizationCanvas {
       this.fillStyle = state.fillStyle;
       this.fontColor = state.fontColor;
       this.font = state.font;
+      this.shadowColor = state.shadowColor;
+      this.shadowBlur = state.shadowBlur;
+      this.shadowOffsetX = state.shadowOffsetX;
+      this.shadowOffsetY = state.shadowOffsetY;
       this.alpha = state.alpha;
       this.roughness = state.roughness;
     }
@@ -346,6 +366,16 @@ class MemoizationCanvas {
 
   setCanvas(canvas: Canvas) {
     this.canvas = canvas;
+  }
+
+  /**
+   * Clear shadow effect
+   */
+  clearShadow() {
+    this.shadowColor = Color.TRANSPARENT;
+    this.shadowBlur = 0;
+    this.shadowOffsetX = 0;
+    this.shadowOffsetY = 0;
   }
 
   /**
@@ -432,7 +462,15 @@ class MemoizationCanvas {
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
       });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
+      this.do.push({
+        type: "rough",
+        alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
+        rd,
+      });
     } else {
       this.do.push({
         type: "line",
@@ -440,6 +478,10 @@ class MemoizationCanvas {
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
         x1,
         y1,
         x2,
@@ -466,7 +508,15 @@ class MemoizationCanvas {
         strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         disableMultiStroke: this.strokePattern.length > 1,
       });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
+      this.do.push({
+        type: "rough",
+        alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
+        rd,
+      });
     } else {
       this.do.push({
         type: "strokeRect",
@@ -474,6 +524,10 @@ class MemoizationCanvas {
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
         x,
         y,
         w,
@@ -502,13 +556,25 @@ class MemoizationCanvas {
         stroke: this.canvas.resolveColor("$transparent"),
         strokeWidth: this.strokeWidth,
       });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
+      this.do.push({
+        type: "rough",
+        alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
+        rd,
+      });
     } else {
       this.do.push({
         type: "fillRect",
         fillColor: this.canvas.resolveColor(this.fillColor),
         fillStyle: this.fillStyle,
         alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
         x,
         y,
         w,
@@ -564,7 +630,15 @@ class MemoizationCanvas {
           preserveVertices: true,
         }
       );
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
+      this.do.push({
+        type: "rough",
+        alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
+        rd,
+      });
     } else {
       this.do.push({
         type: "strokeRoundRect",
@@ -572,6 +646,10 @@ class MemoizationCanvas {
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
         x,
         y,
         w,
@@ -621,13 +699,25 @@ class MemoizationCanvas {
           preserveVertices: true,
         }
       );
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
+      this.do.push({
+        type: "rough",
+        alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
+        rd,
+      });
     } else {
       this.do.push({
         type: "fillRoundRect",
         fillColor: this.canvas.resolveColor(this.fillColor),
         fillStyle: this.fillStyle,
         alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
         x,
         y,
         w,
@@ -679,7 +769,15 @@ class MemoizationCanvas {
         strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         disableMultiStroke: this.strokePattern.length > 1,
       });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
+      this.do.push({
+        type: "rough",
+        alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
+        rd,
+      });
     } else {
       this.do.push({
         type: "strokeEllipse",
@@ -687,6 +785,10 @@ class MemoizationCanvas {
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
         x,
         y,
         w,
@@ -723,13 +825,25 @@ class MemoizationCanvas {
         stroke: this.canvas.resolveColor("$transparent"),
         strokeWidth: this.strokeWidth,
       });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
+      this.do.push({
+        type: "rough",
+        alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
+        rd,
+      });
     } else {
       this.do.push({
         type: "fillEllipse",
         fillColor: this.canvas.resolveColor(this.fillColor),
         fillStyle: this.fillStyle,
         alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
         x,
         y,
         w,
@@ -761,7 +875,15 @@ class MemoizationCanvas {
         strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         disableMultiStroke: this.strokePattern.length > 1,
       });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
+      this.do.push({
+        type: "rough",
+        alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
+        rd,
+      });
     } else {
       this.do.push({
         type: "polyline",
@@ -769,6 +891,10 @@ class MemoizationCanvas {
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
         path: path,
       });
     }
@@ -788,7 +914,15 @@ class MemoizationCanvas {
         strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         disableMultiStroke: this.strokePattern.length > 1,
       });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
+      this.do.push({
+        type: "rough",
+        alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
+        rd,
+      });
     } else {
       this.do.push({
         type: "strokeCurve",
@@ -796,6 +930,10 @@ class MemoizationCanvas {
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
         path: path,
       });
     }
@@ -817,13 +955,25 @@ class MemoizationCanvas {
         stroke: this.canvas.resolveColor("$transparent"),
         strokeWidth: this.strokeWidth,
       });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
+      this.do.push({
+        type: "rough",
+        alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
+        rd,
+      });
     } else {
       this.do.push({
         type: "fillCurve",
         fillColor: this.canvas.resolveColor(this.fillColor),
         fillStyle: this.fillStyle,
         alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
         path: path,
       });
     }
@@ -852,7 +1002,15 @@ class MemoizationCanvas {
         strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         disableMultiStroke: this.strokePattern.length > 1,
       });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
+      this.do.push({
+        type: "rough",
+        alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
+        rd,
+      });
     } else {
       this.do.push({
         type: "strokePolygon",
@@ -860,6 +1018,10 @@ class MemoizationCanvas {
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
         path: path,
       });
     }
@@ -881,13 +1043,25 @@ class MemoizationCanvas {
         stroke: this.canvas.resolveColor("$transparent"),
         strokeWidth: this.strokeWidth,
       });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
+      this.do.push({
+        type: "rough",
+        alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
+        rd,
+      });
     } else {
       this.do.push({
         type: "fillPolygon",
         fillColor: this.canvas.resolveColor(this.fillColor),
         fillStyle: this.fillStyle,
         alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
         path: path,
       });
     }
@@ -927,7 +1101,15 @@ class MemoizationCanvas {
         strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         disableMultiStroke: this.strokePattern.length > 1,
       });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
+      this.do.push({
+        type: "rough",
+        alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
+        rd,
+      });
     } else {
       this.do.push({
         type: "strokeArc",
@@ -935,6 +1117,10 @@ class MemoizationCanvas {
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
         x,
         y,
         r,
@@ -969,13 +1155,25 @@ class MemoizationCanvas {
         stroke: this.canvas.resolveColor("$transparent"),
         strokeWidth: this.strokeWidth,
       });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
+      this.do.push({
+        type: "rough",
+        alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
+        rd,
+      });
     } else {
       this.do.push({
         type: "fillArc",
         fillColor: this.canvas.resolveColor(this.fillColor),
         fillStyle: this.fillStyle,
         alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
         x,
         y,
         r,
@@ -1017,7 +1215,15 @@ class MemoizationCanvas {
         disableMultiStroke: this.strokePattern.length > 1,
         preserveVertices: true,
       });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
+      this.do.push({
+        type: "rough",
+        alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
+        rd,
+      });
     } else {
       this.do.push({
         type: "strokePath",
@@ -1025,6 +1231,10 @@ class MemoizationCanvas {
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
         path,
       });
     }
@@ -1048,13 +1258,25 @@ class MemoizationCanvas {
         strokeWidth: this.strokeWidth,
         preserveVertices: true,
       });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
+      this.do.push({
+        type: "rough",
+        alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
+        rd,
+      });
     } else {
       this.do.push({
         type: "fillPath",
         fillColor: this.canvas.resolveColor(this.fillColor),
         fillStyle: this.fillStyle,
         alpha: this.alpha,
+        shadowColor: this.canvas.resolveColor(this.shadowColor),
+        shadowBlur: this.shadowBlur,
+        shadowOffsetX: this.shadowOffsetX,
+        shadowOffsetY: this.shadowOffsetY,
         path,
       });
     }
@@ -1097,6 +1319,10 @@ class MemoizationCanvas {
       type: "strokeFreehand",
       strokeColor: this.canvas.resolveColor(this.strokeColor),
       alpha: this.alpha,
+      shadowColor: this.canvas.resolveColor(this.shadowColor),
+      shadowBlur: this.shadowBlur,
+      shadowOffsetX: this.shadowOffsetX,
+      shadowOffsetY: this.shadowOffsetY,
       path2d,
     });
     return this;
@@ -1117,6 +1343,10 @@ class MemoizationCanvas {
       x,
       y,
       text,
+      shadowColor: this.canvas.resolveColor(this.shadowColor),
+      shadowBlur: this.shadowBlur,
+      shadowOffsetX: this.shadowOffsetX,
+      shadowOffsetY: this.shadowOffsetY,
     });
     return this;
   }
@@ -1144,6 +1374,10 @@ class MemoizationCanvas {
       w: width,
       h: height,
       radius: rs,
+      shadowColor: this.canvas.resolveColor(this.shadowColor),
+      shadowBlur: this.shadowBlur,
+      shadowOffsetX: this.shadowOffsetX,
+      shadowOffsetY: this.shadowOffsetY,
     });
     return this;
   }
@@ -1163,12 +1397,17 @@ class MemoizationCanvas {
     for (const d of this.do) {
       canvas.context.lineCap = "round";
       canvas.context.lineJoin = "round";
+      canvas.clearShadow();
       switch (d.type) {
         case "line": {
           canvas.context.strokeStyle = d.strokeColor;
           canvas.context.lineWidth = d.strokeWidth;
           canvas.context.setLineDash(d.strokeLineDash);
           canvas.context.globalAlpha = d.alpha;
+          canvas.context.shadowColor = d.shadowColor;
+          canvas.context.shadowBlur = d.shadowBlur;
+          canvas.context.shadowOffsetX = d.shadowOffsetX;
+          canvas.context.shadowOffsetY = d.shadowOffsetY;
           canvas.context.beginPath();
           canvas.context.moveTo(d.x1, d.y1);
           canvas.context.lineTo(d.x2, d.y2);
@@ -1181,6 +1420,10 @@ class MemoizationCanvas {
           canvas.context.lineWidth = d.strokeWidth;
           canvas.context.setLineDash(d.strokeLineDash);
           canvas.context.globalAlpha = d.alpha;
+          canvas.context.shadowColor = d.shadowColor;
+          canvas.context.shadowBlur = d.shadowBlur;
+          canvas.context.shadowOffsetX = d.shadowOffsetX;
+          canvas.context.shadowOffsetY = d.shadowOffsetY;
           canvas.context.beginPath();
           canvas.context.rect(d.x, d.y, d.w, d.h);
           canvas.context.closePath();
@@ -1190,6 +1433,10 @@ class MemoizationCanvas {
         case "fillRect": {
           canvas.context.fillStyle = d.fillColor;
           canvas.context.globalAlpha = d.alpha;
+          canvas.context.shadowColor = d.shadowColor;
+          canvas.context.shadowBlur = d.shadowBlur;
+          canvas.context.shadowOffsetX = d.shadowOffsetX;
+          canvas.context.shadowOffsetY = d.shadowOffsetY;
           canvas.context.fillRect(d.x, d.y, d.w, d.h);
           break;
         }
@@ -1198,6 +1445,10 @@ class MemoizationCanvas {
           canvas.context.lineWidth = d.strokeWidth;
           canvas.context.setLineDash(d.strokeLineDash);
           canvas.context.globalAlpha = d.alpha;
+          canvas.context.shadowColor = d.shadowColor;
+          canvas.context.shadowBlur = d.shadowBlur;
+          canvas.context.shadowOffsetX = d.shadowOffsetX;
+          canvas.context.shadowOffsetY = d.shadowOffsetY;
           canvas.context.beginPath();
           canvas.context.moveTo(d.x + d.radius[0], d.y);
           canvas.context.lineTo(d.x + d.w - d.radius[1], d.y);
@@ -1230,6 +1481,10 @@ class MemoizationCanvas {
         case "fillRoundRect": {
           canvas.context.fillStyle = d.fillColor;
           canvas.context.globalAlpha = d.alpha;
+          canvas.context.shadowColor = d.shadowColor;
+          canvas.context.shadowBlur = d.shadowBlur;
+          canvas.context.shadowOffsetX = d.shadowOffsetX;
+          canvas.context.shadowOffsetY = d.shadowOffsetY;
           canvas.context.beginPath();
           canvas.context.moveTo(d.x + d.radius[0], d.y);
           canvas.context.lineTo(d.x + d.w - d.radius[1], d.y);
@@ -1264,6 +1519,10 @@ class MemoizationCanvas {
           canvas.context.lineWidth = d.strokeWidth;
           canvas.context.setLineDash(d.strokeLineDash);
           canvas.context.globalAlpha = d.alpha;
+          canvas.context.shadowColor = d.shadowColor;
+          canvas.context.shadowBlur = d.shadowBlur;
+          canvas.context.shadowOffsetX = d.shadowOffsetX;
+          canvas.context.shadowOffsetY = d.shadowOffsetY;
           const kappa = 0.5522848;
           const ox = (d.w / 2.0) * kappa;
           const oy = (d.h / 2.0) * kappa;
@@ -1284,6 +1543,10 @@ class MemoizationCanvas {
         case "fillEllipse": {
           canvas.context.fillStyle = d.fillColor;
           canvas.context.globalAlpha = d.alpha;
+          canvas.context.shadowColor = d.shadowColor;
+          canvas.context.shadowBlur = d.shadowBlur;
+          canvas.context.shadowOffsetX = d.shadowOffsetX;
+          canvas.context.shadowOffsetY = d.shadowOffsetY;
           const kappa = 0.5522848;
           const ox = (d.w / 2.0) * kappa;
           const oy = (d.h / 2.0) * kappa;
@@ -1306,6 +1569,10 @@ class MemoizationCanvas {
           canvas.context.lineWidth = d.strokeWidth;
           canvas.context.setLineDash(d.strokeLineDash);
           canvas.context.globalAlpha = d.alpha;
+          canvas.context.shadowColor = d.shadowColor;
+          canvas.context.shadowBlur = d.shadowBlur;
+          canvas.context.shadowOffsetX = d.shadowOffsetX;
+          canvas.context.shadowOffsetY = d.shadowOffsetY;
           canvas.context.beginPath();
           for (let i = 0, len = d.path.length; i < len; i++) {
             const p = d.path[i];
@@ -1323,6 +1590,10 @@ class MemoizationCanvas {
           canvas.context.lineWidth = d.strokeWidth;
           canvas.context.setLineDash(d.strokeLineDash);
           canvas.context.globalAlpha = d.alpha;
+          canvas.context.shadowColor = d.shadowColor;
+          canvas.context.shadowBlur = d.shadowBlur;
+          canvas.context.shadowOffsetX = d.shadowOffsetX;
+          canvas.context.shadowOffsetY = d.shadowOffsetY;
           canvas.context.beginPath();
           if (d.path.length > 2) {
             const ps = geometry.curvePathPoints(d.path);
@@ -1340,6 +1611,10 @@ class MemoizationCanvas {
         case "fillCurve": {
           canvas.context.fillStyle = d.fillColor;
           canvas.context.globalAlpha = d.alpha;
+          canvas.context.shadowColor = d.shadowColor;
+          canvas.context.shadowBlur = d.shadowBlur;
+          canvas.context.shadowOffsetX = d.shadowOffsetX;
+          canvas.context.shadowOffsetY = d.shadowOffsetY;
           canvas.context.beginPath();
           if (d.path.length > 2) {
             const ps = geometry.curvePathPoints([...d.path, d.path[0]]);
@@ -1366,6 +1641,10 @@ class MemoizationCanvas {
           canvas.context.lineWidth = d.strokeWidth;
           canvas.context.setLineDash(d.strokeLineDash);
           canvas.context.globalAlpha = d.alpha;
+          canvas.context.shadowColor = d.shadowColor;
+          canvas.context.shadowBlur = d.shadowBlur;
+          canvas.context.shadowOffsetX = d.shadowOffsetX;
+          canvas.context.shadowOffsetY = d.shadowOffsetY;
           canvas.context.beginPath();
           let start: number[] = [-1, -1];
           for (let i = 0, len = d.path.length; i < len; i++) {
@@ -1384,6 +1663,10 @@ class MemoizationCanvas {
         case "fillPolygon": {
           canvas.context.fillStyle = d.fillColor;
           canvas.context.globalAlpha = d.alpha;
+          canvas.context.shadowColor = d.shadowColor;
+          canvas.context.shadowBlur = d.shadowBlur;
+          canvas.context.shadowOffsetX = d.shadowOffsetX;
+          canvas.context.shadowOffsetY = d.shadowOffsetY;
           canvas.context.beginPath();
           for (let i = 0, len = d.path.length; i < len; i++) {
             const p = d.path[i];
@@ -1401,6 +1684,10 @@ class MemoizationCanvas {
           canvas.context.lineWidth = d.strokeWidth;
           canvas.context.setLineDash(d.strokeLineDash);
           canvas.context.globalAlpha = d.alpha;
+          canvas.context.shadowColor = d.shadowColor;
+          canvas.context.shadowBlur = d.shadowBlur;
+          canvas.context.shadowOffsetX = d.shadowOffsetX;
+          canvas.context.shadowOffsetY = d.shadowOffsetY;
           canvas.context.beginPath();
           canvas.context.arc(d.x, d.y, d.r, d.startAngle, d.endAngle, false);
           canvas.context.stroke();
@@ -1409,6 +1696,10 @@ class MemoizationCanvas {
         case "fillArc": {
           canvas.context.fillStyle = d.fillColor;
           canvas.context.globalAlpha = d.alpha;
+          canvas.context.shadowColor = d.shadowColor;
+          canvas.context.shadowBlur = d.shadowBlur;
+          canvas.context.shadowOffsetX = d.shadowOffsetX;
+          canvas.context.shadowOffsetY = d.shadowOffsetY;
           canvas.context.beginPath();
           canvas.context.arc(d.x, d.y, d.r, d.startAngle, d.endAngle, false);
           canvas.context.fill();
@@ -1419,6 +1710,10 @@ class MemoizationCanvas {
           canvas.context.lineWidth = d.strokeWidth;
           canvas.context.setLineDash(d.strokeLineDash);
           canvas.context.globalAlpha = d.alpha;
+          canvas.context.shadowColor = d.shadowColor;
+          canvas.context.shadowBlur = d.shadowBlur;
+          canvas.context.shadowOffsetX = d.shadowOffsetX;
+          canvas.context.shadowOffsetY = d.shadowOffsetY;
           canvas.context.beginPath();
           const path2d = new Path2D(pathToString(d.path));
           canvas.context.stroke(path2d);
@@ -1427,6 +1722,10 @@ class MemoizationCanvas {
         case "fillPath": {
           canvas.context.fillStyle = d.fillColor;
           canvas.context.globalAlpha = d.alpha;
+          canvas.context.shadowColor = d.shadowColor;
+          canvas.context.shadowBlur = d.shadowBlur;
+          canvas.context.shadowOffsetX = d.shadowOffsetX;
+          canvas.context.shadowOffsetY = d.shadowOffsetY;
           canvas.context.beginPath();
           const path2d = new Path2D(pathToString(d.path));
           canvas.context.fill(path2d);
@@ -1436,6 +1735,10 @@ class MemoizationCanvas {
           canvas.context.fillStyle = d.strokeColor;
           canvas.context.lineCap = "round";
           canvas.context.globalAlpha = d.alpha;
+          canvas.context.shadowColor = d.shadowColor;
+          canvas.context.shadowBlur = d.shadowBlur;
+          canvas.context.shadowOffsetX = d.shadowOffsetX;
+          canvas.context.shadowOffsetY = d.shadowOffsetY;
           canvas.context.beginPath();
           canvas.context.fill(d.path2d);
           break;
@@ -1443,6 +1746,10 @@ class MemoizationCanvas {
         case "fillText": {
           canvas.context.fillStyle = d.fontColor;
           canvas.context.globalAlpha = d.alpha;
+          canvas.context.shadowColor = d.shadowColor;
+          canvas.context.shadowBlur = d.shadowBlur;
+          canvas.context.shadowOffsetX = d.shadowOffsetX;
+          canvas.context.shadowOffsetY = d.shadowOffsetY;
           canvas.context.font = d.font;
           canvas.context.beginPath();
           canvas.context.fillText(d.text, d.x, d.y);
@@ -1450,6 +1757,10 @@ class MemoizationCanvas {
         }
         case "drawImage": {
           canvas.context.globalAlpha = d.alpha;
+          canvas.context.shadowColor = d.shadowColor;
+          canvas.context.shadowBlur = d.shadowBlur;
+          canvas.context.shadowOffsetX = d.shadowOffsetX;
+          canvas.context.shadowOffsetY = d.shadowOffsetY;
           if (d.image && d.image.complete) {
             canvas.context.strokeStyle = this.canvas.resolveColor(
               Color.TRANSPARENT
@@ -1494,6 +1805,10 @@ class MemoizationCanvas {
         }
         case "rough": {
           canvas.context.globalAlpha = d.alpha;
+          canvas.context.shadowColor = d.shadowColor;
+          canvas.context.shadowBlur = d.shadowBlur;
+          canvas.context.shadowOffsetX = d.shadowOffsetX;
+          canvas.context.shadowOffsetY = d.shadowOffsetY;
           roughDraw(canvas.context, d.rd);
           break;
         }

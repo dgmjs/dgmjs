@@ -129,7 +129,7 @@ export type Colors = Record<string, string>;
 
 export const themeColors: Record<string, Colors> = {
   light: {
-    transparent: "#ffffff00",
+    transparent: "#00000000",
     foreground: "#000000",
     background: "#ffffff",
     ...gray,
