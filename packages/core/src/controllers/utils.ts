@@ -2,7 +2,7 @@ import type { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { Connector, Line, Path, Shape } from "../shapes";
 import { angleInCCS, lcs2ccs } from "../graphics/utils";
-import optjs from "optimization-js";
+import { minimize_Powell } from "../utils/optimization-js";
 import type { Editor } from "../editor";
 import { inControlPoint } from "../utils/guide";
 import { CONTROL_POINT_APOTHEM, ControllerPosition } from "../graphics/const";
@@ -47,7 +47,7 @@ export function fitEnclosureInCSS(
     return e;
   };
   let args = [0, 0]; // [dx, dy]
-  let solution = optjs.minimize_Powell(objective, args);
+  let solution = minimize_Powell(objective, args);
   // restore shape states
   shape.fromJSON(memento);
   return solution.argument;
@@ -89,7 +89,7 @@ export function fitPathInCSS(
     return e;
   };
   let args = [0, 0]; // [dx, dy]
-  let solution = optjs.minimize_Powell(objective, args);
+  let solution = minimize_Powell(objective, args);
   // restore shape states
   line.fromJSON(memento);
   return solution.argument;
