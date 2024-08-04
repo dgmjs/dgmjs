@@ -11,6 +11,7 @@ import {
   changeParent,
   deleteShapes,
   deleteSingleShape,
+  groupShapes,
   moveAnchor,
   moveShapes,
   removePage,
@@ -18,6 +19,7 @@ import {
   resolveAllConstraints,
   sendBackward,
   sendToBack,
+  ungroupShapes,
 } from "./macro";
 
 /**
@@ -338,34 +340,19 @@ export class Actions {
    * Group selected shapes
    */
   group(shapes?: Shape[]) {
+    const doc = this.editor.getDoc();
     const page = this.editor.getCurrentPage();
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
-      const box = this.editor.selection.getBoundingRect(this.editor.canvas);
-      let filtered = filterDescendants(shapes) as Shape[];
-      if (filtered.length > 1) {
-        const group = new Group();
-        group.left = box[0][0];
-        group.top = box[0][1];
-        group.width = geometry.width(box);
-        group.height = geometry.height(box);
-        this.editor.transform.startAction("group");
-        this.editor.transform.transact((tx) => {
-          tx.appendObj(group);
-          changeParent(tx, group, page);
-          page
-            ?.traverseSequence()
-            .reverse()
-            .forEach((s) => {
-              if (filtered.includes(s as Shape)) {
-                changeParent(tx, s, group);
-              }
-            });
-          resolveAllConstraints(tx, page, this.editor.canvas);
-        });
-        this.editor.transform.endAction();
-        this.editor.selection.select([group]);
-      }
+      let group: Group | null = null;
+      this.editor.transform.startAction("group");
+      this.editor.transform.transact((tx) => {
+        groupShapes(tx, doc, page, this.editor.canvas, shapes!);
+        group = tx.recentlyAppendedObj as Group;
+        resolveAllConstraints(tx, page, this.editor.canvas);
+      });
+      this.editor.transform.endAction();
+      if (group) this.editor.selection.select([group]);
     }
   }
 
@@ -377,20 +364,13 @@ export class Actions {
     const page = this.editor.getCurrentPage();
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
-      const children: Shape[] = [];
       if (shapes.some((s) => s instanceof Group)) {
+        const children = shapes
+          .filter((s) => s instanceof Group)
+          .flatMap((g) => g.children as Shape[]);
         this.editor.transform.startAction("ungroup");
         this.editor.transform.transact((tx) => {
-          for (let s of shapes!) {
-            if (s instanceof Group) {
-              for (let i = s.children.length - 1; i >= 0; i--) {
-                const child = s.children[i];
-                children.push(child as Shape);
-                changeParent(tx, child, s.parent as Shape);
-              }
-              deleteSingleShape(tx, doc, page, s);
-            }
-          }
+          ungroupShapes(tx, doc, page, this.editor.canvas, shapes!);
           resolveAllConstraints(tx, page, this.editor.canvas);
         });
         this.editor.transform.endAction();

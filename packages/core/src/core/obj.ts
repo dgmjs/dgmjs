@@ -144,6 +144,9 @@ export class Obj {
   }
 }
 
+/**
+ * Filter out descendants from the given objects
+ */
 export function filterDescendants(objs: Obj[]): Obj[] {
   let filtered: Obj[] = [];
   for (let obj of objs) {

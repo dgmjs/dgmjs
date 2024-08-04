@@ -312,10 +312,12 @@ export class ReorderChildMutation extends Mutation {
 export class Transaction {
   store: Store;
   mutations: Mutation[];
+  recentlyAppendedObj: Obj | null;
 
   constructor(store: Store) {
     this.store = store;
     this.mutations = [];
+    this.recentlyAppendedObj = null;
   }
 
   push(mut: Mutation) {
@@ -356,6 +358,7 @@ export class Transaction {
       const mut = new CreateMutation(obj);
       mut.apply(this.store);
       this.push(mut);
+      this.recentlyAppendedObj = obj;
       return true;
     }
     return false;

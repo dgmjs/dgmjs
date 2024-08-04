@@ -46,7 +46,7 @@ export function getAllReferers(doc: Doc, objs: Shape[]): Shape[] {
 }
 
 /**
- * Returns the viewport including all shapes
+ * Returns the viewport including all of given shapes
  */
 export function getAllViewport(canvas: Canvas, shapes: Shape[]): number[][] {
   // get view rect including all shapes
@@ -60,4 +60,25 @@ export function getAllViewport(canvas: Canvas, shapes: Shape[]): number[][] {
           [0, 0],
         ];
   return box;
+}
+
+/**
+ * Returns bounding rect of all of given shapes
+ */
+export function getAllBoundingRect(
+  canvas: Canvas,
+  shapes: Shape[]
+): number[][] {
+  return shapes.length > 0
+    ? shapes
+        .map((s) =>
+          geometry.boundingRect(
+            s.getOutline().map((p) => s.localCoordTransform(canvas, p, true))
+          )
+        )
+        .reduce(geometry.unionRect)
+    : [
+        [0, 0],
+        [0, 0],
+      ];
 }
