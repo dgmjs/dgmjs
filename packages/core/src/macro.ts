@@ -603,7 +603,6 @@ export function ungroupShapes(
         const children = [...s.children].reverse();
         for (let i = children.length - 1; i >= 0; i--) {
           const child = children[i];
-          console.log(i, child);
           changed = changeParent(tx, child, s.parent as Shape) || changed;
         }
         changed = deleteSingleShape(tx, doc, page, s) || changed;
