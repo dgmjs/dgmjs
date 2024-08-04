@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
 import { TextareaField } from "./fields/textarea-field";
 import { Separator } from "@/components/ui/separator";
 import { Label } from "@/components/ui/label";
@@ -123,13 +124,40 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
                 />
               )}
               {property.type === "number" && (
-                <NumberField
-                  className="h-8 rounded-none border-none"
-                  value={property.value}
-                  onChange={(value) =>
-                    changeProperty(i, { ...property, value })
-                  }
-                />
+                <>
+                  {property.extra === "slider" ? (
+                    <Slider
+                      value={[property.value]}
+                      min={property.min ?? 0}
+                      max={property.max ?? 100}
+                      step={property.step ?? 1}
+                      onValueChange={(value) =>
+                        changeProperty(i, {
+                          ...property,
+                          value: value.length > 0 ? value[0] : 0,
+                        })
+                      }
+                    />
+                  ) : (
+                    <NumberField
+                      className="h-8 rounded-none border-none"
+                      value={property.value}
+                      onChange={(value) => {
+                        if (
+                          typeof property.max === "number" &&
+                          value > property.max
+                        )
+                          value = property.max;
+                        if (
+                          typeof property.min === "number" &&
+                          value < property.min
+                        )
+                          value = property.min;
+                        changeProperty(i, { ...property, value });
+                      }}
+                    />
+                  )}
+                </>
               )}
               {property.type === "boolean" && (
                 <div className="w-full flex items-center justify-center">
@@ -223,6 +251,22 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
                   </div>
                   <div className="grid grid-cols-2 w-full items-center">
                     <Label
+                      htmlFor="extended-property-extra"
+                      className="font-normal"
+                    >
+                      Extra
+                    </Label>
+                    <TextField
+                      id="extended-property-extra"
+                      className="h-8"
+                      value={property.extra}
+                      onChange={(value) =>
+                        changeProperty(i, { ...property, extra: value })
+                      }
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 w-full items-center">
+                    <Label
                       htmlFor="extended-property-hidden"
                       className="font-normal"
                     >
@@ -262,6 +306,66 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
                         }
                       />
                     </div>
+                  )}
+                  {property.type === "number" && (
+                    <>
+                      <div className="grid grid-cols-2 w-full items-center">
+                        <Label
+                          htmlFor="extended-property-min"
+                          className="font-normal"
+                        >
+                          Min
+                        </Label>
+                        <NumberField
+                          id="extended-property-min"
+                          className="h-8"
+                          value={property.min}
+                          onChange={(value) =>
+                            changeProperty(i, {
+                              ...property,
+                              min: value,
+                              value: Math.max(value, property.value),
+                            })
+                          }
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 w-full items-center">
+                        <Label
+                          htmlFor="extended-property-max"
+                          className="font-normal"
+                        >
+                          Max
+                        </Label>
+                        <NumberField
+                          id="extended-property-max"
+                          className="h-8"
+                          value={property.max}
+                          onChange={(value) =>
+                            changeProperty(i, {
+                              ...property,
+                              max: value,
+                              value: Math.min(value, property.value),
+                            })
+                          }
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 w-full items-center">
+                        <Label
+                          htmlFor="extended-property-setp"
+                          className="font-normal"
+                        >
+                          Step
+                        </Label>
+                        <NumberField
+                          id="extended-property-step"
+                          className="h-8"
+                          value={property.step}
+                          onChange={(value) =>
+                            changeProperty(i, { ...property, step: value })
+                          }
+                        />
+                      </div>
+                    </>
                   )}
                 </div>
               </PopoverContent>

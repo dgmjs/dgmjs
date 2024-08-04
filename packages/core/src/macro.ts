@@ -3,6 +3,7 @@ import {
   Box,
   Path,
   Shape,
+  Group,
   Connector,
   Page,
   Doc,
@@ -12,6 +13,7 @@ import * as geometry from "./graphics/geometry";
 import { moveEndPoint, adjustRoute } from "./utils/route-utils";
 import { filterDescendants, type Obj } from "./core/obj";
 import {
+  getAllBoundingRect,
   getAllConnectorsTo,
   getAllDescendant,
   getAllReferers,
@@ -548,6 +550,66 @@ export function deleteShapes(
   shapes.forEach((s) => {
     changed = deleteSingleShape(tx, doc, page, s) || changed;
   });
+  return changed;
+}
+
+/**
+ * A macro to create a group of shapes
+ */
+export function groupShapes(
+  tx: Transaction,
+  doc: Doc,
+  page: Page,
+  canvas: Canvas,
+  shapes: Shape[]
+): boolean {
+  let changed = false;
+  const box = getAllBoundingRect(canvas, shapes);
+  let filtered = filterDescendants(shapes) as Shape[];
+  if (filtered.length > 1) {
+    const group = new Group();
+    group.left = box[0][0];
+    group.top = box[0][1];
+    group.width = geometry.width(box);
+    group.height = geometry.height(box);
+    changed = tx.appendObj(group) || changed;
+    changed = changeParent(tx, group, page) || changed;
+    page
+      ?.traverseSequence()
+      .reverse()
+      .forEach((s) => {
+        if (filtered.includes(s as Shape)) {
+          changed = changeParent(tx, s, group) || changed;
+        }
+      });
+  }
+  return changed;
+}
+
+/**
+ * A macro to ungroup shapes
+ */
+export function ungroupShapes(
+  tx: Transaction,
+  doc: Doc,
+  page: Page,
+  canvas: Canvas,
+  shapes: Shape[]
+) {
+  let changed = false;
+  if (shapes.some((s) => s instanceof Group)) {
+    for (let s of shapes!) {
+      if (s instanceof Group) {
+        const children = [...s.children].reverse();
+        for (let i = children.length - 1; i >= 0; i--) {
+          const child = children[i];
+          console.log(i, child);
+          changed = changeParent(tx, child, s.parent as Shape) || changed;
+        }
+        changed = deleteSingleShape(tx, doc, page, s) || changed;
+      }
+    }
+  }
   return changed;
 }
 
