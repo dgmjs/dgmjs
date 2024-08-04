@@ -41,6 +41,10 @@ export interface Property {
   hidden: boolean;
   options?: string[];
   value: any;
+  extra?: string;
+  min?: number;
+  max?: number;
+  step?: number;
 }
 
 export interface Script {
