@@ -1,7 +1,7 @@
 import type { Editor } from "./editor";
 import { Box, Group, type Shape, type ShapeProps, Page, Path } from "./shapes";
 import * as geometry from "./graphics/geometry";
-import { Obj, filterDescendants } from "./core/obj";
+import { Obj } from "./core/obj";
 import { deserialize, serialize } from "./core/serialize";
 import {
   addPage,
@@ -10,7 +10,6 @@ import {
   bringToFront,
   changeParent,
   deleteShapes,
-  deleteSingleShape,
   groupShapes,
   moveAnchor,
   moveShapes,
@@ -21,6 +20,7 @@ import {
   sendToBack,
   ungroupShapes,
 } from "./macro";
+import { visitTextNodes } from "./utils/text-utils";
 
 /**
  * Editor actions
@@ -136,18 +136,31 @@ export class Actions {
       this.editor.transform.transact((tx) => {
         objs = objs ?? this.editor.selection.getShapes();
         for (let key in values) {
+          const value = (values as any)[key];
           switch (key) {
             case "reference": {
               objs.forEach((s) => {
-                if (s.hasOwnProperty(key))
-                  tx.assignRef(s, key, (values as any)[key]);
+                if (s.hasOwnProperty(key)) tx.assignRef(s, key, value);
               });
               break;
             }
+            case "horzAlign":
+              objs.forEach((s) => {
+                if (s instanceof Box) {
+                  const nodes = structuredClone(s.text);
+                  visitTextNodes(nodes, (node) => {
+                    if (node.attrs?.textAlign) node.attrs.textAlign = value;
+                  });
+                  if (s.hasOwnProperty(key)) {
+                    tx.assign(s, key, value);
+                    tx.assign(s, "text", nodes);
+                  }
+                }
+              });
+              break;
             default:
               objs.forEach((s) => {
-                if (s.hasOwnProperty(key))
-                  tx.assign(s, key, (values as any)[key]);
+                if (s.hasOwnProperty(key)) tx.assign(s, key, value);
               });
           }
         }
