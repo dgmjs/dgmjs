@@ -813,6 +813,7 @@ class Canvas {
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         disableMultiStroke: this.strokePattern.length > 1,
+        preserveVertices: true,
       });
       roughDraw(this.context, rd);
     } else {
@@ -850,6 +851,7 @@ class Canvas {
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         disableMultiStroke: this.strokePattern.length > 1,
+        preserveVertices: true,
       });
       roughDraw(this.context, rd);
     } else {
@@ -1099,6 +1101,7 @@ class Canvas {
         strokeWidth: this.strokeWidth,
         strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
         disableMultiStroke: this.strokePattern.length > 1,
+        preserveVertices: true,
       });
       roughDraw(this.context, rd);
     } else {
@@ -1135,6 +1138,7 @@ class Canvas {
         fillLineDash: [],
         stroke: this.resolveColor("$transparent"),
         strokeWidth: this.strokeWidth,
+        preserveVertices: true,
       });
       roughDraw(this.context, rd);
     } else {
