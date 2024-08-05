@@ -90,7 +90,7 @@ export const TextPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
           <NumberField
             value={fontSize}
             onChange={(value) => onChange({ fontSize: value })}
-            className="w-20 h-8 items-center"
+            className="w-16 h-8 items-center"
             title="Font Size"
           />
           <DropdownMenu>

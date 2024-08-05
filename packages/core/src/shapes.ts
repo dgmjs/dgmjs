@@ -21,6 +21,7 @@ import { MemoizationCanvas } from "./graphics/memoization-canvas";
 import { hashStringToNumber } from "./std/id";
 import { themeColors } from "./colors";
 import { getAllViewport } from "./utils/shape-utils";
+import { renderVGElement, VGElement } from "./graphics/vector-graphic";
 
 export const ScriptType = {
   RENDER: "render",
@@ -1800,6 +1801,68 @@ export class Group extends Box {
 }
 
 /**
+ * VectorGraphic shape
+ */
+export class VectorGraphic extends Box {
+  viewWidth: number;
+  viewHeight: number;
+  data: VGElement[];
+
+  constructor() {
+    super();
+    this.type = "VectorGraphic";
+    this.viewWidth = 0;
+    this.viewHeight = 0;
+    this.data = [];
+  }
+
+  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
+    const json = super.toJSON(recursive, keepRefs);
+    json.viewWidth = this.viewWidth;
+    json.viewHeight = this.viewHeight;
+    json.data = structuredClone(this.data);
+    return json;
+  }
+
+  fromJSON(json: any) {
+    super.fromJSON(json);
+    this.viewWidth = json.viewWidth ?? this.viewWidth;
+    this.viewHeight = json.viewHeight ?? this.viewHeight;
+    this.data = json.data ?? this.data;
+  }
+
+  renderDefault(canvas: MemoizationCanvas): void {
+    const position = [this.left, this.top];
+    const scale = [this.width / this.viewWidth, this.height / this.viewHeight];
+    this.data.forEach((e) => {
+      renderVGElement(canvas, position, scale, e, this.getSeed());
+    });
+
+    // if (this.fillStyle !== FillStyle.NONE) {
+    //   canvas.fillRoundRect(
+    //     this.left,
+    //     this.top,
+    //     this.right,
+    //     this.bottom,
+    //     this.corners,
+    //     this.getSeed()
+    //   );
+    // }
+    // if (this.strokeWidth > 0) {
+    //   canvas.strokeRoundRect(
+    //     this.left,
+    //     this.top,
+    //     this.right,
+    //     this.bottom,
+    //     this.corners,
+    //     this.getSeed()
+    //   );
+    // }
+    // this.renderText(canvas);
+  }
+}
+
+/**
  * Line shape
  */
 export class Line extends Path {
@@ -2689,6 +2752,7 @@ export const shapeInstantiator = new Instantiator({
   Ellipse: () => new Ellipse(),
   Text: () => new Text(),
   Image: () => new Image(),
+  VectorGraphic: () => new VectorGraphic(),
   Connector: () => new Connector(),
   Freehand: () => new Freehand(),
   Highlighter: () => new Highlighter(),
@@ -2708,6 +2772,7 @@ export type ShapeProps = Partial<
     Ellipse &
     Text &
     Image &
+    VectorGraphic &
     Connector &
     Freehand &
     Highlighter &

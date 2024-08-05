@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { fileOpen } from "browser-fs-access";
+import { fileOpen, fileSave } from "browser-fs-access";
 import { useDemoStore } from "@/demo-store";
 import { ExportImageFormat, exportImageAsFile } from "@dgmjs/export";
 
@@ -48,6 +48,17 @@ export function Menus() {
     }
   };
 
+  const handleSaveCopy = async () => {
+    const content = JSON.stringify(window.editor.store.toJSON());
+    const blob = new Blob([content], { type: "application/json" });
+    try {
+      await fileSave(blob, { extensions: [".dgm"] });
+    } catch {
+      // user cancelled
+      return;
+    }
+  };
+
   const handleAddPage = () => {
     const page = window.editor.actions.addPage();
     window.editor.setCurrentPage(page);
@@ -83,6 +94,9 @@ export function Menus() {
         <DropdownMenuContent>
           <DropdownMenuItem onSelect={handleNew}>New</DropdownMenuItem>
           <DropdownMenuItem onSelect={handleOpen}>Open...</DropdownMenuItem>
+          <DropdownMenuItem onSelect={handleSaveCopy}>
+            Save copy...
+          </DropdownMenuItem>
           <DropdownMenuItem onSelect={handleExportImage}>
             Export Image
           </DropdownMenuItem>

@@ -14,6 +14,7 @@ import {
   Shape,
   Sizable,
   Text,
+  VectorGraphic,
   VertAlign,
 } from "./shapes";
 import { resizeImage } from "./utils/image-utils";
@@ -22,6 +23,7 @@ import { SHAPE_MIN_SIZE } from "./graphics/const";
 import { TypedEvent } from "./std/typed-event";
 import { convertStringToTextNode } from "./utils/text-utils";
 import { FillStyle } from "./graphics/graphics";
+import { VGElement } from "./graphics/vector-graphic";
 
 /**
  * Shape factory
@@ -256,6 +258,24 @@ export class ShapeFactory {
     highlighter.height = geometry.height(rect);
     this.onShapeInitialize.emit(highlighter);
     return highlighter;
+  }
+
+  createVectorGraphic(
+    rect: number[][],
+    viewWidth: number,
+    viewHeight: number,
+    data: VGElement[]
+  ): VectorGraphic {
+    const vectorGraphic = new VectorGraphic();
+    vectorGraphic.left = rect[0][0];
+    vectorGraphic.top = rect[0][1];
+    vectorGraphic.width = geometry.width(rect);
+    vectorGraphic.height = geometry.height(rect);
+    vectorGraphic.viewWidth = viewWidth;
+    vectorGraphic.viewHeight = viewHeight;
+    vectorGraphic.data = structuredClone(data);
+    this.onShapeInitialize.emit(vectorGraphic);
+    return vectorGraphic;
   }
 
   /**
