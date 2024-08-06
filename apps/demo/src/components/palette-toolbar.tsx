@@ -9,6 +9,7 @@ import {
   MousePointer2Icon,
   Pencil,
   ScanIcon,
+  SmileIcon,
   SquareCodeIcon,
   SquareIcon,
   TypeIcon,
@@ -96,8 +97,8 @@ export function PaletteToolbar() {
           <HighlighterIcon size={16} />
         </PaletteItem>
         <Separator orientation="vertical" className="dark:bg-gray-700 mx-0.5" />
-        <PaletteItem handlerId="VectorGraphic">
-          <SquareCodeIcon size={16} />
+        <PaletteItem handlerId="Icon">
+          <SmileIcon size={16} />
         </PaletteItem>
         <PaletteItem handlerId="Frame">
           <FrameIcon size={16} />

@@ -14,7 +14,7 @@ import {
   Shape,
   Sizable,
   Text,
-  VectorGraphic,
+  Icon,
   VertAlign,
 } from "./shapes";
 import { resizeImage } from "./utils/image-utils";
@@ -260,13 +260,13 @@ export class ShapeFactory {
     return highlighter;
   }
 
-  createVectorGraphic(
+  createIcon(
     rect: number[][],
     viewWidth: number,
     viewHeight: number,
     data: VGElement[]
-  ): VectorGraphic {
-    const vectorGraphic = new VectorGraphic();
+  ): Icon {
+    const vectorGraphic = new Icon();
     vectorGraphic.left = rect[0][0];
     vectorGraphic.top = rect[0][1];
     vectorGraphic.width = geometry.width(rect);

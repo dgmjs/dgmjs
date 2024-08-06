@@ -14,7 +14,7 @@ import {
   EraserHandler,
 } from "./handlers";
 import { FrameFactoryHandler } from "./handlers/frame-handler";
-import { VectorGraphicFactoryHandler } from "./handlers/vector-graphic-handler";
+import { IconFactoryHandler } from "./handlers/icon-handler";
 
 export function basicSetup(
   options?: Partial<EditorOptions>
@@ -32,7 +32,7 @@ export function basicSetup(
       new FreehandFactoryHandler("Freehand", { defaultLock: true }),
       new HighlighterFactoryHandler("Highlighter", { defaultLock: true }),
       new ImageFactoryHandler("Image", { defaultLock: false }),
-      new VectorGraphicFactoryHandler("VectorGraphic", { defaultLock: false }),
+      new IconFactoryHandler("Icon", { defaultLock: false }),
       new FrameFactoryHandler("Frame", { defaultLock: false }),
       new EmbedFactoryHandler("Embed", { defaultLock: false }),
     ],

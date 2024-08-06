@@ -1,5 +1,5 @@
 import React from "react";
-import { VectorGraphic } from "@dgmjs/core";
+import { Icon } from "@dgmjs/core";
 import { NumberField } from "./fields/number-field";
 import { Panel } from "../common/panel";
 import { Label } from "@/components/ui/label";
@@ -8,13 +8,10 @@ import { merge } from "@/utils";
 import { ShapeEditorProps } from "@/types";
 import { TextareaField } from "./fields/textarea-field";
 
-export const VectorGraphicPanel: React.FC<ShapeEditorProps> = ({
-  shapes,
-  onChange,
-}) => {
-  const viewWidth = merge(shapes.map((s) => (s as VectorGraphic).viewWidth));
-  const viewHeight = merge(shapes.map((s) => (s as VectorGraphic).viewHeight));
-  const data = merge(shapes.map((s) => (s as VectorGraphic).data));
+export const IconPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
+  const viewWidth = merge(shapes.map((s) => (s as Icon).viewWidth));
+  const viewHeight = merge(shapes.map((s) => (s as Icon).viewHeight));
+  const data = merge(shapes.map((s) => (s as Icon).data));
   const dataString = data ? JSON.stringify(data, null, 2) : "";
 
   return (

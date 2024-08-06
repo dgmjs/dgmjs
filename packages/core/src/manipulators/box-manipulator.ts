@@ -68,6 +68,6 @@ manipulatorManager.define("Rectangle", new BoxManipulator());
 manipulatorManager.define("Ellipse", new BoxManipulator());
 manipulatorManager.define("Image", new BoxManipulator());
 manipulatorManager.define("Frame", new BoxManipulator());
-manipulatorManager.define("VectorGraphic", new BoxManipulator());
+manipulatorManager.define("Icon", new BoxManipulator());
 
 export { BoxManipulator };

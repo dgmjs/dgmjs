@@ -6,9 +6,9 @@ import { Rectangle, Shape } from "../shapes";
 import { addShape, resolveAllConstraints } from "../macro";
 
 /**
- * VectorGraphic Factory Handler
+ * Icon Factory Handler
  */
-export class VectorGraphicFactoryHandler extends Handler {
+export class IconFactoryHandler extends Handler {
   dragging: boolean = false;
   dragStartPoint: number[] = [-1, -1];
   dragPoint: number[] = [-1, -1];
@@ -24,7 +24,7 @@ export class VectorGraphicFactoryHandler extends Handler {
   initialize(editor: Editor, e: CanvasPointerEvent): void {
     const page = editor.getCurrentPage();
     if (page) {
-      this.shape = editor.factory.createVectorGraphic(
+      this.shape = editor.factory.createIcon(
         [this.dragStartPoint, this.dragPoint],
         28,
         28,
