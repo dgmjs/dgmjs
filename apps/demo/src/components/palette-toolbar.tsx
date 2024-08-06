@@ -10,7 +10,6 @@ import {
   Pencil,
   ScanIcon,
   SmileIcon,
-  SquareCodeIcon,
   SquareIcon,
   TypeIcon,
 } from "lucide-react";
