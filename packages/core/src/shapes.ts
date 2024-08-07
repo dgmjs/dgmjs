@@ -21,6 +21,7 @@ import { MemoizationCanvas } from "./graphics/memoization-canvas";
 import { hashStringToNumber } from "./std/id";
 import { themeColors } from "./colors";
 import { getAllViewport } from "./utils/shape-utils";
+import { renderVGElement, VGElement } from "./graphics/vector-graphic";
 
 export const ScriptType = {
   RENDER: "render",
@@ -1800,6 +1801,56 @@ export class Group extends Box {
 }
 
 /**
+ * Icon shape
+ */
+export class Icon extends Box {
+  viewWidth: number;
+  viewHeight: number;
+  data: VGElement[];
+
+  constructor() {
+    super();
+    this.type = "Icon";
+    this.viewWidth = 0;
+    this.viewHeight = 0;
+    this.data = [];
+  }
+
+  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
+    const json = super.toJSON(recursive, keepRefs);
+    json.viewWidth = this.viewWidth;
+    json.viewHeight = this.viewHeight;
+    json.data = structuredClone(this.data);
+    return json;
+  }
+
+  fromJSON(json: any) {
+    super.fromJSON(json);
+    this.viewWidth = json.viewWidth ?? this.viewWidth;
+    this.viewHeight = json.viewHeight ?? this.viewHeight;
+    this.data = json.data ?? this.data;
+  }
+
+  /**
+   * Determines whether this shape contains a point in GCS
+   */
+  containsPoint(canvas: Canvas, point: number[]): boolean {
+    const outline = this.getOutline().map((p) =>
+      this.localCoordTransform(canvas, p, true)
+    );
+    return geometry.inPolygon(point, outline);
+  }
+
+  renderDefault(canvas: MemoizationCanvas): void {
+    const position = [this.left, this.top];
+    const scale = [this.width / this.viewWidth, this.height / this.viewHeight];
+    this.data.forEach((e) => {
+      renderVGElement(this, canvas, position, scale, e, this.getSeed());
+    });
+  }
+}
+
+/**
  * Line shape
  */
 export class Line extends Path {
@@ -2689,6 +2740,7 @@ export const shapeInstantiator = new Instantiator({
   Ellipse: () => new Ellipse(),
   Text: () => new Text(),
   Image: () => new Image(),
+  Icon: () => new Icon(),
   Connector: () => new Connector(),
   Freehand: () => new Freehand(),
   Highlighter: () => new Highlighter(),
@@ -2708,6 +2760,7 @@ export type ShapeProps = Partial<
     Ellipse &
     Text &
     Image &
+    Icon &
     Connector &
     Freehand &
     Highlighter &

@@ -9,6 +9,7 @@ import {
   MousePointer2Icon,
   Pencil,
   ScanIcon,
+  SmileIcon,
   SquareIcon,
   TypeIcon,
 } from "lucide-react";
@@ -34,6 +35,7 @@ function PaletteItem({ handlerId, children }: PaletteItemProps) {
   return (
     <Toggle
       size="sm"
+      title={handlerId}
       pressed={activeHandler === handlerId}
       onPressedChange={handleToggleChange}
       className="w-8 h-8 p-0 dark:hover:bg-slate-700"
@@ -94,6 +96,9 @@ export function PaletteToolbar() {
           <HighlighterIcon size={16} />
         </PaletteItem>
         <Separator orientation="vertical" className="dark:bg-gray-700 mx-0.5" />
+        <PaletteItem handlerId="Icon">
+          <SmileIcon size={16} />
+        </PaletteItem>
         <PaletteItem handlerId="Frame">
           <FrameIcon size={16} />
         </PaletteItem>

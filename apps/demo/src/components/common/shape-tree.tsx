@@ -10,6 +10,7 @@ import {
   PencilIcon,
   ScanIcon,
   ShapesIcon,
+  SmileIcon,
   SquareIcon,
   StickyNoteIcon,
   TypeIcon,
@@ -51,6 +52,7 @@ const ShapeTreeNode: React.FC<ShapeTreeNodeProps> = ({
             {shape.type === "Ellipse" && <CircleIcon size={16} />}
             {shape.type === "Text" && <TypeIcon size={16} />}
             {shape.type === "Group" && <GroupIcon size={16} />}
+            {shape.type === "Icon" && <SmileIcon size={16} />}
             {shape.type === "Connector" && <ConnectorIcon size={16} />}
             {shape.type === "Line" && <LineIcon size={16} />}
             {shape.type === "Freehand" && <PencilIcon size={16} />}
