@@ -9,7 +9,7 @@ import { FillPanel } from "./fill-panel";
 import { ControlPanel } from "./control-panel";
 import { StrokePanel } from "./stroke-panel";
 import { TagPanel } from "./tag-panel";
-import { Line, Box, Freehand, Doc } from "@dgmjs/core";
+import { Line, Box, Freehand, Doc, Icon } from "@dgmjs/core";
 import { LinePanel } from "./line-panel";
 import { Empty } from "../common/empty";
 import { PrototypePanel } from "./prototype-panel";
@@ -20,6 +20,7 @@ import { ShapeEditorProps } from "@/types";
 import { FreehandPanel } from "./freehand-panel";
 import { LinkPanel } from "./link-panel";
 import { ReferencePanel } from "./reference-panel";
+import { IconPanel } from "./icon-panel";
 
 export interface PropertySidebarProps extends ShapeEditorProps {
   doc: Doc;
@@ -57,6 +58,9 @@ export const PropertySidebar: React.FC<PropertySidebarProps> = ({
               )}
               {shapes.some((s) => s instanceof Line) && (
                 <LinePanel shapes={shapes} onChange={onChange} />
+              )}
+              {shapes.some((s) => s instanceof Icon) && (
+                <IconPanel shapes={shapes} onChange={onChange} />
               )}
               <AlignmentPanel shapes={shapes} onChange={onChange} />
             </ScrollArea>
