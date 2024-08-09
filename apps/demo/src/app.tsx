@@ -16,6 +16,12 @@ import { EditorWrapper } from "./editor";
 import { Button } from "./components/ui/button";
 import { collab, generateUserIdentity } from "./collab";
 import { SelectShapeDialog } from "./components/dialogs/select-shape-dialog";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "./components/ui/context-menu";
 
 declare global {
   interface Window {
@@ -136,29 +142,39 @@ function App() {
 
   return (
     <div className="absolute inset-0 h-[calc(100dvh)] select-none">
-      <EditorWrapper
-        className="absolute inset-y-0 left-56 right-56"
-        darkMode={demoStore.darkMode}
-        options={{
-          keymapEventTarget: window,
-          imageResize: {
-            quality: 1,
-            maxWidth: 2800,
-            maxHeight: 2800,
-          },
-        }}
-        plugins={[new YjsDocSyncPlugin(), new YjsUserPresencePlugin()]}
-        showGrid={true}
-        onMount={handleMount}
-        onShapeCreate={handleShapeCreate}
-        onSelectionChange={handleSelectionChange}
-        onCurrentPageChange={handleCurrentPageChange}
-        onActiveHandlerChange={handleActiveHandlerChange}
-        onActiveHandlerLockChange={(lock) =>
-          demoStore.setActiveHandlerLock(lock)
-        }
-        onAction={handleAction}
-      />
+      <ContextMenu>
+        <ContextMenuTrigger>
+          <EditorWrapper
+            className="absolute inset-y-0 left-56 right-56"
+            darkMode={demoStore.darkMode}
+            options={{
+              keymapEventTarget: window,
+              imageResize: {
+                quality: 1,
+                maxWidth: 2800,
+                maxHeight: 2800,
+              },
+            }}
+            plugins={[new YjsDocSyncPlugin(), new YjsUserPresencePlugin()]}
+            showGrid={true}
+            onMount={handleMount}
+            onShapeCreate={handleShapeCreate}
+            onSelectionChange={handleSelectionChange}
+            onCurrentPageChange={handleCurrentPageChange}
+            onActiveHandlerChange={handleActiveHandlerChange}
+            onActiveHandlerLockChange={(lock) =>
+              demoStore.setActiveHandlerLock(lock)
+            }
+            onAction={handleAction}
+          />
+        </ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuItem>Context Menu 1</ContextMenuItem>
+          <ContextMenuItem>Context Menu 2</ContextMenuItem>
+          <ContextMenuItem>Context Menu 3</ContextMenuItem>
+          <ContextMenuItem>Context Menu 4</ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
       <div className="absolute top-2 left-60 right-60 h-10 border flex items-center justify-between bg-background">
         <Menus />
         <Options />

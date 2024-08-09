@@ -45,6 +45,7 @@ export class SelectHandler extends Handler {
     const canvas = editor.canvas;
     const page = editor.getCurrentPage();
     editor.pointerDownUnselectedShape = false;
+
     if (e.button === Mouse.BUTTON1) {
       const shape = this.getShapeAt(editor, e);
       if (shape) {
@@ -73,8 +74,15 @@ export class SelectHandler extends Handler {
       }
     }
 
+    if (e.button === Mouse.BUTTON3) {
+      // repaint if mouse right click
+      editor.repaint(true);
+    } else {
+      // repaint without selection if mouse left click
+      editor.repaint(false);
+    }
+
     // delegates to manipulators
-    editor.repaint(false); // do not draw selections
     let cursor: [string, number] = [Cursor.DEFAULT, 0];
     if (page) {
       if (editor.selection.size() > 1) {
@@ -97,6 +105,7 @@ export class SelectHandler extends Handler {
         }
       }
     }
+
     if (Array.isArray(cursor) && cursor.length > 1) {
       editor.setCursor(cursor[0], cursor[1]);
     } else {
