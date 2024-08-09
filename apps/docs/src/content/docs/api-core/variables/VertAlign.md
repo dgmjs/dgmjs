@@ -23,4 +23,4 @@ title: "VertAlign"
 
 ## Source
 
-[shapes.ts:122](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L122)
+[shapes.ts:127](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L127)

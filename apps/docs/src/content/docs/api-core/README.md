@@ -35,6 +35,7 @@ title: "@dgmjs/core"
 - [Group](/api-core/classes/group/)
 - [Handler](/api-core/classes/handler/)
 - [Highlighter](/api-core/classes/highlighter/)
+- [Icon](/api-core/classes/icon/)
 - [Image](/api-core/classes/image/)
 - [InsertChildMutation](/api-core/classes/insertchildmutation/)
 - [KeymapManager](/api-core/classes/keymapmanager/)

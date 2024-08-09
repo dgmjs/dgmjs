@@ -13,7 +13,7 @@ title: "Script"
 
 #### Source
 
-[shapes.ts:47](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L47)
+[shapes.ts:52](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L52)
 
 ***
 
@@ -23,4 +23,4 @@ title: "Script"
 
 #### Source
 
-[shapes.ts:48](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L48)
+[shapes.ts:53](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L53)

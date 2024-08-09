@@ -23,4 +23,4 @@ A macro to reorder a page in doc
 
 ## Source
 
-[macro.ts:88](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L88)
+[macro.ts:90](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L90)

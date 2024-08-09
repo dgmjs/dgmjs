@@ -2,12 +2,12 @@
 editUrl: false
 next: false
 prev: false
-title: "deleteShapes"
+title: "groupShapes"
 ---
 
-> **deleteShapes**(`tx`, `doc`, `page`, `shapes`): `boolean`
+> **groupShapes**(`tx`, `doc`, `page`, `canvas`, `shapes`): `boolean`
 
-A macro to delete shapes
+A macro to create a group of shapes
 
 ## Parameters
 
@@ -17,6 +17,8 @@ A macro to delete shapes
 
 • **page**: [`Page`](/api-core/classes/page/)
 
+• **canvas**: [`Canvas`](/api-core/classes/canvas/)
+
 • **shapes**: [`Shape`](/api-core/classes/shape/)[]
 
 ## Returns
@@ -25,4 +27,4 @@ A macro to delete shapes
 
 ## Source
 
-[macro.ts:543](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L543)
+[macro.ts:559](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L559)

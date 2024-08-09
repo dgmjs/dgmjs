@@ -23,4 +23,4 @@ A macro to set right
 
 ## Source
 
-[macro.ts:140](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L140)
+[macro.ts:142](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L142)

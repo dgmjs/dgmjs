@@ -9,4 +9,4 @@ title: "MovableEnum"
 
 ## Source
 
-[shapes.ts:69](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L69)
+[shapes.ts:74](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L74)

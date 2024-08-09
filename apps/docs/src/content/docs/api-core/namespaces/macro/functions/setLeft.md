@@ -23,4 +23,4 @@ A macro to set left
 
 ## Source
 
-[macro.ts:126](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L126)
+[macro.ts:128](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L128)

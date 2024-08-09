@@ -27,7 +27,7 @@ Image
 
 #### Source
 
-[shapes.ts:1716](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1716)
+[shapes.ts:1721](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1721)
 
 ## Properties
 
@@ -43,7 +43,7 @@ Anchor angle (in degree)
 
 #### Source
 
-[shapes.ts:1187](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1187)
+[shapes.ts:1192](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1192)
 
 ***
 
@@ -59,7 +59,7 @@ Anchor length
 
 #### Source
 
-[shapes.ts:1192](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1192)
+[shapes.ts:1197](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1197)
 
 ***
 
@@ -75,7 +75,7 @@ Anchor position (0~1). 0 is on tail, 1 is on head
 
 #### Source
 
-[shapes.ts:1197](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1197)
+[shapes.ts:1202](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1202)
 
 ***
 
@@ -91,7 +91,7 @@ Anchored
 
 #### Source
 
-[shapes.ts:1182](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1182)
+[shapes.ts:1187](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1187)
 
 ***
 
@@ -121,7 +121,7 @@ Connectable flag
 
 #### Source
 
-[shapes.ts:199](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L199)
+[shapes.ts:204](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L204)
 
 ***
 
@@ -137,7 +137,7 @@ Shape's constraints
 
 #### Source
 
-[shapes.ts:299](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L299)
+[shapes.ts:304](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L304)
 
 ***
 
@@ -153,7 +153,7 @@ Containable flag
 
 #### Source
 
-[shapes.ts:189](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L189)
+[shapes.ts:194](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L194)
 
 ***
 
@@ -169,7 +169,7 @@ Containable filter
 
 #### Source
 
-[shapes.ts:194](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L194)
+[shapes.ts:199](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L199)
 
 ***
 
@@ -185,7 +185,7 @@ Corner radius [top-left, top-right, bottom-right, bottom-left] (same with CSS)
 
 #### Source
 
-[shapes.ts:1177](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1177)
+[shapes.ts:1182](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1182)
 
 ***
 
@@ -201,7 +201,7 @@ Description of the shape
 
 #### Source
 
-[shapes.ts:149](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L149)
+[shapes.ts:154](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L154)
 
 ***
 
@@ -217,7 +217,7 @@ Enable flag
 
 #### Source
 
-[shapes.ts:164](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L164)
+[shapes.ts:169](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L169)
 
 ***
 
@@ -233,7 +233,7 @@ Fill color
 
 #### Source
 
-[shapes.ts:244](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L244)
+[shapes.ts:249](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L249)
 
 ***
 
@@ -249,7 +249,7 @@ Fill style
 
 #### Source
 
-[shapes.ts:249](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L249)
+[shapes.ts:254](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L254)
 
 ***
 
@@ -265,7 +265,7 @@ Font color
 
 #### Source
 
-[shapes.ts:254](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L254)
+[shapes.ts:259](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L259)
 
 ***
 
@@ -281,7 +281,7 @@ Font family
 
 #### Source
 
-[shapes.ts:259](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L259)
+[shapes.ts:264](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L264)
 
 ***
 
@@ -297,7 +297,7 @@ Font size
 
 #### Source
 
-[shapes.ts:264](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L264)
+[shapes.ts:269](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L269)
 
 ***
 
@@ -313,7 +313,7 @@ Font style
 
 #### Source
 
-[shapes.ts:269](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L269)
+[shapes.ts:274](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L274)
 
 ***
 
@@ -329,7 +329,7 @@ Font weight
 
 #### Source
 
-[shapes.ts:274](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L274)
+[shapes.ts:279](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L279)
 
 ***
 
@@ -345,7 +345,7 @@ Shape's height
 
 #### Source
 
-[shapes.ts:219](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L219)
+[shapes.ts:224](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L224)
 
 ***
 
@@ -361,7 +361,7 @@ Text horizontal alignment
 
 #### Source
 
-[shapes.ts:1242](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1242)
+[shapes.ts:1247](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1247)
 
 ***
 
@@ -385,7 +385,7 @@ Text horizontal alignment
 
 #### Source
 
-[shapes.ts:1707](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1707)
+[shapes.ts:1712](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1712)
 
 ***
 
@@ -395,7 +395,7 @@ Text horizontal alignment
 
 #### Source
 
-[shapes.ts:1709](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1709)
+[shapes.ts:1714](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1714)
 
 ***
 
@@ -405,7 +405,7 @@ Text horizontal alignment
 
 #### Source
 
-[shapes.ts:1708](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1708)
+[shapes.ts:1713](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1713)
 
 ***
 
@@ -421,7 +421,7 @@ Shape's left position
 
 #### Source
 
-[shapes.ts:204](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L204)
+[shapes.ts:209](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L209)
 
 ***
 
@@ -437,7 +437,7 @@ Text line height
 
 #### Source
 
-[shapes.ts:1252](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1252)
+[shapes.ts:1257](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1257)
 
 ***
 
@@ -453,7 +453,7 @@ Link
 
 #### Source
 
-[shapes.ts:289](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L289)
+[shapes.ts:294](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L294)
 
 ***
 
@@ -469,7 +469,7 @@ Indicate how this shape can be moved
 
 #### Source
 
-[shapes.ts:174](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L174)
+[shapes.ts:179](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L179)
 
 ***
 
@@ -485,7 +485,7 @@ Name of the shape
 
 #### Source
 
-[shapes.ts:144](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L144)
+[shapes.ts:149](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L149)
 
 ***
 
@@ -501,7 +501,7 @@ Opacity
 
 #### Source
 
-[shapes.ts:279](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L279)
+[shapes.ts:284](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L284)
 
 ***
 
@@ -517,7 +517,7 @@ Padding spaces [top, right, bottom, left] (same with CSS)
 
 #### Source
 
-[shapes.ts:1172](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1172)
+[shapes.ts:1177](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1177)
 
 ***
 
@@ -533,7 +533,7 @@ Text paragraph spacing
 
 #### Source
 
-[shapes.ts:1257](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1257)
+[shapes.ts:1262](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1262)
 
 ***
 
@@ -563,7 +563,7 @@ Shape's properties
 
 #### Source
 
-[shapes.ts:304](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L304)
+[shapes.ts:309](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L309)
 
 ***
 
@@ -579,7 +579,7 @@ The flag to indicate this shape is a prototype or not
 
 #### Source
 
-[shapes.ts:154](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L154)
+[shapes.ts:159](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L159)
 
 ***
 
@@ -595,7 +595,7 @@ A reference to shape
 
 #### Source
 
-[shapes.ts:294](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L294)
+[shapes.ts:299](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L299)
 
 ***
 
@@ -611,7 +611,7 @@ Rotatable flag
 
 #### Source
 
-[shapes.ts:184](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L184)
+[shapes.ts:189](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L189)
 
 ***
 
@@ -627,7 +627,7 @@ Shape's rotation angle (in degree)
 
 #### Source
 
-[shapes.ts:224](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L224)
+[shapes.ts:229](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L229)
 
 ***
 
@@ -643,7 +643,7 @@ Roughness
 
 #### Source
 
-[shapes.ts:284](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L284)
+[shapes.ts:289](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L289)
 
 ***
 
@@ -659,7 +659,7 @@ Shape's scripts
 
 #### Source
 
-[shapes.ts:309](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L309)
+[shapes.ts:314](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L314)
 
 ***
 
@@ -675,7 +675,7 @@ Indicate how this shape can be resized
 
 #### Source
 
-[shapes.ts:179](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L179)
+[shapes.ts:184](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L184)
 
 ***
 
@@ -691,7 +691,7 @@ Stroke color
 
 #### Source
 
-[shapes.ts:229](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L229)
+[shapes.ts:234](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L234)
 
 ***
 
@@ -707,7 +707,7 @@ Stroke pattern
 
 #### Source
 
-[shapes.ts:239](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L239)
+[shapes.ts:244](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L244)
 
 ***
 
@@ -723,7 +723,7 @@ Stroke width
 
 #### Source
 
-[shapes.ts:234](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L234)
+[shapes.ts:239](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L239)
 
 ***
 
@@ -739,7 +739,7 @@ Tags
 
 #### Source
 
-[shapes.ts:159](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L159)
+[shapes.ts:164](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L164)
 
 ***
 
@@ -780,7 +780,7 @@ Rich text document content (this.text) look like:
 
 #### Source
 
-[shapes.ts:1232](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1232)
+[shapes.ts:1237](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1237)
 
 ***
 
@@ -796,7 +796,7 @@ Text editable
 
 #### Source
 
-[shapes.ts:1202](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1202)
+[shapes.ts:1207](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1207)
 
 ***
 
@@ -812,7 +812,7 @@ Shape's top position
 
 #### Source
 
-[shapes.ts:209](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L209)
+[shapes.ts:214](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L214)
 
 ***
 
@@ -842,7 +842,7 @@ Text vertical alignment
 
 #### Source
 
-[shapes.ts:1247](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1247)
+[shapes.ts:1252](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1252)
 
 ***
 
@@ -858,7 +858,7 @@ Visible flag
 
 #### Source
 
-[shapes.ts:169](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L169)
+[shapes.ts:174](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L174)
 
 ***
 
@@ -874,7 +874,7 @@ Shape's width
 
 #### Source
 
-[shapes.ts:214](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L214)
+[shapes.ts:219](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L219)
 
 ***
 
@@ -890,7 +890,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:1237](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1237)
+[shapes.ts:1242](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1242)
 
 ## Accessors
 
@@ -904,7 +904,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:482](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L482)
+[shapes.ts:487](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L487)
 
 ***
 
@@ -918,7 +918,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:1333](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1333)
+[shapes.ts:1338](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1338)
 
 ***
 
@@ -932,7 +932,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:1341](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1341)
+[shapes.ts:1346](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1346)
 
 ***
 
@@ -946,7 +946,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:1321](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1321)
+[shapes.ts:1326](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1326)
 
 ***
 
@@ -960,7 +960,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:1325](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1325)
+[shapes.ts:1330](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1330)
 
 ***
 
@@ -974,7 +974,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:1329](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1329)
+[shapes.ts:1334](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1334)
 
 ***
 
@@ -988,7 +988,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:1337](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1337)
+[shapes.ts:1342](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1342)
 
 ***
 
@@ -1002,7 +1002,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:478](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L478)
+[shapes.ts:483](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L483)
 
 ## Methods
 
@@ -1026,7 +1026,7 @@ Assign styles to memoization canvas.
 
 #### Source
 
-[shapes.ts:560](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L560)
+[shapes.ts:565](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L565)
 
 ***
 
@@ -1050,7 +1050,7 @@ Determine a given shape can be contained in this shape
 
 #### Source
 
-[shapes.ts:994](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L994)
+[shapes.ts:999](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L999)
 
 ***
 
@@ -1068,7 +1068,7 @@ Determine a given shape can be contained in this shape
 
 #### Source
 
-[shapes.ts:550](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L550)
+[shapes.ts:555](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L555)
 
 ***
 
@@ -1094,7 +1094,7 @@ Determines whether this shape contains a point in GCS
 
 #### Source
 
-[shapes.ts:854](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L854)
+[shapes.ts:859](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L859)
 
 ***
 
@@ -1124,7 +1124,7 @@ Render vs Draw
 
 #### Source
 
-[shapes.ts:697](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L697)
+[shapes.ts:702](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L702)
 
 ***
 
@@ -1150,7 +1150,7 @@ Draw link
 
 #### Source
 
-[shapes.ts:711](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L711)
+[shapes.ts:716](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L716)
 
 ***
 
@@ -1174,7 +1174,7 @@ Finalize shape
 
 #### Source
 
-[shapes.ts:499](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L499)
+[shapes.ts:504](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L504)
 
 ***
 
@@ -1222,7 +1222,7 @@ Find all shapes matched with the query string
 
 #### Source
 
-[shapes.ts:984](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L984)
+[shapes.ts:989](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L989)
 
 ***
 
@@ -1246,7 +1246,7 @@ Find a shape first matched with the query string
 
 #### Source
 
-[shapes.ts:971](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L971)
+[shapes.ts:976](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L976)
 
 ***
 
@@ -1318,7 +1318,7 @@ Import shape from JSON
 
 #### Source
 
-[shapes.ts:1734](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1734)
+[shapes.ts:1739](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1739)
 
 ***
 
@@ -1353,7 +1353,7 @@ will be rotated as the angle of (base angle + anchor angle) at start point.
 
 #### Source
 
-[shapes.ts:1500](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1500)
+[shapes.ts:1505](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1505)
 
 ***
 
@@ -1377,7 +1377,7 @@ Return a bounding rect.
 
 #### Source
 
-[shapes.ts:758](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L758)
+[shapes.ts:763](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L763)
 
 ***
 
@@ -1397,7 +1397,7 @@ Returns the center point
 
 #### Source
 
-[shapes.ts:751](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L751)
+[shapes.ts:756](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L756)
 
 ***
 
@@ -1417,7 +1417,7 @@ Return a bounding box embracing children shapes
 
 #### Source
 
-[shapes.ts:807](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L807)
+[shapes.ts:812](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L812)
 
 ***
 
@@ -1437,7 +1437,7 @@ Return a enclosure
 
 #### Source
 
-[shapes.ts:841](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L841)
+[shapes.ts:846](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L846)
 
 ***
 
@@ -1457,7 +1457,7 @@ Return outline polygon.
 
 #### Source
 
-[shapes.ts:686](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L686)
+[shapes.ts:691](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L691)
 
 ***
 
@@ -1481,7 +1481,7 @@ Get a property object
 
 #### Source
 
-[shapes.ts:1006](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1006)
+[shapes.ts:1011](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1011)
 
 ***
 
@@ -1505,7 +1505,7 @@ Get a property value
 
 #### Source
 
-[shapes.ts:1016](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1016)
+[shapes.ts:1021](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1021)
 
 ***
 
@@ -1534,7 +1534,7 @@ and don't forget to apply transform scale to the DOM element.
 
 #### Source
 
-[shapes.ts:820](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L820)
+[shapes.ts:825](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L825)
 
 ***
 
@@ -1558,7 +1558,7 @@ Get a property object
 
 #### Source
 
-[shapes.ts:1024](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1024)
+[shapes.ts:1029](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1029)
 
 ***
 
@@ -1576,7 +1576,7 @@ Get a property object
 
 #### Source
 
-[shapes.ts:486](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L486)
+[shapes.ts:491](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L491)
 
 ***
 
@@ -1604,7 +1604,7 @@ Pick a shape at specific position (x, y)
 
 #### Source
 
-[shapes.ts:519](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L519)
+[shapes.ts:524](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L524)
 
 ***
 
@@ -1631,7 +1631,7 @@ bounding rect.
 
 #### Source
 
-[shapes.ts:800](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L800)
+[shapes.ts:805](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L805)
 
 ***
 
@@ -1655,7 +1655,7 @@ Initialize shape
 
 #### Source
 
-[shapes.ts:494](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L494)
+[shapes.ts:499](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L499)
 
 ***
 
@@ -1708,7 +1708,7 @@ if recursive=true, transform to GCS (Global coord-system).
 
 #### Source
 
-[shapes.ts:596](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L596)
+[shapes.ts:601](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L601)
 
 ***
 
@@ -1737,7 +1737,7 @@ if recursive=true, transform GCS (Global coord-system) --> LCS.
 
 #### Source
 
-[shapes.ts:616](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L616)
+[shapes.ts:621](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L621)
 
 ***
 
@@ -1763,7 +1763,7 @@ Transform local context to parent's context
 
 #### Source
 
-[shapes.ts:580](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L580)
+[shapes.ts:585](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L585)
 
 ***
 
@@ -1787,7 +1787,7 @@ Returns true if query matches this shape
 
 #### Source
 
-[shapes.ts:946](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L946)
+[shapes.ts:951](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L951)
 
 ***
 
@@ -1816,7 +1816,7 @@ clipping area. (e.g. Frame)
 
 #### Source
 
-[shapes.ts:877](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L877)
+[shapes.ts:882](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L882)
 
 ***
 
@@ -1842,7 +1842,7 @@ Determines whether this shape overlaps a given rect
 
 #### Source
 
-[shapes.ts:884](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L884)
+[shapes.ts:889](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L889)
 
 ***
 
@@ -1879,7 +1879,7 @@ query object
 
 #### Source
 
-[shapes.ts:921](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L921)
+[shapes.ts:926](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L926)
 
 ***
 
@@ -1922,7 +1922,7 @@ Preprocessed document content grammar (BNF):
 
 #### Source
 
-[shapes.ts:1394](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1394)
+[shapes.ts:1399](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1399)
 
 ***
 
@@ -1950,7 +1950,7 @@ Render vs Draw
 
 #### Source
 
-[shapes.ts:639](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L639)
+[shapes.ts:644](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L644)
 
 ***
 
@@ -1974,7 +1974,7 @@ Default render this shape
 
 #### Source
 
-[shapes.ts:1741](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1741)
+[shapes.ts:1746](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1746)
 
 ***
 
@@ -1998,7 +1998,7 @@ Render this shape's outline
 
 #### Source
 
-[shapes.ts:663](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L663)
+[shapes.ts:668](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L668)
 
 ***
 
@@ -2022,7 +2022,7 @@ Return outline polygon
 
 #### Source
 
-[shapes.ts:1475](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1475)
+[shapes.ts:1480](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1480)
 
 ***
 
@@ -2044,7 +2044,7 @@ Return outline polygon
 
 #### Source
 
-[shapes.ts:1369](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1369)
+[shapes.ts:1374](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1374)
 
 ***
 
@@ -2068,7 +2068,7 @@ Return this shape's viewport
 
 #### Source
 
-[shapes.ts:768](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L768)
+[shapes.ts:773](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L773)
 
 ***
 
@@ -2092,7 +2092,7 @@ Render default viewport
 
 #### Source
 
-[shapes.ts:784](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L784)
+[shapes.ts:789](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L789)
 
 ***
 
@@ -2122,7 +2122,7 @@ assign null if not found
 
 #### Source
 
-[shapes.ts:467](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L467)
+[shapes.ts:472](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L472)
 
 ***
 
@@ -2148,7 +2148,7 @@ Export shape to JSON
 
 #### Source
 
-[shapes.ts:1726](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1726)
+[shapes.ts:1731](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1731)
 
 ***
 
@@ -2264,7 +2264,7 @@ Update shape
 
 #### Source
 
-[shapes.ts:509](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L509)
+[shapes.ts:514](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L514)
 
 ***
 
@@ -2292,7 +2292,7 @@ is that each shape determine visit into children or not.
 
 #### Source
 
-[shapes.ts:539](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L539)
+[shapes.ts:544](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L544)
 
 ***
 
@@ -2320,4 +2320,4 @@ Compute size of text with word-wrap and new line chars
 
 #### Source
 
-[shapes.ts:1399](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1399)
+[shapes.ts:1404](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1404)
