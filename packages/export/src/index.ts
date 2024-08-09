@@ -1,4 +1,4 @@
-import { Page, Canvas, geometry, themeColors } from "@dgmjs/core";
+import { Page, Canvas, geometry, themeColors, Shape } from "@dgmjs/core";
 import fileSaverPkg from "file-saver";
 import { Context } from "svgcanvas";
 const { saveAs } = fileSaverPkg;
@@ -15,11 +15,17 @@ type ExportImageOptions = {
 };
 
 /**
- * Create and return a new canvas element with document rendered
+ * Create and return a new canvas element with the given shapes drawn.
+ * @param canvas - The editor's canvas
+ * @param page - The page to draw.
+ * @param shapes - The shapes to draw in the page. If empty, render all shapes in the page.
+ * @param options - The options for drawing.
+ * @returns The new canvas element with the shapes drawn.
  */
 function getImageCanvas(
   canvas: Canvas,
   page: Page,
+  shapes: Shape[],
   options: ExportImageOptions
 ): HTMLCanvasElement {
   const { scale, dark, fillBackground } = options;
@@ -29,7 +35,7 @@ function getImageCanvas(
   // make a new canvas element for making image data
   const newCanvasElement = document.createElement("canvas");
   const newCanvas = new Canvas(newCanvasElement, scale);
-  let boundingBox = page.getViewport(newCanvas);
+  let boundingBox = page.getViewport(newCanvas, shapes);
 
   // initialize new canvas
   boundingBox = geometry.expandRect(boundingBox, DEFAULT_MARGIN);
@@ -57,7 +63,7 @@ function getImageCanvas(
 
   // update and draw page to the new canvas
   page.update(newCanvas);
-  page.draw(newCanvas);
+  page.draw(newCanvas, false, shapes);
 
   // update page to (existing) canvas
   page.update(canvas);
@@ -65,14 +71,20 @@ function getImageCanvas(
 }
 
 /**
- * Get Base64-encoded image data of doc
+ * Get Base64-encoded image data of the given page.
+ * @param canvas - The editor's canvas
+ * @param page - The page to draw.
+ * @param shapes - The shapes to draw in the page. If empty, render all shapes in the page.
+ * @param options - The options for drawing.
+ * @returns The Base64-encoded image data of the shapes.
  */
 async function getImageDataUrl(
   canvas: Canvas,
   page: Page,
+  shapes: Shape[],
   options: Partial<ExportImageOptions>
 ): Promise<string> {
-  const canvasElement = getImageCanvas(canvas, page, {
+  const canvasElement = getImageCanvas(canvas, page, shapes, {
     scale: 1,
     dark: false,
     fillBackground: true,
@@ -83,14 +95,20 @@ async function getImageDataUrl(
 }
 
 /**
- * Get Blob image data of doc
+ * Get the blob image data of the given shapes.
+ * @param canvas - The editor's canvas
+ * @param page - The page to draw.
+ * @param shapes - The shapes to draw in the page. If empty, render all shapes in the page.
+ * @param options - The options for drawing.
+ * @returns The blob image data of the shapes.
  */
 async function getImageBlob(
   canvas: Canvas,
   page: Page,
+  shapes: Shape[],
   options: Partial<ExportImageOptions>
 ): Promise<Blob | null> {
-  const canvasElement = getImageCanvas(canvas, page, {
+  const canvasElement = getImageCanvas(canvas, page, shapes, {
     scale: 1,
     dark: false,
     fillBackground: true,
@@ -105,11 +123,18 @@ async function getImageBlob(
 }
 
 /**
- * Get SVG image data of doc
+ * Get SVG image data of the given shapes.
+ * @param canvas - The editor's canvas
+ * @param page - The page to draw.
+ * @param shapes - The shapes to draw in the page. If empty, render all shapes in the page.
+ * @param options - The options for drawing.
+ * @param styleInSVG - The style to be included in the SVG data.
+ * @returns The SVG image data of the shapes.
  */
 async function getSVGImageData(
   canvas: Canvas,
   page: Page,
+  shapes: Shape[],
   options: Partial<ExportImageOptions>,
   styleInSVG?: string
 ): Promise<string> {
@@ -124,7 +149,10 @@ async function getSVGImageData(
   const colorVariables = themeColors[theme];
 
   // Make a new SVG canvas for making SVG image data
-  const boundingBox = geometry.expandRect(page.getViewport(canvas), margin);
+  const boundingBox = geometry.expandRect(
+    page.getViewport(canvas, shapes),
+    margin
+  );
   const w = geometry.width(boundingBox);
   const h = geometry.height(boundingBox);
   const ctx = new Context(w * scale, h * scale);
@@ -151,7 +179,7 @@ async function getSVGImageData(
 
   // update and draw page to the new canvas
   page.update(svgCanvas);
-  page.draw(svgCanvas);
+  page.draw(svgCanvas, false, shapes);
 
   // TODO: add fonts in defs (temporal impls)
   const svg: SVGSVGElement = ctx.getSvg();
@@ -173,25 +201,38 @@ async function getSVGImageData(
 }
 
 /**
- * Export doc image as a file
+ * Export the image of the given shapes to a file
+ * @param canvas - The editor's canvas
+ * @param page - The page to draw.
+ * @param shapes - The shapes to draw in the page. If empty, render all shapes in the page.
+ * @param fileName - The name of the file to save.
+ * @param options - The options for drawing.
+ * @param styleInSVG - The style to be included in the SVG data.
  */
 async function exportImageAsFile(
   canvas: Canvas,
   page: Page,
+  shapes: Shape[],
   fileName: string,
   options: Partial<ExportImageOptions>,
   styleInSVG?: string
 ) {
   switch (options.format) {
     case "image/png": {
-      const data = await getImageBlob(canvas, page, options);
+      const data = await getImageBlob(canvas, page, shapes, options);
       if (data) {
         saveAs(data, fileName);
       }
       break;
     }
     case "image/svg+xml": {
-      const data = await getSVGImageData(canvas, page, options, styleInSVG);
+      const data = await getSVGImageData(
+        canvas,
+        page,
+        shapes,
+        options,
+        styleInSVG
+      );
       if (data) {
         const blob = new Blob([data], { type: "image/svg+xml" });
         saveAs(blob, fileName);
@@ -202,16 +243,22 @@ async function exportImageAsFile(
 }
 
 /**
- * Copy page image to clipboard
+ * Copy page image of the given shapes to clipboard
+ * @param canvas - The editor's canvas
+ * @param page - The page to draw.
+ * @param shapes - The shapes to draw in the page. If empty, render all shapes in the page.
+ * @param options - The options for drawing.
+ * @param styleInSVG - The style to be included in the SVG data.
  */
 async function copyToClipboard(
   canvas: Canvas,
   page: Page,
+  shapes: Shape[],
   options: Partial<ExportImageOptions>
 ) {
   switch (options.format) {
     case "image/png": {
-      const data = await getImageBlob(canvas, page, options);
+      const data = await getImageBlob(canvas, page, shapes, options);
       if (data) {
         navigator.clipboard.write([
           new ClipboardItem({

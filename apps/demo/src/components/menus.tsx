@@ -70,6 +70,7 @@ export function Menus() {
    */
   const handleExportImage = async () => {
     const page = window.editor.getCurrentPage()!;
+    const shapes = window.editor.selection.getShapes() ?? [];
     const exportOptions = {
       scale: 1,
       dark: darkMode,
@@ -80,7 +81,13 @@ export function Menus() {
     const fileName = `${name}.${
       exportOptions.format === "image/png" ? "png" : "svg"
     }`;
-    exportImageAsFile(window.editor.canvas, page, fileName, exportOptions);
+    exportImageAsFile(
+      window.editor.canvas,
+      page,
+      shapes,
+      fileName,
+      exportOptions
+    );
   };
 
   return (

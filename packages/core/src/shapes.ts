@@ -1111,13 +1111,17 @@ export class Page extends Shape {
   }
 
   /**
-   * Render this shape
+   * Render the page. If shapes are given, render only the given shapes.
    */
-  draw(canvas: Canvas, showDOM: boolean = false) {
+  draw(canvas: Canvas, showDOM: boolean = false, shapes: Shape[] = []) {
     if (this.visible) {
       canvas.save();
       canvas.globalTransform();
-      this.children.forEach((s) => (s as Shape).draw(canvas, showDOM));
+      if (shapes.length > 0) {
+        shapes.forEach((s) => (s as Shape).draw(canvas, showDOM));
+      } else {
+        this.children.forEach((s) => (s as Shape).draw(canvas, showDOM));
+      }
       canvas.restore();
     }
   }
@@ -1138,18 +1142,25 @@ export class Page extends Shape {
   }
 
   /**
-   * Return the page's viewport in GCS
+   * Return the viewport of the given shapes in the page in GCS.
+   * If shapes are not given, return the viewport of all shapes in the page.
    */
-  getViewport(canvas: Canvas): number[][] {
-    return this.children.length > 0
-      ? this.traverseSequence()
-          .filter((s) => s !== this)
-          .map((s) => (s as Shape).getViewport(canvas))
-          .reduce(geometry.unionRect)
-      : [
-          [0, 0],
-          [0, 0],
-        ];
+  getViewport(canvas: Canvas, shapes?: Shape[]): number[][] {
+    if (shapes && shapes.length > 0) {
+      return shapes
+        .map((s) => (s as Shape).getViewport(canvas))
+        .reduce(geometry.unionRect);
+    } else {
+      return this.children.length > 0
+        ? this.traverseSequence()
+            .filter((s) => s !== this)
+            .map((s) => (s as Shape).getViewport(canvas))
+            .reduce(geometry.unionRect)
+        : [
+            [0, 0],
+            [0, 0],
+          ];
+    }
   }
 
   /**
