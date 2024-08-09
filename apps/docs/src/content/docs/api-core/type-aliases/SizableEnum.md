@@ -9,4 +9,4 @@ title: "SizableEnum"
 
 ## Source
 
-[shapes.ts:79](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L79)
+[shapes.ts:84](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L84)

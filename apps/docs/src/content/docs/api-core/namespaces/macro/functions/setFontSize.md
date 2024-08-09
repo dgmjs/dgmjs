@@ -23,4 +23,4 @@ A macro to change font size
 
 ## Source
 
-[macro.ts:329](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L329)
+[macro.ts:331](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L331)

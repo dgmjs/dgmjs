@@ -28,7 +28,7 @@ Note:
 
 #### Source
 
-[core/transaction.ts:316](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L316)
+[core/transaction.ts:317](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L317)
 
 ## Properties
 
@@ -39,6 +39,16 @@ Note:
 #### Source
 
 [core/transaction.ts:314](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L314)
+
+***
+
+### recentlyAppendedObj
+
+> **recentlyAppendedObj**: `null` \| [`Obj`](/api-core/classes/obj/)
+
+#### Source
+
+[core/transaction.ts:315](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L315)
 
 ***
 
@@ -68,7 +78,7 @@ Atomic mutation to append an obj and returns true if changed
 
 #### Source
 
-[core/transaction.ts:354](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L354)
+[core/transaction.ts:356](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L356)
 
 ***
 
@@ -84,7 +94,7 @@ Apply transaction
 
 #### Source
 
-[core/transaction.ts:332](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L332)
+[core/transaction.ts:334](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L334)
 
 ***
 
@@ -108,7 +118,7 @@ Assign a value to shape's field and returns true if changed
 
 #### Source
 
-[core/transaction.ts:380](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L380)
+[core/transaction.ts:383](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L383)
 
 ***
 
@@ -132,7 +142,7 @@ Assign a ref to shape's field and returns true if changed
 
 #### Source
 
-[core/transaction.ts:403](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L403)
+[core/transaction.ts:406](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L406)
 
 ***
 
@@ -152,7 +162,7 @@ Atomic mutation to delete an obj and returns true if changed
 
 #### Source
 
-[core/transaction.ts:367](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L367)
+[core/transaction.ts:370](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L370)
 
 ***
 
@@ -176,7 +186,7 @@ Insert a child and returns true if changed
 
 #### Source
 
-[core/transaction.ts:426](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L426)
+[core/transaction.ts:429](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L429)
 
 ***
 
@@ -194,7 +204,7 @@ Insert a child and returns true if changed
 
 #### Source
 
-[core/transaction.ts:321](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L321)
+[core/transaction.ts:323](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L323)
 
 ***
 
@@ -216,7 +226,7 @@ Remove a child and returns true if changed
 
 #### Source
 
-[core/transaction.ts:439](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L439)
+[core/transaction.ts:442](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L442)
 
 ***
 
@@ -240,7 +250,7 @@ Reorder a child and returns true if changed
 
 #### Source
 
-[core/transaction.ts:452](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L452)
+[core/transaction.ts:455](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L455)
 
 ***
 
@@ -254,7 +264,7 @@ Reorder a child and returns true if changed
 
 #### Source
 
-[core/transaction.ts:325](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L325)
+[core/transaction.ts:327](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L327)
 
 ***
 
@@ -270,4 +280,4 @@ Unapply transaction
 
 #### Source
 
-[core/transaction.ts:343](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L343)
+[core/transaction.ts:345](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L345)

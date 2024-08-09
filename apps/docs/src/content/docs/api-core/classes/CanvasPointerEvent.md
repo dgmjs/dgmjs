@@ -39,7 +39,7 @@ CanvasPointerEvent
 
 #### Source
 
-[graphics/graphics.ts:1407](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1407)
+[graphics/graphics.ts:1412](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1412)
 
 ## Properties
 
@@ -49,7 +49,7 @@ CanvasPointerEvent
 
 #### Source
 
-[graphics/graphics.ts:1403](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1403)
+[graphics/graphics.ts:1408](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1408)
 
 ***
 
@@ -59,7 +59,7 @@ CanvasPointerEvent
 
 #### Source
 
-[graphics/graphics.ts:1401](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1401)
+[graphics/graphics.ts:1406](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1406)
 
 ***
 
@@ -69,7 +69,7 @@ CanvasPointerEvent
 
 #### Source
 
-[graphics/graphics.ts:1399](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1399)
+[graphics/graphics.ts:1404](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1404)
 
 ***
 
@@ -79,7 +79,7 @@ CanvasPointerEvent
 
 #### Source
 
-[graphics/graphics.ts:1402](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1402)
+[graphics/graphics.ts:1407](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1407)
 
 ***
 
@@ -89,7 +89,7 @@ CanvasPointerEvent
 
 #### Source
 
-[graphics/graphics.ts:1404](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1404)
+[graphics/graphics.ts:1409](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1409)
 
 ***
 
@@ -99,7 +99,7 @@ CanvasPointerEvent
 
 #### Source
 
-[graphics/graphics.ts:1400](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1400)
+[graphics/graphics.ts:1405](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1405)
 
 ***
 
@@ -109,7 +109,7 @@ CanvasPointerEvent
 
 #### Source
 
-[graphics/graphics.ts:1405](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1405)
+[graphics/graphics.ts:1410](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1410)
 
 ***
 
@@ -121,7 +121,7 @@ X-position in CCS (Canvas coord-system)
 
 #### Source
 
-[graphics/graphics.ts:1392](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1392)
+[graphics/graphics.ts:1397](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1397)
 
 ***
 
@@ -133,4 +133,4 @@ Y-position in CCS (Canvas coord-system)
 
 #### Source
 
-[graphics/graphics.ts:1397](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1397)
+[graphics/graphics.ts:1402](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1402)

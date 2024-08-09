@@ -23,4 +23,4 @@ title: "HorzAlign"
 
 ## Source
 
-[shapes.ts:114](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L114)
+[shapes.ts:119](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L119)

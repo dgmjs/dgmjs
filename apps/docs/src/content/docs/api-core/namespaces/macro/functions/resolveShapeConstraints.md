@@ -25,4 +25,4 @@ A macro to resolve a shape's constraints
 
 ## Source
 
-[macro.ts:613](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L613)
+[macro.ts:674](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L674)

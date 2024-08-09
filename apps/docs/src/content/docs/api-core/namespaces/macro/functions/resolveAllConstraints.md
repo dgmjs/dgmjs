@@ -25,4 +25,4 @@ A macro to resolve all constraints
 
 ## Source
 
-[macro.ts:634](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L634)
+[macro.ts:695](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L695)

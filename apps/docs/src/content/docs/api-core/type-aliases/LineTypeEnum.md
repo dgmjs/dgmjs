@@ -9,4 +9,4 @@ title: "LineTypeEnum"
 
 ## Source
 
-[shapes.ts:86](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L86)
+[shapes.ts:91](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L91)

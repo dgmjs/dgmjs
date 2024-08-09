@@ -9,4 +9,4 @@ title: "HorzAlignEnum"
 
 ## Source
 
-[shapes.ts:120](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L120)
+[shapes.ts:125](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L125)
