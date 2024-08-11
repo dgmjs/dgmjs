@@ -21,6 +21,7 @@ import { FreehandPanel } from "./freehand-panel";
 import { LinkPanel } from "./link-panel";
 import { ReferencePanel } from "./reference-panel";
 import { IconPanel } from "./icon-panel";
+import { ShadowPanel } from "./shadow-panel";
 
 export interface PropertySidebarProps extends ShapeEditorProps {
   doc: Doc;
@@ -62,6 +63,7 @@ export const PropertySidebar: React.FC<PropertySidebarProps> = ({
               {shapes.some((s) => s instanceof Icon) && (
                 <IconPanel shapes={shapes} onChange={onChange} />
               )}
+              <ShadowPanel shapes={shapes} onChange={onChange} />
               <AlignmentPanel shapes={shapes} onChange={onChange} />
             </ScrollArea>
           ) : (

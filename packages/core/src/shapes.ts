@@ -289,6 +289,21 @@ export class Shape extends Obj {
   roughness: number;
 
   /**
+   * Shadow
+   */
+  shadow: boolean;
+
+  /**
+   * Shadow color
+   */
+  shadowColor: string;
+
+  /**
+   * Shadow offset
+   */
+  shadowOffset: number[];
+
+  /**
    * Link
    */
   link: string;
@@ -370,6 +385,9 @@ export class Shape extends Obj {
     this.fontWeight = 400;
     this.opacity = 1;
     this.roughness = 0;
+    this.shadow = false;
+    this.shadowColor = "$foreground";
+    this.shadowOffset = [0, 0];
     this.link = "";
     this.reference = null;
     this.constraints = [];
@@ -417,6 +435,9 @@ export class Shape extends Obj {
     json.fontWeight = this.fontWeight;
     json.opacity = this.opacity;
     json.roughness = this.roughness;
+    json.shadow = this.shadow;
+    json.shadowColor = this.shadowColor;
+    json.shadowOffset = structuredClone(this.shadowOffset);
     json.link = this.link;
     json.reference = this.reference ? this.reference.id : null;
     json.constraints = structuredClone(this.constraints);
@@ -462,6 +483,9 @@ export class Shape extends Obj {
     this.fontWeight = json.fontWeight ?? this.fontWeight;
     this.opacity = json.opacity ?? this.opacity;
     this.roughness = json.roughness ?? this.roughness;
+    this.shadow = json.shadow ?? this.shadow;
+    this.shadowColor = json.shadowColor ?? this.shadowColor;
+    this.shadowOffset = json.shadowOffset ?? this.shadowOffset;
     this.link = json.link ?? this.link;
     this.reference = json.reference ?? this.reference;
     this.constraints = json.constraints ?? this.constraints;
@@ -645,6 +669,7 @@ export class Shape extends Obj {
     this.assignStyles(canvas);
     this.renderOutline(canvas);
     this.renderViewport(canvas);
+    this.renderShadow(canvas);
     const script = this.getScript(ScriptType.RENDER);
     if (script) {
       try {
@@ -684,6 +709,11 @@ export class Shape extends Obj {
   renderOutlineDefault(canvas: MemoizationCanvas): number[][] {
     return [];
   }
+
+  /**
+   * Render shadow
+   */
+  renderShadow(canvas: MemoizationCanvas) {}
 
   /**
    * Return outline polygon.
@@ -790,10 +820,15 @@ export class Shape extends Obj {
     const outlineGCS = this.getOutline().map((p) =>
       this.localCoordTransform(canvas.canvas, p, true)
     );
-    return geometry.expandRect(
+    const rect = geometry.expandRect(
       geometry.boundingRect(outlineGCS),
       this.strokeWidth / 2
     );
+    if (this.shadow) {
+      rect[1][0] += this.shadowOffset[0] ?? 0;
+      rect[1][1] += this.shadowOffset[1] ?? 0;
+    }
+    return rect;
   }
 
   /**
@@ -1382,9 +1417,33 @@ export class Box extends Shape {
     this.renderText(canvas);
   }
 
+  /**
+   * Render text
+   */
   renderText(canvas: MemoizationCanvas): void {
     if (this.allowRenderText) {
       renderTextShape(canvas, this);
+    }
+  }
+
+  /**
+   * Render shadow
+   */
+  renderShadow(canvas: MemoizationCanvas) {
+    if (this.shadow) {
+      const [offsetX = 0, offsetY = 0] = this.shadowOffset;
+      canvas.storeState();
+      canvas.fillColor = this.shadowColor;
+      canvas.fillStyle = FillStyle.SOLID;
+      canvas.fillRoundRect(
+        this.left + offsetX,
+        this.top + offsetY,
+        this.right + offsetX,
+        this.bottom + offsetY,
+        this.corners,
+        this.getSeed()
+      );
+      canvas.restoreState();
     }
   }
 
@@ -1676,6 +1735,26 @@ export class Ellipse extends Box {
     );
     return points;
   }
+
+  /**
+   * Render shadow
+   */
+  renderShadow(canvas: MemoizationCanvas) {
+    if (this.shadow) {
+      const [offsetX = 0, offsetY = 0] = this.shadowOffset;
+      canvas.storeState();
+      canvas.fillColor = this.shadowColor;
+      canvas.fillStyle = FillStyle.SOLID;
+      canvas.fillEllipse(
+        this.left + offsetX,
+        this.top + offsetY,
+        this.right + offsetX,
+        this.bottom + offsetY,
+        this.getSeed()
+      );
+      canvas.restoreState();
+    }
+  }
 }
 
 /**
@@ -1713,6 +1792,30 @@ export class Text extends Box {
       );
     }
     this.renderText(canvas);
+  }
+
+  /**
+   * Render shadow
+   */
+  renderShadow(canvas: MemoizationCanvas) {
+    if (this.shadow) {
+      const [offsetX = 0, offsetY = 0] = this.shadowOffset;
+      if (this.allowRenderText) {
+        // store shape's states
+        const left = this.left;
+        const top = this.top;
+        const fontColor = this.fontColor;
+        // render shadow of text
+        this.left += offsetX;
+        this.top += offsetY;
+        this.fontColor = this.shadowColor;
+        renderTextShape(canvas, this);
+        // restore shape's states
+        this.left = left;
+        this.top = top;
+        this.fontColor = fontColor;
+      }
+    }
   }
 }
 
@@ -1809,6 +1912,8 @@ export class Group extends Box {
   }
 
   renderDefault(canvas: MemoizationCanvas): void {}
+
+  renderShadow(canvas: MemoizationCanvas): void {}
 }
 
 /**
@@ -1858,6 +1963,33 @@ export class Icon extends Box {
     this.data.forEach((e) => {
       renderVGElement(this, canvas, position, scale, e, this.getSeed());
     });
+  }
+
+  /**
+   * Render shadow
+   */
+  renderShadow(canvas: MemoizationCanvas) {
+    if (this.shadow) {
+      const [offsetX = 0, offsetY = 0] = this.shadowOffset;
+      // store shape's states
+      canvas.storeState();
+      const fillColor = this.fillColor;
+      const strokeColor = this.strokeColor;
+      // render shadow of text
+      this.strokeColor = this.shadowColor;
+      const position = [this.left + offsetX, this.top + offsetY];
+      const scale = [
+        this.width / this.viewWidth,
+        this.height / this.viewHeight,
+      ];
+      this.data.forEach((e) => {
+        renderVGElement(this, canvas, position, scale, e, this.getSeed());
+      });
+      // restore shape's states
+      this.fillColor = fillColor;
+      this.strokeColor = strokeColor;
+      canvas.restoreState();
+    }
   }
 }
 
@@ -2146,6 +2278,86 @@ export class Line extends Path {
       Math.max(this.strokeWidth / 2, arrowHeadSize)
     );
   }
+
+  /**
+   * Render shadow
+   */
+  renderShadow(canvas: MemoizationCanvas): void {
+    if (this.shadow) {
+      const [offsetX = 0, offsetY = 0] = this.shadowOffset;
+      // store shape states
+      canvas.storeState();
+      canvas.fillColor = this.shadowColor;
+      const path = geometry.pathCopy(this.path);
+      const fillColor = this.fillColor;
+      const strokeColor = this.strokeColor;
+
+      this.path = this.path.map((p) => [p[0] + offsetX, p[1] + offsetY]);
+      this.fillColor = this.shadowColor;
+      this.strokeColor = this.shadowColor;
+      if (this.path.length >= 2) {
+        const hp = this.renderLineEnd(canvas, this.headEndType, true);
+        const tp = this.renderLineEnd(canvas, this.tailEndType, false);
+        this.path[0] = tp;
+        this.path[this.path.length - 1] = hp;
+      }
+      if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
+        switch (this.lineType) {
+          case LineType.STRAIGHT:
+            canvas.fillPolygon(this.path, this.getSeed());
+            break;
+          case LineType.CURVE:
+            canvas.fillCurve(this.path, this.getSeed());
+            break;
+        }
+      }
+      if (this.strokeWidth > 0) {
+        switch (this.lineType) {
+          case LineType.STRAIGHT:
+            canvas.polyline(this.path, this.getSeed());
+            break;
+          case LineType.CURVE:
+            canvas.strokeCurve(this.path, this.getSeed());
+            break;
+        }
+      }
+
+      // restore shape states
+      this.path = path;
+      this.fillColor = fillColor;
+      this.strokeColor = strokeColor;
+      canvas.restoreState();
+    }
+
+    // let path = geometry.pathCopy(this.path);
+    // if (path.length >= 2) {
+    //   const hp = this.renderLineEnd(canvas, this.headEndType, true);
+    //   const tp = this.renderLineEnd(canvas, this.tailEndType, false);
+    //   path[0] = tp;
+    //   path[path.length - 1] = hp;
+    // }
+    // this.assignStyles(canvas);
+    // if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
+    //   switch (this.lineType) {
+    //     case LineType.STRAIGHT:
+    //       canvas.fillPolygon(path, this.getSeed());
+    //       break;
+    //     case LineType.CURVE:
+    //       canvas.fillCurve(path, this.getSeed());
+    //       break;
+    //   }
+    // }
+    // if (this.strokeWidth > 0) {
+    //   switch (this.lineType) {
+    //     case LineType.STRAIGHT:
+    //       canvas.polyline(path, this.getSeed());
+    //       break;
+    //     case LineType.CURVE:
+    //       canvas.strokeCurve(path, this.getSeed());
+    //       break;
+    //   }
+    // }
+  }
 }
 
 /**
@@ -2357,6 +2569,36 @@ export class Freehand extends Path {
       );
     }
   }
+
+  /**
+   * Render shadow
+   */
+  renderShadow(canvas: MemoizationCanvas) {
+    if (this.shadow) {
+      const [offsetX = 0, offsetY = 0] = this.shadowOffset;
+      // store shape's states
+      canvas.storeState();
+      const path = geometry.pathCopy(this.path);
+      // render shadow of text
+      this.path = this.path.map((p) => [p[0] + offsetX, p[1] + offsetY]);
+      canvas.fillColor = this.shadowColor;
+      canvas.strokeColor = this.shadowColor;
+      if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
+        canvas.fillPolygon(this.path, this.getSeed());
+      }
+      if (this.strokeWidth > 0) {
+        canvas.strokeFreehand(
+          this.path,
+          this.thinning,
+          this.tailTaper,
+          this.headTaper
+        );
+      }
+      // restore shape's states
+      this.path = path;
+      canvas.restoreState();
+    }
+  }
 }
 
 /**
@@ -2373,17 +2615,42 @@ export class Highlighter extends Path {
       canvas.strokeFreehand(this.path);
     }
   }
+
+  /**
+   * Render shadow
+   */
+  renderShadow(canvas: MemoizationCanvas) {
+    if (this.shadow) {
+      const [offsetX = 0, offsetY = 0] = this.shadowOffset;
+      // store shape's states
+      canvas.storeState();
+      const path = geometry.pathCopy(this.path);
+      // render shadow of text
+      this.path = this.path.map((p) => [p[0] + offsetX, p[1] + offsetY]);
+      canvas.fillColor = this.shadowColor;
+      canvas.strokeColor = this.shadowColor;
+      if (this.strokeWidth > 0) {
+        canvas.strokeFreehand(this.path);
+      }
+      // restore shape's states
+      this.path = path;
+      canvas.restoreState();
+    }
+  }
 }
 
 /**
  * Frame
  */
 export class Frame extends Box {
+  _memoShadowCanvas: MemoizationCanvas;
+
   constructor() {
     super();
     this.type = "Frame";
     this.name = "Frame";
     this.containable = true;
+    this._memoShadowCanvas = new MemoizationCanvas();
   }
 
   /**
@@ -2423,11 +2690,25 @@ export class Frame extends Box {
     return geometry.includeRect(rect, this.getBoundingRect());
   }
 
+  /**
+   * Update shape
+   */
+  update(canvas: Canvas) {
+    this._memoCanvas.clear();
+    this._memoShadowCanvas.clear();
+    this._memoCanvas.setCanvas(canvas);
+    this._memoShadowCanvas.setCanvas(canvas);
+    this.render(this._memoCanvas);
+    this.children.forEach((s) => (s as Shape).update(canvas));
+  }
+
   draw(canvas: Canvas, showDOM: boolean = false) {
     if (this.visible) {
       this.drawLink(canvas, showDOM);
       canvas.save();
       this.localTransform(canvas);
+      // draw shadow
+      this._memoShadowCanvas.draw(canvas);
       // fill background
       canvas.fillColor = this.fillColor;
       canvas.fillStyle = this.fillStyle;
@@ -2461,6 +2742,26 @@ export class Frame extends Box {
       canvas.restore();
       // draw rendered
       this._memoCanvas.draw(canvas);
+    }
+  }
+
+  /**
+   * Render this shape
+   */
+  render(canvas: MemoizationCanvas) {
+    this.assignStyles(canvas);
+    this.renderOutline(canvas);
+    this.renderViewport(canvas);
+    this.renderShadow(this._memoShadowCanvas);
+    const script = this.getScript(ScriptType.RENDER);
+    if (script) {
+      try {
+        evalScript({ canvas: canvas, shape: this }, script);
+      } catch (err) {
+        console.error("[Script Error]", err);
+      }
+    } else {
+      this.renderDefault(canvas);
     }
   }
 

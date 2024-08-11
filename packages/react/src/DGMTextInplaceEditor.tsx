@@ -34,6 +34,7 @@ interface InternalState {
   paragraphSpacing: number;
   fontFamily: string;
   fontSize: number;
+  fontWeight: number;
   color: string;
   scale: number;
   left: number;
@@ -62,6 +63,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
     paragraphSpacing: 1,
     fontFamily: "",
     fontSize: 16,
+    fontWeight: 400,
     color: "",
     scale: 1,
     left: 0,
@@ -197,6 +199,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
         paragraphSpacing: textShape.paragraphSpacing,
         fontFamily: textShape.fontFamily,
         fontSize: textShape.fontSize,
+        fontWeight: textShape.fontWeight,
         color: editor.canvas.resolveColor(textShape.fontColor),
         scale: editor.getScale(),
         left: rect.left,
@@ -288,6 +291,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
               editor={tiptapEditor}
               fontFamily={state.fontFamily}
               fontSize={state.fontSize}
+              fontWeight={state.fontWeight}
               fontColor={state.color}
               lineHeight={state.lineHeight}
               textHeight={state.textHeight}
