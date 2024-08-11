@@ -52,6 +52,7 @@ export const TextPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
   const isBox = shapes.every((s) => s instanceof Box);
   const fontColor = merge(shapes.map((s) => (s as TextShape).fontColor));
   const fontFamily = merge(shapes.map((s) => (s as TextShape).fontFamily));
+  const fontWeight = merge(shapes.map((s) => (s as TextShape).fontWeight));
   const fontSize = merge(shapes.map((s) => (s as TextShape).fontSize));
   const vertAlign = merge(shapes.map((s) => (s as TextShape).vertAlign));
   const horzAlign = merge(shapes.map((s) => (s as TextShape).horzAlign));
@@ -68,29 +69,53 @@ export const TextPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
         onValueChange={(value) => onChange({ fontColor: value })}
         title="Font Color"
       />
-      <div className="grid grid-cols-3 items-center gap-2 pr-3">
-        <div className="col-span-2">
+      <div className="flex items-center">
+        <Select
+          value={fontFamily}
+          onValueChange={(value) => onChange({ fontFamily: value })}
+        >
+          <SelectTrigger className="h-8" title="Font Family">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {fontFamilies.map((family) => (
+              <SelectItem key={family} value={family}>
+                {family}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="flex items-center gap-2 pr-3 w-full">
+        <div className="flex items-center w-full">
           <Select
-            value={fontFamily}
-            onValueChange={(value) => onChange({ fontFamily: value })}
+            value={fontWeight?.toString()}
+            onValueChange={(value) => {
+              const numberValue = parseInt(value);
+              onChange({ fontWeight: numberValue });
+            }}
           >
-            <SelectTrigger className="h-8" title="Font Family">
+            <SelectTrigger className="h-8 w-full" title="Font Weight">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {fontFamilies.map((family) => (
-                <SelectItem key={family} value={family}>
-                  {family}
-                </SelectItem>
-              ))}
+              <SelectItem value="100">Thin</SelectItem>
+              <SelectItem value="200">ExtraLight</SelectItem>
+              <SelectItem value="300">Light</SelectItem>
+              <SelectItem value="400">Regular</SelectItem>
+              <SelectItem value="500">Medium</SelectItem>
+              <SelectItem value="600">SemiBold</SelectItem>
+              <SelectItem value="700">Bold</SelectItem>
+              <SelectItem value="800">ExtraBold</SelectItem>
+              <SelectItem value="900">Black</SelectItem>
             </SelectContent>
           </Select>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center w-full">
           <NumberField
             value={fontSize}
             onChange={(value) => onChange({ fontSize: value })}
-            className="w-16 h-8 items-center"
+            className="w-20 h-8 items-center"
             title="Font Size"
           />
           <DropdownMenu>

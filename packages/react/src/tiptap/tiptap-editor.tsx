@@ -72,6 +72,7 @@ export function TiptapEditorComponent({
   editor,
   fontFamily,
   fontSize,
+  fontWeight,
   fontColor,
   lineHeight = 1,
   textHeight = 0,
@@ -82,6 +83,7 @@ export function TiptapEditorComponent({
   editor: any;
   fontFamily: string;
   fontSize: number;
+  fontWeight: number;
   fontColor: string;
   lineHeight: number;
   textHeight: number;
@@ -130,6 +132,7 @@ export function TiptapEditorComponent({
           width: "100%",
           fontFamily: fontFamily,
           fontSize: fontSize,
+          fontWeight: fontWeight,
           color: fontColor,
           lineHeight: lineHeight,
           height: textHeight,
