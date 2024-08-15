@@ -1805,15 +1805,25 @@ export class Text extends Box {
         const left = this.left;
         const top = this.top;
         const fontColor = this.fontColor;
+        const text = structuredClone(this.text);
         // render shadow of text
         this.left += offsetX;
         this.top += offsetY;
         this.fontColor = this.shadowColor;
+        // remove color attribute from marks
+        visitTextNodes(this.text, (node) => {
+          if (Array.isArray(node.marks)) {
+            node.marks.forEach((mark: any) => {
+              delete mark.attrs.color;
+            });
+          }
+        });
         renderTextShape(canvas, this);
         // restore shape's states
         this.left = left;
         this.top = top;
         this.fontColor = fontColor;
+        this.text = text;
       }
     }
   }

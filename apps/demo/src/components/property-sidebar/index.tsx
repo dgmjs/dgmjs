@@ -9,7 +9,7 @@ import { FillPanel } from "./fill-panel";
 import { ControlPanel } from "./control-panel";
 import { StrokePanel } from "./stroke-panel";
 import { TagPanel } from "./tag-panel";
-import { Line, Box, Freehand, Doc, Icon } from "@dgmjs/core";
+import { Line, Box, Freehand, Doc, Icon, Page } from "@dgmjs/core";
 import { LinePanel } from "./line-panel";
 import { Empty } from "../common/empty";
 import { PrototypePanel } from "./prototype-panel";
@@ -22,15 +22,20 @@ import { LinkPanel } from "./link-panel";
 import { ReferencePanel } from "./reference-panel";
 import { IconPanel } from "./icon-panel";
 import { ShadowPanel } from "./shadow-panel";
+import { PagePanel } from "./page-panel";
 
 export interface PropertySidebarProps extends ShapeEditorProps {
   doc: Doc;
+  currentPage: Page;
+  onPageChange: (values: Partial<Page>) => void;
 }
 
 export const PropertySidebar: React.FC<PropertySidebarProps> = ({
   doc,
+  currentPage,
   shapes,
   onChange,
+  onPageChange,
 }) => {
   return (
     <div className="absolute inset-y-0 right-0 w-56 bg-background border-l p-2">
@@ -43,6 +48,9 @@ export const PropertySidebar: React.FC<PropertySidebarProps> = ({
           value="basic"
           className="absolute bottom-0 left-0 right-0 top-12"
         >
+          {currentPage && shapes.length === 0 && (
+            <PagePanel page={currentPage} onPageChange={onPageChange} />
+          )}
           {shapes.length > 0 ? (
             <ScrollArea className="h-full w-full">
               <FillPanel shapes={shapes} onChange={onChange} />
