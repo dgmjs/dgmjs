@@ -154,6 +154,7 @@ function App() {
                 maxWidth: 2800,
                 maxHeight: 2800,
               },
+              canvasColor: "$slate1",
             }}
             plugins={[new YjsDocSyncPlugin(), new YjsUserPresencePlugin()]}
             showGrid={true}

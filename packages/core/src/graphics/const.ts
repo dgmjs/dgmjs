@@ -46,9 +46,10 @@ const Color = {
   BACKGROUND: "$background",
   FOREGROUND: "$foreground",
   TRANSPARENT: "$transparent",
-  CANVAS: "$slate2", // #F5F5F5
-  SELECTION: "$blue10",
+  BLANK: "$slate1",
+  CANVAS: "$background",
   GRID: "$slate3",
+  SELECTION: "$blue10",
   BORDER: "$slate9",
   BLACK: "#000000",
   WHITE: "#FFFFFF",

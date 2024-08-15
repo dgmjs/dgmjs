@@ -29,6 +29,9 @@ export interface EditorOptions {
     maxWidth?: number;
     maxHeight?: number;
   };
+  blankColor?: string;
+  canvasColor?: string;
+  gridColor?: string;
   onReady: (editor: Editor) => void;
 }
 
@@ -355,6 +358,9 @@ export class Editor {
         maxWidth: 800,
         maxHeight: 800,
       },
+      blankColor: Color.BLANK,
+      canvasColor: Color.CANVAS,
+      gridColor: Color.GRID,
       onReady: () => {},
       ...options,
     };
@@ -1111,34 +1117,38 @@ export class Editor {
   }
 
   /**
-   * Clear canvas background
+   * Clear background
    */
   private clearBackground(canvas: Canvas) {
     const g = canvas.context;
     const pageSize = this.currentPage?.size;
     g.fillStyle = this.canvas.resolveColor(
-      pageSize ? Color.CANVAS : Color.BACKGROUND
+      pageSize
+        ? this.options.blankColor ?? Color.BLANK
+        : this.options.canvasColor ?? Color.CANVAS
     );
     g.globalAlpha = 1;
     g.fillRect(0, 0, this.canvasElement.width, this.canvasElement.height);
   }
 
   /**
-   * Draw the grid
+   * Draw the page boundary and grid
    */
-  private drawGrid(canvas: Canvas) {
+  private drawPageAndGrid(canvas: Canvas) {
     const scale = this.getScale();
     const pageSize = this.currentPage?.size;
 
     canvas.save();
     canvas.globalTransform();
 
-    // draw document background
+    // draw canvas background
     if (pageSize) {
       canvas.roughness = 0;
       canvas.alpha = 1;
       canvas.fillStyle = FillStyle.SOLID;
-      canvas.fillColor = this.canvas.resolveColor(Color.BACKGROUND);
+      canvas.fillColor = this.canvas.resolveColor(
+        this.options.canvasColor ?? Color.CANVAS
+      );
       canvas.fillRect(0, 0, pageSize[0], pageSize[1]);
     }
 
@@ -1162,7 +1172,9 @@ export class Editor {
       }
       const wc = Math.floor((p2[0] - p1[0]) / w);
       const wh = Math.floor((p2[1] - p1[1]) / h);
-      canvas.strokeColor = this.canvas.resolveColor(Color.GRID);
+      canvas.strokeColor = this.canvas.resolveColor(
+        this.options.gridColor ?? Color.GRID
+      );
       canvas.strokeWidth = thick;
       canvas.strokePattern = [];
       canvas.roughness = 0;
@@ -1217,7 +1229,7 @@ export class Editor {
     // console.time("repaint");
     this.clearBackground(this.canvas);
     if (this.currentPage) {
-      this.drawGrid(this.canvas);
+      this.drawPageAndGrid(this.canvas);
       this.currentPage.draw(this.canvas, true);
       if (drawSelection) this.drawSelection();
       this.onRepaint.emit();
