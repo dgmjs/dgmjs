@@ -56,6 +56,7 @@ export class BoxCreateConnectorController extends Controller {
    */
   active(editor: Editor, shape: Shape): boolean {
     let value =
+      editor.options.showCreateConnectorController &&
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
       shape.connectable &&
