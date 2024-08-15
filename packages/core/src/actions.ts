@@ -158,6 +158,24 @@ export class Actions {
                 }
               });
               break;
+            case "fontColor":
+              objs.forEach((s) => {
+                if (s instanceof Box) {
+                  const nodes = structuredClone(s.text);
+                  visitTextNodes(nodes, (node) => {
+                    if (Array.isArray(node.marks)) {
+                      node.marks.forEach((mark: any) => {
+                        delete mark.attrs.color;
+                      });
+                    }
+                  });
+                  if (s.hasOwnProperty(key)) {
+                    tx.assign(s, key, value);
+                    tx.assign(s, "text", nodes);
+                  }
+                }
+              });
+              break;
             default:
               objs.forEach((s) => {
                 if (s.hasOwnProperty(key)) tx.assign(s, key, value);
