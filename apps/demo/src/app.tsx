@@ -124,6 +124,12 @@ function App() {
     demoStore.setSelection([...shapes]);
   };
 
+  const handlePageChange = (pageProps: Partial<Page>) => {
+    const currentPage = window.editor.getCurrentPage();
+    window.editor.actions.update(pageProps, [currentPage!]);
+    demoStore.setCurrentPage(currentPage);
+  };
+
   const handleCurrentPageChange = (page: Page) => {
     demoStore.setCurrentPage(page);
   };
@@ -154,7 +160,6 @@ function App() {
                 maxWidth: 2800,
                 maxHeight: 2800,
               },
-              canvasColor: "$slate1",
             }}
             plugins={[new YjsDocSyncPlugin(), new YjsUserPresencePlugin()]}
             showGrid={true}
@@ -193,8 +198,10 @@ function App() {
       />
       <PropertySidebar
         doc={demoStore.doc!}
+        currentPage={demoStore.currentPage!}
         shapes={demoStore.selection}
         onChange={handleValuesChange}
+        onPageChange={handlePageChange}
       />
       <SelectShapeDialog />
     </div>
