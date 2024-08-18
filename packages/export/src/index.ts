@@ -3,7 +3,7 @@ import fileSaverPkg from "file-saver";
 import { Context } from "svgcanvas";
 const { saveAs } = fileSaverPkg;
 
-const DEFAULT_MARGIN = 10;
+const DEFAULT_MARGIN = 8;
 
 type ExportImageFormat = "image/png" | "image/svg+xml";
 
@@ -12,6 +12,7 @@ type ExportImageOptions = {
   dark: boolean;
   fillBackground: boolean;
   format: ExportImageFormat;
+  margin: number;
 };
 
 /**
@@ -28,7 +29,7 @@ function getImageCanvas(
   shapes: Shape[],
   options: ExportImageOptions
 ): HTMLCanvasElement {
-  const { scale, dark, fillBackground } = options;
+  const { scale, dark, fillBackground, margin } = options;
   const theme = dark ? "dark" : "light";
   const colorVariables = themeColors[theme];
 
@@ -38,7 +39,7 @@ function getImageCanvas(
   let boundingBox = page.getViewport(newCanvas, shapes);
 
   // initialize new canvas
-  boundingBox = geometry.expandRect(boundingBox, DEFAULT_MARGIN);
+  boundingBox = geometry.expandRect(boundingBox, margin);
   const w = geometry.width(boundingBox);
   const h = geometry.height(boundingBox);
   newCanvas.origin = [-boundingBox[0][0], -boundingBox[0][1]];
@@ -89,6 +90,7 @@ async function getImageDataUrl(
     dark: false,
     fillBackground: true,
     format: "image/png",
+    margin: DEFAULT_MARGIN,
     ...options,
   });
   return canvasElement.toDataURL(options.format);
@@ -113,6 +115,7 @@ async function getImageBlob(
     dark: false,
     fillBackground: true,
     format: "image/png",
+    margin: DEFAULT_MARGIN,
     ...options,
   });
   return new Promise((resolve) => {

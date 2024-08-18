@@ -820,9 +820,10 @@ export class Shape extends Obj {
     const outlineGCS = this.getOutline().map((p) =>
       this.localCoordTransform(canvas.canvas, p, true)
     );
+    // expand viewport as stroke width and roughness
     const rect = geometry.expandRect(
       geometry.boundingRect(outlineGCS),
-      this.strokeWidth / 2
+      this.strokeWidth / 2 + this.roughness * 1.5
     );
     if (this.shadow) {
       rect[1][0] += this.shadowOffset[0] ?? 0;
