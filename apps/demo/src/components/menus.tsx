@@ -76,6 +76,7 @@ export function Menus() {
       dark: darkMode,
       fillBackground: true,
       format: "image/png" as ExportImageFormat,
+      margin: 2,
     };
     const name = "dgm-export";
     const fileName = `${name}.${
