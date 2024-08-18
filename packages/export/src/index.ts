@@ -34,9 +34,13 @@ function getImageCanvas(
   const colorVariables = themeColors[theme];
 
   // make a new canvas element for making image data
+  const orderedShapes = page
+    .traverseSequence()
+    .toReversed()
+    .filter((s) => shapes.includes(s as Shape)) as Shape[];
   const newCanvasElement = document.createElement("canvas");
   const newCanvas = new Canvas(newCanvasElement, scale);
-  let boundingBox = page.getViewport(newCanvas, shapes);
+  let boundingBox = page.getViewport(newCanvas, orderedShapes);
 
   // initialize new canvas
   boundingBox = geometry.expandRect(boundingBox, margin);
@@ -64,7 +68,7 @@ function getImageCanvas(
 
   // update and draw page to the new canvas
   page.update(newCanvas);
-  page.draw(newCanvas, false, shapes);
+  page.draw(newCanvas, false, orderedShapes);
 
   // update page to (existing) canvas
   page.update(canvas);
@@ -152,8 +156,12 @@ async function getSVGImageData(
   const colorVariables = themeColors[theme];
 
   // Make a new SVG canvas for making SVG image data
+  const orderedShapes = page
+    .traverseSequence()
+    .toReversed()
+    .filter((s) => shapes.includes(s as Shape)) as Shape[];
   const boundingBox = geometry.expandRect(
-    page.getViewport(canvas, shapes),
+    page.getViewport(canvas, orderedShapes),
     margin
   );
   const w = geometry.width(boundingBox);
@@ -182,9 +190,9 @@ async function getSVGImageData(
 
   // update and draw page to the new canvas
   page.update(svgCanvas);
-  page.draw(svgCanvas, false, shapes);
+  page.draw(svgCanvas, false, orderedShapes);
 
-  // TODO: add fonts in defs (temporal impls)
+  // add fonts in defs (temporal impls)
   const svg: SVGSVGElement = ctx.getSvg();
   const defs = svg.getElementsByTagName("defs");
   if (styleInSVG && defs.length > 0) {
