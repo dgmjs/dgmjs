@@ -69,7 +69,7 @@ Before inserting the actual component, first update the `index.html`. Here, appl
   <body>
     <div class="text-4xl p-2 text-center">
       <a href="https://dgmjs.dev" class="underline" target="_blank">DGM.js</a> example
-    </h1>
+    </div>
     <div id="root" class="absolute top-16 left-8 right-8 h-96"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
