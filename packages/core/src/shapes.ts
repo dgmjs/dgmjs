@@ -1200,6 +1200,16 @@ export class Page extends Shape {
   }
 
   /**
+   * Return a ordered array of the given shapes
+   */
+  getOrderedShapes(shapes: Shape[]): Shape[] {
+    const orderedShapes = this.traverseSequence()
+      .toReversed()
+      .filter((s) => shapes.includes(s as Shape)) as Shape[];
+    return orderedShapes;
+  }
+
+  /**
    * Page do not contain a point
    */
   containsPoint(canvas: Canvas, point: number[]): boolean {
