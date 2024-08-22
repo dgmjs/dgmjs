@@ -1200,6 +1200,16 @@ export class Page extends Shape {
   }
 
   /**
+   * Return a ordered array of the given shapes
+   */
+  getOrderedShapes(shapes: Shape[]): Shape[] {
+    const orderedShapes = this.traverseSequence()
+      .toReversed()
+      .filter((s) => shapes.includes(s as Shape)) as Shape[];
+    return orderedShapes;
+  }
+
+  /**
    * Page do not contain a point
    */
   containsPoint(canvas: Canvas, point: number[]): boolean {
@@ -1690,6 +1700,7 @@ export class Rectangle extends Box {
   constructor() {
     super();
     this.type = "Rectangle";
+    this.wordWrap = true;
   }
 }
 
@@ -1700,6 +1711,7 @@ export class Ellipse extends Box {
   constructor() {
     super();
     this.type = "Ellipse";
+    this.wordWrap = true;
   }
 
   renderDefault(canvas: MemoizationCanvas): void {
@@ -2339,35 +2351,6 @@ export class Line extends Path {
       this.strokeColor = strokeColor;
       canvas.restoreState();
     }
-
-    // let path = geometry.pathCopy(this.path);
-    // if (path.length >= 2) {
-    //   const hp = this.renderLineEnd(canvas, this.headEndType, true);
-    //   const tp = this.renderLineEnd(canvas, this.tailEndType, false);
-    //   path[0] = tp;
-    //   path[path.length - 1] = hp;
-    // }
-    // this.assignStyles(canvas);
-    // if (this.isClosed() && this.fillStyle !== FillStyle.NONE) {
-    //   switch (this.lineType) {
-    //     case LineType.STRAIGHT:
-    //       canvas.fillPolygon(path, this.getSeed());
-    //       break;
-    //     case LineType.CURVE:
-    //       canvas.fillCurve(path, this.getSeed());
-    //       break;
-    //   }
-    // }
-    // if (this.strokeWidth > 0) {
-    //   switch (this.lineType) {
-    //     case LineType.STRAIGHT:
-    //       canvas.polyline(path, this.getSeed());
-    //       break;
-    //     case LineType.CURVE:
-    //       canvas.strokeCurve(path, this.getSeed());
-    //       break;
-    //   }
-    // }
   }
 }
 

@@ -93,12 +93,17 @@ export class Actions {
   /**
    * Duplicate a page
    */
-  duplicatePage(page: Page, position: number): Page {
+  duplicatePage(
+    page: Page,
+    position: number,
+    initializer?: (page: Page) => void
+  ): Page {
     const buffer: any[] = serialize([page]);
     const copied = deserialize(
       this.editor.store.instantiator,
       buffer
     )[0] as Page;
+    if (initializer) initializer(copied);
     this.editor.transform.startAction("duplicate-page");
     this.editor.transform.transact((tx) => {
       addPage(tx, this.editor.getDoc(), copied);

@@ -29,7 +29,7 @@ You can use various selection methods to select/deselect shapes or area.
 editor.selection.select(shapes);
 
 // additional select an array of shapes
-editor.selection.selectAdditional(shapes);
+editor.selection.select(shapes, false);
 
 // select shapes overlap the given area in the current page
 editor.selection.selectArea(0, 0, 100, 100);

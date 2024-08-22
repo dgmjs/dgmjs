@@ -5,22 +5,34 @@ prev: false
 title: "getImageDataUrl"
 ---
 
-> **getImageDataUrl**(`canvas`, `page`, `options`): `Promise`\<`string`\>
+> **getImageDataUrl**(`canvas`, `page`, `shapes`, `options`): `Promise`\<`string`\>
 
-Get Base64-encoded image data of doc
+Get Base64-encoded image data of the given page.
 
 ## Parameters
 
 • **canvas**: `Canvas`
 
+The editor's canvas
+
 • **page**: `Page`
 
+The page to draw.
+
+• **shapes**: `Shape`[]
+
+The shapes to draw in the page. If empty, render all shapes in the page.
+
 • **options**: `Partial`\<[`ExportImageOptions`](/api-export/type-aliases/exportimageoptions/)\>
+
+The options for drawing.
 
 ## Returns
 
 `Promise`\<`string`\>
 
+The Base64-encoded image data of the shapes.
+
 ## Source
 
-[index.ts:70](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L70)
+[index.ts:86](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L86)

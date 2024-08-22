@@ -21,6 +21,10 @@ title: "ExportImageOptions"
 
 > **format**: [`ExportImageFormat`](/api-export/type-aliases/exportimageformat/)
 
+### margin
+
+> **margin**: `number`
+
 ### scale
 
 > **scale**: `number`

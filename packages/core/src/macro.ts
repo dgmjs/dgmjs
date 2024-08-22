@@ -496,7 +496,8 @@ export function moveShapes(
   });
 
   // move into container
-  filtered.forEach((s) => {
+  const ordered = page.getOrderedShapes(filtered);
+  ordered.forEach((s) => {
     if (container && s.parent !== container && !(s as Box).anchored) {
       changed = changeParent(tx, s, container) || changed;
     }

@@ -1,10 +1,10 @@
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import { Shape, Line, Movable, Connector, Page, Path } from "../shapes";
-import { Controller, Editor, Manipulator } from "../editor";
+import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { Snap } from "../manipulators/snap";
 import * as geometry from "../graphics/geometry";
 import { Cursor } from "../graphics/const";
-import { resolveAllConstraints, setPath } from "../macro";
+import { changeParent, resolveAllConstraints, setPath } from "../macro";
 
 /**
  * ConnectorMove Controller
@@ -78,19 +78,28 @@ export class ConnectorMoveController extends Controller {
     )
       this.dy = 0;
 
+    // determine container (shouldn't be itself of a descendant of target)
+    const canvas = editor.canvas;
+    let p2 = targetShape.localCoordTransform(canvas, this.dragPoint, false);
+    let container = editor.getCurrentPage()?.getShapeAt(canvas, p2, [shape]);
+    const r = targetShape.find((s) => s.id === container?.id);
+    if (r) container = null;
+    if (!(container && container.canContain(targetShape)))
+      container = editor.getCurrentPage();
+
     // update ghost
     let newPath = this.controlPath.map((p) => [p[0] + this.dx, p[1] + this.dy]);
 
-    // apply movable property
-    const canvas = editor.canvas;
-    const page = editor.getCurrentPage()!;
-
     // transform shape
+    const page = editor.getCurrentPage()!;
     editor.transform.transact((tx) => {
       if (this.dx !== 0 || this.dy !== 0) {
         setPath(tx, shape as Line, newPath);
         tx.assignRef(shape, "head", null);
         tx.assignRef(shape, "tail", null);
+        if (container && shape.parent !== container) {
+          changeParent(tx, shape, container);
+        }
         resolveAllConstraints(tx, page, canvas);
       }
     });
@@ -107,17 +116,14 @@ export class ConnectorMoveController extends Controller {
    * Draw controller
    */
   drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
-    // super.drawDragging(editor, shape, e);
-    // const canvas = editor.canvas;
-    // // draw ghost
-    // guide.drawPolylineInLCS(
-    //   canvas,
-    //   shape,
-    //   this.ghost,
-    //   (shape as Line).lineType,
-    //   geometry.isClosed(this.ghost)
-    // );
-    // // draw snap
-    // this.snap.draw(editor, shape, this.ghost);
+    super.drawDragging(editor, shape, e);
+    const canvas = editor.canvas;
+    // hovering containable
+    const dp = shape.localCoordTransform(canvas, this.dragPoint, true);
+    const container = editor.getCurrentPage()?.getShapeAt(canvas, dp, [shape]);
+    if (container && container !== shape && container.canContain(shape)) {
+      const manipulator = manipulatorManager.get(container.type);
+      if (manipulator) manipulator.drawHovering(editor, container, e);
+    }
   }
 }

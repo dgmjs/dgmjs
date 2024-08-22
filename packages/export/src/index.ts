@@ -34,10 +34,7 @@ function getImageCanvas(
   const colorVariables = themeColors[theme];
 
   // make a new canvas element for making image data
-  const orderedShapes = page
-    .traverseSequence()
-    .toReversed()
-    .filter((s) => shapes.includes(s as Shape)) as Shape[];
+  const orderedShapes = page.getOrderedShapes(shapes);
   const newCanvasElement = document.createElement("canvas");
   const newCanvas = new Canvas(newCanvasElement, scale);
   let boundingBox = page.getViewport(newCanvas, orderedShapes);
@@ -156,10 +153,7 @@ async function getSVGImageData(
   const colorVariables = themeColors[theme];
 
   // Make a new SVG canvas for making SVG image data
-  const orderedShapes = page
-    .traverseSequence()
-    .toReversed()
-    .filter((s) => shapes.includes(s as Shape)) as Shape[];
+  const orderedShapes = page.getOrderedShapes(shapes);
   const boundingBox = geometry.expandRect(
     page.getViewport(canvas, orderedShapes),
     margin
