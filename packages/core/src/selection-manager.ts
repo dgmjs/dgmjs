@@ -59,16 +59,11 @@ export class SelectionManager {
 
   /**
    * Select shapes
+   * @param shapes an array of shapes to be selected.
+   * @param clear clear the current selection if true.
    */
-  select(shapes: Shape[]) {
-    this.shapes = [];
-    this.selectAdditional(shapes);
-  }
-
-  /**
-   * Select additional shapes
-   */
-  selectAdditional(shapes: Shape[]) {
+  select(shapes: Shape[], clear: boolean = true) {
+    if (clear) this.shapes = [];
     for (let shape of shapes) {
       if (!this.isSelected(shape)) {
         this.shapes.push(shape);
@@ -79,14 +74,25 @@ export class SelectionManager {
 
   /**
    * Select shapes overlap the given area in the current page.
+   * @param x1 x-coordinate of the first corner of the area.
+   * @param y1 y-coordinate of the first corner of the area.
+   * @param x2 x-coordinate of the second corner of the area.
+   * @param y2 y-coordinate of the second corner of the area.
+   * @param clear clear the current selection if true.
    */
-  selectArea(x1: number, y1: number, x2: number, y2: number) {
+  selectArea(
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    clear: boolean = true
+  ) {
     const canvas = this.editor.canvas;
     let r = geometry.normalizeRect([
       [x1, y1],
       [x2, y2],
     ]);
-    this.shapes = [];
+    if (clear) this.shapes = [];
     this.editor.getCurrentPage()?.visit((s) => {
       if (
         s.visible &&

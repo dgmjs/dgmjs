@@ -9,4 +9,4 @@ title: "manipulatorManager"
 
 ## Source
 
-[editor.ts:1926](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1926)
+[editor.ts:1940](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1940)

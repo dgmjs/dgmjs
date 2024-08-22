@@ -54,7 +54,7 @@ export class SelectHandler extends Handler {
           if (editor.selection.isSelected(shape)) {
             editor.selection.deselect([shape]);
           } else {
-            editor.selection.selectAdditional([shape]);
+            editor.selection.select([shape], false);
           }
         } else {
           if (!editor.selection.isSelected(shape)) {
@@ -64,7 +64,9 @@ export class SelectHandler extends Handler {
         }
       } else {
         // area selection
-        editor.selection.deselectAll();
+        if (!e.shiftDown) {
+          editor.selection.deselectAll();
+        }
         this.dragging = true;
         this.dragStartPoint = canvas.globalCoordTransformRev([e.x, e.y]);
         editor.onDragStart.emit({
@@ -205,7 +207,8 @@ export class SelectHandler extends Handler {
         this.dragStartPoint[0],
         this.dragStartPoint[1],
         p[0],
-        p[1]
+        p[1],
+        !e.shiftDown
       );
     }
 

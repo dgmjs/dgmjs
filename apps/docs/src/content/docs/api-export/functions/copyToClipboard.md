@@ -5,17 +5,27 @@ prev: false
 title: "copyToClipboard"
 ---
 
-> **copyToClipboard**(`canvas`, `page`, `options`): `Promise`\<`void`\>
+> **copyToClipboard**(`canvas`, `page`, `shapes`, `options`): `Promise`\<`void`\>
 
-Copy page image to clipboard
+Copy page image of the given shapes to clipboard
 
 ## Parameters
 
 • **canvas**: `Canvas`
 
+The editor's canvas
+
 • **page**: `Page`
 
+The page to draw.
+
+• **shapes**: `Shape`[]
+
+The shapes to draw in the page. If empty, render all shapes in the page.
+
 • **options**: `Partial`\<[`ExportImageOptions`](/api-export/type-aliases/exportimageoptions/)\>
+
+The options for drawing.
 
 ## Returns
 
@@ -23,4 +33,4 @@ Copy page image to clipboard
 
 ## Source
 
-[index.ts:207](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L207)
+[index.ts:264](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L264)

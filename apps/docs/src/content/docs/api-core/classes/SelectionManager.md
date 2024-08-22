@@ -73,7 +73,7 @@ Deselect the given shapes.
 
 #### Source
 
-[selection-manager.ts:119](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L119)
+[selection-manager.ts:125](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L125)
 
 ***
 
@@ -89,7 +89,7 @@ Deselect all shapes.
 
 #### Source
 
-[selection-manager.ts:131](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L131)
+[selection-manager.ts:137](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L137)
 
 ***
 
@@ -109,7 +109,7 @@ Returns bounding rect of selected shapes
 
 #### Source
 
-[selection-manager.ts:141](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L141)
+[selection-manager.ts:147](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L147)
 
 ***
 
@@ -129,7 +129,7 @@ Returns enclosure of selected shapes
 
 #### Source
 
-[selection-manager.ts:159](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L159)
+[selection-manager.ts:165](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L165)
 
 ***
 
@@ -191,7 +191,7 @@ isChanged
 
 ### select()
 
-> **select**(`shapes`): `void`
+> **select**(`shapes`, `clear`): `void`
 
 Select shapes
 
@@ -199,25 +199,11 @@ Select shapes
 
 • **shapes**: [`Shape`](/api-core/classes/shape/)[]
 
-#### Returns
+an array of shapes to be selected.
 
-`void`
+• **clear**: `boolean`= `true`
 
-#### Source
-
-[selection-manager.ts:63](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L63)
-
-***
-
-### selectAdditional()
-
-> **selectAdditional**(`shapes`): `void`
-
-Select additional shapes
-
-#### Parameters
-
-• **shapes**: [`Shape`](/api-core/classes/shape/)[]
+clear the current selection if true.
 
 #### Returns
 
@@ -225,7 +211,7 @@ Select additional shapes
 
 #### Source
 
-[selection-manager.ts:71](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L71)
+[selection-manager.ts:65](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L65)
 
 ***
 
@@ -241,13 +227,13 @@ Select all shapes in the current page
 
 #### Source
 
-[selection-manager.ts:106](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L106)
+[selection-manager.ts:112](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L112)
 
 ***
 
 ### selectArea()
 
-> **selectArea**(`x1`, `y1`, `x2`, `y2`): `void`
+> **selectArea**(`x1`, `y1`, `x2`, `y2`, `clear`): `void`
 
 Select shapes overlap the given area in the current page.
 
@@ -255,11 +241,23 @@ Select shapes overlap the given area in the current page.
 
 • **x1**: `number`
 
+x-coordinate of the first corner of the area.
+
 • **y1**: `number`
+
+y-coordinate of the first corner of the area.
 
 • **x2**: `number`
 
+x-coordinate of the second corner of the area.
+
 • **y2**: `number`
+
+y-coordinate of the second corner of the area.
+
+• **clear**: `boolean`= `true`
+
+clear the current selection if true.
 
 #### Returns
 
