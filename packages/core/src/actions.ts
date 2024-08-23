@@ -672,4 +672,90 @@ export class Actions {
       }
     }
   }
+
+  /**
+   * Align selected shapes horizontally with space around
+   */
+  alignHorizontalSpaceAround(shapes?: Shape[]) {
+    const page = this.editor.getCurrentPage();
+    if (page) {
+      shapes = shapes ?? this.editor.selection.getShapes();
+      const orderedShapes = shapes.sort(
+        (a, b) => a.getBoundingRect()[0][0] - b.getBoundingRect()[0][0]
+      );
+      if (orderedShapes.length > 0) {
+        const ls = orderedShapes!.map((s) => s.getBoundingRect()[0][0]);
+        const rs = orderedShapes!.map((s) => s.getBoundingRect()[1][0]);
+        const ws = orderedShapes!.map((s) =>
+          geometry.width(s.getBoundingRect())
+        );
+        const left = Math.min(...ls);
+        const right = Math.max(...rs);
+        const width = right - left;
+        const sum = ws.reduce((a, b) => a + b, 0);
+        const gap = (width - sum) / (orderedShapes.length - 1);
+        this.editor.transform.startAction("align-horizontal-space-around");
+        this.editor.transform.transact((tx) => {
+          let x = left;
+          for (let i = 0; i < orderedShapes.length; i++) {
+            const s = orderedShapes[i];
+            if (s instanceof Box) {
+              const dx = x - s.left;
+              moveShapes(tx, page, [s], dx, 0);
+            } else if (s instanceof Path) {
+              const l = Math.min(...s.path.map((p) => p[0]));
+              const dx = x - l;
+              moveShapes(tx, page, [s], dx, 0);
+            }
+            x += ws[i] + gap;
+          }
+          resolveAllConstraints(tx, page, this.editor.canvas);
+        });
+        this.editor.transform.endAction();
+      }
+    }
+  }
+
+  /**
+   * Align selected shapes vertically with space around
+   */
+  alignVerticalSpaceAround(shapes?: Shape[]) {
+    const page = this.editor.getCurrentPage();
+    if (page) {
+      shapes = shapes ?? this.editor.selection.getShapes();
+      const orderedShapes = shapes.sort(
+        (a, b) => a.getBoundingRect()[0][1] - b.getBoundingRect()[0][1]
+      );
+      if (orderedShapes.length > 0) {
+        const ts = orderedShapes!.map((s) => s.getBoundingRect()[0][1]);
+        const bs = orderedShapes!.map((s) => s.getBoundingRect()[1][1]);
+        const hs = orderedShapes!.map((s) =>
+          geometry.height(s.getBoundingRect())
+        );
+        const top = Math.min(...ts);
+        const bottom = Math.max(...bs);
+        const height = bottom - top;
+        const sum = hs.reduce((a, b) => a + b, 0);
+        const gap = (height - sum) / (orderedShapes.length - 1);
+        this.editor.transform.startAction("align-vertical-space-around");
+        this.editor.transform.transact((tx) => {
+          let y = top;
+          for (let i = 0; i < orderedShapes.length; i++) {
+            const s = orderedShapes[i];
+            if (s instanceof Box) {
+              const dy = y - s.top;
+              moveShapes(tx, page, [s], 0, dy);
+            } else if (s instanceof Path) {
+              const t = Math.min(...s.path.map((p) => p[1]));
+              const dy = y - t;
+              moveShapes(tx, page, [s], 0, dy);
+            }
+            y += hs[i] + gap;
+          }
+          resolveAllConstraints(tx, page, this.editor.canvas);
+        });
+        this.editor.transform.endAction();
+      }
+    }
+  }
 }
