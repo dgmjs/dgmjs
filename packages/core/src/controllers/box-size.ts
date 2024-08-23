@@ -1,6 +1,6 @@
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Shape, Box, Sizable, Path } from "../shapes";
+import { Shape, Box, Sizable, Path, Text } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import {
   CONTROL_POINT_APOTHEM,
@@ -347,9 +347,20 @@ export class BoxSizeController extends Controller {
     // restore shape states
     shape.fromJSON(memo);
 
+    // auto wordwrap
+    const autoWordWrap =
+      shape instanceof Text &&
+      !shape.wordWrap &&
+      w !== targetWidth &&
+      (this.options.position === ControllerPosition.RIGHT ||
+        this.options.position === ControllerPosition.LEFT);
+
     // transform shapes
     editor.transform.transact((tx) => {
       const page = editor.getCurrentPage()!;
+      if (autoWordWrap) {
+        tx.assign(shape, "wordWrap", true);
+      }
       resizeShape(tx, shape, targetWidth, targetHeight);
       moveShapes(
         tx,
