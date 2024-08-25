@@ -25,6 +25,7 @@ export interface EditorOptions {
   allowCreateTextOnCanvas: boolean;
   allowCreateTextOnConnector: boolean;
   showCreateConnectorController: boolean;
+  showDOM: boolean;
   imageResize: {
     quality?: number;
     maxWidth?: number;
@@ -355,6 +356,7 @@ export class Editor {
       allowCreateTextOnCanvas: true,
       allowCreateTextOnConnector: true,
       showCreateConnectorController: true,
+      showDOM: true,
       imageResize: {
         quality: 0.7,
         maxWidth: 800,
@@ -1232,7 +1234,7 @@ export class Editor {
     this.clearBackground(this.canvas);
     if (this.currentPage) {
       this.drawPageAndGrid(this.canvas);
-      this.currentPage.draw(this.canvas, true);
+      this.currentPage.draw(this.canvas, this.options.showDOM);
       if (drawSelection) this.drawSelection();
       this.onRepaint.emit();
     }
