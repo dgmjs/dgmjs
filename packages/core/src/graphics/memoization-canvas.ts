@@ -424,27 +424,29 @@ class MemoizationCanvas {
    * Draw a line
    */
   line(x1: number, y1: number, x2: number, y2: number, seed: number = 1) {
-    if (this.roughness > 0) {
-      const rd = this.generator.line(x1, y1, x2, y2, {
-        seed,
-        roughness: this.roughness,
-        stroke: this.canvas.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-      });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
-    } else {
-      this.do.push({
-        type: "line",
-        strokeColor: this.canvas.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        alpha: this.alpha,
-        x1,
-        y1,
-        x2,
-        y2,
-      });
+    if (this.strokeWidth > 0) {
+      if (this.roughness > 0) {
+        const rd = this.generator.line(x1, y1, x2, y2, {
+          seed,
+          roughness: this.roughness,
+          stroke: this.canvas.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+        });
+        this.do.push({ type: "rough", alpha: this.alpha, rd });
+      } else {
+        this.do.push({
+          type: "line",
+          strokeColor: this.canvas.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          alpha: this.alpha,
+          x1,
+          y1,
+          x2,
+          y2,
+        });
+      }
     }
     return this;
   }
@@ -457,28 +459,30 @@ class MemoizationCanvas {
     const y = y1 < y2 ? y1 : y2;
     const w = Math.abs(x2 - x1);
     const h = Math.abs(y2 - y1);
-    if (this.roughness > 0) {
-      const rd = this.generator.rectangle(x, y, w, h, {
-        seed,
-        roughness: this.roughness,
-        stroke: this.canvas.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        disableMultiStroke: this.strokePattern.length > 1,
-      });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
-    } else {
-      this.do.push({
-        type: "strokeRect",
-        strokeColor: this.canvas.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        alpha: this.alpha,
-        x,
-        y,
-        w,
-        h,
-      });
+    if (this.strokeWidth > 0) {
+      if (this.roughness > 0) {
+        const rd = this.generator.rectangle(x, y, w, h, {
+          seed,
+          roughness: this.roughness,
+          stroke: this.canvas.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          disableMultiStroke: this.strokePattern.length > 1,
+        });
+        this.do.push({ type: "rough", alpha: this.alpha, rd });
+      } else {
+        this.do.push({
+          type: "strokeRect",
+          strokeColor: this.canvas.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          alpha: this.alpha,
+          x,
+          y,
+          w,
+          h,
+        });
+      }
     }
     return this;
   }
@@ -545,39 +549,41 @@ class MemoizationCanvas {
     const rs = Array.isArray(radius)
       ? radius
       : [radius, radius, radius, radius];
-    if (this.roughness > 0) {
-      const rd = this.generator.path(
-        `M${x + rs[0]},${y} L${x + w - rs[1]},${y} Q${x + w},${y} ${x + w},${
-          y + rs[1]
-        } L${x + w},${y + h - rs[2]} Q${x + w},${y + h} ${x + w - rs[2]},${
-          y + h
-        } L${x + rs[3]},${y + h} Q${x},${y + h} ${x},${y + h - rs[3]} L${x},${
-          y + rs[0]
-        } Q${x},${y} ${x + rs[0]},${y} Z`,
-        {
-          seed,
-          roughness: this.roughness,
-          stroke: this.canvas.resolveColor(this.strokeColor),
+    if (this.strokeWidth > 0) {
+      if (this.roughness > 0) {
+        const rd = this.generator.path(
+          `M${x + rs[0]},${y} L${x + w - rs[1]},${y} Q${x + w},${y} ${x + w},${
+            y + rs[1]
+          } L${x + w},${y + h - rs[2]} Q${x + w},${y + h} ${x + w - rs[2]},${
+            y + h
+          } L${x + rs[3]},${y + h} Q${x},${y + h} ${x},${y + h - rs[3]} L${x},${
+            y + rs[0]
+          } Q${x},${y} ${x + rs[0]},${y} Z`,
+          {
+            seed,
+            roughness: this.roughness,
+            stroke: this.canvas.resolveColor(this.strokeColor),
+            strokeWidth: this.strokeWidth,
+            strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+            disableMultiStroke: this.strokePattern.length > 1,
+            preserveVertices: true,
+          }
+        );
+        this.do.push({ type: "rough", alpha: this.alpha, rd });
+      } else {
+        this.do.push({
+          type: "strokeRoundRect",
+          strokeColor: this.canvas.resolveColor(this.strokeColor),
           strokeWidth: this.strokeWidth,
           strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-          disableMultiStroke: this.strokePattern.length > 1,
-          preserveVertices: true,
-        }
-      );
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
-    } else {
-      this.do.push({
-        type: "strokeRoundRect",
-        strokeColor: this.canvas.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        alpha: this.alpha,
-        x,
-        y,
-        w,
-        h,
-        radius: rs,
-      });
+          alpha: this.alpha,
+          x,
+          y,
+          w,
+          h,
+          radius: rs,
+        });
+      }
     }
     return this;
   }
@@ -670,28 +676,30 @@ class MemoizationCanvas {
     const h = Math.abs(y2 - y1);
     const xm = x + w / 2.0;
     const ym = y + h / 2.0;
-    if (this.roughness > 0) {
-      const rd = this.generator.ellipse(xm, ym, w, h, {
-        seed,
-        roughness: this.roughness,
-        stroke: this.canvas.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        disableMultiStroke: this.strokePattern.length > 1,
-      });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
-    } else {
-      this.do.push({
-        type: "strokeEllipse",
-        strokeColor: this.canvas.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        alpha: this.alpha,
-        x,
-        y,
-        w,
-        h,
-      });
+    if (this.strokeWidth > 0) {
+      if (this.roughness > 0) {
+        const rd = this.generator.ellipse(xm, ym, w, h, {
+          seed,
+          roughness: this.roughness,
+          stroke: this.canvas.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          disableMultiStroke: this.strokePattern.length > 1,
+        });
+        this.do.push({ type: "rough", alpha: this.alpha, rd });
+      } else {
+        this.do.push({
+          type: "strokeEllipse",
+          strokeColor: this.canvas.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          alpha: this.alpha,
+          x,
+          y,
+          w,
+          h,
+        });
+      }
     }
     return this;
   }
@@ -752,26 +760,28 @@ class MemoizationCanvas {
    * Draw polyline
    */
   polyline(path: number[][], seed: number = 1) {
-    if (this.roughness > 0) {
-      const rd = this.generator.linearPath(path as Point[], {
-        seed,
-        roughness: this.roughness,
-        stroke: this.canvas.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        disableMultiStroke: this.strokePattern.length > 1,
-        preserveVertices: true,
-      });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
-    } else {
-      this.do.push({
-        type: "polyline",
-        strokeColor: this.canvas.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        alpha: this.alpha,
-        path: path,
-      });
+    if (this.strokeWidth > 0) {
+      if (this.roughness > 0) {
+        const rd = this.generator.linearPath(path as Point[], {
+          seed,
+          roughness: this.roughness,
+          stroke: this.canvas.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          disableMultiStroke: this.strokePattern.length > 1,
+          preserveVertices: true,
+        });
+        this.do.push({ type: "rough", alpha: this.alpha, rd });
+      } else {
+        this.do.push({
+          type: "polyline",
+          strokeColor: this.canvas.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          alpha: this.alpha,
+          path: path,
+        });
+      }
     }
     return this;
   }
@@ -780,25 +790,27 @@ class MemoizationCanvas {
    * Draw curved lines
    */
   strokeCurve(path: number[][], seed: number = 1) {
-    if (this.roughness > 0) {
-      const rd = this.generator.curve(path as Point[], {
-        seed,
-        roughness: this.roughness,
-        stroke: this.canvas.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        disableMultiStroke: this.strokePattern.length > 1,
-      });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
-    } else {
-      this.do.push({
-        type: "strokeCurve",
-        strokeColor: this.canvas.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        alpha: this.alpha,
-        path: path,
-      });
+    if (this.strokeWidth > 0) {
+      if (this.roughness > 0) {
+        const rd = this.generator.curve(path as Point[], {
+          seed,
+          roughness: this.roughness,
+          stroke: this.canvas.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          disableMultiStroke: this.strokePattern.length > 1,
+        });
+        this.do.push({ type: "rough", alpha: this.alpha, rd });
+      } else {
+        this.do.push({
+          type: "strokeCurve",
+          strokeColor: this.canvas.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          alpha: this.alpha,
+          path: path,
+        });
+      }
     }
     return this;
   }
@@ -844,26 +856,28 @@ class MemoizationCanvas {
    * Draw polygon
    */
   strokePolygon(path: number[][], seed: number = 1) {
-    if (this.roughness > 0) {
-      const rd = this.generator.polygon(path as Point[], {
-        seed,
-        roughness: this.roughness,
-        stroke: this.canvas.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        disableMultiStroke: this.strokePattern.length > 1,
-        preserveVertices: true,
-      });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
-    } else {
-      this.do.push({
-        type: "strokePolygon",
-        strokeColor: this.canvas.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        alpha: this.alpha,
-        path: path,
-      });
+    if (this.strokeWidth > 0) {
+      if (this.roughness > 0) {
+        const rd = this.generator.polygon(path as Point[], {
+          seed,
+          roughness: this.roughness,
+          stroke: this.canvas.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          disableMultiStroke: this.strokePattern.length > 1,
+          preserveVertices: true,
+        });
+        this.do.push({ type: "rough", alpha: this.alpha, rd });
+      } else {
+        this.do.push({
+          type: "strokePolygon",
+          strokeColor: this.canvas.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          alpha: this.alpha,
+          path: path,
+        });
+      }
     }
     return this;
   }
@@ -919,31 +933,33 @@ class MemoizationCanvas {
   ) {
     const sa = geometry.toRadian(startAngle);
     const ea = geometry.toRadian(endAngle);
-    if (this.roughness > 0) {
-      // To avoid system stuck due to the bug of roughjs
-      if (startAngle === 0 && endAngle === 360) return this;
-      const rd = this.generator.arc(x, y, r * 2, r * 2, sa, ea, false, {
-        seed,
-        roughness: this.roughness,
-        stroke: this.canvas.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        disableMultiStroke: this.strokePattern.length > 1,
-      });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
-    } else {
-      this.do.push({
-        type: "strokeArc",
-        strokeColor: this.canvas.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        alpha: this.alpha,
-        x,
-        y,
-        r,
-        startAngle: sa,
-        endAngle: ea,
-      });
+    if (this.strokeWidth > 0) {
+      if (this.roughness > 0) {
+        // To avoid system stuck due to the bug of roughjs
+        if (startAngle === 0 && endAngle === 360) return this;
+        const rd = this.generator.arc(x, y, r * 2, r * 2, sa, ea, false, {
+          seed,
+          roughness: this.roughness,
+          stroke: this.canvas.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          disableMultiStroke: this.strokePattern.length > 1,
+        });
+        this.do.push({ type: "rough", alpha: this.alpha, rd });
+      } else {
+        this.do.push({
+          type: "strokeArc",
+          strokeColor: this.canvas.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          alpha: this.alpha,
+          x,
+          y,
+          r,
+          startAngle: sa,
+          endAngle: ea,
+        });
+      }
     }
     return this;
   }
@@ -1009,27 +1025,29 @@ class MemoizationCanvas {
    * Draw a path
    */
   strokePath(path: SVGPath, seed: number = 1) {
-    if (this.roughness > 0) {
-      const d = pathToString(path);
-      const rd = this.generator.path(d, {
-        seed,
-        roughness: this.roughness,
-        stroke: this.canvas.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        disableMultiStroke: this.strokePattern.length > 1,
-        preserveVertices: true,
-      });
-      this.do.push({ type: "rough", alpha: this.alpha, rd });
-    } else {
-      this.do.push({
-        type: "strokePath",
-        strokeColor: this.canvas.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        alpha: this.alpha,
-        path,
-      });
+    if (this.strokeWidth > 0) {
+      if (this.roughness > 0) {
+        const d = pathToString(path);
+        const rd = this.generator.path(d, {
+          seed,
+          roughness: this.roughness,
+          stroke: this.canvas.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          disableMultiStroke: this.strokePattern.length > 1,
+          preserveVertices: true,
+        });
+        this.do.push({ type: "rough", alpha: this.alpha, rd });
+      } else {
+        this.do.push({
+          type: "strokePath",
+          strokeColor: this.canvas.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          alpha: this.alpha,
+          path,
+        });
+      }
     }
     return this;
   }
@@ -1087,21 +1105,23 @@ class MemoizationCanvas {
     tailTaper: number = 0,
     headTaper: number = 0
   ) {
-    const len = geometry.pathLength(path);
-    const stroke = getStroke(path, {
-      size: this.strokeWidth,
-      thinning,
-      start: tailTaper > 0 ? { taper: len * tailTaper } : undefined,
-      end: headTaper > 0 ? { taper: len * headTaper } : undefined,
-    });
-    const pathData = getSvgPathFromStroke(stroke);
-    const path2d = new Path2D(pathData);
-    this.do.push({
-      type: "strokeFreehand",
-      strokeColor: this.canvas.resolveColor(this.strokeColor),
-      alpha: this.alpha,
-      path2d,
-    });
+    if (this.strokeWidth > 0) {
+      const len = geometry.pathLength(path);
+      const stroke = getStroke(path, {
+        size: this.strokeWidth,
+        thinning,
+        start: tailTaper > 0 ? { taper: len * tailTaper } : undefined,
+        end: headTaper > 0 ? { taper: len * headTaper } : undefined,
+      });
+      const pathData = getSvgPathFromStroke(stroke);
+      const path2d = new Path2D(pathData);
+      this.do.push({
+        type: "strokeFreehand",
+        strokeColor: this.canvas.resolveColor(this.strokeColor),
+        alpha: this.alpha,
+        path2d,
+      });
+    }
     return this;
   }
 

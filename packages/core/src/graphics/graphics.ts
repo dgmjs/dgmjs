@@ -431,21 +431,23 @@ class Canvas {
     this.context.setLineDash(
       this.strokePattern.map((v) => v * this.strokeWidth)
     );
-    if (this.roughness > 0) {
-      const rd = this.generator.line(x1, y1, x2, y2, {
-        seed,
-        roughness: this.roughness,
-        stroke: this.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        disableMultiStroke: this.strokePattern.length > 1,
-      });
-      roughDraw(this.context, rd);
-    } else {
-      this.context.beginPath();
-      this.context.moveTo(x1, y1);
-      this.context.lineTo(x2, y2);
-      this.context.stroke();
+    if (this.strokeWidth > 0) {
+      if (this.roughness > 0) {
+        const rd = this.generator.line(x1, y1, x2, y2, {
+          seed,
+          roughness: this.roughness,
+          stroke: this.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          disableMultiStroke: this.strokePattern.length > 1,
+        });
+        roughDraw(this.context, rd);
+      } else {
+        this.context.beginPath();
+        this.context.moveTo(x1, y1);
+        this.context.lineTo(x2, y2);
+        this.context.stroke();
+      }
     }
     return this;
   }
@@ -472,21 +474,23 @@ class Canvas {
     this.context.setLineDash(
       this.strokePattern.map((v) => v * this.strokeWidth)
     );
-    if (this.roughness > 0) {
-      const rd = this.generator.rectangle(x, y, w, h, {
-        seed,
-        roughness: this.roughness,
-        stroke: this.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        disableMultiStroke: this.strokePattern.length > 1,
-      });
-      roughDraw(this.context, rd);
-    } else {
-      this.context.beginPath();
-      this.context.rect(x, y, w, h);
-      this.context.closePath();
-      this.context.stroke();
+    if (this.strokeWidth > 0) {
+      if (this.roughness > 0) {
+        const rd = this.generator.rectangle(x, y, w, h, {
+          seed,
+          roughness: this.roughness,
+          stroke: this.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          disableMultiStroke: this.strokePattern.length > 1,
+        });
+        roughDraw(this.context, rd);
+      } else {
+        this.context.beginPath();
+        this.context.rect(x, y, w, h);
+        this.context.closePath();
+        this.context.stroke();
+      }
     }
     return this;
   }
@@ -566,39 +570,41 @@ class Canvas {
     this.context.setLineDash(
       this.strokePattern.map((v) => v * this.strokeWidth)
     );
-    if (this.roughness > 0) {
-      const rd = this.generator.path(
-        `M${x + rs[0]},${y} L${x + w - rs[1]},${y} Q${x + w},${y} ${x + w},${
-          y + rs[1]
-        } L${x + w},${y + h - rs[2]} Q${x + w},${y + h} ${x + w - rs[2]},${
-          y + h
-        } L${x + rs[3]},${y + h} Q${x},${y + h} ${x},${y + h - rs[3]} L${x},${
-          y + rs[0]
-        } Q${x},${y} ${x + rs[0]},${y} Z`,
-        {
-          seed,
-          roughness: this.roughness,
-          stroke: this.resolveColor(this.strokeColor),
-          strokeWidth: this.strokeWidth,
-          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-          disableMultiStroke: this.strokePattern.length > 1,
-          preserveVertices: true,
-        }
-      );
-      roughDraw(this.context, rd);
-    } else {
-      this.context.beginPath();
-      this.context.moveTo(x + rs[0], y);
-      this.context.lineTo(x + w - rs[1], y);
-      this.context.quadraticCurveTo(x + w, y, x + w, y + rs[1]);
-      this.context.lineTo(x + w, y + h - rs[2]);
-      this.context.quadraticCurveTo(x + w, y + h, x + w - rs[2], y + h);
-      this.context.lineTo(x + rs[3], y + h);
-      this.context.quadraticCurveTo(x, y + h, x, y + h - rs[3]);
-      this.context.lineTo(x, y + rs[0]);
-      this.context.quadraticCurveTo(x, y, x + rs[0], y);
-      this.context.closePath();
-      this.context.stroke();
+    if (this.strokeWidth > 0) {
+      if (this.roughness > 0) {
+        const rd = this.generator.path(
+          `M${x + rs[0]},${y} L${x + w - rs[1]},${y} Q${x + w},${y} ${x + w},${
+            y + rs[1]
+          } L${x + w},${y + h - rs[2]} Q${x + w},${y + h} ${x + w - rs[2]},${
+            y + h
+          } L${x + rs[3]},${y + h} Q${x},${y + h} ${x},${y + h - rs[3]} L${x},${
+            y + rs[0]
+          } Q${x},${y} ${x + rs[0]},${y} Z`,
+          {
+            seed,
+            roughness: this.roughness,
+            stroke: this.resolveColor(this.strokeColor),
+            strokeWidth: this.strokeWidth,
+            strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+            disableMultiStroke: this.strokePattern.length > 1,
+            preserveVertices: true,
+          }
+        );
+        roughDraw(this.context, rd);
+      } else {
+        this.context.beginPath();
+        this.context.moveTo(x + rs[0], y);
+        this.context.lineTo(x + w - rs[1], y);
+        this.context.quadraticCurveTo(x + w, y, x + w, y + rs[1]);
+        this.context.lineTo(x + w, y + h - rs[2]);
+        this.context.quadraticCurveTo(x + w, y + h, x + w - rs[2], y + h);
+        this.context.lineTo(x + rs[3], y + h);
+        this.context.quadraticCurveTo(x, y + h, x, y + h - rs[3]);
+        this.context.lineTo(x, y + rs[0]);
+        this.context.quadraticCurveTo(x, y, x + rs[0], y);
+        this.context.closePath();
+        this.context.stroke();
+      }
     }
     return this;
   }
@@ -707,25 +713,27 @@ class Canvas {
     this.context.setLineDash(
       this.strokePattern.map((v) => v * this.strokeWidth)
     );
-    if (this.roughness > 0) {
-      const rd = this.generator.ellipse(xm, ym, w, h, {
-        seed,
-        roughness: this.roughness,
-        stroke: this.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        disableMultiStroke: this.strokePattern.length > 1,
-      });
-      roughDraw(this.context, rd);
-    } else {
-      this.context.beginPath();
-      this.context.moveTo(x, ym);
-      this.context.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
-      this.context.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
-      this.context.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
-      this.context.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
-      this.context.closePath();
-      this.context.stroke();
+    if (this.strokeWidth > 0) {
+      if (this.roughness > 0) {
+        const rd = this.generator.ellipse(xm, ym, w, h, {
+          seed,
+          roughness: this.roughness,
+          stroke: this.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          disableMultiStroke: this.strokePattern.length > 1,
+        });
+        roughDraw(this.context, rd);
+      } else {
+        this.context.beginPath();
+        this.context.moveTo(x, ym);
+        this.context.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
+        this.context.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
+        this.context.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
+        this.context.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
+        this.context.closePath();
+        this.context.stroke();
+      }
     }
     return this;
   }
@@ -805,28 +813,30 @@ class Canvas {
     this.context.setLineDash(
       this.strokePattern.map((v) => v * this.strokeWidth)
     );
-    if (this.roughness > 0) {
-      const rd = this.generator.linearPath(path as Point[], {
-        seed,
-        roughness: this.roughness,
-        stroke: this.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        disableMultiStroke: this.strokePattern.length > 1,
-        preserveVertices: true,
-      });
-      roughDraw(this.context, rd);
-    } else {
-      this.context.beginPath();
-      for (let i = 0, len = path.length; i < len; i++) {
-        const p = path[i];
-        if (i === 0) {
-          this.context.moveTo(p[0], p[1]);
-        } else {
-          this.context.lineTo(p[0], p[1]);
+    if (this.strokeWidth > 0) {
+      if (this.roughness > 0) {
+        const rd = this.generator.linearPath(path as Point[], {
+          seed,
+          roughness: this.roughness,
+          stroke: this.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          disableMultiStroke: this.strokePattern.length > 1,
+          preserveVertices: true,
+        });
+        roughDraw(this.context, rd);
+      } else {
+        this.context.beginPath();
+        for (let i = 0, len = path.length; i < len; i++) {
+          const p = path[i];
+          if (i === 0) {
+            this.context.moveTo(p[0], p[1]);
+          } else {
+            this.context.lineTo(p[0], p[1]);
+          }
         }
+        this.context.stroke();
       }
-      this.context.stroke();
     }
     return this;
   }
@@ -843,155 +853,160 @@ class Canvas {
     this.context.setLineDash(
       this.strokePattern.map((v) => v * this.strokeWidth)
     );
-    if (this.roughness > 0) {
-      const rd = this.generator.linearPath(path as Point[], {
-        seed,
-        roughness: this.roughness,
-        stroke: this.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        disableMultiStroke: this.strokePattern.length > 1,
-        preserveVertices: true,
-      });
-      roughDraw(this.context, rd);
-    } else {
-      this.context.beginPath();
-      if (path.length > 0) {
-        var p, prev, next, pdir, ndir;
-        const p0 = path[0];
-        this.context.moveTo(p0[0], p0[1]);
-        for (let i = 1, len = path.length - 1; i < len; i++) {
-          p = path[i];
-          prev = path[i - 1];
-          next = path[i + 1];
-          // direction of previous line
-          if (prev[0] === p[0]) {
-            // vertical
-            pdir = prev[1] < p[1] ? "VD" : "VU"; // down or up
-          } else {
-            // horizontal
-            pdir = prev[0] < p[0] ? "HR" : "HL"; // right or left
+    if (this.strokeWidth > 0) {
+      if (this.roughness > 0) {
+        const rd = this.generator.linearPath(path as Point[], {
+          seed,
+          roughness: this.roughness,
+          stroke: this.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          disableMultiStroke: this.strokePattern.length > 1,
+          preserveVertices: true,
+        });
+        roughDraw(this.context, rd);
+      } else {
+        this.context.beginPath();
+        if (path.length > 0) {
+          var p, prev, next, pdir, ndir;
+          const p0 = path[0];
+          this.context.moveTo(p0[0], p0[1]);
+          for (let i = 1, len = path.length - 1; i < len; i++) {
+            p = path[i];
+            prev = path[i - 1];
+            next = path[i + 1];
+            // direction of previous line
+            if (prev[0] === p[0]) {
+              // vertical
+              pdir = prev[1] < p[1] ? "VD" : "VU"; // down or up
+            } else {
+              // horizontal
+              pdir = prev[0] < p[0] ? "HR" : "HL"; // right or left
+            }
+            // direction of next line
+            if (next[0] === p[0]) {
+              ndir = next[1] < p[1] ? "VU" : "VD"; // vertical down or up
+            } else {
+              ndir = next[0] < p[0] ? "HL" : "HR"; // horizontal right or left
+            }
+            // draw line
+            switch (pdir) {
+              case "VD":
+                // this.context.moveTo(prev[0], prev[1] + ROUND_RADIUS)
+                this.context.lineTo(p[0], p[1] - ROUND_RADIUS);
+                break;
+              case "VU":
+                // this.context.moveTo(prev[0], prev[1] - ROUND_RADIUS)
+                this.context.lineTo(p[0], p[1] + ROUND_RADIUS);
+                break;
+              case "HR":
+                // this.context.moveTo(prev[0] + ROUND_RADIUS, prev[1])
+                this.context.lineTo(p[0] - ROUND_RADIUS, p[1]);
+                break;
+              case "HL":
+                // this.context.moveTo(prev[0] - ROUND_RADIUS, prev[1])
+                this.context.lineTo(p[0] + ROUND_RADIUS, p[1]);
+                break;
+            }
+            // draw corner
+            switch (pdir) {
+              case "VD":
+                if (ndir === "HL") {
+                  this.context.arc(
+                    p[0] - ROUND_RADIUS,
+                    p[1] - ROUND_RADIUS,
+                    ROUND_RADIUS,
+                    0,
+                    0.5 * Math.PI,
+                    false
+                  );
+                } else {
+                  // HR
+                  this.context.arc(
+                    p[0] + ROUND_RADIUS,
+                    p[1] - ROUND_RADIUS,
+                    ROUND_RADIUS,
+                    Math.PI,
+                    0.5 * Math.PI,
+                    true
+                  );
+                }
+                break;
+              case "VU":
+                if (ndir === "HL") {
+                  this.context.arc(
+                    p[0] - ROUND_RADIUS,
+                    p[1] + ROUND_RADIUS,
+                    ROUND_RADIUS,
+                    0,
+                    1.5 * Math.PI,
+                    true
+                  );
+                } else {
+                  // HR
+                  this.context.arc(
+                    p[0] + ROUND_RADIUS,
+                    p[1] + ROUND_RADIUS,
+                    ROUND_RADIUS,
+                    Math.PI,
+                    1.5 * Math.PI,
+                    false
+                  );
+                }
+                break;
+              case "HR":
+                if (ndir === "VD") {
+                  this.context.arc(
+                    p[0] - ROUND_RADIUS,
+                    p[1] + ROUND_RADIUS,
+                    ROUND_RADIUS,
+                    1.5 * Math.PI,
+                    0,
+                    false
+                  );
+                } else {
+                  // VU
+                  this.context.arc(
+                    p[0] - ROUND_RADIUS,
+                    p[1] - ROUND_RADIUS,
+                    ROUND_RADIUS,
+                    0.5 * Math.PI,
+                    0,
+                    true
+                  );
+                }
+                break;
+              case "HL":
+                if (ndir === "VD") {
+                  this.context.arc(
+                    p[0] + ROUND_RADIUS,
+                    p[1] + ROUND_RADIUS,
+                    ROUND_RADIUS,
+                    1.5 * Math.PI,
+                    Math.PI,
+                    true
+                  );
+                } else {
+                  // VU
+                  this.context.arc(
+                    p[0] + ROUND_RADIUS,
+                    p[1] - ROUND_RADIUS,
+                    ROUND_RADIUS,
+                    0.5 * Math.PI,
+                    Math.PI,
+                    false
+                  );
+                }
+                break;
+            }
           }
-          // direction of next line
-          if (next[0] === p[0]) {
-            ndir = next[1] < p[1] ? "VU" : "VD"; // vertical down or up
-          } else {
-            ndir = next[0] < p[0] ? "HL" : "HR"; // horizontal right or left
-          }
-          // draw line
-          switch (pdir) {
-            case "VD":
-              // this.context.moveTo(prev[0], prev[1] + ROUND_RADIUS)
-              this.context.lineTo(p[0], p[1] - ROUND_RADIUS);
-              break;
-            case "VU":
-              // this.context.moveTo(prev[0], prev[1] - ROUND_RADIUS)
-              this.context.lineTo(p[0], p[1] + ROUND_RADIUS);
-              break;
-            case "HR":
-              // this.context.moveTo(prev[0] + ROUND_RADIUS, prev[1])
-              this.context.lineTo(p[0] - ROUND_RADIUS, p[1]);
-              break;
-            case "HL":
-              // this.context.moveTo(prev[0] - ROUND_RADIUS, prev[1])
-              this.context.lineTo(p[0] + ROUND_RADIUS, p[1]);
-              break;
-          }
-          // draw corner
-          switch (pdir) {
-            case "VD":
-              if (ndir === "HL") {
-                this.context.arc(
-                  p[0] - ROUND_RADIUS,
-                  p[1] - ROUND_RADIUS,
-                  ROUND_RADIUS,
-                  0,
-                  0.5 * Math.PI,
-                  false
-                );
-              } else {
-                // HR
-                this.context.arc(
-                  p[0] + ROUND_RADIUS,
-                  p[1] - ROUND_RADIUS,
-                  ROUND_RADIUS,
-                  Math.PI,
-                  0.5 * Math.PI,
-                  true
-                );
-              }
-              break;
-            case "VU":
-              if (ndir === "HL") {
-                this.context.arc(
-                  p[0] - ROUND_RADIUS,
-                  p[1] + ROUND_RADIUS,
-                  ROUND_RADIUS,
-                  0,
-                  1.5 * Math.PI,
-                  true
-                );
-              } else {
-                // HR
-                this.context.arc(
-                  p[0] + ROUND_RADIUS,
-                  p[1] + ROUND_RADIUS,
-                  ROUND_RADIUS,
-                  Math.PI,
-                  1.5 * Math.PI,
-                  false
-                );
-              }
-              break;
-            case "HR":
-              if (ndir === "VD") {
-                this.context.arc(
-                  p[0] - ROUND_RADIUS,
-                  p[1] + ROUND_RADIUS,
-                  ROUND_RADIUS,
-                  1.5 * Math.PI,
-                  0,
-                  false
-                );
-              } else {
-                // VU
-                this.context.arc(
-                  p[0] - ROUND_RADIUS,
-                  p[1] - ROUND_RADIUS,
-                  ROUND_RADIUS,
-                  0.5 * Math.PI,
-                  0,
-                  true
-                );
-              }
-              break;
-            case "HL":
-              if (ndir === "VD") {
-                this.context.arc(
-                  p[0] + ROUND_RADIUS,
-                  p[1] + ROUND_RADIUS,
-                  ROUND_RADIUS,
-                  1.5 * Math.PI,
-                  Math.PI,
-                  true
-                );
-              } else {
-                // VU
-                this.context.arc(
-                  p[0] + ROUND_RADIUS,
-                  p[1] - ROUND_RADIUS,
-                  ROUND_RADIUS,
-                  0.5 * Math.PI,
-                  Math.PI,
-                  false
-                );
-              }
-              break;
-          }
+          this.context.lineTo(
+            path[path.length - 1][0],
+            path[path.length - 1][1]
+          );
         }
-        this.context.lineTo(path[path.length - 1][0], path[path.length - 1][1]);
+        this.context.stroke();
       }
-      this.context.stroke();
     }
     return this;
   }
@@ -1008,26 +1023,31 @@ class Canvas {
     this.context.setLineDash(
       this.strokePattern.map((v) => v * this.strokeWidth)
     );
-    if (this.roughness > 0) {
-      const rd = this.generator.curve(path as Point[], {
-        seed,
-        roughness: this.roughness,
-        stroke: this.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        disableMultiStroke: this.strokePattern.length > 1,
-      });
-      roughDraw(this.context, rd);
-    } else {
-      this.context.beginPath();
-      if (path.length > 2) {
-        const ps = geometry.curvePathPoints(path);
-        this.polyline(ps);
+    if (this.strokeWidth > 0) {
+      if (this.roughness > 0) {
+        const rd = this.generator.curve(path as Point[], {
+          seed,
+          roughness: this.roughness,
+          stroke: this.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          disableMultiStroke: this.strokePattern.length > 1,
+        });
+        roughDraw(this.context, rd);
       } else {
-        this.context.moveTo(path[0][0], path[0][1]);
-        this.context.lineTo(path[path.length - 1][0], path[path.length - 1][1]);
+        this.context.beginPath();
+        if (path.length > 2) {
+          const ps = geometry.curvePathPoints(path);
+          this.polyline(ps);
+        } else {
+          this.context.moveTo(path[0][0], path[0][1]);
+          this.context.lineTo(
+            path[path.length - 1][0],
+            path[path.length - 1][1]
+          );
+        }
+        this.context.stroke();
       }
-      this.context.stroke();
     }
     return this;
   }
@@ -1093,31 +1113,33 @@ class Canvas {
     this.context.setLineDash(
       this.strokePattern.map((v) => v * this.strokeWidth)
     );
-    if (this.roughness > 0) {
-      const rd = this.generator.polygon(path as Point[], {
-        seed,
-        roughness: this.roughness,
-        stroke: this.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        disableMultiStroke: this.strokePattern.length > 1,
-        preserveVertices: true,
-      });
-      roughDraw(this.context, rd);
-    } else {
-      this.context.beginPath();
-      let start: number[] = [-1, -1];
-      for (let i = 0, len = path.length; i < len; i++) {
-        const p = path[i];
-        if (i === 0) {
-          start = p;
-          this.context.moveTo(p[0], p[1]);
-        } else {
-          this.context.lineTo(p[0], p[1]);
+    if (this.strokeWidth > 0) {
+      if (this.roughness > 0) {
+        const rd = this.generator.polygon(path as Point[], {
+          seed,
+          roughness: this.roughness,
+          stroke: this.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          disableMultiStroke: this.strokePattern.length > 1,
+          preserveVertices: true,
+        });
+        roughDraw(this.context, rd);
+      } else {
+        this.context.beginPath();
+        let start: number[] = [-1, -1];
+        for (let i = 0, len = path.length; i < len; i++) {
+          const p = path[i];
+          if (i === 0) {
+            start = p;
+            this.context.moveTo(p[0], p[1]);
+          } else {
+            this.context.lineTo(p[0], p[1]);
+          }
         }
+        this.context.lineTo(start[0], start[1]);
+        this.context.stroke();
       }
-      this.context.lineTo(start[0], start[1]);
-      this.context.stroke();
     }
     return this;
   }
@@ -1186,22 +1208,24 @@ class Canvas {
     this.context.setLineDash(
       this.strokePattern.map((v) => v * this.strokeWidth)
     );
-    if (this.roughness > 0) {
-      // To avoid system stuck due to the bug of roughjs
-      if (startAngle === 0 && endAngle === 360) return this;
-      const rd = this.generator.arc(x, y, r * 2, r * 2, sa, ea, false, {
-        seed,
-        roughness: this.roughness,
-        stroke: this.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        disableMultiStroke: this.strokePattern.length > 1,
-      });
-      roughDraw(this.context, rd);
-    } else {
-      this.context.beginPath();
-      this.context.arc(x, y, r, sa, ea, false);
-      this.context.stroke();
+    if (this.strokeWidth > 0) {
+      if (this.roughness > 0) {
+        // To avoid system stuck due to the bug of roughjs
+        if (startAngle === 0 && endAngle === 360) return this;
+        const rd = this.generator.arc(x, y, r * 2, r * 2, sa, ea, false, {
+          seed,
+          roughness: this.roughness,
+          stroke: this.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          disableMultiStroke: this.strokePattern.length > 1,
+        });
+        roughDraw(this.context, rd);
+      } else {
+        this.context.beginPath();
+        this.context.arc(x, y, r, sa, ea, false);
+        this.context.stroke();
+      }
     }
     return this;
   }
@@ -1270,22 +1294,24 @@ class Canvas {
     this.context.setLineDash(
       this.strokePattern.map((v) => v * this.strokeWidth)
     );
-    if (this.roughness > 0) {
-      const d = pathToString(path);
-      const rd = this.generator.path(d, {
-        seed,
-        roughness: this.roughness,
-        stroke: this.resolveColor(this.strokeColor),
-        strokeWidth: this.strokeWidth,
-        strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
-        disableMultiStroke: this.strokePattern.length > 1,
-        preserveVertices: true,
-      });
-      roughDraw(this.context, rd);
-    } else {
-      this.context.beginPath();
-      const d = new Path2D(pathToString(path));
-      this.context.stroke(d);
+    if (this.strokeWidth > 0) {
+      if (this.roughness > 0) {
+        const d = pathToString(path);
+        const rd = this.generator.path(d, {
+          seed,
+          roughness: this.roughness,
+          stroke: this.resolveColor(this.strokeColor),
+          strokeWidth: this.strokeWidth,
+          strokeLineDash: this.strokePattern.map((v) => v * this.strokeWidth),
+          disableMultiStroke: this.strokePattern.length > 1,
+          preserveVertices: true,
+        });
+        roughDraw(this.context, rd);
+      } else {
+        this.context.beginPath();
+        const d = new Path2D(pathToString(path));
+        this.context.stroke(d);
+      }
     }
     return this;
   }
