@@ -319,7 +319,7 @@ class Canvas {
   /**
    * Translate transform
    */
-  translate(x: number, y: number) {
+  translateTransform(x: number, y: number) {
     this.context.translate(x, y);
   }
 
@@ -327,8 +327,15 @@ class Canvas {
    * Rotation transform
    * @param angle anti-clockwise in degree
    */
-  rotate(angle: number) {
+  rotateTransform(angle: number) {
     this.context.rotate(geometry.toRadian(angle));
+  }
+
+  /**
+   * Scale transform
+   */
+  scaleTransform(x: number, y: number) {
+    this.context.scale(x, y);
   }
 
   /**

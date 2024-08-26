@@ -612,9 +612,9 @@ export class Shape extends Obj {
     }
     if (this.rotate !== 0) {
       const cp = this.getCenter();
-      canvas.translate(cp[0], cp[1]);
-      canvas.rotate(this.rotate);
-      canvas.translate(-cp[0], -cp[1]);
+      canvas.translateTransform(cp[0], cp[1]);
+      canvas.rotateTransform(this.rotate);
+      canvas.translateTransform(-cp[0], -cp[1]);
     }
   }
 
@@ -2818,6 +2818,65 @@ export class Mirror extends Box {
       } else if (nullIfNotFound) {
         this.subject = null;
       }
+    }
+  }
+
+  /**
+   * Update shape
+   */
+  update(canvas: Canvas) {
+    super.update(canvas);
+    const scale = 0.7; // replace by actual scale
+    if (this.subject) {
+      const box = this.subject.getBoundingRect();
+      const w = geometry.width(box);
+      const h = geometry.height(box);
+      this.width = w * scale;
+      this.height = h * scale;
+    }
+  }
+
+  draw(canvas: Canvas, showDOM: boolean = false) {
+    if (this.visible) {
+      this.drawLink(canvas, showDOM);
+      canvas.save();
+      this.localTransform(canvas);
+      // draw subject
+      if (this.subject) {
+        const box = this.subject.getBoundingRect();
+        const l = box[0][0];
+        const t = box[0][1];
+        const scale = 0.7; // replace by actual scale
+        const dx = this.left - l * scale;
+        const dy = this.top - t * scale;
+        canvas.translateTransform(dx, dy);
+        canvas.scaleTransform(scale, scale);
+        // canvas.alpha = this.opacity;
+        this.subject.draw(canvas, showDOM);
+        canvas.translateTransform(-dx, -dy);
+      }
+      // draw children
+      this.children.forEach((s) => (s as Shape).draw(canvas, showDOM));
+      canvas.restore();
+      // draw rendered
+      this._memoCanvas.draw(canvas);
+    }
+  }
+
+  /**
+   * Default render this shape
+   */
+  renderDefault(canvas: MemoizationCanvas) {
+    if (!this.subject) {
+      canvas.strokeRect(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.getSeed()
+      );
+      canvas.line(this.left, this.top, this.right, this.bottom, this.getSeed());
+      canvas.line(this.right, this.top, this.left, this.bottom, this.getSeed());
     }
   }
 }
