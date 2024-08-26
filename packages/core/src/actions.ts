@@ -149,6 +149,12 @@ export class Actions {
               });
               break;
             }
+            case "subject": {
+              objs.forEach((s) => {
+                if (s.hasOwnProperty(key)) tx.assignRef(s, key, value);
+              });
+              break;
+            }
             case "horzAlign":
               objs.forEach((s) => {
                 if (s instanceof Box) {

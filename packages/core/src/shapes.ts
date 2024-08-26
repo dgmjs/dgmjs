@@ -3162,5 +3162,6 @@ export type ShapeProps = Partial<
     Highlighter &
     Group &
     Frame &
+    Mirror &
     Embed
 >;

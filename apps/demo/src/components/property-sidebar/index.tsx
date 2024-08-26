@@ -9,7 +9,7 @@ import { FillPanel } from "./fill-panel";
 import { ControlPanel } from "./control-panel";
 import { StrokePanel } from "./stroke-panel";
 import { TagPanel } from "./tag-panel";
-import { Line, Box, Freehand, Doc, Icon, Page } from "@dgmjs/core";
+import { Line, Box, Freehand, Doc, Icon, Page, Mirror } from "@dgmjs/core";
 import { LinePanel } from "./line-panel";
 import { Empty } from "../common/empty";
 import { PrototypePanel } from "./prototype-panel";
@@ -23,6 +23,7 @@ import { ReferencePanel } from "./reference-panel";
 import { IconPanel } from "./icon-panel";
 import { ShadowPanel } from "./shadow-panel";
 import { PagePanel } from "./page-panel";
+import { MirrorPanel } from "./mirror-panel";
 
 export interface PropertySidebarProps extends ShapeEditorProps {
   doc: Doc;
@@ -56,6 +57,9 @@ export const PropertySidebar: React.FC<PropertySidebarProps> = ({
               <FillPanel shapes={shapes} onChange={onChange} />
               <StrokePanel shapes={shapes} onChange={onChange} />
               <CommonPanel shapes={shapes} onChange={onChange} />
+              {shapes.some((s) => s instanceof Mirror) && (
+                <MirrorPanel doc={doc} shapes={shapes} onChange={onChange} />
+              )}
               {shapes.some((s) => s instanceof Box) && (
                 <>
                   <BoxPanel shapes={shapes} onChange={onChange} />
