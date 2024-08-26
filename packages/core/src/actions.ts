@@ -99,10 +99,7 @@ export class Actions {
     initializer?: (page: Page) => void
   ): Page {
     const buffer: any[] = serialize([page]);
-    const copied = deserialize(
-      this.editor.store.instantiator,
-      buffer
-    )[0] as Page;
+    const copied = deserialize(this.editor.store, buffer)[0] as Page;
     if (initializer) initializer(copied);
     this.editor.transform.startAction("duplicate-page");
     this.editor.transform.transact((tx) => {
@@ -323,10 +320,7 @@ export class Actions {
       shapes = shapes ?? this.editor.selection.getShapes();
       const buffer: any[] = serialize(shapes);
       if (buffer.length > 0) {
-        const copied = deserialize(
-          this.editor.store.instantiator,
-          buffer
-        ) as Shape[];
+        const copied = deserialize(this.editor.store, buffer) as Shape[];
         this.editor.transform.startAction("duplicate");
         this.editor.transform.transact((tx) => {
           copied.toReversed().forEach((shape) => {

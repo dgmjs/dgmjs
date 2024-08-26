@@ -54,7 +54,7 @@ class Clipboard {
           const svgMatch = text.match(/<svg.*<\/svg>/);
           if (dgmMatch) {
             const buffer = JSON.parse(Base64.decode(dgmMatch[1]));
-            data.objs = deserialize(this.store.instantiator, buffer);
+            data.objs = deserialize(this.store, buffer);
           } else if (svgMatch) {
             data.image = new Blob([svgMatch[0]], { type: "image/svg+xml" });
           } else {

@@ -1,5 +1,5 @@
 import { generateId } from "../std/id";
-import { Instantiator } from "./instantiator";
+import type { Store } from "./store";
 import type { Obj } from "./obj";
 
 /**
@@ -23,11 +23,11 @@ export function serialize(objs: Obj[]): any[] {
 /**
  * Get cloned shapes from the given buffer
  */
-export function deserialize(instantiator: Instantiator, buffer: any[]): Obj[] {
+export function deserialize(store: Store, buffer: any[]): Obj[] {
   // copy objects
   const idMap: Record<string, Obj> = {};
   const objs = buffer.map((json) => {
-    const obj = instantiator.createFromJson(json) as Obj;
+    const obj = store.instantiator.createFromJson(json) as Obj;
     obj.traverse((s) => (idMap[s.id] = s));
     return obj;
   });
