@@ -1,5 +1,5 @@
 import { unique } from "../std/lambda";
-import { Connector, Doc, Page, Shape } from "../shapes";
+import { Connector, Doc, Mirror, Page, Shape } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 
@@ -43,6 +43,19 @@ export function getAllReferers(doc: Doc, objs: Shape[]): Shape[] {
     }
   });
   return referers;
+}
+
+/**
+ * Returns all mirrors of the given set of objects
+ */
+export function getAllMirrors(doc: Doc, objs: Shape[]): Mirror[] {
+  const mirrors: Mirror[] = [];
+  doc.traverse((shape) => {
+    if (shape instanceof Mirror && objs.find((o) => shape.subject === o)) {
+      mirrors.push(shape);
+    }
+  });
+  return mirrors;
 }
 
 /**
