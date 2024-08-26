@@ -22,6 +22,7 @@ import { hashStringToNumber } from "./std/id";
 import { themeColors } from "./colors";
 import { getAllViewport } from "./utils/shape-utils";
 import { renderVGElement, VGElement } from "./graphics/vector-graphic";
+import { Store } from "./core";
 
 export const ScriptType = {
   RENDER: "render",

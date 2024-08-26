@@ -1,5 +1,13 @@
 import type { Editor } from "./editor";
-import { Box, Group, type Shape, type ShapeProps, Page, Path } from "./shapes";
+import {
+  Box,
+  Group,
+  Shape,
+  type ShapeProps,
+  Page,
+  Path,
+  Mirror,
+} from "./shapes";
 import * as geometry from "./graphics/geometry";
 import { Obj } from "./core/obj";
 import { deserialize, serialize } from "./core/serialize";
@@ -21,6 +29,36 @@ import {
   ungroupShapes,
 } from "./macro";
 import { visitTextNodes } from "./utils/text-utils";
+import { Store } from "./core";
+
+/**
+ * Extract outer refs in objs from the store
+ */
+export const outerRefMapExtractor = (
+  store: Store,
+  objs: Obj[]
+): Record<string, Obj> => {
+  const outerRefMap: Record<string, Obj> = {};
+  for (let obj of objs) {
+    obj.traverse((o) => {
+      if (
+        o instanceof Shape &&
+        typeof o.reference === "string" &&
+        store.idIndex[o.reference]
+      ) {
+        outerRefMap[o.reference] = store.idIndex[o.reference];
+      }
+      if (
+        o instanceof Mirror &&
+        typeof o.subject === "string" &&
+        store.idIndex[o.subject]
+      ) {
+        outerRefMap[o.subject] = store.idIndex[o.subject];
+      }
+    });
+  }
+  return outerRefMap;
+};
 
 /**
  * Editor actions
@@ -99,7 +137,11 @@ export class Actions {
     initializer?: (page: Page) => void
   ): Page {
     const buffer: any[] = serialize([page]);
-    const copied = deserialize(this.editor.store, buffer)[0] as Page;
+    const copied = deserialize(
+      this.editor.store,
+      buffer,
+      outerRefMapExtractor
+    )[0] as Page;
     if (initializer) initializer(copied);
     this.editor.transform.startAction("duplicate-page");
     this.editor.transform.transact((tx) => {
@@ -254,7 +296,7 @@ export class Actions {
     if (currentPage) {
       const canvas = this.editor.canvas;
       const clipboard = this.editor.clipboard;
-      const data = await clipboard.read();
+      const data = await clipboard.read(outerRefMapExtractor);
       const center = this.editor.getCenter();
 
       // paste shapes in clipboard
@@ -320,7 +362,11 @@ export class Actions {
       shapes = shapes ?? this.editor.selection.getShapes();
       const buffer: any[] = serialize(shapes);
       if (buffer.length > 0) {
-        const copied = deserialize(this.editor.store, buffer) as Shape[];
+        const copied = deserialize(
+          this.editor.store,
+          buffer,
+          outerRefMapExtractor
+        ) as Shape[];
         this.editor.transform.startAction("duplicate");
         this.editor.transform.transact((tx) => {
           copied.toReversed().forEach((shape) => {
