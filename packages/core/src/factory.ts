@@ -16,6 +16,7 @@ import {
   Text,
   Icon,
   VertAlign,
+  Mirror,
 } from "./shapes";
 import { resizeImage } from "./utils/image-utils";
 import * as geometry from "./graphics/geometry";
@@ -298,6 +299,29 @@ export class ShapeFactory {
     frame.textEditable = false;
     this.onShapeInitialize.emit(frame);
     return frame;
+  }
+
+  /**
+   * Create a mirror
+   */
+  createMirror(rect: number[][], subject?: Shape) {
+    const mirror = new Mirror();
+    mirror.left = rect[0][0];
+    mirror.top = rect[0][1];
+    let w = geometry.width(rect);
+    let h = geometry.height(rect);
+    if (geometry.distance(rect[0], rect[1]) <= SHAPE_MIN_SIZE) {
+      w = 100;
+      h = 100;
+    }
+    mirror.width = w;
+    mirror.height = h;
+    mirror.horzAlign = HorzAlign.CENTER;
+    mirror.vertAlign = VertAlign.MIDDLE;
+    mirror.textEditable = false;
+    if (subject) mirror.subject = subject;
+    this.onShapeInitialize.emit(mirror);
+    return mirror;
   }
 
   /**

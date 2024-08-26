@@ -2780,6 +2780,49 @@ export class Frame extends Box {
 }
 
 /**
+ * Mirror
+ */
+export class Mirror extends Box {
+  /**
+   * The subject shape to be mirrored
+   */
+  subject: Shape | null;
+
+  constructor() {
+    super();
+    this.type = "Mirror";
+    this.name = "Mirror";
+    this.containable = true;
+    this.subject = null;
+  }
+
+  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
+    const json = super.toJSON(recursive, keepRefs);
+    json.subject = this.subject ? this.subject.id : null;
+    if (keepRefs) {
+      json.subject = this.subject;
+    }
+    return json;
+  }
+
+  fromJSON(json: any) {
+    super.fromJSON(json);
+    this.subject = json.subject ?? this.subject;
+  }
+
+  resolveRefs(idMap: Record<string, Shape>, nullIfNotFound: boolean = false) {
+    super.resolveRefs(idMap, nullIfNotFound);
+    if (typeof this.subject === "string") {
+      if (idMap[this.subject]) {
+        this.subject = idMap[this.subject];
+      } else if (nullIfNotFound) {
+        this.subject = null;
+      }
+    }
+  }
+}
+
+/**
  * Embed
  */
 export class Embed extends Box {
@@ -3052,6 +3095,7 @@ export const shapeInstantiator = new Instantiator({
   Highlighter: () => new Highlighter(),
   Group: () => new Group(),
   Frame: () => new Frame(),
+  Mirror: () => new Mirror(),
   Embed: () => new Embed(),
 });
 

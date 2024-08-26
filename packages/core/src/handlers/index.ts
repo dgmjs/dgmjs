@@ -10,6 +10,7 @@ import { FreehandFactoryHandler } from "./freehand-handler";
 import { HighlighterFactoryHandler } from "./highlighter-handler";
 import { ImageFactoryHandler } from "./image-handler";
 import { FrameFactoryHandler } from "./frame-handler";
+import { MirrorFactoryHandler } from "./mirror-handler";
 import { EmbedFactoryHandler } from "./embed-handler";
 
 export {
@@ -25,5 +26,6 @@ export {
   HighlighterFactoryHandler,
   ImageFactoryHandler,
   FrameFactoryHandler,
+  MirrorFactoryHandler,
   EmbedFactoryHandler,
 };
