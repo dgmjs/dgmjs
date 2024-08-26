@@ -2821,21 +2821,6 @@ export class Mirror extends Box {
     }
   }
 
-  /**
-   * Update shape
-   */
-  update(canvas: Canvas) {
-    super.update(canvas);
-    const scale = 0.7; // replace by actual scale
-    if (this.subject) {
-      const box = this.subject.getBoundingRect();
-      const w = geometry.width(box);
-      const h = geometry.height(box);
-      this.width = w * scale;
-      this.height = h * scale;
-    }
-  }
-
   draw(canvas: Canvas, showDOM: boolean = false) {
     if (this.visible) {
       this.drawLink(canvas, showDOM);
@@ -2846,12 +2831,14 @@ export class Mirror extends Box {
         const box = this.subject.getBoundingRect();
         const l = box[0][0];
         const t = box[0][1];
-        const scale = 0.7; // replace by actual scale
-        const dx = this.left - l * scale;
-        const dy = this.top - t * scale;
+        const w = geometry.width(box);
+        const h = geometry.height(box);
+        const scaleX = this.width / w;
+        const scaleY = this.height / h;
+        const dx = this.left - l * scaleX;
+        const dy = this.top - t * scaleY;
         canvas.translateTransform(dx, dy);
-        canvas.scaleTransform(scale, scale);
-        // canvas.alpha = this.opacity;
+        canvas.scaleTransform(scaleX, scaleY);
         this.subject.draw(canvas, showDOM);
         canvas.translateTransform(-dx, -dy);
       }

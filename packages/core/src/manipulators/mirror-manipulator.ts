@@ -1,41 +1,41 @@
 import { ControllerPosition } from "../graphics/const";
 import { Manipulator, manipulatorManager } from "../editor";
 import { BoxRotateController } from "../controllers/box-rotate";
-import { BoxSizeController } from "../controllers/box-size";
 import { BoxMoveController } from "../controllers/box-move";
 import { BoxMoveAnchoredController } from "../controllers/box-move-anchored";
 import { BoxMoveAnchorPositionController } from "../controllers/box-move-anchor-position";
+import { BoxSizeController } from "../controllers/box-size";
 import { BoxCreateConnectorController } from "../controllers/box-create-connector";
 
 /**
- * BoxManipulator
+ * MirrorManipulator
  */
-class BoxManipulator extends Manipulator {
+class MirrorManipulator extends Manipulator {
   constructor() {
     super();
     this.controllers.push(
-      new BoxSizeController(this, { position: ControllerPosition.TOP })
+      new BoxSizeController(this, {
+        position: ControllerPosition.LEFT_TOP,
+        doScale: true,
+      })
     );
     this.controllers.push(
-      new BoxSizeController(this, { position: ControllerPosition.RIGHT })
+      new BoxSizeController(this, {
+        position: ControllerPosition.RIGHT_TOP,
+        doScale: true,
+      })
     );
     this.controllers.push(
-      new BoxSizeController(this, { position: ControllerPosition.BOTTOM })
+      new BoxSizeController(this, {
+        position: ControllerPosition.RIGHT_BOTTOM,
+        doScale: true,
+      })
     );
     this.controllers.push(
-      new BoxSizeController(this, { position: ControllerPosition.LEFT })
-    );
-    this.controllers.push(
-      new BoxSizeController(this, { position: ControllerPosition.LEFT_TOP })
-    );
-    this.controllers.push(
-      new BoxSizeController(this, { position: ControllerPosition.RIGHT_TOP })
-    );
-    this.controllers.push(
-      new BoxSizeController(this, { position: ControllerPosition.RIGHT_BOTTOM })
-    );
-    this.controllers.push(
-      new BoxSizeController(this, { position: ControllerPosition.LEFT_BOTTOM })
+      new BoxSizeController(this, {
+        position: ControllerPosition.LEFT_BOTTOM,
+        doScale: true,
+      })
     );
     this.controllers.push(new BoxRotateController(this));
     this.controllers.push(new BoxMoveAnchoredController(this));
@@ -64,10 +64,6 @@ class BoxManipulator extends Manipulator {
   }
 }
 
-manipulatorManager.define("Rectangle", new BoxManipulator());
-manipulatorManager.define("Ellipse", new BoxManipulator());
-manipulatorManager.define("Image", new BoxManipulator());
-manipulatorManager.define("Frame", new BoxManipulator());
-manipulatorManager.define("Icon", new BoxManipulator());
+manipulatorManager.define("Mirror", new MirrorManipulator());
 
-export { BoxManipulator };
+export { MirrorManipulator };
