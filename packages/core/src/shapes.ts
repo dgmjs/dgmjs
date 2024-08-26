@@ -2842,7 +2842,9 @@ export class Mirror extends Box {
         this.subject.draw(canvas, showDOM);
         canvas.translateTransform(-dx, -dy);
       }
+      canvas.restore();
       // draw children
+      canvas.save();
       this.children.forEach((s) => (s as Shape).draw(canvas, showDOM));
       canvas.restore();
       // draw rendered
