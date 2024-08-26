@@ -2,6 +2,7 @@ import React from "react";
 import { Shape } from "@dgmjs/core";
 import { TreeNode, Tree } from "@/components/common/tree";
 import {
+  AirplayIcon,
   CircleIcon,
   ComponentIcon,
   FrameIcon,
@@ -59,6 +60,7 @@ const ShapeTreeNode: React.FC<ShapeTreeNodeProps> = ({
             {shape.type === "Highlighter" && <HighlighterIcon size={16} />}
             {shape.type === "Embed" && <ScanIcon size={16} />}
             {shape.type === "Frame" && <FrameIcon size={16} />}
+            {shape.type === "Mirror" && <AirplayIcon size={16} />}
           </div>
           {shape.proto && <ComponentIcon size={16} className="mr-2" />}
           <div className="truncate">
