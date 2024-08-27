@@ -21,4 +21,4 @@ A macro to bring the shape forward
 
 ## Source
 
-[macro.ts:641](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L641)
+[macro.ts:649](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L649)

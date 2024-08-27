@@ -21,4 +21,4 @@ A macro to adjust routing path
 
 ## Source
 
-[macro.ts:437](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L437)
+[macro.ts:438](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L438)

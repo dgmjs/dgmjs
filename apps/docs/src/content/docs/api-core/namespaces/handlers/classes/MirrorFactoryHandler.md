@@ -2,10 +2,10 @@
 editUrl: false
 next: false
 prev: false
-title: "ImageFactoryHandler"
+title: "MirrorFactoryHandler"
 ---
 
-Image Factory Handler
+Mirror Factory Handler
 
 ## Extends
 
@@ -13,9 +13,9 @@ Image Factory Handler
 
 ## Constructors
 
-### new ImageFactoryHandler()
+### new MirrorFactoryHandler()
 
-> **new ImageFactoryHandler**(`id`, `options`?): [`ImageFactoryHandler`](/api-core/namespaces/handlers/classes/imagefactoryhandler/)
+> **new MirrorFactoryHandler**(`id`, `options`?): [`MirrorFactoryHandler`](/api-core/namespaces/handlers/classes/mirrorfactoryhandler/)
 
 #### Parameters
 
@@ -25,7 +25,7 @@ Image Factory Handler
 
 #### Returns
 
-[`ImageFactoryHandler`](/api-core/namespaces/handlers/classes/imagefactoryhandler/)
+[`MirrorFactoryHandler`](/api-core/namespaces/handlers/classes/mirrorfactoryhandler/)
 
 #### Inherited from
 
@@ -36,6 +36,36 @@ Image Factory Handler
 [editor.ts:1374](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1374)
 
 ## Properties
+
+### dragPoint
+
+> **dragPoint**: `number`[]
+
+#### Source
+
+[handlers/mirror-handler.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/mirror-handler.ts#L14)
+
+***
+
+### dragStartPoint
+
+> **dragStartPoint**: `number`[]
+
+#### Source
+
+[handlers/mirror-handler.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/mirror-handler.ts#L13)
+
+***
+
+### dragging
+
+> **dragging**: `boolean` = `false`
+
+#### Source
+
+[handlers/mirror-handler.ts:12](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/mirror-handler.ts#L12)
+
+***
 
 ### id
 
@@ -62,6 +92,16 @@ Image Factory Handler
 #### Source
 
 [editor.ts:1372](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1372)
+
+***
+
+### shape
+
+> **shape**: `null` \| [`Mirror`](/api-core/classes/mirror/) = `null`
+
+#### Source
+
+[handlers/mirror-handler.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/mirror-handler.ts#L15)
 
 ## Methods
 
@@ -161,9 +201,49 @@ Draw ghost for the selected shape
 
 ***
 
+### finalize()
+
+> **finalize**(`editor`, `e`): `void`
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Source
+
+[handlers/mirror-handler.ts:55](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/mirror-handler.ts#L55)
+
+***
+
+### initialize()
+
+> **initialize**(`editor`, `e`): `void`
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Source
+
+[handlers/mirror-handler.ts:24](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/mirror-handler.ts#L24)
+
+***
+
 ### keyDown()
 
-> **keyDown**(`editor`, `e`): `void`
+> **keyDown**(`editor`, `e`): `boolean`
 
 keyDown
 
@@ -175,15 +255,15 @@ keyDown
 
 #### Returns
 
-`void`
+`boolean`
 
-#### Inherited from
+#### Overrides
 
 [`Handler`](/api-core/classes/handler/).[`keyDown`](/api-core/classes/handler/#keydown)
 
 #### Source
 
-[editor.ts:1443](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1443)
+[handlers/mirror-handler.ts:113](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/mirror-handler.ts#L113)
 
 ***
 
@@ -233,7 +313,7 @@ Triggered when activated
 
 #### Source
 
-[handlers/image-handler.ts:9](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/image-handler.ts#L9)
+[handlers/mirror-handler.ts:123](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/mirror-handler.ts#L123)
 
 ***
 
@@ -251,13 +331,13 @@ Triggered when deactivate
 
 `void`
 
-#### Inherited from
+#### Overrides
 
 [`Handler`](/api-core/classes/handler/).[`onDeactivate`](/api-core/classes/handler/#ondeactivate)
 
 #### Source
 
-[editor.ts:1420](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1420)
+[handlers/mirror-handler.ts:127](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/mirror-handler.ts#L127)
 
 ***
 
@@ -277,15 +357,13 @@ pointerDown
 
 `void`
 
-#### Inherited from
+#### Overrides
 
 [`Handler`](/api-core/classes/handler/).[`pointerDown`](/api-core/classes/handler/#pointerdown)
 
-#### Abstract
-
 #### Source
 
-[editor.ts:1426](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1426)
+[handlers/mirror-handler.ts:73](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/mirror-handler.ts#L73)
 
 ***
 
@@ -305,15 +383,13 @@ pointerMove
 
 `void`
 
-#### Inherited from
+#### Overrides
 
 [`Handler`](/api-core/classes/handler/).[`pointerMove`](/api-core/classes/handler/#pointermove)
 
-#### Abstract
-
 #### Source
 
-[editor.ts:1438](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1438)
+[handlers/mirror-handler.ts:88](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/mirror-handler.ts#L88)
 
 ***
 
@@ -333,15 +409,13 @@ pointerUp
 
 `void`
 
-#### Inherited from
+#### Overrides
 
 [`Handler`](/api-core/classes/handler/).[`pointerUp`](/api-core/classes/handler/#pointerup)
 
-#### Abstract
-
 #### Source
 
-[editor.ts:1432](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1432)
+[handlers/mirror-handler.ts:104](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/mirror-handler.ts#L104)
 
 ***
 
@@ -355,10 +429,30 @@ Reset the states of handler
 
 `void`
 
-#### Inherited from
+#### Overrides
 
 [`Handler`](/api-core/classes/handler/).[`reset`](/api-core/classes/handler/#reset)
 
 #### Source
 
-[editor.ts:1386](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1386)
+[handlers/mirror-handler.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/mirror-handler.ts#L17)
+
+***
+
+### update()
+
+> **update**(`editor`, `e`): `void`
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Source
+
+[handlers/mirror-handler.ts:38](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/mirror-handler.ts#L38)

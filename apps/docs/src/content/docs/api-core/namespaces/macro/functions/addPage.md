@@ -23,4 +23,4 @@ A macro to add a page to doc
 
 ## Source
 
-[macro.ts:68](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L68)
+[macro.ts:69](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L69)

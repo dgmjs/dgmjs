@@ -27,4 +27,4 @@ A macro to create a group of shapes
 
 ## Source
 
-[macro.ts:559](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L559)
+[macro.ts:567](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L567)
