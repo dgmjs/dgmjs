@@ -1,4 +1,5 @@
 import {
+  AirplayIcon,
   CircleIcon,
   EraserIcon,
   FrameIcon,
@@ -101,6 +102,9 @@ export function PaletteToolbar() {
         </PaletteItem>
         <PaletteItem handlerId="Frame">
           <FrameIcon size={16} />
+        </PaletteItem>
+        <PaletteItem handlerId="Mirror">
+          <AirplayIcon size={16} />
         </PaletteItem>
         <PaletteItem handlerId="Embed">
           <ScanIcon size={16} />

@@ -5,6 +5,7 @@ import { PathManipulator } from "./path-manipulator";
 import { GroupManipulator } from "./group-manipulator";
 import { EmbedManipulator } from "./embed-manipulator";
 import { SelectionsManipulator } from "./selections-manipulator";
+import { MirrorManipulator } from "./mirror-manipulator";
 
 export {
   BoxManipulator,
@@ -14,4 +15,5 @@ export {
   SelectionsManipulator,
   GroupManipulator,
   EmbedManipulator,
+  MirrorManipulator,
 };

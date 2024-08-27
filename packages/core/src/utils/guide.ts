@@ -217,9 +217,9 @@ function drawControlPoint(
   const p1 = [p[0] - r, p[1] - r];
   const p2 = [p[0] + r, p[1] + r];
   canvas.save();
-  canvas.translate(p[0], p[1]);
-  canvas.rotate(rotate);
-  canvas.translate(-p[0], -p[1]);
+  canvas.translateTransform(p[0], p[1]);
+  canvas.rotateTransform(rotate);
+  canvas.translateTransform(-p[0], -p[1]);
   switch (type) {
     case ControlPoint.RECT: {
       canvas.fillRoundRect(p1[0], p1[1], p2[0], p2[1], 0);
