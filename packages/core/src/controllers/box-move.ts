@@ -5,6 +5,7 @@ import { drawPolylineInLCS } from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { Cursor } from "../graphics/const";
 import { moveShapes, resolveAllConstraints } from "../macro";
+import { ActionKind } from "../core";
 
 /**
  * BoxMoveController
@@ -46,7 +47,7 @@ export class BoxMoveController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
-    editor.transform.startAction("move");
+    editor.transform.startAction(ActionKind.MOVE);
   }
 
   /**

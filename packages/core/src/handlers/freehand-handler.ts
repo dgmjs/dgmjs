@@ -4,6 +4,7 @@ import { Editor, Handler } from "../editor";
 import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
 import { Freehand, Line } from "../shapes";
 import { addShape, resolveAllConstraints, setPath } from "../macro";
+import { ActionKind } from "../core";
 
 /**
  * Freehand Factory Handler
@@ -30,7 +31,7 @@ export class FreehandFactoryHandler extends Handler {
     if (page) {
       this.draggingPoints.push(this.dragStartPoint);
       this.shape = editor.factory.createFreehand(this.draggingPoints, false);
-      editor.transform.startAction("create");
+      editor.transform.startAction(ActionKind.INSERT);
       editor.transform.transact((tx) => {
         addShape(tx, this.shape!, page);
       });

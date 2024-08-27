@@ -332,6 +332,14 @@ export class Editor {
    */
   pointerDownUnselectedShape: boolean;
 
+  /**
+   * @private
+   *
+   * This indicates that the duplicated shape(s) are dragging
+   * by (alt/opt + mouse) or not.
+   */
+  duplicatedDragging: boolean = false;
+
   private downX: number;
   private downY: number;
   private isPinching: boolean;

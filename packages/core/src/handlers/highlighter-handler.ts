@@ -4,6 +4,7 @@ import { Editor, Handler } from "../editor";
 import { Mouse, Cursor } from "../graphics/const";
 import { Highlighter } from "../shapes";
 import { addShape, resolveAllConstraints, setPath } from "../macro";
+import { ActionKind } from "../core";
 
 /**
  * Highlighter Factory Handler
@@ -30,7 +31,7 @@ export class HighlighterFactoryHandler extends Handler {
     if (page) {
       this.draggingPoints.push(this.dragStartPoint);
       this.shape = editor.factory.createHighlighter(this.draggingPoints);
-      editor.transform.startAction("create");
+      editor.transform.startAction(ActionKind.INSERT);
       editor.transform.transact((tx) => {
         addShape(tx, this.shape!, page);
       });

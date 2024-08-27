@@ -7,6 +7,7 @@ import { Snap } from "../manipulators/snap";
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import { Cursor } from "../graphics/const";
 import { moveAnchor, resolveAllConstraints } from "../macro";
+import { ActionKind } from "../core";
 
 /**
  * BoxMoveAnchoredController
@@ -32,7 +33,8 @@ export class BoxMoveAnchoredController extends Controller {
       editor.selection.isSelected(shape) &&
       shape instanceof Box &&
       shape.movable !== Movable.NONE &&
-      shape.anchored
+      shape.anchored &&
+      !editor.duplicatedDragging
     );
   }
 
@@ -50,7 +52,7 @@ export class BoxMoveAnchoredController extends Controller {
 
   initialize(editor: Editor, shape: Shape): void {
     // this.ghost = shape.getEnclosure();
-    editor.transform.startAction("move-anchor");
+    editor.transform.startAction(ActionKind.MOVE_ANCHOR);
   }
 
   /**

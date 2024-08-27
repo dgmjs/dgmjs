@@ -13,6 +13,7 @@ import { Snap } from "../manipulators/snap";
 import { findControlPoint } from "./utils";
 import { reducePath } from "../utils/route-utils";
 import { resolveAllConstraints, setPath } from "../macro";
+import { ActionKind } from "../core";
 
 interface PathMovePointControllerOptions {
   exceptEndPoints: boolean;
@@ -63,7 +64,8 @@ export class PathMovePointController extends Controller {
       editor.selection.isSelected(shape) &&
       shape instanceof Path &&
       shape.pathEditable &&
-      !editor.pointerDownUnselectedShape
+      !editor.pointerDownUnselectedShape &&
+      !editor.duplicatedDragging
     );
   }
 
@@ -97,7 +99,7 @@ export class PathMovePointController extends Controller {
       this.dragStartPoint
     );
     this.controlPath = geometry.pathCopy((shape as Path).path);
-    editor.transform.startAction("repath");
+    editor.transform.startAction(ActionKind.REPATH);
   }
 
   /**

@@ -13,6 +13,7 @@ import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { getControllerPosition } from "./utils";
 import { resolveAllConstraints } from "../macro";
+import { ActionKind } from "../core";
 
 interface BoxRotateControllerOptions {
   position: string;
@@ -58,8 +59,10 @@ export class BoxRotateController extends Controller {
       !editor.pointerDownUnselectedShape;
     // don't allow rotating a single line
     if (shape instanceof Path && shape.path.length === 2) value = false;
-    // don't allow resizing when path editable
+    // don't allow rotating when path editable
     if (shape instanceof Path && shape.pathEditable) value = false;
+    // don't allow rotating when duplicated dragging
+    if (editor.duplicatedDragging) value = false;
     return value;
   }
 
@@ -130,7 +133,7 @@ export class BoxRotateController extends Controller {
    * Initialize ghost
    */
   initialize(editor: Editor, shape: Shape): void {
-    editor.transform.startAction("rotate");
+    editor.transform.startAction(ActionKind.ROTATE);
   }
 
   /**

@@ -1,6 +1,7 @@
 import { Editor, Handler } from "../editor";
 import { fileOpen } from "browser-fs-access";
 import { addShape, resolveAllConstraints } from "../macro";
+import { ActionKind } from "../core";
 
 /**
  * Image Factory Handler
@@ -26,7 +27,7 @@ export class ImageFactoryHandler extends Handler {
           ]);
           const center = editor.getCenter();
           const shape = await editor.factory.createImage(file, center);
-          editor.transform.startAction("create");
+          editor.transform.startAction(ActionKind.INSERT);
           editor.transform.transact((tx) => {
             addShape(tx, shape, page);
             resolveAllConstraints(tx, page, editor.canvas);

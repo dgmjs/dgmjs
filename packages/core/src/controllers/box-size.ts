@@ -21,6 +21,7 @@ import {
   resizeShape,
   resolveAllConstraints,
 } from "../macro";
+import { ActionKind } from "../core";
 
 interface BoxSizeControllerOptions {
   position: string;
@@ -135,6 +136,8 @@ export class BoxSizeController extends Controller {
     if (shape instanceof Path && shape.pathEditable) value = false;
     // don't allow resizing when pointer down on unselected shape
     if (editor.pointerDownUnselectedShape) value = false;
+    // don't allow resizing when dragging a duplicated shape
+    if (editor.duplicatedDragging) value = false;
     return value;
   }
 
@@ -185,7 +188,7 @@ export class BoxSizeController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
-    editor.transform.startAction("resize");
+    editor.transform.startAction(ActionKind.RESIZE);
     this.initialEnclosure = shape.getEnclosure();
     this.initialSnapshot = {};
     shape.traverse((s) => (this.initialSnapshot[s.id] = s.toJSON(false, true)));

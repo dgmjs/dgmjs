@@ -29,7 +29,7 @@ import {
   ungroupShapes,
 } from "./macro";
 import { visitTextNodes } from "./utils/text-utils";
-import { Store } from "./core";
+import { ActionKind, Store } from "./core";
 
 /**
  * Extract outer refs in objs from the store
@@ -94,7 +94,7 @@ export class Actions {
     const page = new Page();
     page.size = prevPage?.size ?? null; // set size to the previous page's size
     page.name = `Page ${position + 1}`;
-    this.editor.transform.startAction("add-page");
+    this.editor.transform.startAction(ActionKind.ADD_PAGE);
     this.editor.transform.transact((tx) => {
       addPage(tx, this.editor.getDoc(), page);
       if (position >= 0 && position < this.editor.getPages().length) {
@@ -110,7 +110,7 @@ export class Actions {
    * Remove a page
    */
   removePage(page: Page) {
-    this.editor.transform.startAction("remove-page");
+    this.editor.transform.startAction(ActionKind.REMOVE_PAGE);
     this.editor.transform.transact((tx) => {
       removePage(tx, page);
     });
@@ -121,7 +121,7 @@ export class Actions {
    * Reorder a page
    */
   reorderPage(page: Page, position: number) {
-    this.editor.transform.startAction("remove-page");
+    this.editor.transform.startAction(ActionKind.REORDER_PAGE);
     this.editor.transform.transact((tx) => {
       reorderPage(tx, page, position);
     });
@@ -143,7 +143,7 @@ export class Actions {
       outerRefMapExtractor
     )[0] as Page;
     if (initializer) initializer(copied);
-    this.editor.transform.startAction("duplicate-page");
+    this.editor.transform.startAction(ActionKind.DUPLICATE_PAGE);
     this.editor.transform.transact((tx) => {
       addPage(tx, this.editor.getDoc(), copied);
       reorderPage(tx, copied, position);
@@ -161,7 +161,7 @@ export class Actions {
   insert(shape: Shape, parent?: Shape) {
     const page = this.editor.getCurrentPage();
     if (page) {
-      this.editor.transform.startAction("insert");
+      this.editor.transform.startAction(ActionKind.INSERT);
       this.editor.transform.transact((tx) => {
         addShape(tx, shape, parent ?? page);
         resolveAllConstraints(tx, page, this.editor.canvas);
@@ -176,7 +176,7 @@ export class Actions {
   update(values: ShapeProps, objs?: Obj[]) {
     const page = this.editor.getCurrentPage();
     if (page) {
-      this.editor.transform.startAction("update");
+      this.editor.transform.startAction(ActionKind.UPDATE);
       this.editor.transform.transact((tx) => {
         objs = objs ?? this.editor.selection.getShapes();
         for (let key in values) {
@@ -245,7 +245,7 @@ export class Actions {
     const doc = this.editor.getDoc();
     const page = this.editor.getCurrentPage();
     if (page) {
-      this.editor.transform.startAction("delete");
+      this.editor.transform.startAction(ActionKind.DELETE);
       this.editor.transform.transact((tx) => {
         shapes = shapes ?? this.editor.selection.getShapes();
         deleteShapes(tx, doc, page, shapes);
@@ -279,7 +279,7 @@ export class Actions {
       await clipboard.write({
         objs: shapes,
       });
-      this.editor.transform.startAction("cut");
+      this.editor.transform.startAction(ActionKind.CUT);
       this.editor.transform.transact((tx) => {
         deleteShapes(tx, doc, page, shapes!);
       });
@@ -309,7 +309,7 @@ export class Actions {
         const h = geometry.height(boundingRect);
         const dx = center[0] - (boundingRect[0][0] + w / 2);
         const dy = center[1] - (boundingRect[0][1] + h / 2);
-        this.editor.transform.startAction("paste");
+        this.editor.transform.startAction(ActionKind.PASTE);
         this.editor.transform.transact((tx) => {
           shapes.toReversed().forEach((shape) => {
             tx.appendObj(shape);
@@ -325,7 +325,7 @@ export class Actions {
       // paste image in clipboard
       if (data.image) {
         const shape = await this.editor.factory.createImage(data.image, center);
-        this.editor.transform.startAction("paste");
+        this.editor.transform.startAction(ActionKind.PASTE);
         this.editor.transform.transact((tx) => {
           addShape(tx, shape, currentPage);
           resolveAllConstraints(tx, currentPage, canvas);
@@ -341,7 +341,7 @@ export class Actions {
           [center, center],
           data.text
         );
-        this.editor.transform.startAction("paste");
+        this.editor.transform.startAction(ActionKind.PASTE);
         this.editor.transform.transact((tx) => {
           addShape(tx, shape, currentPage);
           resolveAllConstraints(tx, currentPage, canvas);
@@ -355,8 +355,11 @@ export class Actions {
 
   /**
    * Duplicate shapes
+   * @param shapes - The shapes to duplicate. If not provided, the selected shapes will be duplicated
+   * @param dx - The horizontal distance to move the duplicated shapes
+   * @param dy - The vertical distance to move the duplicated shapes
    */
-  duplicate(shapes?: Shape[]) {
+  duplicate(shapes?: Shape[], dx: number = 30, dy: number = 30): Shape[] {
     const page = this.editor.getCurrentPage();
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
@@ -367,18 +370,20 @@ export class Actions {
           buffer,
           outerRefMapExtractor
         ) as Shape[];
-        this.editor.transform.startAction("duplicate");
+        this.editor.transform.startAction(ActionKind.DUPLICATE);
         this.editor.transform.transact((tx) => {
           copied.toReversed().forEach((shape) => {
             tx.appendObj(shape);
             changeParent(tx, shape, page);
           });
-          moveShapes(tx, page, copied, 30, 30);
+          moveShapes(tx, page, copied, dx, dy);
         });
         this.editor.transform.endAction();
         this.editor.selection.select(copied);
+        return copied;
       }
     }
+    return [];
   }
 
   /**
@@ -389,7 +394,7 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.transform.startAction("move-right");
+        this.editor.transform.startAction(ActionKind.MOVE);
         this.editor.transform.transact((tx) => {
           if (shapes!.every((s) => s instanceof Box && s.anchored)) {
             for (let s of shapes!) {
@@ -427,7 +432,7 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       let group: Group | null = null;
-      this.editor.transform.startAction("group");
+      this.editor.transform.startAction(ActionKind.GROUP);
       this.editor.transform.transact((tx) => {
         groupShapes(tx, doc, page, this.editor.canvas, shapes!);
         group = tx.recentlyAppendedObj as Group;
@@ -450,7 +455,7 @@ export class Actions {
         const children = shapes
           .filter((s) => s instanceof Group)
           .flatMap((g) => g.children as Shape[]);
-        this.editor.transform.startAction("ungroup");
+        this.editor.transform.startAction(ActionKind.UNGROUP);
         this.editor.transform.transact((tx) => {
           ungroupShapes(tx, doc, page, this.editor.canvas, shapes!);
           resolveAllConstraints(tx, page, this.editor.canvas);
@@ -469,7 +474,7 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.transform.startAction("bring-to-front");
+        this.editor.transform.startAction(ActionKind.BRING_TO_FRONT);
         this.editor.transform.transact((tx) => {
           for (let s of shapes!) {
             bringToFront(tx, s);
@@ -489,7 +494,7 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.transform.startAction("send-to-back");
+        this.editor.transform.startAction(ActionKind.SEND_TO_BACK);
         this.editor.transform.transact((tx) => {
           for (let s of shapes!) {
             sendToBack(tx, s);
@@ -509,7 +514,7 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.transform.startAction("bring-forward");
+        this.editor.transform.startAction(ActionKind.BRING_FORWARD);
         this.editor.transform.transact((tx) => {
           for (let s of shapes!) {
             bringForward(tx, s);
@@ -529,7 +534,7 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.transform.startAction("send-backward");
+        this.editor.transform.startAction(ActionKind.SEND_BACKWARD);
         this.editor.transform.transact((tx) => {
           for (let s of shapes!) {
             sendBackward(tx, s);
@@ -549,7 +554,7 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.transform.startAction("align-left");
+        this.editor.transform.startAction(ActionKind.ALIGN_LEFT);
         this.editor.transform.transact((tx) => {
           const ls = shapes!.map((s) => s.getBoundingRect()[0][0]);
           const left = Math.min(...ls);
@@ -577,7 +582,7 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.transform.startAction("align-right");
+        this.editor.transform.startAction(ActionKind.ALIGN_RIGHT);
         this.editor.transform.transact((tx) => {
           const rs = shapes!.map((s) => s.getBoundingRect()[1][0]);
           const right = Math.max(...rs);
@@ -605,7 +610,7 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.transform.startAction("align-center");
+        this.editor.transform.startAction(ActionKind.ALIGN_CENTER);
         this.editor.transform.transact((tx) => {
           const ls = shapes!.map((s) => s.getBoundingRect()[0][0]);
           const rs = shapes!.map((s) => s.getBoundingRect()[1][0]);
@@ -638,7 +643,7 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.transform.startAction("align-top");
+        this.editor.transform.startAction(ActionKind.ALIGN_TOP);
         this.editor.transform.transact((tx) => {
           const ts = shapes!.map((s) => s.getBoundingRect()[0][1]);
           const top = Math.min(...ts);
@@ -666,7 +671,7 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.transform.startAction("align-bottom");
+        this.editor.transform.startAction(ActionKind.ALIGN_BOTTOM);
         this.editor.transform.transact((tx) => {
           const bs = shapes!.map((s) => s.getBoundingRect()[1][1]);
           const bottom = Math.max(...bs);
@@ -694,7 +699,7 @@ export class Actions {
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
       if (shapes.length > 0) {
-        this.editor.transform.startAction("align-middle");
+        this.editor.transform.startAction(ActionKind.ALIGN_MIDDLE);
         this.editor.transform.transact((tx) => {
           const ts = shapes!.map((s) => s.getBoundingRect()[0][1]);
           const bs = shapes!.map((s) => s.getBoundingRect()[1][1]);
@@ -740,7 +745,7 @@ export class Actions {
         const width = right - left;
         const sum = ws.reduce((a, b) => a + b, 0);
         const gap = (width - sum) / (orderedShapes.length - 1);
-        this.editor.transform.startAction("align-horizontal-space-around");
+        this.editor.transform.startAction(ActionKind.DISTRIBUTE_HORIZONTALLY);
         this.editor.transform.transact((tx) => {
           let x = left;
           for (let i = 0; i < orderedShapes.length; i++) {
@@ -783,7 +788,7 @@ export class Actions {
         const height = bottom - top;
         const sum = hs.reduce((a, b) => a + b, 0);
         const gap = (height - sum) / (orderedShapes.length - 1);
-        this.editor.transform.startAction("align-vertical-space-around");
+        this.editor.transform.startAction(ActionKind.DISTRIBUTE_VERTICALLY);
         this.editor.transform.transact((tx) => {
           let y = top;
           for (let i = 0; i < orderedShapes.length; i++) {

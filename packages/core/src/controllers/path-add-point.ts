@@ -9,6 +9,7 @@ import { Snap } from "../manipulators/snap";
 import { findSegmentControlPoint, fitPathInCSS } from "./utils";
 import { reducePath } from "../utils/route-utils";
 import { resolveAllConstraints, setPath } from "../macro";
+import { ActionKind } from "../core";
 
 /**
  * PathAddPointController
@@ -46,7 +47,8 @@ export class PathAddPointController extends Controller {
       editor.selection.isSelected(shape) &&
       shape instanceof Path &&
       shape.pathEditable &&
-      !editor.pointerDownUnselectedShape
+      !editor.pointerDownUnselectedShape &&
+      !editor.duplicatedDragging
     );
   }
 
@@ -77,7 +79,7 @@ export class PathAddPointController extends Controller {
       shape as Line,
       this.dragStartPoint
     );
-    editor.transform.startAction("repath");
+    editor.transform.startAction(ActionKind.REPATH);
   }
 
   /**

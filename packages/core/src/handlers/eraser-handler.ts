@@ -4,6 +4,7 @@ import { Editor, Handler } from "../editor";
 import { Mouse, Cursor } from "../graphics/const";
 import { deleteShapes, resolveAllConstraints } from "../macro";
 import { Shape } from "../shapes";
+import { ActionKind } from "../core";
 
 /**
  * Eraser Handler
@@ -40,7 +41,7 @@ export class EraserHandler extends Handler {
   }
 
   initialize(editor: Editor, e: CanvasPointerEvent): void {
-    editor.transform.startAction("erase");
+    editor.transform.startAction(ActionKind.DELETE);
     this.addToDeletingShapes(editor, this.dragStartPoint);
   }
 

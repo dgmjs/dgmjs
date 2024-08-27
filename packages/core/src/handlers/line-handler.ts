@@ -4,6 +4,7 @@ import { Line, Shape } from "../shapes";
 import { Editor, Handler } from "../editor";
 import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
 import { addShape, resolveAllConstraints, setPath } from "../macro";
+import { ActionKind } from "../core";
 
 /**
  * Line Factory Handler
@@ -34,7 +35,7 @@ export class LineFactoryHandler extends Handler {
     if (page) {
       this.points = [this.dragStartPoint];
       this.shape = editor.factory.createLine(this.points, false);
-      editor.transform.startAction("create");
+      editor.transform.startAction(ActionKind.INSERT);
       editor.transform.transact((tx) => {
         addShape(tx, this.shape!, page);
       });
