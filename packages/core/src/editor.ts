@@ -504,7 +504,7 @@ export class Editor {
         if (e.button === Mouse.BUTTON2) this.midButtonDown = true;
         const event = createPointerEvent(this.canvasElement, this.canvas, e);
         this.autoScroller.pointerDown(event);
-        if (this.midButtonDown || (event.ModDown && this.leftButtonDown)) {
+        if (this.midButtonDown || (event.modDown && this.leftButtonDown)) {
           // viewpoint move
           this.setCursor(Cursor.GRABBING);
           this.downX = e.offsetX;
@@ -524,7 +524,7 @@ export class Editor {
         const event = createPointerEvent(this.canvasElement, this.canvas, e);
         event.leftButtonDown = this.leftButtonDown;
         this.autoScroller.pointerMove(event);
-        if (this.midButtonDown || (event.ModDown && this.leftButtonDown)) {
+        if (this.midButtonDown || (event.modDown && this.leftButtonDown)) {
           // viewpoint move
           let dx = (e.offsetX - this.downX) / this.getScale();
           let dy = (e.offsetY - this.downY) / this.getScale();
@@ -542,7 +542,7 @@ export class Editor {
     this.canvasElement.addEventListener("pointerup", (e) => {
       if (this.enabled) {
         const event = createPointerEvent(this.canvasElement, this.canvas, e);
-        if (this.midButtonDown || (event.ModDown && this.leftButtonDown)) {
+        if (this.midButtonDown || (event.modDown && this.leftButtonDown)) {
           this.setCursor(Cursor.DEFAULT);
           this.downX = 0;
           this.downY = 0;

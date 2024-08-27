@@ -78,7 +78,8 @@ export class SelectHandler extends Handler {
       }
 
       // duplicated dragging (alt/opt + mouse)
-      if (e.altDown) {
+      if (e.altDown && !e.modDown && !e.shiftDown) {
+        console.log("e", e);
         // deselect the shape if mouse is outside of the shape
         if (shape && editor.selection.isSelected(shape)) {
           const p = canvas.globalCoordTransformRev([e.x, e.y]);

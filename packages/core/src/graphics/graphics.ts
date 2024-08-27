@@ -1438,7 +1438,7 @@ class CanvasPointerEvent {
   shiftDown: boolean;
   altDown: boolean;
   ctrlDown: boolean;
-  ModDown: boolean;
+  modDown: boolean;
   leftButtonDown: boolean;
   touchDistance: number;
 
@@ -1460,7 +1460,7 @@ class CanvasPointerEvent {
     this.shiftDown = e.shiftKey;
     this.altDown = e.altKey;
     this.ctrlDown = e.ctrlKey;
-    this.ModDown = e.metaKey || e.ctrlKey;
+    this.modDown = e.metaKey || e.ctrlKey;
     this.leftButtonDown = false;
     this.touchDistance = e.touchDistance || 0;
   }
