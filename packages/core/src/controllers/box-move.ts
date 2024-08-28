@@ -1,11 +1,12 @@
 import { CanvasPointerEvent } from "../graphics/graphics";
-import { Shape, Box, Movable, Page, Path } from "../shapes";
+import { Shape, Box, Movable, Page, Path, Mirror } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { drawPolylineInLCS } from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { Cursor } from "../graphics/const";
 import { moveShapes, resolveAllConstraints } from "../macro";
 import { ActionKind } from "../core";
+import { ableToContain } from "./utils";
 
 /**
  * BoxMoveController
@@ -16,10 +17,16 @@ export class BoxMoveController extends Controller {
    */
   snap: Snap;
 
+  /**
+   * Reference to a container shape
+   */
+  container: Shape | null;
+
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.hasHandle = false;
     this.snap = new Snap();
+    this.container = null;
   }
 
   /**
@@ -74,14 +81,15 @@ export class BoxMoveController extends Controller {
     // return if no change
     if (this.dxStepGCS === 0 && this.dyStepGCS === 0) return;
 
-    // determine container (shouldn't be itself of a descendant of target)
+    // determine container
     const canvas = editor.canvas;
     let p2 = targetShape.localCoordTransform(canvas, this.dragPoint, false);
-    let container = editor.getCurrentPage()?.getShapeAt(canvas, p2, [shape]);
-    const r = targetShape.find((s) => s.id === container?.id);
-    if (r) container = null;
-    if (!(container && container.canContain(targetShape)))
-      container = editor.getCurrentPage();
+    this.container =
+      editor.getCurrentPage()?.getShapeAt(canvas, p2, [shape]) ?? null;
+    if (this.container && !ableToContain(this.container, targetShape)) {
+      this.container = null;
+    }
+    if (!this.container) this.container = editor.getCurrentPage();
 
     // update
     const page = editor.getCurrentPage()!;
@@ -92,7 +100,7 @@ export class BoxMoveController extends Controller {
         [targetShape],
         this.dxStepGCS,
         this.dyStepGCS,
-        container
+        this.container
       );
       resolveAllConstraints(tx, page, canvas);
     });
@@ -122,13 +130,10 @@ export class BoxMoveController extends Controller {
 
   drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent): void {
     super.drawDragging(editor, shape, e);
-    const canvas = editor.canvas;
     // hovering containable
-    const dp = shape.localCoordTransform(canvas, this.dragPoint, true);
-    const container = editor.getCurrentPage()?.getShapeAt(canvas, dp, [shape]);
-    if (container && container !== shape && container.canContain(shape)) {
-      const manipulator = manipulatorManager.get(container.type);
-      if (manipulator) manipulator.drawHovering(editor, container, e);
+    if (this.container) {
+      const manipulator = manipulatorManager.get(this.container.type);
+      if (manipulator) manipulator.drawHovering(editor, this.container, e);
     }
   }
 }

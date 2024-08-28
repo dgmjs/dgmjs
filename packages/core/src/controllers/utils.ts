@@ -1,6 +1,6 @@
 import type { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Connector, Line, Path, Shape } from "../shapes";
+import { Connector, Line, Mirror, Path, Shape } from "../shapes";
 import { angleInCCS, lcs2ccs } from "../graphics/utils";
 import { minimize_Powell } from "../utils/optimization-js";
 import type { Editor } from "../editor";
@@ -244,4 +244,26 @@ export function getControllerPosition(
     }
   }
   return [-1, -1];
+}
+
+/**
+ * Returns whether the container can contain the given shape
+ */
+export function ableToContain(container: Shape, shape: Shape) {
+  // container or it's parent shouldn't contain the mirror of itself
+  const mirror = shape.find(
+    (s) =>
+      s instanceof Mirror &&
+      (s.subject === container ||
+        container.findParent((p) => s.subject === p) !== null)
+  );
+  if (mirror) return false;
+
+  // container shouldn't contain one of it's ancestors
+  const child = shape.find((s) => s.id === container?.id);
+  if (child) return false;
+
+  // determine based on containable an containable filter
+  if (!container.canContain(shape)) return false;
+  return true;
 }
