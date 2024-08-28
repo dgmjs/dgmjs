@@ -4,6 +4,7 @@ import { CanvasPointerEvent } from "../graphics/graphics";
 import { Cursor, Mouse } from "../graphics/const";
 import { Rectangle, Shape } from "../shapes";
 import { addShape, resolveAllConstraints } from "../macro";
+import { ActionKind } from "../core";
 
 /**
  * Rectangle Factory Handler
@@ -28,7 +29,7 @@ export class RectangleFactoryHandler extends Handler {
         this.dragStartPoint,
         this.dragPoint,
       ]);
-      editor.transform.startAction("create");
+      editor.transform.startAction(ActionKind.INSERT);
       editor.transform.transact((tx) => {
         addShape(tx, this.shape!, page);
       });

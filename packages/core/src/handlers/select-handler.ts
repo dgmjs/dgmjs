@@ -4,6 +4,7 @@ import { Shape } from "../shapes";
 import { Editor, Handler, manipulatorManager } from "../editor";
 import { Mouse, Color, Cursor } from "../graphics/const";
 import * as guide from "../utils/guide";
+import { ActionKind } from "../core";
 
 /**
  * Select Handler
@@ -44,6 +45,7 @@ export class SelectHandler extends Handler {
   pointerDown(editor: Editor, e: CanvasPointerEvent) {
     const canvas = editor.canvas;
     const page = editor.getCurrentPage();
+    editor.duplicatedDragging = false;
     editor.pointerDownUnselectedShape = false;
 
     if (e.button === Mouse.BUTTON1) {
@@ -73,6 +75,28 @@ export class SelectHandler extends Handler {
           controller: null,
           dragPoint: this.dragStartPoint,
         });
+      }
+
+      // duplicated dragging (alt/opt + mouse)
+      if (e.altDown && !e.modDown && !e.shiftDown) {
+        console.log("e", e);
+        // deselect the shape if mouse is outside of the shape
+        if (shape && editor.selection.isSelected(shape)) {
+          const p = canvas.globalCoordTransformRev([e.x, e.y]);
+          if (!shape.containsPoint(canvas, p)) {
+            editor.selection.deselect([shape]);
+          }
+        }
+        // duplicate selected shapes
+        if (editor.selection.size() > 0) {
+          const copied = editor.actions.duplicate(
+            editor.selection.getShapes(),
+            0,
+            0
+          );
+          editor.selection.select(copied);
+        }
+        editor.duplicatedDragging = true;
       }
     }
 
@@ -250,6 +274,24 @@ export class SelectHandler extends Handler {
 
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
+
+    // merge multiple actions of duplicated dragging into a single action
+    if (editor.duplicatedDragging) {
+      if (editor.transform.undoHistory.size() > 0) {
+        const action1 = editor.transform.undoHistory.get();
+        if (action1 && action1.name === ActionKind.MOVE) {
+          if (editor.transform.undoHistory.size() > 1) {
+            const action2 = editor.transform.undoHistory.get(1);
+            if (action2 && action2.name === ActionKind.DUPLICATE) {
+              editor.transform.mergeAction();
+            }
+          }
+        } else if (action1 && action1.name === ActionKind.DUPLICATE) {
+          editor.transform.undo();
+        }
+      }
+      editor.duplicatedDragging = false;
+    }
   }
 
   /**

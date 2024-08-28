@@ -35,4 +35,4 @@ The Base64-encoded image data of the shapes.
 
 ## Source
 
-[index.ts:86](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L86)
+[index.ts:83](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L83)

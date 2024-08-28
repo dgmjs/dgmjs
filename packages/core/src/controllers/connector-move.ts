@@ -5,6 +5,7 @@ import { Snap } from "../manipulators/snap";
 import * as geometry from "../graphics/geometry";
 import { Cursor } from "../graphics/const";
 import { changeParent, resolveAllConstraints, setPath } from "../macro";
+import { ActionKind } from "../core";
 
 /**
  * ConnectorMove Controller
@@ -53,7 +54,7 @@ export class ConnectorMoveController extends Controller {
 
   initialize(editor: Editor, shape: Shape): void {
     this.controlPath = geometry.pathCopy((shape as Path).path);
-    editor.transform.startAction("repath");
+    editor.transform.startAction(ActionKind.REPATH);
   }
 
   /**

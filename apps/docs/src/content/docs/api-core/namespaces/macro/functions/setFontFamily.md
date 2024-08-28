@@ -23,4 +23,4 @@ A macro to change font family
 
 ## Source
 
-[macro.ts:355](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L355)
+[macro.ts:356](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L356)

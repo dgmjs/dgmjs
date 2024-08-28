@@ -5,6 +5,7 @@ import { Color, Cursor } from "../graphics/const";
 import { Snap } from "../manipulators/snap";
 import { lcs2ccs } from "../graphics/utils";
 import { moveShapes, resolveAllConstraints } from "../macro";
+import { ActionKind } from "../core";
 
 /**
  * SelectionsMoveController
@@ -55,7 +56,7 @@ export class SelectionsMoveController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
-    editor.transform.startAction("move");
+    editor.transform.startAction(ActionKind.MOVE);
   }
 
   /**

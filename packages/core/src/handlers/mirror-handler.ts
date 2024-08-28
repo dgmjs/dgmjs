@@ -1,36 +1,34 @@
-import { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { Editor, Handler } from "../editor";
-import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
-import { Freehand, Line } from "../shapes";
-import { addShape, resolveAllConstraints, setPath } from "../macro";
+import { CanvasPointerEvent } from "../graphics/graphics";
+import { Cursor, Mouse } from "../graphics/const";
+import { Mirror, Shape } from "../shapes";
+import { addShape, resolveAllConstraints } from "../macro";
 import { ActionKind } from "../core";
 
 /**
- * Freehand Factory Handler
+ * Mirror Factory Handler
  */
-export class FreehandFactoryHandler extends Handler {
+export class MirrorFactoryHandler extends Handler {
   dragging: boolean = false;
   dragStartPoint: number[] = [-1, -1];
   dragPoint: number[] = [-1, -1];
-  draggingPoints: number[][] = [];
-  closed: boolean = false;
-  shape: Freehand | null = null;
+  shape: Mirror | null = null;
 
   reset(): void {
     this.dragging = false;
     this.dragStartPoint = [-1, -1];
     this.dragPoint = [-1, -1];
-    this.draggingPoints = [];
-    this.closed = false;
     this.shape = null;
   }
 
   initialize(editor: Editor, e: CanvasPointerEvent): void {
     const page = editor.getCurrentPage();
     if (page) {
-      this.draggingPoints.push(this.dragStartPoint);
-      this.shape = editor.factory.createFreehand(this.draggingPoints, false);
+      this.shape = editor.factory.createMirror([
+        this.dragStartPoint,
+        this.dragPoint,
+      ]);
       editor.transform.startAction(ActionKind.INSERT);
       editor.transform.transact((tx) => {
         addShape(tx, this.shape!, page);
@@ -40,31 +38,32 @@ export class FreehandFactoryHandler extends Handler {
 
   update(editor: Editor, e: CanvasPointerEvent): void {
     const page = editor.getCurrentPage();
-    this.draggingPoints.push(this.dragPoint);
-    const newPath = structuredClone(this.draggingPoints);
-    this.closed =
-      geometry.distance(newPath[0], newPath[newPath.length - 1]) <=
-      MAGNET_THRESHOLD;
-    if (this.closed) {
-      newPath[newPath.length - 1] = geometry.copy(newPath[0]);
-    }
-    editor.transform.transact((tx) => {
-      if (page && this.shape) {
-        setPath(tx, this.shape, newPath);
+    if (page && this.shape) {
+      const rect = geometry.normalizeRect([
+        this.dragStartPoint,
+        this.dragPoint,
+      ]);
+      editor.transform.transact((tx) => {
+        tx.assign(this.shape!, "left", rect[0][0]);
+        tx.assign(this.shape!, "top", rect[0][1]);
+        tx.assign(this.shape!, "width", geometry.width(rect));
+        tx.assign(this.shape!, "height", geometry.height(rect));
         resolveAllConstraints(tx, page, editor.canvas);
-      }
-    });
+      });
+    }
   }
 
   finalize(editor: Editor, e: CanvasPointerEvent): void {
-    if (this.shape) {
-      const MIN_SIZE = 2;
-      if (geometry.pathLength(this.draggingPoints) < MIN_SIZE) {
-        editor.transform.cancelAction();
-      } else {
-        editor.transform.endAction();
-        editor.factory.triggerCreate(this.shape);
-      }
+    const MIN_SIZE = 2;
+    if (
+      this.shape &&
+      this.shape?.width < MIN_SIZE &&
+      this.shape?.height < MIN_SIZE
+    ) {
+      editor.transform.cancelAction();
+    } else {
+      editor.transform.endAction();
+      editor.factory.triggerCreate(this.shape as Shape);
     }
   }
 
@@ -88,6 +87,7 @@ export class FreehandFactoryHandler extends Handler {
    * @override
    */
   pointerMove(editor: Editor, e: CanvasPointerEvent) {
+    editor.repaint();
     if (this.dragging) {
       const canvas = editor.canvas;
       this.dragPoint = canvas.globalCoordTransformRev([e.x, e.y]);

@@ -22,6 +22,7 @@ import { hashStringToNumber } from "./std/id";
 import { themeColors } from "./colors";
 import { getAllViewport } from "./utils/shape-utils";
 import { renderVGElement, VGElement } from "./graphics/vector-graphic";
+import { Store } from "./core";
 
 export const ScriptType = {
   RENDER: "render",
@@ -612,9 +613,9 @@ export class Shape extends Obj {
     }
     if (this.rotate !== 0) {
       const cp = this.getCenter();
-      canvas.translate(cp[0], cp[1]);
-      canvas.rotate(this.rotate);
-      canvas.translate(-cp[0], -cp[1]);
+      canvas.translateTransform(cp[0], cp[1]);
+      canvas.rotateTransform(this.rotate);
+      canvas.translateTransform(-cp[0], -cp[1]);
     }
   }
 
@@ -839,6 +840,9 @@ export class Shape extends Obj {
    * bounding rect.
    */
   getViewport(canvas: Canvas): number[][] {
+    if (this._memoViewport.length === 0) {
+      return this.getBoundingRect();
+    }
     return this._memoViewport;
   }
 
@@ -2780,6 +2784,136 @@ export class Frame extends Box {
 }
 
 /**
+ * Mirror
+ */
+export class Mirror extends Box {
+  /**
+   * The subject shape to be mirrored
+   */
+  subject: Shape | null;
+
+  constructor() {
+    super();
+    this.type = "Mirror";
+    this.name = "Mirror";
+    this.containable = true;
+    this.subject = null;
+  }
+
+  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
+    const json = super.toJSON(recursive, keepRefs);
+    json.subject = this.subject ? this.subject.id : null;
+    if (keepRefs) {
+      json.subject = this.subject;
+    }
+    return json;
+  }
+
+  fromJSON(json: any) {
+    super.fromJSON(json);
+    this.subject = json.subject ?? this.subject;
+  }
+
+  resolveRefs(idMap: Record<string, Shape>, nullIfNotFound: boolean = false) {
+    super.resolveRefs(idMap, nullIfNotFound);
+    if (typeof this.subject === "string") {
+      if (idMap[this.subject]) {
+        this.subject = idMap[this.subject];
+      } else if (nullIfNotFound) {
+        this.subject = null;
+      }
+    }
+  }
+
+  draw(canvas: Canvas, showDOM: boolean = false) {
+    if (this.visible) {
+      this.drawLink(canvas, showDOM);
+      canvas.save();
+      this.localTransform(canvas);
+      // draw subject
+      if (this.subject) {
+        const box = this.subject.getBoundingRect();
+        const l = box[0][0];
+        const t = box[0][1];
+        const w = geometry.width(box);
+        const h = geometry.height(box);
+        const scaleX = this.width / w;
+        const scaleY = this.height / h;
+        const dx = this.left - l * scaleX;
+        const dy = this.top - t * scaleY;
+        canvas.translateTransform(dx, dy);
+        canvas.scaleTransform(scaleX, scaleY);
+        this.subject.draw(canvas, showDOM);
+        canvas.translateTransform(-dx, -dy);
+      }
+      canvas.restore();
+      // draw children
+      canvas.save();
+      this.children.forEach((s) => (s as Shape).draw(canvas, showDOM));
+      canvas.restore();
+      // draw rendered
+      this._memoCanvas.draw(canvas);
+    }
+  }
+
+  /**
+   * Default render this shape
+   */
+  renderDefault(canvas: MemoizationCanvas) {
+    if (!this.subject) {
+      canvas.strokeRect(
+        this.left,
+        this.top,
+        this.right,
+        this.bottom,
+        this.getSeed()
+      );
+      canvas.line(this.left, this.top, this.right, this.bottom, this.getSeed());
+      canvas.line(this.right, this.top, this.left, this.bottom, this.getSeed());
+    }
+  }
+
+  getScale(): number[] {
+    if (this.subject) {
+      const box = this.subject.getBoundingRect();
+      const w = geometry.width(box);
+      const h = geometry.height(box);
+      const scaleX = this.width / w;
+      const scaleY = this.height / h;
+      return [scaleX, scaleY];
+    }
+    return [1, 1];
+  }
+
+  /**
+   * Render default viewport
+   */
+  renderViewportDefault(canvas: MemoizationCanvas): number[][] {
+    const outlineGCS = this.getOutline().map((p) =>
+      this.localCoordTransform(canvas.canvas, p, true)
+    );
+    const rect = geometry.boundingRect(outlineGCS);
+    if (this.subject) {
+      const box = this.subject.getBoundingRect();
+      const viewport = this.subject.getViewport(canvas.canvas);
+      const w = geometry.width(box);
+      const h = geometry.height(box);
+      const scaleX = this.width / w;
+      const scaleY = this.height / h;
+      const t = (box[0][1] - viewport[0][1]) * scaleY;
+      const b = (viewport[1][1] - box[1][1]) * scaleY;
+      const l = (box[0][0] - viewport[0][0]) * scaleX;
+      const r = (viewport[1][0] - box[1][0]) * scaleX;
+      return [
+        [rect[0][0] - l, rect[0][1] - t],
+        [rect[1][0] + r, rect[1][1] + b],
+      ];
+    }
+    return rect;
+  }
+}
+
+/**
  * Embed
  */
 export class Embed extends Box {
@@ -3052,6 +3186,7 @@ export const shapeInstantiator = new Instantiator({
   Highlighter: () => new Highlighter(),
   Group: () => new Group(),
   Frame: () => new Frame(),
+  Mirror: () => new Mirror(),
   Embed: () => new Embed(),
 });
 
@@ -3072,5 +3207,6 @@ export type ShapeProps = Partial<
     Highlighter &
     Group &
     Frame &
+    Mirror &
     Embed
 >;

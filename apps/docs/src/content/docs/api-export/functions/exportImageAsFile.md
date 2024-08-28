@@ -41,4 +41,4 @@ The style to be included in the SVG data.
 
 ## Source
 
-[index.ts:223](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L223)
+[index.ts:217](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L217)

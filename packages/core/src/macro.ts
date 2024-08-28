@@ -16,6 +16,7 @@ import {
   getAllBoundingRect,
   getAllConnectorsTo,
   getAllDescendant,
+  getAllMirrors,
   getAllReferers,
 } from "./utils/shape-utils";
 import { visitTextNodes } from "./utils/text-utils";
@@ -529,6 +530,12 @@ export function deleteSingleShape(
   for (let referer of referers) {
     if (referer.reference === shape)
       changed = tx.assignRef(referer, "reference", null) || changed;
+  }
+  // set null to all mirrors of the shape
+  const mirrors = getAllMirrors(doc, [shape]);
+  for (let mirror of mirrors) {
+    if (mirror.subject === shape)
+      changed = tx.assignRef(mirror, "subject", null) || changed;
   }
   // delete the shape from store
   if (shape.parent) {

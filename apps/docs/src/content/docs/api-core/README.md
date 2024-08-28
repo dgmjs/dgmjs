@@ -42,6 +42,7 @@ title: "@dgmjs/core"
 - [Line](/api-core/classes/line/)
 - [Manipulator](/api-core/classes/manipulator/)
 - [MemoizationCanvas](/api-core/classes/memoizationcanvas/)
+- [Mirror](/api-core/classes/mirror/)
 - [Mutation](/api-core/classes/mutation/)
 - [Obj](/api-core/classes/obj/)
 - [Page](/api-core/classes/page/)
@@ -112,4 +113,5 @@ title: "@dgmjs/core"
 
 - [basicSetup](/api-core/functions/basicsetup/)
 - [drawShapesOnCanvas](/api-core/functions/drawshapesoncanvas/)
+- [outerRefMapExtractor](/api-core/functions/outerrefmapextractor/)
 - [pathToString](/api-core/functions/pathtostring/)

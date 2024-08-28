@@ -7,6 +7,7 @@ import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import { resolveAllConstraints } from "../macro";
+import { ActionKind } from "../core";
 
 /**
  * BoxMoveAnchorPositionController
@@ -56,7 +57,8 @@ export class BoxMoveAnchorPositionController extends Controller {
       editor.selection.isSelected(shape) &&
       shape instanceof Box &&
       shape.movable !== Movable.NONE &&
-      shape.anchored
+      shape.anchored &&
+      !editor.duplicatedDragging
     );
   }
 
@@ -94,8 +96,7 @@ export class BoxMoveAnchorPositionController extends Controller {
       (shape as Box).anchorPosition
     );
     this.outOfPath = false;
-
-    editor.transform.startAction("move-anchor");
+    editor.transform.startAction(ActionKind.MOVE_ANCHOR);
   }
 
   /**

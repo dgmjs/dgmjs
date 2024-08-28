@@ -36,6 +36,13 @@ export class Stack<T> {
   }
 
   /**
+   * Get the n-th item from the top (immutable)
+   */
+  get(n: number = 0): T | undefined {
+    return this.stack[this.stack.length - 1 - n];
+  }
+
+  /**
    * Return size of stack
    */
   size(): number {

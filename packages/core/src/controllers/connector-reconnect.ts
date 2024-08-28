@@ -8,6 +8,7 @@ import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { findConnectionAnchor } from "./utils";
 import { resolveAllConstraints, setPath } from "../macro";
+import { ActionKind } from "../core";
 
 /**
  * Connector Reconnect Controller
@@ -44,7 +45,8 @@ export class ConnectorReconnectController extends Controller {
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
       shape instanceof Connector &&
-      !editor.pointerDownUnselectedShape
+      !editor.pointerDownUnselectedShape &&
+      !editor.duplicatedDragging
     );
   }
 
@@ -88,7 +90,7 @@ export class ConnectorReconnectController extends Controller {
         this.controlPoint = 0;
       this.controlPath = geometry.pathCopy(shape.path);
     }
-    editor.transform.startAction("reconnect");
+    editor.transform.startAction(ActionKind.RECONNECT);
   }
 
   /**

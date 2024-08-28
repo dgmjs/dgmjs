@@ -4,6 +4,7 @@ import { CanvasPointerEvent } from "../graphics/graphics";
 import { Cursor, Mouse } from "../graphics/const";
 import { Rectangle, Shape } from "../shapes";
 import { addShape, resolveAllConstraints } from "../macro";
+import { ActionKind } from "../core";
 
 /**
  * Icon Factory Handler
@@ -30,7 +31,7 @@ export class IconFactoryHandler extends Handler {
         28,
         []
       );
-      editor.transform.startAction("create");
+      editor.transform.startAction(ActionKind.INSERT);
       editor.transform.transact((tx) => {
         addShape(tx, this.shape!, page);
       });

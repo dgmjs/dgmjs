@@ -7,6 +7,7 @@ import {
   textUtils,
   DblClickEvent,
   macro,
+  ActionKind,
 } from "@dgmjs/core";
 import { useEffect, useRef, useState } from "react";
 import { moveToAboveOrBelow, textVertAlignToAlignItems } from "./utils";
@@ -160,7 +161,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
       editor.repaint();
 
       // start transaction
-      editor.transform.startAction("text-edit");
+      editor.transform.startAction(ActionKind.EDIT_TEXT);
 
       // set initial content
       tiptapEditor?.commands.setContent(textShape.text);

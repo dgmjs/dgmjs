@@ -23,4 +23,4 @@ A macro to set bottom
 
 ## Source
 
-[macro.ts:182](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L182)
+[macro.ts:183](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L183)

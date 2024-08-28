@@ -11,6 +11,7 @@ import * as guide from "../utils/guide";
 import { Snap } from "../manipulators/snap";
 import { findConnectionAnchor, getControllerPosition } from "./utils";
 import { addShape, resolveAllConstraints, setPath } from "../macro";
+import { ActionKind } from "../core";
 
 interface BoxCreateConnectorControllerOptions {
   position: string;
@@ -60,7 +61,8 @@ export class BoxCreateConnectorController extends Controller {
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
       shape.connectable &&
-      !editor.pointerDownUnselectedShape;
+      !editor.pointerDownUnselectedShape &&
+      !editor.duplicatedDragging;
     return value;
   }
 
@@ -110,7 +112,7 @@ export class BoxCreateConnectorController extends Controller {
       [this.dragStartPointGCS, this.dragPointGCS]
     );
     const page = editor.getCurrentPage()!;
-    editor.transform.startAction("create");
+    editor.transform.startAction(ActionKind.INSERT);
     editor.transform.transact((tx) => {
       addShape(tx, this.connector!, page);
       resolveAllConstraints(tx, page, editor.canvas);

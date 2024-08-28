@@ -7,6 +7,44 @@ import { Transaction } from "./transaction";
 const MAX_STACK_SIZE = 1000;
 
 /**
+ * ActionKind
+ */
+export const ActionKind = {
+  UNKNOWN: "unknown",
+  INSERT: "insert",
+  UPDATE: "update",
+  DELETE: "delete",
+  CUT: "cut",
+  PASTE: "paste",
+  DUPLICATE: "duplicate",
+  MOVE: "move",
+  MOVE_ANCHOR: "move-anchor",
+  ROTATE: "rotate",
+  RESIZE: "resize",
+  REPATH: "repath",
+  RECONNECT: "reconnect",
+  EDIT_TEXT: "edit-text",
+  GROUP: "group",
+  UNGROUP: "ungroup",
+  ADD_PAGE: "add-page",
+  REMOVE_PAGE: "remove-page",
+  REORDER_PAGE: "reorder-page",
+  DUPLICATE_PAGE: "duplicate-page",
+  BRING_FORWARD: "bring-forward",
+  SEND_BACKWARD: "send-backward",
+  BRING_TO_FRONT: "bring-to-front",
+  SEND_TO_BACK: "send-to-back",
+  ALIGN_LEFT: "align-left",
+  ALIGN_CENTER: "align-center",
+  ALIGN_RIGHT: "align-right",
+  ALIGN_TOP: "align-top",
+  ALIGN_MIDDLE: "align-middle",
+  ALIGN_BOTTOM: "align-bottom",
+  DISTRIBUTE_HORIZONTALLY: "distribute-horizontally",
+  DISTRIBUTE_VERTICALLY: "distribute-vertically",
+} as const;
+
+/**
  * Action is a collection of transactions, which can be undone/redone as a whole.
  */
 export class Action {
@@ -116,7 +154,7 @@ export class Transform {
       if (this.action) {
         this.action.push(tx);
       } else {
-        this.startAction("unknown");
+        this.startAction(ActionKind.UNKNOWN);
         this.action!.push(tx);
         this.endAction();
       }
@@ -143,6 +181,22 @@ export class Transform {
     if (this.action) {
       this.action.unapply(this);
       this.action = null;
+    }
+  }
+
+  /**
+   * Merge lastest two actions into a single action
+   */
+  mergeAction() {
+    if (this.undoHistory.size() > 1) {
+      const action1 = this.undoHistory.get(0);
+      const action2 = this.undoHistory.get(1);
+      if (action1 && action2) {
+        for (let tx of action1.transactions) {
+          action2.push(tx);
+        }
+        this.undoHistory.pop();
+      }
     }
   }
 

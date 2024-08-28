@@ -7,6 +7,7 @@ import { findConnectionAnchor } from "../controllers/utils";
 import * as guide from "../utils/guide";
 import { lcs2ccs } from "../graphics/utils";
 import { addShape, resolveAllConstraints, setPath } from "../macro";
+import { ActionKind } from "../core";
 
 /**
  * Connector Factory Handler
@@ -50,7 +51,7 @@ export class ConnectorFactoryHandler extends Handler {
         [this.dragStartPoint, this.dragPoint]
       );
       this.shape.path = [this.dragStartPoint, this.dragPoint];
-      editor.transform.startAction("create");
+      editor.transform.startAction(ActionKind.INSERT);
       editor.transform.transact((tx) => {
         addShape(tx, this.shape!, page);
       });

@@ -12,6 +12,7 @@ import {
   ImageFactoryHandler,
   EmbedFactoryHandler,
   EraserHandler,
+  MirrorFactoryHandler,
 } from "./handlers";
 import { FrameFactoryHandler } from "./handlers/frame-handler";
 import { IconFactoryHandler } from "./handlers/icon-handler";
@@ -34,6 +35,7 @@ export function basicSetup(
       new ImageFactoryHandler("Image", { defaultLock: false }),
       new IconFactoryHandler("Icon", { defaultLock: false }),
       new FrameFactoryHandler("Frame", { defaultLock: false }),
+      new MirrorFactoryHandler("Mirror", { defaultLock: false }),
       new EmbedFactoryHandler("Embed", { defaultLock: false }),
     ],
     defaultHandlerId: "Select",

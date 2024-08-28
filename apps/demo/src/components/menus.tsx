@@ -4,6 +4,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { fileOpen, fileSave } from "browser-fs-access";
@@ -68,7 +69,7 @@ export function Menus() {
   /**
    * Export doc image to a file
    */
-  const handleExportImage = async () => {
+  const handleExportPNG = async () => {
     const page = window.editor.getCurrentPage()!;
     const shapes = window.editor.selection.getShapes() ?? [];
     const exportOptions = {
@@ -76,6 +77,31 @@ export function Menus() {
       dark: darkMode,
       fillBackground: true,
       format: "image/png" as ExportImageFormat,
+    };
+    const name = "dgm-export";
+    const fileName = `${name}.${
+      exportOptions.format === "image/png" ? "png" : "svg"
+    }`;
+    exportImageAsFile(
+      window.editor.canvas,
+      page,
+      shapes,
+      fileName,
+      exportOptions
+    );
+  };
+
+  /**
+   * Export doc image to a file
+   */
+  const handleExportSVG = async () => {
+    const page = window.editor.getCurrentPage()!;
+    const shapes = window.editor.selection.getShapes() ?? [];
+    const exportOptions = {
+      scale: 1,
+      dark: darkMode,
+      fillBackground: true,
+      format: "image/svg+xml" as ExportImageFormat,
     };
     const name = "dgm-export";
     const fileName = `${name}.${
@@ -104,8 +130,12 @@ export function Menus() {
           <DropdownMenuItem onSelect={handleSaveCopy}>
             Save copy...
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={handleExportImage}>
-            Export Image
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onSelect={handleExportPNG}>
+            Export as PNG
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={handleExportSVG}>
+            Export as SVG
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -25,4 +25,4 @@ A macro to move an connector's end point
 
 ## Source
 
-[macro.ts:407](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L407)
+[macro.ts:408](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L408)

@@ -154,7 +154,7 @@ function App() {
             className="absolute inset-y-0 left-56 right-56"
             darkMode={demoStore.darkMode}
             options={{
-              showDOM: false,
+              showDOM: true,
               keymapEventTarget: window,
               imageResize: {
                 quality: 1,

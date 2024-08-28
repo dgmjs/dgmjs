@@ -29,7 +29,7 @@ constructor
 
 #### Source
 
-[editor.ts:344](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L344)
+[editor.ts:345](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L345)
 
 ## Properties
 
@@ -41,7 +41,7 @@ The actions
 
 #### Source
 
-[editor.ts:234](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L234)
+[editor.ts:235](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L235)
 
 ***
 
@@ -53,7 +53,7 @@ The canvas object
 
 #### Source
 
-[editor.ts:259](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L259)
+[editor.ts:260](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L260)
 
 ***
 
@@ -65,7 +65,7 @@ The canvas element
 
 #### Source
 
-[editor.ts:254](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L254)
+[editor.ts:255](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L255)
 
 ***
 
@@ -77,7 +77,7 @@ The clipboard object
 
 #### Source
 
-[editor.ts:219](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L219)
+[editor.ts:220](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L220)
 
 ***
 
@@ -89,7 +89,7 @@ The shape factory
 
 #### Source
 
-[editor.ts:229](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L229)
+[editor.ts:230](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L230)
 
 ***
 
@@ -101,7 +101,7 @@ The keymap manager
 
 #### Source
 
-[editor.ts:239](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L239)
+[editor.ts:240](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L240)
 
 ***
 
@@ -113,7 +113,7 @@ The event emitter for active handler change
 
 #### Source
 
-[editor.ts:139](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L139)
+[editor.ts:140](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L140)
 
 ***
 
@@ -125,7 +125,7 @@ The event emitter for active handler lock change
 
 #### Source
 
-[editor.ts:144](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L144)
+[editor.ts:145](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L145)
 
 ***
 
@@ -137,7 +137,7 @@ The event emitter for current page change
 
 #### Source
 
-[editor.ts:134](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L134)
+[editor.ts:135](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L135)
 
 ***
 
@@ -149,7 +149,7 @@ The event emitter for double click
 
 #### Source
 
-[editor.ts:174](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L174)
+[editor.ts:175](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L175)
 
 ***
 
@@ -161,7 +161,7 @@ The event emitter for drag
 
 #### Source
 
-[editor.ts:189](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L189)
+[editor.ts:190](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L190)
 
 ***
 
@@ -173,7 +173,7 @@ The event emitter for drag end
 
 #### Source
 
-[editor.ts:194](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L194)
+[editor.ts:195](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L195)
 
 ***
 
@@ -185,7 +185,7 @@ The event emitter for drag start
 
 #### Source
 
-[editor.ts:184](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L184)
+[editor.ts:185](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L185)
 
 ***
 
@@ -197,7 +197,7 @@ The event emitter for file drop
 
 #### Source
 
-[editor.ts:199](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L199)
+[editor.ts:200](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L200)
 
 ***
 
@@ -209,7 +209,7 @@ The event emitter for key down
 
 #### Source
 
-[editor.ts:179](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L179)
+[editor.ts:180](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L180)
 
 ***
 
@@ -221,7 +221,7 @@ The event emitter for pointer down
 
 #### Source
 
-[editor.ts:159](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L159)
+[editor.ts:160](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L160)
 
 ***
 
@@ -233,7 +233,7 @@ The event emitter for pointer move
 
 #### Source
 
-[editor.ts:164](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L164)
+[editor.ts:165](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L165)
 
 ***
 
@@ -245,7 +245,7 @@ The event emitter for pointer up
 
 #### Source
 
-[editor.ts:169](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L169)
+[editor.ts:170](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L170)
 
 ***
 
@@ -257,7 +257,7 @@ The event emitter for repaint
 
 #### Source
 
-[editor.ts:204](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L204)
+[editor.ts:205](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L205)
 
 ***
 
@@ -269,7 +269,7 @@ The event emitter for scroll
 
 #### Source
 
-[editor.ts:154](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L154)
+[editor.ts:155](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L155)
 
 ***
 
@@ -281,7 +281,7 @@ The event emitter for zoom
 
 #### Source
 
-[editor.ts:149](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L149)
+[editor.ts:150](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L150)
 
 ***
 
@@ -293,7 +293,7 @@ The editor options
 
 #### Source
 
-[editor.ts:119](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L119)
+[editor.ts:120](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L120)
 
 ***
 
@@ -305,7 +305,7 @@ The parent element
 
 #### Source
 
-[editor.ts:249](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L249)
+[editor.ts:250](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L250)
 
 ***
 
@@ -317,7 +317,7 @@ The platform
 
 #### Source
 
-[editor.ts:129](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L129)
+[editor.ts:130](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L130)
 
 ***
 
@@ -329,7 +329,7 @@ The plugins
 
 #### Source
 
-[editor.ts:124](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L124)
+[editor.ts:125](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L125)
 
 ***
 
@@ -341,7 +341,7 @@ The selection manager
 
 #### Source
 
-[editor.ts:224](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L224)
+[editor.ts:225](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L225)
 
 ***
 
@@ -353,7 +353,7 @@ The store object
 
 #### Source
 
-[editor.ts:209](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L209)
+[editor.ts:210](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L210)
 
 ***
 
@@ -365,7 +365,7 @@ The transform object
 
 #### Source
 
-[editor.ts:214](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L214)
+[editor.ts:215](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L215)
 
 ## Methods
 
@@ -381,7 +381,7 @@ Activate the default handler
 
 #### Source
 
-[editor.ts:1098](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1098)
+[editor.ts:1100](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1100)
 
 ***
 
@@ -401,7 +401,7 @@ Activate a handler by id
 
 #### Source
 
-[editor.ts:1081](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1081)
+[editor.ts:1083](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1083)
 
 ***
 
@@ -417,7 +417,7 @@ Draw selection
 
 #### Source
 
-[editor.ts:1210](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1210)
+[editor.ts:1212](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1212)
 
 ***
 
@@ -433,7 +433,7 @@ Fit the editor size to the holder element
 
 #### Source
 
-[editor.ts:894](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L894)
+[editor.ts:896](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L896)
 
 ***
 
@@ -455,7 +455,7 @@ Fit doc to screen and move to center
 
 #### Source
 
-[editor.ts:1002](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1002)
+[editor.ts:1004](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1004)
 
 ***
 
@@ -471,7 +471,7 @@ Set focus on this editor
 
 #### Source
 
-[editor.ts:810](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L810)
+[editor.ts:812](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L812)
 
 ***
 
@@ -487,7 +487,7 @@ Get the active handler
 
 #### Source
 
-[editor.ts:1074](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1074)
+[editor.ts:1076](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1076)
 
 ***
 
@@ -503,7 +503,7 @@ Get active handler lock
 
 #### Source
 
-[editor.ts:1117](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1117)
+[editor.ts:1119](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1119)
 
 ***
 
@@ -519,7 +519,7 @@ Get bounding rect in GCS
 
 #### Source
 
-[editor.ts:957](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L957)
+[editor.ts:959](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L959)
 
 ***
 
@@ -535,7 +535,7 @@ Get screen center point in GCS
 
 #### Source
 
-[editor.ts:949](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L949)
+[editor.ts:951](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L951)
 
 ***
 
@@ -551,7 +551,7 @@ Get current page
 
 #### Source
 
-[editor.ts:771](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L771)
+[editor.ts:773](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L773)
 
 ***
 
@@ -567,7 +567,7 @@ Get cursor
 
 #### Source
 
-[editor.ts:1245](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1245)
+[editor.ts:1247](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1247)
 
 ***
 
@@ -583,7 +583,7 @@ Get dark mode
 
 #### Source
 
-[editor.ts:817](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L817)
+[editor.ts:819](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L819)
 
 ***
 
@@ -599,7 +599,7 @@ Get the document
 
 #### Source
 
-[editor.ts:1260](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1260)
+[editor.ts:1262](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1262)
 
 ***
 
@@ -615,7 +615,7 @@ Get enabled state
 
 #### Source
 
-[editor.ts:756](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L756)
+[editor.ts:758](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L758)
 
 ***
 
@@ -631,7 +631,7 @@ Get grid size
 
 #### Source
 
-[editor.ts:836](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L836)
+[editor.ts:838](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L838)
 
 ***
 
@@ -647,7 +647,7 @@ Get origin point in CCS
 
 #### Source
 
-[editor.ts:902](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L902)
+[editor.ts:904](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L904)
 
 ***
 
@@ -663,7 +663,7 @@ Get pages
 
 #### Source
 
-[editor.ts:800](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L800)
+[editor.ts:802](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L802)
 
 ***
 
@@ -683,7 +683,7 @@ Get a plugin by id
 
 #### Source
 
-[editor.ts:749](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L749)
+[editor.ts:751](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L751)
 
 ***
 
@@ -699,7 +699,7 @@ Get scale
 
 #### Source
 
-[editor.ts:965](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L965)
+[editor.ts:967](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L967)
 
 ***
 
@@ -715,7 +715,7 @@ Get show grid state
 
 #### Source
 
-[editor.ts:851](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L851)
+[editor.ts:853](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L853)
 
 ***
 
@@ -731,7 +731,7 @@ Return the size of canvas element in CCS
 
 #### Source
 
-[editor.ts:928](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L928)
+[editor.ts:930](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L930)
 
 ***
 
@@ -747,7 +747,7 @@ Get snap to grid
 
 #### Source
 
-[editor.ts:866](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L866)
+[editor.ts:868](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L868)
 
 ***
 
@@ -763,7 +763,7 @@ Get snap to object
 
 #### Source
 
-[editor.ts:880](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L880)
+[editor.ts:882](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L882)
 
 ***
 
@@ -783,7 +783,7 @@ Load from JSON
 
 #### Source
 
-[editor.ts:1288](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1288)
+[editor.ts:1290](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1290)
 
 ***
 
@@ -805,7 +805,7 @@ Move origin point
 
 #### Source
 
-[editor.ts:921](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L921)
+[editor.ts:923](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L923)
 
 ***
 
@@ -821,7 +821,7 @@ Create a new document
 
 #### Source
 
-[editor.ts:1274](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1274)
+[editor.ts:1276](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1276)
 
 ***
 
@@ -841,7 +841,7 @@ Repaint diagram
 
 #### Source
 
-[editor.ts:1230](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1230)
+[editor.ts:1232](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1232)
 
 ***
 
@@ -857,7 +857,7 @@ Save to JSON
 
 #### Source
 
-[editor.ts:1305](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1305)
+[editor.ts:1307](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1307)
 
 ***
 
@@ -879,7 +879,7 @@ Scroll screen
 
 #### Source
 
-[editor.ts:1025](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1025)
+[editor.ts:1027](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1027)
 
 ***
 
@@ -902,7 +902,7 @@ center point in GCS. If not provided, scroll to the center
 
 #### Source
 
-[editor.ts:1034](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1034)
+[editor.ts:1036](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1036)
 
 ***
 
@@ -918,7 +918,7 @@ Scroll to center of the shapes
 
 #### Source
 
-[editor.ts:1060](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1060)
+[editor.ts:1062](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1062)
 
 ***
 
@@ -938,7 +938,7 @@ Set active handler lock
 
 #### Source
 
-[editor.ts:1107](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1107)
+[editor.ts:1109](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1109)
 
 ***
 
@@ -958,7 +958,7 @@ Set current page
 
 #### Source
 
-[editor.ts:778](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L778)
+[editor.ts:780](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L780)
 
 ***
 
@@ -980,7 +980,7 @@ Set cursor
 
 #### Source
 
-[editor.ts:1252](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1252)
+[editor.ts:1254](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1254)
 
 ***
 
@@ -1000,7 +1000,7 @@ Set dark mode
 
 #### Source
 
-[editor.ts:824](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L824)
+[editor.ts:826](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L826)
 
 ***
 
@@ -1020,7 +1020,7 @@ Set the document
 
 #### Source
 
-[editor.ts:1267](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1267)
+[editor.ts:1269](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1269)
 
 ***
 
@@ -1040,7 +1040,7 @@ Set enabled state
 
 #### Source
 
-[editor.ts:763](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L763)
+[editor.ts:765](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L765)
 
 ***
 
@@ -1060,7 +1060,7 @@ Set grid size
 
 #### Source
 
-[editor.ts:843](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L843)
+[editor.ts:845](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L845)
 
 ***
 
@@ -1082,7 +1082,7 @@ Set origin point
 
 #### Source
 
-[editor.ts:909](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L909)
+[editor.ts:911](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L911)
 
 ***
 
@@ -1102,7 +1102,7 @@ Set scale
 
 #### Source
 
-[editor.ts:972](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L972)
+[editor.ts:974](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L974)
 
 ***
 
@@ -1122,7 +1122,7 @@ Set show grid or not
 
 #### Source
 
-[editor.ts:858](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L858)
+[editor.ts:860](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L860)
 
 ***
 
@@ -1144,7 +1144,7 @@ Set canvas element size
 
 #### Source
 
-[editor.ts:935](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L935)
+[editor.ts:937](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L937)
 
 ***
 
@@ -1164,7 +1164,7 @@ Set snap to grid
 
 #### Source
 
-[editor.ts:873](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L873)
+[editor.ts:875](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L875)
 
 ***
 
@@ -1184,7 +1184,7 @@ Set snap to object
 
 #### Source
 
-[editor.ts:887](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L887)
+[editor.ts:889](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L889)
 
 ***
 
@@ -1200,7 +1200,7 @@ Update all shapes
 
 #### Source
 
-[editor.ts:1219](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1219)
+[editor.ts:1221](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1221)
 
 ***
 
@@ -1220,4 +1220,4 @@ Set zoom scale while keeping the screen center
 
 #### Source
 
-[editor.ts:992](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L992)
+[editor.ts:994](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L994)

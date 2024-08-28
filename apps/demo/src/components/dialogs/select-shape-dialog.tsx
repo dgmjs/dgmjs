@@ -65,8 +65,8 @@ export function SelectShapeDialog() {
 
   return (
     <ResponsiveDialog
-      title="Select a shape"
-      description="Select a shape to be referenced."
+      title="Select shape"
+      description="Select a shape."
       open={open}
       onOpenChange={(open) => {}}
       className="max-w-[432px]"
