@@ -840,6 +840,9 @@ export class Shape extends Obj {
    * bounding rect.
    */
   getViewport(canvas: Canvas): number[][] {
+    if (this._memoViewport.length === 0) {
+      return this.getBoundingRect();
+    }
     return this._memoViewport;
   }
 
@@ -2868,6 +2871,45 @@ export class Mirror extends Box {
       canvas.line(this.left, this.top, this.right, this.bottom, this.getSeed());
       canvas.line(this.right, this.top, this.left, this.bottom, this.getSeed());
     }
+  }
+
+  getScale(): number[] {
+    if (this.subject) {
+      const box = this.subject.getBoundingRect();
+      const w = geometry.width(box);
+      const h = geometry.height(box);
+      const scaleX = this.width / w;
+      const scaleY = this.height / h;
+      return [scaleX, scaleY];
+    }
+    return [1, 1];
+  }
+
+  /**
+   * Render default viewport
+   */
+  renderViewportDefault(canvas: MemoizationCanvas): number[][] {
+    const outlineGCS = this.getOutline().map((p) =>
+      this.localCoordTransform(canvas.canvas, p, true)
+    );
+    const rect = geometry.boundingRect(outlineGCS);
+    if (this.subject) {
+      const box = this.subject.getBoundingRect();
+      const viewport = this.subject.getViewport(canvas.canvas);
+      const w = geometry.width(box);
+      const h = geometry.height(box);
+      const scaleX = this.width / w;
+      const scaleY = this.height / h;
+      const t = (box[0][1] - viewport[0][1]) * scaleY;
+      const b = (viewport[1][1] - box[1][1]) * scaleY;
+      const l = (box[0][0] - viewport[0][0]) * scaleX;
+      const r = (viewport[1][0] - box[1][0]) * scaleX;
+      return [
+        [rect[0][0] - l, rect[0][1] - t],
+        [rect[1][0] + r, rect[1][1] + b],
+      ];
+    }
+    return rect;
   }
 }
 
