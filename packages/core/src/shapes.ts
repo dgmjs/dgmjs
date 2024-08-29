@@ -2796,6 +2796,7 @@ export class Mirror extends Box {
     super();
     this.type = "Mirror";
     this.name = "Mirror";
+    this.rotatable = false;
     this.containable = true;
     this.subject = null;
   }

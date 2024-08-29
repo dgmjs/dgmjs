@@ -6,6 +6,7 @@ import * as geometry from "../graphics/geometry";
 import { Cursor } from "../graphics/const";
 import { changeParent, resolveAllConstraints, setPath } from "../macro";
 import { ActionKind } from "../core";
+import { ableToContain } from "./utils";
 
 /**
  * ConnectorMove Controller
@@ -21,11 +22,17 @@ export class ConnectorMoveController extends Controller {
    */
   controlPath: number[][];
 
+  /**
+   * Reference to a container shape
+   */
+  container: Shape | null;
+
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.hasHandle = false;
     this.snap = new Snap();
     this.controlPath = [];
+    this.container = null;
   }
 
   /**
@@ -79,14 +86,15 @@ export class ConnectorMoveController extends Controller {
     )
       this.dy = 0;
 
-    // determine container (shouldn't be itself of a descendant of target)
+    // determine container
     const canvas = editor.canvas;
     let p2 = targetShape.localCoordTransform(canvas, this.dragPoint, false);
-    let container = editor.getCurrentPage()?.getShapeAt(canvas, p2, [shape]);
-    const r = targetShape.find((s) => s.id === container?.id);
-    if (r) container = null;
-    if (!(container && container.canContain(targetShape)))
-      container = editor.getCurrentPage();
+    this.container =
+      editor.getCurrentPage()?.getShapeAt(canvas, p2, [shape]) ?? null;
+    if (this.container && !ableToContain(this.container, targetShape)) {
+      this.container = null;
+    }
+    if (!this.container) this.container = editor.getCurrentPage();
 
     // update ghost
     let newPath = this.controlPath.map((p) => [p[0] + this.dx, p[1] + this.dy]);
@@ -98,8 +106,8 @@ export class ConnectorMoveController extends Controller {
         setPath(tx, shape as Line, newPath);
         tx.assignRef(shape, "head", null);
         tx.assignRef(shape, "tail", null);
-        if (container && shape.parent !== container) {
-          changeParent(tx, shape, container);
+        if (this.container && shape.parent !== this.container) {
+          changeParent(tx, shape, this.container);
         }
         resolveAllConstraints(tx, page, canvas);
       }
@@ -118,13 +126,9 @@ export class ConnectorMoveController extends Controller {
    */
   drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     super.drawDragging(editor, shape, e);
-    const canvas = editor.canvas;
-    // hovering containable
-    const dp = shape.localCoordTransform(canvas, this.dragPoint, true);
-    const container = editor.getCurrentPage()?.getShapeAt(canvas, dp, [shape]);
-    if (container && container !== shape && container.canContain(shape)) {
-      const manipulator = manipulatorManager.get(container.type);
-      if (manipulator) manipulator.drawHovering(editor, container, e);
+    if (this.container) {
+      const manipulator = manipulatorManager.get(this.container.type);
+      if (manipulator) manipulator.drawHovering(editor, this.container, e);
     }
   }
 }

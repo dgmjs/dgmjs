@@ -6,6 +6,7 @@ import { Snap } from "../manipulators/snap";
 import { lcs2ccs } from "../graphics/utils";
 import { moveShapes, resolveAllConstraints } from "../macro";
 import { ActionKind } from "../core";
+import { ableToContain } from "./utils";
 
 /**
  * SelectionsMoveController
@@ -16,10 +17,16 @@ export class SelectionsMoveController extends Controller {
    */
   snap: Snap;
 
+  /**
+   * Reference to a container shape
+   */
+  container: Shape | null;
+
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.hasHandle = false;
     this.snap = new Snap();
+    this.container = null;
   }
 
   /**
@@ -68,14 +75,19 @@ export class SelectionsMoveController extends Controller {
     const selections = editor.selection.getShapes();
 
     // determine container
-    // (container shouldn't be itself of a descendant of target)
-    let container = editor
-      .getCurrentPage()
-      ?.getShapeAt(canvas, this.dragPointGCS, selections);
-    const r = selections.find((sh) => sh.find((s) => s.id === container?.id));
-    if (r) container = null;
-    if (!(container && selections.every((s) => container?.canContain(s))))
-      container = editor.getCurrentPage();
+    this.container =
+      editor
+        .getCurrentPage()
+        ?.getShapeAt(canvas, this.dragPointGCS, selections) ?? null;
+    if (this.container) {
+      for (let s of selections) {
+        if (!ableToContain(this.container, s)) {
+          this.container = null;
+          break;
+        }
+      }
+    }
+    if (!this.container) this.container = editor.getCurrentPage();
 
     // move shapes
     editor.transform.transact((tx) => {
@@ -86,7 +98,7 @@ export class SelectionsMoveController extends Controller {
         selections,
         this.dxStepGCS,
         this.dyStepGCS,
-        container
+        this.container
       );
       resolveAllConstraints(tx, page, canvas);
     });
@@ -131,19 +143,9 @@ export class SelectionsMoveController extends Controller {
    * Draw controller
    */
   drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
-    const canvas = editor.canvas;
-    const selections = editor.selection.getShapes();
-    const container = editor
-      .getCurrentPage()
-      ?.getShapeAt(canvas, this.dragPointGCS, selections);
-    if (
-      container &&
-      container !== shape &&
-      container.containable &&
-      selections.every((s) => container?.canContain(s))
-    ) {
-      const manipulator = manipulatorManager.get(container.type);
-      if (manipulator) manipulator.drawHovering(editor, container, e);
+    if (this.container) {
+      const manipulator = manipulatorManager.get(this.container.type);
+      if (manipulator) manipulator.drawHovering(editor, this.container, e);
     }
     // draw snap
     // this.snap.draw(editor, shape, this.ghost);
