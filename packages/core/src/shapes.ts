@@ -22,7 +22,6 @@ import { hashStringToNumber } from "./std/id";
 import { themeColors } from "./colors";
 import { getAllViewport } from "./utils/shape-utils";
 import { renderVGElement, VGElement } from "./graphics/vector-graphic";
-import { Store } from "./core";
 
 export const ScriptType = {
   RENDER: "render",
@@ -505,6 +504,13 @@ export class Shape extends Obj {
     }
   }
 
+  /**
+   * Return the page that contains this shape
+   */
+  getPage(): Page | null {
+    return this.findParent((p) => p instanceof Page) as Page;
+  }
+
   get right(): number {
     return this.left + this.width;
   }
@@ -513,6 +519,9 @@ export class Shape extends Obj {
     return this.top + this.height;
   }
 
+  /**
+   * Return the seed number
+   */
   getSeed(): number {
     if (!this._memoSeed) this._memoSeed = hashStringToNumber(this.id);
     return this._memoSeed;
