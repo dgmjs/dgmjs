@@ -47,6 +47,7 @@ export function basicSetup(
       "mod-d": (editor) => editor.actions.duplicate(),
       "mod-v": (editor) => editor.actions.paste(),
       delete: (editor) => editor.actions.remove(),
+      backspace: (editor) => editor.actions.remove(),
       "mod-a": (editor) => editor.selection.selectAll(),
       "]": (editor) => editor.actions.bringForward(),
       "[": (editor) => editor.actions.sendBackward(),
