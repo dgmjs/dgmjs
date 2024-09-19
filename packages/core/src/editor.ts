@@ -180,6 +180,11 @@ export class Editor {
   onKeyDown: TypedEvent<KeyboardEvent>;
 
   /**
+   * The event emitter for key up
+   */
+  onKeyUp: TypedEvent<KeyboardEvent>;
+
+  /**
    * The event emitter for drag start
    */
   onDragStart: TypedEvent<DragEvent>;
@@ -312,6 +317,11 @@ export class Editor {
   /**
    * @private
    */
+  spaceKeyDown: boolean;
+
+  /**
+   * @private
+   */
   leftButtonDown: boolean;
 
   /**
@@ -394,6 +404,7 @@ export class Editor {
     this.onPointerUp = new TypedEvent();
     this.onDblClick = new TypedEvent();
     this.onKeyDown = new TypedEvent();
+    this.onKeyUp = new TypedEvent();
     this.onDragStart = new TypedEvent();
     this.onDrag = new TypedEvent();
     this.onDragEnd = new TypedEvent();
@@ -439,6 +450,7 @@ export class Editor {
     this.handlers = {};
     this.activeHandler = null;
     this.activeHandlerLock = false;
+    this.spaceKeyDown = false;
     this.leftButtonDown = false;
     this.midButtonDown = false;
     this.downX = 0;
@@ -504,12 +516,19 @@ export class Editor {
         if (e.button === Mouse.BUTTON2) this.midButtonDown = true;
         const event = createPointerEvent(this.canvasElement, this.canvas, e);
         this.autoScroller.pointerDown(event);
-        if (this.midButtonDown || (event.modDown && this.leftButtonDown)) {
+        if (this.spaceKeyDown) {
+          this.setCursor(Cursor.GRAB);
+        }
+        if (this.midButtonDown || (this.spaceKeyDown && this.leftButtonDown)) {
           // viewpoint move
           this.setCursor(Cursor.GRABBING);
           this.downX = e.offsetX;
           this.downY = e.offsetY;
-        } else if (!this.isPinching && this.activeHandler) {
+        } else if (
+          !this.isPinching &&
+          !this.spaceKeyDown &&
+          this.activeHandler
+        ) {
           // In mobile devices pointerMove is not triggered, so need to trigger pointerMove once
           this.activeHandler.pointerMove(this, event);
           this.activeHandler.pointerDown(this, event);
@@ -524,14 +543,22 @@ export class Editor {
         const event = createPointerEvent(this.canvasElement, this.canvas, e);
         event.leftButtonDown = this.leftButtonDown;
         this.autoScroller.pointerMove(event);
-        if (this.midButtonDown || (event.modDown && this.leftButtonDown)) {
+        if (this.spaceKeyDown) {
+          this.setCursor(Cursor.GRAB);
+        }
+        if (this.midButtonDown || (this.spaceKeyDown && this.leftButtonDown)) {
           // viewpoint move
+          this.setCursor(Cursor.GRABBING);
           let dx = (e.offsetX - this.downX) / this.getScale();
           let dy = (e.offsetY - this.downY) / this.getScale();
           this.moveOrigin(dx, dy);
           this.downX = e.offsetX;
           this.downY = e.offsetY;
-        } else if (!this.isPinching && this.activeHandler) {
+        } else if (
+          !this.isPinching &&
+          !this.spaceKeyDown &&
+          this.activeHandler
+        ) {
           this.activeHandler.pointerMove(this, event);
         }
         this.onPointerMove.emit(event);
@@ -542,13 +569,15 @@ export class Editor {
     this.canvasElement.addEventListener("pointerup", (e) => {
       if (this.enabled) {
         const event = createPointerEvent(this.canvasElement, this.canvas, e);
-        if (this.midButtonDown || (event.modDown && this.leftButtonDown)) {
-          this.setCursor(Cursor.DEFAULT);
+        if (this.spaceKeyDown) {
+          this.setCursor(Cursor.GRAB);
+        }
+        if (this.midButtonDown || (this.spaceKeyDown && this.leftButtonDown)) {
           this.downX = 0;
           this.downY = 0;
         }
         this.autoScroller.pointerUp(event);
-        if (!this.isPinching && this.activeHandler) {
+        if (!this.isPinching && !this.spaceKeyDown && this.activeHandler) {
           this.activeHandler.pointerUp(this, event);
         }
         if (e.button === Mouse.BUTTON1) this.leftButtonDown = false;
@@ -707,8 +736,25 @@ export class Editor {
     this.canvasElement.addEventListener("keydown", (e) => {
       if (this.enabled) {
         e.preventDefault();
+        if (e.code === "Space" && this.spaceKeyDown === false) {
+          this.spaceKeyDown = true;
+          this.setCursor(Cursor.GRAB);
+        }
         this.focus();
         this.onKeyDown.emit(e);
+      }
+    });
+
+    // key up event
+    this.canvasElement.addEventListener("keyup", (e) => {
+      if (this.enabled) {
+        e.preventDefault();
+        if (e.code === "Space" && this.spaceKeyDown === true) {
+          this.spaceKeyDown = false;
+          this.setCursor(Cursor.DEFAULT);
+        }
+        this.focus();
+        this.onKeyUp.emit(e);
       }
     });
   }
