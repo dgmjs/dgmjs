@@ -41,7 +41,7 @@ export function basicSetup(
     defaultHandlerId: "Select",
     keymap: {
       "mod-z": (editor) => editor.actions.undo(),
-      "mod-y": (editor) => editor.actions.redo(),
+      "mod-shift-z": (editor) => editor.actions.redo(),
       "mod-x": (editor) => editor.actions.cut(),
       "mod-c": (editor) => editor.actions.copy(),
       "mod-d": (editor) => editor.actions.duplicate(),
