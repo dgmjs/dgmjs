@@ -265,6 +265,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
             style={{
               position: "fixed",
               inset: 0,
+              zIndex: 10000,
             }}
             onPointerDown={close}
           />
@@ -272,7 +273,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
             style={{
               position: "absolute",
               display: "flex",
-              zIndex: 1000,
+              zIndex: 10000,
               outline: "none",
               overflow: "hidden",
               paddingTop: state.padding[0],
