@@ -1138,12 +1138,16 @@ export class Page extends Shape {
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
     json.size = structuredClone(this.size);
+    json.pageOrigin = structuredClone(this.pageOrigin);
+    json.pageScale = this.pageScale;
     return json;
   }
 
   fromJSON(json: any) {
     super.fromJSON(json);
     this.size = json.size ?? this.size;
+    this.pageOrigin = json.pageOrigin ?? this.pageOrigin;
+    this.pageScale = json.pageScale ?? this.pageScale;
   }
 
   finalize(canvas: Canvas): void {
