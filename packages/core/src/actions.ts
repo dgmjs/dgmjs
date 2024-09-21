@@ -209,13 +209,19 @@ export class Actions {
               });
               break;
             case "fontColor":
+            case "fontFamily":
+            case "fontSize":
+            case "fontWeight":
               objs.forEach((s) => {
                 if (s instanceof Box) {
                   const nodes = structuredClone(s.text);
                   visitTextNodes(nodes, (node) => {
                     if (Array.isArray(node.marks)) {
                       node.marks.forEach((mark: any) => {
-                        delete mark.attrs.color;
+                        if (mark.attrs)
+                          delete mark.attrs[
+                            key === "fontColor" ? "color" : key
+                          ];
                       });
                     }
                   });
