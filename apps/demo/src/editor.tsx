@@ -74,11 +74,15 @@ export function TextInplaceEditorToolbar({
             <PaletteIcon size={16} />
           </Button>
         </PopoverTrigger>
-        <PopoverContent sideOffset={8} className="w-fit dark:bg-slate-950">
+        <PopoverContent
+          sideOffset={8}
+          className="w-fit dark:bg-slate-950 z-[10000]"
+        >
           <ColorPalette
             theme={darkMode ? "dark" : "light"}
             palette={simplePalette}
             onClick={(value: any) => {
+              console.log(value);
               (tiptapEditor.chain().focus() as any).setColor(value).run();
             }}
           />

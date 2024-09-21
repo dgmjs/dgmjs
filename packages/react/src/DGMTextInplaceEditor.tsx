@@ -308,7 +308,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
             style={{
               position: "absolute",
               background: "transparent",
-              zIndex: 10,
+              zIndex: 10000,
               outline: "none",
             }}
           >
