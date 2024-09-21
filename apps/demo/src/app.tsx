@@ -22,6 +22,7 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "./components/ui/context-menu";
+import { useEffect, useState } from "react";
 
 declare global {
   interface Window {
@@ -31,10 +32,30 @@ declare global {
 
 function App() {
   const demoStore = useDemoStore();
+  const [isTextFocused, setIsTextFocused] = useState(false);
 
   const urlSearchParams = new URLSearchParams(window.location.search);
   const params = Object.fromEntries(urlSearchParams.entries());
   const roomId = params.roomId;
+
+  useEffect(() => {
+    const focusinHandler = (e: FocusEvent) => {
+      const target = e.target as HTMLElement;
+      if (
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.isContentEditable
+      ) {
+        setIsTextFocused(true);
+      } else {
+        setIsTextFocused(false);
+      }
+    };
+    document.addEventListener("focusin", focusinHandler);
+    return () => {
+      document.removeEventListener("focusin", focusinHandler);
+    };
+  }, []);
 
   const handleMount = async (editor: Editor) => {
     window.editor = editor;
@@ -149,7 +170,7 @@ function App() {
   return (
     <div className="absolute inset-0 h-[calc(100dvh)] select-none">
       <ContextMenu>
-        <ContextMenuTrigger>
+        <ContextMenuTrigger disabled={isTextFocused}>
           <EditorWrapper
             className="absolute inset-y-0 left-56 right-56"
             darkMode={demoStore.darkMode}
