@@ -571,15 +571,11 @@ export class Shape extends Obj {
       );
       if (r && !exceptions.includes(r)) return r;
     }
-    if (allowDisabledAndInvisible) {
-      if (this.containsPoint(canvas, point)) return this;
-    } else {
-      if (this.visible && this.enable && this.containsPoint(canvas, point)) {
-        return this;
-      }
+    const allowPick =
+      allowDisabledAndInvisible || (this.enable && this.visible);
+    if (allowPick && this.containsPoint(canvas, point)) {
+      return this;
     }
-    // if (this.visible && this.enable && this.containsPoint(canvas, point))
-    //   return this;
     return null;
   }
 
@@ -1938,9 +1934,15 @@ export class Group extends Box {
   /**
    * Pick a shape at specific position (x, y)
    */
-  getShapeAt(canvas: Canvas, point: number[]): Shape | null {
-    if (this.visible && this.enable && this.containsPoint(canvas, point))
-      return this;
+  getShapeAt(
+    canvas: Canvas,
+    point: number[],
+    exceptions: Shape[] = [],
+    allowDisabledAndInvisible: boolean = false
+  ): Shape | null {
+    const allowPick =
+      allowDisabledAndInvisible || (this.enable && this.visible);
+    if (allowPick && this.containsPoint(canvas, point)) return this;
     return null;
   }
 
@@ -2683,9 +2685,12 @@ export class Frame extends Box {
   getShapeAt(
     canvas: Canvas,
     point: number[],
-    exceptions: Shape[] = []
+    exceptions: Shape[] = [],
+    allowDisabledAndInvisible: boolean = false
   ): Shape | null {
-    if (this.visible && this.enable && this.containsPoint(canvas, point)) {
+    const allowPick =
+      allowDisabledAndInvisible || (this.enable && this.visible);
+    if (allowPick && this.containsPoint(canvas, point)) {
       for (let i = this.children.length - 1; i >= 0; i--) {
         const s: Shape = this.children[i] as Shape;
         const r = s.getShapeAt(canvas, point, exceptions);
