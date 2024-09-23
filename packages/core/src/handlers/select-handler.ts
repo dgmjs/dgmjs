@@ -104,7 +104,8 @@ export class SelectHandler extends Handler {
       if (page) {
         const p = canvas.globalCoordTransformRev([e.x, e.y]);
         const shape = page.getShapeAt(canvas, p, [], true);
-        if (shape) editor.selection.select([shape]);
+        if (shape && !editor.selection.isSelected(shape))
+          editor.selection.select([shape]);
       }
       editor.repaint(true);
     } else {
