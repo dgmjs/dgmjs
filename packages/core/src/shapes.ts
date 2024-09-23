@@ -558,15 +558,28 @@ export class Shape extends Obj {
   getShapeAt(
     canvas: Canvas,
     point: number[],
-    exceptions: Shape[] = []
+    exceptions: Shape[] = [],
+    allowDisabledAndInvisible: boolean = false
   ): Shape | null {
     for (let i = this.children.length - 1; i >= 0; i--) {
       const s: Shape = this.children[i] as Shape;
-      const r = s.getShapeAt(canvas, point, exceptions);
+      const r = s.getShapeAt(
+        canvas,
+        point,
+        exceptions,
+        allowDisabledAndInvisible
+      );
       if (r && !exceptions.includes(r)) return r;
     }
-    if (this.visible && this.enable && this.containsPoint(canvas, point))
-      return this;
+    if (allowDisabledAndInvisible) {
+      if (this.containsPoint(canvas, point)) return this;
+    } else {
+      if (this.visible && this.enable && this.containsPoint(canvas, point)) {
+        return this;
+      }
+    }
+    // if (this.visible && this.enable && this.containsPoint(canvas, point))
+    //   return this;
     return null;
   }
 
