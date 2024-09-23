@@ -2765,7 +2765,10 @@ export class Frame extends Box {
       this.children.forEach((s) => (s as Shape).draw(canvas, showDOM));
       canvas.restore();
       // draw rendered
+      canvas.save();
+      this.localTransform(canvas);
       this._memoCanvas.draw(canvas);
+      canvas.restore();
     }
   }
 
