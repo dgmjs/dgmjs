@@ -169,7 +169,7 @@ export class SelectHandler extends Handler {
         for (let shape of page.children as Shape[]) {
           shape.visit((s) => {
             let box = geometry.normalizeRect([this.dragStartPoint, p]);
-            if (s.overlapRect(canvas, box)) {
+            if (s.enable && s.visible && s.overlapRect(canvas, box)) {
               const manipulator = manipulatorManager.get(s.type);
               if (manipulator) manipulator.drawHovering(editor, s, e);
             }
