@@ -100,7 +100,12 @@ export class SelectHandler extends Handler {
     }
 
     if (e.button === Mouse.BUTTON3) {
-      // repaint if mouse right click
+      // select a shape (include disabled and invisible) if mouse right click
+      if (page) {
+        const p = canvas.globalCoordTransformRev([e.x, e.y]);
+        const shape = page.getShapeAt(canvas, p, [], true);
+        if (shape) editor.selection.select([shape]);
+      }
       editor.repaint(true);
     } else {
       // repaint without selection if mouse left click
