@@ -7,6 +7,7 @@ import { Cursor } from "../graphics/const";
 import { moveShapes, resolveAllConstraints } from "../macro";
 import { ActionKind } from "../core";
 import { ableToContain } from "./utils";
+import { GridSnapper } from "../manipulators/snapper";
 
 /**
  * BoxMoveController
@@ -18,6 +19,11 @@ export class BoxMoveController extends Controller {
   snap: Snap;
 
   /**
+   * Grid snapper
+   */
+  gridSnapper: GridSnapper;
+
+  /**
    * Reference to a container shape
    */
   container: Shape | null;
@@ -26,6 +32,7 @@ export class BoxMoveController extends Controller {
     super(manipulator);
     this.hasHandle = false;
     this.snap = new Snap();
+    this.gridSnapper = new GridSnapper();
     this.container = null;
   }
 
@@ -67,6 +74,25 @@ export class BoxMoveController extends Controller {
         (s) => (s as Shape).movable !== Movable.PARENT
       ) as Shape;
     if (!targetShape || targetShape instanceof Page) return;
+
+    // snap to grid
+    const snapped = this.gridSnapper.snap(editor, [
+      targetShape.left + this.dxStepGCS,
+      targetShape.top + this.dyStepGCS,
+    ]);
+    // console.log(this.dragStartPoint, this.dragPoint, [shape.left, shape.top]);
+    this.dxStepGCS = snapped[0] - targetShape.left;
+    this.dyStepGCS = snapped[1] - targetShape.top;
+    console.log(
+      targetShape.left,
+      targetShape.top,
+      snapped[0],
+      snapped[1],
+      this.dxStepGCS,
+      this.dyStepGCS
+    );
+
+    // apply movable constraint
     if (
       targetShape.movable === Movable.VERT ||
       targetShape.movable === Movable.NONE
