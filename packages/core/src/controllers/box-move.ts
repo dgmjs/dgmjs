@@ -60,7 +60,23 @@ export class BoxMoveController extends Controller {
     return [Cursor.MOVE, 0];
   }
 
+  getTargetShape(editor: Editor, shape: Shape): Shape {
+    let targetShape: Shape | null = shape;
+    if (targetShape.movable === Movable.PARENT)
+      targetShape = targetShape.findParent(
+        (s) => (s as Shape).movable !== Movable.PARENT
+      ) as Shape;
+    return targetShape;
+  }
+
   initialize(editor: Editor, shape: Shape): void {
+    const targetShape = this.getTargetShape(editor, shape);
+    if (!targetShape || targetShape instanceof Page) return;
+
+    this.gridSnapper.setSnapPoint(editor, this, [
+      targetShape.left,
+      targetShape.top,
+    ]);
     editor.transform.startAction(ActionKind.MOVE);
   }
 
@@ -68,29 +84,22 @@ export class BoxMoveController extends Controller {
    * Update ghost
    */
   update(editor: Editor, shape: Shape) {
-    let targetShape: Shape | null = shape;
-    if (targetShape.movable === Movable.PARENT)
-      targetShape = targetShape.findParent(
-        (s) => (s as Shape).movable !== Movable.PARENT
-      ) as Shape;
+    const targetShape = this.getTargetShape(editor, shape);
     if (!targetShape || targetShape instanceof Page) return;
 
     // snap to grid
-    const snapped = this.gridSnapper.snap(editor, [
-      targetShape.left + this.dxStepGCS,
-      targetShape.top + this.dyStepGCS,
-    ]);
+    const snapped = this.gridSnapper.snap(editor, this);
     // console.log(this.dragStartPoint, this.dragPoint, [shape.left, shape.top]);
-    this.dxStepGCS = snapped[0] - targetShape.left;
-    this.dyStepGCS = snapped[1] - targetShape.top;
-    console.log(
-      targetShape.left,
-      targetShape.top,
-      snapped[0],
-      snapped[1],
-      this.dxStepGCS,
-      this.dyStepGCS
-    );
+    // this.dxStepGCS = snapped[0] - targetShape.left;
+    // this.dyStepGCS = snapped[1] - targetShape.top;
+    // console.log(
+    //   targetShape.left,
+    //   targetShape.top,
+    //   snapped[0],
+    //   snapped[1],
+    //   this.dxStepGCS,
+    //   this.dyStepGCS
+    // );
 
     // apply movable constraint
     if (
