@@ -79,7 +79,7 @@ export class BoxMoveController extends Controller {
       targetShape.left,
       targetShape.top,
     ]);
-    this.moveSnapper.setRectToSnap(editor, this, targetShape.getBoundingRect());
+    this.moveSnapper.initialize(editor, this, targetShape);
 
     editor.transform.startAction(ActionKind.MOVE);
   }
@@ -92,7 +92,8 @@ export class BoxMoveController extends Controller {
     if (!targetShape || targetShape instanceof Page) return;
 
     // snap to grid
-    this.gridSnapper.update(editor, this);
+    // this.gridSnapper.update(editor, this);
+    this.moveSnapper.update(editor, this);
 
     // apply movable constraint
     if (
@@ -163,5 +164,8 @@ export class BoxMoveController extends Controller {
       const manipulator = manipulatorManager.get(this.container.type);
       if (manipulator) manipulator.drawHovering(editor, this.container, e);
     }
+
+    // draw snapping
+    this.moveSnapper.draw(editor);
   }
 }
