@@ -62,6 +62,13 @@ function move(point: number[], dx: number, dy: number): number[] {
 }
 
 /**
+ * Returns points moved as dx and dy
+ */
+function movePoints(points: number[][], dx: number, dy: number): number[][] {
+  return points.map((p) => move(p, dx, dy));
+}
+
+/**
  * Test whether the two points are horizontal
  */
 function isHorz(point1: number[], point2: number[]): boolean {
@@ -951,6 +958,7 @@ export {
   quantize,
   mid,
   move,
+  movePoints,
   isHorz,
   isVert,
   inRect,
