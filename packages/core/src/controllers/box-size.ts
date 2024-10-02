@@ -22,6 +22,7 @@ import {
   resolveAllConstraints,
 } from "../macro";
 import { ActionKind } from "../core";
+import { SizeSnapper } from "../manipulators/snapper";
 
 interface BoxSizeControllerOptions {
   position: string;
@@ -42,6 +43,8 @@ export class BoxSizeController extends Controller {
    * Snap support for controller
    */
   snap: Snap;
+
+  sizeSnapper: SizeSnapper;
 
   /**
    * Temporal memory for shape's enclosure
@@ -66,6 +69,7 @@ export class BoxSizeController extends Controller {
       ...options,
     };
     this.snap = new Snap();
+    this.sizeSnapper = new SizeSnapper();
     this.initialEnclosure = [];
     this.initialSnapshot = {};
   }
@@ -188,6 +192,8 @@ export class BoxSizeController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
+    this.sizeSnapper.initialize(editor, this, shape);
+
     editor.transform.startAction(ActionKind.RESIZE);
     this.initialEnclosure = shape.getEnclosure();
     this.initialSnapshot = {};
@@ -199,6 +205,9 @@ export class BoxSizeController extends Controller {
    */
   update(editor: Editor, shape: Shape) {
     const canvas = editor.canvas;
+
+    // snapping
+    this.sizeSnapper.update(editor, this);
 
     // remember current shape states
     const memo = shape.toJSON(false, true);
@@ -475,5 +484,7 @@ export class BoxSizeController extends Controller {
     const canvas = editor.canvas;
     const ghost = shape.getEnclosure();
     drawPolylineInLCS(canvas, shape, ghost);
+
+    this.sizeSnapper.draw(editor);
   }
 }

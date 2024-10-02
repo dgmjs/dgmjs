@@ -1734,10 +1734,10 @@ export class Controller {
     let handled = false;
     if (this.dragging) {
       this.dragPrevPoint = geometry.copy(this.dragPoint);
-      this.dragPoint = utils.ccs2lcs(canvas, shape, [e.x, e.y]);
       this.dragPrevPointGCS = geometry.copy(this.dragPointGCS);
-      this.dragPointGCS = utils.ccs2gcs(canvas, [e.x, e.y]);
       this.dragPrevPointCCS = geometry.copy(this.dragPointCCS);
+      this.dragPoint = utils.ccs2lcs(canvas, shape, [e.x, e.y]);
+      this.dragPointGCS = utils.ccs2gcs(canvas, [e.x, e.y]);
       this.dragPointCCS = [e.x, e.y];
       this.dx = this.dragPoint[0] - this.dragStartPoint[0];
       this.dy = this.dragPoint[1] - this.dragStartPoint[1];
