@@ -215,9 +215,9 @@ export class BoxSizeController extends Controller {
     shape.fromJSON(initialShape);
 
     // compute (dx, dy) in initial shape's LCS
-    const dragPoint = ccs2lcs(canvas, shape, this.dragPointCCS);
-    let dx = dragPoint[0] - this.dragStartPoint[0];
-    let dy = dragPoint[1] - this.dragStartPoint[1];
+    // const dragPoint = ccs2lcs(canvas, shape, this.dragPointCCS);
+    let dx = this.dx; // dragPoint[0] - this.dragStartPoint[0];
+    let dy = this.dy; // dragPoint[1] - this.dragStartPoint[1];
 
     // initialize control enclosure
     let controlEnclosure = geometry.pathCopy(this.initialEnclosure);

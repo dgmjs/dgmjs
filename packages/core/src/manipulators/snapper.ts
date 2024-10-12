@@ -2,7 +2,7 @@ import { BoxSizeController } from "../controllers/box-size";
 import { Controller, Editor } from "../editor";
 import { ControllerPosition, MAGNET_THRESHOLD } from "../graphics/const";
 import * as geometry from "../graphics/geometry";
-import { gcs2ccs } from "../graphics/utils";
+import { ccs2lcs, gcs2ccs } from "../graphics/utils";
 import { Box, Shape, Sizable } from "../shapes";
 import * as guide from "../utils/guide";
 
@@ -15,6 +15,7 @@ export class Snapper {
    */
   moveDragPointGCS(
     editor: Editor,
+    shape: Shape,
     controller: Controller,
     dx: number,
     dy: number
@@ -24,6 +25,11 @@ export class Snapper {
       controller.dragPointGCS[1] + dy,
     ];
     controller.dragPointCCS = gcs2ccs(editor.canvas, controller.dragPointGCS);
+    controller.dragPoint = ccs2lcs(
+      editor.canvas,
+      shape,
+      controller.dragPointCCS
+    );
     controller.dx = controller.dragPoint[0] - controller.dragStartPoint[0];
     controller.dy = controller.dragPoint[1] - controller.dragStartPoint[1];
     controller.dxStep = controller.dragPoint[0] - controller.dragPrevPoint[0];
@@ -115,7 +121,7 @@ export class GridSnapper extends Snapper {
     const dy = snappedPoint[1] - p[1];
 
     // update drag point as snapped point
-    this.moveDragPointGCS(editor, controller, dx, dy);
+    this.moveDragPointGCS(editor, shape, controller, dx, dy);
   }
 }
 
@@ -173,14 +179,14 @@ export class MoveSnapper extends Snapper {
         this.snappedX = this.snapX(p, this.referencePoints);
         if (this.snappedX !== null) {
           const dx = this.snappedX - p[0];
-          this.moveDragPointGCS(editor, controller, dx, 0);
+          this.moveDragPointGCS(editor, shape, controller, dx, 0);
         }
       }
       if (this.snappedY === null) {
         this.snappedY = this.snapY(p, this.referencePoints);
         if (this.snappedY !== null) {
           const dy = this.snappedY - p[1];
-          this.moveDragPointGCS(editor, controller, 0, dy);
+          this.moveDragPointGCS(editor, shape, controller, 0, dy);
         }
       }
     }
@@ -359,22 +365,29 @@ export class SizeSnapper extends Snapper {
     // compute snapped X and Y
     this.snappedX = null;
     this.snappedY = null;
-    for (let j = 0; j < movedPointsToSnap.length; j++) {
-      const p = movedPointsToSnap[j];
+    for (let i = 0; i < movedPointsToSnap.length; i++) {
+      const p = movedPointsToSnap[i];
       if (this.snappedX === null) {
         this.snappedX = this.snapX(p, this.referencePoints);
         if (this.snappedX !== null) {
           const dx = this.snappedX - p[0];
           const dy = this.ratio !== 0 ? dx * this.ratio : 0;
-          this.moveDragPointGCS(editor, controller, dx, dy);
+          this.moveDragPointGCS(editor, shape, controller, dx, dy);
         }
       }
+
+      // if sizing is ratio and X is snapped, skip snapping Y
+      // because snapping Y causes broke snapped X position.
+      if (this.ratio !== 0 && this.snappedX !== null) {
+        continue;
+      }
+
       if (this.snappedY === null) {
         this.snappedY = this.snapY(p, this.referencePoints);
         if (this.snappedY !== null) {
           const dy = this.snappedY - p[1];
           const dx = this.ratio !== 0 ? dy / this.ratio : 0;
-          this.moveDragPointGCS(editor, controller, dx, dy);
+          this.moveDragPointGCS(editor, shape, controller, dx, dy);
         }
       }
     }
