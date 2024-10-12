@@ -214,7 +214,9 @@ export class MoveSnapper extends MultipointSnapper {
         const rect = (s as Shape).getBoundingRect();
         const center = geometry.center(rect);
         this.referencePoints.push(
-          ...geometry.rectToPolygon(rect, false),
+          ...geometry
+            .rectToPolygon(rect, false)
+            .map((p) => lcs2gcs(canvas, s, p)),
           center
         );
       }
@@ -325,6 +327,8 @@ export class SizeSnapper extends MultipointSnapper {
   }
 
   initialize(editor: Editor, shape: Shape, controller: BoxSizeController) {
+    const canvas = editor.canvas;
+
     // set points to snap
     const rect = shape.getBoundingRect();
     const center = geometry.center(rect);
@@ -384,7 +388,9 @@ export class SizeSnapper extends MultipointSnapper {
         const rect = (s as Shape).getBoundingRect();
         const center = geometry.center(rect);
         this.referencePoints.push(
-          ...geometry.rectToPolygon(rect, false),
+          ...geometry
+            .rectToPolygon(rect, false)
+            .map((p) => lcs2gcs(canvas, s, p)),
           center
         );
       }
