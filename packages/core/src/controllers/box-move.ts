@@ -79,7 +79,7 @@ export class BoxMoveController extends Controller {
       targetShape.left,
       targetShape.top,
     ]);
-    this.moveSnapper.initialize(editor, this, targetShape);
+    this.moveSnapper.initialize(editor, targetShape, this);
 
     editor.transform.startAction(ActionKind.MOVE);
   }
@@ -92,8 +92,8 @@ export class BoxMoveController extends Controller {
     if (!targetShape || targetShape instanceof Page) return;
 
     // snap to grid
-    // this.gridSnapper.update(editor, this);
-    this.moveSnapper.update(editor, this);
+    // this.gridSnapper.update(editor, shape, this);
+    this.moveSnapper.update(editor, shape, this);
 
     // apply movable constraint
     if (

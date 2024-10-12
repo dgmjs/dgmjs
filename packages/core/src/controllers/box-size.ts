@@ -192,7 +192,7 @@ export class BoxSizeController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
-    this.sizeSnapper.initialize(editor, this, shape);
+    this.sizeSnapper.initialize(editor, shape, this);
 
     editor.transform.startAction(ActionKind.RESIZE);
     this.initialEnclosure = shape.getEnclosure();
@@ -207,7 +207,7 @@ export class BoxSizeController extends Controller {
     const canvas = editor.canvas;
 
     // snapping
-    this.sizeSnapper.update(editor, this);
+    this.sizeSnapper.update(editor, shape, this);
 
     // remember current shape states
     const memo = shape.toJSON(false, true);

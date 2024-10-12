@@ -3,25 +3,16 @@ import { Controller, Editor } from "../editor";
 import { ControllerPosition, MAGNET_THRESHOLD } from "../graphics/const";
 import * as geometry from "../graphics/geometry";
 import { gcs2ccs } from "../graphics/utils";
-import { Box, Shape } from "../shapes";
+import { Box, Shape, Sizable } from "../shapes";
 import * as guide from "../utils/guide";
 
+/**
+ * Snapper class
+ */
 export class Snapper {
-  updateDeltas(controller: Controller): void {
-    controller.dx = controller.dragPoint[0] - controller.dragStartPoint[0];
-    controller.dy = controller.dragPoint[1] - controller.dragStartPoint[1];
-    controller.dxStep = controller.dragPoint[0] - controller.dragPrevPoint[0];
-    controller.dyStep = controller.dragPoint[1] - controller.dragPrevPoint[1];
-    controller.dxGCS =
-      controller.dragPointGCS[0] - controller.dragStartPointGCS[0];
-    controller.dyGCS =
-      controller.dragPointGCS[1] - controller.dragStartPointGCS[1];
-    controller.dxStepGCS =
-      controller.dragPointGCS[0] - controller.dragPrevPointGCS[0];
-    controller.dyStepGCS =
-      controller.dragPointGCS[1] - controller.dragPrevPointGCS[1];
-  }
-
+  /**
+   * Move drag point in GCS of the given controller
+   */
   moveDragPointGCS(
     editor: Editor,
     controller: Controller,
@@ -76,6 +67,15 @@ export class Snapper {
     }
     return null;
   }
+
+  /**
+   * Update snapper
+   * @abstract
+   * @param editor Editor
+   * @param shape Shape
+   * @param controller Controller
+   */
+  update(editor: Editor, shape: Shape, controller: Controller) {}
 }
 
 /**
@@ -98,7 +98,7 @@ export class GridSnapper extends Snapper {
    * @param editor Editor
    * @param controller Controller
    */
-  update(editor: Editor, controller: Controller) {
+  update(editor: Editor, shape: Shape, controller: Controller) {
     // if (editor.getSnapToGrid()) {
     const [gridX, gridY] = editor.getGridSize();
 
@@ -129,18 +129,19 @@ export class MoveSnapper extends Snapper {
   snappedX: number | null = null;
   snappedY: number | null = null;
 
-  initialize(editor: Editor, controller: Controller, targetShape: Shape) {
+  initialize(editor: Editor, shape: Shape, controller: Controller) {
     // set points to snap
-    const rect = targetShape.getBoundingRect();
+    const rect = shape.getBoundingRect();
     const center = geometry.center(rect);
+    // TODO: Apply rotate on pointsToSnap
     this.pointsToSnap = [...geometry.rectToPolygon(rect, false), center];
 
     // set refernces points
     this.referencePoints = [];
     const page = editor.getCurrentPage()!;
-    page.traverse((shape) => {
-      if (shape !== targetShape && shape instanceof Box) {
-        const rect = (shape as Shape).getBoundingRect();
+    page.traverse((s) => {
+      if (s !== shape && s instanceof Box) {
+        const rect = (s as Shape).getBoundingRect();
         const center = geometry.center(rect);
         this.referencePoints.push(
           ...geometry.rectToPolygon(rect, false),
@@ -155,54 +156,19 @@ export class MoveSnapper extends Snapper {
       const db = geometry.distance(b, center);
       return da - db;
     });
-
-    // console.log("pointsToSnap", this.pointsToSnap);
-    // this.referencePoints.forEach((p) => {
-    //   console.log(p, geometry.distance(p, center));
-    // });
   }
 
-  /**
-   * Snap a point to reference points in horizontally.
-   * @param point
-   * @param references
-   * @returns snapped x-coord or null
-   */
-  snapX(point: number[], referencePoints: number[][]): number | null {
-    for (let i = 0; i < referencePoints.length; i++) {
-      const rp = referencePoints[i];
-      const dx = rp[0] - point[0];
-      if (Math.abs(dx) < MAGNET_THRESHOLD) return rp[0];
-    }
-    return null;
-  }
-
-  /**
-   * Snap a point to reference points in vertically.
-   * @param point
-   * @param references
-   * @returns snapped y-coord or null
-   */
-  snapY(point: number[], referencePoints: number[][]): number | null {
-    for (let i = 0; i < referencePoints.length; i++) {
-      const rp = referencePoints[i];
-      const dy = rp[1] - point[1];
-      if (Math.abs(dy) < MAGNET_THRESHOLD) return rp[1];
-    }
-    return null;
-  }
-
-  update(editor: Editor, controller: Controller) {
-    const page = editor.getCurrentPage()!;
-
+  update(editor: Editor, shape: Shape, controller: Controller) {
+    // move points to snap by dx and dy
     const dx = controller.dxGCS;
     const dy = controller.dyGCS;
-    const pointToSnap = geometry.movePoints(this.pointsToSnap, dx, dy);
+    const movedPointsToSnap = geometry.movePoints(this.pointsToSnap, dx, dy);
+
+    // compute snapped X and Y
     this.snappedX = null;
     this.snappedY = null;
-
-    for (let j = 0; j < pointToSnap.length; j++) {
-      const p = pointToSnap[j];
+    for (let j = 0; j < movedPointsToSnap.length; j++) {
+      const p = movedPointsToSnap[j];
       if (this.snappedX === null) {
         this.snappedX = this.snapX(p, this.referencePoints);
         if (this.snappedX !== null) {
@@ -218,12 +184,11 @@ export class MoveSnapper extends Snapper {
         }
       }
     }
-
-    // const rect = geometry.movePoints(this.rectToSnap, dx, dy);
-    // const center = geometry.center(rect);
   }
 
-  /** Draw snapping guide lines */
+  /**
+   * Draw snapping guide lines
+   */
   draw(editor: Editor) {
     const canvas = editor.canvas;
     // draw all lines from reference points to points to snap
@@ -247,16 +212,24 @@ export class SizeSnapper extends Snapper {
   referencePoints: number[][] = [];
   snappedX: number | null = null;
   snappedY: number | null = null;
+  ratio: number = 0;
 
-  initialize(
-    editor: Editor,
-    controller: BoxSizeController,
-    targetShape: Shape
-  ) {
+  initialize(editor: Editor, shape: Shape, controller: BoxSizeController) {
     // set points to snap
-    const rect = targetShape.getBoundingRect();
+    const rect = shape.getBoundingRect();
     const center = geometry.center(rect);
     const enclosure = geometry.rectToPolygon(rect, false);
+
+    // compute ratio if the shape's sizable is ratio
+    const w = geometry.width(rect);
+    const h = geometry.height(rect);
+    if (shape.sizable === Sizable.RATIO) {
+      this.ratio = h / w;
+    } else {
+      this.ratio = 0;
+    }
+
+    // set points to snap
     switch (controller.options.position) {
       case ControllerPosition.TOP: {
         this.pointsToSnap = [enclosure[0], enclosure[1]];
@@ -295,9 +268,9 @@ export class SizeSnapper extends Snapper {
     // set refernces points
     this.referencePoints = [];
     const page = editor.getCurrentPage()!;
-    page.traverse((shape) => {
-      if (shape !== targetShape && shape instanceof Box) {
-        const rect = (shape as Shape).getBoundingRect();
+    page.traverse((s) => {
+      if (s !== shape && s instanceof Box) {
+        const rect = (s as Shape).getBoundingRect();
         const center = geometry.center(rect);
         this.referencePoints.push(
           ...geometry.rectToPolygon(rect, false),
@@ -312,70 +285,111 @@ export class SizeSnapper extends Snapper {
       const db = geometry.distance(b, center);
       return da - db;
     });
-
-    // console.log("pointsToSnap", this.pointsToSnap);
-    // this.referencePoints.forEach((p) => {
-    //   console.log(p, geometry.distance(p, center));
-    // });
   }
 
-  update(editor: Editor, controller: BoxSizeController) {
-    const canvas = editor.canvas;
-    const page = editor.getCurrentPage()!;
+  update(editor: Editor, shape: Shape, controller: BoxSizeController) {
+    // size snapping will not work on rotated shape
+    const rotate = geometry.normalizeAngle(shape.rotate);
+    if (rotate !== 0) return;
 
-    const dx = controller.dxGCS;
-    const dy = controller.dyGCS;
+    // adjust dx and dy if the shape is sizable ratio
+    let dx = controller.dxGCS;
+    let dy = controller.dyGCS;
+    if (shape.sizable === Sizable.RATIO) {
+      if (dx * this.ratio > dy / this.ratio) {
+        dy = dx * this.ratio;
+      } else {
+        dx = dy / this.ratio;
+      }
+    }
 
-    let pointToSnap: number[][] = [];
+    // move points to snap by dx and dy
+    let movedPointsToSnap: number[][] = [];
     switch (controller.options.position) {
-      case ControllerPosition.TOP: {
-        pointToSnap = geometry.movePoints(this.pointsToSnap, dx, dy);
+      case ControllerPosition.TOP:
+      case ControllerPosition.BOTTOM: {
+        movedPointsToSnap = [
+          [this.pointsToSnap[0][0], this.pointsToSnap[0][1] + dy],
+          [this.pointsToSnap[1][0], this.pointsToSnap[1][1] + dy],
+        ];
+        break;
+      }
+      case ControllerPosition.LEFT:
+      case ControllerPosition.RIGHT: {
+        movedPointsToSnap = [
+          [this.pointsToSnap[0][0] + dx, this.pointsToSnap[0][1]],
+          [this.pointsToSnap[1][0] + dx, this.pointsToSnap[1][1]],
+        ];
+        break;
+      }
+      case ControllerPosition.LEFT_TOP: {
+        movedPointsToSnap = [
+          [this.pointsToSnap[0][0] + dx, this.pointsToSnap[0][1] + dy],
+          [this.pointsToSnap[1][0], this.pointsToSnap[1][1] + dy],
+          [this.pointsToSnap[2][0] + dx, this.pointsToSnap[2][1]],
+        ];
+        break;
+      }
+      case ControllerPosition.RIGHT_TOP: {
+        movedPointsToSnap = [
+          [this.pointsToSnap[0][0] + dx, this.pointsToSnap[0][1] + dy],
+          [this.pointsToSnap[1][0] + dx, this.pointsToSnap[1][1]],
+          [this.pointsToSnap[2][0], this.pointsToSnap[2][1] + dy],
+        ];
+        break;
+      }
+      case ControllerPosition.RIGHT_BOTTOM: {
+        movedPointsToSnap = [
+          [this.pointsToSnap[0][0] + dx, this.pointsToSnap[0][1] + dy],
+          [this.pointsToSnap[1][0], this.pointsToSnap[1][1] + dy],
+          [this.pointsToSnap[2][0] + dx, this.pointsToSnap[2][1]],
+        ];
+        break;
+      }
+      case ControllerPosition.LEFT_BOTTOM: {
+        movedPointsToSnap = [
+          [this.pointsToSnap[0][0] + dx, this.pointsToSnap[0][1] + dy],
+          [this.pointsToSnap[1][0] + dx, this.pointsToSnap[1][1]],
+          [this.pointsToSnap[2][0], this.pointsToSnap[2][1] + dy],
+        ];
         break;
       }
     }
 
-    // console.log("pointToSnap", JSON.stringify(pointToSnap));
-    // console.log("referencePoints", this.referencePoints);
-
-    // const pointToSnap = geometry.movePoints(this.pointsToSnap, dx, dy);
+    // compute snapped X and Y
     this.snappedX = null;
     this.snappedY = null;
-
-    for (let j = 0; j < pointToSnap.length; j++) {
-      const p = pointToSnap[j];
-
-      // if (this.snappedX === null) {
-      //   this.snappedX = this.snapX(p, this.referencePoints);
-      //   if (this.snappedX !== null) {
-      //     const dx = this.snappedX - p[0];
-      //     controller.dragPointGCS[0] += dx;
-      //     this.updateDeltas(controller);
-      //   }
-      // }
-
+    for (let j = 0; j < movedPointsToSnap.length; j++) {
+      const p = movedPointsToSnap[j];
+      if (this.snappedX === null) {
+        this.snappedX = this.snapX(p, this.referencePoints);
+        if (this.snappedX !== null) {
+          const dx = this.snappedX - p[0];
+          const dy = this.ratio !== 0 ? dx * this.ratio : 0;
+          this.moveDragPointGCS(editor, controller, dx, dy);
+        }
+      }
       if (this.snappedY === null) {
         this.snappedY = this.snapY(p, this.referencePoints);
         if (this.snappedY !== null) {
-          console.log("snappedY", this.snappedY);
           const dy = this.snappedY - p[1];
-          this.moveDragPointGCS(editor, controller, 0, dy);
+          const dx = this.ratio !== 0 ? dy / this.ratio : 0;
+          this.moveDragPointGCS(editor, controller, dx, dy);
         }
       }
     }
-
-    // const rect = geometry.movePoints(this.rectToSnap, dx, dy);
-    // const center = geometry.center(rect);
   }
 
-  /** Draw snapping guide lines */
+  /**
+   * Draw snapping guide lines
+   */
   draw(editor: Editor) {
     const canvas = editor.canvas;
     // draw all lines from reference points to points to snap
-
-    // if (this.snappedX !== null) {
-    //   const x = gcs2ccs(canvas, [this.snappedX, 0])[0];
-    //   guide.drawVertline(canvas, x, [4]);
-    // }
+    if (this.snappedX !== null) {
+      const x = gcs2ccs(canvas, [this.snappedX, 0])[0];
+      guide.drawVertline(canvas, x, [4]);
+    }
 
     if (this.snappedY !== null) {
       const y = gcs2ccs(canvas, [0, this.snappedY])[1];
