@@ -2,9 +2,13 @@ import { BoxSizeController } from "../controllers/box-size";
 import { Controller, Editor } from "../editor";
 import { ControllerPosition, MAGNET_THRESHOLD } from "../graphics/const";
 import * as geometry from "../graphics/geometry";
-import { ccs2lcs, gcs2ccs } from "../graphics/utils";
+import { ccs2lcs, gcs2ccs, lcs2gcs } from "../graphics/utils";
 import { Box, Shape, Sizable } from "../shapes";
 import * as guide from "../utils/guide";
+
+function eq(a: number, b: number): boolean {
+  return Math.abs(a - b) < 0.0001;
+}
 
 /**
  * Snapper class
@@ -84,6 +88,65 @@ export class Snapper {
   update(editor: Editor, shape: Shape, controller: Controller) {}
 }
 
+export class MultipointSnapper extends Snapper {
+  initialPointsToSnap: number[][] = [];
+  pointsToSnap: number[][] = [];
+  referencePoints: number[][] = [];
+  snappedX: number | null = null;
+  snappedY: number | null = null;
+
+  /**
+   * Draw snapped points and lines
+   */
+  draw(editor: Editor) {
+    const canvas = editor.canvas;
+
+    if (this.snappedX !== null) {
+      const snappedXPoints: number[][] = [];
+      this.pointsToSnap.forEach((p) => {
+        if (eq(p[0], this.snappedX as number)) snappedXPoints.push(p);
+      });
+      this.referencePoints.forEach((p) => {
+        if (eq(p[0], this.snappedX as number)) snappedXPoints.push(p);
+      });
+
+      snappedXPoints.forEach((p) => {
+        const pCCS = gcs2ccs(canvas, p);
+        guide.drawControlPoint(canvas, pCCS, 3);
+      });
+      if (snappedXPoints.length > 1) {
+        const y1 = Math.min(...snappedXPoints.map((p) => p[1]));
+        const y2 = Math.max(...snappedXPoints.map((p) => p[1]));
+        const p1 = gcs2ccs(canvas, [this.snappedX as number, y1]);
+        const p2 = gcs2ccs(canvas, [this.snappedX as number, y2]);
+        guide.drawLine(canvas, p1, p2);
+      }
+    }
+
+    if (this.snappedY !== null) {
+      const snappedYPoints: number[][] = [];
+      this.pointsToSnap.forEach((p) => {
+        if (eq(p[1], this.snappedY as number)) snappedYPoints.push(p);
+      });
+      this.referencePoints.forEach((p) => {
+        if (eq(p[1], this.snappedY as number)) snappedYPoints.push(p);
+      });
+
+      snappedYPoints.forEach((p) => {
+        const pCCS = gcs2ccs(canvas, p);
+        guide.drawControlPoint(canvas, pCCS, 3);
+      });
+      if (snappedYPoints.length > 1) {
+        const x1 = Math.min(...snappedYPoints.map((p) => p[0]));
+        const x2 = Math.max(...snappedYPoints.map((p) => p[0]));
+        const p1 = gcs2ccs(canvas, [x1, this.snappedY as number]);
+        const p2 = gcs2ccs(canvas, [x2, this.snappedY as number]);
+        guide.drawLine(canvas, p1, p2);
+      }
+    }
+  }
+}
+
 /**
  * GridSnapper
  * Snap a point to grid
@@ -129,18 +192,19 @@ export class GridSnapper extends Snapper {
  * MoveSnapper
  * Snap a moving shape to other shapes
  */
-export class MoveSnapper extends Snapper {
-  pointsToSnap: number[][] = [];
-  referencePoints: number[][] = [];
-  snappedX: number | null = null;
-  snappedY: number | null = null;
-
+export class MoveSnapper extends MultipointSnapper {
   initialize(editor: Editor, shape: Shape, controller: Controller) {
-    // set points to snap
+    const canvas = editor.canvas;
+
+    // set initial points to snap
     const rect = shape.getBoundingRect();
     const center = geometry.center(rect);
-    // TODO: Apply rotate on pointsToSnap
-    this.pointsToSnap = [...geometry.rectToPolygon(rect, false), center];
+    this.initialPointsToSnap = [
+      ...geometry
+        .rectToPolygon(rect, false)
+        .map((p) => lcs2gcs(canvas, shape, p)),
+      center,
+    ];
 
     // set refernces points
     this.referencePoints = [];
@@ -168,18 +232,19 @@ export class MoveSnapper extends Snapper {
     // move points to snap by dx and dy
     const dx = controller.dxGCS;
     const dy = controller.dyGCS;
-    const movedPointsToSnap = geometry.movePoints(this.pointsToSnap, dx, dy);
+    this.pointsToSnap = geometry.movePoints(this.initialPointsToSnap, dx, dy);
 
     // compute snapped X and Y
     this.snappedX = null;
     this.snappedY = null;
-    for (let j = 0; j < movedPointsToSnap.length; j++) {
-      const p = movedPointsToSnap[j];
+    for (let j = 0; j < this.pointsToSnap.length; j++) {
+      const p = this.pointsToSnap[j];
       if (this.snappedX === null) {
         this.snappedX = this.snapX(p, this.referencePoints);
         if (this.snappedX !== null) {
           const dx = this.snappedX - p[0];
           this.moveDragPointGCS(editor, shape, controller, dx, 0);
+          this.pointsToSnap.forEach((p) => (p[0] += dx));
         }
       }
       if (this.snappedY === null) {
@@ -187,24 +252,9 @@ export class MoveSnapper extends Snapper {
         if (this.snappedY !== null) {
           const dy = this.snappedY - p[1];
           this.moveDragPointGCS(editor, shape, controller, 0, dy);
+          this.pointsToSnap.forEach((p) => (p[1] += dy));
         }
       }
-    }
-  }
-
-  /**
-   * Draw snapping guide lines
-   */
-  draw(editor: Editor) {
-    const canvas = editor.canvas;
-    // draw all lines from reference points to points to snap
-    if (this.snappedX !== null) {
-      const x = gcs2ccs(canvas, [this.snappedX, 0])[0];
-      guide.drawVertline(canvas, x, [4]);
-    }
-    if (this.snappedY !== null) {
-      const y = gcs2ccs(canvas, [0, this.snappedY])[1];
-      guide.drawHorzline(canvas, y, [4]);
     }
   }
 }
@@ -213,12 +263,66 @@ export class MoveSnapper extends Snapper {
  * SizeSnapper
  * Snap a sizing shape to other shapes
  */
-export class SizeSnapper extends Snapper {
-  pointsToSnap: number[][] = [];
-  referencePoints: number[][] = [];
-  snappedX: number | null = null;
-  snappedY: number | null = null;
-  ratio: number = 0;
+export class SizeSnapper extends MultipointSnapper {
+  sizingRatio: number = 0;
+
+  /**
+   * Move points to snap by dx and dy according to the position
+   */
+  movePointsToSnap(
+    position: string,
+    pointsToSnap: number[][],
+    dx: number,
+    dy: number
+  ): number[][] {
+    switch (position) {
+      case ControllerPosition.TOP:
+      case ControllerPosition.BOTTOM: {
+        return [
+          [pointsToSnap[0][0], pointsToSnap[0][1] + dy],
+          [pointsToSnap[1][0], pointsToSnap[1][1] + dy],
+        ];
+      }
+      case ControllerPosition.LEFT:
+      case ControllerPosition.RIGHT: {
+        return [
+          [pointsToSnap[0][0] + dx, pointsToSnap[0][1]],
+          [pointsToSnap[1][0] + dx, pointsToSnap[1][1]],
+        ];
+      }
+      case ControllerPosition.LEFT_TOP: {
+        return [
+          [pointsToSnap[0][0] + dx, pointsToSnap[0][1] + dy],
+          [pointsToSnap[1][0], pointsToSnap[1][1] + dy],
+          [pointsToSnap[2][0] + dx, pointsToSnap[2][1]],
+        ];
+      }
+      case ControllerPosition.RIGHT_TOP: {
+        return [
+          [pointsToSnap[0][0] + dx, pointsToSnap[0][1] + dy],
+          [pointsToSnap[1][0] + dx, pointsToSnap[1][1]],
+          [pointsToSnap[2][0], pointsToSnap[2][1] + dy],
+        ];
+      }
+      case ControllerPosition.RIGHT_BOTTOM: {
+        return [
+          [pointsToSnap[0][0] + dx, pointsToSnap[0][1] + dy],
+          [pointsToSnap[1][0], pointsToSnap[1][1] + dy],
+          [pointsToSnap[2][0] + dx, pointsToSnap[2][1]],
+        ];
+      }
+      case ControllerPosition.LEFT_BOTTOM: {
+        return [
+          [pointsToSnap[0][0] + dx, pointsToSnap[0][1] + dy],
+          [pointsToSnap[1][0] + dx, pointsToSnap[1][1]],
+          [pointsToSnap[2][0], pointsToSnap[2][1] + dy],
+        ];
+      }
+      default: {
+        return [];
+      }
+    }
+  }
 
   initialize(editor: Editor, shape: Shape, controller: BoxSizeController) {
     // set points to snap
@@ -230,46 +334,47 @@ export class SizeSnapper extends Snapper {
     const w = geometry.width(rect);
     const h = geometry.height(rect);
     if (shape.sizable === Sizable.RATIO) {
-      this.ratio = h / w;
+      this.sizingRatio = h / w;
     } else {
-      this.ratio = 0;
+      this.sizingRatio = 0;
     }
 
     // set points to snap
     switch (controller.options.position) {
       case ControllerPosition.TOP: {
-        this.pointsToSnap = [enclosure[0], enclosure[1]];
+        this.initialPointsToSnap = [enclosure[0], enclosure[1]];
         break;
       }
       case ControllerPosition.RIGHT: {
-        this.pointsToSnap = [enclosure[1], enclosure[2]];
+        this.initialPointsToSnap = [enclosure[1], enclosure[2]];
         break;
       }
       case ControllerPosition.BOTTOM: {
-        this.pointsToSnap = [enclosure[2], enclosure[3]];
+        this.initialPointsToSnap = [enclosure[2], enclosure[3]];
         break;
       }
       case ControllerPosition.LEFT: {
-        this.pointsToSnap = [enclosure[3], enclosure[0]];
+        this.initialPointsToSnap = [enclosure[3], enclosure[0]];
         break;
       }
       case ControllerPosition.LEFT_TOP: {
-        this.pointsToSnap = [enclosure[0], enclosure[1], enclosure[3]];
+        this.initialPointsToSnap = [enclosure[0], enclosure[1], enclosure[3]];
         break;
       }
       case ControllerPosition.RIGHT_TOP: {
-        this.pointsToSnap = [enclosure[1], enclosure[2], enclosure[0]];
+        this.initialPointsToSnap = [enclosure[1], enclosure[2], enclosure[0]];
         break;
       }
       case ControllerPosition.RIGHT_BOTTOM: {
-        this.pointsToSnap = [enclosure[2], enclosure[3], enclosure[1]];
+        this.initialPointsToSnap = [enclosure[2], enclosure[3], enclosure[1]];
         break;
       }
       case ControllerPosition.LEFT_BOTTOM: {
-        this.pointsToSnap = [enclosure[3], enclosure[0], enclosure[2]];
+        this.initialPointsToSnap = [enclosure[3], enclosure[0], enclosure[2]];
         break;
       }
     }
+    this.pointsToSnap = geometry.pathCopy(this.initialPointsToSnap);
 
     // set refernces points
     this.referencePoints = [];
@@ -302,83 +407,44 @@ export class SizeSnapper extends Snapper {
     let dx = controller.dxGCS;
     let dy = controller.dyGCS;
     if (shape.sizable === Sizable.RATIO) {
-      if (dx * this.ratio > dy / this.ratio) {
-        dy = dx * this.ratio;
+      if (dx * this.sizingRatio > dy / this.sizingRatio) {
+        dy = dx * this.sizingRatio;
       } else {
-        dx = dy / this.ratio;
+        dx = dy / this.sizingRatio;
       }
     }
 
     // move points to snap by dx and dy
-    let movedPointsToSnap: number[][] = [];
-    switch (controller.options.position) {
-      case ControllerPosition.TOP:
-      case ControllerPosition.BOTTOM: {
-        movedPointsToSnap = [
-          [this.pointsToSnap[0][0], this.pointsToSnap[0][1] + dy],
-          [this.pointsToSnap[1][0], this.pointsToSnap[1][1] + dy],
-        ];
-        break;
-      }
-      case ControllerPosition.LEFT:
-      case ControllerPosition.RIGHT: {
-        movedPointsToSnap = [
-          [this.pointsToSnap[0][0] + dx, this.pointsToSnap[0][1]],
-          [this.pointsToSnap[1][0] + dx, this.pointsToSnap[1][1]],
-        ];
-        break;
-      }
-      case ControllerPosition.LEFT_TOP: {
-        movedPointsToSnap = [
-          [this.pointsToSnap[0][0] + dx, this.pointsToSnap[0][1] + dy],
-          [this.pointsToSnap[1][0], this.pointsToSnap[1][1] + dy],
-          [this.pointsToSnap[2][0] + dx, this.pointsToSnap[2][1]],
-        ];
-        break;
-      }
-      case ControllerPosition.RIGHT_TOP: {
-        movedPointsToSnap = [
-          [this.pointsToSnap[0][0] + dx, this.pointsToSnap[0][1] + dy],
-          [this.pointsToSnap[1][0] + dx, this.pointsToSnap[1][1]],
-          [this.pointsToSnap[2][0], this.pointsToSnap[2][1] + dy],
-        ];
-        break;
-      }
-      case ControllerPosition.RIGHT_BOTTOM: {
-        movedPointsToSnap = [
-          [this.pointsToSnap[0][0] + dx, this.pointsToSnap[0][1] + dy],
-          [this.pointsToSnap[1][0], this.pointsToSnap[1][1] + dy],
-          [this.pointsToSnap[2][0] + dx, this.pointsToSnap[2][1]],
-        ];
-        break;
-      }
-      case ControllerPosition.LEFT_BOTTOM: {
-        movedPointsToSnap = [
-          [this.pointsToSnap[0][0] + dx, this.pointsToSnap[0][1] + dy],
-          [this.pointsToSnap[1][0] + dx, this.pointsToSnap[1][1]],
-          [this.pointsToSnap[2][0], this.pointsToSnap[2][1] + dy],
-        ];
-        break;
-      }
-    }
+    this.pointsToSnap = this.movePointsToSnap(
+      controller.options.position,
+      this.initialPointsToSnap,
+      dx,
+      dy
+    );
 
     // compute snapped X and Y
     this.snappedX = null;
     this.snappedY = null;
-    for (let i = 0; i < movedPointsToSnap.length; i++) {
-      const p = movedPointsToSnap[i];
+    for (let i = 0; i < this.pointsToSnap.length; i++) {
+      const p = this.pointsToSnap[i];
       if (this.snappedX === null) {
         this.snappedX = this.snapX(p, this.referencePoints);
         if (this.snappedX !== null) {
           const dx = this.snappedX - p[0];
-          const dy = this.ratio !== 0 ? dx * this.ratio : 0;
+          const dy = this.sizingRatio !== 0 ? dx * this.sizingRatio : 0;
           this.moveDragPointGCS(editor, shape, controller, dx, dy);
+          this.pointsToSnap = this.movePointsToSnap(
+            controller.options.position,
+            this.pointsToSnap,
+            dx,
+            dy
+          );
         }
       }
 
       // if sizing is ratio and X is snapped, skip snapping Y
       // because snapping Y causes broke snapped X position.
-      if (this.ratio !== 0 && this.snappedX !== null) {
+      if (this.sizingRatio !== 0 && this.snappedX !== null) {
         continue;
       }
 
@@ -386,27 +452,16 @@ export class SizeSnapper extends Snapper {
         this.snappedY = this.snapY(p, this.referencePoints);
         if (this.snappedY !== null) {
           const dy = this.snappedY - p[1];
-          const dx = this.ratio !== 0 ? dy / this.ratio : 0;
+          const dx = this.sizingRatio !== 0 ? dy / this.sizingRatio : 0;
           this.moveDragPointGCS(editor, shape, controller, dx, dy);
+          this.pointsToSnap = this.movePointsToSnap(
+            controller.options.position,
+            this.pointsToSnap,
+            dx,
+            dy
+          );
         }
       }
-    }
-  }
-
-  /**
-   * Draw snapping guide lines
-   */
-  draw(editor: Editor) {
-    const canvas = editor.canvas;
-    // draw all lines from reference points to points to snap
-    if (this.snappedX !== null) {
-      const x = gcs2ccs(canvas, [this.snappedX, 0])[0];
-      guide.drawVertline(canvas, x, [4]);
-    }
-
-    if (this.snappedY !== null) {
-      const y = gcs2ccs(canvas, [0, this.snappedY])[1];
-      guide.drawHorzline(canvas, y, [4]);
     }
   }
 }
