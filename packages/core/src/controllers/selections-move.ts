@@ -7,6 +7,7 @@ import { lcs2ccs } from "../graphics/utils";
 import { moveShapes, resolveAllConstraints } from "../macro";
 import { ActionKind } from "../core";
 import { ableToContain } from "./utils";
+import { GridSnapper, MoveSnapper } from "../manipulators/snapper";
 
 /**
  * SelectionsMoveController
@@ -18,6 +19,16 @@ export class SelectionsMoveController extends Controller {
   snap: Snap;
 
   /**
+   * Grid snapper
+   */
+  gridSnapper: GridSnapper;
+
+  /**
+   * Move snapper
+   */
+  moveSnapper: MoveSnapper;
+
+  /**
    * Reference to a container shape
    */
   container: Shape | null;
@@ -26,6 +37,8 @@ export class SelectionsMoveController extends Controller {
     super(manipulator);
     this.hasHandle = false;
     this.snap = new Snap();
+    this.gridSnapper = new GridSnapper();
+    this.moveSnapper = new MoveSnapper();
     this.container = null;
   }
 
@@ -63,6 +76,14 @@ export class SelectionsMoveController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
+    // initialize snappers
+    const rect = editor.selection.getBoundingRect(editor.canvas);
+
+    this.gridSnapper.setPointToSnap(editor, this, rect[0]);
+
+    // TODO: snap to points 와 reference points를 직접 파라미터로 넘겨야 할듯.
+    this.moveSnapper.initialize(editor, shape, this);
+
     editor.transform.startAction(ActionKind.MOVE);
   }
 
@@ -73,6 +94,9 @@ export class SelectionsMoveController extends Controller {
   update(editor: Editor, shape: Shape) {
     const canvas = editor.canvas;
     const selections = editor.selection.getShapes();
+
+    // update snappers
+    this.gridSnapper.update(editor, shape, this);
 
     // determine container
     this.container =

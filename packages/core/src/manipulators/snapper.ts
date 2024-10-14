@@ -88,6 +88,10 @@ export class Snapper {
   update(editor: Editor, shape: Shape, controller: Controller) {}
 }
 
+/**
+ * MultipointSnapper
+ * Snap multiple points to reference points
+ */
 export class MultipointSnapper extends Snapper {
   initialPointsToSnap: number[][] = [];
   pointsToSnap: number[][] = [];
@@ -273,6 +277,8 @@ export class MoveSnapper extends MultipointSnapper {
  * Snap a sizing shape to other shapes
  */
 export class SizeSnapper extends MultipointSnapper {
+  // TODO: Anchord Text를 Resizing 할 때 constraint 에 의해서 위치가 변경되기 때문에, Snapped 된 위치가 이상하게 되는 문제가 있음.
+
   sizingRatio: number = 0;
 
   /**
@@ -344,7 +350,7 @@ export class SizeSnapper extends MultipointSnapper {
     // compute ratio if the shape's sizable is ratio
     const w = geometry.width(rect);
     const h = geometry.height(rect);
-    if (shape.sizable === Sizable.RATIO) {
+    if (controller.options.doScale || shape.sizable === Sizable.RATIO) {
       this.sizingRatio = h / w;
     } else {
       this.sizingRatio = 0;
@@ -421,7 +427,7 @@ export class SizeSnapper extends MultipointSnapper {
     // adjust dx and dy if the shape is sizable ratio
     let dx = controller.dxGCS;
     let dy = controller.dyGCS;
-    if (shape.sizable === Sizable.RATIO) {
+    if (controller.options.doScale || shape.sizable === Sizable.RATIO) {
       if (dx * this.sizingRatio > dy / this.sizingRatio) {
         dy = dx * this.sizingRatio;
       } else {

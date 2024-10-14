@@ -79,6 +79,7 @@ export class BoxMoveController extends Controller {
     const targetShape = this.getTargetShape(editor, shape);
     if (!targetShape || targetShape instanceof Page) return;
 
+    // initialize snappers
     this.gridSnapper.setPointToSnap(editor, this, [
       targetShape.left,
       targetShape.top,
