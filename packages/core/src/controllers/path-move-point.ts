@@ -14,6 +14,7 @@ import { findControlPoint } from "./utils";
 import { reducePath } from "../utils/route-utils";
 import { resolveAllConstraints, setPath } from "../macro";
 import { ActionKind } from "../core";
+import { GridSnapper } from "../manipulators/snapper";
 
 interface PathMovePointControllerOptions {
   exceptEndPoints: boolean;
@@ -34,6 +35,11 @@ export class PathMovePointController extends Controller {
   snap: Snap;
 
   /**
+   * Grid snapper
+   */
+  gridSnapper: GridSnapper;
+
+  /**
    * current control point
    */
   controlPoint: number;
@@ -51,6 +57,7 @@ export class PathMovePointController extends Controller {
     this.hasHandle = true;
     this.options = { exceptEndPoints: false, ...options };
     this.snap = new Snap();
+    this.gridSnapper = new GridSnapper();
     this.controlPoint = 0;
     this.controlPath = [];
   }
@@ -99,6 +106,15 @@ export class PathMovePointController extends Controller {
       this.dragStartPoint
     );
     this.controlPath = geometry.pathCopy((shape as Path).path);
+
+    if (this.controlPoint >= 0) {
+      this.gridSnapper.setPointToSnap(
+        editor,
+        this,
+        this.controlPath[this.controlPoint]
+      );
+    }
+
     editor.transform.startAction(ActionKind.REPATH);
   }
 
@@ -106,6 +122,9 @@ export class PathMovePointController extends Controller {
    * Update ghost
    */
   update(editor: Editor, shape: Shape) {
+    // update snappers
+    this.gridSnapper.update(editor, shape, this);
+
     let newPath = geometry.pathCopy(this.controlPath);
 
     // update the path

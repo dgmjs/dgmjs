@@ -22,6 +22,10 @@ export class BoxMoveController extends Controller {
    * Grid snapper
    */
   gridSnapper: GridSnapper;
+
+  /**
+   * Move snapper
+   */
   moveSnapper: MoveSnapper;
 
   /**
@@ -91,8 +95,8 @@ export class BoxMoveController extends Controller {
     const targetShape = this.getTargetShape(editor, shape);
     if (!targetShape || targetShape instanceof Page) return;
 
-    // snap to grid
-    // this.gridSnapper.update(editor, shape, this);
+    // update snappers
+    this.gridSnapper.update(editor, shape, this);
     this.moveSnapper.update(editor, shape, this);
 
     // apply movable constraint

@@ -6,6 +6,9 @@ export interface DemoState {
   scale: number;
   origin: number[];
   darkMode: boolean;
+  showGrid: boolean;
+  snapToGrid: boolean;
+  snapToObject: boolean;
   activeHandler: string | null;
   activeHandlerLock: boolean;
   doc: Doc | null;
@@ -15,6 +18,9 @@ export interface DemoState {
   setScale: (scale: number) => void;
   setOrigin: (origin: [number, number]) => void;
   setDarkMode: (darkMode: boolean) => void;
+  setShowGrid: (showGrid: boolean) => void;
+  setSnapToGrid: (snapToGrid: boolean) => void;
+  setSnapToObject: (snapToObject: boolean) => void;
   setActiveHandler: (handlerId: string | null) => void;
   setActiveHandlerLock: (lock: boolean) => void;
   setDoc: (doc: Doc | null) => void;
@@ -28,6 +34,9 @@ export const useDemoStore = create<DemoState>()(
       scale: 1,
       origin: [0, 0],
       darkMode: false,
+      showGrid: false,
+      snapToGrid: false,
+      snapToObject: false,
       activeHandler: "Select",
       activeHandlerLock: false,
       doc: null,
@@ -42,6 +51,10 @@ export const useDemoStore = create<DemoState>()(
         if (darkMode) root.classList.add("dark");
         set((state) => ({ darkMode }));
       },
+      setShowGrid: (showGrid) => set((state) => ({ showGrid })),
+      setSnapToGrid: (snapToGrid) => set((state) => ({ snapToGrid })),
+      setSnapToObject: (snapToObjects) =>
+        set((state) => ({ snapToObject: snapToObjects })),
       setActiveHandler: (handlerId) =>
         set((state) => ({ activeHandler: handlerId })),
       setActiveHandlerLock: (lock) =>

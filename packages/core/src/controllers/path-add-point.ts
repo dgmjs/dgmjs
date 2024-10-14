@@ -10,6 +10,7 @@ import { findSegmentControlPoint, fitPathInCSS } from "./utils";
 import { reducePath } from "../utils/route-utils";
 import { resolveAllConstraints, setPath } from "../macro";
 import { ActionKind } from "../core";
+import { GridSnapper } from "../manipulators/snapper";
 
 /**
  * PathAddPointController
@@ -19,6 +20,11 @@ export class PathAddPointController extends Controller {
    * Snap support for controller
    */
   snap: Snap;
+
+  /**
+   * Grid snapper
+   */
+  gridSnapper: GridSnapper;
 
   /**
    * current control point
@@ -34,6 +40,7 @@ export class PathAddPointController extends Controller {
     super(manipulator);
     this.hasHandle = true;
     this.snap = new Snap();
+    this.gridSnapper = new GridSnapper();
     this.controlPoint = -1;
     this.controlPath = [];
   }
@@ -79,6 +86,19 @@ export class PathAddPointController extends Controller {
       shape as Line,
       this.dragStartPoint
     );
+
+    // initialize snappers
+    if (this.controlPoint >= 0) {
+      this.gridSnapper.setPointToSnap(
+        editor,
+        this,
+        geometry.mid(
+          this.controlPath[this.controlPoint],
+          this.controlPath[this.controlPoint + 1]
+        )
+      );
+    }
+
     editor.transform.startAction(ActionKind.REPATH);
   }
 
@@ -86,6 +106,9 @@ export class PathAddPointController extends Controller {
    * Update ghost
    */
   update(editor: Editor, shape: Shape) {
+    // update snappers
+    this.gridSnapper.update(editor, shape, this);
+
     let newPath = geometry.pathCopy(this.controlPath);
     newPath.splice(
       this.controlPoint + 1,

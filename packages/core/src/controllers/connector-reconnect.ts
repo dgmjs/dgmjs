@@ -9,6 +9,7 @@ import { Snap } from "../manipulators/snap";
 import { findConnectionAnchor } from "./utils";
 import { resolveAllConstraints, setPath } from "../macro";
 import { ActionKind } from "../core";
+import { GridSnapper } from "../manipulators/snapper";
 
 /**
  * Connector Reconnect Controller
@@ -18,6 +19,11 @@ export class ConnectorReconnectController extends Controller {
    * Snap support for controller
    */
   snap: Snap;
+
+  /**
+   * Grid snapper
+   */
+  gridSnapper: GridSnapper;
 
   /**
    * control point
@@ -33,6 +39,7 @@ export class ConnectorReconnectController extends Controller {
     super(manipulator);
     this.hasHandle = true;
     this.snap = new Snap();
+    this.gridSnapper = new GridSnapper();
     this.controlPoint = -1;
     this.controlPath = [];
   }
@@ -90,6 +97,12 @@ export class ConnectorReconnectController extends Controller {
         this.controlPoint = 0;
       this.controlPath = geometry.pathCopy(shape.path);
     }
+
+    // initialize snappers
+    if (this.controlPoint >= 0) {
+      this.gridSnapper.setPointToSnap(editor, this, this.dragPointGCS);
+    }
+
     editor.transform.startAction(ActionKind.RECONNECT);
   }
 
@@ -97,18 +110,23 @@ export class ConnectorReconnectController extends Controller {
    * Update ghost
    */
   update(editor: Editor, shape: Shape) {
+    // update snappers
+    this.gridSnapper.update(editor, shape, this);
+
     // find an end and anchor
     const [newEnd, anchor] = findConnectionAnchor(
       editor,
       shape as Connector,
       this.dragPoint
     );
+
     // update the path
     let newPath = geometry.pathCopy(this.controlPath);
     if (!newEnd) {
       newPath[this.controlPoint] = this.dragPoint;
     }
     const isHead = this.controlPoint > 0;
+
     // transform shape
     editor.transform.transact((tx) => {
       const page = editor.getCurrentPage()!;
@@ -160,7 +178,5 @@ export class ConnectorReconnectController extends Controller {
         if (manipulator) manipulator.drawHovering(editor, shape.head, e);
       }
     }
-    // draw snap
-    // this.snap.draw(editor, shape, this.ghost);
   }
 }

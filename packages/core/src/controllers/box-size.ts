@@ -7,7 +7,7 @@ import {
   Cursor,
   ControllerPosition,
 } from "../graphics/const";
-import { lcs2ccs, angleInCCS, ccs2lcs } from "../graphics/utils";
+import { lcs2ccs, angleInCCS } from "../graphics/utils";
 import {
   drawControlPoint,
   drawPolylineInLCS,
@@ -22,7 +22,7 @@ import {
   resolveAllConstraints,
 } from "../macro";
 import { ActionKind } from "../core";
-import { SizeSnapper } from "../manipulators/snapper";
+import { GridSnapper, SizeSnapper } from "../manipulators/snapper";
 
 interface BoxSizeControllerOptions {
   position: string;
@@ -44,6 +44,14 @@ export class BoxSizeController extends Controller {
    */
   snap: Snap;
 
+  /**
+   * Grid snapper
+   */
+  gridSnapper: GridSnapper;
+
+  /**
+   * Size snapper
+   */
   sizeSnapper: SizeSnapper;
 
   /**
@@ -69,6 +77,7 @@ export class BoxSizeController extends Controller {
       ...options,
     };
     this.snap = new Snap();
+    this.gridSnapper = new GridSnapper();
     this.sizeSnapper = new SizeSnapper();
     this.initialEnclosure = [];
     this.initialSnapshot = {};
@@ -192,6 +201,12 @@ export class BoxSizeController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
+    // initialize snappers
+    this.gridSnapper.setPointToSnap(
+      editor,
+      this,
+      getControllerPosition(editor.canvas, shape, this.options.position)
+    );
     this.sizeSnapper.initialize(editor, shape, this);
 
     editor.transform.startAction(ActionKind.RESIZE);
@@ -206,7 +221,8 @@ export class BoxSizeController extends Controller {
   update(editor: Editor, shape: Shape) {
     const canvas = editor.canvas;
 
-    // snapping
+    // update snappers
+    this.gridSnapper.update(editor, shape, this);
     this.sizeSnapper.update(editor, shape, this);
 
     // remember current shape states

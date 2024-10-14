@@ -152,6 +152,7 @@ export class MultipointSnapper extends Snapper {
  * Snap a point to grid
  */
 export class GridSnapper extends Snapper {
+  initialPointToSnap: number[] = [0, 0];
   pointToSnap: number[] = [0, 0];
 
   setPointToSnap(
@@ -159,7 +160,7 @@ export class GridSnapper extends Snapper {
     controller: Controller,
     point: number[]
   ): void {
-    this.pointToSnap = point;
+    this.initialPointToSnap = point;
   }
 
   /**
@@ -168,23 +169,27 @@ export class GridSnapper extends Snapper {
    * @param controller Controller
    */
   update(editor: Editor, shape: Shape, controller: Controller) {
-    // if (editor.getSnapToGrid()) {
-    const [gridX, gridY] = editor.getGridSize();
+    if (!editor.getSnapToGrid()) return;
+
+    // snap only if the shape is moving
+    const dx = controller.dxGCS;
+    const dy = controller.dyGCS;
+    if (dx === 0 && dy === 0) return;
 
     // snap point to grid and compute snap delta
-    const p = [
-      this.pointToSnap[0] + controller.dxGCS,
-      this.pointToSnap[1] + controller.dyGCS,
-    ];
+    const [gridX, gridY] = editor.getGridSize();
+    this.pointToSnap = geometry.move(this.initialPointToSnap, dx, dy);
     const snappedPoint = [
-      Math.round(p[0] / gridX) * gridX,
-      Math.round(p[1] / gridY) * gridY,
+      Math.round(this.pointToSnap[0] / gridX) * gridX,
+      Math.round(this.pointToSnap[1] / gridY) * gridY,
     ];
-    const dx = snappedPoint[0] - p[0];
-    const dy = snappedPoint[1] - p[1];
+    const snapDX = snappedPoint[0] - this.pointToSnap[0];
+    const snapDY = snappedPoint[1] - this.pointToSnap[1];
+    this.pointToSnap[0] += snapDX;
+    this.pointToSnap[1] += snapDY;
 
     // update drag point as snapped point
-    this.moveDragPointGCS(editor, shape, controller, dx, dy);
+    this.moveDragPointGCS(editor, shape, controller, snapDX, snapDY);
   }
 }
 
@@ -231,6 +236,8 @@ export class MoveSnapper extends MultipointSnapper {
   }
 
   update(editor: Editor, shape: Shape, controller: Controller) {
+    if (!editor.getSnapToObject()) return;
+
     // move points to snap by dx and dy
     const dx = controller.dxGCS;
     const dy = controller.dyGCS;
@@ -405,6 +412,8 @@ export class SizeSnapper extends MultipointSnapper {
   }
 
   update(editor: Editor, shape: Shape, controller: BoxSizeController) {
+    if (!editor.getSnapToObject()) return;
+
     // size snapping will not work on rotated shape
     const rotate = geometry.normalizeAngle(shape.rotate);
     if (rotate !== 0) return;
