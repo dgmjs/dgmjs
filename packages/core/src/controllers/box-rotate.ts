@@ -10,7 +10,6 @@ import {
 } from "../graphics/const";
 import { angleInCCS, lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
-import { Snap } from "../manipulators/snap";
 import { getControllerPosition } from "./utils";
 import { resolveAllConstraints } from "../macro";
 import { ActionKind } from "../core";
@@ -29,18 +28,12 @@ export class BoxRotateController extends Controller {
    */
   options: BoxRotateControllerOptions;
 
-  /**
-   * Snap support for controller
-   */
-  snap: Snap;
-
   constructor(
     manipulator: Manipulator,
     options?: Partial<BoxRotateControllerOptions>
   ) {
     super(manipulator);
     this.hasHandle = true;
-    this.snap = new Snap();
     this.options = {
       position: ControllerPosition.LEFT_TOP,
       distance: CONTROL_POINT_APOTHEM * 3,

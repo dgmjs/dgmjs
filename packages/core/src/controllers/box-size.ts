@@ -13,7 +13,6 @@ import {
   drawPolylineInLCS,
   inControlPoint,
 } from "../utils/guide";
-import { Snap } from "../manipulators/snap";
 import { fitEnclosureInCSS, getControllerPosition } from "./utils";
 import {
   moveSingleShape,
@@ -38,11 +37,6 @@ export class BoxSizeController extends Controller {
    * Options of the controller
    */
   options: BoxSizeControllerOptions;
-
-  /**
-   * Snap support for controller
-   */
-  snap: Snap;
 
   /**
    * Grid snapper
@@ -76,7 +70,6 @@ export class BoxSizeController extends Controller {
       doScaleChildren: false,
       ...options,
     };
-    this.snap = new Snap();
     this.gridSnapper = new GridSnapper();
     this.sizeSnapper = new SizeSnapper();
     this.initialEnclosure = [];

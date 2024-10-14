@@ -3,7 +3,6 @@ import { Shape, Box, Movable } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import { lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
-import { Snap } from "../manipulators/snap";
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import { Cursor } from "../graphics/const";
 import { moveAnchor, resolveAllConstraints } from "../macro";
@@ -14,11 +13,6 @@ import { GridSnapper, MoveSnapper } from "../manipulators/snapper";
  * BoxMoveAnchoredController
  */
 export class BoxMoveAnchoredController extends Controller {
-  /**
-   * Snap support for controller
-   */
-  snap: Snap;
-
   /**
    * Grid snapper
    */
@@ -32,7 +26,6 @@ export class BoxMoveAnchoredController extends Controller {
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.hasHandle = false;
-    this.snap = new Snap();
     this.gridSnapper = new GridSnapper();
     this.moveSnapper = new MoveSnapper();
   }

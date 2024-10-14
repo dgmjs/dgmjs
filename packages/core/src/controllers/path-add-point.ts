@@ -5,7 +5,6 @@ import { Controller, Editor, Manipulator } from "../editor";
 import { Cursor, LINE_STRATIFY_ANGLE_THRESHOLD } from "../graphics/const";
 import { lcs2ccs, ccs2lcs, angleInCCS } from "../graphics/utils";
 import * as guide from "../utils/guide";
-import { Snap } from "../manipulators/snap";
 import { findSegmentControlPoint, fitPathInCSS } from "./utils";
 import { reducePath } from "../utils/route-utils";
 import { resolveAllConstraints, setPath } from "../macro";
@@ -16,11 +15,6 @@ import { GridSnapper } from "../manipulators/snapper";
  * PathAddPointController
  */
 export class PathAddPointController extends Controller {
-  /**
-   * Snap support for controller
-   */
-  snap: Snap;
-
   /**
    * Grid snapper
    */
@@ -39,7 +33,6 @@ export class PathAddPointController extends Controller {
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.hasHandle = true;
-    this.snap = new Snap();
     this.gridSnapper = new GridSnapper();
     this.controlPoint = -1;
     this.controlPath = [];

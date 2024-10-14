@@ -5,7 +5,6 @@ import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { Cursor } from "../graphics/const";
 import { lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
-import { Snap } from "../manipulators/snap";
 import { findConnectionAnchor } from "./utils";
 import { resolveAllConstraints, setPath } from "../macro";
 import { ActionKind } from "../core";
@@ -15,11 +14,6 @@ import { GridSnapper } from "../manipulators/snapper";
  * Connector Reconnect Controller
  */
 export class ConnectorReconnectController extends Controller {
-  /**
-   * Snap support for controller
-   */
-  snap: Snap;
-
   /**
    * Grid snapper
    */
@@ -38,7 +32,6 @@ export class ConnectorReconnectController extends Controller {
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.hasHandle = true;
-    this.snap = new Snap();
     this.gridSnapper = new GridSnapper();
     this.controlPoint = -1;
     this.controlPath = [];

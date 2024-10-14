@@ -1,7 +1,6 @@
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import { Shape, Line, Movable, Connector, Page, Path } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
-import { Snap } from "../manipulators/snap";
 import * as geometry from "../graphics/geometry";
 import { Cursor } from "../graphics/const";
 import { changeParent, resolveAllConstraints, setPath } from "../macro";
@@ -13,11 +12,6 @@ import { GridSnapper, MoveSnapper } from "../manipulators/snapper";
  * ConnectorMove Controller
  */
 export class ConnectorMoveController extends Controller {
-  /**
-   * Snap support for controller
-   */
-  snap: Snap;
-
   /**
    * Grid snapper
    */
@@ -41,7 +35,6 @@ export class ConnectorMoveController extends Controller {
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.hasHandle = false;
-    this.snap = new Snap();
     this.gridSnapper = new GridSnapper();
     this.moveSnapper = new MoveSnapper();
     this.controlPath = [];

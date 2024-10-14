@@ -9,7 +9,6 @@ import {
 import { lcs2ccs, ccs2lcs } from "../graphics/utils";
 import * as guide from "../utils/guide";
 import * as geometry from "../graphics/geometry";
-import { Snap } from "../manipulators/snap";
 import { findControlPoint } from "./utils";
 import { reducePath } from "../utils/route-utils";
 import { resolveAllConstraints, setPath } from "../macro";
@@ -28,11 +27,6 @@ export class PathMovePointController extends Controller {
    * Options of the controller
    */
   options: PathMovePointControllerOptions;
-
-  /**
-   * Snap support for controller
-   */
-  snap: Snap;
 
   /**
    * Grid snapper
@@ -56,7 +50,6 @@ export class PathMovePointController extends Controller {
     super(manipulator);
     this.hasHandle = true;
     this.options = { exceptEndPoints: false, ...options };
-    this.snap = new Snap();
     this.gridSnapper = new GridSnapper();
     this.controlPoint = 0;
     this.controlPath = [];

@@ -2,7 +2,6 @@ import type { CanvasPointerEvent } from "../graphics/graphics";
 import { Shape, Page } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { Color, Cursor } from "../graphics/const";
-import { Snap } from "../manipulators/snap";
 import { lcs2ccs } from "../graphics/utils";
 import { moveShapes, resolveAllConstraints } from "../macro";
 import { ActionKind } from "../core";
@@ -13,11 +12,6 @@ import { GridSnapper, MoveSnapper } from "../manipulators/snapper";
  * SelectionsMoveController
  */
 export class SelectionsMoveController extends Controller {
-  /**
-   * Snap support for controller
-   */
-  snap: Snap;
-
   /**
    * Grid snapper
    */
@@ -36,7 +30,6 @@ export class SelectionsMoveController extends Controller {
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.hasHandle = false;
-    this.snap = new Snap();
     this.gridSnapper = new GridSnapper();
     this.moveSnapper = new MoveSnapper();
     this.container = null;

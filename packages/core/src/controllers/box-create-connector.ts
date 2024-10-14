@@ -8,7 +8,6 @@ import {
 } from "../graphics/const";
 import { lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
-import { Snap } from "../manipulators/snap";
 import { findConnectionAnchor, getControllerPosition } from "./utils";
 import { addShape, resolveAllConstraints, setPath } from "../macro";
 import { ActionKind } from "../core";
@@ -34,11 +33,6 @@ export class BoxCreateConnectorController extends Controller {
   connector: Connector | null;
 
   /**
-   * Snap support for controller
-   */
-  snap: Snap;
-
-  /**
    * Grid snapper
    */
   gridSnapper: GridSnapper;
@@ -49,7 +43,6 @@ export class BoxCreateConnectorController extends Controller {
   ) {
     super(manipulator);
     this.hasHandle = true;
-    this.snap = new Snap();
     this.gridSnapper = new GridSnapper();
     this.connector = null;
     this.options = {

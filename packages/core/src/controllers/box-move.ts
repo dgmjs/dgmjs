@@ -2,7 +2,6 @@ import { CanvasPointerEvent } from "../graphics/graphics";
 import { Shape, Box, Movable, Page, Path, Mirror } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { drawPolylineInLCS } from "../utils/guide";
-import { Snap } from "../manipulators/snap";
 import { Cursor } from "../graphics/const";
 import { moveShapes, resolveAllConstraints } from "../macro";
 import { ActionKind } from "../core";
@@ -13,11 +12,6 @@ import { GridSnapper, MoveSnapper } from "../manipulators/snapper";
  * BoxMoveController
  */
 export class BoxMoveController extends Controller {
-  /**
-   * Snap support for controller
-   */
-  snap: Snap;
-
   /**
    * Grid snapper
    */
@@ -36,7 +30,6 @@ export class BoxMoveController extends Controller {
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.hasHandle = false;
-    this.snap = new Snap();
     this.gridSnapper = new GridSnapper();
     this.moveSnapper = new MoveSnapper();
     this.container = null;
