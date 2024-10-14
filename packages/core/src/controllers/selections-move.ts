@@ -76,13 +76,13 @@ export class SelectionsMoveController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
-    // initialize snappers
     const rect = editor.selection.getBoundingRect(editor.canvas);
+    const selection = editor.selection.getShapes();
 
+    // initialize snappers
     this.gridSnapper.setPointToSnap(editor, this, rect[0]);
-
-    // TODO: snap to points 와 reference points를 직접 파라미터로 넘겨야 할듯.
-    this.moveSnapper.initialize(editor, shape, this);
+    this.moveSnapper.setRectToSnap(editor, shape, rect);
+    this.moveSnapper.setReferencePoints(editor, selection);
 
     editor.transform.startAction(ActionKind.MOVE);
   }
@@ -97,6 +97,7 @@ export class SelectionsMoveController extends Controller {
 
     // update snappers
     this.gridSnapper.update(editor, shape, this);
+    this.moveSnapper.update(editor, shape, this);
 
     // determine container
     this.container =
@@ -171,7 +172,8 @@ export class SelectionsMoveController extends Controller {
       const manipulator = manipulatorManager.get(this.container.type);
       if (manipulator) manipulator.drawHovering(editor, this.container, e);
     }
-    // draw snap
-    // this.snap.draw(editor, shape, this.ghost);
+
+    // draw snapping
+    this.moveSnapper.draw(editor);
   }
 }

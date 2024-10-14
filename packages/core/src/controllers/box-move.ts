@@ -84,7 +84,12 @@ export class BoxMoveController extends Controller {
       targetShape.left,
       targetShape.top,
     ]);
-    this.moveSnapper.initialize(editor, targetShape, this);
+    this.moveSnapper.setRectToSnap(
+      editor,
+      targetShape,
+      shape.getBoundingRect()
+    );
+    this.moveSnapper.setReferencePoints(editor, [targetShape]);
 
     editor.transform.startAction(ActionKind.MOVE);
   }

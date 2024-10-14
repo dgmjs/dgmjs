@@ -66,7 +66,8 @@ export class BoxMoveAnchoredController extends Controller {
   initialize(editor: Editor, shape: Shape): void {
     // initialize snappers
     this.gridSnapper.setPointToSnap(editor, this, [shape.left, shape.top]);
-    this.moveSnapper.initialize(editor, shape, this);
+    this.moveSnapper.setRectToSnap(editor, shape, shape.getBoundingRect());
+    this.moveSnapper.setReferencePoints(editor, [shape]);
 
     editor.transform.startAction(ActionKind.MOVE_ANCHOR);
   }

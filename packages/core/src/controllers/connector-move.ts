@@ -75,7 +75,8 @@ export class ConnectorMoveController extends Controller {
   initialize(editor: Editor, shape: Shape): void {
     // initialize snappers
     this.gridSnapper.setPointToSnap(editor, this, [shape.left, shape.top]);
-    this.moveSnapper.initialize(editor, shape, this);
+    this.moveSnapper.setRectToSnap(editor, shape, shape.getBoundingRect());
+    this.moveSnapper.setReferencePoints(editor, [shape]);
 
     this.controlPath = geometry.pathCopy((shape as Path).path);
     editor.transform.startAction(ActionKind.REPATH);

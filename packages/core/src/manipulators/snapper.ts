@@ -202,11 +202,11 @@ export class GridSnapper extends Snapper {
  * Snap a moving shape to other shapes
  */
 export class MoveSnapper extends MultipointSnapper {
-  initialize(editor: Editor, shape: Shape, controller: Controller) {
+  /**
+   * Set rect to snap
+   */
+  setRectToSnap(editor: Editor, shape: Shape, rect: number[][]) {
     const canvas = editor.canvas;
-
-    // set initial points to snap
-    const rect = shape.getBoundingRect();
     const center = geometry.center(rect);
     this.initialPointsToSnap = [
       ...geometry
@@ -214,12 +214,19 @@ export class MoveSnapper extends MultipointSnapper {
         .map((p) => lcs2gcs(canvas, shape, p)),
       center,
     ];
+  }
 
-    // set refernces points
+  /**
+   * Set reference points
+   */
+  setReferencePoints(editor: Editor, exceptions: Shape[]) {
+    const canvas = editor.canvas;
+    const center =
+      this.initialPointsToSnap[this.initialPointsToSnap.length - 1];
     this.referencePoints = [];
     const page = editor.getCurrentPage()!;
     page.traverse((s) => {
-      if (s !== shape && s instanceof Box) {
+      if (!exceptions.includes(s as Shape) && s instanceof Box) {
         const rect = (s as Shape).getBoundingRect();
         const center = geometry.center(rect);
         this.referencePoints.push(
@@ -339,7 +346,7 @@ export class SizeSnapper extends MultipointSnapper {
     }
   }
 
-  initialize(editor: Editor, shape: Shape, controller: BoxSizeController) {
+  setSizeToSnap(editor: Editor, shape: Shape, controller: BoxSizeController) {
     const canvas = editor.canvas;
 
     // set points to snap
