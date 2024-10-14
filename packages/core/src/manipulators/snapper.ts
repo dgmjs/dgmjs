@@ -3,7 +3,7 @@ import { Controller, Editor } from "../editor";
 import { ControllerPosition, MAGNET_THRESHOLD } from "../graphics/const";
 import * as geometry from "../graphics/geometry";
 import { ccs2lcs, gcs2ccs, lcs2gcs } from "../graphics/utils";
-import { Box, Shape, Sizable } from "../shapes";
+import { Box, Shape, Sizable, Text } from "../shapes";
 import * as guide from "../utils/guide";
 
 function eq(a: number, b: number): boolean {
@@ -284,8 +284,6 @@ export class MoveSnapper extends MultipointSnapper {
  * Snap a sizing shape to other shapes
  */
 export class SizeSnapper extends MultipointSnapper {
-  // TODO: Anchord Text를 Resizing 할 때 constraint 에 의해서 위치가 변경되기 때문에, Snapped 된 위치가 이상하게 되는 문제가 있음.
-
   sizingRatio: number = 0;
 
   /**
@@ -430,6 +428,11 @@ export class SizeSnapper extends MultipointSnapper {
     // size snapping will not work on rotated shape
     const rotate = geometry.normalizeAngle(shape.rotate);
     if (rotate !== 0) return;
+
+    // skip snapping anchord shape temporally
+    // anchord shape을 Resizing 할 때 constraint 에 의해서 위치가 변경되기 때문에,
+    // snapped 된 위치가 이상하게 되는 문제가 있음.
+    if (shape instanceof Box && shape.anchored) return;
 
     // adjust dx and dy if the shape is sizable ratio
     let dx = controller.dxGCS;
