@@ -5,6 +5,7 @@ import { Cursor, Mouse } from "../graphics/const";
 import { Rectangle, Shape } from "../shapes";
 import { addShape, resolveAllConstraints } from "../macro";
 import { ActionKind } from "../core";
+import { DraggingSnapper } from "../manipulators/snapper";
 
 /**
  * Rectangle Factory Handler
@@ -14,6 +15,9 @@ export class RectangleFactoryHandler extends Handler {
   dragStartPoint: number[] = [-1, -1];
   dragPoint: number[] = [-1, -1];
   shape: Rectangle | null = null;
+
+  // gridSnapper: GridSnapper
+  draggingSnapper: DraggingSnapper = new DraggingSnapper();
 
   reset(): void {
     this.dragging = false;
@@ -25,6 +29,11 @@ export class RectangleFactoryHandler extends Handler {
   initialize(editor: Editor, e: CanvasPointerEvent): void {
     const page = editor.getCurrentPage();
     if (page) {
+      // initialize snapping
+      this.draggingSnapper.initialPointsToSnap = [
+        geometry.copy(this.dragStartPoint),
+      ];
+
       this.shape = editor.factory.createRectangle([
         this.dragStartPoint,
         this.dragPoint,
@@ -39,6 +48,9 @@ export class RectangleFactoryHandler extends Handler {
   update(editor: Editor, e: CanvasPointerEvent): void {
     const page = editor.getCurrentPage();
     if (page && this.shape) {
+      // update snapping
+      this.draggingSnapper.update(editor, this.shape);
+
       const rect = geometry.normalizeRect([
         this.dragStartPoint,
         this.dragPoint,

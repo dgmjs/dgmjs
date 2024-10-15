@@ -497,6 +497,30 @@ export class SizeSnapper extends MultipointSnapper {
   }
 }
 
+export class DraggingSnapper extends MultipointSnapper {
+  // initialStartPointToSnap: number[] = [0, 0];
+  // initialDragPointToSnap: number[] = [0, 0];
+  // startPointToSnap: number[] = [0, 0];
+  // dragPointToSnap: number[] = [0, 0];
+
+  // setStartPointToSnap() {}
+  // setDragPointToSnap() {}
+  // setReferencePoints() {}
+
+  /**
+   * Snap
+   * @returns snapping delta [dx, dy] or null (not snapped)
+   */
+  snap(): number[] | null {
+    // pointToSnap = initialPointToSnap + [dx, dy]
+    return [];
+  }
+
+  update(editor: Editor, shape: Shape) {}
+
+  // draw(editor: Editor, snappedPoints: number[][], references: number[][]) {}
+}
+
 /**
  * GapSnapper
  * Snap a moving shape to gaps between shapes
