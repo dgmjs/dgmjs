@@ -214,7 +214,7 @@ export class BoxSizeController extends Controller {
   update(editor: Editor, shape: Shape) {
     const canvas = editor.canvas;
 
-    // update snappers
+    // snapping
     this.gridSnapper.update(editor, shape, this);
     this.sizeSnapper.update(editor, shape, this);
 
@@ -494,6 +494,7 @@ export class BoxSizeController extends Controller {
     const ghost = shape.getEnclosure();
     drawPolylineInLCS(canvas, shape, ghost);
 
+    // draw snapping
     this.sizeSnapper.draw(editor);
   }
 }

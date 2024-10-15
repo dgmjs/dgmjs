@@ -526,7 +526,7 @@ export class DraggingSnapper extends Snapper {
   /**
    * Set reference points
    */
-  setReferencePoints(editor: Editor, exceptions: Shape[]) {
+  setReferencePoints(editor: Editor, exceptions: Shape[] = []) {
     const canvas = editor.canvas;
     // const center =
     //   this.initialPointsToSnap[this.initialPointsToSnap.length - 1];
@@ -560,7 +560,7 @@ export class DraggingSnapper extends Snapper {
   snap(editor: Editor, pointsToSnap: number[][]): number[] | null {
     // if (!editor.getSnapToObject()) return null;
 
-    this.pointsToSnap = pointsToSnap;
+    this.pointsToSnap = geometry.pathCopy(pointsToSnap);
 
     // size snapping will not work on rotated shape
     // const rotate = geometry.normalizeAngle(shape.rotate);
@@ -634,15 +634,18 @@ export class DraggingSnapper extends Snapper {
       }
     }
 
-    if (this.snappedX !== null || this.snappedY !== null) return [dx, dy];
+    if (this.snappedX !== null || this.snappedY !== null) {
+      this.pointsToSnap = this.pointsToSnap.map((p) => [p[0] + dx, p[1] + dy]);
+      this.guidePoints = geometry.pathCopy(this.pointsToSnap);
+      return [dx, dy];
+    }
+
     return null;
   }
 
   // snap() { snapToObject(); snapToGrid()}
   // snapToObject()
   // snapToGrid()
-
-  update(editor: Editor, shape: Shape) {}
 
   /**
    * Draw snapped points and lines

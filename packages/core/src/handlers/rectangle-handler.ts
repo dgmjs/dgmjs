@@ -153,7 +153,6 @@ export class RectangleFactoryHandler extends Handler {
     editor.setCursor(Cursor.CROSSHAIR);
 
     // initialize snapping
-    this.draggingSnapper.pointsToSnap = [geometry.copy(this.dragStartPoint)];
     this.draggingSnapper.setReferencePoints(editor, []);
   }
 
