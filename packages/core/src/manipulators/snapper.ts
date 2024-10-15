@@ -497,28 +497,203 @@ export class SizeSnapper extends MultipointSnapper {
   }
 }
 
-export class DraggingSnapper extends MultipointSnapper {
-  // initialStartPointToSnap: number[] = [0, 0];
-  // initialDragPointToSnap: number[] = [0, 0];
-  // startPointToSnap: number[] = [0, 0];
-  // dragPointToSnap: number[] = [0, 0];
+export class DraggingSnapper extends Snapper {
+  /**
+   * An array of points to snap
+   */
+  pointsToSnap: number[][] = [];
 
-  // setStartPointToSnap() {}
-  // setDragPointToSnap() {}
-  // setReferencePoints() {}
+  /**
+   * An array of reference points
+   */
+  referencePoints: number[][] = [];
+
+  /**
+   * Snapped x-coord (null if not snapped)
+   */
+  snappedX: number | null = null;
+
+  /**
+   * Snapped y-coord (null if not snapped)
+   */
+  snappedY: number | null = null;
+
+  /**
+   * An array of guide points (snapped points to draw for guide)
+   */
+  guidePoints: number[][] = [];
+
+  /**
+   * Set reference points
+   */
+  setReferencePoints(editor: Editor, exceptions: Shape[]) {
+    const canvas = editor.canvas;
+    // const center =
+    //   this.initialPointsToSnap[this.initialPointsToSnap.length - 1];
+    this.referencePoints = [];
+    const page = editor.getCurrentPage()!;
+    page.traverse((s) => {
+      if (!exceptions.includes(s as Shape) && s instanceof Box) {
+        const rect = (s as Shape).getBoundingRect();
+        const center = geometry.center(rect);
+        this.referencePoints.push(
+          ...geometry
+            .rectToPolygon(rect, false)
+            .map((p) => lcs2gcs(canvas, s, p)),
+          center
+        );
+      }
+    });
+
+    // sort reference points by distance to points to snap
+    // this.referencePoints.sort((a, b) => {
+    //   const da = geometry.distance(a, center);
+    //   const db = geometry.distance(b, center);
+    //   return da - db;
+    // });
+  }
 
   /**
    * Snap
    * @returns snapping delta [dx, dy] or null (not snapped)
    */
-  snap(): number[] | null {
-    // pointToSnap = initialPointToSnap + [dx, dy]
-    return [];
+  snap(editor: Editor, pointsToSnap: number[][]): number[] | null {
+    // if (!editor.getSnapToObject()) return null;
+
+    this.pointsToSnap = pointsToSnap;
+
+    // size snapping will not work on rotated shape
+    // const rotate = geometry.normalizeAngle(shape.rotate);
+    // if (rotate !== 0) return;
+
+    // skip snapping anchord shape temporally
+    // anchord shape을 Resizing 할 때 constraint 에 의해서 위치가 변경되기 때문에,
+    // snapped 된 위치가 이상하게 되는 문제가 있음.
+    // if (shape instanceof Box && shape.anchored) return;
+
+    // adjust dx and dy if the shape is sizable ratio
+    // let dx = controller.dxGCS;
+    // let dy = controller.dyGCS;
+    // if (controller.options.doScale || shape.sizable === Sizable.RATIO) {
+    //   if (dx * this.sizingRatio > dy / this.sizingRatio) {
+    //     dy = dx * this.sizingRatio;
+    //   } else {
+    //     dx = dy / this.sizingRatio;
+    //   }
+    // }
+
+    // move points to snap by dx and dy
+    // this.pointsToSnap = this.movePointsToSnap(
+    //   controller.options.position,
+    //   this.initialPointsToSnap,
+    //   dx,
+    //   dy
+    // );
+
+    // compute snapped X and Y
+    let dx = 0;
+    let dy = 0;
+    this.snappedX = null;
+    this.snappedY = null;
+    for (let i = 0; i < this.pointsToSnap.length; i++) {
+      const p = this.pointsToSnap[i];
+      if (this.snappedX === null) {
+        this.snappedX = this.snapX(p, this.referencePoints);
+        if (this.snappedX !== null) {
+          dx = this.snappedX - p[0];
+          // const dy = this.sizingRatio !== 0 ? dx * this.sizingRatio : 0;
+          // this.moveDragPointGCS(editor, shape, controller, dx, dy);
+          // this.pointsToSnap = this.movePointsToSnap(
+          //   controller.options.position,
+          //   this.pointsToSnap,
+          //   dx,
+          //   dy
+          // );
+        }
+      }
+
+      // if sizing is ratio and X is snapped, skip snapping Y
+      // because snapping Y causes broke snapped X position.
+      // if (this.sizingRatio !== 0 && this.snappedX !== null) {
+      //   continue;
+      // }
+
+      if (this.snappedY === null) {
+        this.snappedY = this.snapY(p, this.referencePoints);
+        if (this.snappedY !== null) {
+          dy = this.snappedY - p[1];
+          // const dx = this.sizingRatio !== 0 ? dy / this.sizingRatio : 0;
+          // this.moveDragPointGCS(editor, shape, controller, dx, dy);
+          // this.pointsToSnap = this.movePointsToSnap(
+          //   controller.options.position,
+          //   this.pointsToSnap,
+          //   dx,
+          //   dy
+          // );
+        }
+      }
+    }
+
+    if (this.snappedX !== null || this.snappedY !== null) return [dx, dy];
+    return null;
   }
+
+  // snap() { snapToObject(); snapToGrid()}
+  // snapToObject()
+  // snapToGrid()
 
   update(editor: Editor, shape: Shape) {}
 
-  // draw(editor: Editor, snappedPoints: number[][], references: number[][]) {}
+  /**
+   * Draw snapped points and lines
+   */
+  draw(editor: Editor) {
+    const canvas = editor.canvas;
+
+    if (this.snappedX !== null) {
+      const snappedXPoints: number[][] = [];
+      this.guidePoints.forEach((p) => {
+        if (eq(p[0], this.snappedX as number)) snappedXPoints.push(p);
+      });
+      this.referencePoints.forEach((p) => {
+        if (eq(p[0], this.snappedX as number)) snappedXPoints.push(p);
+      });
+
+      snappedXPoints.forEach((p) => {
+        const pCCS = gcs2ccs(canvas, p);
+        guide.drawControlPoint(canvas, pCCS, 3);
+      });
+      if (snappedXPoints.length > 1) {
+        const y1 = Math.min(...snappedXPoints.map((p) => p[1]));
+        const y2 = Math.max(...snappedXPoints.map((p) => p[1]));
+        const p1 = gcs2ccs(canvas, [this.snappedX as number, y1]);
+        const p2 = gcs2ccs(canvas, [this.snappedX as number, y2]);
+        guide.drawLine(canvas, p1, p2);
+      }
+    }
+
+    if (this.snappedY !== null) {
+      const snappedYPoints: number[][] = [];
+      this.guidePoints.forEach((p) => {
+        if (eq(p[1], this.snappedY as number)) snappedYPoints.push(p);
+      });
+      this.referencePoints.forEach((p) => {
+        if (eq(p[1], this.snappedY as number)) snappedYPoints.push(p);
+      });
+
+      snappedYPoints.forEach((p) => {
+        const pCCS = gcs2ccs(canvas, p);
+        guide.drawControlPoint(canvas, pCCS, 3);
+      });
+      if (snappedYPoints.length > 1) {
+        const x1 = Math.min(...snappedYPoints.map((p) => p[0]));
+        const x2 = Math.max(...snappedYPoints.map((p) => p[0]));
+        const p1 = gcs2ccs(canvas, [x1, this.snappedY as number]);
+        const p2 = gcs2ccs(canvas, [x2, this.snappedY as number]);
+        guide.drawLine(canvas, p1, p2);
+      }
+    }
+  }
 }
 
 /**

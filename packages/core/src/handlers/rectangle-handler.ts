@@ -29,11 +29,7 @@ export class RectangleFactoryHandler extends Handler {
   initialize(editor: Editor, e: CanvasPointerEvent): void {
     const page = editor.getCurrentPage();
     if (page) {
-      // initialize snapping
-      this.draggingSnapper.initialPointsToSnap = [
-        geometry.copy(this.dragStartPoint),
-      ];
-
+      // create shape
       this.shape = editor.factory.createRectangle([
         this.dragStartPoint,
         this.dragPoint,
@@ -48,9 +44,6 @@ export class RectangleFactoryHandler extends Handler {
   update(editor: Editor, e: CanvasPointerEvent): void {
     const page = editor.getCurrentPage();
     if (page && this.shape) {
-      // update snapping
-      this.draggingSnapper.update(editor, this.shape);
-
       const rect = geometry.normalizeRect([
         this.dragStartPoint,
         this.dragPoint,
@@ -98,13 +91,36 @@ export class RectangleFactoryHandler extends Handler {
    * @override
    */
   pointerMove(editor: Editor, e: CanvasPointerEvent) {
+    const canvas = editor.canvas;
     if (this.dragging) {
-      const canvas = editor.canvas;
       this.dragPoint = canvas.globalCoordTransformRev([e.x, e.y]);
+
+      // update snapping
+      const snapped = this.draggingSnapper.snap(editor, [this.dragPoint]);
+      if (snapped) {
+        const [dx, dy] = snapped;
+        this.dragPoint = [this.dragPoint[0] + dx, this.dragPoint[1] + dy];
+        this.draggingSnapper.guidePoints = [
+          this.dragStartPoint,
+          [this.dragPoint[0], this.dragStartPoint[1]],
+          [this.dragStartPoint[0], this.dragPoint[1]],
+          this.dragPoint,
+        ];
+      }
+
       this.update(editor, e);
       editor.repaint();
       this.drawDragging(editor, e);
     } else {
+      // update snapping
+      const p = canvas.globalCoordTransformRev([e.x, e.y]);
+      const snap = this.draggingSnapper.snap(editor, [p]);
+      if (snap) {
+        // console.log("snapped", snap);
+        this.draggingSnapper.guidePoints = [[p[0] + snap[0], p[1] + snap[1]]];
+      }
+      // console.log(this.draggingSnapper.pointsToSnap[0]);
+
       editor.repaint();
       this.drawHovering(editor, e);
     }
@@ -135,13 +151,19 @@ export class RectangleFactoryHandler extends Handler {
 
   onActivate(editor: Editor): void {
     editor.setCursor(Cursor.CROSSHAIR);
+
+    // initialize snapping
+    this.draggingSnapper.pointsToSnap = [geometry.copy(this.dragStartPoint)];
+    this.draggingSnapper.setReferencePoints(editor, []);
   }
 
   onDeactivate(editor: Editor): void {
     editor.setCursor(Cursor.DEFAULT);
   }
 
-  drawHovering(editor: Editor, e: CanvasPointerEvent) {}
+  drawHovering(editor: Editor, e: CanvasPointerEvent) {
+    this.draggingSnapper.draw(editor);
+  }
 
   drawDragging(editor: Editor, e: CanvasPointerEvent) {
     // const canvas = editor.canvas;
@@ -154,5 +176,7 @@ export class RectangleFactoryHandler extends Handler {
     // canvas.roughness = 0;
     // canvas.alpha = 1;
     // canvas.strokeRect(rect[0][0], rect[0][1], rect[1][0], rect[1][1]);
+
+    this.draggingSnapper.draw(editor);
   }
 }
