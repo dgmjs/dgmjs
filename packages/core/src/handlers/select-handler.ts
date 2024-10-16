@@ -302,7 +302,7 @@ export class SelectHandler extends Handler {
   /**
    * keyDown
    */
-  keyDown(editor: Editor, e: KeyboardEvent) {
+  keyDown(editor: Editor, e: KeyboardEvent): boolean {
     // delegates to manipulators
     const page = editor.getCurrentPage();
     if (page) {
@@ -321,6 +321,7 @@ export class SelectHandler extends Handler {
       editor.selection.deselectAll();
       editor.repaint();
     }
+    return false;
   }
 
   /**

@@ -497,11 +497,14 @@ export class SizeSnapper extends MultipointSnapper {
   }
 }
 
-export class DraggingSnapper extends Snapper {
+/**
+ * HandlerSnapper
+ */
+export class HandlerSnapper extends Snapper {
   /**
-   * An array of points to snap
+   * A point to snap
    */
-  pointsToSnap: number[][] = [];
+  pointToSnap: number[] = [];
 
   /**
    * An array of reference points
@@ -519,17 +522,35 @@ export class DraggingSnapper extends Snapper {
   snappedY: number | null = null;
 
   /**
+   * Draw snapped X
+   */
+  drawSnappedX: boolean = false;
+
+  /**
+   * Draw snapped Y
+   */
+  drawSnappedY: boolean = false;
+
+  /**
+   * Snapped delta x
+   */
+  snapDX: number = 0;
+
+  /**
+   * Snapped delta y
+   */
+  snapDY: number = 0;
+
+  /**
    * An array of guide points (snapped points to draw for guide)
    */
   guidePoints: number[][] = [];
 
   /**
-   * Set reference points
+   * Set reference shapes
    */
-  setReferencePoints(editor: Editor, exceptions: Shape[] = []) {
+  setReferences(editor: Editor, exceptions: Shape[] = []) {
     const canvas = editor.canvas;
-    // const center =
-    //   this.initialPointsToSnap[this.initialPointsToSnap.length - 1];
     this.referencePoints = [];
     const page = editor.getCurrentPage()!;
     page.traverse((s) => {
@@ -554,93 +575,99 @@ export class DraggingSnapper extends Snapper {
   }
 
   /**
-   * Snap
+   * Snap to object
    * @returns snapping delta [dx, dy] or null (not snapped)
    */
-  snap(editor: Editor, pointsToSnap: number[][]): number[] | null {
-    // if (!editor.getSnapToObject()) return null;
-
-    this.pointsToSnap = geometry.pathCopy(pointsToSnap);
-
-    // size snapping will not work on rotated shape
-    // const rotate = geometry.normalizeAngle(shape.rotate);
-    // if (rotate !== 0) return;
-
-    // skip snapping anchord shape temporally
-    // anchord shape을 Resizing 할 때 constraint 에 의해서 위치가 변경되기 때문에,
-    // snapped 된 위치가 이상하게 되는 문제가 있음.
-    // if (shape instanceof Box && shape.anchored) return;
-
-    // adjust dx and dy if the shape is sizable ratio
-    // let dx = controller.dxGCS;
-    // let dy = controller.dyGCS;
-    // if (controller.options.doScale || shape.sizable === Sizable.RATIO) {
-    //   if (dx * this.sizingRatio > dy / this.sizingRatio) {
-    //     dy = dx * this.sizingRatio;
-    //   } else {
-    //     dx = dy / this.sizingRatio;
-    //   }
-    // }
-
-    // move points to snap by dx and dy
-    // this.pointsToSnap = this.movePointsToSnap(
-    //   controller.options.position,
-    //   this.initialPointsToSnap,
-    //   dx,
-    //   dy
-    // );
-
-    // compute snapped X and Y
-    let dx = 0;
-    let dy = 0;
+  snap(editor: Editor, pointToSnap: number[]): number[] | null {
     this.snappedX = null;
     this.snappedY = null;
-    for (let i = 0; i < this.pointsToSnap.length; i++) {
-      const p = this.pointsToSnap[i];
-      if (this.snappedX === null) {
-        this.snappedX = this.snapX(p, this.referencePoints);
-        if (this.snappedX !== null) {
-          dx = this.snappedX - p[0];
-          // const dy = this.sizingRatio !== 0 ? dx * this.sizingRatio : 0;
-          // this.moveDragPointGCS(editor, shape, controller, dx, dy);
-          // this.pointsToSnap = this.movePointsToSnap(
-          //   controller.options.position,
-          //   this.pointsToSnap,
-          //   dx,
-          //   dy
-          // );
-        }
-      }
+    this.drawSnappedX = false;
+    this.drawSnappedY = false;
+    this.snapDX = 0;
+    this.snapDY = 0;
 
-      // if sizing is ratio and X is snapped, skip snapping Y
-      // because snapping Y causes broke snapped X position.
-      // if (this.sizingRatio !== 0 && this.snappedX !== null) {
-      //   continue;
-      // }
+    // snap to object and grid
+    this.snapToObject(editor, pointToSnap);
+    this.snapToGrid(editor, pointToSnap);
 
-      if (this.snappedY === null) {
-        this.snappedY = this.snapY(p, this.referencePoints);
-        if (this.snappedY !== null) {
-          dy = this.snappedY - p[1];
-          // const dx = this.sizingRatio !== 0 ? dy / this.sizingRatio : 0;
-          // this.moveDragPointGCS(editor, shape, controller, dx, dy);
-          // this.pointsToSnap = this.movePointsToSnap(
-          //   controller.options.position,
-          //   this.pointsToSnap,
-          //   dx,
-          //   dy
-          // );
-        }
-      }
-    }
-
+    // update points to snap and guide points
     if (this.snappedX !== null || this.snappedY !== null) {
-      this.pointsToSnap = this.pointsToSnap.map((p) => [p[0] + dx, p[1] + dy]);
-      this.guidePoints = geometry.pathCopy(this.pointsToSnap);
-      return [dx, dy];
+      this.pointToSnap = geometry.move(
+        this.pointToSnap,
+        this.snapDX,
+        this.snapDY
+      );
+      this.guidePoints = [this.pointToSnap];
+      return [this.snapDX, this.snapDY];
     }
 
     return null;
+  }
+
+  /**
+   * Snap to object
+   * @returns snapping delta [dx, dy] or null (not snapped)
+   */
+  snapToObject(editor: Editor, pointToSnap: number[]) {
+    if (!editor.getSnapToObject()) return;
+
+    // compute snapped X and Y
+    this.pointToSnap = geometry.copy(pointToSnap);
+    this.snappedX = null;
+    this.snappedY = null;
+    const p = this.pointToSnap;
+    if (this.snappedX === null) {
+      this.snappedX = this.snapX(p, this.referencePoints);
+      if (this.snappedX !== null) {
+        this.drawSnappedX = true;
+        this.snapDX = this.snappedX - p[0];
+      }
+    }
+    if (this.snappedY === null) {
+      this.snappedY = this.snapY(p, this.referencePoints);
+      if (this.snappedY !== null) {
+        this.drawSnappedY = true;
+        this.snapDY = this.snappedY - p[1];
+      }
+    }
+  }
+
+  /**
+   * Snap to grid
+   * @returns snapping delta [dx, dy] or null (not snapped)
+   */
+  snapToGrid(editor: Editor, pointToSnap: number[]) {
+    if (!editor.getSnapToGrid()) return;
+
+    // snap only if the shape is moving
+    // const dx = controller.dxGCS;
+    // const dy = controller.dyGCS;
+    // if (dx === 0 && dy === 0) return;
+
+    // snap point to grid and compute snap delta
+    const [gridX, gridY] = editor.getGridSize();
+    // this.pointToSnap = geometry.move(this.initialPointToSnap, dx, dy);
+    const snappedPoint = [
+      Math.round(pointToSnap[0] / gridX) * gridX,
+      Math.round(pointToSnap[1] / gridY) * gridY,
+    ];
+    if (this.snappedX === null) {
+      this.snappedX = snappedPoint[0];
+      this.snapDX = snappedPoint[0] - this.pointToSnap[0];
+      this.guidePoints = [];
+    }
+    if (this.snappedY === null) {
+      this.snappedY = snappedPoint[1];
+      this.snapDY = snappedPoint[1] - this.pointToSnap[1];
+      this.guidePoints = [];
+    }
+    // this.pointToSnap = geometry.move(
+    //   this.pointToSnap,
+    //   this.snapDX,
+    //   this.snapDY
+    // );
+
+    // return null;
   }
 
   // snap() { snapToObject(); snapToGrid()}
@@ -653,7 +680,7 @@ export class DraggingSnapper extends Snapper {
   draw(editor: Editor) {
     const canvas = editor.canvas;
 
-    if (this.snappedX !== null) {
+    if (this.snappedX !== null && this.drawSnappedX) {
       const snappedXPoints: number[][] = [];
       this.guidePoints.forEach((p) => {
         if (eq(p[0], this.snappedX as number)) snappedXPoints.push(p);
@@ -675,7 +702,7 @@ export class DraggingSnapper extends Snapper {
       }
     }
 
-    if (this.snappedY !== null) {
+    if (this.snappedY !== null && this.drawSnappedY) {
       const snappedYPoints: number[][] = [];
       this.guidePoints.forEach((p) => {
         if (eq(p[1], this.snappedY as number)) snappedYPoints.push(p);
