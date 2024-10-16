@@ -3,7 +3,7 @@ import { Controller, Editor } from "../editor";
 import { ControllerPosition, MAGNET_THRESHOLD } from "../graphics/const";
 import * as geometry from "../graphics/geometry";
 import { ccs2lcs, gcs2ccs, lcs2gcs } from "../graphics/utils";
-import { Box, Shape, Sizable, Text } from "../shapes";
+import { Box, Shape, Sizable } from "../shapes";
 import * as guide from "../utils/guide";
 
 function eq(a: number, b: number): boolean {
@@ -13,7 +13,7 @@ function eq(a: number, b: number): boolean {
 /**
  * Snapper class
  */
-export class Snapper {
+export class BaseSnapper {
   /**
    * Move drag point in GCS of the given controller
    */
@@ -92,7 +92,7 @@ export class Snapper {
  * MultipointSnapper
  * Snap multiple points to reference points
  */
-export class MultipointSnapper extends Snapper {
+export class MultipointSnapper extends BaseSnapper {
   initialPointsToSnap: number[][] = [];
   pointsToSnap: number[][] = [];
   referencePoints: number[][] = [];
@@ -155,7 +155,7 @@ export class MultipointSnapper extends Snapper {
  * GridSnapper
  * Snap a point to grid
  */
-export class GridSnapper extends Snapper {
+export class GridSnapper extends BaseSnapper {
   initialPointToSnap: number[] = [0, 0];
   pointToSnap: number[] = [0, 0];
 
@@ -500,7 +500,7 @@ export class SizeSnapper extends MultipointSnapper {
 /**
  * HandlerSnapper
  */
-export class HandlerSnapper extends Snapper {
+export class HandlerSnapper extends BaseSnapper {
   /**
    * A point to snap
    */
@@ -726,8 +726,109 @@ export class HandlerSnapper extends Snapper {
   }
 }
 
-/**
- * GapSnapper
- * Snap a moving shape to gaps between shapes
- */
-export class GapSnapper {}
+export class Snapper {
+  /**
+   * An array of points to snap
+   */
+  pointToSnap: number[] = [];
+
+  /**
+   * An array of reference points
+   */
+  referencePoints: number[][] = [];
+
+  /**
+   * Snapped x-coord (null if not snapped)
+   */
+  snappedX: number | null = null;
+
+  /**
+   * Snapped y-coord (null if not snapped)
+   */
+  snappedY: number | null = null;
+
+  /**
+   * Snapped delta x
+   */
+  snapDX: number = 0;
+
+  /**
+   * Snapped delta y
+   */
+  snapDY: number = 0;
+
+  constructor(editor: Editor) {
+    this.pointToSnap = [0, 0];
+    this.referencePoints = [];
+    this.snappedX = null;
+    this.snappedY = null;
+    this.snapDX = 0;
+    this.snapDY = 0;
+  }
+
+  /**
+   * Set reference shapes
+   */
+  setReferences(editor: Editor, exceptions: Shape[] = []) {
+    const canvas = editor.canvas;
+    this.referencePoints = [];
+    const page = editor.getCurrentPage()!;
+    page.traverse((s) => {
+      if (!exceptions.includes(s as Shape) && s instanceof Box) {
+        const rect = (s as Shape).getBoundingRect();
+        const center = geometry.center(rect);
+        this.referencePoints.push(
+          ...geometry
+            .rectToPolygon(rect, false)
+            .map((p) => lcs2gcs(canvas, s, p)),
+          center
+        );
+      }
+    });
+  }
+
+  /**
+   * Snap a point to object.
+   * @param point
+   */
+  snapToObject(editor: Editor, point: number[]) {
+    if (this.snappedX === null) {
+      for (let i = 0; i < this.referencePoints.length; i++) {
+        const rp = this.referencePoints[i];
+        const dx = rp[0] - point[0];
+        if (Math.abs(dx) < MAGNET_THRESHOLD) {
+          this.snappedX = rp[0];
+          this.snapDX = this.snappedX - point[0];
+          break;
+        }
+      }
+    }
+    if (this.snappedY === null) {
+      for (let i = 0; i < this.referencePoints.length; i++) {
+        const rp = this.referencePoints[i];
+        const dy = rp[1] - point[1];
+        if (Math.abs(dy) < MAGNET_THRESHOLD) {
+          this.snappedY = rp[1];
+          this.snapDY = this.snappedY - point[1];
+          break;
+        }
+      }
+    }
+  }
+
+  snapToGrid(editor: Editor, point: number[]) {
+    const [gridX, gridY] = editor.getGridSize();
+    const snappedPoint = [
+      Math.round(point[0] / gridX) * gridX,
+      Math.round(point[1] / gridY) * gridY,
+    ];
+    if (this.snappedX === null) {
+      this.snappedX = snappedPoint[0];
+      this.snapDX = this.snappedX - point[0];
+    }
+    if (this.snappedY === null) {
+      this.snappedY = snappedPoint[1];
+      this.snapDY = this.snappedY - point[1];
+    }
+  }
+}
