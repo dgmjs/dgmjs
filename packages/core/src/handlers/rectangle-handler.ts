@@ -22,7 +22,7 @@ export class RectangleFactoryHandler extends Handler {
   initialize(editor: Editor, e: CanvasPointerEvent): void {
     const page = editor.getCurrentPage();
     if (page) {
-      // update snapping
+      // snap drag start point
       const snapped = this.snapper.snap(editor, this.dragStartPoint);
       if (snapped) {
         const [dx, dy] = snapped;
@@ -45,7 +45,7 @@ export class RectangleFactoryHandler extends Handler {
   }
 
   update(editor: Editor, e: CanvasPointerEvent): void {
-    // update snapping
+    // snap drag point
     const snapped = this.snapper.snap(editor, this.dragPoint);
     if (snapped) {
       const [dx, dy] = snapped;
@@ -76,7 +76,7 @@ export class RectangleFactoryHandler extends Handler {
   }
 
   updateHovering(editor: Editor, e: CanvasPointerEvent): void {
-    // update snapping
+    // snap hovering point
     const p = editor.canvas.globalCoordTransformRev([e.x, e.y]);
     this.snapper.snap(editor, p);
   }

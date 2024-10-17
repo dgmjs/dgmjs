@@ -1,5 +1,5 @@
 import { BoxSizeController } from "../controllers/box-size";
-import { Controller, Editor } from "../editor";
+import { Controller, Editor, Handler } from "../editor";
 import { ControllerPosition, MAGNET_THRESHOLD } from "../graphics/const";
 import * as geometry from "../graphics/geometry";
 import { ccs2lcs, gcs2ccs, lcs2gcs } from "../graphics/utils";
@@ -582,7 +582,11 @@ export class HandlerSnapper extends BaseSnapper {
    * Snap to object
    * @returns snapping delta [dx, dy] or null (not snapped)
    */
-  snap(editor: Editor, pointToSnap: number[]): number[] | null {
+  snap(
+    editor: Editor,
+    pointToSnap: number[],
+    doUpdate: boolean = false
+  ): number[] | null {
     this.snappedX = null;
     this.snappedY = null;
     this.drawSnappedX = false;
