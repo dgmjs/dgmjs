@@ -481,10 +481,19 @@ export class Editor {
   }
 
   private initializeState() {
-    this.transform.onTransaction.addListener(() => this.repaint());
-    this.transform.onUndo.addListener(() => this.repaint());
-    this.transform.onRedo.addListener(() => this.repaint());
     this.selection.onChange.addListener(() => this.repaint());
+    this.transform.onTransaction.addListener(() => this.repaint());
+    this.transform.onUndo.addListener(() => {
+      if (this.activeHandler) this.activeHandler.onActionPerformed(this);
+      this.repaint();
+    });
+    this.transform.onRedo.addListener(() => {
+      if (this.activeHandler) this.activeHandler.onActionPerformed(this);
+      this.repaint();
+    });
+    this.transform.onAction.addListener(() => {
+      if (this.activeHandler) this.activeHandler.onActionPerformed(this);
+    });
   }
 
   private initializeHandlers() {
@@ -1482,6 +1491,11 @@ export class Handler {
    * Triggered when deactivate
    */
   onDeactivate(editor: Editor) {}
+
+  /**
+   * Triggered when action is performed (unclude undo and redo)
+   */
+  onActionPerformed(editor: Editor) {}
 
   /**
    * Initialize handler

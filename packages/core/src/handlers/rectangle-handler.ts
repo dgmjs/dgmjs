@@ -22,6 +22,16 @@ export class RectangleFactoryHandler extends Handler {
   initialize(editor: Editor, e: CanvasPointerEvent): void {
     const page = editor.getCurrentPage();
     if (page) {
+      // update snapping
+      const snapped = this.snapper.snap(editor, this.dragStartPoint);
+      if (snapped) {
+        const [dx, dy] = snapped;
+        this.dragStartPoint = [
+          this.dragStartPoint[0] + dx,
+          this.dragStartPoint[1] + dy,
+        ];
+      }
+
       // create shape
       this.shape = editor.factory.createRectangle([
         this.dragStartPoint,
@@ -80,21 +90,20 @@ export class RectangleFactoryHandler extends Handler {
         editor.transform.endAction();
         editor.factory.triggerCreate(this.shape as Shape);
       }
-
-      // set snapping references
-      this.snapper.setReferences(editor, []);
     }
   }
 
   onActivate(editor: Editor): void {
-    // initialize snapping
     this.snapper.setReferences(editor, []);
-
     editor.setCursor(Cursor.CROSSHAIR);
   }
 
   onDeactivate(editor: Editor): void {
     editor.setCursor(Cursor.DEFAULT);
+  }
+
+  onActionPerformed(editor: Editor): void {
+    this.snapper.setReferences(editor, []);
   }
 
   drawHovering(editor: Editor, e: CanvasPointerEvent) {

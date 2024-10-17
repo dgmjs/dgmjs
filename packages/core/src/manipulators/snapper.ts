@@ -565,13 +565,17 @@ export class HandlerSnapper extends BaseSnapper {
         );
       }
     });
+  }
 
-    // sort reference points by distance to points to snap
-    // this.referencePoints.sort((a, b) => {
-    //   const da = geometry.distance(a, center);
-    //   const db = geometry.distance(b, center);
-    //   return da - db;
-    // });
+  /**
+   * Sort reference points by distance to the given point
+   */
+  sortReferencePoints(point: number[]) {
+    this.referencePoints.sort((a, b) => {
+      const da = geometry.distance(a, point);
+      const db = geometry.distance(b, point);
+      return da - db;
+    });
   }
 
   /**
@@ -585,6 +589,9 @@ export class HandlerSnapper extends BaseSnapper {
     this.drawSnappedY = false;
     this.snapDX = 0;
     this.snapDY = 0;
+
+    // sort reference points (snap first to the nearest reference point)
+    this.sortReferencePoints(pointToSnap);
 
     // snap to object and grid
     this.snapToObject(editor, pointToSnap);
@@ -639,11 +646,6 @@ export class HandlerSnapper extends BaseSnapper {
   snapToGrid(editor: Editor, pointToSnap: number[]) {
     if (!editor.getSnapToGrid()) return;
 
-    // snap only if the shape is moving
-    // const dx = controller.dxGCS;
-    // const dy = controller.dyGCS;
-    // if (dx === 0 && dy === 0) return;
-
     // snap point to grid and compute snap delta
     const [gridX, gridY] = editor.getGridSize();
     // this.pointToSnap = geometry.move(this.initialPointToSnap, dx, dy);
@@ -661,18 +663,7 @@ export class HandlerSnapper extends BaseSnapper {
       this.snapDY = snappedPoint[1] - this.pointToSnap[1];
       this.guidePoints = [];
     }
-    // this.pointToSnap = geometry.move(
-    //   this.pointToSnap,
-    //   this.snapDX,
-    //   this.snapDY
-    // );
-
-    // return null;
   }
-
-  // snap() { snapToObject(); snapToGrid()}
-  // snapToObject()
-  // snapToGrid()
 
   /**
    * Draw snapped points and lines
@@ -722,113 +713,6 @@ export class HandlerSnapper extends BaseSnapper {
         const p2 = gcs2ccs(canvas, [x2, this.snappedY as number]);
         guide.drawLine(canvas, p1, p2);
       }
-    }
-  }
-}
-
-export class Snapper {
-  /**
-   * An array of points to snap
-   */
-  pointToSnap: number[] = [];
-
-  /**
-   * An array of reference points
-   */
-  referencePoints: number[][] = [];
-
-  /**
-   * Snapped x-coord (null if not snapped)
-   */
-  snappedX: number | null = null;
-
-  /**
-   * Snapped y-coord (null if not snapped)
-   */
-  snappedY: number | null = null;
-
-  /**
-   * Snapped delta x
-   */
-  snapDX: number = 0;
-
-  /**
-   * Snapped delta y
-   */
-  snapDY: number = 0;
-
-  constructor(editor: Editor) {
-    this.pointToSnap = [0, 0];
-    this.referencePoints = [];
-    this.snappedX = null;
-    this.snappedY = null;
-    this.snapDX = 0;
-    this.snapDY = 0;
-  }
-
-  /**
-   * Set reference shapes
-   */
-  setReferences(editor: Editor, exceptions: Shape[] = []) {
-    const canvas = editor.canvas;
-    this.referencePoints = [];
-    const page = editor.getCurrentPage()!;
-    page.traverse((s) => {
-      if (!exceptions.includes(s as Shape) && s instanceof Box) {
-        const rect = (s as Shape).getBoundingRect();
-        const center = geometry.center(rect);
-        this.referencePoints.push(
-          ...geometry
-            .rectToPolygon(rect, false)
-            .map((p) => lcs2gcs(canvas, s, p)),
-          center
-        );
-      }
-    });
-  }
-
-  /**
-   * Snap a point to object.
-   * @param point
-   */
-  snapToObject(editor: Editor, point: number[]) {
-    if (this.snappedX === null) {
-      for (let i = 0; i < this.referencePoints.length; i++) {
-        const rp = this.referencePoints[i];
-        const dx = rp[0] - point[0];
-        if (Math.abs(dx) < MAGNET_THRESHOLD) {
-          this.snappedX = rp[0];
-          this.snapDX = this.snappedX - point[0];
-          break;
-        }
-      }
-    }
-    if (this.snappedY === null) {
-      for (let i = 0; i < this.referencePoints.length; i++) {
-        const rp = this.referencePoints[i];
-        const dy = rp[1] - point[1];
-        if (Math.abs(dy) < MAGNET_THRESHOLD) {
-          this.snappedY = rp[1];
-          this.snapDY = this.snappedY - point[1];
-          break;
-        }
-      }
-    }
-  }
-
-  snapToGrid(editor: Editor, point: number[]) {
-    const [gridX, gridY] = editor.getGridSize();
-    const snappedPoint = [
-      Math.round(point[0] / gridX) * gridX,
-      Math.round(point[1] / gridY) * gridY,
-    ];
-    if (this.snappedX === null) {
-      this.snappedX = snappedPoint[0];
-      this.snapDX = this.snappedX - point[0];
-    }
-    if (this.snappedY === null) {
-      this.snappedY = snappedPoint[1];
-      this.snapDY = this.snappedY - point[1];
     }
   }
 }
