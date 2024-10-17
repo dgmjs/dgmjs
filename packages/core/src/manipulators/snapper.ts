@@ -502,6 +502,16 @@ export class SizeSnapper extends MultipointSnapper {
  */
 export class HandlerSnapper extends BaseSnapper {
   /**
+   * Allow snap to object
+   */
+  allowSnapToObject: boolean = true;
+
+  /**
+   * Allow snap to grid
+   */
+  allowSnapToGrid: boolean = true;
+
+  /**
    * A point to snap
    */
   pointToSnap: number[] = [];
@@ -545,6 +555,15 @@ export class HandlerSnapper extends BaseSnapper {
    * An array of guide points (snapped points to draw for guide)
    */
   guidePoints: number[][] = [];
+
+  constructor(
+    allowSnapToObject: boolean = true,
+    allowSnapToGrid: boolean = true
+  ) {
+    super();
+    this.allowSnapToObject = allowSnapToObject;
+    this.allowSnapToGrid = allowSnapToGrid;
+  }
 
   /**
    * Set reference shapes
@@ -620,7 +639,7 @@ export class HandlerSnapper extends BaseSnapper {
    * @returns snapping delta [dx, dy] or null (not snapped)
    */
   snapToObject(editor: Editor, pointToSnap: number[]) {
-    if (!editor.getSnapToObject()) return;
+    if (!editor.getSnapToObject() || !this.allowSnapToObject) return;
 
     // compute snapped X and Y
     this.pointToSnap = geometry.copy(pointToSnap);
@@ -648,15 +667,16 @@ export class HandlerSnapper extends BaseSnapper {
    * @returns snapping delta [dx, dy] or null (not snapped)
    */
   snapToGrid(editor: Editor, pointToSnap: number[]) {
-    if (!editor.getSnapToGrid()) return;
+    if (!editor.getSnapToGrid() || !this.allowSnapToGrid) return;
 
     // snap point to grid and compute snap delta
     const [gridX, gridY] = editor.getGridSize();
-    // this.pointToSnap = geometry.move(this.initialPointToSnap, dx, dy);
+    this.pointToSnap = geometry.copy(pointToSnap);
     const snappedPoint = [
-      Math.round(pointToSnap[0] / gridX) * gridX,
-      Math.round(pointToSnap[1] / gridY) * gridY,
+      Math.round(this.pointToSnap[0] / gridX) * gridX,
+      Math.round(this.pointToSnap[1] / gridY) * gridY,
     ];
+
     if (this.snappedX === null) {
       this.snappedX = snappedPoint[0];
       this.snapDX = snappedPoint[0] - this.pointToSnap[0];

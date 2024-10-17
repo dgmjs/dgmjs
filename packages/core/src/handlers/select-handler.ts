@@ -10,14 +10,6 @@ import { ActionKind } from "../core";
  * Select Handler
  */
 export class SelectHandler extends Handler {
-  dragging: boolean = false;
-  dragStartPoint: number[] = [-1, -1];
-
-  reset(): void {
-    this.dragging = false;
-    this.dragStartPoint = [-1, -1];
-  }
-
   /**
    * Returns a shape (with manipulator area) located at the position e.
    */

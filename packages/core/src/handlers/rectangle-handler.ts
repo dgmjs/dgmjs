@@ -20,19 +20,19 @@ export class RectangleFactoryHandler extends Handler {
   }
 
   initialize(editor: Editor, e: CanvasPointerEvent): void {
+    // snap drag start point
+    const snapped = this.snapper.snap(editor, this.dragStartPoint);
+    if (snapped) {
+      const [dx, dy] = snapped;
+      this.dragStartPoint = [
+        this.dragStartPoint[0] + dx,
+        this.dragStartPoint[1] + dy,
+      ];
+    }
+
+    // create shape
     const page = editor.getCurrentPage();
     if (page) {
-      // snap drag start point
-      const snapped = this.snapper.snap(editor, this.dragStartPoint);
-      if (snapped) {
-        const [dx, dy] = snapped;
-        this.dragStartPoint = [
-          this.dragStartPoint[0] + dx,
-          this.dragStartPoint[1] + dy,
-        ];
-      }
-
-      // create shape
       this.shape = editor.factory.createRectangle([
         this.dragStartPoint,
         this.dragPoint,

@@ -5,24 +5,32 @@ import { Cursor, Mouse } from "../graphics/const";
 import { Mirror, Shape } from "../shapes";
 import { addShape, resolveAllConstraints } from "../macro";
 import { ActionKind } from "../core";
+import { HandlerSnapper } from "../manipulators/snapper";
 
 /**
  * Mirror Factory Handler
  */
 export class MirrorFactoryHandler extends Handler {
-  dragging: boolean = false;
-  dragStartPoint: number[] = [-1, -1];
-  dragPoint: number[] = [-1, -1];
   shape: Mirror | null = null;
+  snapper: HandlerSnapper = new HandlerSnapper();
 
   reset(): void {
-    this.dragging = false;
-    this.dragStartPoint = [-1, -1];
-    this.dragPoint = [-1, -1];
+    super.reset();
     this.shape = null;
   }
 
   initialize(editor: Editor, e: CanvasPointerEvent): void {
+    // snap drag start point
+    const snapped = this.snapper.snap(editor, this.dragStartPoint);
+    if (snapped) {
+      const [dx, dy] = snapped;
+      this.dragStartPoint = [
+        this.dragStartPoint[0] + dx,
+        this.dragStartPoint[1] + dy,
+      ];
+    }
+
+    // create shape
     const page = editor.getCurrentPage();
     if (page) {
       this.shape = editor.factory.createMirror([
@@ -37,6 +45,20 @@ export class MirrorFactoryHandler extends Handler {
   }
 
   update(editor: Editor, e: CanvasPointerEvent): void {
+    // snap drag point
+    const snapped = this.snapper.snap(editor, this.dragPoint);
+    if (snapped) {
+      const [dx, dy] = snapped;
+      this.dragPoint = [this.dragPoint[0] + dx, this.dragPoint[1] + dy];
+      this.snapper.guidePoints = [
+        this.dragStartPoint,
+        [this.dragPoint[0], this.dragStartPoint[1]],
+        [this.dragStartPoint[0], this.dragPoint[1]],
+        this.dragPoint,
+      ];
+    }
+
+    // update shape
     const page = editor.getCurrentPage();
     if (page && this.shape) {
       const rect = geometry.normalizeRect([
@@ -53,6 +75,12 @@ export class MirrorFactoryHandler extends Handler {
     }
   }
 
+  updateHovering(editor: Editor, e: CanvasPointerEvent): void {
+    // snap hovering point
+    const p = editor.canvas.globalCoordTransformRev([e.x, e.y]);
+    this.snapper.snap(editor, p);
+  }
+
   finalize(editor: Editor, e: CanvasPointerEvent): void {
     const MIN_SIZE = 2;
     if (
@@ -67,65 +95,24 @@ export class MirrorFactoryHandler extends Handler {
     }
   }
 
-  /**
-   * pointerDown
-   * @override
-   */
-  pointerDown(editor: Editor, e: CanvasPointerEvent) {
-    if (e.button === Mouse.BUTTON1) {
-      const canvas = editor.canvas;
-      this.dragging = true;
-      this.dragStartPoint = canvas.globalCoordTransformRev([e.x, e.y]);
-      this.dragPoint = geometry.copy(this.dragStartPoint);
-      this.initialize(editor, e);
-      editor.repaint();
-    }
-  }
-
-  /**
-   * pointerMove
-   * @override
-   */
-  pointerMove(editor: Editor, e: CanvasPointerEvent) {
-    editor.repaint();
-    if (this.dragging) {
-      const canvas = editor.canvas;
-      this.dragPoint = canvas.globalCoordTransformRev([e.x, e.y]);
-      this.update(editor, e);
-      editor.repaint();
-    } else {
-      editor.repaint();
-    }
-  }
-
-  /**
-   * pointerUp
-   * @override
-   */
-  pointerUp(editor: Editor, e: CanvasPointerEvent) {
-    if (e.button === Mouse.BUTTON1 && this.dragging) {
-      this.finalize(editor, e);
-      editor.repaint();
-      this.reset();
-      this.complete(editor);
-    }
-  }
-
-  keyDown(editor: Editor, e: KeyboardEvent): boolean {
-    if (e.key === "Escape" && this.dragging) {
-      editor.transform.cancelAction();
-      editor.repaint();
-      this.reset();
-      this.complete(editor);
-    }
-    return false;
-  }
-
   onActivate(editor: Editor): void {
+    this.snapper.setReferences(editor, []);
     editor.setCursor(Cursor.CROSSHAIR);
   }
 
   onDeactivate(editor: Editor): void {
     editor.setCursor(Cursor.DEFAULT);
+  }
+
+  onActionPerformed(editor: Editor): void {
+    this.snapper.setReferences(editor, []);
+  }
+
+  drawHovering(editor: Editor, e: CanvasPointerEvent) {
+    this.snapper.draw(editor);
+  }
+
+  drawDragging(editor: Editor, e: CanvasPointerEvent) {
+    this.snapper.draw(editor);
   }
 }

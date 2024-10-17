@@ -2,66 +2,55 @@ import * as geometry from "../graphics/geometry";
 import { Editor, Handler } from "../editor";
 import { CanvasPointerEvent } from "../graphics/graphics";
 import { Color, Cursor, Mouse } from "../graphics/const";
+import { HandlerSnapper } from "../manipulators/snapper";
 
 /**
  * Embed Factory Handler
  */
 export class EmbedFactoryHandler extends Handler {
-  dragging: boolean = false;
-  dragStartPoint: number[] = [-1, -1];
-  dragPoint: number[] = [-1, -1];
+  snapper: HandlerSnapper = new HandlerSnapper();
 
-  reset() {
-    this.dragging = false;
-    this.dragStartPoint = [-1, -1];
-    this.dragPoint = [-1, -1];
+  initialize(editor: Editor, e: CanvasPointerEvent): void {
+    // snap drag start point
+    const snapped = this.snapper.snap(editor, this.dragStartPoint);
+    if (snapped) {
+      const [dx, dy] = snapped;
+      this.dragStartPoint = [
+        this.dragStartPoint[0] + dx,
+        this.dragStartPoint[1] + dy,
+      ];
+    }
   }
-
-  /**
-   * pointerDown
-   * @override
-   */
-  pointerDown(editor: Editor, e: CanvasPointerEvent) {
-    if (e.button === Mouse.BUTTON1) {
-      const canvas = editor.canvas;
-      this.dragging = true;
-      this.dragStartPoint = canvas.globalCoordTransformRev([e.x, e.y]);
-      this.dragPoint = geometry.copy(this.dragStartPoint);
-      this.drawDragging(editor, e);
+  update(editor: Editor, e: CanvasPointerEvent): void {
+    // snap drag point
+    const snapped = this.snapper.snap(editor, this.dragPoint);
+    if (snapped) {
+      const [dx, dy] = snapped;
+      this.dragPoint = [this.dragPoint[0] + dx, this.dragPoint[1] + dy];
+      this.snapper.guidePoints = [
+        this.dragStartPoint,
+        [this.dragPoint[0], this.dragStartPoint[1]],
+        [this.dragStartPoint[0], this.dragPoint[1]],
+        this.dragPoint,
+      ];
     }
   }
 
-  /**
-   * pointerMove
-   * @override
-   */
-  pointerMove(editor: Editor, e: CanvasPointerEvent) {
-    editor.repaint();
-    if (this.dragging) {
-      const canvas = editor.canvas;
-      this.dragPoint = canvas.globalCoordTransformRev([e.x, e.y]);
-      this.drawDragging(editor, e);
-    } else {
-      this.drawHovering(editor, e);
-    }
+  updateHovering(editor: Editor, e: CanvasPointerEvent): void {
+    // snap hovering point
+    const p = editor.canvas.globalCoordTransformRev([e.x, e.y]);
+    this.snapper.snap(editor, p);
   }
 
-  /**
-   * pointerUp
-   * @override
-   */
-  pointerUp(editor: Editor, e: CanvasPointerEvent) {
-    if (e.button === Mouse.BUTTON1 && this.dragging) {
-      const r = geometry.normalizeRect([this.dragStartPoint, this.dragPoint]);
-      const shape = editor.factory.createEmbed(r);
-      editor.actions.insert(shape);
-      editor.factory.triggerCreate(shape);
-      this.reset();
-      this.complete(editor);
-    }
+  finalize(editor: Editor, e: CanvasPointerEvent): void {
+    const r = geometry.normalizeRect([this.dragStartPoint, this.dragPoint]);
+    const shape = editor.factory.createEmbed(r);
+    editor.actions.insert(shape);
+    editor.factory.triggerCreate(shape);
   }
 
   onActivate(editor: Editor): void {
+    this.snapper.setReferences(editor, []);
     editor.setCursor(Cursor.CROSSHAIR);
   }
 
@@ -69,7 +58,13 @@ export class EmbedFactoryHandler extends Handler {
     editor.setCursor(Cursor.DEFAULT);
   }
 
-  drawHovering(editor: Editor, e: CanvasPointerEvent) {}
+  onActionPerformed(editor: Editor): void {
+    this.snapper.setReferences(editor, []);
+  }
+
+  drawHovering(editor: Editor, e: CanvasPointerEvent) {
+    this.snapper.draw(editor);
+  }
 
   drawDragging(editor: Editor, e: CanvasPointerEvent) {
     const canvas = editor.canvas;
@@ -82,5 +77,7 @@ export class EmbedFactoryHandler extends Handler {
     canvas.roughness = 0;
     canvas.alpha = 1;
     canvas.strokeRect(rect[0][0], rect[0][1], rect[1][0], rect[1][1]);
+
+    this.snapper.draw(editor);
   }
 }
