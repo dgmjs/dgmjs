@@ -201,6 +201,7 @@ export class BoxSizeController extends Controller {
       getControllerPosition(editor.canvas, shape, this.options.position)
     );
     this.sizeSnapper.setSizeToSnap(editor, shape, this);
+    this.sizeSnapper.setReferencePoints(editor, [shape]);
 
     editor.transform.startAction(ActionKind.RESIZE);
     this.initialEnclosure = shape.getEnclosure();

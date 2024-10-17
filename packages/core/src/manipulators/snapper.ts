@@ -100,6 +100,38 @@ export class MultipointSnapper extends BaseSnapper {
   snappedY: number | null = null;
 
   /**
+   * Set reference points
+   */
+  setReferencePoints(editor: Editor, exceptions: Shape[]) {
+    const canvas = editor.canvas;
+    this.referencePoints = [];
+    const page = editor.getCurrentPage()!;
+    page.traverse((s) => {
+      if (!exceptions.includes(s as Shape) && s instanceof Box) {
+        const rect = (s as Shape).getBoundingRect();
+        const center = geometry.center(rect);
+        this.referencePoints.push(
+          ...geometry
+            .rectToPolygon(rect, false)
+            .map((p) => lcs2gcs(canvas, s, p)),
+          center
+        );
+      }
+    });
+  }
+
+  /**
+   * Sort reference points by distance to the given point
+   */
+  sortReferencePoints(point: number[]) {
+    this.referencePoints.sort((a, b) => {
+      const da = geometry.distance(a, point);
+      const db = geometry.distance(b, point);
+      return da - db;
+    });
+  }
+
+  /**
    * Draw snapped points and lines
    */
   draw(editor: Editor) {
@@ -214,36 +246,8 @@ export class MoveSnapper extends MultipointSnapper {
         .map((p) => lcs2gcs(canvas, shape, p)),
       center,
     ];
-  }
-
-  /**
-   * Set reference points
-   */
-  setReferencePoints(editor: Editor, exceptions: Shape[]) {
-    const canvas = editor.canvas;
-    const center =
-      this.initialPointsToSnap[this.initialPointsToSnap.length - 1];
-    this.referencePoints = [];
-    const page = editor.getCurrentPage()!;
-    page.traverse((s) => {
-      if (!exceptions.includes(s as Shape) && s instanceof Box) {
-        const rect = (s as Shape).getBoundingRect();
-        const center = geometry.center(rect);
-        this.referencePoints.push(
-          ...geometry
-            .rectToPolygon(rect, false)
-            .map((p) => lcs2gcs(canvas, s, p)),
-          center
-        );
-      }
-    });
-
-    // sort reference points by distance to points to snap
-    this.referencePoints.sort((a, b) => {
-      const da = geometry.distance(a, center);
-      const db = geometry.distance(b, center);
-      return da - db;
-    });
+    this.snappedX = null;
+    this.snappedY = null;
   }
 
   update(editor: Editor, shape: Shape, controller: Controller) {
@@ -253,6 +257,10 @@ export class MoveSnapper extends MultipointSnapper {
     const dx = controller.dxGCS;
     const dy = controller.dyGCS;
     this.pointsToSnap = geometry.movePoints(this.initialPointsToSnap, dx, dy);
+
+    // sort reference points (snap first to the nearest reference point)
+    const centroid = geometry.centroidPolygon(this.pointsToSnap);
+    this.sortReferencePoints(centroid);
 
     // compute snapped X and Y
     this.snappedX = null;
@@ -349,7 +357,6 @@ export class SizeSnapper extends MultipointSnapper {
 
     // set points to snap
     const rect = shape.getBoundingRect();
-    const center = geometry.center(rect);
     const enclosure = geometry.rectToPolygon(rect, false);
 
     // compute ratio if the shape's sizable is ratio
@@ -397,29 +404,8 @@ export class SizeSnapper extends MultipointSnapper {
       }
     }
     this.pointsToSnap = geometry.pathCopy(this.initialPointsToSnap);
-
-    // set refernces points
-    this.referencePoints = [];
-    const page = editor.getCurrentPage()!;
-    page.traverse((s) => {
-      if (s !== shape && s instanceof Box) {
-        const rect = (s as Shape).getBoundingRect();
-        const center = geometry.center(rect);
-        this.referencePoints.push(
-          ...geometry
-            .rectToPolygon(rect, false)
-            .map((p) => lcs2gcs(canvas, s, p)),
-          center
-        );
-      }
-    });
-
-    // sort reference points by distance to points to snap
-    this.referencePoints.sort((a, b) => {
-      const da = geometry.distance(a, center);
-      const db = geometry.distance(b, center);
-      return da - db;
-    });
+    this.snappedX = null;
+    this.snappedY = null;
   }
 
   update(editor: Editor, shape: Shape, controller: BoxSizeController) {
@@ -452,6 +438,10 @@ export class SizeSnapper extends MultipointSnapper {
       dx,
       dy
     );
+
+    // sort reference points (snap first to the nearest reference point)
+    const centroid = geometry.centroidPolygon(this.pointsToSnap);
+    this.sortReferencePoints(centroid);
 
     // compute snapped X and Y
     this.snappedX = null;
