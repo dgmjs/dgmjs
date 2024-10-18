@@ -103,8 +103,8 @@ export class ConnectorReconnectController extends Controller {
    * Update ghost
    */
   update(editor: Editor, shape: Shape) {
-    // update snappers
-    this.gridSnapper.update(editor, shape, this);
+    // snap dragging points
+    this.gridSnapper.snap(editor, shape, this);
 
     // find an end and anchor
     const [newEnd, anchor] = findConnectionAnchor(

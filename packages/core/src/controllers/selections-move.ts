@@ -88,9 +88,9 @@ export class SelectionsMoveController extends Controller {
     const canvas = editor.canvas;
     const selections = editor.selection.getShapes();
 
-    // update snappers
-    this.gridSnapper.update(editor, shape, this);
-    this.moveSnapper.update(editor, shape, this);
+    // snap dragging points
+    this.gridSnapper.snap(editor, shape, this);
+    this.moveSnapper.snap(editor, shape, this);
 
     // determine container
     this.container =

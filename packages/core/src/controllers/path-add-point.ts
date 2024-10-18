@@ -99,8 +99,8 @@ export class PathAddPointController extends Controller {
    * Update ghost
    */
   update(editor: Editor, shape: Shape) {
-    // update snappers
-    this.gridSnapper.update(editor, shape, this);
+    // snap dragging points
+    this.gridSnapper.snap(editor, shape, this);
 
     let newPath = geometry.pathCopy(this.controlPath);
     newPath.splice(

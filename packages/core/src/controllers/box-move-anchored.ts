@@ -69,9 +69,9 @@ export class BoxMoveAnchoredController extends Controller {
    * Update ghost
    */
   update(editor: Editor, shape: Shape) {
-    // update snappers
-    this.gridSnapper.update(editor, shape, this);
-    this.moveSnapper.update(editor, shape, this);
+    // snap dragging points
+    this.gridSnapper.snap(editor, shape, this);
+    this.moveSnapper.snap(editor, shape, this);
 
     const canvas = editor.canvas;
     const anchorPoint = geometry.getPointOnPath(

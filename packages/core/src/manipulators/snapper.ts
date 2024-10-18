@@ -77,22 +77,24 @@ export class BaseSnapper {
     }
     return null;
   }
+}
 
+export class ControllerSnapper extends BaseSnapper {
   /**
-   * Update snapper
+   * Snap points in controller
    * @abstract
    * @param editor Editor
    * @param shape Shape
    * @param controller Controller
    */
-  update(editor: Editor, shape: Shape, controller: Controller) {}
+  snap(editor: Editor, shape: Shape, controller: Controller) {}
 }
 
 /**
  * MultipointSnapper
  * Snap multiple points to reference points
  */
-export class MultipointSnapper extends BaseSnapper {
+export class MultipointSnapper extends ControllerSnapper {
   initialPointsToSnap: number[][] = [];
   pointsToSnap: number[][] = [];
   referencePoints: number[][] = [];
@@ -187,7 +189,7 @@ export class MultipointSnapper extends BaseSnapper {
  * GridSnapper
  * Snap a point to grid
  */
-export class GridSnapper extends BaseSnapper {
+export class GridSnapper extends ControllerSnapper {
   initialPointToSnap: number[] = [0, 0];
   pointToSnap: number[] = [0, 0];
 
@@ -204,7 +206,7 @@ export class GridSnapper extends BaseSnapper {
    * @param editor Editor
    * @param controller Controller
    */
-  update(editor: Editor, shape: Shape, controller: Controller) {
+  snap(editor: Editor, shape: Shape, controller: Controller) {
     if (!editor.getSnapToGrid()) return;
 
     // snap only if the shape is moving
@@ -250,7 +252,7 @@ export class MoveSnapper extends MultipointSnapper {
     this.snappedY = null;
   }
 
-  update(editor: Editor, shape: Shape, controller: Controller) {
+  snap(editor: Editor, shape: Shape, controller: Controller) {
     if (!editor.getSnapToObject()) return;
 
     // move points to snap by dx and dy
@@ -409,7 +411,7 @@ export class SizeSnapper extends MultipointSnapper {
     this.snappedY = null;
   }
 
-  update(editor: Editor, shape: Shape, controller: BoxSizeController) {
+  snap(editor: Editor, shape: Shape, controller: BoxSizeController) {
     if (!editor.getSnapToObject()) return;
 
     // size snapping will not work on rotated shape
@@ -593,11 +595,7 @@ export class HandlerSnapper extends BaseSnapper {
    * Snap to object
    * @returns snapping delta [dx, dy] or null (not snapped)
    */
-  snap(
-    editor: Editor,
-    pointToSnap: number[],
-    doUpdate: boolean = false
-  ): number[] | null {
+  snap(editor: Editor, pointToSnap: number[]): number[] | null {
     this.snappedX = null;
     this.snappedY = null;
     this.drawSnappedX = false;

@@ -127,8 +127,8 @@ export class BoxCreateConnectorController extends Controller {
    */
   update(editor: Editor, shape: Shape) {
     if (this.connector) {
-      // update snappers
-      this.gridSnapper.update(editor, shape, this);
+      // snap dragging points
+      this.gridSnapper.snap(editor, shape, this);
 
       // find an end and anchor
       const [newEnd, anchor] = findConnectionAnchor(

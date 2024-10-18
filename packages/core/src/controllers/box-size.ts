@@ -216,8 +216,8 @@ export class BoxSizeController extends Controller {
     const canvas = editor.canvas;
 
     // snapping
-    this.gridSnapper.update(editor, shape, this);
-    this.sizeSnapper.update(editor, shape, this);
+    this.gridSnapper.snap(editor, shape, this);
+    this.sizeSnapper.snap(editor, shape, this);
 
     // remember current shape states
     const memo = shape.toJSON(false, true);

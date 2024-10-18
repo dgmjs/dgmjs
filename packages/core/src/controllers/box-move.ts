@@ -94,9 +94,9 @@ export class BoxMoveController extends Controller {
     const targetShape = this.getTargetShape(editor, shape);
     if (!targetShape || targetShape instanceof Page) return;
 
-    // update snappers
-    this.gridSnapper.update(editor, shape, this);
-    this.moveSnapper.update(editor, shape, this);
+    // snap dragging points
+    this.gridSnapper.snap(editor, shape, this);
+    this.moveSnapper.snap(editor, shape, this);
 
     // apply movable constraint
     if (
