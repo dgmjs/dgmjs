@@ -184,7 +184,7 @@ function App() {
               },
             }}
             plugins={[new YjsDocSyncPlugin(), new YjsUserPresencePlugin()]}
-            showGrid={true}
+            showGrid={demoStore.showGrid}
             onMount={handleMount}
             onShapeCreate={handleShapeCreate}
             onSelectionChange={handleSelectionChange}

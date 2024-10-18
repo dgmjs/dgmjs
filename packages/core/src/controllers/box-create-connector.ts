@@ -8,10 +8,10 @@ import {
 } from "../graphics/const";
 import { lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
-import { Snap } from "../manipulators/snap";
 import { findConnectionAnchor, getControllerPosition } from "./utils";
 import { addShape, resolveAllConstraints, setPath } from "../macro";
 import { ActionKind } from "../core";
+import { GridSnapper } from "../manipulators/snapper";
 
 interface BoxCreateConnectorControllerOptions {
   position: string;
@@ -33,9 +33,9 @@ export class BoxCreateConnectorController extends Controller {
   connector: Connector | null;
 
   /**
-   * Snap support for controller
+   * Grid snapper
    */
-  snap: Snap;
+  gridSnapper: GridSnapper;
 
   constructor(
     manipulator: Manipulator,
@@ -43,7 +43,7 @@ export class BoxCreateConnectorController extends Controller {
   ) {
     super(manipulator);
     this.hasHandle = true;
-    this.snap = new Snap();
+    this.gridSnapper = new GridSnapper();
     this.connector = null;
     this.options = {
       position: ControllerPosition.BOTTOM,
@@ -104,6 +104,9 @@ export class BoxCreateConnectorController extends Controller {
    * Initialize ghost
    */
   initialize(editor: Editor, shape: Shape): void {
+    // initialize snappers
+    this.gridSnapper.setPointToSnap(editor, this, this.dragPointGCS);
+
     this.connector = editor.factory.createConnector(
       shape,
       [0.5, 0.5],
@@ -124,6 +127,9 @@ export class BoxCreateConnectorController extends Controller {
    */
   update(editor: Editor, shape: Shape) {
     if (this.connector) {
+      // snap dragging points
+      this.gridSnapper.snap(editor, shape, this);
+
       // find an end and anchor
       const [newEnd, anchor] = findConnectionAnchor(
         editor,

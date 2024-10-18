@@ -481,10 +481,19 @@ export class Editor {
   }
 
   private initializeState() {
-    this.transform.onTransaction.addListener(() => this.repaint());
-    this.transform.onUndo.addListener(() => this.repaint());
-    this.transform.onRedo.addListener(() => this.repaint());
     this.selection.onChange.addListener(() => this.repaint());
+    this.transform.onTransaction.addListener(() => this.repaint());
+    this.transform.onUndo.addListener(() => {
+      if (this.activeHandler) this.activeHandler.onActionPerformed(this);
+      this.repaint();
+    });
+    this.transform.onRedo.addListener(() => {
+      if (this.activeHandler) this.activeHandler.onActionPerformed(this);
+      this.repaint();
+    });
+    this.transform.onAction.addListener(() => {
+      if (this.activeHandler) this.activeHandler.onActionPerformed(this);
+    });
   }
 
   private initializeHandlers() {
@@ -1424,6 +1433,9 @@ export interface HandlerOptions {
 export class Handler {
   id: string;
   options: HandlerOptions;
+  dragging: boolean;
+  dragStartPoint: number[];
+  dragPoint: number[];
 
   constructor(id: string, options?: Partial<HandlerOptions>) {
     this.id = id;
@@ -1431,13 +1443,20 @@ export class Handler {
       defaultLock: false,
       ...options,
     };
+    this.dragging = false;
+    this.dragStartPoint = [-1, -1];
+    this.dragPoint = [-1, -1];
     this.reset();
   }
 
   /**
    * Reset the states of handler
    */
-  reset() {}
+  reset() {
+    this.dragging = false;
+    this.dragStartPoint = [-1, -1];
+    this.dragPoint = [-1, -1];
+  }
 
   /**
    * Trigger when the handler action is complete
@@ -1474,27 +1493,88 @@ export class Handler {
   onDeactivate(editor: Editor) {}
 
   /**
-   * pointerDown
-   * @abstract
+   * Triggered when action is performed (unclude undo and redo)
    */
-  pointerDown(editor: Editor, e: CanvasPointerEvent) {}
+  onActionPerformed(editor: Editor) {}
+
+  /**
+   * Initialize handler
+   */
+  initialize(editor: Editor, e: CanvasPointerEvent): void {}
+
+  /**
+   * Update handler
+   */
+  update(editor: Editor, e: CanvasPointerEvent): void {}
+
+  /**
+   * Update handler when hovering (not dragging)
+   */
+  updateHovering(editor: Editor, e: CanvasPointerEvent): void {}
+
+  /**
+   * Finalize handler
+   */
+  finalize(editor: Editor, e: CanvasPointerEvent): void {}
+
+  /**
+   * pointerDown
+   */
+  pointerDown(editor: Editor, e: CanvasPointerEvent) {
+    if (e.button === Mouse.BUTTON1) {
+      const canvas = editor.canvas;
+      this.dragging = true;
+      this.dragStartPoint = canvas.globalCoordTransformRev([e.x, e.y]);
+      this.dragPoint = geometry.copy(this.dragStartPoint);
+      this.initialize(editor, e);
+      editor.repaint();
+      this.drawDragging(editor, e);
+    }
+  }
 
   /**
    * pointerUp
    * @abstract
    */
-  pointerUp(editor: Editor, e: CanvasPointerEvent) {}
+  pointerUp(editor: Editor, e: CanvasPointerEvent) {
+    if (e.button === Mouse.BUTTON1 && this.dragging) {
+      this.finalize(editor, e);
+      editor.repaint();
+      this.reset();
+      this.complete(editor);
+    }
+  }
 
   /**
    * pointerMove
    * @abstract
    */
-  pointerMove(editor: Editor, e: CanvasPointerEvent) {}
+  pointerMove(editor: Editor, e: CanvasPointerEvent) {
+    const canvas = editor.canvas;
+    if (this.dragging) {
+      this.dragPoint = canvas.globalCoordTransformRev([e.x, e.y]);
+      this.update(editor, e);
+      editor.repaint();
+      this.drawDragging(editor, e);
+    } else {
+      this.updateHovering(editor, e);
+      editor.repaint();
+      this.drawHovering(editor, e);
+    }
+  }
 
   /**
    * keyDown
    */
-  keyDown(editor: Editor, e: KeyboardEvent) {}
+  keyDown(editor: Editor, e: KeyboardEvent) {
+    if (e.key === "Escape" && this.dragging) {
+      editor.transform.cancelAction();
+      editor.repaint();
+      this.reset();
+      this.complete(editor);
+    }
+    return false;
+  }
 
   /**
    * keyUp
@@ -1505,6 +1585,16 @@ export class Handler {
    * Draw ghost for the selected shape
    */
   drawSelection(editor: Editor) {}
+
+  /**
+   * Draw hovering
+   */
+  drawHovering(editor: Editor, e: CanvasPointerEvent) {}
+
+  /**
+   * Draw dragging
+   */
+  drawDragging(editor: Editor, e: CanvasPointerEvent) {}
 }
 
 /**
@@ -1734,10 +1824,10 @@ export class Controller {
     let handled = false;
     if (this.dragging) {
       this.dragPrevPoint = geometry.copy(this.dragPoint);
-      this.dragPoint = utils.ccs2lcs(canvas, shape, [e.x, e.y]);
       this.dragPrevPointGCS = geometry.copy(this.dragPointGCS);
-      this.dragPointGCS = utils.ccs2gcs(canvas, [e.x, e.y]);
       this.dragPrevPointCCS = geometry.copy(this.dragPointCCS);
+      this.dragPoint = utils.ccs2lcs(canvas, shape, [e.x, e.y]);
+      this.dragPointGCS = utils.ccs2gcs(canvas, [e.x, e.y]);
       this.dragPointCCS = [e.x, e.y];
       this.dx = this.dragPoint[0] - this.dragStartPoint[0];
       this.dy = this.dragPoint[1] - this.dragStartPoint[1];

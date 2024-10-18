@@ -7,13 +7,12 @@ import {
   Cursor,
   ControllerPosition,
 } from "../graphics/const";
-import { lcs2ccs, angleInCCS, ccs2lcs } from "../graphics/utils";
+import { lcs2ccs, angleInCCS } from "../graphics/utils";
 import {
   drawControlPoint,
   drawPolylineInLCS,
   inControlPoint,
 } from "../utils/guide";
-import { Snap } from "../manipulators/snap";
 import { fitEnclosureInCSS, getControllerPosition } from "./utils";
 import {
   moveSingleShape,
@@ -22,6 +21,7 @@ import {
   resolveAllConstraints,
 } from "../macro";
 import { ActionKind } from "../core";
+import { GridSnapper, SizeSnapper } from "../manipulators/snapper";
 
 interface BoxSizeControllerOptions {
   position: string;
@@ -39,9 +39,14 @@ export class BoxSizeController extends Controller {
   options: BoxSizeControllerOptions;
 
   /**
-   * Snap support for controller
+   * Grid snapper
    */
-  snap: Snap;
+  gridSnapper: GridSnapper;
+
+  /**
+   * Size snapper
+   */
+  sizeSnapper: SizeSnapper;
 
   /**
    * Temporal memory for shape's enclosure
@@ -65,7 +70,8 @@ export class BoxSizeController extends Controller {
       doScaleChildren: false,
       ...options,
     };
-    this.snap = new Snap();
+    this.gridSnapper = new GridSnapper();
+    this.sizeSnapper = new SizeSnapper();
     this.initialEnclosure = [];
     this.initialSnapshot = {};
   }
@@ -188,6 +194,15 @@ export class BoxSizeController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
+    // initialize snappers
+    this.gridSnapper.setPointToSnap(
+      editor,
+      this,
+      getControllerPosition(editor.canvas, shape, this.options.position)
+    );
+    this.sizeSnapper.setSizeToSnap(editor, shape, this);
+    this.sizeSnapper.setReferencePoints(editor, [shape]);
+
     editor.transform.startAction(ActionKind.RESIZE);
     this.initialEnclosure = shape.getEnclosure();
     this.initialSnapshot = {};
@@ -200,15 +215,19 @@ export class BoxSizeController extends Controller {
   update(editor: Editor, shape: Shape) {
     const canvas = editor.canvas;
 
+    // snapping
+    this.gridSnapper.snap(editor, shape, this);
+    this.sizeSnapper.snap(editor, shape, this);
+
     // remember current shape states
     const memo = shape.toJSON(false, true);
     const initialShape = this.initialSnapshot[shape.id];
     shape.fromJSON(initialShape);
 
     // compute (dx, dy) in initial shape's LCS
-    const dragPoint = ccs2lcs(canvas, shape, this.dragPointCCS);
-    let dx = dragPoint[0] - this.dragStartPoint[0];
-    let dy = dragPoint[1] - this.dragStartPoint[1];
+    // const dragPoint = ccs2lcs(canvas, shape, this.dragPointCCS);
+    let dx = this.dx; // dragPoint[0] - this.dragStartPoint[0];
+    let dy = this.dy; // dragPoint[1] - this.dragStartPoint[1];
 
     // initialize control enclosure
     let controlEnclosure = geometry.pathCopy(this.initialEnclosure);
@@ -475,5 +494,8 @@ export class BoxSizeController extends Controller {
     const canvas = editor.canvas;
     const ghost = shape.getEnclosure();
     drawPolylineInLCS(canvas, shape, ghost);
+
+    // draw snapping
+    this.sizeSnapper.draw(editor);
   }
 }

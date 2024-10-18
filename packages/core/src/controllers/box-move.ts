@@ -2,20 +2,25 @@ import { CanvasPointerEvent } from "../graphics/graphics";
 import { Shape, Box, Movable, Page, Path, Mirror } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { drawPolylineInLCS } from "../utils/guide";
-import { Snap } from "../manipulators/snap";
 import { Cursor } from "../graphics/const";
 import { moveShapes, resolveAllConstraints } from "../macro";
 import { ActionKind } from "../core";
 import { ableToContain } from "./utils";
+import { GridSnapper, MoveSnapper } from "../manipulators/snapper";
 
 /**
  * BoxMoveController
  */
 export class BoxMoveController extends Controller {
   /**
-   * Snap support for controller
+   * Grid snapper
    */
-  snap: Snap;
+  gridSnapper: GridSnapper;
+
+  /**
+   * Move snapper
+   */
+  moveSnapper: MoveSnapper;
 
   /**
    * Reference to a container shape
@@ -25,7 +30,8 @@ export class BoxMoveController extends Controller {
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.hasHandle = false;
-    this.snap = new Snap();
+    this.gridSnapper = new GridSnapper();
+    this.moveSnapper = new MoveSnapper();
     this.container = null;
   }
 
@@ -53,7 +59,31 @@ export class BoxMoveController extends Controller {
     return [Cursor.MOVE, 0];
   }
 
+  getTargetShape(editor: Editor, shape: Shape): Shape {
+    let targetShape: Shape | null = shape;
+    if (targetShape.movable === Movable.PARENT)
+      targetShape = targetShape.findParent(
+        (s) => (s as Shape).movable !== Movable.PARENT
+      ) as Shape;
+    return targetShape;
+  }
+
   initialize(editor: Editor, shape: Shape): void {
+    const targetShape = this.getTargetShape(editor, shape);
+    if (!targetShape || targetShape instanceof Page) return;
+
+    // initialize snappers
+    this.gridSnapper.setPointToSnap(editor, this, [
+      targetShape.left,
+      targetShape.top,
+    ]);
+    this.moveSnapper.setRectToSnap(
+      editor,
+      targetShape,
+      shape.getBoundingRect()
+    );
+    this.moveSnapper.setReferencePoints(editor, [targetShape]);
+
     editor.transform.startAction(ActionKind.MOVE);
   }
 
@@ -61,12 +91,14 @@ export class BoxMoveController extends Controller {
    * Update ghost
    */
   update(editor: Editor, shape: Shape) {
-    let targetShape: Shape | null = shape;
-    if (targetShape.movable === Movable.PARENT)
-      targetShape = targetShape.findParent(
-        (s) => (s as Shape).movable !== Movable.PARENT
-      ) as Shape;
+    const targetShape = this.getTargetShape(editor, shape);
     if (!targetShape || targetShape instanceof Page) return;
+
+    // snap dragging points
+    this.gridSnapper.snap(editor, shape, this);
+    this.moveSnapper.snap(editor, shape, this);
+
+    // apply movable constraint
     if (
       targetShape.movable === Movable.VERT ||
       targetShape.movable === Movable.NONE
@@ -135,5 +167,8 @@ export class BoxMoveController extends Controller {
       const manipulator = manipulatorManager.get(this.container.type);
       if (manipulator) manipulator.drawHovering(editor, this.container, e);
     }
+
+    // draw snapping
+    this.moveSnapper.draw(editor);
   }
 }

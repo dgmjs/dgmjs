@@ -4,7 +4,6 @@ import { Controller, Editor, Manipulator } from "../editor";
 import { Cursor, MAGNET_THRESHOLD } from "../graphics/const";
 import { ccs2lcs, lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
-import { Snap } from "../manipulators/snap";
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import { resolveAllConstraints } from "../macro";
 import { ActionKind } from "../core";
@@ -13,11 +12,6 @@ import { ActionKind } from "../core";
  * BoxMoveAnchorPositionController
  */
 export class BoxMoveAnchorPositionController extends Controller {
-  /**
-   * Snap support for controller
-   */
-  snap: Snap;
-
   /**
    * Ghost polygon
    */
@@ -41,7 +35,6 @@ export class BoxMoveAnchorPositionController extends Controller {
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.hasHandle = true;
-    this.snap = new Snap();
     this.ghost = [];
     this.anchorPosition = 0.5;
     this.anchorPoint = [-1, -1];

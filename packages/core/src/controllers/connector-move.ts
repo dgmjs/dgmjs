@@ -1,21 +1,26 @@
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import { Shape, Line, Movable, Connector, Page, Path } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
-import { Snap } from "../manipulators/snap";
 import * as geometry from "../graphics/geometry";
 import { Cursor } from "../graphics/const";
 import { changeParent, resolveAllConstraints, setPath } from "../macro";
 import { ActionKind } from "../core";
 import { ableToContain } from "./utils";
+import { GridSnapper, MoveSnapper } from "../manipulators/snapper";
 
 /**
  * ConnectorMove Controller
  */
 export class ConnectorMoveController extends Controller {
   /**
-   * Snap support for controller
+   * Grid snapper
    */
-  snap: Snap;
+  gridSnapper: GridSnapper;
+
+  /**
+   * Move snapper
+   */
+  moveSnapper: MoveSnapper;
 
   /**
    * Ghost polygon
@@ -30,7 +35,8 @@ export class ConnectorMoveController extends Controller {
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.hasHandle = false;
-    this.snap = new Snap();
+    this.gridSnapper = new GridSnapper();
+    this.moveSnapper = new MoveSnapper();
     this.controlPath = [];
     this.container = null;
   }
@@ -60,6 +66,11 @@ export class ConnectorMoveController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
+    // initialize snappers
+    this.gridSnapper.setPointToSnap(editor, this, [shape.left, shape.top]);
+    this.moveSnapper.setRectToSnap(editor, shape, shape.getBoundingRect());
+    this.moveSnapper.setReferencePoints(editor, [shape]);
+
     this.controlPath = geometry.pathCopy((shape as Path).path);
     editor.transform.startAction(ActionKind.REPATH);
   }
@@ -68,6 +79,10 @@ export class ConnectorMoveController extends Controller {
    * Update ghost
    */
   update(editor: Editor, shape: Shape) {
+    // snap dragging points
+    this.gridSnapper.snap(editor, shape, this);
+    this.moveSnapper.snap(editor, shape, this);
+
     // apply movable property
     let targetShape: Shape | null = shape;
     if (targetShape.movable === Movable.PARENT)
@@ -130,5 +145,8 @@ export class ConnectorMoveController extends Controller {
       const manipulator = manipulatorManager.get(this.container.type);
       if (manipulator) manipulator.drawHovering(editor, this.container, e);
     }
+
+    // draw snapping
+    this.moveSnapper.draw(editor);
   }
 }

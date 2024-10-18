@@ -2,20 +2,25 @@ import type { CanvasPointerEvent } from "../graphics/graphics";
 import { Shape, Page } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { Color, Cursor } from "../graphics/const";
-import { Snap } from "../manipulators/snap";
 import { lcs2ccs } from "../graphics/utils";
 import { moveShapes, resolveAllConstraints } from "../macro";
 import { ActionKind } from "../core";
 import { ableToContain } from "./utils";
+import { GridSnapper, MoveSnapper } from "../manipulators/snapper";
 
 /**
  * SelectionsMoveController
  */
 export class SelectionsMoveController extends Controller {
   /**
-   * Snap support for controller
+   * Grid snapper
    */
-  snap: Snap;
+  gridSnapper: GridSnapper;
+
+  /**
+   * Move snapper
+   */
+  moveSnapper: MoveSnapper;
 
   /**
    * Reference to a container shape
@@ -25,7 +30,8 @@ export class SelectionsMoveController extends Controller {
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.hasHandle = false;
-    this.snap = new Snap();
+    this.gridSnapper = new GridSnapper();
+    this.moveSnapper = new MoveSnapper();
     this.container = null;
   }
 
@@ -63,6 +69,14 @@ export class SelectionsMoveController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
+    const rect = editor.selection.getBoundingRect(editor.canvas);
+    const selection = editor.selection.getShapes();
+
+    // initialize snappers
+    this.gridSnapper.setPointToSnap(editor, this, rect[0]);
+    this.moveSnapper.setRectToSnap(editor, shape, rect);
+    this.moveSnapper.setReferencePoints(editor, selection);
+
     editor.transform.startAction(ActionKind.MOVE);
   }
 
@@ -73,6 +87,10 @@ export class SelectionsMoveController extends Controller {
   update(editor: Editor, shape: Shape) {
     const canvas = editor.canvas;
     const selections = editor.selection.getShapes();
+
+    // snap dragging points
+    this.gridSnapper.snap(editor, shape, this);
+    this.moveSnapper.snap(editor, shape, this);
 
     // determine container
     this.container =
@@ -147,7 +165,8 @@ export class SelectionsMoveController extends Controller {
       const manipulator = manipulatorManager.get(this.container.type);
       if (manipulator) manipulator.drawHovering(editor, this.container, e);
     }
-    // draw snap
-    // this.snap.draw(editor, shape, this.ghost);
+
+    // draw snapping
+    this.moveSnapper.draw(editor);
   }
 }

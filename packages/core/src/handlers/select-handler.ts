@@ -10,14 +10,6 @@ import { ActionKind } from "../core";
  * Select Handler
  */
 export class SelectHandler extends Handler {
-  dragging: boolean = false;
-  dragStartPoint: number[] = [-1, -1];
-
-  reset(): void {
-    this.dragging = false;
-    this.dragStartPoint = [-1, -1];
-  }
-
   /**
    * Returns a shape (with manipulator area) located at the position e.
    */
@@ -302,7 +294,7 @@ export class SelectHandler extends Handler {
   /**
    * keyDown
    */
-  keyDown(editor: Editor, e: KeyboardEvent) {
+  keyDown(editor: Editor, e: KeyboardEvent): boolean {
     // delegates to manipulators
     const page = editor.getCurrentPage();
     if (page) {
@@ -321,6 +313,7 @@ export class SelectHandler extends Handler {
       editor.selection.deselectAll();
       editor.repaint();
     }
+    return false;
   }
 
   /**

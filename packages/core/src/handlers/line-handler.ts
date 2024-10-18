@@ -5,24 +5,21 @@ import { Editor, Handler } from "../editor";
 import { Mouse, MAGNET_THRESHOLD, Cursor } from "../graphics/const";
 import { addShape, resolveAllConstraints, setPath } from "../macro";
 import { ActionKind } from "../core";
+import { HandlerSnapper } from "../manipulators/snapper";
 
 /**
  * Line Factory Handler
  */
 export class LineFactoryHandler extends Handler {
-  dragging: boolean = false;
-  dragStartPoint: number[] = [-1, -1];
-  dragPoint: number[] = [-1, -1];
   points: number[][] = [];
   closed: boolean = false;
   draggingMoved: boolean = false;
   multiPointMode: boolean = false;
   shape: Line | null = null;
+  snapper: HandlerSnapper = new HandlerSnapper(false, true);
 
   reset() {
-    this.dragging = false;
-    this.dragStartPoint = [-1, -1];
-    this.dragPoint = [-1, -1];
+    super.reset();
     this.points = [];
     this.closed = false;
     this.draggingMoved = false;
@@ -31,6 +28,17 @@ export class LineFactoryHandler extends Handler {
   }
 
   initialize(editor: Editor, e: CanvasPointerEvent): void {
+    // snap drag start point
+    const snapped = this.snapper.snap(editor, this.dragStartPoint);
+    if (snapped) {
+      const [dx, dy] = snapped;
+      this.dragStartPoint = [
+        this.dragStartPoint[0] + dx,
+        this.dragStartPoint[1] + dy,
+      ];
+    }
+
+    // create shape
     const page = editor.getCurrentPage();
     if (page) {
       this.points = [this.dragStartPoint];
@@ -43,6 +51,20 @@ export class LineFactoryHandler extends Handler {
   }
 
   update(editor: Editor, e: CanvasPointerEvent): void {
+    // snap drag point
+    const snapped = this.snapper.snap(editor, this.dragPoint);
+    if (snapped) {
+      const [dx, dy] = snapped;
+      this.dragPoint = [this.dragPoint[0] + dx, this.dragPoint[1] + dy];
+      this.snapper.guidePoints = [
+        this.dragStartPoint,
+        [this.dragPoint[0], this.dragStartPoint[1]],
+        [this.dragStartPoint[0], this.dragPoint[1]],
+        this.dragPoint,
+      ];
+    }
+
+    // update shape
     const page = editor.getCurrentPage();
     if (page && this.shape) {
       const newPath = [...this.points, this.dragPoint];
@@ -51,6 +73,12 @@ export class LineFactoryHandler extends Handler {
         resolveAllConstraints(tx, page, editor.canvas);
       });
     }
+  }
+
+  updateHovering(editor: Editor, e: CanvasPointerEvent): void {
+    // snap hovering point
+    const p = editor.canvas.globalCoordTransformRev([e.x, e.y]);
+    this.snapper.snap(editor, p);
   }
 
   finalize(editor: Editor, e?: CanvasPointerEvent): void {
@@ -78,7 +106,13 @@ export class LineFactoryHandler extends Handler {
           this.reset();
           this.complete(editor);
         } else {
+          // snap intermediate point
           const p = canvas.globalCoordTransformRev([e.x, e.y]);
+          const snapped = this.snapper.snap(editor, p);
+          if (snapped) {
+            p[0] += snapped[0];
+            p[1] += snapped[1];
+          }
           this.points.push(p);
         }
       } else {
@@ -108,8 +142,13 @@ export class LineFactoryHandler extends Handler {
         this.dragPoint = geometry.copy(this.points[0]);
       }
       this.update(editor, e);
+      editor.repaint();
+      this.drawDragging(editor, e);
+    } else {
+      this.updateHovering(editor, e);
+      editor.repaint();
+      this.drawHovering(editor, e);
     }
-    editor.repaint();
   }
 
   /**
@@ -149,11 +188,24 @@ export class LineFactoryHandler extends Handler {
 
   onActivate(editor: Editor): void {
     this.reset();
+    this.snapper.setReferences(editor, []);
     editor.setCursor(Cursor.CROSSHAIR);
   }
 
   onDeactivate(editor: Editor): void {
     this.reset();
     editor.setCursor(Cursor.DEFAULT);
+  }
+
+  onActionPerformed(editor: Editor): void {
+    this.snapper.setReferences(editor, []);
+  }
+
+  drawHovering(editor: Editor, e: CanvasPointerEvent) {
+    this.snapper.draw(editor);
+  }
+
+  drawDragging(editor: Editor, e: CanvasPointerEvent) {
+    this.snapper.draw(editor);
   }
 }
