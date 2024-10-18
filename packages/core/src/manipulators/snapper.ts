@@ -243,10 +243,10 @@ export class MoveSnapper extends MultipointSnapper {
     const canvas = editor.canvas;
     const center = geometry.center(rect);
     this.initialPointsToSnap = [
+      center,
       ...geometry
         .rectToPolygon(rect, false)
         .map((p) => lcs2gcs(canvas, shape, p)),
-      center,
     ];
     this.snappedX = null;
     this.snappedY = null;
