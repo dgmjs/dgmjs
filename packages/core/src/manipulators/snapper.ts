@@ -256,6 +256,7 @@ export class MoveSnapper extends MultipointSnapper {
     // move points to snap by dx and dy
     const dx = controller.dxGCS;
     const dy = controller.dyGCS;
+    if (dx === 0 && dy === 0) return;
     this.pointsToSnap = geometry.movePoints(this.initialPointsToSnap, dx, dy);
 
     // sort reference points (snap first to the nearest reference point)
@@ -423,6 +424,7 @@ export class SizeSnapper extends MultipointSnapper {
     // adjust dx and dy if the shape is sizable ratio
     let dx = controller.dxGCS;
     let dy = controller.dyGCS;
+    if (dx === 0 && dy === 0) return;
     if (controller.options.doScale || shape.sizable === Sizable.RATIO) {
       if (dx * this.sizingRatio > dy / this.sizingRatio) {
         dy = dx * this.sizingRatio;
