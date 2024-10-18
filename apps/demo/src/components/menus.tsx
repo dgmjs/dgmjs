@@ -2,6 +2,7 @@ import { MenuIcon, PlusIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
@@ -12,7 +13,17 @@ import { useDemoStore } from "@/demo-store";
 import { ExportImageFormat, exportImageAsFile } from "@dgmjs/export";
 
 export function Menus() {
-  const { setDoc, setCurrentPage, darkMode } = useDemoStore();
+  const {
+    setDoc,
+    setCurrentPage,
+    darkMode,
+    showGrid,
+    snapToGrid,
+    snapToObject: snapToObjects,
+    setShowGrid,
+    setSnapToGrid,
+    setSnapToObject: setSnapToObjects,
+  } = useDemoStore();
 
   const handleNew = () => {
     window.editor.newDoc();
@@ -137,6 +148,34 @@ export function Menus() {
           <DropdownMenuItem onSelect={handleExportSVG}>
             Export as SVG
           </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuCheckboxItem
+            checked={showGrid}
+            onSelect={(e) => {
+              window.editor.setShowGrid(!showGrid);
+              setShowGrid(!showGrid);
+            }}
+          >
+            Show grid
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem
+            checked={snapToGrid}
+            onSelect={(e) => {
+              window.editor.setSnapToGrid(!snapToGrid);
+              setSnapToGrid(!snapToGrid);
+            }}
+          >
+            Snap to grid
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem
+            checked={snapToObjects}
+            onSelect={(e) => {
+              window.editor.setSnapToObject(!snapToObjects);
+              setSnapToObjects(!snapToObjects);
+            }}
+          >
+            Snap to objects
+          </DropdownMenuCheckboxItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <Button variant="ghost" className="h-8 w-8 p-0" onClick={handleAddPage}>

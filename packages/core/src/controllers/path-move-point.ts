@@ -9,11 +9,11 @@ import {
 import { lcs2ccs, ccs2lcs } from "../graphics/utils";
 import * as guide from "../utils/guide";
 import * as geometry from "../graphics/geometry";
-import { Snap } from "../manipulators/snap";
 import { findControlPoint } from "./utils";
 import { reducePath } from "../utils/route-utils";
 import { resolveAllConstraints, setPath } from "../macro";
 import { ActionKind } from "../core";
+import { GridSnapper } from "../manipulators/snapper";
 
 interface PathMovePointControllerOptions {
   exceptEndPoints: boolean;
@@ -29,9 +29,9 @@ export class PathMovePointController extends Controller {
   options: PathMovePointControllerOptions;
 
   /**
-   * Snap support for controller
+   * Grid snapper
    */
-  snap: Snap;
+  gridSnapper: GridSnapper;
 
   /**
    * current control point
@@ -50,7 +50,7 @@ export class PathMovePointController extends Controller {
     super(manipulator);
     this.hasHandle = true;
     this.options = { exceptEndPoints: false, ...options };
-    this.snap = new Snap();
+    this.gridSnapper = new GridSnapper();
     this.controlPoint = 0;
     this.controlPath = [];
   }
@@ -99,6 +99,15 @@ export class PathMovePointController extends Controller {
       this.dragStartPoint
     );
     this.controlPath = geometry.pathCopy((shape as Path).path);
+
+    if (this.controlPoint >= 0) {
+      this.gridSnapper.setPointToSnap(
+        editor,
+        this,
+        this.controlPath[this.controlPoint]
+      );
+    }
+
     editor.transform.startAction(ActionKind.REPATH);
   }
 
@@ -106,6 +115,9 @@ export class PathMovePointController extends Controller {
    * Update ghost
    */
   update(editor: Editor, shape: Shape) {
+    // snap dragging points
+    this.gridSnapper.snap(editor, shape, this);
+
     let newPath = geometry.pathCopy(this.controlPath);
 
     // update the path

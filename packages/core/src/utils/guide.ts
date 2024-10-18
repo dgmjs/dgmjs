@@ -271,6 +271,24 @@ function drawControlPoint(
 }
 
 /**
+ * Draw line
+ * @param canvas
+ * @param p1
+ * @param p2
+ */
+function drawLine(canvas: Canvas, p1: number[], p2: number[]) {
+  canvas.storeState();
+  canvas.strokeColor = Color.SELECTION;
+  canvas.strokeWidth = canvas.px * 1.5;
+  canvas.strokePattern = [];
+  canvas.fillColor = Color.SELECTION;
+  canvas.roughness = 0;
+  canvas.alpha = 1;
+  canvas.line(p1[0], p1[1], p2[0], p2[1]);
+  canvas.restoreState();
+}
+
+/**
  * Draw dotted line
  * @param canvas
  * @param p1
@@ -384,6 +402,7 @@ export {
   drawHorzGap,
   drawVertGap,
   drawControlPoint,
+  drawLine,
   drawDottedLine,
   drawDottedPolyline,
   inControlPoint,

@@ -2,30 +2,27 @@ import { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
 import { Connector, Line, Shape } from "../shapes";
 import { Editor, Handler, manipulatorManager } from "../editor";
-import { Cursor, Mouse } from "../graphics/const";
+import { Cursor } from "../graphics/const";
 import { findConnectionAnchor } from "../controllers/utils";
 import * as guide from "../utils/guide";
 import { lcs2ccs } from "../graphics/utils";
 import { addShape, resolveAllConstraints, setPath } from "../macro";
 import { ActionKind } from "../core";
+import { HandlerSnapper } from "../manipulators/snapper";
 
 /**
  * Connector Factory Handler
  */
 export class ConnectorFactoryHandler extends Handler {
-  dragging: boolean = false;
-  dragStartPoint: number[] = [-1, -1];
-  dragPoint: number[] = [-1, -1];
   tailEnd: Shape | null = null;
   tailAnchor: number[] = [0.5, 0.5];
   headEnd: Shape | null = null;
   headAnchor: number[] = [0.5, 0.5];
   shape: Connector | null = null;
+  snapper: HandlerSnapper = new HandlerSnapper(false, true);
 
   reset() {
-    this.dragging = false;
-    this.dragStartPoint = [-1, -1];
-    this.dragPoint = [-1, -1];
+    super.reset();
     this.tailEnd = null;
     this.tailAnchor = [0.5, 0.5];
     this.headEnd = null;
@@ -34,6 +31,17 @@ export class ConnectorFactoryHandler extends Handler {
   }
 
   initialize(editor: Editor, e: CanvasPointerEvent): void {
+    // snap drag start point
+    const snapped = this.snapper.snap(editor, this.dragStartPoint);
+    if (snapped) {
+      const [dx, dy] = snapped;
+      this.dragStartPoint = [
+        this.dragStartPoint[0] + dx,
+        this.dragStartPoint[1] + dy,
+      ];
+    }
+
+    // create shape
     const page = editor.getCurrentPage();
     if (page) {
       const [end, anchor] = findConnectionAnchor(
@@ -59,6 +67,20 @@ export class ConnectorFactoryHandler extends Handler {
   }
 
   update(editor: Editor, e: CanvasPointerEvent): void {
+    // snap drag point
+    const snapped = this.snapper.snap(editor, this.dragPoint);
+    if (snapped) {
+      const [dx, dy] = snapped;
+      this.dragPoint = [this.dragPoint[0] + dx, this.dragPoint[1] + dy];
+      this.snapper.guidePoints = [
+        this.dragStartPoint,
+        [this.dragPoint[0], this.dragStartPoint[1]],
+        [this.dragStartPoint[0], this.dragPoint[1]],
+        this.dragPoint,
+      ];
+    }
+
+    // update shape
     const page = editor.getCurrentPage();
     if (page) {
       const [end, anchor] = findConnectionAnchor(
@@ -79,6 +101,12 @@ export class ConnectorFactoryHandler extends Handler {
     }
   }
 
+  updateHovering(editor: Editor, e: CanvasPointerEvent): void {
+    // snap hovering point
+    const p = editor.canvas.globalCoordTransformRev([e.x, e.y]);
+    this.snapper.snap(editor, p);
+  }
+
   finalize(editor: Editor, e: CanvasPointerEvent): void {
     const MIN_SIZE = 2;
     if (this.shape) {
@@ -91,68 +119,17 @@ export class ConnectorFactoryHandler extends Handler {
     }
   }
 
-  /**
-   * pointerDown
-   * @override
-   */
-  pointerDown(editor: Editor, e: CanvasPointerEvent) {
-    if (e.button === Mouse.BUTTON1) {
-      const canvas = editor.canvas;
-      this.dragging = true;
-      this.dragStartPoint = canvas.globalCoordTransformRev([e.x, e.y]);
-      this.dragPoint = geometry.copy(this.dragStartPoint);
-      this.initialize(editor, e);
-      editor.repaint();
-      this.drawDragging(editor, e);
-    }
-  }
-
-  /**
-   * pointerMove
-   * @override
-   */
-  pointerMove(editor: Editor, e: CanvasPointerEvent) {
-    const canvas = editor.canvas;
-    if (this.dragging) {
-      this.dragPoint = canvas.globalCoordTransformRev([e.x, e.y]);
-      this.update(editor, e);
-      editor.repaint();
-      this.drawDragging(editor, e);
-    } else {
-      editor.repaint();
-      this.drawHovering(editor, e);
-    }
-  }
-
-  /**
-   * pointerUp
-   * @override
-   */
-  pointerUp(editor: Editor, e: CanvasPointerEvent) {
-    if (e.button === Mouse.BUTTON1 && this.dragging) {
-      this.finalize(editor, e);
-      editor.repaint();
-      this.reset();
-      this.complete(editor);
-    }
-  }
-
-  keyDown(editor: Editor, e: KeyboardEvent): boolean {
-    if (e.key === "Escape" && this.dragging) {
-      editor.transform.cancelAction();
-      editor.repaint();
-      this.reset();
-      this.complete(editor);
-    }
-    return false;
-  }
-
   onActivate(editor: Editor): void {
+    this.snapper.setReferences(editor, []);
     editor.setCursor(Cursor.CROSSHAIR);
   }
 
   onDeactivate(editor: Editor): void {
     editor.setCursor(Cursor.DEFAULT);
+  }
+
+  onActionPerformed(editor: Editor): void {
+    this.snapper.setReferences(editor, []);
   }
 
   drawTailHovering(editor: Editor, e: CanvasPointerEvent) {
@@ -171,6 +148,7 @@ export class ConnectorFactoryHandler extends Handler {
 
   drawHovering(editor: Editor, e: CanvasPointerEvent) {
     this.drawTailHovering(editor, e);
+    this.snapper.draw(editor);
   }
 
   drawDragging(editor: Editor, e: CanvasPointerEvent) {
@@ -190,5 +168,6 @@ export class ConnectorFactoryHandler extends Handler {
       guide.drawControlPoint(canvas, p1, this.shape.tail ? 5 : 1);
       guide.drawControlPoint(canvas, p2, this.shape.head ? 5 : 1);
     }
+    this.snapper.draw(editor);
   }
 }

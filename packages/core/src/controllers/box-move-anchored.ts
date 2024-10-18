@@ -3,25 +3,31 @@ import { Shape, Box, Movable } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import { lcs2ccs } from "../graphics/utils";
 import * as guide from "../utils/guide";
-import { Snap } from "../manipulators/snap";
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import { Cursor } from "../graphics/const";
 import { moveAnchor, resolveAllConstraints } from "../macro";
 import { ActionKind } from "../core";
+import { GridSnapper, MoveSnapper } from "../manipulators/snapper";
 
 /**
  * BoxMoveAnchoredController
  */
 export class BoxMoveAnchoredController extends Controller {
   /**
-   * Snap support for controller
+   * Grid snapper
    */
-  snap: Snap;
+  gridSnapper: GridSnapper;
+
+  /**
+   * Move snapper
+   */
+  moveSnapper: MoveSnapper;
 
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.hasHandle = false;
-    this.snap = new Snap();
+    this.gridSnapper = new GridSnapper();
+    this.moveSnapper = new MoveSnapper();
   }
 
   /**
@@ -51,7 +57,11 @@ export class BoxMoveAnchoredController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape): void {
-    // this.ghost = shape.getEnclosure();
+    // initialize snappers
+    this.gridSnapper.setPointToSnap(editor, this, [shape.left, shape.top]);
+    this.moveSnapper.setRectToSnap(editor, shape, shape.getBoundingRect());
+    this.moveSnapper.setReferencePoints(editor, [shape]);
+
     editor.transform.startAction(ActionKind.MOVE_ANCHOR);
   }
 
@@ -59,6 +69,10 @@ export class BoxMoveAnchoredController extends Controller {
    * Update ghost
    */
   update(editor: Editor, shape: Shape) {
+    // snap dragging points
+    this.gridSnapper.snap(editor, shape, this);
+    this.moveSnapper.snap(editor, shape, this);
+
     const canvas = editor.canvas;
     const anchorPoint = geometry.getPointOnPath(
       (shape.parent as Shape).getOutline() ?? [],
@@ -69,6 +83,7 @@ export class BoxMoveAnchoredController extends Controller {
     shapeCenter[1] += this.dyStep;
     const angle = geometry.angle(anchorPoint, shapeCenter);
     const length = geometry.distance(shapeCenter, anchorPoint);
+
     // transform shape
     editor.transform.transact((tx) => {
       const page = editor.getCurrentPage()!;
@@ -126,7 +141,8 @@ export class BoxMoveAnchoredController extends Controller {
     );
     guide.drawPolylineInLCS(canvas, shape, ghost);
     guide.drawDottedLine(canvas, centerCCS, anchorPointCCS);
-    // draw snap
-    // this.snap.draw(editor, shape, this.ghost);
+
+    // draw snapping
+    this.moveSnapper.draw(editor);
   }
 }
