@@ -8,7 +8,7 @@ export interface DemoState {
   darkMode: boolean;
   showGrid: boolean;
   snapToGrid: boolean;
-  snapToObject: boolean;
+  snapToObjects: boolean;
   activeHandler: string | null;
   activeHandlerLock: boolean;
   doc: Doc | null;
@@ -20,7 +20,7 @@ export interface DemoState {
   setDarkMode: (darkMode: boolean) => void;
   setShowGrid: (showGrid: boolean) => void;
   setSnapToGrid: (snapToGrid: boolean) => void;
-  setSnapToObject: (snapToObject: boolean) => void;
+  setSnapToObjects: (snapToObjects: boolean) => void;
   setActiveHandler: (handlerId: string | null) => void;
   setActiveHandlerLock: (lock: boolean) => void;
   setDoc: (doc: Doc | null) => void;
@@ -36,7 +36,7 @@ export const useDemoStore = create<DemoState>()(
       darkMode: false,
       showGrid: false,
       snapToGrid: false,
-      snapToObject: false,
+      snapToObjects: false,
       activeHandler: "Select",
       activeHandlerLock: false,
       doc: null,
@@ -53,8 +53,8 @@ export const useDemoStore = create<DemoState>()(
       },
       setShowGrid: (showGrid) => set((state) => ({ showGrid })),
       setSnapToGrid: (snapToGrid) => set((state) => ({ snapToGrid })),
-      setSnapToObject: (snapToObjects) =>
-        set((state) => ({ snapToObject: snapToObjects })),
+      setSnapToObjects: (snapToObjects) =>
+        set((state) => ({ snapToObjects: snapToObjects })),
       setActiveHandler: (handlerId) =>
         set((state) => ({ activeHandler: handlerId })),
       setActiveHandlerLock: (lock) =>
