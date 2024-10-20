@@ -295,9 +295,9 @@ export class Editor {
   private snapToGrid: boolean;
 
   /**
-   * The snap to object option (Not implemented yet)
+   * The snap to objects option
    */
-  private snapToObject: boolean;
+  private snapToObjects: boolean;
 
   /**
    * The handlers
@@ -446,7 +446,7 @@ export class Editor {
     this.gridSize = [8, 8];
     this.showGrid = false;
     this.snapToGrid = false;
-    this.snapToObject = false;
+    this.snapToObjects = false;
     this.handlers = {};
     this.activeHandler = null;
     this.activeHandlerLock = false;
@@ -942,15 +942,15 @@ export class Editor {
   /**
    * Get snap to object
    */
-  getSnapToObject(): boolean {
-    return this.snapToObject;
+  getSnapToObjects(): boolean {
+    return this.snapToObjects;
   }
 
   /**
    * Set snap to object
    */
-  setSnapToObject(value: boolean) {
-    this.snapToObject = value;
+  setSnapToObjects(value: boolean) {
+    this.snapToObjects = value;
   }
 
   /**

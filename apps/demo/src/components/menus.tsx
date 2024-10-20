@@ -19,10 +19,10 @@ export function Menus() {
     darkMode,
     showGrid,
     snapToGrid,
-    snapToObject: snapToObjects,
+    snapToObjects,
     setShowGrid,
     setSnapToGrid,
-    setSnapToObject: setSnapToObjects,
+    setSnapToObjects,
   } = useDemoStore();
 
   const handleNew = () => {
@@ -170,7 +170,7 @@ export function Menus() {
           <DropdownMenuCheckboxItem
             checked={snapToObjects}
             onSelect={(e) => {
-              window.editor.setSnapToObject(!snapToObjects);
+              window.editor.setSnapToObjects(!snapToObjects);
               setSnapToObjects(!snapToObjects);
             }}
           >

@@ -253,7 +253,7 @@ export class MoveSnapper extends MultipointSnapper {
   }
 
   snap(editor: Editor, shape: Shape, controller: Controller) {
-    if (!editor.getSnapToObject()) return;
+    if (!editor.getSnapToObjects()) return;
 
     // move points to snap by dx and dy
     const dx = controller.dxGCS;
@@ -412,7 +412,7 @@ export class SizeSnapper extends MultipointSnapper {
   }
 
   snap(editor: Editor, shape: Shape, controller: BoxSizeController) {
-    if (!editor.getSnapToObject()) return;
+    if (!editor.getSnapToObjects()) return;
 
     // size snapping will not work on rotated shape
     const rotate = geometry.normalizeAngle(shape.rotate);
@@ -496,9 +496,9 @@ export class SizeSnapper extends MultipointSnapper {
  */
 export class HandlerSnapper extends BaseSnapper {
   /**
-   * Allow snap to object
+   * Allow snap to objects
    */
-  allowSnapToObject: boolean = true;
+  allowSnapToObjects: boolean = true;
 
   /**
    * Allow snap to grid
@@ -551,11 +551,11 @@ export class HandlerSnapper extends BaseSnapper {
   guidePoints: number[][] = [];
 
   constructor(
-    allowSnapToObject: boolean = true,
+    allowSnapToObjects: boolean = true,
     allowSnapToGrid: boolean = true
   ) {
     super();
-    this.allowSnapToObject = allowSnapToObject;
+    this.allowSnapToObjects = allowSnapToObjects;
     this.allowSnapToGrid = allowSnapToGrid;
   }
 
@@ -606,8 +606,8 @@ export class HandlerSnapper extends BaseSnapper {
     // sort reference points (snap first to the nearest reference point)
     this.sortReferencePoints(pointToSnap);
 
-    // snap to object and grid
-    this.snapToObject(editor, pointToSnap);
+    // snap to objects and grid
+    this.snapToObjects(editor, pointToSnap);
     this.snapToGrid(editor, pointToSnap);
 
     // update points to snap and guide points
@@ -628,8 +628,8 @@ export class HandlerSnapper extends BaseSnapper {
    * Snap to object
    * @returns snapping delta [dx, dy] or null (not snapped)
    */
-  snapToObject(editor: Editor, pointToSnap: number[]) {
-    if (!editor.getSnapToObject() || !this.allowSnapToObject) return;
+  snapToObjects(editor: Editor, pointToSnap: number[]) {
+    if (!editor.getSnapToObjects() || !this.allowSnapToObjects) return;
 
     // compute snapped X and Y
     this.pointToSnap = geometry.copy(pointToSnap);
