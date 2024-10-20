@@ -25,4 +25,4 @@ nearest point on path
 
 ## Source
 
-[graphics/geometry.ts:283](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L283)
+[graphics/geometry.ts:290](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L290)

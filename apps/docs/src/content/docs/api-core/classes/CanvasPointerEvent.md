@@ -43,16 +43,6 @@ CanvasPointerEvent
 
 ## Properties
 
-### ModDown
-
-> **ModDown**: `boolean`
-
-#### Source
-
-[graphics/graphics.ts:1441](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1441)
-
-***
-
 ### altDown
 
 > **altDown**: `boolean`
@@ -90,6 +80,16 @@ CanvasPointerEvent
 #### Source
 
 [graphics/graphics.ts:1442](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1442)
+
+***
+
+### modDown
+
+> **modDown**: `boolean`
+
+#### Source
+
+[graphics/graphics.ts:1441](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1441)
 
 ***
 

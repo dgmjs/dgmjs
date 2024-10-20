@@ -19,4 +19,4 @@ Returns a normalized rect
 
 ## Source
 
-[graphics/geometry.ts:394](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L394)
+[graphics/geometry.ts:401](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L401)

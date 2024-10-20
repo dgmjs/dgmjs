@@ -25,7 +25,7 @@ constructor
 
 #### Source
 
-[core/transform.ts:87](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L87)
+[core/transform.ts:125](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L125)
 
 ## Properties
 
@@ -37,7 +37,7 @@ Working action
 
 #### Source
 
-[core/transform.ts:52](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L52)
+[core/transform.ts:90](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L90)
 
 ***
 
@@ -49,7 +49,7 @@ Event for action
 
 #### Source
 
-[core/transform.ts:72](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L72)
+[core/transform.ts:110](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L110)
 
 ***
 
@@ -61,7 +61,7 @@ Event for redo
 
 #### Source
 
-[core/transform.ts:82](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L82)
+[core/transform.ts:120](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L120)
 
 ***
 
@@ -73,7 +73,7 @@ Event for transaction
 
 #### Source
 
-[core/transform.ts:67](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L67)
+[core/transform.ts:105](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L105)
 
 ***
 
@@ -85,7 +85,7 @@ Event for undo
 
 #### Source
 
-[core/transform.ts:77](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L77)
+[core/transform.ts:115](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L115)
 
 ***
 
@@ -97,7 +97,7 @@ Redo history.
 
 #### Source
 
-[core/transform.ts:62](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L62)
+[core/transform.ts:100](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L100)
 
 ***
 
@@ -109,7 +109,7 @@ Shape store
 
 #### Source
 
-[core/transform.ts:47](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L47)
+[core/transform.ts:85](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L85)
 
 ***
 
@@ -121,7 +121,7 @@ Undo history.
 
 #### Source
 
-[core/transform.ts:57](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L57)
+[core/transform.ts:95](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L95)
 
 ## Methods
 
@@ -137,7 +137,7 @@ Whether redo is available
 
 #### Source
 
-[core/transform.ts:159](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L159)
+[core/transform.ts:213](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L213)
 
 ***
 
@@ -153,7 +153,7 @@ Whether undo is available
 
 #### Source
 
-[core/transform.ts:152](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L152)
+[core/transform.ts:206](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L206)
 
 ***
 
@@ -169,7 +169,7 @@ Cancel the action
 
 #### Source
 
-[core/transform.ts:142](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L142)
+[core/transform.ts:180](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L180)
 
 ***
 
@@ -185,7 +185,23 @@ End the action
 
 #### Source
 
-[core/transform.ts:129](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L129)
+[core/transform.ts:167](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L167)
+
+***
+
+### mergeAction()
+
+> **mergeAction**(): `void`
+
+Merge lastest two actions into a single action
+
+#### Returns
+
+`void`
+
+#### Source
+
+[core/transform.ts:190](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L190)
 
 ***
 
@@ -201,7 +217,7 @@ Redo
 
 #### Source
 
-[core/transform.ts:180](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L180)
+[core/transform.ts:234](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L234)
 
 ***
 
@@ -221,7 +237,7 @@ Start an action
 
 #### Source
 
-[core/transform.ts:101](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L101)
+[core/transform.ts:139](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L139)
 
 ***
 
@@ -241,7 +257,7 @@ Execute function as a transaction
 
 #### Source
 
-[core/transform.ts:111](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L111)
+[core/transform.ts:149](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L149)
 
 ***
 
@@ -257,4 +273,4 @@ Undo
 
 #### Source
 
-[core/transform.ts:166](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L166)
+[core/transform.ts:220](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L220)

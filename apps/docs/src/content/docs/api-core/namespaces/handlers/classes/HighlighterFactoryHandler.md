@@ -33,7 +33,7 @@ Highlighter Factory Handler
 
 #### Source
 
-[editor.ts:1374](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1374)
+[editor.ts:1440](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1440)
 
 ## Properties
 
@@ -43,7 +43,7 @@ Highlighter Factory Handler
 
 #### Source
 
-[handlers/highlighter-handler.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L16)
+[handlers/highlighter-handler.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L17)
 
 ***
 
@@ -51,9 +51,13 @@ Highlighter Factory Handler
 
 > **dragPoint**: `number`[]
 
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`dragPoint`](/api-core/classes/handler/#dragpoint)
+
 #### Source
 
-[handlers/highlighter-handler.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L14)
+[handlers/highlighter-handler.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L15)
 
 ***
 
@@ -61,9 +65,13 @@ Highlighter Factory Handler
 
 > **dragStartPoint**: `number`[]
 
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`dragStartPoint`](/api-core/classes/handler/#dragstartpoint)
+
 #### Source
 
-[handlers/highlighter-handler.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L13)
+[handlers/highlighter-handler.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L14)
 
 ***
 
@@ -71,9 +79,13 @@ Highlighter Factory Handler
 
 > **dragging**: `boolean` = `false`
 
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`dragging`](/api-core/classes/handler/#dragging)
+
 #### Source
 
-[handlers/highlighter-handler.ts:12](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L12)
+[handlers/highlighter-handler.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L13)
 
 ***
 
@@ -83,7 +95,7 @@ Highlighter Factory Handler
 
 #### Source
 
-[handlers/highlighter-handler.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L15)
+[handlers/highlighter-handler.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L16)
 
 ***
 
@@ -97,7 +109,7 @@ Highlighter Factory Handler
 
 #### Source
 
-[editor.ts:1371](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1371)
+[editor.ts:1434](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1434)
 
 ***
 
@@ -111,7 +123,7 @@ Highlighter Factory Handler
 
 #### Source
 
-[editor.ts:1372](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1372)
+[editor.ts:1435](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1435)
 
 ***
 
@@ -121,7 +133,7 @@ Highlighter Factory Handler
 
 #### Source
 
-[handlers/highlighter-handler.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L17)
+[handlers/highlighter-handler.ts:18](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L18)
 
 ## Methods
 
@@ -145,7 +157,7 @@ Activate the handler
 
 #### Source
 
-[editor.ts:1400](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1400)
+[editor.ts:1473](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1473)
 
 ***
 
@@ -169,7 +181,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[editor.ts:1391](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1391)
+[editor.ts:1464](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1464)
 
 ***
 
@@ -193,7 +205,59 @@ Deactivate the handler
 
 #### Source
 
-[editor.ts:1408](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1408)
+[editor.ts:1481](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1481)
+
+***
+
+### drawDragging()
+
+> **drawDragging**(`editor`, `e`): `void`
+
+Draw dragging
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`drawDragging`](/api-core/classes/handler/#drawdragging)
+
+#### Source
+
+[editor.ts:1597](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1597)
+
+***
+
+### drawHovering()
+
+> **drawHovering**(`editor`, `e`): `void`
+
+Draw hovering
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`drawHovering`](/api-core/classes/handler/#drawhovering)
+
+#### Source
+
+[editor.ts:1592](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1592)
 
 ***
 
@@ -217,7 +281,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[editor.ts:1453](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1453)
+[editor.ts:1587](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1587)
 
 ***
 
@@ -225,6 +289,8 @@ Draw ghost for the selected shape
 
 > **finalize**(`editor`, `e`): `void`
 
+Finalize handler
+
 #### Parameters
 
 • **editor**: [`Editor`](/api-core/classes/editor/)
@@ -235,9 +301,13 @@ Draw ghost for the selected shape
 
 `void`
 
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`finalize`](/api-core/classes/handler/#finalize)
+
 #### Source
 
-[handlers/highlighter-handler.ts:52](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L52)
+[handlers/highlighter-handler.ts:53](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L53)
 
 ***
 
@@ -245,6 +315,8 @@ Draw ghost for the selected shape
 
 > **initialize**(`editor`, `e`): `void`
 
+Initialize handler
+
 #### Parameters
 
 • **editor**: [`Editor`](/api-core/classes/editor/)
@@ -255,9 +327,13 @@ Draw ghost for the selected shape
 
 `void`
 
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`initialize`](/api-core/classes/handler/#initialize)
+
 #### Source
 
-[handlers/highlighter-handler.ts:28](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L28)
+[handlers/highlighter-handler.ts:29](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L29)
 
 ***
 
@@ -283,7 +359,7 @@ keyDown
 
 #### Source
 
-[handlers/highlighter-handler.ts:107](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L107)
+[handlers/highlighter-handler.ts:108](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L108)
 
 ***
 
@@ -309,7 +385,31 @@ keyUp
 
 #### Source
 
-[editor.ts:1448](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1448)
+[editor.ts:1582](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1582)
+
+***
+
+### onActionPerformed()
+
+> **onActionPerformed**(`editor`): `void`
+
+Triggered when action is performed (unclude undo and redo)
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`onActionPerformed`](/api-core/classes/handler/#onactionperformed)
+
+#### Source
+
+[editor.ts:1498](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1498)
 
 ***
 
@@ -333,7 +433,7 @@ Triggered when activated
 
 #### Source
 
-[handlers/highlighter-handler.ts:117](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L117)
+[handlers/highlighter-handler.ts:118](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L118)
 
 ***
 
@@ -357,7 +457,7 @@ Triggered when deactivate
 
 #### Source
 
-[handlers/highlighter-handler.ts:121](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L121)
+[handlers/highlighter-handler.ts:122](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L122)
 
 ***
 
@@ -383,7 +483,7 @@ pointerDown
 
 #### Source
 
-[handlers/highlighter-handler.ts:68](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L68)
+[handlers/highlighter-handler.ts:69](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L69)
 
 ***
 
@@ -409,7 +509,7 @@ pointerMove
 
 #### Source
 
-[handlers/highlighter-handler.ts:83](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L83)
+[handlers/highlighter-handler.ts:84](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L84)
 
 ***
 
@@ -435,7 +535,7 @@ pointerUp
 
 #### Source
 
-[handlers/highlighter-handler.ts:98](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L98)
+[handlers/highlighter-handler.ts:99](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L99)
 
 ***
 
@@ -455,13 +555,15 @@ Reset the states of handler
 
 #### Source
 
-[handlers/highlighter-handler.ts:19](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L19)
+[handlers/highlighter-handler.ts:20](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L20)
 
 ***
 
 ### update()
 
 > **update**(`editor`, `e`): `void`
+
+Update handler
 
 #### Parameters
 
@@ -473,6 +575,36 @@ Reset the states of handler
 
 `void`
 
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`update`](/api-core/classes/handler/#update)
+
 #### Source
 
-[handlers/highlighter-handler.ts:40](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L40)
+[handlers/highlighter-handler.ts:41](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L41)
+
+***
+
+### updateHovering()
+
+> **updateHovering**(`editor`, `e`): `void`
+
+Update handler when hovering (not dragging)
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`updateHovering`](/api-core/classes/handler/#updatehovering)
+
+#### Source
+
+[editor.ts:1513](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1513)

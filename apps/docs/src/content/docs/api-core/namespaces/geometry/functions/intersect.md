@@ -40,4 +40,4 @@ null if not intersect
 
 ## Source
 
-[graphics/geometry.ts:198](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L198)
+[graphics/geometry.ts:205](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L205)

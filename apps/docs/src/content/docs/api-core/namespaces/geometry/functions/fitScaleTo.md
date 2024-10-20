@@ -25,4 +25,4 @@ Return scale-downed size with scale fit inside the given maximum size
 
 ## Source
 
-[graphics/geometry.ts:350](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L350)
+[graphics/geometry.ts:357](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L357)

@@ -26,4 +26,4 @@ position value (0 ~ 1) on the path
 
 ## Source
 
-[graphics/geometry.ts:812](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L812)
+[graphics/geometry.ts:819](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L819)

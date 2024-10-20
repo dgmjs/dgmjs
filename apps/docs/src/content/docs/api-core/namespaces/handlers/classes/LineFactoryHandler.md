@@ -33,7 +33,7 @@ Line Factory Handler
 
 #### Source
 
-[editor.ts:1374](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1374)
+[editor.ts:1440](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1440)
 
 ## Properties
 
@@ -43,7 +43,7 @@ Line Factory Handler
 
 #### Source
 
-[handlers/line-handler.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L16)
+[handlers/line-handler.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L15)
 
 ***
 
@@ -51,9 +51,13 @@ Line Factory Handler
 
 > **dragPoint**: `number`[]
 
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`dragPoint`](/api-core/classes/handler/#dragpoint)
+
 #### Source
 
-[handlers/line-handler.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L14)
+[editor.ts:1438](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1438)
 
 ***
 
@@ -61,19 +65,27 @@ Line Factory Handler
 
 > **dragStartPoint**: `number`[]
 
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`dragStartPoint`](/api-core/classes/handler/#dragstartpoint)
+
 #### Source
 
-[handlers/line-handler.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L13)
+[editor.ts:1437](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1437)
 
 ***
 
 ### dragging
 
-> **dragging**: `boolean` = `false`
+> **dragging**: `boolean`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`dragging`](/api-core/classes/handler/#dragging)
 
 #### Source
 
-[handlers/line-handler.ts:12](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L12)
+[editor.ts:1436](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1436)
 
 ***
 
@@ -83,7 +95,7 @@ Line Factory Handler
 
 #### Source
 
-[handlers/line-handler.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L17)
+[handlers/line-handler.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L16)
 
 ***
 
@@ -97,7 +109,7 @@ Line Factory Handler
 
 #### Source
 
-[editor.ts:1371](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1371)
+[editor.ts:1434](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1434)
 
 ***
 
@@ -107,7 +119,7 @@ Line Factory Handler
 
 #### Source
 
-[handlers/line-handler.ts:18](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L18)
+[handlers/line-handler.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L17)
 
 ***
 
@@ -121,7 +133,7 @@ Line Factory Handler
 
 #### Source
 
-[editor.ts:1372](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1372)
+[editor.ts:1435](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1435)
 
 ***
 
@@ -131,13 +143,23 @@ Line Factory Handler
 
 #### Source
 
-[handlers/line-handler.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L15)
+[handlers/line-handler.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L14)
 
 ***
 
 ### shape
 
 > **shape**: `null` \| [`Line`](/api-core/classes/line/) = `null`
+
+#### Source
+
+[handlers/line-handler.ts:18](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L18)
+
+***
+
+### snapper
+
+> **snapper**: `HandlerSnapper`
 
 #### Source
 
@@ -165,7 +187,7 @@ Activate the handler
 
 #### Source
 
-[editor.ts:1400](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1400)
+[editor.ts:1473](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1473)
 
 ***
 
@@ -189,7 +211,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[editor.ts:1391](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1391)
+[editor.ts:1464](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1464)
 
 ***
 
@@ -213,7 +235,59 @@ Deactivate the handler
 
 #### Source
 
-[editor.ts:1408](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1408)
+[editor.ts:1481](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1481)
+
+***
+
+### drawDragging()
+
+> **drawDragging**(`editor`, `e`): `void`
+
+Draw dragging
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`drawDragging`](/api-core/classes/handler/#drawdragging)
+
+#### Source
+
+[handlers/line-handler.ts:208](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L208)
+
+***
+
+### drawHovering()
+
+> **drawHovering**(`editor`, `e`): `void`
+
+Draw hovering
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`drawHovering`](/api-core/classes/handler/#drawhovering)
+
+#### Source
+
+[handlers/line-handler.ts:204](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L204)
 
 ***
 
@@ -237,13 +311,15 @@ Draw ghost for the selected shape
 
 #### Source
 
-[editor.ts:1453](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1453)
+[editor.ts:1587](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1587)
 
 ***
 
 ### finalize()
 
 > **finalize**(`editor`, `e`?): `void`
+
+Finalize handler
 
 #### Parameters
 
@@ -255,15 +331,21 @@ Draw ghost for the selected shape
 
 `void`
 
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`finalize`](/api-core/classes/handler/#finalize)
+
 #### Source
 
-[handlers/line-handler.ts:55](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L55)
+[handlers/line-handler.ts:84](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L84)
 
 ***
 
 ### initialize()
 
 > **initialize**(`editor`, `e`): `void`
+
+Initialize handler
 
 #### Parameters
 
@@ -275,9 +357,13 @@ Draw ghost for the selected shape
 
 `void`
 
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`initialize`](/api-core/classes/handler/#initialize)
+
 #### Source
 
-[handlers/line-handler.ts:32](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L32)
+[handlers/line-handler.ts:30](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L30)
 
 ***
 
@@ -303,7 +389,7 @@ keyDown
 
 #### Source
 
-[handlers/line-handler.ts:131](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L131)
+[handlers/line-handler.ts:171](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L171)
 
 ***
 
@@ -329,7 +415,31 @@ keyUp
 
 #### Source
 
-[editor.ts:1448](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1448)
+[editor.ts:1582](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1582)
+
+***
+
+### onActionPerformed()
+
+> **onActionPerformed**(`editor`): `void`
+
+Triggered when action is performed (unclude undo and redo)
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+#### Returns
+
+`void`
+
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`onActionPerformed`](/api-core/classes/handler/#onactionperformed)
+
+#### Source
+
+[handlers/line-handler.ts:200](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L200)
 
 ***
 
@@ -353,7 +463,7 @@ Triggered when activated
 
 #### Source
 
-[handlers/line-handler.ts:149](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L149)
+[handlers/line-handler.ts:189](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L189)
 
 ***
 
@@ -377,7 +487,7 @@ Triggered when deactivate
 
 #### Source
 
-[handlers/line-handler.ts:154](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L154)
+[handlers/line-handler.ts:195](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L195)
 
 ***
 
@@ -403,7 +513,7 @@ pointerDown
 
 #### Source
 
-[handlers/line-handler.ts:71](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L71)
+[handlers/line-handler.ts:100](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L100)
 
 ***
 
@@ -429,7 +539,7 @@ pointerMove
 
 #### Source
 
-[handlers/line-handler.ts:98](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L98)
+[handlers/line-handler.ts:133](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L133)
 
 ***
 
@@ -455,7 +565,7 @@ pointerUp
 
 #### Source
 
-[handlers/line-handler.ts:118](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L118)
+[handlers/line-handler.ts:158](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L158)
 
 ***
 
@@ -483,6 +593,8 @@ Reset the states of handler
 
 > **update**(`editor`, `e`): `void`
 
+Update handler
+
 #### Parameters
 
 • **editor**: [`Editor`](/api-core/classes/editor/)
@@ -493,6 +605,36 @@ Reset the states of handler
 
 `void`
 
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`update`](/api-core/classes/handler/#update)
+
 #### Source
 
-[handlers/line-handler.ts:44](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L44)
+[handlers/line-handler.ts:53](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L53)
+
+***
+
+### updateHovering()
+
+> **updateHovering**(`editor`, `e`): `void`
+
+Update handler when hovering (not dragging)
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`updateHovering`](/api-core/classes/handler/#updatehovering)
+
+#### Source
+
+[handlers/line-handler.ts:78](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L78)

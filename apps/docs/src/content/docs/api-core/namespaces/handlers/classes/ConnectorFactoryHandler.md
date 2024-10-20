@@ -33,7 +33,7 @@ Connector Factory Handler
 
 #### Source
 
-[editor.ts:1374](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1374)
+[editor.ts:1440](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1440)
 
 ## Properties
 
@@ -41,9 +41,13 @@ Connector Factory Handler
 
 > **dragPoint**: `number`[]
 
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`dragPoint`](/api-core/classes/handler/#dragpoint)
+
 #### Source
 
-[handlers/connector-handler.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L17)
+[editor.ts:1438](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1438)
 
 ***
 
@@ -51,19 +55,27 @@ Connector Factory Handler
 
 > **dragStartPoint**: `number`[]
 
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`dragStartPoint`](/api-core/classes/handler/#dragstartpoint)
+
 #### Source
 
-[handlers/connector-handler.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L16)
+[editor.ts:1437](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1437)
 
 ***
 
 ### dragging
 
-> **dragging**: `boolean` = `false`
+> **dragging**: `boolean`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`dragging`](/api-core/classes/handler/#dragging)
 
 #### Source
 
-[handlers/connector-handler.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L15)
+[editor.ts:1436](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1436)
 
 ***
 
@@ -73,7 +85,7 @@ Connector Factory Handler
 
 #### Source
 
-[handlers/connector-handler.ts:21](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L21)
+[handlers/connector-handler.ts:20](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L20)
 
 ***
 
@@ -83,7 +95,7 @@ Connector Factory Handler
 
 #### Source
 
-[handlers/connector-handler.ts:20](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L20)
+[handlers/connector-handler.ts:19](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L19)
 
 ***
 
@@ -97,7 +109,7 @@ Connector Factory Handler
 
 #### Source
 
-[editor.ts:1371](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1371)
+[editor.ts:1434](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1434)
 
 ***
 
@@ -111,13 +123,23 @@ Connector Factory Handler
 
 #### Source
 
-[editor.ts:1372](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1372)
+[editor.ts:1435](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1435)
 
 ***
 
 ### shape
 
 > **shape**: `null` \| [`Connector`](/api-core/classes/connector/) = `null`
+
+#### Source
+
+[handlers/connector-handler.ts:21](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L21)
+
+***
+
+### snapper
+
+> **snapper**: `HandlerSnapper`
 
 #### Source
 
@@ -131,7 +153,7 @@ Connector Factory Handler
 
 #### Source
 
-[handlers/connector-handler.ts:19](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L19)
+[handlers/connector-handler.ts:18](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L18)
 
 ***
 
@@ -141,7 +163,7 @@ Connector Factory Handler
 
 #### Source
 
-[handlers/connector-handler.ts:18](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L18)
+[handlers/connector-handler.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L17)
 
 ## Methods
 
@@ -165,7 +187,7 @@ Activate the handler
 
 #### Source
 
-[editor.ts:1400](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1400)
+[editor.ts:1473](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1473)
 
 ***
 
@@ -189,7 +211,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[editor.ts:1391](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1391)
+[editor.ts:1464](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1464)
 
 ***
 
@@ -213,13 +235,15 @@ Deactivate the handler
 
 #### Source
 
-[editor.ts:1408](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1408)
+[editor.ts:1481](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1481)
 
 ***
 
 ### drawDragging()
 
 > **drawDragging**(`editor`, `e`): `void`
+
+Draw dragging
 
 #### Parameters
 
@@ -231,9 +255,13 @@ Deactivate the handler
 
 `void`
 
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`drawDragging`](/api-core/classes/handler/#drawdragging)
+
 #### Source
 
-[handlers/connector-handler.ts:175](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L175)
+[handlers/connector-handler.ts:154](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L154)
 
 ***
 
@@ -253,13 +281,15 @@ Deactivate the handler
 
 #### Source
 
-[handlers/connector-handler.ts:164](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L164)
+[handlers/connector-handler.ts:142](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L142)
 
 ***
 
 ### drawHovering()
 
 > **drawHovering**(`editor`, `e`): `void`
+
+Draw hovering
 
 #### Parameters
 
@@ -271,9 +301,13 @@ Deactivate the handler
 
 `void`
 
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`drawHovering`](/api-core/classes/handler/#drawhovering)
+
 #### Source
 
-[handlers/connector-handler.ts:171](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L171)
+[handlers/connector-handler.ts:149](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L149)
 
 ***
 
@@ -297,7 +331,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[editor.ts:1453](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1453)
+[editor.ts:1587](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1587)
 
 ***
 
@@ -317,7 +351,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[handlers/connector-handler.ts:157](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L157)
+[handlers/connector-handler.ts:135](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L135)
 
 ***
 
@@ -325,6 +359,8 @@ Draw ghost for the selected shape
 
 > **finalize**(`editor`, `e`): `void`
 
+Finalize handler
+
 #### Parameters
 
 • **editor**: [`Editor`](/api-core/classes/editor/)
@@ -335,9 +371,13 @@ Draw ghost for the selected shape
 
 `void`
 
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`finalize`](/api-core/classes/handler/#finalize)
+
 #### Source
 
-[handlers/connector-handler.ts:81](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L81)
+[handlers/connector-handler.ts:110](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L110)
 
 ***
 
@@ -345,6 +385,8 @@ Draw ghost for the selected shape
 
 > **initialize**(`editor`, `e`): `void`
 
+Initialize handler
+
 #### Parameters
 
 • **editor**: [`Editor`](/api-core/classes/editor/)
@@ -355,9 +397,13 @@ Draw ghost for the selected shape
 
 `void`
 
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`initialize`](/api-core/classes/handler/#initialize)
+
 #### Source
 
-[handlers/connector-handler.ts:35](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L35)
+[handlers/connector-handler.ts:33](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L33)
 
 ***
 
@@ -377,13 +423,13 @@ keyDown
 
 `boolean`
 
-#### Overrides
+#### Inherited from
 
 [`Handler`](/api-core/classes/handler/).[`keyDown`](/api-core/classes/handler/#keydown)
 
 #### Source
 
-[handlers/connector-handler.ts:139](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L139)
+[editor.ts:1569](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1569)
 
 ***
 
@@ -409,7 +455,31 @@ keyUp
 
 #### Source
 
-[editor.ts:1448](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1448)
+[editor.ts:1582](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1582)
+
+***
+
+### onActionPerformed()
+
+> **onActionPerformed**(`editor`): `void`
+
+Triggered when action is performed (unclude undo and redo)
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+#### Returns
+
+`void`
+
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`onActionPerformed`](/api-core/classes/handler/#onactionperformed)
+
+#### Source
+
+[handlers/connector-handler.ts:131](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L131)
 
 ***
 
@@ -433,7 +503,7 @@ Triggered when activated
 
 #### Source
 
-[handlers/connector-handler.ts:149](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L149)
+[handlers/connector-handler.ts:122](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L122)
 
 ***
 
@@ -457,7 +527,7 @@ Triggered when deactivate
 
 #### Source
 
-[handlers/connector-handler.ts:153](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L153)
+[handlers/connector-handler.ts:127](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L127)
 
 ***
 
@@ -477,13 +547,13 @@ pointerDown
 
 `void`
 
-#### Overrides
+#### Inherited from
 
 [`Handler`](/api-core/classes/handler/).[`pointerDown`](/api-core/classes/handler/#pointerdown)
 
 #### Source
 
-[handlers/connector-handler.ts:97](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L97)
+[editor.ts:1523](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1523)
 
 ***
 
@@ -503,13 +573,15 @@ pointerMove
 
 `void`
 
-#### Overrides
+#### Inherited from
 
 [`Handler`](/api-core/classes/handler/).[`pointerMove`](/api-core/classes/handler/#pointermove)
 
+#### Abstract
+
 #### Source
 
-[handlers/connector-handler.ts:113](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L113)
+[editor.ts:1552](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1552)
 
 ***
 
@@ -529,13 +601,15 @@ pointerUp
 
 `void`
 
-#### Overrides
+#### Inherited from
 
 [`Handler`](/api-core/classes/handler/).[`pointerUp`](/api-core/classes/handler/#pointerup)
 
+#### Abstract
+
 #### Source
 
-[handlers/connector-handler.ts:130](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L130)
+[editor.ts:1539](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1539)
 
 ***
 
@@ -563,6 +637,8 @@ Reset the states of handler
 
 > **update**(`editor`, `e`): `void`
 
+Update handler
+
 #### Parameters
 
 • **editor**: [`Editor`](/api-core/classes/editor/)
@@ -573,6 +649,36 @@ Reset the states of handler
 
 `void`
 
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`update`](/api-core/classes/handler/#update)
+
 #### Source
 
-[handlers/connector-handler.ts:60](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L60)
+[handlers/connector-handler.ts:69](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L69)
+
+***
+
+### updateHovering()
+
+> **updateHovering**(`editor`, `e`): `void`
+
+Update handler when hovering (not dragging)
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`updateHovering`](/api-core/classes/handler/#updatehovering)
+
+#### Source
+
+[handlers/connector-handler.ts:104](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/connector-handler.ts#L104)

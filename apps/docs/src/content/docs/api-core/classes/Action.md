@@ -23,7 +23,7 @@ Action is a collection of transactions, which can be undone/redone as a whole.
 
 #### Source
 
-[core/transform.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L16)
+[core/transform.ts:54](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L54)
 
 ## Properties
 
@@ -33,7 +33,7 @@ Action is a collection of transactions, which can be undone/redone as a whole.
 
 #### Source
 
-[core/transform.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L13)
+[core/transform.ts:51](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L51)
 
 ***
 
@@ -43,7 +43,7 @@ Action is a collection of transactions, which can be undone/redone as a whole.
 
 #### Source
 
-[core/transform.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L14)
+[core/transform.ts:52](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L52)
 
 ## Methods
 
@@ -61,7 +61,7 @@ Action is a collection of transactions, which can be undone/redone as a whole.
 
 #### Source
 
-[core/transform.ts:25](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L25)
+[core/transform.ts:63](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L63)
 
 ***
 
@@ -79,7 +79,7 @@ Action is a collection of transactions, which can be undone/redone as a whole.
 
 #### Source
 
-[core/transform.ts:21](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L21)
+[core/transform.ts:59](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L59)
 
 ***
 
@@ -97,4 +97,4 @@ Action is a collection of transactions, which can be undone/redone as a whole.
 
 #### Source
 
-[core/transform.ts:32](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L32)
+[core/transform.ts:70](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L70)

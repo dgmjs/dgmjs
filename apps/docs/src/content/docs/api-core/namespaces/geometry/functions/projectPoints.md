@@ -25,4 +25,4 @@ projected points
 
 ## Source
 
-[graphics/geometry.ts:570](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L570)
+[graphics/geometry.ts:577](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L577)

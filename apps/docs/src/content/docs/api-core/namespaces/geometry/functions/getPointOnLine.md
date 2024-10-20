@@ -30,4 +30,4 @@ position value (0 ~ 1) on the path
 
 ## Source
 
-[graphics/geometry.ts:794](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L794)
+[graphics/geometry.ts:801](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L801)

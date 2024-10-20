@@ -21,4 +21,4 @@ Get the angle in degree between two points
 
 ## Source
 
-[graphics/geometry.ts:639](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L639)
+[graphics/geometry.ts:646](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L646)

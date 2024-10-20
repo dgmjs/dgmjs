@@ -23,4 +23,4 @@ Fixed code when the number of points is 3.
 
 ## Source
 
-[graphics/geometry.ts:727](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L727)
+[graphics/geometry.ts:734](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L734)

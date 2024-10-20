@@ -55,12 +55,17 @@ export class BaseSnapper {
    * @returns snapped x-coord or null
    */
   snapX(point: number[], referencePoints: number[][]): number | null {
+    let snapX: number | null = null;
+    let delta = MAGNET_THRESHOLD;
     for (let i = 0; i < referencePoints.length; i++) {
       const rp = referencePoints[i];
-      const dx = rp[0] - point[0];
-      if (Math.abs(dx) < MAGNET_THRESHOLD) return rp[0];
+      const dx = Math.abs(rp[0] - point[0]);
+      if (dx < MAGNET_THRESHOLD && dx < delta) {
+        snapX = rp[0];
+        delta = dx;
+      }
     }
-    return null;
+    return snapX;
   }
 
   /**
@@ -70,12 +75,17 @@ export class BaseSnapper {
    * @returns snapped y-coord or null
    */
   snapY(point: number[], referencePoints: number[][]): number | null {
+    let snapY: number | null = null;
+    let delta = MAGNET_THRESHOLD;
     for (let i = 0; i < referencePoints.length; i++) {
       const rp = referencePoints[i];
-      const dy = rp[1] - point[1];
-      if (Math.abs(dy) < MAGNET_THRESHOLD) return rp[1];
+      const dy = Math.abs(rp[1] - point[1]);
+      if (dy < MAGNET_THRESHOLD && dy < delta) {
+        snapY = rp[1];
+        delta = dy;
+      }
     }
-    return null;
+    return snapY;
   }
 }
 
@@ -134,53 +144,63 @@ export class MultipointSnapper extends ControllerSnapper {
   }
 
   /**
-   * Draw snapped points and lines
+   * Draw a given snapped x points with a line
    */
-  draw(editor: Editor) {
+  drawSnappingX(editor: Editor, x: number) {
     const canvas = editor.canvas;
-
-    if (this.snappedX !== null) {
-      const snappedXPoints: number[][] = [];
-      this.pointsToSnap.forEach((p) => {
-        if (eq(p[0], this.snappedX as number)) snappedXPoints.push(p);
-      });
-      this.referencePoints.forEach((p) => {
-        if (eq(p[0], this.snappedX as number)) snappedXPoints.push(p);
-      });
-
+    const snappedXPoints: number[][] = [];
+    this.pointsToSnap.forEach((p) => {
+      if (eq(p[0], x)) snappedXPoints.push(p);
+    });
+    this.referencePoints.forEach((p) => {
+      if (eq(p[0], x)) snappedXPoints.push(p);
+    });
+    if (snappedXPoints.length > 1) {
       snappedXPoints.forEach((p) => {
         const pCCS = gcs2ccs(canvas, p);
         guide.drawControlPoint(canvas, pCCS, 3);
       });
-      if (snappedXPoints.length > 1) {
-        const y1 = Math.min(...snappedXPoints.map((p) => p[1]));
-        const y2 = Math.max(...snappedXPoints.map((p) => p[1]));
-        const p1 = gcs2ccs(canvas, [this.snappedX as number, y1]);
-        const p2 = gcs2ccs(canvas, [this.snappedX as number, y2]);
-        guide.drawLine(canvas, p1, p2);
-      }
+      const y1 = Math.min(...snappedXPoints.map((p) => p[1]));
+      const y2 = Math.max(...snappedXPoints.map((p) => p[1]));
+      const p1 = gcs2ccs(canvas, [x, y1]);
+      const p2 = gcs2ccs(canvas, [x, y2]);
+      guide.drawLine(canvas, p1, p2);
     }
+  }
 
-    if (this.snappedY !== null) {
-      const snappedYPoints: number[][] = [];
-      this.pointsToSnap.forEach((p) => {
-        if (eq(p[1], this.snappedY as number)) snappedYPoints.push(p);
-      });
-      this.referencePoints.forEach((p) => {
-        if (eq(p[1], this.snappedY as number)) snappedYPoints.push(p);
-      });
-
+  /**
+   * Draw a given snapped y points with a line
+   */
+  drawSnappingY(editor: Editor, y: number) {
+    const canvas = editor.canvas;
+    const snappedYPoints: number[][] = [];
+    this.pointsToSnap.forEach((p) => {
+      if (eq(p[1], y)) snappedYPoints.push(p);
+    });
+    this.referencePoints.forEach((p) => {
+      if (eq(p[1], y)) snappedYPoints.push(p);
+    });
+    if (snappedYPoints.length > 1) {
       snappedYPoints.forEach((p) => {
         const pCCS = gcs2ccs(canvas, p);
         guide.drawControlPoint(canvas, pCCS, 3);
       });
-      if (snappedYPoints.length > 1) {
-        const x1 = Math.min(...snappedYPoints.map((p) => p[0]));
-        const x2 = Math.max(...snappedYPoints.map((p) => p[0]));
-        const p1 = gcs2ccs(canvas, [x1, this.snappedY as number]);
-        const p2 = gcs2ccs(canvas, [x2, this.snappedY as number]);
-        guide.drawLine(canvas, p1, p2);
-      }
+      const x1 = Math.min(...snappedYPoints.map((p) => p[0]));
+      const x2 = Math.max(...snappedYPoints.map((p) => p[0]));
+      const p1 = gcs2ccs(canvas, [x1, y]);
+      const p2 = gcs2ccs(canvas, [x2, y]);
+      guide.drawLine(canvas, p1, p2);
+    }
+  }
+
+  /**
+   * Draw snapped points and lines
+   */
+  draw(editor: Editor) {
+    for (let i = 0; i < this.pointsToSnap.length; i++) {
+      const p = this.pointsToSnap[i];
+      if (this.snappedX !== null) this.drawSnappingX(editor, p[0]);
+      if (this.snappedY !== null) this.drawSnappingY(editor, p[1]);
     }
   }
 }
@@ -265,28 +285,70 @@ export class MoveSnapper extends MultipointSnapper {
     const centroid = geometry.centroidPolygon(this.pointsToSnap);
     this.sortReferencePoints(centroid);
 
-    // compute snapped X and Y
+    // compute snapped X
     this.snappedX = null;
-    this.snappedY = null;
-    for (let j = 0; j < this.pointsToSnap.length; j++) {
-      const p = this.pointsToSnap[j];
-      if (this.snappedX === null) {
-        this.snappedX = this.snapX(p, this.referencePoints);
-        if (this.snappedX !== null) {
-          const dx = this.snappedX - p[0];
-          this.moveDragPointGCS(editor, shape, controller, dx, 0);
-          this.pointsToSnap.forEach((p) => (p[0] += dx));
-        }
-      }
-      if (this.snappedY === null) {
-        this.snappedY = this.snapY(p, this.referencePoints);
-        if (this.snappedY !== null) {
-          const dy = this.snappedY - p[1];
-          this.moveDragPointGCS(editor, shape, controller, 0, dy);
-          this.pointsToSnap.forEach((p) => (p[1] += dy));
+    let deltaX = MAGNET_THRESHOLD;
+    if (this.snappedX === null) {
+      for (let j = 0; j < this.pointsToSnap.length; j++) {
+        const p = this.pointsToSnap[j];
+        const sx = this.snapX(p, this.referencePoints);
+        if (sx !== null) {
+          const dx = Math.abs(sx - p[0]);
+          if (dx < deltaX) {
+            this.snappedX = sx;
+            deltaX = dx;
+          }
         }
       }
     }
+    if (this.snappedX !== null) {
+      this.moveDragPointGCS(editor, shape, controller, deltaX, 0);
+      this.pointsToSnap.forEach((p) => (p[0] += deltaX));
+    }
+
+    // compute snapped Y
+    this.snappedY = null;
+    let deltaY = MAGNET_THRESHOLD;
+    if (this.snappedY === null) {
+      for (let j = 0; j < this.pointsToSnap.length; j++) {
+        const p = this.pointsToSnap[j];
+        const sy = this.snapY(p, this.referencePoints);
+        if (sy !== null) {
+          const dy = Math.abs(sy - p[1]);
+          if (dy < deltaY) {
+            this.snappedY = sy;
+            deltaY = dy;
+          }
+        }
+      }
+    }
+    if (this.snappedY !== null) {
+      this.moveDragPointGCS(editor, shape, controller, 0, deltaY);
+      this.pointsToSnap.forEach((p) => (p[1] += deltaY));
+    }
+
+    // // compute snapped X and Y
+    // this.snappedX = null;
+    // this.snappedY = null;
+    // for (let j = 0; j < this.pointsToSnap.length; j++) {
+    //   const p = this.pointsToSnap[j];
+    //   if (this.snappedX === null) {
+    //     this.snappedX = this.snapX(p, this.referencePoints);
+    //     if (this.snappedX !== null) {
+    //       const dx = this.snappedX - p[0];
+    //       this.moveDragPointGCS(editor, shape, controller, dx, 0);
+    //       this.pointsToSnap.forEach((p) => (p[0] += dx));
+    //     }
+    //   }
+    //   if (this.snappedY === null) {
+    //     this.snappedY = this.snapY(p, this.referencePoints);
+    //     if (this.snappedY !== null) {
+    //       const dy = this.snappedY - p[1];
+    //       this.moveDragPointGCS(editor, shape, controller, 0, dy);
+    //       this.pointsToSnap.forEach((p) => (p[1] += dy));
+    //     }
+    //   }
+    // }
   }
 }
 

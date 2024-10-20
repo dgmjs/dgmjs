@@ -31,4 +31,4 @@ title: "Movable"
 
 ## Source
 
-[shapes.ts:67](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L67)
+[shapes.ts:66](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L66)

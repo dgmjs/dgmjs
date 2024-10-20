@@ -33,27 +33,49 @@ Select Handler
 
 #### Source
 
-[editor.ts:1374](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1374)
+[editor.ts:1440](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1440)
 
 ## Properties
+
+### dragPoint
+
+> **dragPoint**: `number`[]
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`dragPoint`](/api-core/classes/handler/#dragpoint)
+
+#### Source
+
+[editor.ts:1438](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1438)
+
+***
 
 ### dragStartPoint
 
 > **dragStartPoint**: `number`[]
 
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`dragStartPoint`](/api-core/classes/handler/#dragstartpoint)
+
 #### Source
 
-[handlers/select-handler.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L13)
+[editor.ts:1437](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1437)
 
 ***
 
 ### dragging
 
-> **dragging**: `boolean` = `false`
+> **dragging**: `boolean`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`dragging`](/api-core/classes/handler/#dragging)
 
 #### Source
 
-[handlers/select-handler.ts:12](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L12)
+[editor.ts:1436](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1436)
 
 ***
 
@@ -67,7 +89,7 @@ Select Handler
 
 #### Source
 
-[editor.ts:1371](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1371)
+[editor.ts:1434](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1434)
 
 ***
 
@@ -81,7 +103,7 @@ Select Handler
 
 #### Source
 
-[editor.ts:1372](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1372)
+[editor.ts:1435](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1435)
 
 ## Methods
 
@@ -105,7 +127,7 @@ Activate the handler
 
 #### Source
 
-[editor.ts:1400](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1400)
+[editor.ts:1473](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1473)
 
 ***
 
@@ -129,7 +151,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[editor.ts:1391](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1391)
+[editor.ts:1464](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1464)
 
 ***
 
@@ -153,7 +175,59 @@ Deactivate the handler
 
 #### Source
 
-[editor.ts:1408](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1408)
+[editor.ts:1481](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1481)
+
+***
+
+### drawDragging()
+
+> **drawDragging**(`editor`, `e`): `void`
+
+Draw dragging
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`drawDragging`](/api-core/classes/handler/#drawdragging)
+
+#### Source
+
+[editor.ts:1597](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1597)
+
+***
+
+### drawHovering()
+
+> **drawHovering**(`editor`, `e`): `void`
+
+Draw hovering
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`drawHovering`](/api-core/classes/handler/#drawhovering)
+
+#### Source
+
+[editor.ts:1592](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1592)
 
 ***
 
@@ -177,7 +251,33 @@ Draw ghost for the selected shape
 
 #### Source
 
-[handlers/select-handler.ts:287](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L287)
+[handlers/select-handler.ts:327](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L327)
+
+***
+
+### finalize()
+
+> **finalize**(`editor`, `e`): `void`
+
+Finalize handler
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`finalize`](/api-core/classes/handler/#finalize)
+
+#### Source
+
+[editor.ts:1518](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1518)
 
 ***
 
@@ -199,13 +299,39 @@ Returns a shape (with manipulator area) located at the position e.
 
 #### Source
 
-[handlers/select-handler.ts:23](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L23)
+[handlers/select-handler.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L16)
+
+***
+
+### initialize()
+
+> **initialize**(`editor`, `e`): `void`
+
+Initialize handler
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`initialize`](/api-core/classes/handler/#initialize)
+
+#### Source
+
+[editor.ts:1503](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1503)
 
 ***
 
 ### keyDown()
 
-> **keyDown**(`editor`, `e`): `void`
+> **keyDown**(`editor`, `e`): `boolean`
 
 keyDown
 
@@ -217,7 +343,7 @@ keyDown
 
 #### Returns
 
-`void`
+`boolean`
 
 #### Overrides
 
@@ -225,7 +351,7 @@ keyDown
 
 #### Source
 
-[handlers/select-handler.ts:258](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L258)
+[handlers/select-handler.ts:297](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L297)
 
 ***
 
@@ -251,7 +377,31 @@ keyUp
 
 #### Source
 
-[handlers/select-handler.ts:282](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L282)
+[handlers/select-handler.ts:322](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L322)
+
+***
+
+### onActionPerformed()
+
+> **onActionPerformed**(`editor`): `void`
+
+Triggered when action is performed (unclude undo and redo)
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`onActionPerformed`](/api-core/classes/handler/#onactionperformed)
+
+#### Source
+
+[editor.ts:1498](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1498)
 
 ***
 
@@ -275,7 +425,7 @@ Triggered when activated
 
 #### Source
 
-[editor.ts:1415](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1415)
+[editor.ts:1488](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1488)
 
 ***
 
@@ -299,7 +449,7 @@ Triggered when deactivate
 
 #### Source
 
-[editor.ts:1420](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1420)
+[editor.ts:1493](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1493)
 
 ***
 
@@ -325,7 +475,7 @@ handle pointer down event
 
 #### Source
 
-[handlers/select-handler.ts:44](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L44)
+[handlers/select-handler.ts:37](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L37)
 
 ***
 
@@ -351,7 +501,7 @@ handle pointer move event
 
 #### Source
 
-[handlers/select-handler.ts:121](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L121)
+[handlers/select-handler.ts:142](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L142)
 
 ***
 
@@ -377,7 +527,7 @@ handle pointer up event
 
 #### Source
 
-[handlers/select-handler.ts:198](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L198)
+[handlers/select-handler.ts:219](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L219)
 
 ***
 
@@ -391,10 +541,62 @@ Reset the states of handler
 
 `void`
 
-#### Overrides
+#### Inherited from
 
 [`Handler`](/api-core/classes/handler/).[`reset`](/api-core/classes/handler/#reset)
 
 #### Source
 
-[handlers/select-handler.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L15)
+[editor.ts:1455](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1455)
+
+***
+
+### update()
+
+> **update**(`editor`, `e`): `void`
+
+Update handler
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`update`](/api-core/classes/handler/#update)
+
+#### Source
+
+[editor.ts:1508](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1508)
+
+***
+
+### updateHovering()
+
+> **updateHovering**(`editor`, `e`): `void`
+
+Update handler when hovering (not dragging)
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`updateHovering`](/api-core/classes/handler/#updatehovering)
+
+#### Source
+
+[editor.ts:1513](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1513)

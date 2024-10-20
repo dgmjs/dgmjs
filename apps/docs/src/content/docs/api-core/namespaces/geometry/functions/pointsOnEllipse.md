@@ -25,4 +25,4 @@ Return points on a ellipse outline
 
 ## Source
 
-[graphics/geometry.ts:704](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L704)
+[graphics/geometry.ts:711](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L711)

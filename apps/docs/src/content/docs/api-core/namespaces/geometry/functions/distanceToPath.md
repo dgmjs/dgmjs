@@ -21,4 +21,4 @@ Shortest distance from a point to path
 
 ## Source
 
-[graphics/geometry.ts:178](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L178)
+[graphics/geometry.ts:185](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L185)
