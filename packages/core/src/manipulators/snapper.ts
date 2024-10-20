@@ -55,12 +55,18 @@ export class BaseSnapper {
    * @returns snapped x-coord or null
    */
   snapX(point: number[], referencePoints: number[][]): number | null {
+    let snapX = -1;
+    let delta = MAGNET_THRESHOLD;
     for (let i = 0; i < referencePoints.length; i++) {
       const rp = referencePoints[i];
       const dx = rp[0] - point[0];
-      if (Math.abs(dx) < MAGNET_THRESHOLD) return rp[0];
+      if (Math.abs(dx) < MAGNET_THRESHOLD && dx < delta) {
+        snapX = rp[0];
+        delta = dx;
+      }
     }
-    return null;
+    if (snapX < 0) return null;
+    return snapX;
   }
 
   /**
@@ -70,12 +76,18 @@ export class BaseSnapper {
    * @returns snapped y-coord or null
    */
   snapY(point: number[], referencePoints: number[][]): number | null {
+    let snapY = -1;
+    let delta = MAGNET_THRESHOLD;
     for (let i = 0; i < referencePoints.length; i++) {
       const rp = referencePoints[i];
       const dy = rp[1] - point[1];
-      if (Math.abs(dy) < MAGNET_THRESHOLD) return rp[1];
+      if (Math.abs(dy) < MAGNET_THRESHOLD && dy < delta) {
+        snapY = rp[1];
+        delta = dy;
+      }
     }
-    return null;
+    if (snapY < 0) return null;
+    return snapY;
   }
 }
 
@@ -265,28 +277,68 @@ export class MoveSnapper extends MultipointSnapper {
     const centroid = geometry.centroidPolygon(this.pointsToSnap);
     this.sortReferencePoints(centroid);
 
-    // compute snapped X and Y
+    // compute snapped X
     this.snappedX = null;
-    this.snappedY = null;
-    for (let j = 0; j < this.pointsToSnap.length; j++) {
-      const p = this.pointsToSnap[j];
-      if (this.snappedX === null) {
-        this.snappedX = this.snapX(p, this.referencePoints);
-        if (this.snappedX !== null) {
-          const dx = this.snappedX - p[0];
-          this.moveDragPointGCS(editor, shape, controller, dx, 0);
-          this.pointsToSnap.forEach((p) => (p[0] += dx));
-        }
-      }
-      if (this.snappedY === null) {
-        this.snappedY = this.snapY(p, this.referencePoints);
-        if (this.snappedY !== null) {
-          const dy = this.snappedY - p[1];
-          this.moveDragPointGCS(editor, shape, controller, 0, dy);
-          this.pointsToSnap.forEach((p) => (p[1] += dy));
+    let snappingX = -1;
+    let snappingDX = MAGNET_THRESHOLD;
+    if (this.snappedX === null) {
+      for (let j = 0; j < this.pointsToSnap.length; j++) {
+        const p = this.pointsToSnap[j];
+        const sx = this.snapX(p, this.referencePoints);
+        if (sx !== null && sx - p[0] < snappingDX) {
+          this.snappedX = sx;
+          snappingX = p[0];
+          snappingDX = this.snappedX - p[0];
         }
       }
     }
+    if (this.snappedX !== null) {
+      this.moveDragPointGCS(editor, shape, controller, snappingDX, 0);
+      this.pointsToSnap.forEach((p) => (p[0] += snappingDX));
+    }
+
+    // compute snapped Y
+    this.snappedY = null;
+    let snappingY = -1;
+    let snappingDY = MAGNET_THRESHOLD;
+    if (this.snappedY === null) {
+      for (let j = 0; j < this.pointsToSnap.length; j++) {
+        const p = this.pointsToSnap[j];
+        const sy = this.snapY(p, this.referencePoints);
+        if (sy !== null && sy - p[1] < snappingDY) {
+          this.snappedY = sy;
+          snappingY = p[1];
+          snappingDY = this.snappedY - p[1];
+        }
+      }
+    }
+    if (this.snappedY !== null) {
+      this.moveDragPointGCS(editor, shape, controller, 0, snappingDY);
+      this.pointsToSnap.forEach((p) => (p[1] += snappingDY));
+    }
+
+    // // compute snapped X and Y
+    // this.snappedX = null;
+    // this.snappedY = null;
+    // for (let j = 0; j < this.pointsToSnap.length; j++) {
+    //   const p = this.pointsToSnap[j];
+    //   if (this.snappedX === null) {
+    //     this.snappedX = this.snapX(p, this.referencePoints);
+    //     if (this.snappedX !== null) {
+    //       const dx = this.snappedX - p[0];
+    //       this.moveDragPointGCS(editor, shape, controller, dx, 0);
+    //       this.pointsToSnap.forEach((p) => (p[0] += dx));
+    //     }
+    //   }
+    //   if (this.snappedY === null) {
+    //     this.snappedY = this.snapY(p, this.referencePoints);
+    //     if (this.snappedY !== null) {
+    //       const dy = this.snappedY - p[1];
+    //       this.moveDragPointGCS(editor, shape, controller, 0, dy);
+    //       this.pointsToSnap.forEach((p) => (p[1] += dy));
+    //     }
+    //   }
+    // }
   }
 }
 
