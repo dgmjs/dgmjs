@@ -21,4 +21,4 @@ Test whether the two points are vertical
 
 ## Source
 
-[graphics/geometry.ts:76](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L76)
+[graphics/geometry.ts:83](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L83)

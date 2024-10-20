@@ -33,7 +33,7 @@ Freehand Factory Handler
 
 #### Source
 
-[editor.ts:1374](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1374)
+[editor.ts:1440](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1440)
 
 ## Properties
 
@@ -43,7 +43,7 @@ Freehand Factory Handler
 
 #### Source
 
-[handlers/freehand-handler.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L16)
+[handlers/freehand-handler.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L17)
 
 ***
 
@@ -51,9 +51,13 @@ Freehand Factory Handler
 
 > **dragPoint**: `number`[]
 
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`dragPoint`](/api-core/classes/handler/#dragpoint)
+
 #### Source
 
-[handlers/freehand-handler.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L14)
+[handlers/freehand-handler.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L15)
 
 ***
 
@@ -61,9 +65,13 @@ Freehand Factory Handler
 
 > **dragStartPoint**: `number`[]
 
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`dragStartPoint`](/api-core/classes/handler/#dragstartpoint)
+
 #### Source
 
-[handlers/freehand-handler.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L13)
+[handlers/freehand-handler.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L14)
 
 ***
 
@@ -71,9 +79,13 @@ Freehand Factory Handler
 
 > **dragging**: `boolean` = `false`
 
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`dragging`](/api-core/classes/handler/#dragging)
+
 #### Source
 
-[handlers/freehand-handler.ts:12](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L12)
+[handlers/freehand-handler.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L13)
 
 ***
 
@@ -83,7 +95,7 @@ Freehand Factory Handler
 
 #### Source
 
-[handlers/freehand-handler.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L15)
+[handlers/freehand-handler.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L16)
 
 ***
 
@@ -97,7 +109,7 @@ Freehand Factory Handler
 
 #### Source
 
-[editor.ts:1371](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1371)
+[editor.ts:1434](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1434)
 
 ***
 
@@ -111,7 +123,7 @@ Freehand Factory Handler
 
 #### Source
 
-[editor.ts:1372](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1372)
+[editor.ts:1435](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1435)
 
 ***
 
@@ -121,7 +133,7 @@ Freehand Factory Handler
 
 #### Source
 
-[handlers/freehand-handler.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L17)
+[handlers/freehand-handler.ts:18](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L18)
 
 ## Methods
 
@@ -145,7 +157,7 @@ Activate the handler
 
 #### Source
 
-[editor.ts:1400](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1400)
+[editor.ts:1473](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1473)
 
 ***
 
@@ -169,7 +181,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[editor.ts:1391](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1391)
+[editor.ts:1464](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1464)
 
 ***
 
@@ -193,7 +205,59 @@ Deactivate the handler
 
 #### Source
 
-[editor.ts:1408](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1408)
+[editor.ts:1481](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1481)
+
+***
+
+### drawDragging()
+
+> **drawDragging**(`editor`, `e`): `void`
+
+Draw dragging
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`drawDragging`](/api-core/classes/handler/#drawdragging)
+
+#### Source
+
+[editor.ts:1597](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1597)
+
+***
+
+### drawHovering()
+
+> **drawHovering**(`editor`, `e`): `void`
+
+Draw hovering
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`drawHovering`](/api-core/classes/handler/#drawhovering)
+
+#### Source
+
+[editor.ts:1592](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1592)
 
 ***
 
@@ -217,7 +281,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[editor.ts:1453](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1453)
+[editor.ts:1587](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1587)
 
 ***
 
@@ -225,6 +289,8 @@ Draw ghost for the selected shape
 
 > **finalize**(`editor`, `e`): `void`
 
+Finalize handler
+
 #### Parameters
 
 • **editor**: [`Editor`](/api-core/classes/editor/)
@@ -235,9 +301,13 @@ Draw ghost for the selected shape
 
 `void`
 
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`finalize`](/api-core/classes/handler/#finalize)
+
 #### Source
 
-[handlers/freehand-handler.ts:58](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L58)
+[handlers/freehand-handler.ts:59](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L59)
 
 ***
 
@@ -245,6 +315,8 @@ Draw ghost for the selected shape
 
 > **initialize**(`editor`, `e`): `void`
 
+Initialize handler
+
 #### Parameters
 
 • **editor**: [`Editor`](/api-core/classes/editor/)
@@ -255,9 +327,13 @@ Draw ghost for the selected shape
 
 `void`
 
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`initialize`](/api-core/classes/handler/#initialize)
+
 #### Source
 
-[handlers/freehand-handler.ts:28](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L28)
+[handlers/freehand-handler.ts:29](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L29)
 
 ***
 
@@ -283,7 +359,7 @@ keyDown
 
 #### Source
 
-[handlers/freehand-handler.ts:113](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L113)
+[handlers/freehand-handler.ts:114](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L114)
 
 ***
 
@@ -309,7 +385,31 @@ keyUp
 
 #### Source
 
-[editor.ts:1448](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1448)
+[editor.ts:1582](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1582)
+
+***
+
+### onActionPerformed()
+
+> **onActionPerformed**(`editor`): `void`
+
+Triggered when action is performed (unclude undo and redo)
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`onActionPerformed`](/api-core/classes/handler/#onactionperformed)
+
+#### Source
+
+[editor.ts:1498](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1498)
 
 ***
 
@@ -333,7 +433,7 @@ Triggered when activated
 
 #### Source
 
-[handlers/freehand-handler.ts:123](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L123)
+[handlers/freehand-handler.ts:124](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L124)
 
 ***
 
@@ -357,7 +457,7 @@ Triggered when deactivate
 
 #### Source
 
-[handlers/freehand-handler.ts:127](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L127)
+[handlers/freehand-handler.ts:128](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L128)
 
 ***
 
@@ -383,7 +483,7 @@ pointerDown
 
 #### Source
 
-[handlers/freehand-handler.ts:74](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L74)
+[handlers/freehand-handler.ts:75](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L75)
 
 ***
 
@@ -409,7 +509,7 @@ pointerMove
 
 #### Source
 
-[handlers/freehand-handler.ts:89](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L89)
+[handlers/freehand-handler.ts:90](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L90)
 
 ***
 
@@ -435,7 +535,7 @@ pointerUp
 
 #### Source
 
-[handlers/freehand-handler.ts:104](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L104)
+[handlers/freehand-handler.ts:105](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L105)
 
 ***
 
@@ -455,13 +555,15 @@ Reset the states of handler
 
 #### Source
 
-[handlers/freehand-handler.ts:19](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L19)
+[handlers/freehand-handler.ts:20](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L20)
 
 ***
 
 ### update()
 
 > **update**(`editor`, `e`): `void`
+
+Update handler
 
 #### Parameters
 
@@ -473,6 +575,36 @@ Reset the states of handler
 
 `void`
 
+#### Overrides
+
+[`Handler`](/api-core/classes/handler/).[`update`](/api-core/classes/handler/#update)
+
 #### Source
 
-[handlers/freehand-handler.ts:40](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L40)
+[handlers/freehand-handler.ts:41](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/freehand-handler.ts#L41)
+
+***
+
+### updateHovering()
+
+> **updateHovering**(`editor`, `e`): `void`
+
+Update handler when hovering (not dragging)
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`Handler`](/api-core/classes/handler/).[`updateHovering`](/api-core/classes/handler/#updatehovering)
+
+#### Source
+
+[editor.ts:1513](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1513)

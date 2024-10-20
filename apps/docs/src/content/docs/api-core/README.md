@@ -95,6 +95,7 @@ title: "@dgmjs/core"
 
 ## Variables
 
+- [ActionKind](/api-core/variables/actionkind/)
 - [FillStyle](/api-core/variables/fillstyle/)
 - [HorzAlign](/api-core/variables/horzalign/)
 - [LineEndType](/api-core/variables/lineendtype/)

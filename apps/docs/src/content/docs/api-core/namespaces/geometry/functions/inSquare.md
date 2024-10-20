@@ -27,4 +27,4 @@ apothem of square
 
 ## Source
 
-[graphics/geometry.ts:99](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L99)
+[graphics/geometry.ts:106](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L106)

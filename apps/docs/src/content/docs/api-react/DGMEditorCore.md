@@ -18,6 +18,7 @@ The core editor component that is a wrapper component for [Editor](/api-core/cla
 | `darkMode` |  `boolean` | `false` |
 | `showGrid` |  `boolean` | `false` |
 | `snapToGrid` |  `boolean` | `false` |
+| `snapToObjects` |  `boolean` | `false` |
 | `onMount` | (`editor`: [`Editor`](/api-core/classes/editor/)) => `void` | |
 | `onSelectionChange` | (`selections`: [`Shape`](/api-core/classes/shape/)[]) => `void` | |
 | `onCurrentPageChange` | (`page`: [`Page`](/api-core/classes/page/)) => `void` | |

@@ -27,4 +27,4 @@ radius of circle
 
 ## Source
 
-[graphics/geometry.ts:109](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L109)
+[graphics/geometry.ts:116](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L116)

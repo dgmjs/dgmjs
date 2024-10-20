@@ -21,4 +21,4 @@ Returns an union of two rects
 
 ## Source
 
-[graphics/geometry.ts:329](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L329)
+[graphics/geometry.ts:336](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L336)

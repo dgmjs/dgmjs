@@ -13,7 +13,7 @@ title: "Property"
 
 #### Source
 
-[shapes.ts:46](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L46)
+[shapes.ts:45](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L45)
 
 ***
 
@@ -23,7 +23,7 @@ title: "Property"
 
 #### Source
 
-[shapes.ts:43](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L43)
+[shapes.ts:42](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L42)
 
 ***
 
@@ -33,7 +33,7 @@ title: "Property"
 
 #### Source
 
-[shapes.ts:48](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L48)
+[shapes.ts:47](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L47)
 
 ***
 
@@ -43,7 +43,7 @@ title: "Property"
 
 #### Source
 
-[shapes.ts:47](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L47)
+[shapes.ts:46](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L46)
 
 ***
 
@@ -53,7 +53,7 @@ title: "Property"
 
 #### Source
 
-[shapes.ts:41](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L41)
+[shapes.ts:40](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L40)
 
 ***
 
@@ -63,7 +63,7 @@ title: "Property"
 
 #### Source
 
-[shapes.ts:44](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L44)
+[shapes.ts:43](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L43)
 
 ***
 
@@ -73,7 +73,7 @@ title: "Property"
 
 #### Source
 
-[shapes.ts:49](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L49)
+[shapes.ts:48](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L48)
 
 ***
 
@@ -83,7 +83,7 @@ title: "Property"
 
 #### Source
 
-[shapes.ts:42](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L42)
+[shapes.ts:41](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L41)
 
 ***
 
@@ -93,4 +93,4 @@ title: "Property"
 
 #### Source
 
-[shapes.ts:45](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L45)
+[shapes.ts:44](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L44)

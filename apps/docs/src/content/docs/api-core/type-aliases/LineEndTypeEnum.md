@@ -9,4 +9,4 @@ title: "LineEndTypeEnum"
 
 ## Source
 
-[shapes.ts:118](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L118)
+[shapes.ts:117](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L117)
