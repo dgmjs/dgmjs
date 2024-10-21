@@ -108,6 +108,7 @@ export class MultipointSnapper extends ControllerSnapper {
   initialPointsToSnap: number[][] = [];
   pointsToSnap: number[][] = [];
   referencePoints: number[][] = [];
+  guidePoints: number[][] = [];
   snappedX: number | null = null;
   snappedY: number | null = null;
 
@@ -149,7 +150,7 @@ export class MultipointSnapper extends ControllerSnapper {
   drawSnappingX(editor: Editor, x: number) {
     const canvas = editor.canvas;
     const snappedXPoints: number[][] = [];
-    this.pointsToSnap.forEach((p) => {
+    this.guidePoints.forEach((p) => {
       if (eq(p[0], x)) snappedXPoints.push(p);
     });
     this.referencePoints.forEach((p) => {
@@ -174,7 +175,7 @@ export class MultipointSnapper extends ControllerSnapper {
   drawSnappingY(editor: Editor, y: number) {
     const canvas = editor.canvas;
     const snappedYPoints: number[][] = [];
-    this.pointsToSnap.forEach((p) => {
+    this.guidePoints.forEach((p) => {
       if (eq(p[1], y)) snappedYPoints.push(p);
     });
     this.referencePoints.forEach((p) => {
@@ -197,8 +198,8 @@ export class MultipointSnapper extends ControllerSnapper {
    * Draw snapped points and lines
    */
   draw(editor: Editor) {
-    for (let i = 0; i < this.pointsToSnap.length; i++) {
-      const p = this.pointsToSnap[i];
+    for (let i = 0; i < this.guidePoints.length; i++) {
+      const p = this.guidePoints[i];
       if (this.snappedX !== null) this.drawSnappingX(editor, p[0]);
       if (this.snappedY !== null) this.drawSnappingY(editor, p[1]);
     }
@@ -327,28 +328,8 @@ export class MoveSnapper extends MultipointSnapper {
       this.pointsToSnap.forEach((p) => (p[1] += deltaY));
     }
 
-    // // compute snapped X and Y
-    // this.snappedX = null;
-    // this.snappedY = null;
-    // for (let j = 0; j < this.pointsToSnap.length; j++) {
-    //   const p = this.pointsToSnap[j];
-    //   if (this.snappedX === null) {
-    //     this.snappedX = this.snapX(p, this.referencePoints);
-    //     if (this.snappedX !== null) {
-    //       const dx = this.snappedX - p[0];
-    //       this.moveDragPointGCS(editor, shape, controller, dx, 0);
-    //       this.pointsToSnap.forEach((p) => (p[0] += dx));
-    //     }
-    //   }
-    //   if (this.snappedY === null) {
-    //     this.snappedY = this.snapY(p, this.referencePoints);
-    //     if (this.snappedY !== null) {
-    //       const dy = this.snappedY - p[1];
-    //       this.moveDragPointGCS(editor, shape, controller, 0, dy);
-    //       this.pointsToSnap.forEach((p) => (p[1] += dy));
-    //     }
-    //   }
-    // }
+    // set guide points
+    this.guidePoints = geometry.pathCopy(this.pointsToSnap);
   }
 }
 
@@ -357,6 +338,7 @@ export class MoveSnapper extends MultipointSnapper {
  * Snap a sizing shape to other shapes
  */
 export class SizeSnapper extends MultipointSnapper {
+  initialEnclosure: number[][] = [];
   sizingRatio: number = 0;
 
   /**
@@ -417,9 +399,55 @@ export class SizeSnapper extends MultipointSnapper {
     }
   }
 
-  setSizeToSnap(editor: Editor, shape: Shape, controller: BoxSizeController) {
-    const canvas = editor.canvas;
+  makeGuidePoints(position: string) {
+    switch (position) {
+      case ControllerPosition.TOP: {
+        return [
+          ...this.pointsToSnap,
+          this.initialEnclosure[2],
+          this.initialEnclosure[3],
+        ];
+      }
+      case ControllerPosition.BOTTOM: {
+        return [
+          ...this.pointsToSnap,
+          this.initialEnclosure[0],
+          this.initialEnclosure[1],
+        ];
+      }
+      case ControllerPosition.LEFT: {
+        return [
+          ...this.pointsToSnap,
+          this.initialEnclosure[1],
+          this.initialEnclosure[2],
+        ];
+      }
+      case ControllerPosition.RIGHT: {
+        return [
+          ...this.pointsToSnap,
+          this.initialEnclosure[0],
+          this.initialEnclosure[3],
+        ];
+      }
+      case ControllerPosition.LEFT_TOP: {
+        return [...this.pointsToSnap, this.initialEnclosure[2]];
+      }
+      case ControllerPosition.RIGHT_TOP: {
+        return [...this.pointsToSnap, this.initialEnclosure[3]];
+      }
+      case ControllerPosition.RIGHT_BOTTOM: {
+        return [...this.pointsToSnap, this.initialEnclosure[0]];
+      }
+      case ControllerPosition.LEFT_BOTTOM: {
+        return [...this.pointsToSnap, this.initialEnclosure[1]];
+      }
+      default: {
+        return [];
+      }
+    }
+  }
 
+  setSizeToSnap(editor: Editor, shape: Shape, controller: BoxSizeController) {
     // set points to snap
     const rect = shape.getBoundingRect();
     const enclosure = geometry.rectToPolygon(rect, false);
@@ -469,6 +497,8 @@ export class SizeSnapper extends MultipointSnapper {
       }
     }
     this.pointsToSnap = geometry.pathCopy(this.initialPointsToSnap);
+    this.initialEnclosure = geometry.pathCopy(enclosure);
+
     this.snappedX = null;
     this.snappedY = null;
   }
@@ -549,6 +579,9 @@ export class SizeSnapper extends MultipointSnapper {
           );
         }
       }
+
+      // make guide points
+      this.guidePoints = this.makeGuidePoints(controller.options.position);
     }
   }
 }
