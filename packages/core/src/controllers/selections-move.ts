@@ -7,6 +7,7 @@ import { moveShapes, resolveAllConstraints } from "../macro";
 import { ActionKind } from "../core";
 import { ableToContain } from "./utils";
 import { GridSnapper, MoveSnapper } from "../manipulators/snapper";
+import { getAllDescendant } from "../utils/shape-utils";
 
 /**
  * SelectionsMoveController
@@ -75,7 +76,7 @@ export class SelectionsMoveController extends Controller {
     // initialize snappers
     this.gridSnapper.setPointToSnap(editor, this, rect[0]);
     this.moveSnapper.setRectToSnap(editor, shape, rect);
-    this.moveSnapper.setReferencePoints(editor, selection);
+    this.moveSnapper.setReferencePoints(editor, getAllDescendant(selection));
 
     editor.transform.startAction(ActionKind.MOVE);
   }

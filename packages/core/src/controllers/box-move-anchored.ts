@@ -8,6 +8,7 @@ import { Cursor } from "../graphics/const";
 import { moveAnchor, resolveAllConstraints } from "../macro";
 import { ActionKind } from "../core";
 import { GridSnapper, MoveSnapper } from "../manipulators/snapper";
+import { getAllDescendant } from "../utils/shape-utils";
 
 /**
  * BoxMoveAnchoredController
@@ -60,7 +61,7 @@ export class BoxMoveAnchoredController extends Controller {
     // initialize snappers
     this.gridSnapper.setPointToSnap(editor, this, [shape.left, shape.top]);
     this.moveSnapper.setRectToSnap(editor, shape, shape.getBoundingRect());
-    this.moveSnapper.setReferencePoints(editor, [shape]);
+    this.moveSnapper.setReferencePoints(editor, getAllDescendant([shape]));
 
     editor.transform.startAction(ActionKind.MOVE_ANCHOR);
   }
