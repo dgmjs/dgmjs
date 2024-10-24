@@ -88,6 +88,9 @@ export class SelectionsMoveController extends Controller {
     const canvas = editor.canvas;
     const selections = editor.selection.getShapes();
 
+    // return if not moving
+    if (this.dxStepGCS === 0 && this.dyStepGCS === 0) return;
+
     // snap dragging points
     this.gridSnapper.snap(editor, shape, this);
     this.moveSnapper.snap(editor, shape, this);
