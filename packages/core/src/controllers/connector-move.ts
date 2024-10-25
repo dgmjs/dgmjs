@@ -7,6 +7,7 @@ import { changeParent, resolveAllConstraints, setPath } from "../macro";
 import { ActionKind } from "../core";
 import { ableToContain } from "./utils";
 import { GridSnapper, MoveSnapper } from "../manipulators/snapper";
+import { getAllDescendant } from "../utils/shape-utils";
 
 /**
  * ConnectorMove Controller
@@ -69,7 +70,7 @@ export class ConnectorMoveController extends Controller {
     // initialize snappers
     this.gridSnapper.setPointToSnap(editor, this, [shape.left, shape.top]);
     this.moveSnapper.setRectToSnap(editor, shape, shape.getBoundingRect());
-    this.moveSnapper.setReferencePoints(editor, [shape]);
+    this.moveSnapper.setReferencePoints(editor, getAllDescendant([shape]));
 
     this.controlPath = geometry.pathCopy((shape as Path).path);
     editor.transform.startAction(ActionKind.REPATH);

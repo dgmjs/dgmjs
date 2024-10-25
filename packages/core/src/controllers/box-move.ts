@@ -7,6 +7,7 @@ import { moveShapes, resolveAllConstraints } from "../macro";
 import { ActionKind } from "../core";
 import { ableToContain } from "./utils";
 import { GridSnapper, MoveSnapper } from "../manipulators/snapper";
+import { getAllDescendant } from "../utils/shape-utils";
 
 /**
  * BoxMoveController
@@ -82,7 +83,10 @@ export class BoxMoveController extends Controller {
       targetShape,
       shape.getBoundingRect()
     );
-    this.moveSnapper.setReferencePoints(editor, [targetShape]);
+    this.moveSnapper.setReferencePoints(
+      editor,
+      getAllDescendant([targetShape])
+    );
 
     editor.transform.startAction(ActionKind.MOVE);
   }
