@@ -1264,11 +1264,6 @@ export class Page extends Shape {
  */
 export class Box extends Shape {
   /**
-   * Border position (center, inside, outside)
-   */
-  borderPosition: BorderPositionEnum;
-
-  /**
    * Padding spaces [top, right, bottom, left] (same with CSS)
    */
   padding: number[];
@@ -1277,6 +1272,16 @@ export class Box extends Shape {
    * Corner radius [top-left, top-right, bottom-right, bottom-left] (same with CSS)
    */
   corners: number[];
+
+  /**
+   * Borders [top, right, bottom, left]
+   */
+  borders: boolean[];
+
+  /**
+   * Border position (center, inside, outside)
+   */
+  borderPosition: BorderPositionEnum;
 
   /**
    * Anchored
@@ -1369,9 +1374,10 @@ export class Box extends Shape {
     this.type = "Box";
     // Initialization
     this.containable = false;
-    this.borderPosition = "center";
     this.padding = [0, 0, 0, 0];
     this.corners = [0, 0, 0, 0];
+    this.borders = [true, true, true, true];
+    this.borderPosition = "center";
     this.anchored = false;
     this.anchorAngle = 0;
     this.anchorLength = 0;
@@ -1388,9 +1394,10 @@ export class Box extends Shape {
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
-    json.strokePosition = this.borderPosition;
     json.padding = structuredClone(this.padding);
     json.corners = structuredClone(this.corners);
+    json.borders = structuredClone(this.borders);
+    json.borderPosition = this.borderPosition;
     json.anchored = this.anchored;
     json.anchorAngle = this.anchorAngle;
     json.anchorLength = this.anchorLength;
@@ -1407,9 +1414,10 @@ export class Box extends Shape {
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.borderPosition = json.strokePosition ?? this.borderPosition;
     this.padding = json.padding ?? this.padding;
     this.corners = json.corners ?? this.corners;
+    this.borders = json.borders ?? this.borders;
+    this.borderPosition = json.borderPosition ?? this.borderPosition;
     this.anchored = json.anchored ?? this.anchored;
     this.anchorAngle = json.anchorAngle ?? this.anchorAngle;
     this.anchorLength = json.anchorLength ?? this.anchorLength;
@@ -1447,6 +1455,137 @@ export class Box extends Shape {
     return this.innerBottom - this.innerTop;
   }
 
+  renderBorders(
+    canvas: MemoizationCanvas,
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number
+  ): void {
+    const b = this.borders;
+    const c = this.corners;
+    if (b[0] && b[1] && b[2] && b[3]) {
+      // all borders
+      canvas.strokeRoundRect(x1, y1, x2, y2, c, this.getSeed());
+    } else if (b[0] && !b[1] && !b[2] && !b[3]) {
+      // top border
+      canvas.line(x1 + c[0], y1, x2 - c[1], y1, this.getSeed());
+    } else if (!b[0] && b[1] && !b[2] && !b[3]) {
+      // right border
+      canvas.line(x2, y1 + c[1], x2, y2 - c[2], this.getSeed());
+    } else if (!b[0] && !b[1] && b[2] && !b[3]) {
+      // bottom border
+      canvas.line(x1 + c[3], y2, x2 - c[2], y2, this.getSeed());
+    } else if (!b[0] && !b[1] && !b[2] && b[3]) {
+      // left border
+      canvas.line(x1, y1 + c[0], x1, y2 - c[3], this.getSeed());
+    } else if (b[0] && b[1] && !b[2] && !b[3]) {
+      // top-right
+      canvas.strokePath(
+        [
+          ["M", x1 + c[0], y1],
+          ["L", x2 - c[1], y1],
+          ["Q", x2, y1, x2, y1 + c[1]],
+          ["L", x2, y2 - c[2]],
+        ],
+        this.getSeed()
+      );
+    } else if (!b[0] && b[1] && b[2] && !b[3]) {
+      // right-bottom
+      canvas.strokePath(
+        [
+          ["M", x2, y1 + c[1]],
+          ["L", x2, y2 - c[2]],
+          ["Q", x2, y2, x2 - c[2], y2],
+          ["L", x1 + c[3], y2],
+        ],
+        this.getSeed()
+      );
+    } else if (!b[0] && !b[1] && b[2] && b[3]) {
+      // bottom-left
+      canvas.strokePath(
+        [
+          ["M", x2 - c[2], y2],
+          ["L", x1 + c[3], y2],
+          ["Q", x1, y2, x1, y2 - c[3]],
+          ["L", x1, y1 + c[0]],
+        ],
+        this.getSeed()
+      );
+    } else if (b[0] && !b[1] && !b[2] && b[3]) {
+      // left-top
+      canvas.strokePath(
+        [
+          ["M", x1, y2 - c[3]],
+          ["L", x1, y1 + c[0]],
+          ["Q", x1, y1, x1 + c[0], y1],
+          ["L", x2 - c[1], y1],
+        ],
+        this.getSeed()
+      );
+    } else if (b[0] && b[1] && b[2] && !b[3]) {
+      // top-right-bottom
+      canvas.strokePath(
+        [
+          ["M", x1 + c[0], y1],
+          ["L", x2 - c[1], y1],
+          ["Q", x2, y1, x2, y1 + c[1]],
+          ["L", x2, y2 - c[2]],
+          ["Q", x2, y2, x2 - c[2], y2],
+          ["L", x1 + c[3], y2],
+        ],
+        this.getSeed()
+      );
+    } else if (!b[0] && b[1] && b[2] && b[3]) {
+      // right-bottom-left
+      canvas.strokePath(
+        [
+          ["M", x2, y1 + c[1]],
+          ["L", x2, y2 - c[2]],
+          ["Q", x2, y2, x2 - c[2], y2],
+          ["L", x1 + c[3], y2],
+          ["Q", x1, y2, x1, y2 - c[3]],
+          ["L", x1, y1 + c[0]],
+        ],
+        this.getSeed()
+      );
+    } else if (b[0] && !b[1] && b[2] && b[3]) {
+      // bottom-left-top
+      canvas.strokePath(
+        [
+          ["M", x2 - c[2], y2],
+          ["L", x1 + c[3], y2],
+          ["Q", x1, y2, x1, y2 - c[3]],
+          ["L", x1, y1 + c[0]],
+          ["Q", x1, y1, x1 + c[0], y1],
+          ["L", x2 - c[1], y1],
+        ],
+        this.getSeed()
+      );
+    } else if (b[0] && b[1] && !b[2] && b[3]) {
+      // left-top-right
+      canvas.strokePath(
+        [
+          ["M", x1, y2 - c[3]],
+          ["L", x1, y1 + c[0]],
+          ["Q", x1, y1, x1 + c[0], y1],
+          ["L", x2 - c[1], y1],
+          ["Q", x2, y1, x2, y1 + c[1]],
+          ["L", x2, y2 - c[2]],
+        ],
+        this.getSeed()
+      );
+    } else if (b[0] && !b[1] && b[2] && !b[3]) {
+      // top-bottom
+      canvas.line(x1 + c[0], y1, x2 - c[1], y1, this.getSeed());
+      canvas.line(x1 + c[3], y2, x2 - c[2], y2, this.getSeed());
+    } else if (!b[0] && b[1] && !b[2] && b[3]) {
+      // left-right
+      canvas.line(x1, y1 + c[0], x1, y2 - c[3], this.getSeed());
+      canvas.line(x2, y1 + c[1], x2, y2 - c[2], this.getSeed());
+    }
+  }
+
   renderDefault(canvas: MemoizationCanvas): void {
     if (this.fillStyle !== FillStyle.NONE) {
       canvas.fillRoundRect(
@@ -1461,37 +1600,34 @@ export class Box extends Shape {
     if (this.strokeWidth > 0) {
       switch (this.borderPosition) {
         case BorderPosition.CENTER: {
-          canvas.strokeRoundRect(
+          this.renderBorders(
+            canvas,
             this.left,
             this.top,
             this.right,
-            this.bottom,
-            this.corners,
-            this.getSeed()
+            this.bottom
           );
           break;
         }
         case BorderPosition.INSIDE: {
           const offset = this.strokeWidth / 2;
-          canvas.strokeRoundRect(
+          this.renderBorders(
+            canvas,
             this.left + offset,
             this.top + offset,
             this.right - offset,
-            this.bottom - offset,
-            this.corners,
-            this.getSeed()
+            this.bottom - offset
           );
           break;
         }
         case BorderPosition.OUTSIDE: {
           const offset = this.strokeWidth / 2;
-          canvas.strokeRoundRect(
+          this.renderBorders(
+            canvas,
             this.left - offset,
             this.top - offset,
             this.right + offset,
-            this.bottom + offset,
-            this.corners,
-            this.getSeed()
+            this.bottom + offset
           );
           break;
         }

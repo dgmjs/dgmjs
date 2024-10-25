@@ -13,12 +13,14 @@ import {
 } from "@/components/ui/select";
 import { merge } from "@/utils";
 import { ShapeEditorProps } from "@/types";
+import { Checkbox } from "../ui/checkbox";
 
 export const BoxPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
   const width = merge(shapes.map((s) => s.width));
   const height = merge(shapes.map((s) => s.height));
   const corners = merge(shapes.map((s) => (s as Box).corners));
   const padding = merge(shapes.map((s) => (s as Box).padding));
+  const borders = merge(shapes.map((s) => (s as Box).borders));
   const borderPosition = merge(shapes.map((s) => (s as Box).borderPosition));
 
   return (
@@ -151,6 +153,77 @@ export const BoxPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
               });
             }}
           />
+        </SimpleTooltip>
+      </div>
+      <div className="flex items-center gap-2">
+        <Label className="font-normal">Borders</Label>
+        <SimpleTooltip content="Top Border">
+          <div className="flex justify-center items-center w-8">
+            <Checkbox
+              checked={borders ? borders[0] : undefined}
+              onCheckedChange={(value) => {
+                onChange({
+                  borders: [
+                    value === true,
+                    borders![1] ?? false,
+                    borders![2] ?? false,
+                    borders![3] ?? false,
+                  ],
+                });
+              }}
+            />
+          </div>
+        </SimpleTooltip>
+        <SimpleTooltip content="Right Border">
+          <div className="flex justify-center items-center w-8">
+            <Checkbox
+              checked={borders ? borders[1] : undefined}
+              onCheckedChange={(value) => {
+                onChange({
+                  borders: [
+                    borders![0] ?? false,
+                    value === true,
+                    borders![2] ?? false,
+                    borders![3] ?? false,
+                  ],
+                });
+              }}
+            />
+          </div>
+        </SimpleTooltip>
+        <SimpleTooltip content="Bottom Border">
+          <div className="flex justify-center items-center w-8">
+            <Checkbox
+              checked={borders ? borders[2] : undefined}
+              onCheckedChange={(value) => {
+                onChange({
+                  borders: [
+                    borders![0] ?? false,
+                    borders![1] ?? false,
+                    value === true,
+                    borders![3] ?? false,
+                  ],
+                });
+              }}
+            />
+          </div>
+        </SimpleTooltip>
+        <SimpleTooltip content="Left Border">
+          <div className="flex justify-center items-center w-8">
+            <Checkbox
+              checked={borders ? borders[3] : undefined}
+              onCheckedChange={(value) => {
+                onChange({
+                  borders: [
+                    borders![0] ?? false,
+                    borders![1] ?? false,
+                    borders![2] ?? false,
+                    value === true,
+                  ],
+                });
+              }}
+            />
+          </div>
         </SimpleTooltip>
       </div>
       <div className="grid grid-cols-2 items-center gap-2 pr-3 w-full">
