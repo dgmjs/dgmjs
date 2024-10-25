@@ -1,9 +1,16 @@
 import React from "react";
-import { Box } from "@dgmjs/core";
+import { BorderPosition, BorderPositionEnum, Box } from "@dgmjs/core";
 import { NumberField } from "./fields/number-field";
 import { Panel } from "../common/panel";
 import { Label } from "@/components/ui/label";
 import { SimpleTooltip } from "../common/simple-tooltip";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { merge } from "@/utils";
 import { ShapeEditorProps } from "@/types";
 
@@ -12,6 +19,7 @@ export const BoxPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
   const height = merge(shapes.map((s) => s.height));
   const corners = merge(shapes.map((s) => (s as Box).corners));
   const padding = merge(shapes.map((s) => (s as Box).padding));
+  const borderPosition = merge(shapes.map((s) => (s as Box).borderPosition));
 
   return (
     <Panel title="Box" borderTop>
@@ -144,6 +152,28 @@ export const BoxPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
             }}
           />
         </SimpleTooltip>
+      </div>
+      <div className="grid grid-cols-2 items-center gap-2 pr-3 w-full">
+        <Label className="font-normal">Position</Label>
+        <div className="flex items-center w-full">
+          <Select
+            value={borderPosition}
+            onValueChange={(value) => {
+              onChange({ borderPosition: value as BorderPositionEnum });
+            }}
+          >
+            <SelectTrigger className="h-8 w-full" title="Font Weight">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.values(BorderPosition).map((key) => (
+                <SelectItem key={key} value={key}>
+                  {key}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
     </Panel>
   );

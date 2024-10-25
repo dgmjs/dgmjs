@@ -83,6 +83,15 @@ export const Sizable = {
 
 export type SizableEnum = (typeof Sizable)[keyof typeof Sizable];
 
+export const BorderPosition = {
+  CENTER: "center",
+  INSIDE: "inside",
+  OUTSIDE: "outside",
+} as const;
+
+export type BorderPositionEnum =
+  (typeof BorderPosition)[keyof typeof BorderPosition];
+
 export const LineType = {
   STRAIGHT: "straight",
   CURVE: "curve",
@@ -1255,6 +1264,11 @@ export class Page extends Shape {
  */
 export class Box extends Shape {
   /**
+   * Border position (center, inside, outside)
+   */
+  borderPosition: BorderPositionEnum;
+
+  /**
    * Padding spaces [top, right, bottom, left] (same with CSS)
    */
   padding: number[];
@@ -1355,6 +1369,7 @@ export class Box extends Shape {
     this.type = "Box";
     // Initialization
     this.containable = false;
+    this.borderPosition = "center";
     this.padding = [0, 0, 0, 0];
     this.corners = [0, 0, 0, 0];
     this.anchored = false;
@@ -1373,6 +1388,7 @@ export class Box extends Shape {
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
+    json.strokePosition = this.borderPosition;
     json.padding = structuredClone(this.padding);
     json.corners = structuredClone(this.corners);
     json.anchored = this.anchored;
@@ -1391,6 +1407,7 @@ export class Box extends Shape {
 
   fromJSON(json: any) {
     super.fromJSON(json);
+    this.borderPosition = json.strokePosition ?? this.borderPosition;
     this.padding = json.padding ?? this.padding;
     this.corners = json.corners ?? this.corners;
     this.anchored = json.anchored ?? this.anchored;
@@ -1442,14 +1459,43 @@ export class Box extends Shape {
       );
     }
     if (this.strokeWidth > 0) {
-      canvas.strokeRoundRect(
-        this.left,
-        this.top,
-        this.right,
-        this.bottom,
-        this.corners,
-        this.getSeed()
-      );
+      switch (this.borderPosition) {
+        case BorderPosition.CENTER: {
+          canvas.strokeRoundRect(
+            this.left,
+            this.top,
+            this.right,
+            this.bottom,
+            this.corners,
+            this.getSeed()
+          );
+          break;
+        }
+        case BorderPosition.INSIDE: {
+          const offset = this.strokeWidth / 2;
+          canvas.strokeRoundRect(
+            this.left + offset,
+            this.top + offset,
+            this.right - offset,
+            this.bottom - offset,
+            this.corners,
+            this.getSeed()
+          );
+          break;
+        }
+        case BorderPosition.OUTSIDE: {
+          const offset = this.strokeWidth / 2;
+          canvas.strokeRoundRect(
+            this.left - offset,
+            this.top - offset,
+            this.right + offset,
+            this.bottom + offset,
+            this.corners,
+            this.getSeed()
+          );
+          break;
+        }
+      }
     }
     this.renderText(canvas);
   }
@@ -1751,13 +1797,39 @@ export class Ellipse extends Box {
       );
     }
     if (this.strokeWidth > 0) {
-      canvas.strokeEllipse(
-        this.left,
-        this.top,
-        this.right,
-        this.bottom,
-        this.getSeed()
-      );
+      switch (this.borderPosition) {
+        case BorderPosition.CENTER:
+          canvas.strokeEllipse(
+            this.left,
+            this.top,
+            this.right,
+            this.bottom,
+            this.getSeed()
+          );
+          break;
+        case BorderPosition.INSIDE: {
+          const offset = this.strokeWidth / 2;
+          canvas.strokeEllipse(
+            this.left + offset,
+            this.top + offset,
+            this.right - offset,
+            this.bottom - offset,
+            this.getSeed()
+          );
+          break;
+        }
+        case BorderPosition.OUTSIDE: {
+          const offset = this.strokeWidth / 2;
+          canvas.strokeEllipse(
+            this.left - offset,
+            this.top - offset,
+            this.right + offset,
+            this.bottom + offset,
+            this.getSeed()
+          );
+          break;
+        }
+      }
     }
     this.renderText(canvas);
   }
