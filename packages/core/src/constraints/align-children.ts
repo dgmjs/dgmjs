@@ -35,6 +35,7 @@ const schema = z.object({
     ])
     .default("left"),
   query: z.string().default(""),
+  gap: z.number().default(0),
   fillLast: z.boolean().default(false),
 });
 
@@ -222,7 +223,7 @@ function constraint(
         for (let child of arr) {
           if (child instanceof Box) {
             changed = setTop(tx, child, ty) || changed;
-            ty = child.bottom;
+            ty = child.bottom + (args.gap ?? 0);
             changed =
               setHorzAlign(tx, page, child, shape, args.align) || changed;
             // fill last child
@@ -242,7 +243,7 @@ function constraint(
         for (let child of arr.reverse()) {
           if (child instanceof Box) {
             changed = setBottom(tx, child, by) || changed;
-            by = child.top - 1;
+            by = child.top - (args.gap ?? 0);
             changed =
               setHorzAlign(tx, page, child, shape, args.align) || changed;
             // fill last child
@@ -263,7 +264,7 @@ function constraint(
         for (let child of arr) {
           if (child instanceof Box) {
             changed = setLeft(tx, child, lx) || changed;
-            lx = child.right;
+            lx = child.right + (args.gap ?? 0);
             changed =
               setVertAlign(tx, page, child, shape, args.align) || changed;
             // fill last child
@@ -283,7 +284,7 @@ function constraint(
         for (let child of arr.reverse()) {
           if (child instanceof Box) {
             changed = setRight(tx, child, rx) || changed;
-            rx = child.left - 1;
+            rx = child.left - (args.gap ?? 0);
             changed =
               setVertAlign(tx, page, child, shape, args.align) || changed;
             // fill last child
