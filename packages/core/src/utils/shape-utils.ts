@@ -2,6 +2,9 @@ import { unique } from "../std/lambda";
 import { Connector, Doc, Mirror, Page, Shape } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
+import { Store } from "../core";
+import { deserialize, serialize } from "../core/serialize";
+import { outerRefMapExtractor } from "../actions";
 
 /**
  * Returns all descendants of the given set of objects including the given
@@ -94,4 +97,16 @@ export function getAllBoundingRect(
         [0, 0],
         [0, 0],
       ];
+}
+
+/**
+ * A function to duplicate an array of shapes
+ */
+export function duplicateShapes(store: Store, shapes: Shape[]): Shape[] | null {
+  const buffer: any[] = serialize(shapes);
+  if (buffer.length > 0) {
+    const copied = deserialize(store, buffer, outerRefMapExtractor) as Shape[];
+    return copied;
+  }
+  return null;
 }
