@@ -10,6 +10,7 @@ title: "@dgmjs/core"
 - [geometry](/api-core/namespaces/geometry/readme/)
 - [handlers](/api-core/namespaces/handlers/readme/)
 - [macro](/api-core/namespaces/macro/readme/)
+- [shapeUtils](/api-core/namespaces/shapeutils/readme/)
 - [textUtils](/api-core/namespaces/textutils/readme/)
 - [utils](/api-core/namespaces/utils/readme/)
 
@@ -77,6 +78,7 @@ title: "@dgmjs/core"
 
 ## Type Aliases
 
+- [BorderPositionEnum](/api-core/type-aliases/borderpositionenum/)
 - [Colors](/api-core/type-aliases/colors/)
 - [ConstraintFn](/api-core/type-aliases/constraintfn/)
 - [HorzAlignEnum](/api-core/type-aliases/horzalignenum/)
@@ -96,6 +98,7 @@ title: "@dgmjs/core"
 ## Variables
 
 - [ActionKind](/api-core/variables/actionkind/)
+- [BorderPosition](/api-core/variables/borderposition/)
 - [FillStyle](/api-core/variables/fillstyle/)
 - [HorzAlign](/api-core/variables/horzalign/)
 - [LineEndType](/api-core/variables/lineendtype/)
