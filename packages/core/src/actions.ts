@@ -364,8 +364,15 @@ export class Actions {
    * @param shapes - The shapes to duplicate. If not provided, the selected shapes will be duplicated
    * @param dx - The horizontal distance to move the duplicated shapes
    * @param dy - The vertical distance to move the duplicated shapes
+   * @param parent - The parent shape to insert the duplicated shapes into. If not provided, the duplicated shapes will be inserted into the current page
    */
-  duplicate(shapes?: Shape[], dx: number = 30, dy: number = 30): Shape[] {
+  duplicate(
+    shapes?: Shape[],
+    dx: number = 30,
+    dy: number = 30,
+    parent?: Shape
+  ): Shape[] {
+    const canvas = this.editor.canvas;
     const page = this.editor.getCurrentPage();
     if (page) {
       shapes = shapes ?? this.editor.selection.getShapes();
@@ -380,9 +387,10 @@ export class Actions {
         this.editor.transform.transact((tx) => {
           copied.toReversed().forEach((shape) => {
             tx.appendObj(shape);
-            changeParent(tx, shape, page);
+            changeParent(tx, shape, parent ?? page);
           });
           moveShapes(tx, page, copied, dx, dy);
+          resolveAllConstraints(tx, page, canvas);
         });
         this.editor.transform.endAction();
         this.editor.selection.select(copied);
