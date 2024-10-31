@@ -57,7 +57,7 @@ export class BoxMoveAnchoredController extends Controller {
     return [Cursor.MOVE, 0];
   }
 
-  initialize(editor: Editor, shape: Shape): void {
+  initialize(editor: Editor, shape: Shape, e: CanvasPointerEvent): void {
     // initialize snappers
     this.gridSnapper.setPointToSnap(editor, this, [shape.left, shape.top]);
     this.moveSnapper.setRectToSnap(editor, shape, shape.getBoundingRect());
@@ -69,7 +69,7 @@ export class BoxMoveAnchoredController extends Controller {
   /**
    * Update ghost
    */
-  update(editor: Editor, shape: Shape) {
+  update(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     // snap dragging points
     this.gridSnapper.snap(editor, shape, this);
     this.moveSnapper.snap(editor, shape, this);
@@ -96,7 +96,7 @@ export class BoxMoveAnchoredController extends Controller {
   /**
    * Finalize shape by ghost
    */
-  finalize(editor: Editor, shape: Box) {
+  finalize(editor: Editor, shape: Box, e: CanvasPointerEvent) {
     editor.transform.endAction();
   }
 

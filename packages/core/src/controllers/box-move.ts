@@ -69,7 +69,7 @@ export class BoxMoveController extends Controller {
     return targetShape;
   }
 
-  initialize(editor: Editor, shape: Shape): void {
+  initialize(editor: Editor, shape: Shape, e: CanvasPointerEvent): void {
     const targetShape = this.getTargetShape(editor, shape);
     if (!targetShape || targetShape instanceof Page) return;
 
@@ -94,7 +94,7 @@ export class BoxMoveController extends Controller {
   /**
    * Update ghost
    */
-  update(editor: Editor, shape: Shape) {
+  update(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     const targetShape = this.getTargetShape(editor, shape);
     if (!targetShape || targetShape instanceof Page) return;
 
@@ -145,7 +145,7 @@ export class BoxMoveController extends Controller {
   /**
    * Finalize shape by ghost
    */
-  finalize(editor: Editor, shape: Shape) {
+  finalize(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     editor.transform.endAction();
   }
 

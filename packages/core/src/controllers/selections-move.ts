@@ -69,7 +69,7 @@ export class SelectionsMoveController extends Controller {
     return [Cursor.MOVE, 0];
   }
 
-  initialize(editor: Editor, shape: Shape): void {
+  initialize(editor: Editor, shape: Shape, e: CanvasPointerEvent): void {
     const rect = editor.selection.getBoundingRect(editor.canvas);
     const selection = editor.selection.getShapes();
 
@@ -85,7 +85,7 @@ export class SelectionsMoveController extends Controller {
    * Update
    * @param shape (is a page in group manipulator)
    */
-  update(editor: Editor, shape: Shape) {
+  update(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     const canvas = editor.canvas;
     const selections = editor.selection.getShapes();
 
@@ -130,7 +130,7 @@ export class SelectionsMoveController extends Controller {
    * Finalize shape by ghost
    * @param shape (is a page in group manipulator)
    */
-  finalize(editor: Editor, shape: Shape) {
+  finalize(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     editor.transform.endAction();
   }
 

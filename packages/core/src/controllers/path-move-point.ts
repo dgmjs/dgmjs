@@ -92,7 +92,7 @@ export class PathMovePointController extends Controller {
     return [Cursor.POINTER, 0];
   }
 
-  initialize(editor: Editor, shape: Shape): void {
+  initialize(editor: Editor, shape: Shape, e: CanvasPointerEvent): void {
     this.controlPoint = findControlPoint(
       editor,
       shape as Path,
@@ -114,7 +114,7 @@ export class PathMovePointController extends Controller {
   /**
    * Update ghost
    */
-  update(editor: Editor, shape: Shape) {
+  update(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     // snap dragging points
     this.gridSnapper.snap(editor, shape, this);
 
@@ -159,7 +159,7 @@ export class PathMovePointController extends Controller {
   /**
    * Finalize shape by ghost
    */
-  finalize(editor: Editor, shape: Path) {
+  finalize(editor: Editor, shape: Path, e: CanvasPointerEvent) {
     editor.transform.endAction();
   }
 
