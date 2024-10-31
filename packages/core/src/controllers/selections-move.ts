@@ -99,27 +99,41 @@ export class SelectionsMoveController extends Controller {
     const rect = editor.selection.getBoundingRect(editor.canvas);
     const selections = editor.selection.getShapes();
 
-    // horizontal or vertical movement with shift key
+    // return if not moving
+    if (this.dxStepGCS === 0 && this.dyStepGCS === 0) return;
+
+    // determine horz and/or vert movement
+    let allowMoveX = true;
+    let allowMoveY = true;
     if (e.shiftDown) {
       if (Math.abs(this.dxGCS) > Math.abs(this.dyGCS)) {
+        allowMoveY = false;
+      } else {
+        allowMoveX = false;
+      }
+    }
+
+    // snap dragging points
+    this.gridSnapper.snap(editor, shape, this);
+    this.moveSnapper.snap(editor, shape, this, allowMoveX, allowMoveY);
+
+    // horizontal or vertical movement with shift key
+    if (e.shiftDown) {
+      if (!allowMoveY) {
         this.dyStepGCS = 0;
+        this.dyGCS = 0;
         if (rect[0][1] !== this.initialPosition[1]) {
           this.dyStepGCS = this.initialPosition[1] - rect[0][1];
         }
-      } else {
+      }
+      if (!allowMoveX) {
         this.dxStepGCS = 0;
+        this.dxGCS = 0;
         if (rect[0][0] !== this.initialPosition[0]) {
           this.dxStepGCS = this.initialPosition[0] - rect[0][0];
         }
       }
     }
-
-    // return if not moving
-    if (this.dxStepGCS === 0 && this.dyStepGCS === 0) return;
-
-    // snap dragging points
-    this.gridSnapper.snap(editor, shape, this);
-    this.moveSnapper.snap(editor, shape, this);
 
     // determine container
     this.container =

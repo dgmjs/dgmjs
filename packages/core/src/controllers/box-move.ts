@@ -107,24 +107,38 @@ export class BoxMoveController extends Controller {
     const targetShape = this.getTargetShape(editor, shape);
     if (!targetShape || targetShape instanceof Page) return;
 
-    // horizontal or vertical movement with shift key
+    // determine horz and/or vert movement
+    let allowMoveX = true;
+    let allowMoveY = true;
     if (e.shiftDown) {
       if (Math.abs(this.dxGCS) > Math.abs(this.dyGCS)) {
-        this.dyStepGCS = 0;
-        if (targetShape.top !== this.initialPosition[1]) {
-          this.dyStepGCS = this.initialPosition[1] - targetShape.top;
-        }
+        allowMoveY = false;
       } else {
-        this.dxStepGCS = 0;
-        if (targetShape.left !== this.initialPosition[0]) {
-          this.dxStepGCS = this.initialPosition[0] - targetShape.left;
-        }
+        allowMoveX = false;
       }
     }
 
     // snap dragging points
     this.gridSnapper.snap(editor, shape, this);
-    this.moveSnapper.snap(editor, shape, this);
+    this.moveSnapper.snap(editor, shape, this, allowMoveX, allowMoveY);
+
+    // horizontal or vertical movement with shift key
+    if (e.shiftDown) {
+      if (!allowMoveY) {
+        this.dyStepGCS = 0;
+        this.dyGCS = 0;
+        if (targetShape.top !== this.initialPosition[1]) {
+          this.dyStepGCS = this.initialPosition[1] - targetShape.top;
+        }
+      }
+      if (!allowMoveX) {
+        this.dxStepGCS = 0;
+        this.dxGCS = 0;
+        if (targetShape.left !== this.initialPosition[0]) {
+          this.dxStepGCS = this.initialPosition[0] - targetShape.left;
+        }
+      }
+    }
 
     // apply movable constraint
     if (

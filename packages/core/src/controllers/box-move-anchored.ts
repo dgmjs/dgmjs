@@ -79,24 +79,38 @@ export class BoxMoveAnchoredController extends Controller {
    * Update ghost
    */
   update(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
-    // horizontal or vertical movement with shift key
+    // determine horz and/or vert movement
+    let allowMoveX = true;
+    let allowMoveY = true;
     if (e.shiftDown) {
       if (Math.abs(this.dxGCS) > Math.abs(this.dyGCS)) {
-        this.dyStepGCS = 0;
-        if (shape.top !== this.initialPosition[1]) {
-          this.dyStepGCS = this.initialPosition[1] - shape.top;
-        }
+        allowMoveY = false;
       } else {
-        this.dxStepGCS = 0;
-        if (shape.left !== this.initialPosition[0]) {
-          this.dxStepGCS = this.initialPosition[0] - shape.left;
-        }
+        allowMoveX = false;
       }
     }
 
     // snap dragging points
     this.gridSnapper.snap(editor, shape, this);
-    this.moveSnapper.snap(editor, shape, this);
+    this.moveSnapper.snap(editor, shape, this, allowMoveX, allowMoveY);
+
+    // horizontal or vertical movement with shift key
+    if (e.shiftDown) {
+      if (!allowMoveY) {
+        this.dyStepGCS = 0;
+        this.dyGCS = 0;
+        if (shape.top !== this.initialPosition[1]) {
+          this.dyStepGCS = this.initialPosition[1] - shape.top;
+        }
+      }
+      if (!allowMoveX) {
+        this.dxStepGCS = 0;
+        this.dxGCS = 0;
+        if (shape.left !== this.initialPosition[0]) {
+          this.dxStepGCS = this.initialPosition[0] - shape.left;
+        }
+      }
+    }
 
     // update
     const canvas = editor.canvas;

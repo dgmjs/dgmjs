@@ -3,7 +3,7 @@ import { Controller, Editor, Handler } from "../editor";
 import { ControllerPosition, MAGNET_THRESHOLD } from "../graphics/const";
 import * as geometry from "../graphics/geometry";
 import { ccs2lcs, gcs2ccs, lcs2gcs } from "../graphics/utils";
-import { Box, Shape, Sizable } from "../shapes";
+import { Box, Movable, Shape, Sizable } from "../shapes";
 import * as guide from "../utils/guide";
 
 function eq(a: number, b: number): boolean {
@@ -273,12 +273,26 @@ export class MoveSnapper extends MultipointSnapper {
     this.snappedY = null;
   }
 
-  snap(editor: Editor, shape: Shape, controller: Controller) {
+  snap(
+    editor: Editor,
+    shape: Shape,
+    controller: Controller,
+    allowMoveX: boolean = true,
+    allowMoveY: boolean = true
+  ) {
     if (!editor.getSnapToObjects()) return;
 
+    // apply movable constraint
+    if (shape.movable === Movable.HORZ) allowMoveY = false;
+    if (shape.movable === Movable.VERT) allowMoveX = false;
+    if (shape.movable === Movable.NONE) {
+      allowMoveX = false;
+      allowMoveY = false;
+    }
+
     // move points to snap by dx and dy
-    const dx = controller.dxGCS;
-    const dy = controller.dyGCS;
+    const dx = allowMoveX ? controller.dxGCS : 0;
+    const dy = allowMoveY ? controller.dyGCS : 0;
     if (dx === 0 && dy === 0) return;
     this.pointsToSnap = geometry.movePoints(this.initialPointsToSnap, dx, dy);
 
@@ -288,44 +302,48 @@ export class MoveSnapper extends MultipointSnapper {
 
     // compute snapped X
     this.snappedX = null;
-    let deltaX = MAGNET_THRESHOLD;
-    if (this.snappedX === null) {
-      for (let j = 0; j < this.pointsToSnap.length; j++) {
-        const p = this.pointsToSnap[j];
-        const sx = this.snapX(p, this.referencePoints);
-        if (sx !== null) {
-          const dx = Math.abs(sx - p[0]);
-          if (dx < deltaX) {
-            this.snappedX = sx;
-            deltaX = dx;
+    if (allowMoveX) {
+      let deltaX = MAGNET_THRESHOLD;
+      if (this.snappedX === null) {
+        for (let j = 0; j < this.pointsToSnap.length; j++) {
+          const p = this.pointsToSnap[j];
+          const sx = this.snapX(p, this.referencePoints);
+          if (sx !== null) {
+            const dx = Math.abs(sx - p[0]);
+            if (dx < deltaX) {
+              this.snappedX = sx;
+              deltaX = dx;
+            }
           }
         }
       }
-    }
-    if (this.snappedX !== null) {
-      this.moveDragPointGCS(editor, shape, controller, deltaX, 0);
-      this.pointsToSnap.forEach((p) => (p[0] += deltaX));
+      if (this.snappedX !== null) {
+        this.moveDragPointGCS(editor, shape, controller, deltaX, 0);
+        this.pointsToSnap.forEach((p) => (p[0] += deltaX));
+      }
     }
 
     // compute snapped Y
     this.snappedY = null;
-    let deltaY = MAGNET_THRESHOLD;
-    if (this.snappedY === null) {
-      for (let j = 0; j < this.pointsToSnap.length; j++) {
-        const p = this.pointsToSnap[j];
-        const sy = this.snapY(p, this.referencePoints);
-        if (sy !== null) {
-          const dy = Math.abs(sy - p[1]);
-          if (dy < deltaY) {
-            this.snappedY = sy;
-            deltaY = dy;
+    if (allowMoveY) {
+      let deltaY = MAGNET_THRESHOLD;
+      if (this.snappedY === null) {
+        for (let j = 0; j < this.pointsToSnap.length; j++) {
+          const p = this.pointsToSnap[j];
+          const sy = this.snapY(p, this.referencePoints);
+          if (sy !== null) {
+            const dy = Math.abs(sy - p[1]);
+            if (dy < deltaY) {
+              this.snappedY = sy;
+              deltaY = dy;
+            }
           }
         }
       }
-    }
-    if (this.snappedY !== null) {
-      this.moveDragPointGCS(editor, shape, controller, 0, deltaY);
-      this.pointsToSnap.forEach((p) => (p[1] += deltaY));
+      if (this.snappedY !== null) {
+        this.moveDragPointGCS(editor, shape, controller, 0, deltaY);
+        this.pointsToSnap.forEach((p) => (p[1] += deltaY));
+      }
     }
 
     // set guide points

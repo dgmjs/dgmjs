@@ -97,18 +97,30 @@ export class ConnectorMoveController extends Controller {
       ) as Shape;
     if (!targetShape || targetShape instanceof Page) return;
 
-    // horizontal or vertical movement with shift key
+    // determine horz and/or vert movement
+    let allowMoveX = true;
+    let allowMoveY = true;
     if (e.shiftDown) {
       if (Math.abs(this.dxGCS) > Math.abs(this.dyGCS)) {
-        this.dy = 0;
+        allowMoveY = false;
       } else {
-        this.dx = 0;
+        allowMoveX = false;
       }
     }
 
     // snap dragging points
     this.gridSnapper.snap(editor, targetShape, this);
-    this.moveSnapper.snap(editor, targetShape, this);
+    this.moveSnapper.snap(editor, targetShape, this, allowMoveX, allowMoveY);
+
+    // horizontal or vertical movement with shift key
+    if (e.shiftDown) {
+      if (!allowMoveY) {
+        this.dy = 0;
+      }
+      if (!allowMoveX) {
+        this.dx = 0;
+      }
+    }
 
     // apply movable constraint
     if (
