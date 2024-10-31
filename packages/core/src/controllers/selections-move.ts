@@ -29,9 +29,9 @@ export class SelectionsMoveController extends Controller {
   container: Shape | null;
 
   /**
-   * Initial position of the target shapes
+   * State of shift movement (moving shapes with shift key)
    */
-  initialPosition: number[];
+  shiftMove: "none" | "horz" | "vert";
 
   constructor(manipulator: Manipulator) {
     super(manipulator);
@@ -39,7 +39,7 @@ export class SelectionsMoveController extends Controller {
     this.gridSnapper = new GridSnapper();
     this.moveSnapper = new MoveSnapper();
     this.container = null;
-    this.initialPosition = [0, 0];
+    this.shiftMove = "none";
   }
 
   /**
@@ -79,8 +79,8 @@ export class SelectionsMoveController extends Controller {
     const rect = editor.selection.getBoundingRect(editor.canvas);
     const selection = editor.selection.getShapes();
 
-    // store initial position
-    this.initialPosition = [rect[0][0], rect[0][1]];
+    // initialize shift movement
+    this.shiftMove = "none";
 
     // initialize snappers
     this.gridSnapper.setPointToSnap(editor, this, rect[0]);
@@ -102,39 +102,34 @@ export class SelectionsMoveController extends Controller {
     // return if not moving
     if (this.dxStepGCS === 0 && this.dyStepGCS === 0) return;
 
-    // determine horz and/or vert movement
-    let allowMoveX = true;
-    let allowMoveY = true;
-    if (e.shiftDown) {
-      if (Math.abs(this.dxGCS) > Math.abs(this.dyGCS)) {
-        allowMoveY = false;
-      } else {
-        allowMoveX = false;
-      }
+    // determine shift-move state
+    if (e.shiftDown && this.shiftMove === "none") {
+      this.shiftMove =
+        Math.abs(this.dxStepGCS) > Math.abs(this.dyStepGCS) ? "horz" : "vert";
     }
 
     // snap dragging points
     this.gridSnapper.snap(editor, shape, this);
-    this.moveSnapper.snap(editor, shape, this, allowMoveX, allowMoveY);
+    this.moveSnapper.snap(
+      editor,
+      shape,
+      this,
+      this.shiftMove !== "vert",
+      this.shiftMove !== "horz"
+    );
 
-    // horizontal or vertical movement with shift key
+    // move horizontal or vertical with shift key
     if (e.shiftDown) {
-      if (!allowMoveY) {
+      if (this.shiftMove === "horz") {
         this.dyStepGCS = 0;
         this.dyGCS = 0;
-        if (rect[0][1] !== this.initialPosition[1]) {
-          this.dyStepGCS = this.initialPosition[1] - rect[0][1];
-        }
-      }
-      if (!allowMoveX) {
+        this.dy = 0;
+      } else if (this.shiftMove === "vert") {
         this.dxStepGCS = 0;
         this.dxGCS = 0;
-        if (rect[0][0] !== this.initialPosition[0]) {
-          this.dxStepGCS = this.initialPosition[0] - rect[0][0];
-        }
+        this.dx = 0;
       }
     }
-
     // determine container
     this.container =
       editor

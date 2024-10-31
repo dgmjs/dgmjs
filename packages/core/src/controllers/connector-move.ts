@@ -34,9 +34,9 @@ export class ConnectorMoveController extends Controller {
   container: Shape | null;
 
   /**
-   * Initial position of the target shape
+   * State of shift movement (moving shapes with shift key)
    */
-  initialPosition: number[];
+  shiftMove: "none" | "horz" | "vert";
 
   constructor(manipulator: Manipulator) {
     super(manipulator);
@@ -45,7 +45,7 @@ export class ConnectorMoveController extends Controller {
     this.moveSnapper = new MoveSnapper();
     this.controlPath = [];
     this.container = null;
-    this.initialPosition = [0, 0];
+    this.shiftMove = "none";
   }
 
   /**
@@ -73,8 +73,8 @@ export class ConnectorMoveController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape, e: CanvasPointerEvent): void {
-    // store initial position
-    this.initialPosition = [shape.left, shape.top];
+    // initialize shift movement
+    this.shiftMove = "none";
 
     // initialize snappers
     this.gridSnapper.setPointToSnap(editor, this, [shape.left, shape.top]);
@@ -97,31 +97,37 @@ export class ConnectorMoveController extends Controller {
       ) as Shape;
     if (!targetShape || targetShape instanceof Page) return;
 
-    // determine horz and/or vert movement
-    let allowMoveX = true;
-    let allowMoveY = true;
-    if (e.shiftDown) {
-      if (Math.abs(this.dxGCS) > Math.abs(this.dyGCS)) {
-        allowMoveY = false;
-      } else {
-        allowMoveX = false;
-      }
+    // return if no change
+    if (this.dxStepGCS === 0 && this.dyStepGCS === 0) return;
+
+    // determine shift-move state
+    if (e.shiftDown && this.shiftMove === "none") {
+      this.shiftMove =
+        Math.abs(this.dxStepGCS) > Math.abs(this.dyStepGCS) ? "horz" : "vert";
     }
 
     // snap dragging points
     this.gridSnapper.snap(editor, targetShape, this);
-    this.moveSnapper.snap(editor, targetShape, this, allowMoveX, allowMoveY);
+    this.moveSnapper.snap(
+      editor,
+      targetShape,
+      this,
+      this.shiftMove !== "vert",
+      this.shiftMove !== "horz"
+    );
 
-    // horizontal or vertical movement with shift key
+    // move horizontal or vertical with shift key
     if (e.shiftDown) {
-      if (!allowMoveY) {
+      if (this.shiftMove === "horz") {
+        this.dyStepGCS = 0;
+        this.dyGCS = 0;
         this.dy = 0;
-      }
-      if (!allowMoveX) {
+      } else if (this.shiftMove === "vert") {
+        this.dxStepGCS = 0;
+        this.dxGCS = 0;
         this.dx = 0;
       }
     }
-
     // apply movable constraint
     if (
       targetShape.movable === Movable.VERT ||
