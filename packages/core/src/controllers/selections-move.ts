@@ -28,12 +28,18 @@ export class SelectionsMoveController extends Controller {
    */
   container: Shape | null;
 
+  /**
+   * Initial position of the target shapes
+   */
+  initialPosition: number[];
+
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.hasHandle = false;
     this.gridSnapper = new GridSnapper();
     this.moveSnapper = new MoveSnapper();
     this.container = null;
+    this.initialPosition = [0, 0];
   }
 
   /**
@@ -73,6 +79,9 @@ export class SelectionsMoveController extends Controller {
     const rect = editor.selection.getBoundingRect(editor.canvas);
     const selection = editor.selection.getShapes();
 
+    // store initial position
+    this.initialPosition = [rect[0][0], rect[0][1]];
+
     // initialize snappers
     this.gridSnapper.setPointToSnap(editor, this, rect[0]);
     this.moveSnapper.setRectToSnap(editor, shape, rect);
@@ -87,7 +96,23 @@ export class SelectionsMoveController extends Controller {
    */
   update(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     const canvas = editor.canvas;
+    const rect = editor.selection.getBoundingRect(editor.canvas);
     const selections = editor.selection.getShapes();
+
+    // horizontal or vertical movement with shift key
+    if (e.shiftDown) {
+      if (Math.abs(this.dxGCS) > Math.abs(this.dyGCS)) {
+        this.dyStepGCS = 0;
+        if (rect[0][1] !== this.initialPosition[1]) {
+          this.dyStepGCS = this.initialPosition[1] - rect[0][1];
+        }
+      } else {
+        this.dxStepGCS = 0;
+        if (rect[0][0] !== this.initialPosition[0]) {
+          this.dxStepGCS = this.initialPosition[0] - rect[0][0];
+        }
+      }
+    }
 
     // return if not moving
     if (this.dxStepGCS === 0 && this.dyStepGCS === 0) return;

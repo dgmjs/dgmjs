@@ -33,6 +33,11 @@ export class ConnectorMoveController extends Controller {
    */
   container: Shape | null;
 
+  /**
+   * Initial position of the target shape
+   */
+  initialPosition: number[];
+
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.hasHandle = false;
@@ -40,6 +45,7 @@ export class ConnectorMoveController extends Controller {
     this.moveSnapper = new MoveSnapper();
     this.controlPath = [];
     this.container = null;
+    this.initialPosition = [0, 0];
   }
 
   /**
@@ -67,6 +73,9 @@ export class ConnectorMoveController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape, e: CanvasPointerEvent): void {
+    // store initial position
+    this.initialPosition = [shape.left, shape.top];
+
     // initialize snappers
     this.gridSnapper.setPointToSnap(editor, this, [shape.left, shape.top]);
     this.moveSnapper.setRectToSnap(editor, shape, shape.getBoundingRect());
@@ -80,10 +89,6 @@ export class ConnectorMoveController extends Controller {
    * Update ghost
    */
   update(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
-    // snap dragging points
-    this.gridSnapper.snap(editor, shape, this);
-    this.moveSnapper.snap(editor, shape, this);
-
     // apply movable property
     let targetShape: Shape | null = shape;
     if (targetShape.movable === Movable.PARENT)
@@ -91,6 +96,21 @@ export class ConnectorMoveController extends Controller {
         (s) => (s as Shape).movable !== Movable.PARENT
       ) as Shape;
     if (!targetShape || targetShape instanceof Page) return;
+
+    // horizontal or vertical movement with shift key
+    if (e.shiftDown) {
+      if (Math.abs(this.dxGCS) > Math.abs(this.dyGCS)) {
+        this.dy = 0;
+      } else {
+        this.dx = 0;
+      }
+    }
+
+    // snap dragging points
+    this.gridSnapper.snap(editor, targetShape, this);
+    this.moveSnapper.snap(editor, targetShape, this);
+
+    // apply movable constraint
     if (
       targetShape.movable === Movable.VERT ||
       targetShape.movable === Movable.NONE
