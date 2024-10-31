@@ -11,6 +11,13 @@ import { ActionKind } from "../core";
  */
 export class SelectHandler extends Handler {
   /**
+   * A set of shapes that should be deselected when pointer up. This is required
+   * to deselect shapes on pointer up, not pointer down. This allows controllers
+   * can handle shift key while pointer down.
+   */
+  private deselectOnPointerUp: Shape[] = [];
+
+  /**
    * Returns a shape (with manipulator area) located at the position e.
    */
   getShapeAt(editor: Editor, e: CanvasPointerEvent): Shape | null {
@@ -46,7 +53,8 @@ export class SelectHandler extends Handler {
         // single selection
         if (e.shiftDown) {
           if (editor.selection.isSelected(shape)) {
-            editor.selection.deselect([shape]);
+            // editor.selection.deselect([shape]);
+            this.deselectOnPointerUp = [shape];
           } else {
             editor.selection.select([shape], false);
           }
@@ -189,7 +197,8 @@ export class SelectHandler extends Handler {
       if (editor.selection.getShapes().length > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) {
-          manipulator.pointerMove(editor, page, e);
+          const moved = manipulator.pointerMove(editor, page, e);
+          if (moved) this.deselectOnPointerUp = [];
           if (manipulator.mouseIn(editor, page, e)) {
             cursor = manipulator.mouseCursor(editor, page, e) ?? cursor;
           }
@@ -199,7 +208,8 @@ export class SelectHandler extends Handler {
         const s = editor.selection.getShapes()[0];
         const manipulator = manipulatorManager.get(s.type);
         if (manipulator) {
-          manipulator.pointerMove(editor, s, e);
+          const moved = manipulator.pointerMove(editor, s, e);
+          if (moved) this.deselectOnPointerUp = [];
           if (manipulator.mouseIn(editor, s, e) || manipulator.isDragging()) {
             cursor = manipulator.mouseCursor(editor, s, e) ?? cursor;
           }
@@ -221,6 +231,12 @@ export class SelectHandler extends Handler {
     const canvas = editor.canvas;
     const page = editor.getCurrentPage();
     const p = canvas.globalCoordTransformRev([e.x, e.y]);
+
+    // deselect shapes marked to deselect
+    if (this.deselectOnPointerUp.length > 0) {
+      editor.selection.deselect(this.deselectOnPointerUp);
+      this.deselectOnPointerUp = [];
+    }
 
     // select area
     if (e.button === Mouse.BUTTON1 && this.dragging) {

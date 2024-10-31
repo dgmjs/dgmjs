@@ -1771,17 +1771,17 @@ export class Controller {
   /**
    * Initialize before dragging
    */
-  initialize(editor: Editor, shape: Shape) {}
+  initialize(editor: Editor, shape: Shape, e: CanvasPointerEvent) {}
 
   /**
    * Update ghost
    */
-  update(editor: Editor, shape: Shape) {}
+  update(editor: Editor, shape: Shape, e: CanvasPointerEvent) {}
 
   /**
    * Finalize shape by ghost
    */
-  finalize(editor: Editor, shape: Shape) {}
+  finalize(editor: Editor, shape: Shape, e: CanvasPointerEvent) {}
 
   /**
    * Handle pointer down event
@@ -1803,8 +1803,8 @@ export class Controller {
       this.dragPrevPointCCS = geometry.copy(this.dragStartPointCCS);
       this.dragPointCCS = geometry.copy(this.dragStartPointCCS);
       handled = true;
-      this.initialize(editor, shape);
-      this.update(editor, shape);
+      this.initialize(editor, shape, e);
+      this.update(editor, shape, e);
       editor.repaint();
       this.drawDragging(editor, shape, e);
       editor.onDragStart.emit({
@@ -1838,7 +1838,7 @@ export class Controller {
       this.dxStepGCS = this.dragPointGCS[0] - this.dragPrevPointGCS[0];
       this.dyStepGCS = this.dragPointGCS[1] - this.dragPrevPointGCS[1];
       handled = true;
-      this.update(editor, shape);
+      this.update(editor, shape, e);
       editor.repaint();
       this.drawDragging(editor, shape, e);
       editor.onDrag.emit({
@@ -1856,7 +1856,7 @@ export class Controller {
   pointerUp(editor: Editor, shape: Shape, e: CanvasPointerEvent): boolean {
     let handled = false;
     if (e.button === Mouse.BUTTON1 && this.dragging) {
-      this.finalize(editor, shape);
+      this.finalize(editor, shape, e);
       this.reset();
       handled = true;
       editor.repaint();

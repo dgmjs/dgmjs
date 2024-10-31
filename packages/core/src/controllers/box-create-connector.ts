@@ -103,7 +103,7 @@ export class BoxCreateConnectorController extends Controller {
   /**
    * Initialize ghost
    */
-  initialize(editor: Editor, shape: Shape): void {
+  initialize(editor: Editor, shape: Shape, e: CanvasPointerEvent): void {
     // initialize snappers
     this.gridSnapper.setPointToSnap(editor, this, this.dragPointGCS);
 
@@ -125,7 +125,7 @@ export class BoxCreateConnectorController extends Controller {
   /**
    * Update ghost
    */
-  update(editor: Editor, shape: Shape) {
+  update(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     if (this.connector) {
       // snap dragging points
       this.gridSnapper.snap(editor, shape, this);
@@ -152,7 +152,7 @@ export class BoxCreateConnectorController extends Controller {
   /**
    * Finalize shape by ghost
    */
-  finalize(editor: Editor, shape: Box) {
+  finalize(editor: Editor, shape: Box, e: CanvasPointerEvent) {
     if (this.dx === 0 && this.dy === 0) {
       editor.transform.cancelAction();
     } else {

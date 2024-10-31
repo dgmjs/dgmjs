@@ -81,7 +81,7 @@ export class BoxMoveAnchorPositionController extends Controller {
     return [Cursor.POINTER, 0];
   }
 
-  initialize(editor: Editor, shape: Shape): void {
+  initialize(editor: Editor, shape: Shape, e: CanvasPointerEvent): void {
     this.ghost = shape.getEnclosure();
     this.anchorPosition = (shape as Box).anchorPosition;
     this.anchorPoint = geometry.getPointOnPath(
@@ -95,7 +95,7 @@ export class BoxMoveAnchorPositionController extends Controller {
   /**
    * Update ghost
    */
-  update(editor: Editor, shape: Shape) {
+  update(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     const canvas = editor.canvas;
     let newEnclosure = shape.getEnclosure();
     const dragCCS = lcs2ccs(canvas, shape, this.dragPoint);
@@ -139,7 +139,7 @@ export class BoxMoveAnchorPositionController extends Controller {
   /**
    * Finalize shape by ghost
    */
-  finalize(editor: Editor, shape: Box) {
+  finalize(editor: Editor, shape: Box, e: CanvasPointerEvent) {
     editor.transform.endAction();
   }
 

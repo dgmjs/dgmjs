@@ -28,12 +28,18 @@ export class BoxMoveController extends Controller {
    */
   container: Shape | null;
 
+  /**
+   * Initial position of the target shape
+   */
+  initialPosition: number[];
+
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.hasHandle = false;
     this.gridSnapper = new GridSnapper();
     this.moveSnapper = new MoveSnapper();
     this.container = null;
+    this.initialPosition = [0, 0];
   }
 
   /**
@@ -69,9 +75,12 @@ export class BoxMoveController extends Controller {
     return targetShape;
   }
 
-  initialize(editor: Editor, shape: Shape): void {
+  initialize(editor: Editor, shape: Shape, e: CanvasPointerEvent): void {
     const targetShape = this.getTargetShape(editor, shape);
     if (!targetShape || targetShape instanceof Page) return;
+
+    // store initial position
+    this.initialPosition = [targetShape.left, targetShape.top];
 
     // initialize snappers
     this.gridSnapper.setPointToSnap(editor, this, [
@@ -94,9 +103,24 @@ export class BoxMoveController extends Controller {
   /**
    * Update ghost
    */
-  update(editor: Editor, shape: Shape) {
+  update(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     const targetShape = this.getTargetShape(editor, shape);
     if (!targetShape || targetShape instanceof Page) return;
+
+    // horizontal or vertical movement with shift key
+    if (e.shiftDown) {
+      if (Math.abs(this.dxGCS) > Math.abs(this.dyGCS)) {
+        this.dyStepGCS = 0;
+        if (targetShape.top !== this.initialPosition[1]) {
+          this.dyStepGCS = this.initialPosition[1] - targetShape.top;
+        }
+      } else {
+        this.dxStepGCS = 0;
+        if (targetShape.left !== this.initialPosition[0]) {
+          this.dxStepGCS = this.initialPosition[0] - targetShape.left;
+        }
+      }
+    }
 
     // snap dragging points
     this.gridSnapper.snap(editor, shape, this);
@@ -145,7 +169,7 @@ export class BoxMoveController extends Controller {
   /**
    * Finalize shape by ghost
    */
-  finalize(editor: Editor, shape: Shape) {
+  finalize(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     editor.transform.endAction();
   }
 

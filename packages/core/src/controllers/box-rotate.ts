@@ -125,14 +125,14 @@ export class BoxRotateController extends Controller {
   /**
    * Initialize ghost
    */
-  initialize(editor: Editor, shape: Shape): void {
+  initialize(editor: Editor, shape: Shape, e: CanvasPointerEvent): void {
     editor.transform.startAction(ActionKind.ROTATE);
   }
 
   /**
    * Update ghost
    */
-  update(editor: Editor, shape: Shape) {
+  update(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     const enclosure = shape.getEnclosure();
     const cp = this.getControlPoint(editor.canvas, shape);
     const center = geometry.mid(enclosure[0], enclosure[2]);
@@ -152,7 +152,7 @@ export class BoxRotateController extends Controller {
   /**
    * Finalize shape by ghost
    */
-  finalize(editor: Editor, shape: Box) {
+  finalize(editor: Editor, shape: Box, e: CanvasPointerEvent) {
     editor.transform.endAction();
   }
 

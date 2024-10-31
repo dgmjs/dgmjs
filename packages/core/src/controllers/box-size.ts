@@ -193,7 +193,7 @@ export class BoxSizeController extends Controller {
     return [Cursor.RESIZE, angle];
   }
 
-  initialize(editor: Editor, shape: Shape): void {
+  initialize(editor: Editor, shape: Shape, e: CanvasPointerEvent): void {
     // initialize snappers
     this.gridSnapper.setPointToSnap(
       editor,
@@ -212,7 +212,7 @@ export class BoxSizeController extends Controller {
   /**
    * Update ghost
    */
-  update(editor: Editor, shape: Shape) {
+  update(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     const canvas = editor.canvas;
 
     // snapping
@@ -467,7 +467,7 @@ export class BoxSizeController extends Controller {
   /**
    * Finalize shape by ghost
    */
-  finalize(editor: Editor, shape: Box) {
+  finalize(editor: Editor, shape: Box, e: CanvasPointerEvent) {
     editor.transform.endAction();
   }
 

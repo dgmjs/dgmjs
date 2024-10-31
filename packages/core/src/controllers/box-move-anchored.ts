@@ -24,11 +24,17 @@ export class BoxMoveAnchoredController extends Controller {
    */
   moveSnapper: MoveSnapper;
 
+  /**
+   * Initial position of the target shape
+   */
+  initialPosition: number[];
+
   constructor(manipulator: Manipulator) {
     super(manipulator);
     this.hasHandle = false;
     this.gridSnapper = new GridSnapper();
     this.moveSnapper = new MoveSnapper();
+    this.initialPosition = [0, 0];
   }
 
   /**
@@ -57,7 +63,10 @@ export class BoxMoveAnchoredController extends Controller {
     return [Cursor.MOVE, 0];
   }
 
-  initialize(editor: Editor, shape: Shape): void {
+  initialize(editor: Editor, shape: Shape, e: CanvasPointerEvent): void {
+    // store initial position
+    this.initialPosition = [shape.left, shape.top];
+
     // initialize snappers
     this.gridSnapper.setPointToSnap(editor, this, [shape.left, shape.top]);
     this.moveSnapper.setRectToSnap(editor, shape, shape.getBoundingRect());
@@ -69,19 +78,35 @@ export class BoxMoveAnchoredController extends Controller {
   /**
    * Update ghost
    */
-  update(editor: Editor, shape: Shape) {
+  update(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
+    // horizontal or vertical movement with shift key
+    if (e.shiftDown) {
+      if (Math.abs(this.dxGCS) > Math.abs(this.dyGCS)) {
+        this.dyStepGCS = 0;
+        if (shape.top !== this.initialPosition[1]) {
+          this.dyStepGCS = this.initialPosition[1] - shape.top;
+        }
+      } else {
+        this.dxStepGCS = 0;
+        if (shape.left !== this.initialPosition[0]) {
+          this.dxStepGCS = this.initialPosition[0] - shape.left;
+        }
+      }
+    }
+
     // snap dragging points
     this.gridSnapper.snap(editor, shape, this);
     this.moveSnapper.snap(editor, shape, this);
 
+    // update
     const canvas = editor.canvas;
     const anchorPoint = geometry.getPointOnPath(
       (shape.parent as Shape).getOutline() ?? [],
       (shape as Box).anchorPosition
     );
     const shapeCenter = shape.getCenter();
-    shapeCenter[0] += this.dxStep;
-    shapeCenter[1] += this.dyStep;
+    shapeCenter[0] += this.dxStepGCS;
+    shapeCenter[1] += this.dyStepGCS;
     const angle = geometry.angle(anchorPoint, shapeCenter);
     const length = geometry.distance(shapeCenter, anchorPoint);
 
@@ -96,7 +121,7 @@ export class BoxMoveAnchoredController extends Controller {
   /**
    * Finalize shape by ghost
    */
-  finalize(editor: Editor, shape: Box) {
+  finalize(editor: Editor, shape: Box, e: CanvasPointerEvent) {
     editor.transform.endAction();
   }
 

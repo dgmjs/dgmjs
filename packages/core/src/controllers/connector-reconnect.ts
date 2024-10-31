@@ -80,7 +80,7 @@ export class ConnectorReconnectController extends Controller {
     return [Cursor.POINTER, 0];
   }
 
-  initialize(editor: Editor, shape: Shape): void {
+  initialize(editor: Editor, shape: Shape, e: CanvasPointerEvent): void {
     if (shape instanceof Connector) {
       const tpCCS = lcs2ccs(editor.canvas, shape, shape.getTailAnchorPoint());
       const hpCCS = lcs2ccs(editor.canvas, shape, shape.getHeadAnchorPoint());
@@ -102,7 +102,7 @@ export class ConnectorReconnectController extends Controller {
   /**
    * Update ghost
    */
-  update(editor: Editor, shape: Shape) {
+  update(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     // snap dragging points
     this.gridSnapper.snap(editor, shape, this);
 
@@ -133,7 +133,7 @@ export class ConnectorReconnectController extends Controller {
   /**
    * Finalize shape by ghost
    */
-  finalize(editor: Editor, shape: Connector) {
+  finalize(editor: Editor, shape: Connector, e: CanvasPointerEvent) {
     editor.transform.endAction();
   }
 
