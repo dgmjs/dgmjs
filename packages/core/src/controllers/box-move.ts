@@ -29,9 +29,9 @@ export class BoxMoveController extends Controller {
   container: Shape | null;
 
   /**
-   * Initial position of the target shape
+   * State of shift movement (moving shapes with shift key)
    */
-  initialPosition: number[];
+  shiftMove: "none" | "horz" | "vert";
 
   constructor(manipulator: Manipulator) {
     super(manipulator);
@@ -39,7 +39,7 @@ export class BoxMoveController extends Controller {
     this.gridSnapper = new GridSnapper();
     this.moveSnapper = new MoveSnapper();
     this.container = null;
-    this.initialPosition = [0, 0];
+    this.shiftMove = "none";
   }
 
   /**
@@ -79,8 +79,8 @@ export class BoxMoveController extends Controller {
     const targetShape = this.getTargetShape(editor, shape);
     if (!targetShape || targetShape instanceof Page) return;
 
-    // store initial position
-    this.initialPosition = [targetShape.left, targetShape.top];
+    // initialize shift move state
+    this.shiftMove = "none";
 
     // initialize snappers
     this.gridSnapper.setPointToSnap(editor, this, [
@@ -107,24 +107,37 @@ export class BoxMoveController extends Controller {
     const targetShape = this.getTargetShape(editor, shape);
     if (!targetShape || targetShape instanceof Page) return;
 
-    // horizontal or vertical movement with shift key
-    if (e.shiftDown) {
-      if (Math.abs(this.dxGCS) > Math.abs(this.dyGCS)) {
-        this.dyStepGCS = 0;
-        if (targetShape.top !== this.initialPosition[1]) {
-          this.dyStepGCS = this.initialPosition[1] - targetShape.top;
-        }
-      } else {
-        this.dxStepGCS = 0;
-        if (targetShape.left !== this.initialPosition[0]) {
-          this.dxStepGCS = this.initialPosition[0] - targetShape.left;
-        }
-      }
+    // return if no change
+    if (this.dxStepGCS === 0 && this.dyStepGCS === 0) return;
+
+    // determine shift-move state
+    if (e.shiftDown && this.shiftMove === "none") {
+      this.shiftMove =
+        Math.abs(this.dxStepGCS) > Math.abs(this.dyStepGCS) ? "horz" : "vert";
     }
 
     // snap dragging points
     this.gridSnapper.snap(editor, shape, this);
-    this.moveSnapper.snap(editor, shape, this);
+    this.moveSnapper.snap(
+      editor,
+      shape,
+      this,
+      this.shiftMove !== "vert",
+      this.shiftMove !== "horz"
+    );
+
+    // move horizontal or vertical with shift key
+    if (e.shiftDown) {
+      if (this.shiftMove === "horz") {
+        this.dyStepGCS = 0;
+        this.dyGCS = 0;
+        this.dy = 0;
+      } else if (this.shiftMove === "vert") {
+        this.dxStepGCS = 0;
+        this.dxGCS = 0;
+        this.dx = 0;
+      }
+    }
 
     // apply movable constraint
     if (
@@ -137,9 +150,6 @@ export class BoxMoveController extends Controller {
       targetShape.movable === Movable.NONE
     )
       this.dyStepGCS = 0;
-
-    // return if no change
-    if (this.dxStepGCS === 0 && this.dyStepGCS === 0) return;
 
     // determine container
     const canvas = editor.canvas;
