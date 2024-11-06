@@ -1,6 +1,8 @@
-import { Page, Canvas, geometry, themeColors, Shape } from "@dgmjs/core";
+import { Page, Canvas, geometry, themeColors, Shape, Doc } from "@dgmjs/core";
 import fileSaverPkg from "file-saver";
 import { Context } from "svgcanvas";
+import { jsPDF } from "jspdf";
+
 const { saveAs } = fileSaverPkg;
 
 const DEFAULT_MARGIN = 8;
@@ -280,6 +282,30 @@ async function copyToClipboard(
   }
 }
 
+/**
+ * Export the doc to PDF
+ * @param doc
+ */
+async function exportDocAsPDF(doc: Doc) {
+  const pdfDoc = new jsPDF();
+  pdfDoc.text("Hello world!", 10, 10);
+
+  const context = pdfDoc.context2d;
+
+  // context.beginPath();
+  // context.arc(150, 150, 50, 0, Math.PI, false);
+  // context.lineTo(300, 300);
+  // context.moveTo(300, 150);
+  // context.rect(5, 5, 150, 150);
+  // context.arc(150, 150, 50, 0, Math.PI, false);
+  // context.stroke();
+
+  context.fillStyle = "red";
+  context.fillRect(10, 10, 50, 40);
+
+  pdfDoc.save("a4.pdf");
+}
+
 export {
   ExportImageFormat,
   ExportImageOptions,
@@ -288,4 +314,5 @@ export {
   getSVGImageData,
   exportImageAsFile,
   copyToClipboard,
+  exportDocAsPDF,
 };

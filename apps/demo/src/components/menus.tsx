@@ -10,7 +10,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { fileOpen, fileSave } from "browser-fs-access";
 import { useDemoStore } from "@/demo-store";
-import { ExportImageFormat, exportImageAsFile } from "@dgmjs/export";
+import {
+  ExportImageFormat,
+  exportImageAsFile,
+  exportDocAsPDF,
+} from "@dgmjs/export";
 
 export function Menus() {
   const {
@@ -127,6 +131,13 @@ export function Menus() {
     );
   };
 
+  const handleExportPDF = async () => {
+    console.log("Export as PDF");
+    const editor = window.editor;
+    const doc = editor.getDoc();
+    exportDocAsPDF(doc);
+  };
+
   return (
     <div className="flex justify-center items-center h-8 px-1">
       <DropdownMenu>
@@ -147,6 +158,9 @@ export function Menus() {
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={handleExportSVG}>
             Export as SVG
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={handleExportPDF}>
+            Export as PDF
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuCheckboxItem
