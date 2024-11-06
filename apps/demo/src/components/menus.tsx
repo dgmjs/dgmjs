@@ -14,6 +14,7 @@ import {
   ExportImageFormat,
   exportImageAsFile,
   exportDocAsPDF,
+  ExportPDFOptions,
 } from "@dgmjs/export";
 
 export function Menus() {
@@ -135,7 +136,11 @@ export function Menus() {
     console.log("Export as PDF");
     const editor = window.editor;
     const doc = editor.getDoc();
-    exportDocAsPDF(doc);
+    const pdfOptions: ExportPDFOptions = {
+      dark: false,
+      margin: 8,
+    };
+    exportDocAsPDF(editor.canvas, doc, pdfOptions);
   };
 
   return (

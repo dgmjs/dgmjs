@@ -17,6 +17,11 @@ type ExportImageOptions = {
   margin: number;
 };
 
+type ExportPDFOptions = {
+  dark: boolean;
+  margin: number;
+};
+
 /**
  * Create and return a new canvas element with the given shapes drawn.
  * @param canvas - The editor's canvas
@@ -286,11 +291,87 @@ async function copyToClipboard(
  * Export the doc to PDF
  * @param doc
  */
-async function exportDocAsPDF(doc: Doc) {
+async function exportDocAsPDF(
+  canvas: Canvas,
+  doc: Doc,
+  options: Partial<ExportPDFOptions>
+) {
+  const { dark, margin } = {
+    dark: false,
+    margin: DEFAULT_MARGIN,
+    ...options,
+  };
+
+  const theme = dark ? "dark" : "light";
+  const colorVariables = themeColors[theme];
+  const scale = 1; // TODO: find proper scale to fit in the page
+
   const pdfDoc = new jsPDF();
   pdfDoc.text("Hello world!", 10, 10);
 
-  const context = pdfDoc.context2d;
+  doc.children.forEach((obj) => {
+    const page = obj as Page;
+    pdfDoc.addPage();
+
+    // Make a new pdf canvas
+    const orderedShapes = page.getOrderedShapes([]);
+    const boundingBox = geometry.expandRect(
+      page.getViewport(canvas, orderedShapes),
+      margin
+    );
+    const w = geometry.width(boundingBox);
+    const h = geometry.height(boundingBox);
+
+    // Prepare context2d for jspdf
+    const ctx = pdfDoc.context2d; // new Context(w * scale, h * scale);
+    // replace measureText in jspdf.context2d
+    ctx.measureText = (text: string) => {
+      return canvas.context.measureText(text) as any;
+    };
+
+    const pseudoCanvas: HTMLCanvasElement = {
+      getContext: (contextId: string) => {
+        if (contextId === "2d") return ctx as any;
+      },
+    } as HTMLCanvasElement;
+    const pdfCanvas = new Canvas(pseudoCanvas, 1);
+
+    // Initialize new PDF Canvas
+    pdfCanvas.origin = [-boundingBox[0][0], -boundingBox[0][1]];
+    pdfCanvas.ratio = scale;
+    pdfCanvas.scale = 1;
+    pdfCanvas.colorVariables = colorVariables;
+    const svgCanvasWidth = w * scale;
+    const svgCanvasHeight = h * scale;
+
+    // Fill background
+    // if (fillBackground) {
+    //   pdfCanvas.context.fillStyle = pdfCanvas.resolveColor("$background");
+    //   pdfCanvas.context.fillRect(0, 0, svgCanvasWidth, svgCanvasHeight);
+    // }
+
+    // update and draw page to the new canvas
+    page.update(pdfCanvas);
+    page.draw(pdfCanvas, false, orderedShapes);
+
+    // add fonts in defs (temporal impls)
+    // const svg: SVGSVGElement = ctx.getSvg();
+    // const defs = svg.getElementsByTagName("defs");
+    // if (styleInSVG && defs.length > 0) {
+    //   const styleTag = document.createElement("style");
+    //   styleTag.setAttribute("type", "text/css");
+    //   styleTag.appendChild(document.createTextNode(styleInSVG));
+    //   defs.item(0)?.appendChild(styleTag);
+    // }
+
+    // Return the SVG data
+    // const data = ctx.getSerializedSvg(true);
+
+    // update page to existing canvas
+    // page.update(canvas);
+  });
+
+  // return data;
 
   // context.beginPath();
   // context.arc(150, 150, 50, 0, Math.PI, false);
@@ -300,8 +381,8 @@ async function exportDocAsPDF(doc: Doc) {
   // context.arc(150, 150, 50, 0, Math.PI, false);
   // context.stroke();
 
-  context.fillStyle = "red";
-  context.fillRect(10, 10, 50, 40);
+  // context.fillStyle = "red";
+  // context.fillRect(10, 10, 50, 40);
 
   pdfDoc.save("a4.pdf");
 }
@@ -309,6 +390,7 @@ async function exportDocAsPDF(doc: Doc) {
 export {
   ExportImageFormat,
   ExportImageOptions,
+  ExportPDFOptions,
   getImageDataUrl,
   getImageBlob,
   getSVGImageData,
