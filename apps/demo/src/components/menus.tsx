@@ -10,12 +10,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { fileOpen, fileSave } from "browser-fs-access";
 import { useDemoStore } from "@/demo-store";
-import {
-  ExportImageFormat,
-  exportImageAsFile,
-  exportDocAsPDF,
-  ExportPDFOptions,
-} from "@dgmjs/export";
+import { ExportImageFormat, exportImageAsFile } from "@dgmjs/export";
+import { exportDocAsPDF, ExportPDFOptions } from "@dgmjs/pdf";
 
 export function Menus() {
   const {

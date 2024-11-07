@@ -15,7 +15,7 @@
     "test": "jest"
   },
   "author": "",
-  "license": "DGM License",
+  "license": "GPLv3",
   "dependencies": {
     "@radix-ui/colors": "^3.0.0",
     "@tiptap/core": "^2.2.2",
