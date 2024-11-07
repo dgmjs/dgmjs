@@ -91,5 +91,12 @@
     "src": "/fonts/NanumHimnaeraneunmalbodan-Regular.ttf",
     "sizeAdjust": "130%",
     "unicodeRange": "U+AC00-D7A3"
+  },
+  {
+    "category": "hand",
+    "family": "Loranthus",
+    "style": "normal",
+    "weight": 400,
+    "src": "/fonts/Loranthus.otf"
   }
 ]

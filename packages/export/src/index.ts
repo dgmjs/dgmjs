@@ -294,7 +294,8 @@ async function copyToClipboard(
 async function exportDocAsPDF(
   canvas: Canvas,
   doc: Doc,
-  options: Partial<ExportPDFOptions>
+  options: Partial<ExportPDFOptions>,
+  preprocess?: (jspdf: jsPDF) => void
 ) {
   const { dark, margin } = {
     dark: false,
@@ -304,14 +305,33 @@ async function exportDocAsPDF(
 
   const theme = dark ? "dark" : "light";
   const colorVariables = themeColors[theme];
-  const scale = 1; // TODO: find proper scale to fit in the page
+  const scale = 0.2; // 1; // TODO: find proper scale to fit in the page
 
   const pdfDoc = new jsPDF();
-  pdfDoc.text("Hello world!", 10, 10);
 
-  doc.children.forEach((obj) => {
+  // preprocess
+  if (preprocess) preprocess(pdfDoc);
+
+  pdfDoc.context2d.fillStyle = "#ff3333";
+  pdfDoc.context2d.fillRect(0, 0, 100, 100);
+  pdfDoc.context2d.fillStyle = "rgb(51, 255, 51)"; // "#33ff3399";
+  pdfDoc.context2d.globalAlpha = 0.5;
+  pdfDoc.context2d.fillRect(50, 50, 100, 100);
+
+  // add fonts
+  const res = await fetch("http://localhost:4321/fonts/Loranthus.otf");
+  const buffer = await res.arrayBuffer();
+  const binaryString = new Uint8Array(buffer).reduce(
+    (data, byte) => data + String.fromCharCode(byte),
+    ""
+  );
+  pdfDoc.addFileToVFS("Loranthus.otf", binaryString);
+  pdfDoc.addFont("Loranthus.otf", "Loranthus", "normal");
+
+  // render pages
+  doc.children.forEach((obj, index) => {
     const page = obj as Page;
-    pdfDoc.addPage();
+    if (index > 0) pdfDoc.addPage();
 
     // Make a new pdf canvas
     const orderedShapes = page.getOrderedShapes([]);
