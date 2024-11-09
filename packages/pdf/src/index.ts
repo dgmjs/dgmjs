@@ -21,6 +21,19 @@ export type ExportPDFOptions = {
   margin: number;
 };
 
+function arrayBufferToBinaryString(buffer: ArrayBuffer) {
+  return new Uint8Array(buffer).reduce(
+    (data, byte) => data + String.fromCharCode(byte),
+    ""
+  );
+}
+
+async function loadFont(url: string) {
+  const res = await fetch(url);
+  const buffer = await res.arrayBuffer();
+  return arrayBufferToBinaryString(buffer);
+}
+
 export async function exportDocAsPDF0(
   canvas: Canvas,
   doc: Doc,
@@ -125,15 +138,35 @@ export async function exportDocAsPDF(
   if (preprocess) preprocess(pdfDoc);
 
   // add fonts
-  const res = await fetch("http://localhost:4321/fonts/Loranthus.otf");
-  const buffer = await res.arrayBuffer();
-  const binaryString = new Uint8Array(buffer).reduce(
-    (data, byte) => data + String.fromCharCode(byte),
-    ""
+  const loranthus = await loadFont("http://localhost:4321/fonts/Loranthus.ttf");
+  const inter400 = await loadFont(
+    "http://localhost:4321/fonts/Inter-Regular.ttf"
   );
-  // console.log("binaryString", binaryString);
-  pdfDoc.addFileToVFS("Loranthus.otf", binaryString);
-  pdfDoc.addFont("Loranthus.otf", "Loranthus", "normal", 400);
+  const inter500 = await loadFont(
+    "http://localhost:4321/fonts/Inter-Medium.ttf"
+  );
+  const inter600 = await loadFont(
+    "http://localhost:4321/fonts/Inter-SemiBold.ttf"
+  );
+  const inter700 = await loadFont("http://localhost:4321/fonts/Inter-Bold.ttf");
+  const inter800 = await loadFont(
+    "http://localhost:4321/fonts/Inter-ExtraBold.ttf"
+  );
+
+  pdfDoc.addFileToVFS("Loranthus.ttf", loranthus);
+  pdfDoc.addFileToVFS("Inter-Regular.ttf", inter400);
+  pdfDoc.addFileToVFS("Inter-Medium.ttf", inter500);
+  pdfDoc.addFileToVFS("Inter-SemiBold.ttf", inter600);
+  pdfDoc.addFileToVFS("Inter-Bold.ttf", inter700);
+  pdfDoc.addFileToVFS("Inter-ExtraBold.ttf", inter800);
+  pdfDoc.addFont("Loranthus.ttf", "Loranthus", "normal");
+  pdfDoc.addFont("Inter-Regular.ttf", "Inter", "normal", 400);
+  pdfDoc.addFont("Inter-Medium.ttf", "Inter", "normal", 500);
+  pdfDoc.addFont("Inter-SemiBold.ttf", "Inter", "normal", 600);
+  pdfDoc.addFont("Inter-Bold.ttf", "Inter", "normal", 700);
+  pdfDoc.addFont("Inter-ExtraBold.ttf", "Inter", "normal", 800);
+
+  console.log("internal", (pdfDoc.internal as any).getFontSize());
 
   pdfDoc.context2d.fillStyle = "#ff3333";
   pdfDoc.context2d.fillRect(0, 0, 100, 100);

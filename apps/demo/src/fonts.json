@@ -24,6 +24,13 @@
     "category": "sans",
     "family": "Inter",
     "style": "normal",
+    "weight": 600,
+    "src": "/fonts/Inter-SemiBold.ttf"
+  },
+  {
+    "category": "sans",
+    "family": "Inter",
+    "style": "normal",
     "weight": 700,
     "src": "/fonts/Inter-Bold.ttf"
   },
@@ -53,7 +60,7 @@
     "family": "IBM Plex Mono",
     "style": "normal",
     "weight": 400,
-    "src": "/fonts/IBMPlexMono-Regular.ttf"
+    "src": "/fonts/IBMPlexMono-Regular.woff2"
   },
   {
     "category": "mono",
@@ -97,6 +104,6 @@
     "family": "Loranthus",
     "style": "normal",
     "weight": 400,
-    "src": "/fonts/Loranthus.otf"
+    "src": "/fonts/Loranthus.ttf"
   }
 ]

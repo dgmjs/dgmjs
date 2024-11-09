@@ -4,7 +4,7 @@ import { jsPDF } from "jspdf";
 
 export class PDFContext2D {
   canvas: Canvas;
-  doc: jsPDF;
+  pdf: jsPDF;
   _fillStyle: string;
   _fillAlpha: number;
   _strokeStyle: string;
@@ -17,9 +17,9 @@ export class PDFContext2D {
   _fontSize: number;
   stateStack: any[];
 
-  constructor(canvas: Canvas, doc: jsPDF) {
+  constructor(canvas: Canvas, pdf: jsPDF) {
     this.canvas = canvas;
-    this.doc = doc;
+    this.pdf = pdf;
     this._fillStyle = "#ffffff";
     this._fillAlpha = 1;
     this._strokeStyle = "#000000";
@@ -34,14 +34,26 @@ export class PDFContext2D {
   }
 
   _assignStyles() {
-    this.doc.context2d.fillStyle = this._fillStyle;
-    this.doc.context2d.strokeStyle = this._strokeStyle;
-    this.doc.context2d.lineWidth = this._lineWidth;
+    this.pdf.context2d.fillStyle = this._fillStyle;
+    this.pdf.context2d.strokeStyle = this._strokeStyle;
+    this.pdf.context2d.lineWidth = this._lineWidth;
     // TODO: this.doc.context2d.lineCap = this._lineCap;
     // TODO: this.doc.context2d.lineJoin = this._lineJoin;
-    this.doc.context2d.font = this._font;
-    this.doc.setGState(
-      new (this.doc as any).GState({
+
+    this.pdf.context2d.font = this._font;
+
+    // const font = this._font.split(" ");
+    // const fontName = font[3].replaceAll(`"`, ``);
+    // const fontStyle = font[0];
+    // const fontWeight = parseInt(font[1]);
+    // const fontSize =
+    //   parseInt(font[2].replace("px", "")) * this.pdf.internal.scaleFactor;
+    // this.pdf.setFont(fontName, fontStyle, fontWeight);
+    // this.pdf.setFontSize(fontSize);
+    // console.log("font", fontName, fontStyle, fontWeight, fontSize);
+
+    this.pdf.setGState(
+      new (this.pdf as any).GState({
         opacity: this._fillAlpha * this._globalAlpha,
         "stroke-opacity": this._strokeAlpha * this._globalAlpha,
       })
@@ -49,7 +61,7 @@ export class PDFContext2D {
   }
 
   save() {
-    this.doc.context2d.save();
+    this.pdf.context2d.save();
     this.stateStack.push({
       fillStyle: this._fillStyle,
       fillAlpha: this._fillAlpha,
@@ -64,7 +76,7 @@ export class PDFContext2D {
   }
 
   restore() {
-    this.doc.context2d.restore();
+    this.pdf.context2d.restore();
     const state = this.stateStack.pop();
     this._fillStyle = state.fillStyle;
     this._fillAlpha = state.fillAlpha;
@@ -79,19 +91,19 @@ export class PDFContext2D {
   }
 
   translate(x: number, y: number) {
-    this.doc.context2d.translate(x, y);
+    this.pdf.context2d.translate(x, y);
   }
 
   scale(x: number, y: number) {
-    this.doc.context2d.scale(x, y);
+    this.pdf.context2d.scale(x, y);
   }
 
   rotate(angle: number) {
-    this.doc.context2d.rotate(angle);
+    this.pdf.context2d.rotate(angle);
   }
 
   clip() {
-    this.doc.context2d.clip();
+    this.pdf.context2d.clip();
   }
 
   set fillStyle(value: string) {
@@ -127,6 +139,7 @@ export class PDFContext2D {
   }
 
   set font(value: string) {
+    // console.log(`set font:`, value.split(" "));
     this._font = value;
   }
 
@@ -135,26 +148,26 @@ export class PDFContext2D {
   }
 
   beginPath() {
-    this.doc.context2d.beginPath();
+    this.pdf.context2d.beginPath();
   }
 
   closePath() {
-    this.doc.context2d.closePath();
+    this.pdf.context2d.closePath();
   }
 
   moveTo(x: number, y: number) {
     this._assignStyles();
-    this.doc.context2d.moveTo(x, y);
+    this.pdf.context2d.moveTo(x, y);
   }
 
   lineTo(x: number, y: number) {
     this._assignStyles();
-    this.doc.context2d.lineTo(x, y);
+    this.pdf.context2d.lineTo(x, y);
   }
 
   quadraticCurveTo(cpx: number, cpy: number, x: number, y: number) {
     this._assignStyles();
-    this.doc.context2d.quadraticCurveTo(cpx, cpy, x, y);
+    this.pdf.context2d.quadraticCurveTo(cpx, cpy, x, y);
   }
 
   bezierCurveTo(
@@ -166,25 +179,25 @@ export class PDFContext2D {
     y: number
   ) {
     this._assignStyles();
-    this.doc.context2d.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
+    this.pdf.context2d.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
   }
 
   stroke() {
-    this.doc.context2d.stroke();
+    this.pdf.context2d.stroke();
   }
 
   fill() {
-    this.doc.context2d.fill();
+    this.pdf.context2d.fill();
   }
 
   rect(x: number, y: number, width: number, height: number) {
     this._assignStyles();
-    this.doc.context2d.rect(x, y, width, height);
+    this.pdf.context2d.rect(x, y, width, height);
   }
 
   fillRect(x: number, y: number, width: number, height: number) {
     this._assignStyles();
-    this.doc.context2d.fillRect(x, y, width, height);
+    this.pdf.context2d.fillRect(x, y, width, height);
   }
 
   arc(
@@ -196,7 +209,7 @@ export class PDFContext2D {
     anticlockwise: boolean
   ) {
     this._assignStyles();
-    this.doc.context2d.arc(x, y, radius, startAngle, endAngle, anticlockwise);
+    this.pdf.context2d.arc(x, y, radius, startAngle, endAngle, anticlockwise);
   }
 
   drawImage(
@@ -229,6 +242,6 @@ export class PDFContext2D {
 
   fillText(text: string, x: number, y: number) {
     this._assignStyles();
-    this.doc.context2d.fillText(text, x, y);
+    this.pdf.context2d.fillText(text, x, y);
   }
 }
