@@ -12,6 +12,20 @@ import { fileOpen, fileSave } from "browser-fs-access";
 import { useDemoStore } from "@/demo-store";
 import { ExportImageFormat, exportImageAsFile } from "@dgmjs/export";
 import { exportDocAsPDF, ExportPDFOptions } from "@dgmjs/pdf";
+import fontJson from "@/fonts.json";
+
+function arrayBufferToBinaryString(buffer: ArrayBuffer) {
+  return new Uint8Array(buffer).reduce(
+    (data, byte) => data + String.fromCharCode(byte),
+    ""
+  );
+}
+
+async function loadFont(url: string) {
+  const res = await fetch(url);
+  const buffer = await res.arrayBuffer();
+  return arrayBufferToBinaryString(buffer);
+}
 
 export function Menus() {
   const {
@@ -130,11 +144,26 @@ export function Menus() {
 
   const handleExportPDF = async () => {
     console.log("Export as PDF");
+
+    const fonts = [];
+    for (const font of fontJson) {
+      const fontBinaryString = await loadFont(
+        `http://localhost:4321${font.src}`
+      );
+      fonts.push({
+        family: font.family,
+        style: font.style,
+        weight: font.weight,
+        binaryString: fontBinaryString,
+      });
+    }
+
     const editor = window.editor;
     const doc = editor.getDoc();
     const pdfOptions: ExportPDFOptions = {
       dark: false,
       margin: 8,
+      fonts: fonts,
     };
     exportDocAsPDF(editor.canvas, doc, pdfOptions);
   };

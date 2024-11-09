@@ -21,6 +21,7 @@
     "blob-stream": "^0.1.3",
     "buffer": "^6.0.3",
     "color-string": "^1.9.1",
+    "css-font-parser": "^2.0.1",
     "file-saver": "^2.0.5",
     "jspdf": "^2.5.2",
     "pdfkit": "^0.15.1"

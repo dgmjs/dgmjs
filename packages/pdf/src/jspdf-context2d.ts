@@ -1,6 +1,7 @@
 import { Canvas } from "@dgmjs/core";
 import colorString from "color-string";
 import { jsPDF } from "jspdf";
+import { parseFont } from "css-font-parser";
 
 export class PDFContext2D {
   canvas: Canvas;
@@ -40,18 +41,18 @@ export class PDFContext2D {
     // TODO: this.doc.context2d.lineCap = this._lineCap;
     // TODO: this.doc.context2d.lineJoin = this._lineJoin;
 
-    this.pdf.context2d.font = this._font;
+    // assign font
+    const font = parseFont(this._font);
+    const fontName = font["font-family"][0];
+    const fontStyle = font["font-style"] ?? "normal";
+    const fontWeight = parseInt(font["font-weight"]);
+    const fontSize =
+      parseInt((font["font-size"] ?? "16px").replace("px", "")) *
+      this.pdf.internal.scaleFactor;
+    this.pdf.setFont(fontName, fontStyle, fontWeight);
+    this.pdf.setFontSize(fontSize);
 
-    // const font = this._font.split(" ");
-    // const fontName = font[3].replaceAll(`"`, ``);
-    // const fontStyle = font[0];
-    // const fontWeight = parseInt(font[1]);
-    // const fontSize =
-    //   parseInt(font[2].replace("px", "")) * this.pdf.internal.scaleFactor;
-    // this.pdf.setFont(fontName, fontStyle, fontWeight);
-    // this.pdf.setFontSize(fontSize);
-    // console.log("font", fontName, fontStyle, fontWeight, fontSize);
-
+    // assign color's opacity and global alpha
     this.pdf.setGState(
       new (this.pdf as any).GState({
         opacity: this._fillAlpha * this._globalAlpha,
@@ -242,11 +243,6 @@ export class PDFContext2D {
 
   fillText(text: string, x: number, y: number) {
     this._assignStyles();
-    // this.pdf.context2d.save();
-    // this.pdf.context2d.translate(x, y);
-    // this.pdf.context2d.transform(1, 0, -0.4, 1, 0, 0);
-    // this.pdf.context2d.fillText(text, 0, 0);
-    // this.pdf.context2d.restore();
     this.pdf.context2d.fillText(text, x, y);
   }
 }
