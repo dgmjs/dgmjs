@@ -139,34 +139,51 @@ export async function exportDocAsPDF(
 
   // add fonts
   const loranthus = await loadFont("http://localhost:4321/fonts/Loranthus.ttf");
-  const inter400 = await loadFont(
-    "http://localhost:4321/fonts/Inter-Regular.ttf"
+  const inter_regular = await loadFont(
+    "http://localhost:4321/fonts/Inter_18pt-Regular.ttf"
   );
-  const inter500 = await loadFont(
-    "http://localhost:4321/fonts/Inter-Medium.ttf"
+  const inter_italic = await loadFont(
+    "http://localhost:4321/fonts/Inter_18pt-Italic.ttf"
   );
-  const inter600 = await loadFont(
-    "http://localhost:4321/fonts/Inter-SemiBold.ttf"
+  const inter_bold = await loadFont(
+    "http://localhost:4321/fonts/Inter_18pt-Bold.ttf"
   );
-  const inter700 = await loadFont("http://localhost:4321/fonts/Inter-Bold.ttf");
-  const inter800 = await loadFont(
-    "http://localhost:4321/fonts/Inter-ExtraBold.ttf"
+  const inter_bold_italic = await loadFont(
+    "http://localhost:4321/fonts/Inter_18pt-BoldItalic.ttf"
   );
+
+  // const inter500 = await loadFont(
+  //   "http://localhost:4321/fonts/Inter-Medium.ttf"
+  // );
+  // const inter600 = await loadFont(
+  //   "http://localhost:4321/fonts/Inter-SemiBold.ttf"
+  // );
+  // const inter700 = await loadFont("http://localhost:4321/fonts/Inter-Bold.ttf");
+  // const inter800 = await loadFont(
+  //   "http://localhost:4321/fonts/Inter-ExtraBold.ttf"
+  // );
 
   pdfDoc.addFileToVFS("Loranthus.ttf", loranthus);
-  pdfDoc.addFileToVFS("Inter-Regular.ttf", inter400);
-  pdfDoc.addFileToVFS("Inter-Medium.ttf", inter500);
-  pdfDoc.addFileToVFS("Inter-SemiBold.ttf", inter600);
-  pdfDoc.addFileToVFS("Inter-Bold.ttf", inter700);
-  pdfDoc.addFileToVFS("Inter-ExtraBold.ttf", inter800);
+  pdfDoc.addFileToVFS("Inter-Regular.ttf", inter_regular);
+  pdfDoc.addFileToVFS("Inter-Italic.ttf", inter_italic);
+  pdfDoc.addFileToVFS("Inter-Bold.ttf", inter_bold);
+  pdfDoc.addFileToVFS("Inter-BoldItalic.ttf", inter_bold_italic);
+  // pdfDoc.addFileToVFS("Inter-Medium.ttf", inter500);
+  // pdfDoc.addFileToVFS("Inter-SemiBold.ttf", inter600);
+  // pdfDoc.addFileToVFS("Inter-Bold.ttf", inter700);
+  // pdfDoc.addFileToVFS("Inter-ExtraBold.ttf", inter800);
   pdfDoc.addFont("Loranthus.ttf", "Loranthus", "normal");
   pdfDoc.addFont("Inter-Regular.ttf", "Inter", "normal", 400);
-  pdfDoc.addFont("Inter-Medium.ttf", "Inter", "normal", 500);
-  pdfDoc.addFont("Inter-SemiBold.ttf", "Inter", "normal", 600);
+  pdfDoc.addFont("Inter-Italic.ttf", "Inter", "italic", 400);
   pdfDoc.addFont("Inter-Bold.ttf", "Inter", "normal", 700);
-  pdfDoc.addFont("Inter-ExtraBold.ttf", "Inter", "normal", 800);
+  pdfDoc.addFont("Inter-BoldItalic.ttf", "Inter", "italic", 700);
 
-  console.log("internal", (pdfDoc.internal as any).getFontSize());
+  // pdfDoc.addFont("Inter-Medium.ttf", "Inter", "normal", 500);
+  // pdfDoc.addFont("Inter-SemiBold.ttf", "Inter", "normal", 600);
+  // pdfDoc.addFont("Inter-Bold.ttf", "Inter", "normal", 700);
+  // pdfDoc.addFont("Inter-ExtraBold.ttf", "Inter", "normal", 800);
+
+  console.log("internal", pdfDoc.getFontList());
 
   pdfDoc.context2d.fillStyle = "#ff3333";
   pdfDoc.context2d.fillRect(0, 0, 100, 100);

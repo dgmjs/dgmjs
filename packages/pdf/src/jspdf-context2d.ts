@@ -242,6 +242,11 @@ export class PDFContext2D {
 
   fillText(text: string, x: number, y: number) {
     this._assignStyles();
+    // this.pdf.context2d.save();
+    // this.pdf.context2d.translate(x, y);
+    // this.pdf.context2d.transform(1, 0, -0.4, 1, 0, 0);
+    // this.pdf.context2d.fillText(text, 0, 0);
+    // this.pdf.context2d.restore();
     this.pdf.context2d.fillText(text, x, y);
   }
 }

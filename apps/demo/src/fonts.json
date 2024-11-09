@@ -60,7 +60,7 @@
     "family": "IBM Plex Mono",
     "style": "normal",
     "weight": 400,
-    "src": "/fonts/IBMPlexMono-Regular.woff2"
+    "src": "/fonts/IBMPlexMono-Regular.ttf"
   },
   {
     "category": "mono",
@@ -105,5 +105,33 @@
     "style": "normal",
     "weight": 400,
     "src": "/fonts/Loranthus.ttf"
+  },
+  {
+    "category": "sans",
+    "family": "Inter2",
+    "style": "normal",
+    "weight": 400,
+    "src": "/fonts/Inter_18pt-Regular.ttf"
+  },
+  {
+    "category": "sans",
+    "family": "Inter2",
+    "style": "italic",
+    "weight": 400,
+    "src": "/fonts/Inter_18pt-Italic.ttf"
+  },
+  {
+    "category": "sans",
+    "family": "Inter2",
+    "style": "normal",
+    "weight": 700,
+    "src": "/fonts/Inter_18pt-Bold.ttf"
+  },
+  {
+    "category": "sans",
+    "family": "Inter2",
+    "style": "italic",
+    "weight": 700,
+    "src": "/fonts/Inter_18pt-BoldItalic.ttf"
   }
 ]
