@@ -21,15 +21,15 @@ export class PDFContext2D {
   constructor(canvas: Canvas, pdf: jsPDF) {
     this.canvas = canvas;
     this.pdf = pdf;
-    this._fillStyle = "#ffffff";
+    this._fillStyle = "#ffffffff";
     this._fillAlpha = 1;
-    this._strokeStyle = "#000000";
+    this._strokeStyle = "#000000ff";
     this._strokeAlpha = 1;
     this._globalAlpha = 1;
     this._lineWidth = 1;
     this._lineCap = "butt";
     this._lineJoin = "miter";
-    this._font = "Loranthus";
+    this._font = "16px Loranthus";
     this._fontSize = 16;
     this.stateStack = [];
   }
@@ -140,12 +140,11 @@ export class PDFContext2D {
   }
 
   set font(value: string) {
-    // console.log(`set font:`, value.split(" "));
     this._font = value;
   }
 
   setLineDash(segments: number[]) {
-    // console.log(`setLineDash(${segments})`);
+    // TODO: console.log(`setLineDash(${segments})`);
   }
 
   beginPath() {
@@ -215,18 +214,15 @@ export class PDFContext2D {
 
   drawImage(
     image: HTMLImageElement,
-    sx: number,
-    sy: number,
-    sWidth: number,
-    sHeight: number,
-    dx: number,
-    dy: number,
-    dWidth: number,
-    dHeight: number
+    x: number,
+    y: number,
+    width: number,
+    height: number
   ) {
-    // console.log(
-    //   `drawImage(${image.src}, ${sx}, ${sy}, ${sWidth}, ${sHeight}, ${dx}, ${dy}, ${dWidth}, ${dHeight})`
-    // );
+    this._fillAlpha = 1;
+    this._strokeAlpha = 1;
+    this._assignStyles();
+    this.pdf.context2d.drawImage(image as any, x, y, width, height);
   }
 
   measureText(text: string) {
