@@ -38,8 +38,8 @@ export class PDFContext2D {
     this.pdf.context2d.fillStyle = this._fillStyle;
     this.pdf.context2d.strokeStyle = this._strokeStyle;
     this.pdf.context2d.lineWidth = this._lineWidth;
-    // TODO: this.doc.context2d.lineCap = this._lineCap;
-    // TODO: this.doc.context2d.lineJoin = this._lineJoin;
+    (this.pdf.context2d as any).lineCap = this._lineCap;
+    (this.pdf.context2d as any).lineJoin = this._lineJoin;
 
     // assign font
     const font = parseFont(this._font);
@@ -144,7 +144,8 @@ export class PDFContext2D {
   }
 
   setLineDash(segments: number[]) {
-    // TODO: console.log(`setLineDash(${segments})`);
+    const dash = segments.map((s) => s / 5); // 5 is found by trial and error
+    (this.pdf.context2d as any).setLineDash(dash);
   }
 
   beginPath() {
