@@ -1316,8 +1316,11 @@ class Canvas {
         roughDraw(this.context, rd);
       } else {
         this.context.beginPath();
-        const d = new Path2D(pathToString(path));
-        this.context.stroke(d);
+        const d = pathToString(path);
+        const path2d = new Path2D(d);
+        // inject pathData into path2d so that pseudo Context2D can draw it
+        (path2d as any).pathData = d;
+        this.context.stroke(path2d);
       }
     }
     return this;
@@ -1345,8 +1348,11 @@ class Canvas {
       roughDraw(this.context, rd);
     } else {
       this.context.beginPath();
-      const d = new Path2D(pathToString(path));
-      this.context.fill(d);
+      const d = pathToString(path);
+      const path2d = new Path2D(d);
+      // inject pathData into path2d so that pseudo Context2D can draw it
+      (path2d as any).pathData = d;
+      this.context.fill(path2d);
     }
     return this;
   }

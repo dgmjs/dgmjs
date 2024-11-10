@@ -242,6 +242,7 @@ interface strokeFreehandDO extends BaseDO {
   strokeColor: string;
   alpha: number;
   path2d: Path2D;
+  pathData: string;
 }
 
 interface FillTextDO extends BaseDO {
@@ -1120,6 +1121,7 @@ class MemoizationCanvas {
         strokeColor: this.canvas.resolveColor(this.strokeColor),
         alpha: this.alpha,
         path2d,
+        pathData: pathData,
       });
     }
     return this;
@@ -1443,7 +1445,10 @@ class MemoizationCanvas {
           canvas.context.setLineDash(d.strokeLineDash);
           canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
-          const path2d = new Path2D(pathToString(d.path));
+          const pathData = pathToString(d.path);
+          const path2d = new Path2D(pathData);
+          // inject pathData into path2d so that pseudo Context2D can draw it
+          (path2d as any).pathData = pathData;
           canvas.context.stroke(path2d);
           break;
         }
@@ -1451,7 +1456,10 @@ class MemoizationCanvas {
           canvas.context.fillStyle = d.fillColor;
           canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
-          const path2d = new Path2D(pathToString(d.path));
+          const pathData = pathToString(d.path);
+          const path2d = new Path2D();
+          // inject pathData into path2d so that pseudo Context2D can draw it
+          (path2d as any).pathData = pathData;
           canvas.context.fill(path2d);
           break;
         }
@@ -1460,6 +1468,8 @@ class MemoizationCanvas {
           canvas.context.lineCap = "round";
           canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
+          // inject pathData into path2d so that pseudo Context2D can draw it
+          (d.path2d as any).pathData = d.pathData;
           canvas.context.fill(d.path2d);
           break;
         }

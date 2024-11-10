@@ -21,7 +21,8 @@
     "color-string": "^1.9.1",
     "css-font-parser": "^2.0.1",
     "file-saver": "^2.0.5",
-    "jspdf": "^2.5.2"
+    "jspdf": "^2.5.2",
+    "svg-path-parser": "^1.1.0"
   },
   "devDependencies": {
     "@types/color-string": "^1.5.5",

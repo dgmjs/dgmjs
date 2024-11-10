@@ -2,6 +2,7 @@ import { Canvas } from "@dgmjs/core";
 import colorString from "color-string";
 import { jsPDF } from "jspdf";
 import { parseFont } from "css-font-parser";
+import { renderSVGPath } from "./svg-renderer";
 
 export class PDFContext2D {
   canvas: Canvas;
@@ -183,11 +184,23 @@ export class PDFContext2D {
     this.pdf.context2d.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
   }
 
-  stroke() {
+  stroke(path2d: Path2D) {
+    this._assignStyles();
+    if (path2d) {
+      // assume path2d object has pathData property
+      const pathData: string = (path2d as any).pathData;
+      renderSVGPath(pathData, this.pdf.context2d);
+    }
     this.pdf.context2d.stroke();
   }
 
-  fill() {
+  fill(path2d: Path2D) {
+    this._assignStyles();
+    if (path2d) {
+      // assume path2d object has pathData property
+      const pathData: string = (path2d as any).pathData;
+      renderSVGPath(pathData, this.pdf.context2d);
+    }
     this.pdf.context2d.fill();
   }
 
