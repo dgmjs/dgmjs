@@ -359,7 +359,7 @@ Draw on hovering
 
 ### finalize()
 
-> **finalize**(`editor`, `shape`): `void`
+> **finalize**(`editor`, `shape`, `e`): `void`
 
 Finalize shape by ghost
 
@@ -368,6 +368,8 @@ Finalize shape by ghost
 • **editor**: [`Editor`](/api-core/classes/editor/)
 
 • **shape**: [`Shape`](/api-core/classes/shape/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
 
 #### Returns
 
@@ -381,7 +383,7 @@ Finalize shape by ghost
 
 ### initialize()
 
-> **initialize**(`editor`, `shape`): `void`
+> **initialize**(`editor`, `shape`, `e`): `void`
 
 Initialize before dragging
 
@@ -390,6 +392,8 @@ Initialize before dragging
 • **editor**: [`Editor`](/api-core/classes/editor/)
 
 • **shape**: [`Shape`](/api-core/classes/shape/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
 
 #### Returns
 
@@ -598,7 +602,7 @@ handled or not
 
 ### update()
 
-> **update**(`editor`, `shape`): `void`
+> **update**(`editor`, `shape`, `e`): `void`
 
 Update ghost
 
@@ -607,6 +611,8 @@ Update ghost
 • **editor**: [`Editor`](/api-core/classes/editor/)
 
 • **shape**: [`Shape`](/api-core/classes/shape/)
+
+• **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
 
 #### Returns
 

@@ -73,23 +73,36 @@ export type PDFFont = {
 
 /**
  * Export PDF options
- * @param dark - Whether to export in dark mode
- * @param pageMargin - The margin of the page
- * @param pageFormat - The format of the page
- * @param pageOrientation - The orientation of the page
- * @param compress - Whether to compress the PDF
- * @param fonts - The fonts to embed in the PDF
- * @param fonts[].family - The font family
- * @param fonts[].style - The font style
- * @param fonts[].weight - The font weight
- * @param fonts[].binaryString - The binary string of the font file
  */
 export type ExportPDFOptions = {
+  /**
+   * Whether to export in dark mode
+   */
   dark?: boolean;
+
+  /**
+   * The margin of the page
+   */
   pageMargin?: number;
+
+  /**
+   * The format of the page
+   */
   pageFormat?: PDFPageFormat;
+
+  /**
+   * The orientation of the page
+   */
   pageOrientation?: PDFPageOrientation;
+
+  /**
+   * Whether to compress the PDF
+   */
   compress?: boolean;
+
+  /**
+   * The fonts to be embedded
+   */
   fonts?: PDFFont[];
 };
 

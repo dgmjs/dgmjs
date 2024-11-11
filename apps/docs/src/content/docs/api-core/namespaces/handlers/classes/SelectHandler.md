@@ -251,7 +251,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[handlers/select-handler.ts:327](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L327)
+[handlers/select-handler.ts:343](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L343)
 
 ***
 
@@ -299,7 +299,7 @@ Returns a shape (with manipulator area) located at the position e.
 
 #### Source
 
-[handlers/select-handler.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L16)
+[handlers/select-handler.ts:23](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L23)
 
 ***
 
@@ -351,7 +351,7 @@ keyDown
 
 #### Source
 
-[handlers/select-handler.ts:297](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L297)
+[handlers/select-handler.ts:313](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L313)
 
 ***
 
@@ -377,7 +377,7 @@ keyUp
 
 #### Source
 
-[handlers/select-handler.ts:322](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L322)
+[handlers/select-handler.ts:338](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L338)
 
 ***
 
@@ -475,7 +475,7 @@ handle pointer down event
 
 #### Source
 
-[handlers/select-handler.ts:37](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L37)
+[handlers/select-handler.ts:44](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L44)
 
 ***
 
@@ -501,7 +501,7 @@ handle pointer move event
 
 #### Source
 
-[handlers/select-handler.ts:142](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L142)
+[handlers/select-handler.ts:150](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L150)
 
 ***
 
@@ -527,7 +527,7 @@ handle pointer up event
 
 #### Source
 
-[handlers/select-handler.ts:219](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L219)
+[handlers/select-handler.ts:229](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/select-handler.ts#L229)
 
 ***
 
