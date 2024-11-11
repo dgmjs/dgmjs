@@ -162,6 +162,8 @@ export function Menus() {
       dark: darkMode,
       fonts: fonts,
       pageFormat: "a4",
+      createLinks: true,
+      createPageLinks: true,
     };
     exportDocAsPDF(editor.canvas, doc, "exported-pdf", pdfOptions);
   };

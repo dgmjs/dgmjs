@@ -1,4 +1,4 @@
-import { Page, Canvas, geometry, themeColors, Doc } from "@dgmjs/core";
+import { Page, Canvas, geometry, themeColors, Doc, Shape } from "@dgmjs/core";
 import { jsPDF } from "jspdf";
 import { PDFContext2D } from "./jspdf-context2d";
 
@@ -101,6 +101,31 @@ export type ExportPDFOptions = {
   compress?: boolean;
 
   /**
+   * Whether to create links for shape's link property
+   */
+  createLinks?: boolean;
+
+  /**
+   * Whether to create page links for shape's reference property
+   */
+  createPageLinks?: boolean;
+
+  /**
+   * The pages to exclude
+   */
+  excludePages?: Page[];
+
+  /**
+   * A function to be called before rendering each page
+   */
+  prerenderPage?: (page: Page, jsPDF: jsPDF, canvas: Canvas) => void;
+
+  /**
+   * A function to be called after rendering each page
+   */
+  postrenderPage?: (page: Page, jsPDF: jsPDF, canvas: Canvas) => void;
+
+  /**
    * The fonts to be embedded
    */
   fonts?: PDFFont[];
@@ -118,12 +143,28 @@ export async function getPDFData(
   doc: Doc,
   options: Partial<ExportPDFOptions>
 ): Promise<jsPDF> {
-  const { dark, pageMargin, pageFormat, pageOrientation, compress } = {
+  const {
+    dark,
+    pageMargin,
+    pageFormat,
+    pageOrientation,
+    compress,
+    createLinks,
+    createPageLinks,
+    excludePages,
+    prerenderPage,
+    postrenderPage,
+    fonts,
+  } = {
     dark: false,
     pageMargin: DEFAULT_PAGE_MARGIN,
     pageFormat: "a4",
     pageOrientation: "portrait",
     compress: true,
+    createLinks: false,
+    createPageLinks: false,
+    excludePages: [],
+    fonts: [],
     ...options,
   };
 
@@ -137,8 +178,8 @@ export async function getPDFData(
   });
 
   // add fonts
-  if (Array.isArray(options.fonts)) {
-    options.fonts.forEach((font) => {
+  if (Array.isArray(fonts)) {
+    fonts.forEach((font) => {
       const filename = `${font.family}-${font.style}.ttf`;
       pdfDoc.addFileToVFS(filename, font.binaryString);
       pdfDoc.addFont(filename, font.family, font.style, font.weight);
@@ -146,17 +187,19 @@ export async function getPDFData(
   }
 
   // render pages
-  doc.children.forEach((obj, index) => {
-    const page = obj as Page;
-    if (index > 0) pdfDoc.addPage();
+  const pagesToRender = doc.children.filter(
+    (child) => child instanceof Page && !(excludePages || []).includes(child)
+  );
+  for (let i = 0; i < pagesToRender.length; i++) {
+    const page = pagesToRender[i] as Page;
+    if (i > 0) pdfDoc.addPage();
 
     // Compute origin and scale
     const pageWidth = pdfDoc.internal.pageSize.getWidth();
     const pageHeight = pdfDoc.internal.pageSize.getHeight();
     const viewportWidth = pageWidth - pageMargin * 2;
     const viewportHeight = pageHeight - pageMargin * 2;
-    const orderedShapes = page.getOrderedShapes([]);
-    const boundingBox = page.getViewport(canvas, orderedShapes);
+    const boundingBox = page.getViewport(canvas);
     const w = geometry.width(boundingBox);
     const h = geometry.height(boundingBox);
     const fitRatio = Math.min(viewportWidth / w, viewportHeight / h);
@@ -165,7 +208,7 @@ export async function getPDFData(
     const oy = -boundingBox[0][1] + pageMargin / scale;
 
     // Prepare canvas (context2d) for PDF rendering
-    const ctx = new PDFContext2D(canvas, pdfDoc); // new Context(w * scale, h * scale);
+    const ctx = new PDFContext2D(canvas, pdfDoc);
     const pseudoCanvas: HTMLCanvasElement = {
       getContext: (contextId: string) => {
         if (contextId === "2d") return ctx as any;
@@ -183,13 +226,66 @@ export async function getPDFData(
       pdfDoc.rect(0, 0, pageWidth, pageHeight, "F");
     }
 
+    // prerender page
+    if (prerenderPage) {
+      prerenderPage(page, pdfDoc, pdfCanvas);
+    }
+
     // update and draw page to the new canvas
     page.update(pdfCanvas);
-    page.draw(pdfCanvas, false, orderedShapes);
+    page.draw(pdfCanvas, false);
+
+    // postrender page
+    if (postrenderPage) {
+      postrenderPage(page, pdfDoc, pdfCanvas);
+    }
+
+    // create links
+    const shapes = page.getOrderedShapes(page.traverseSequence() as Shape[]);
+    if (createLinks) {
+      for (const shape of shapes) {
+        if (shape.link && shape.link.length > 0) {
+          const box = shape.getBoundingRect();
+          const p1 = pdfCanvas.globalCoordTransform(box[0]);
+          const p2 = pdfCanvas.globalCoordTransform(box[1]);
+          const newBox = geometry.normalizeRect([p1, p2]);
+          const x = newBox[0][0];
+          const y = newBox[0][1];
+          const w = geometry.width(newBox);
+          const h = geometry.height(newBox);
+          console.log("link", shape.link, x, y, w, h);
+          pdfDoc.link(x, y, w, h, { url: shape.link });
+        }
+      }
+    }
+
+    // create page links
+    if (createPageLinks) {
+      for (const shape of shapes) {
+        if (shape.reference instanceof Shape) {
+          const box = shape.getBoundingRect();
+          const p1 = pdfCanvas.globalCoordTransform(box[0]);
+          const p2 = pdfCanvas.globalCoordTransform(box[1]);
+          const newBox = geometry.normalizeRect([p1, p2]);
+          const x = newBox[0][0];
+          const y = newBox[0][1];
+          const w = geometry.width(newBox);
+          const h = geometry.height(newBox);
+          const targetPage = shape.reference.getPage();
+          if (targetPage) {
+            const targetPageIndex = pagesToRender.indexOf(targetPage);
+            if (targetPageIndex >= 0) {
+              console.log("page link", shape, targetPageIndex);
+              pdfDoc.link(x, y, w, h, { pageNumber: targetPageIndex + 1 });
+            }
+          }
+        }
+      }
+    }
 
     // update page to existing canvas
     page.update(canvas);
-  });
+  }
 
   return pdfDoc;
 }
