@@ -143,8 +143,6 @@ export function Menus() {
   };
 
   const handleExportPDF = async () => {
-    console.log("Export as PDF");
-
     const fonts = [];
     for (const font of fontJson) {
       const fontBinaryString = await loadFont(
@@ -161,11 +159,11 @@ export function Menus() {
     const editor = window.editor;
     const doc = editor.getDoc();
     const pdfOptions: ExportPDFOptions = {
-      dark: false,
-      margin: 8,
+      dark: darkMode,
       fonts: fonts,
+      pageFormat: "a4",
     };
-    exportDocAsPDF(editor.canvas, doc, pdfOptions);
+    exportDocAsPDF(editor.canvas, doc, "exported-pdf", pdfOptions);
   };
 
   return (

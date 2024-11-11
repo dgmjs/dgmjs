@@ -189,7 +189,7 @@ export class PDFContext2D {
     if (path2d) {
       // assume path2d object has pathData property
       const pathData: string = (path2d as any).pathData;
-      renderSVGPath(pathData, this.pdf.context2d);
+      if (pathData) renderSVGPath(pathData, this.pdf.context2d);
     }
     this.pdf.context2d.stroke();
   }
@@ -199,7 +199,7 @@ export class PDFContext2D {
     if (path2d) {
       // assume path2d object has pathData property
       const pathData: string = (path2d as any).pathData;
-      renderSVGPath(pathData, this.pdf.context2d);
+      if (pathData) renderSVGPath(pathData, this.pdf.context2d);
     }
     this.pdf.context2d.fill();
   }

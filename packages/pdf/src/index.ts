@@ -1,5 +1,4 @@
 import { Page, Canvas, geometry, themeColors, Doc } from "@dgmjs/core";
-import fileSaverPkg from "file-saver";
 import { jsPDF } from "jspdf";
 import { PDFContext2D } from "./jspdf-context2d";
 
@@ -8,10 +7,63 @@ declare global {
   const blobStream: any;
 }
 
-const { saveAs } = fileSaverPkg;
+const DEFAULT_PAGE_MARGIN = 10;
 
-const DEFAULT_MARGIN = 8;
+/**
+ * Page format
+ */
+export type PDFPageFormat =
+  | "a0"
+  | "a1"
+  | "a2"
+  | "a3"
+  | "a4"
+  | "a5"
+  | "a6"
+  | "a7"
+  | "a8"
+  | "a9"
+  | "a10"
+  | "b0"
+  | "b1"
+  | "b2"
+  | "b3"
+  | "b4"
+  | "b5"
+  | "b6"
+  | "b7"
+  | "b8"
+  | "b9"
+  | "b10"
+  | "c0"
+  | "c1"
+  | "c2"
+  | "c3"
+  | "c4"
+  | "c5"
+  | "c6"
+  | "c7"
+  | "c8"
+  | "c9"
+  | "c10"
+  | "dl"
+  | "letter"
+  | "government-letter"
+  | "legal"
+  | "junior-legal"
+  | "ledger"
+  | "tabloid"
+  | "credit-card"
+  | number[];
 
+/**
+ * Page orientation
+ */
+export type PDFPageOrientation = "portrait" | "landscape";
+
+/**
+ * PDF font to be embedded
+ */
 export type PDFFont = {
   family: string;
   style: string;
@@ -19,45 +71,57 @@ export type PDFFont = {
   binaryString: string;
 };
 
+/**
+ * Export PDF options
+ * @param dark - Whether to export in dark mode
+ * @param pageMargin - The margin of the page
+ * @param pageFormat - The format of the page
+ * @param pageOrientation - The orientation of the page
+ * @param compress - Whether to compress the PDF
+ * @param fonts - The fonts to embed in the PDF
+ * @param fonts[].family - The font family
+ * @param fonts[].style - The font style
+ * @param fonts[].weight - The font weight
+ * @param fonts[].binaryString - The binary string of the font file
+ */
 export type ExportPDFOptions = {
-  dark: boolean;
-  margin: number;
+  dark?: boolean;
+  pageMargin?: number;
+  pageFormat?: PDFPageFormat;
+  pageOrientation?: PDFPageOrientation;
+  compress?: boolean;
   fonts?: PDFFont[];
 };
 
-function arrayBufferToBinaryString(buffer: ArrayBuffer) {
-  return new Uint8Array(buffer).reduce(
-    (data, byte) => data + String.fromCharCode(byte),
-    ""
-  );
-}
-
-async function loadFont(url: string) {
-  const res = await fetch(url);
-  const buffer = await res.arrayBuffer();
-  return arrayBufferToBinaryString(buffer);
-}
-
 /**
- * Export the doc to PDF
- * @param doc
+ * Get PDF data of the doc
+ * @param canvas - The editor's canvas
+ * @param doc - The document to export
+ * @param options - The options for exporting
+ * @returns The PDF document (jsPDF instance)
  */
-export async function exportDocAsPDF(
+export async function getPDFData(
   canvas: Canvas,
   doc: Doc,
   options: Partial<ExportPDFOptions>
-) {
-  const { dark, margin } = {
+): Promise<jsPDF> {
+  const { dark, pageMargin, pageFormat, pageOrientation, compress } = {
     dark: false,
-    margin: DEFAULT_MARGIN,
+    pageMargin: DEFAULT_PAGE_MARGIN,
+    pageFormat: "a4",
+    pageOrientation: "portrait",
+    compress: true,
     ...options,
   };
 
   const theme = dark ? "dark" : "light";
   const colorVariables = themeColors[theme];
-  const scale = 0.2; // 1; // TODO: find proper scale to fit in the page
-
-  const pdfDoc = new jsPDF();
+  const pdfDoc = new jsPDF({
+    orientation: pageOrientation as any,
+    format: pageFormat,
+    putOnlyUsedFonts: true,
+    compress: compress,
+  });
 
   // add fonts
   if (Array.isArray(options.fonts)) {
@@ -68,32 +132,26 @@ export async function exportDocAsPDF(
     });
   }
 
-  // pdfDoc.context2d.fillStyle = "#ff3333";
-  // pdfDoc.context2d.fillRect(0, 0, 100, 100);
-  // pdfDoc.context2d.fillStyle = "#33ff33";
-  // pdfDoc.context2d.fillRect(50, 50, 100, 100);
-  // pdfDoc.context2d.font = `normal 400 16px "Loranthus"`;
-  // pdfDoc.setFont("Loranthus", "normal", 400);
-  // pdfDoc.setFontSize(16);
-  // pdfDoc.context2d.fillStyle = "#000000";
-  // pdfDoc.context2d.fillText("Hello world!", 10, 10);
-  // pdfDoc.addPage();
-
   // render pages
   doc.children.forEach((obj, index) => {
     const page = obj as Page;
     if (index > 0) pdfDoc.addPage();
 
-    // Make a new pdf canvas
+    // Compute origin and scale
+    const pageWidth = pdfDoc.internal.pageSize.getWidth();
+    const pageHeight = pdfDoc.internal.pageSize.getHeight();
+    const viewportWidth = pageWidth - pageMargin * 2;
+    const viewportHeight = pageHeight - pageMargin * 2;
     const orderedShapes = page.getOrderedShapes([]);
-    const boundingBox = geometry.expandRect(
-      page.getViewport(canvas, orderedShapes),
-      margin
-    );
+    const boundingBox = page.getViewport(canvas, orderedShapes);
     const w = geometry.width(boundingBox);
     const h = geometry.height(boundingBox);
+    const fitRatio = Math.min(viewportWidth / w, viewportHeight / h);
+    const scale = fitRatio >= 1 ? 1 : fitRatio;
+    const ox = -boundingBox[0][0] + pageMargin / scale;
+    const oy = -boundingBox[0][1] + pageMargin / scale;
 
-    // Prepare context2d for jspdf
+    // Prepare canvas (context2d) for PDF rendering
     const ctx = new PDFContext2D(canvas, pdfDoc); // new Context(w * scale, h * scale);
     const pseudoCanvas: HTMLCanvasElement = {
       getContext: (contextId: string) => {
@@ -101,54 +159,58 @@ export async function exportDocAsPDF(
       },
     } as HTMLCanvasElement;
     const pdfCanvas = new Canvas(pseudoCanvas, 1);
-
-    // Initialize new PDF Canvas
-    pdfCanvas.origin = [-boundingBox[0][0], -boundingBox[0][1]];
-    pdfCanvas.ratio = scale;
-    pdfCanvas.scale = 1;
+    pdfCanvas.origin = [ox, oy];
+    pdfCanvas.ratio = 1; // pixel ratio
+    pdfCanvas.scale = scale;
     pdfCanvas.colorVariables = colorVariables;
-    const svgCanvasWidth = w * scale;
-    const svgCanvasHeight = h * scale;
 
-    // Fill background
-    // if (fillBackground) {
-    //   pdfCanvas.context.fillStyle = pdfCanvas.resolveColor("$background");
-    //   pdfCanvas.context.fillRect(0, 0, svgCanvasWidth, svgCanvasHeight);
-    // }
+    // Fill dark background
+    if (dark) {
+      pdfDoc.setFillColor(pdfCanvas.resolveColor("$background"));
+      pdfDoc.rect(0, 0, pageWidth, pageHeight, "F");
+    }
 
     // update and draw page to the new canvas
     page.update(pdfCanvas);
     page.draw(pdfCanvas, false, orderedShapes);
 
-    // add fonts in defs (temporal impls)
-    // const svg: SVGSVGElement = ctx.getSvg();
-    // const defs = svg.getElementsByTagName("defs");
-    // if (styleInSVG && defs.length > 0) {
-    //   const styleTag = document.createElement("style");
-    //   styleTag.setAttribute("type", "text/css");
-    //   styleTag.appendChild(document.createTextNode(styleInSVG));
-    //   defs.item(0)?.appendChild(styleTag);
-    // }
-
-    // Return the SVG data
-    // const data = ctx.getSerializedSvg(true);
-
     // update page to existing canvas
     page.update(canvas);
   });
 
-  // return data;
+  return pdfDoc;
+}
 
-  // context.beginPath();
-  // context.arc(150, 150, 50, 0, Math.PI, false);
-  // context.lineTo(300, 300);
-  // context.moveTo(300, 150);
-  // context.rect(5, 5, 150, 150);
-  // context.arc(150, 150, 50, 0, Math.PI, false);
-  // context.stroke();
+/**
+ * Get the blob of the generated PDF
+ * @param canvas - The editor's canvas
+ * @param doc - The document to export
+ * @param options - The options for exporting
+ * @returns The blob of the generated PDF
+ */
+export async function getPDFBlob(
+  canvas: Canvas,
+  doc: Doc,
+  options: Partial<ExportPDFOptions>
+): Promise<Blob> {
+  const pdfDoc = await getPDFData(canvas, doc, options);
+  return pdfDoc.output("blob");
+}
 
-  // context.fillStyle = "red";
-  // context.fillRect(10, 10, 50, 40);
-
-  pdfDoc.save("a4.pdf");
+/**
+ * Export the doc to PDF file
+ * @param canvas - The editor's canvas
+ * @param doc - The document to export
+ * @param fileName - The file name of the exported PDF
+ * @param options - The options for exporting
+ * @returns The export the generated PDF file
+ */
+export async function exportDocAsPDF(
+  canvas: Canvas,
+  doc: Doc,
+  fileName: string,
+  options: Partial<ExportPDFOptions>
+) {
+  const pdfDoc = await getPDFData(canvas, doc, options);
+  pdfDoc.save(fileName);
 }
