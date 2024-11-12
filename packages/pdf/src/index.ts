@@ -314,7 +314,7 @@ export async function getPDFBlob(
  * @param options - The options for exporting
  * @returns The export the generated PDF file
  */
-export async function exportDocAsPDF(
+export async function exportPDFAsFile(
   canvas: Canvas,
   doc: Doc,
   fileName: string,

@@ -17,11 +17,29 @@ Export PDF options
 
 Whether to compress the PDF
 
+### createLinks?
+
+> `optional` **createLinks**: `boolean`
+
+Whether to create links for shape's link property
+
+### createPageLinks?
+
+> `optional` **createPageLinks**: `boolean`
+
+Whether to create page links for shape's reference property
+
 ### dark?
 
 > `optional` **dark**: `boolean`
 
 Whether to export in dark mode
+
+### excludePages?
+
+> `optional` **excludePages**: `Page`[]
+
+The pages to exclude
 
 ### fonts?
 
@@ -46,6 +64,42 @@ The margin of the page
 > `optional` **pageOrientation**: [`PDFPageOrientation`](/api-pdf/type-aliases/pdfpageorientation/)
 
 The orientation of the page
+
+### postrenderPage()?
+
+> `optional` **postrenderPage**: (`page`, `jsPDF`, `canvas`) => `void`
+
+A function to be called after rendering each page
+
+#### Parameters
+
+• **page**: `Page`
+
+• **jsPDF**: `jsPDF`
+
+• **canvas**: `Canvas`
+
+#### Returns
+
+`void`
+
+### prerenderPage()?
+
+> `optional` **prerenderPage**: (`page`, `jsPDF`, `canvas`) => `void`
+
+A function to be called before rendering each page
+
+#### Parameters
+
+• **page**: `Page`
+
+• **jsPDF**: `jsPDF`
+
+• **canvas**: `Canvas`
+
+#### Returns
+
+`void`
 
 ## Source
 

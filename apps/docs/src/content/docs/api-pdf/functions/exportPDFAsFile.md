@@ -2,10 +2,10 @@
 editUrl: false
 next: false
 prev: false
-title: "exportDocAsPDF"
+title: "exportPDFAsFile"
 ---
 
-> **exportDocAsPDF**(`canvas`, `doc`, `fileName`, `options`): `Promise`\<`void`\>
+> **exportPDFAsFile**(`canvas`, `doc`, `fileName`, `options`): `Promise`\<`void`\>
 
 Export the doc to PDF file
 
@@ -35,4 +35,4 @@ The export the generated PDF file
 
 ## Source
 
-[index.ts:221](https://github.com/dgmjs/dgmjs/blob/main/packages/pdf/src/index.ts#L221)
+[index.ts:317](https://github.com/dgmjs/dgmjs/blob/main/packages/pdf/src/index.ts#L317)

@@ -14,6 +14,6 @@ title: "@dgmjs/pdf"
 
 ## Functions
 
-- [exportDocAsPDF](/api-pdf/functions/exportdocaspdf/)
+- [exportPDFAsFile](/api-pdf/functions/exportpdfasfile/)
 - [getPDFBlob](/api-pdf/functions/getpdfblob/)
 - [getPDFData](/api-pdf/functions/getpdfdata/)

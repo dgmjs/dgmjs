@@ -11,7 +11,7 @@ import {
 import { fileOpen, fileSave } from "browser-fs-access";
 import { useDemoStore } from "@/demo-store";
 import { ExportImageFormat, exportImageAsFile } from "@dgmjs/export";
-import { exportDocAsPDF, ExportPDFOptions } from "@dgmjs/pdf";
+import { exportPDFAsFile, ExportPDFOptions } from "@dgmjs/pdf";
 import fontJson from "@/fonts.json";
 
 function arrayBufferToBinaryString(buffer: ArrayBuffer) {
@@ -165,7 +165,7 @@ export function Menus() {
       createLinks: true,
       createPageLinks: true,
     };
-    exportDocAsPDF(editor.canvas, doc, "exported-pdf", pdfOptions);
+    exportPDFAsFile(editor.canvas, doc, "exported-pdf", pdfOptions);
   };
 
   return (

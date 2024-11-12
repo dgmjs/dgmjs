@@ -27,7 +27,7 @@ Mirror
 
 #### Source
 
-[shapes.ts:3037](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3037)
+[shapes.ts:3041](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3041)
 
 ## Properties
 
@@ -43,7 +43,7 @@ Anchor angle (in degree)
 
 #### Source
 
-[shapes.ts:1294](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1294)
+[shapes.ts:1298](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1298)
 
 ***
 
@@ -59,7 +59,7 @@ Anchor length
 
 #### Source
 
-[shapes.ts:1299](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1299)
+[shapes.ts:1303](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1303)
 
 ***
 
@@ -75,7 +75,7 @@ Anchor position (0~1). 0 is on tail, 1 is on head
 
 #### Source
 
-[shapes.ts:1304](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1304)
+[shapes.ts:1308](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1308)
 
 ***
 
@@ -91,7 +91,7 @@ Anchored
 
 #### Source
 
-[shapes.ts:1289](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1289)
+[shapes.ts:1293](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1293)
 
 ***
 
@@ -107,7 +107,7 @@ Border position (center, inside, outside)
 
 #### Source
 
-[shapes.ts:1284](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1284)
+[shapes.ts:1288](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1288)
 
 ***
 
@@ -123,7 +123,7 @@ Borders [top, right, bottom, left]
 
 #### Source
 
-[shapes.ts:1279](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1279)
+[shapes.ts:1283](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1283)
 
 ***
 
@@ -217,7 +217,7 @@ Corner radius [top-left, top-right, bottom-right, bottom-left] (same with CSS)
 
 #### Source
 
-[shapes.ts:1274](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1274)
+[shapes.ts:1278](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1278)
 
 ***
 
@@ -393,7 +393,7 @@ Text horizontal alignment
 
 #### Source
 
-[shapes.ts:1349](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1349)
+[shapes.ts:1353](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1353)
 
 ***
 
@@ -439,7 +439,7 @@ Text line height
 
 #### Source
 
-[shapes.ts:1359](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1359)
+[shapes.ts:1363](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1363)
 
 ***
 
@@ -519,7 +519,7 @@ Padding spaces [top, right, bottom, left] (same with CSS)
 
 #### Source
 
-[shapes.ts:1269](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1269)
+[shapes.ts:1273](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1273)
 
 ***
 
@@ -535,7 +535,7 @@ Text paragraph spacing
 
 #### Source
 
-[shapes.ts:1364](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1364)
+[shapes.ts:1368](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1368)
 
 ***
 
@@ -785,7 +785,7 @@ The subject shape to be mirrored
 
 #### Source
 
-[shapes.ts:3035](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3035)
+[shapes.ts:3039](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3039)
 
 ***
 
@@ -842,7 +842,7 @@ Rich text document content (this.text) look like:
 
 #### Source
 
-[shapes.ts:1339](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1339)
+[shapes.ts:1343](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1343)
 
 ***
 
@@ -858,7 +858,7 @@ Text editable
 
 #### Source
 
-[shapes.ts:1309](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1309)
+[shapes.ts:1313](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1313)
 
 ***
 
@@ -904,7 +904,7 @@ Text vertical alignment
 
 #### Source
 
-[shapes.ts:1354](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1354)
+[shapes.ts:1358](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1358)
 
 ***
 
@@ -952,7 +952,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:1344](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1344)
+[shapes.ts:1348](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1348)
 
 ## Accessors
 
@@ -980,7 +980,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:1446](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1446)
+[shapes.ts:1450](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1450)
 
 ***
 
@@ -994,7 +994,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:1454](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1454)
+[shapes.ts:1458](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1458)
 
 ***
 
@@ -1008,7 +1008,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:1434](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1434)
+[shapes.ts:1438](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1438)
 
 ***
 
@@ -1022,7 +1022,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:1438](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1438)
+[shapes.ts:1442](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1442)
 
 ***
 
@@ -1036,7 +1036,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:1442](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1442)
+[shapes.ts:1446](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1446)
 
 ***
 
@@ -1050,7 +1050,7 @@ Word wrap
 
 #### Source
 
-[shapes.ts:1450](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1450)
+[shapes.ts:1454](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1454)
 
 ***
 
@@ -1186,7 +1186,7 @@ Render vs Draw
 
 #### Source
 
-[shapes.ts:3071](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3071)
+[shapes.ts:3075](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3075)
 
 ***
 
@@ -1380,7 +1380,7 @@ Import shape from JSON
 
 #### Source
 
-[shapes.ts:3055](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3055)
+[shapes.ts:3059](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3059)
 
 ***
 
@@ -1415,7 +1415,7 @@ will be rotated as the angle of (base angle + anchor angle) at start point.
 
 #### Source
 
-[shapes.ts:1794](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1794)
+[shapes.ts:1798](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1798)
 
 ***
 
@@ -1630,7 +1630,7 @@ and don't forget to apply transform scale to the DOM element.
 
 #### Source
 
-[shapes.ts:3119](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3119)
+[shapes.ts:3123](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3123)
 
 ***
 
@@ -2022,7 +2022,7 @@ Preprocessed document content grammar (BNF):
 
 #### Source
 
-[shapes.ts:1688](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1688)
+[shapes.ts:1692](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1692)
 
 ***
 
@@ -2080,7 +2080,7 @@ Render vs Draw
 
 #### Source
 
-[shapes.ts:1458](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1458)
+[shapes.ts:1462](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1462)
 
 ***
 
@@ -2104,7 +2104,7 @@ Default render this shape
 
 #### Source
 
-[shapes.ts:3105](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3105)
+[shapes.ts:3109](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3109)
 
 ***
 
@@ -2152,7 +2152,7 @@ Return outline polygon
 
 #### Source
 
-[shapes.ts:1769](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1769)
+[shapes.ts:1773](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1773)
 
 ***
 
@@ -2176,7 +2176,7 @@ Render shadow
 
 #### Source
 
-[shapes.ts:1651](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1651)
+[shapes.ts:1655](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1655)
 
 ***
 
@@ -2200,7 +2200,7 @@ Render text
 
 #### Source
 
-[shapes.ts:1642](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1642)
+[shapes.ts:1646](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1646)
 
 ***
 
@@ -2248,7 +2248,7 @@ Render default viewport
 
 #### Source
 
-[shapes.ts:3134](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3134)
+[shapes.ts:3138](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3138)
 
 ***
 
@@ -2278,7 +2278,7 @@ assign null if not found
 
 #### Source
 
-[shapes.ts:3060](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3060)
+[shapes.ts:3064](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3064)
 
 ***
 
@@ -2304,7 +2304,7 @@ Export shape to JSON
 
 #### Source
 
-[shapes.ts:3046](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3046)
+[shapes.ts:3050](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3050)
 
 ***
 
@@ -2476,4 +2476,4 @@ Compute size of text with word-wrap and new line chars
 
 #### Source
 
-[shapes.ts:1693](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1693)
+[shapes.ts:1697](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1697)
