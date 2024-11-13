@@ -1168,6 +1168,10 @@ export class Page extends Shape {
     this.pageScale = json.pageScale ?? this.pageScale;
   }
 
+  getPage(): Page | null {
+    return this;
+  }
+
   finalize(canvas: Canvas): void {
     this.traverseSequence().forEach((s) => {
       if (s !== this) (s as Shape).finalize(canvas);

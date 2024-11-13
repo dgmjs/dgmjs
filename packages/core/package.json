@@ -1,6 +1,6 @@
 {
   "name": "@dgmjs/core",
-  "version": "0.34.1",
+  "version": "0.35.0",
   "description": "An extensible diagramming library for the web",
   "type": "module",
   "main": "./dist/index.js",
@@ -15,7 +15,7 @@
     "test": "jest"
   },
   "author": "",
-  "license": "DGM License",
+  "license": "GPLv3",
   "dependencies": {
     "@radix-ui/colors": "^3.0.0",
     "@tiptap/core": "^2.2.2",

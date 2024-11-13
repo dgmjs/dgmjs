@@ -829,7 +829,7 @@ Page do not contain a point
 
 #### Source
 
-[shapes.ts:1250](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1250)
+[shapes.ts:1254](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1254)
 
 ***
 
@@ -857,7 +857,7 @@ Render the page. If shapes are given, render only the given shapes.
 
 #### Source
 
-[shapes.ts:1187](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1187)
+[shapes.ts:1191](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1191)
 
 ***
 
@@ -907,7 +907,7 @@ Finalize shape
 
 #### Source
 
-[shapes.ts:1171](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1171)
+[shapes.ts:1175](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1175)
 
 ***
 
@@ -1071,7 +1071,7 @@ Returns a bounding box containing all shapes in the doc
 
 #### Source
 
-[shapes.ts:1203](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1203)
+[shapes.ts:1207](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1207)
 
 ***
 
@@ -1151,7 +1151,7 @@ Return a ordered array of the given shapes
 
 #### Source
 
-[shapes.ts:1240](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1240)
+[shapes.ts:1244](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1244)
 
 ***
 
@@ -1185,13 +1185,13 @@ Return the page that contains this shape
 
 `null` \| [`Page`](/api-core/classes/page/)
 
-#### Inherited from
+#### Overrides
 
 [`Shape`](/api-core/classes/shape/).[`getPage`](/api-core/classes/shape/#getpage)
 
 #### Source
 
-[shapes.ts:519](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L519)
+[shapes.ts:1171](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1171)
 
 ***
 
@@ -1369,7 +1369,7 @@ If shapes are not given, return the viewport of all shapes in the page.
 
 #### Source
 
-[shapes.ts:1219](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1219)
+[shapes.ts:1223](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1223)
 
 ***
 
@@ -1580,7 +1580,7 @@ Page do not overlap with anything
 
 #### Source
 
-[shapes.ts:1257](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1257)
+[shapes.ts:1261](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1261)
 
 ***
 
@@ -1961,7 +1961,7 @@ Update all shapes in this page
 
 #### Source
 
-[shapes.ts:1180](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1180)
+[shapes.ts:1184](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1184)
 
 ***
 

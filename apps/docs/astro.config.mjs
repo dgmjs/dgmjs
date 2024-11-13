@@ -8,6 +8,8 @@ const [CoreStarlightTypeDoc, CoreTypeDocSidebarGroup] =
   createStarlightTypeDocPlugin();
 const [ExportStarlightTypeDoc, ExportTypeDocSidebarGroup] =
   createStarlightTypeDocPlugin();
+const [PDFStarlightTypeDoc, PDFTypeDocSidebarGroup] =
+  createStarlightTypeDocPlugin();
 
 // https://astro.build/config
 export default defineConfig({
@@ -42,6 +44,18 @@ export default defineConfig({
             gitRevision: "main",
           },
         }),
+        PDFStarlightTypeDoc({
+          entryPoints: ["../../packages/pdf/src/index.ts"],
+          tsconfig: "../../packages/pdf/tsconfig.json",
+          output: "api-pdf",
+          sidebar: {
+            collapsed: true,
+            label: "@dgmjs/pdf",
+          },
+          typeDoc: {
+            gitRevision: "main",
+          },
+        }),
       ],
       social: {
         github: "https://github.com/dgmjs/dgmjs",
@@ -62,6 +76,7 @@ export default defineConfig({
         },
         CoreTypeDocSidebarGroup,
         ExportTypeDocSidebarGroup,
+        PDFTypeDocSidebarGroup,
       ],
       customCss: [
         "./src/styles/globals.css",
