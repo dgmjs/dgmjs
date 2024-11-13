@@ -11,6 +11,21 @@ import {
 import { fileOpen, fileSave } from "browser-fs-access";
 import { useDemoStore } from "@/demo-store";
 import { ExportImageFormat, exportImageAsFile } from "@dgmjs/export";
+import { exportPDFAsFile, ExportPDFOptions } from "@dgmjs/pdf";
+import fontJson from "@/fonts.json";
+
+function arrayBufferToBinaryString(buffer: ArrayBuffer) {
+  return new Uint8Array(buffer).reduce(
+    (data, byte) => data + String.fromCharCode(byte),
+    ""
+  );
+}
+
+async function loadFont(url: string) {
+  const res = await fetch(url);
+  const buffer = await res.arrayBuffer();
+  return arrayBufferToBinaryString(buffer);
+}
 
 export function Menus() {
   const {
@@ -127,6 +142,32 @@ export function Menus() {
     );
   };
 
+  const handleExportPDF = async () => {
+    const fonts = [];
+    for (const font of fontJson) {
+      const fontBinaryString = await loadFont(
+        `http://localhost:4321${font.src}`
+      );
+      fonts.push({
+        family: font.family,
+        style: font.style,
+        weight: font.weight,
+        binaryString: fontBinaryString,
+      });
+    }
+
+    const editor = window.editor;
+    const doc = editor.getDoc();
+    const pdfOptions: ExportPDFOptions = {
+      dark: darkMode,
+      fonts: fonts,
+      pageFormat: "a4",
+      createLinks: true,
+      createPageLinks: true,
+    };
+    exportPDFAsFile(editor.canvas, doc, "exported-pdf", pdfOptions);
+  };
+
   return (
     <div className="flex justify-center items-center h-8 px-1">
       <DropdownMenu>
@@ -147,6 +188,9 @@ export function Menus() {
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={handleExportSVG}>
             Export as SVG
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={handleExportPDF}>
+            Export as PDF
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuCheckboxItem

@@ -1,6 +1,7 @@
-import { Page, Canvas, geometry, themeColors, Shape } from "@dgmjs/core";
+import { Page, Canvas, geometry, themeColors, Shape, Doc } from "@dgmjs/core";
 import fileSaverPkg from "file-saver";
 import { Context } from "svgcanvas";
+
 const { saveAs } = fileSaverPkg;
 
 const DEFAULT_MARGIN = 8;

@@ -286,7 +286,7 @@ Draw Image
 
 #### Source
 
-[graphics/graphics.ts:1381](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1381)
+[graphics/graphics.ts:1387](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1387)
 
 ***
 
@@ -416,7 +416,7 @@ Draw filled path
 
 #### Source
 
-[graphics/graphics.ts:1329](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1329)
+[graphics/graphics.ts:1332](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1332)
 
 ***
 
@@ -522,7 +522,7 @@ text baseline (metric.ascent - not the top of text)
 
 #### Source
 
-[graphics/graphics.ts:1369](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1369)
+[graphics/graphics.ts:1375](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1375)
 
 ***
 
@@ -628,7 +628,7 @@ Draw a path with fill and stroke
 
 #### Source
 
-[graphics/graphics.ts:1357](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1357)
+[graphics/graphics.ts:1363](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1363)
 
 ***
 
@@ -1275,7 +1275,7 @@ Hints:
 
 #### Source
 
-[graphics/graphics.ts:1409](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1409)
+[graphics/graphics.ts:1415](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L1415)
 
 ***
 

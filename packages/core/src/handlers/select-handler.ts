@@ -119,9 +119,13 @@ export class SelectHandler extends Handler {
       if (editor.selection.size() > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) {
-          manipulator.pointerDown(editor, page, e);
-          if (manipulator.mouseIn(editor, page, e)) {
-            cursor = manipulator.mouseCursor(editor, page, e) ?? cursor;
+          try {
+            manipulator.pointerDown(editor, page, e);
+            if (manipulator.mouseIn(editor, page, e)) {
+              cursor = manipulator.mouseCursor(editor, page, e) ?? cursor;
+            }
+          } catch (e) {
+            console.error(e);
           }
         }
       }
@@ -129,9 +133,13 @@ export class SelectHandler extends Handler {
         const s = editor.selection.getShapes()[0];
         const manipulator = manipulatorManager.get(s.type);
         if (manipulator) {
-          manipulator.pointerDown(editor, s, e);
-          if (manipulator.mouseIn(editor, s, e)) {
-            cursor = manipulator.mouseCursor(editor, s, e) ?? cursor;
+          try {
+            manipulator.pointerDown(editor, s, e);
+            if (manipulator.mouseIn(editor, s, e)) {
+              cursor = manipulator.mouseCursor(editor, s, e) ?? cursor;
+            }
+          } catch (e) {
+            console.error(e);
           }
         }
       }
@@ -197,10 +205,14 @@ export class SelectHandler extends Handler {
       if (editor.selection.getShapes().length > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) {
-          const moved = manipulator.pointerMove(editor, page, e);
-          if (moved) this.deselectOnPointerUp = [];
-          if (manipulator.mouseIn(editor, page, e)) {
-            cursor = manipulator.mouseCursor(editor, page, e) ?? cursor;
+          try {
+            const moved = manipulator.pointerMove(editor, page, e);
+            if (moved) this.deselectOnPointerUp = [];
+            if (manipulator.mouseIn(editor, page, e)) {
+              cursor = manipulator.mouseCursor(editor, page, e) ?? cursor;
+            }
+          } catch (e) {
+            console.error(e);
           }
         }
       }
@@ -208,10 +220,14 @@ export class SelectHandler extends Handler {
         const s = editor.selection.getShapes()[0];
         const manipulator = manipulatorManager.get(s.type);
         if (manipulator) {
-          const moved = manipulator.pointerMove(editor, s, e);
-          if (moved) this.deselectOnPointerUp = [];
-          if (manipulator.mouseIn(editor, s, e) || manipulator.isDragging()) {
-            cursor = manipulator.mouseCursor(editor, s, e) ?? cursor;
+          try {
+            const moved = manipulator.pointerMove(editor, s, e);
+            if (moved) this.deselectOnPointerUp = [];
+            if (manipulator.mouseIn(editor, s, e) || manipulator.isDragging()) {
+              cursor = manipulator.mouseCursor(editor, s, e) ?? cursor;
+            }
+          } catch (e) {
+            console.error(e);
           }
         }
       }
@@ -255,20 +271,28 @@ export class SelectHandler extends Handler {
       if (editor.selection.getShapes().length > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) {
-          if (manipulator.mouseIn(editor, page, e)) {
-            cursor = manipulator.mouseCursor(editor, page, e) ?? cursor;
+          try {
+            if (manipulator.mouseIn(editor, page, e)) {
+              cursor = manipulator.mouseCursor(editor, page, e) ?? cursor;
+            }
+            manipulator.pointerUp(editor, page, e);
+          } catch (e) {
+            console.error(e);
           }
-          manipulator.pointerUp(editor, page, e);
         }
       }
       if (editor.selection.size() === 1) {
         const s = editor.selection.getShapes()[0];
         const manipulator = manipulatorManager.get(s.type);
         if (manipulator) {
-          if (manipulator.mouseIn(editor, s, e)) {
-            cursor = manipulator.mouseCursor(editor, s, e) ?? cursor;
+          try {
+            if (manipulator.mouseIn(editor, s, e)) {
+              cursor = manipulator.mouseCursor(editor, s, e) ?? cursor;
+            }
+            manipulator.pointerUp(editor, s, e);
+          } catch (e) {
+            console.error(e);
           }
-          manipulator.pointerUp(editor, s, e);
         }
       }
     }
@@ -317,10 +341,22 @@ export class SelectHandler extends Handler {
       if (editor.selection.getShapes().length === 1) {
         const shape = editor.selection.getShapes()[0];
         const manipulator = manipulatorManager.get(shape.type);
-        if (manipulator) manipulator.keyDown(editor, shape, e);
+        if (manipulator) {
+          try {
+            manipulator.keyDown(editor, shape, e);
+          } catch (e) {
+            console.error(e);
+          }
+        }
       } else if (editor.selection.getShapes().length > 1) {
         const manipulator = manipulatorManager.get("selections");
-        if (manipulator) manipulator.keyDown(editor, page, e);
+        if (manipulator) {
+          try {
+            manipulator.keyDown(editor, page, e);
+          } catch (e) {
+            console.error(e);
+          }
+        }
       }
     }
     if (e.key === "Escape") {

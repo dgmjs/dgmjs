@@ -15,7 +15,7 @@
     "test": "jest"
   },
   "author": "",
-  "license": "DGM License",
+  "license": "GPLv3",
   "dependencies": {
     "@dgmjs/core": "*",
     "@types/file-saver": "^2.0.7",
