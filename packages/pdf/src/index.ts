@@ -253,7 +253,6 @@ export async function getPDFData(
           const y = newBox[0][1];
           const w = geometry.width(newBox);
           const h = geometry.height(newBox);
-          console.log("link", shape.link, x, y, w, h);
           pdfDoc.link(x, y, w, h, { url: shape.link });
         }
       }
@@ -275,7 +274,6 @@ export async function getPDFData(
           if (targetPage) {
             const targetPageIndex = pagesToRender.indexOf(targetPage);
             if (targetPageIndex >= 0) {
-              console.log("page link", shape, targetPageIndex);
               pdfDoc.link(x, y, w, h, { pageNumber: targetPageIndex + 1 });
             }
           }
