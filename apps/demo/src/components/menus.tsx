@@ -162,6 +162,7 @@ export function Menus() {
       dark: darkMode,
       fonts: fonts,
       pageFormat: "a4",
+      pageOrientation: "landscape",
       createLinks: true,
       createPageLinks: true,
     };

@@ -1,6 +1,6 @@
 {
   "name": "@dgmjs/pdf",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "PDF export for DGM.js",
   "type": "module",
   "main": "./dist/index.js",

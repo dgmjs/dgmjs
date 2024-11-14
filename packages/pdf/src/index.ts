@@ -204,8 +204,12 @@ export async function getPDFData(
     const h = geometry.height(boundingBox);
     const fitRatio = Math.min(viewportWidth / w, viewportHeight / h);
     const scale = fitRatio >= 1 ? 1 : fitRatio;
-    const ox = -boundingBox[0][0] + pageMargin / scale;
-    const oy = -boundingBox[0][1] + pageMargin / scale;
+
+    // dx, dy are the margins to center the content
+    const dx = (viewportWidth / scale - w) / 2;
+    const dy = (viewportHeight / scale - h) / 2;
+    const ox = -boundingBox[0][0] + pageMargin / scale + dx;
+    const oy = -boundingBox[0][1] + pageMargin / scale + dy;
 
     // Prepare canvas (context2d) for PDF rendering
     const ctx = new PDFContext2D(canvas, pdfDoc);
