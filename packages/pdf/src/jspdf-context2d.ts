@@ -4,9 +4,25 @@ import { jsPDF } from "jspdf";
 import { parseFont } from "css-font-parser";
 import { renderSVGPath } from "./svg-renderer";
 
+/**
+ * PDF context2d
+ */
 export class PDFContext2D {
-  canvas: Canvas;
+  /**
+   * jsPDF instance
+   */
   pdf: jsPDF;
+
+  /**
+   * Editor's canvas
+   */
+  canvas: Canvas;
+
+  /**
+   * PDF canvas of this context2d
+   */
+  pdfCanvas: Canvas | null;
+
   _fillStyle: string;
   _fillAlpha: number;
   _strokeStyle: string;
@@ -20,8 +36,9 @@ export class PDFContext2D {
   stateStack: any[];
 
   constructor(canvas: Canvas, pdf: jsPDF) {
-    this.canvas = canvas;
     this.pdf = pdf;
+    this.canvas = canvas;
+    this.pdfCanvas = null;
     this._fillStyle = "#ffffffff";
     this._fillAlpha = 1;
     this._strokeStyle = "#000000ff";
@@ -60,6 +77,10 @@ export class PDFContext2D {
         "stroke-opacity": this._strokeAlpha * this._globalAlpha,
       })
     );
+  }
+
+  setPDFCanvas(pdfCanvas: Canvas) {
+    this.pdfCanvas = pdfCanvas;
   }
 
   save() {
@@ -148,7 +169,8 @@ export class PDFContext2D {
     if (segments.length > 0 && segments.every((v) => v === 0)) {
       (this.pdf.context2d as any).setLineDash([]);
     } else {
-      const dash = segments.map((s) => s / 5); // 5 is found by trial and error
+      const scale = this.pdfCanvas?.scale ?? 1;
+      const dash = segments.map((s) => s * scale);
       (this.pdf.context2d as any).setLineDash(dash);
     }
   }
