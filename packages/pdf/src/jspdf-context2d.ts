@@ -145,8 +145,12 @@ export class PDFContext2D {
   }
 
   setLineDash(segments: number[]) {
-    const dash = segments.map((s) => s / 5); // 5 is found by trial and error
-    (this.pdf.context2d as any).setLineDash(dash);
+    if (segments.length > 0 && segments.every((v) => v === 0)) {
+      (this.pdf.context2d as any).setLineDash([]);
+    } else {
+      const dash = segments.map((s) => s / 5); // 5 is found by trial and error
+      (this.pdf.context2d as any).setLineDash(dash);
+    }
   }
 
   beginPath() {
