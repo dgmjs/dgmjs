@@ -219,6 +219,7 @@ export async function getPDFData(
       },
     } as HTMLCanvasElement;
     const pdfCanvas = new Canvas(pseudoCanvas, 1);
+    ctx.setPDFCanvas(pdfCanvas);
     pdfCanvas.origin = [ox, oy];
     pdfCanvas.ratio = 1; // pixel ratio
     pdfCanvas.scale = scale;
