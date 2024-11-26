@@ -14,6 +14,7 @@ An infinite canvas with _smart shapes_. It supports:
 - 👥 Real-time collaboration
 - 🎨 Dark mode (adaptive colors)
 - 📸 Export to image (PNG, SVG)
+- 📕 Export to PDF
 - 🔤 Rich text
 - 🧑🏻‍💻 JSON export/import
 
