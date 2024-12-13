@@ -88,18 +88,22 @@ export class ConnectorMoveController extends Controller {
     // initialize shift movement
     this.shiftMove = "none";
 
+    // store initial head and tail ends
+    this.initialHead = (shape as Connector).head;
+    this.initialTail = (shape as Connector).tail;
+
     // initialize snappers
     this.gridSnapper.setPointToSnap(editor, this, [shape.left, shape.top]);
-    this.moveSnapper.setRectToSnap(editor, shape, shape.getBoundingRect());
-    this.moveSnapper.setReferencePoints(editor, getAllDescendant([shape]));
+    if (this.initialHead === null || this.initialTail === null) {
+      this.moveSnapper.setRectToSnap(editor, shape, shape.getBoundingRect());
+      this.moveSnapper.setReferencePoints(editor, getAllDescendant([shape]));
+    }
 
     this.controlPath = geometry.pathCopy((shape as Path).path);
     this.controlPath[0] = (shape as Connector).getTailAnchorPoint();
     this.controlPath[this.controlPath.length - 1] = (
       shape as Connector
     ).getHeadAnchorPoint();
-    this.initialHead = (shape as Connector).head;
-    this.initialTail = (shape as Connector).tail;
     editor.transform.startAction(ActionKind.REPATH);
   }
 
@@ -126,13 +130,15 @@ export class ConnectorMoveController extends Controller {
 
     // snap dragging points
     this.gridSnapper.snap(editor, targetShape, this);
-    this.moveSnapper.snap(
-      editor,
-      targetShape,
-      this,
-      this.shiftMove !== "vert",
-      this.shiftMove !== "horz"
-    );
+    if (this.initialHead === null || this.initialTail === null) {
+      this.moveSnapper.snap(
+        editor,
+        targetShape,
+        this,
+        this.shiftMove !== "vert",
+        this.shiftMove !== "horz"
+      );
+    }
 
     // move horizontal or vertical with shift key
     if (e.shiftDown) {
@@ -226,6 +232,8 @@ export class ConnectorMoveController extends Controller {
     }
 
     // draw snapping
-    this.moveSnapper.draw(editor);
+    if (this.initialHead === null || this.initialTail === null) {
+      this.moveSnapper.draw(editor);
+    }
   }
 }
