@@ -5,7 +5,7 @@ import * as geometry from "../graphics/geometry";
 import { Cursor } from "../graphics/const";
 import { changeParent, resolveAllConstraints, setPath } from "../macro";
 import { ActionKind } from "../core";
-import { ableToContain } from "./utils";
+import { ableToContain, findConnectionAnchor } from "./utils";
 import { GridSnapper, MoveSnapper } from "../manipulators/snapper";
 import { getAllDescendant } from "../utils/shape-utils";
 
@@ -29,6 +29,16 @@ export class ConnectorMoveController extends Controller {
   controlPath: number[][];
 
   /**
+   * Initial head
+   */
+  initialHead: Shape | null;
+
+  /**
+   * Initial tail
+   */
+  initialTail: Shape | null;
+
+  /**
    * Reference to a container shape
    */
   container: Shape | null;
@@ -44,6 +54,8 @@ export class ConnectorMoveController extends Controller {
     this.gridSnapper = new GridSnapper();
     this.moveSnapper = new MoveSnapper();
     this.controlPath = [];
+    this.initialHead = null;
+    this.initialTail = null;
     this.container = null;
     this.shiftMove = "none";
   }
@@ -82,6 +94,12 @@ export class ConnectorMoveController extends Controller {
     this.moveSnapper.setReferencePoints(editor, getAllDescendant([shape]));
 
     this.controlPath = geometry.pathCopy((shape as Path).path);
+    this.controlPath[0] = (shape as Connector).getTailAnchorPoint();
+    this.controlPath[this.controlPath.length - 1] = (
+      shape as Connector
+    ).getHeadAnchorPoint();
+    this.initialHead = (shape as Connector).head;
+    this.initialTail = (shape as Connector).tail;
     editor.transform.startAction(ActionKind.REPATH);
   }
 
@@ -153,13 +171,35 @@ export class ConnectorMoveController extends Controller {
     // update ghost
     let newPath = this.controlPath.map((p) => [p[0] + this.dx, p[1] + this.dy]);
 
+    // find ends and anchor points
+    let [headEnd, headAnchor] = findConnectionAnchor(
+      editor,
+      shape as Connector,
+      newPath[newPath.length - 1]
+    );
+    let [tailEnd, tailAnchor] = findConnectionAnchor(
+      editor,
+      shape as Connector,
+      newPath[0]
+    );
+    if (this.initialHead !== headEnd) {
+      headEnd = null;
+      headAnchor = [0.5, 0.5];
+    }
+    if (this.initialTail !== tailEnd) {
+      tailEnd = null;
+      tailAnchor = [0.5, 0.5];
+    }
+
     // transform shape
     const page = editor.getCurrentPage()!;
     editor.transform.transact((tx) => {
       if (this.dx !== 0 || this.dy !== 0) {
         setPath(tx, shape as Line, newPath);
-        tx.assignRef(shape, "head", null);
-        tx.assignRef(shape, "tail", null);
+        tx.assignRef(shape, "head", headEnd);
+        tx.assignRef(shape, "tail", tailEnd);
+        tx.assign(shape, "headAnchor", headAnchor);
+        tx.assign(shape, "tailAnchor", tailAnchor);
         if (this.container && shape.parent !== this.container) {
           changeParent(tx, shape, this.container);
         }
