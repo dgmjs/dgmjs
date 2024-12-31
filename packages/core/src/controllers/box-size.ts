@@ -39,6 +39,11 @@ export class BoxSizeController extends Controller {
   options: BoxSizeControllerOptions;
 
   /**
+   * Whether keep size ratio or not
+   */
+  keepSizeRatio: boolean;
+
+  /**
    * Grid snapper
    */
   gridSnapper: GridSnapper;
@@ -70,6 +75,7 @@ export class BoxSizeController extends Controller {
       doScaleChildren: false,
       ...options,
     };
+    this.keepSizeRatio = false;
     this.gridSnapper = new GridSnapper();
     this.sizeSnapper = new SizeSnapper();
     this.initialEnclosure = [];
@@ -203,6 +209,13 @@ export class BoxSizeController extends Controller {
     this.sizeSnapper.setSizeToSnap(editor, shape, this);
     this.sizeSnapper.setReferencePoints(editor, [shape]);
 
+    // keep size ratio
+    if (e.shiftDown) {
+      this.keepSizeRatio = shape.sizable !== Sizable.RATIO;
+    } else {
+      this.keepSizeRatio = shape.sizable === Sizable.RATIO;
+    }
+
     editor.transform.startAction(ActionKind.RESIZE);
     this.initialEnclosure = shape.getEnclosure();
     this.initialSnapshot = {};
@@ -242,7 +255,7 @@ export class BoxSizeController extends Controller {
         controlEnclosure[0][1] += dy;
         controlEnclosure[1][1] += dy;
         controlEnclosure[4][1] += dy;
-        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
+        if (this.options.doScale || this.keepSizeRatio) {
           controlEnclosure[1][0] += -dy / r;
           controlEnclosure[2][0] += -dy / r;
         }
@@ -250,7 +263,7 @@ export class BoxSizeController extends Controller {
       case ControllerPosition.RIGHT:
         controlEnclosure[1][0] += dx;
         controlEnclosure[2][0] += dx;
-        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
+        if (this.options.doScale || this.keepSizeRatio) {
           controlEnclosure[2][1] += dx * r;
           controlEnclosure[3][1] += dx * r;
         }
@@ -258,7 +271,7 @@ export class BoxSizeController extends Controller {
       case ControllerPosition.BOTTOM:
         controlEnclosure[2][1] += dy;
         controlEnclosure[3][1] += dy;
-        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
+        if (this.options.doScale || this.keepSizeRatio) {
           controlEnclosure[1][0] += dy / r;
           controlEnclosure[2][0] += dy / r;
         }
@@ -267,13 +280,13 @@ export class BoxSizeController extends Controller {
         controlEnclosure[0][0] += dx;
         controlEnclosure[3][0] += dx;
         controlEnclosure[4][0] += dx;
-        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
+        if (this.options.doScale || this.keepSizeRatio) {
           controlEnclosure[2][1] += -dx * r;
           controlEnclosure[3][1] += -dx * r;
         }
         break;
       case ControllerPosition.LEFT_TOP:
-        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
+        if (this.options.doScale || this.keepSizeRatio) {
           if (dx * r > dy / r) {
             dy = dx * r;
           } else {
@@ -288,7 +301,7 @@ export class BoxSizeController extends Controller {
         controlEnclosure[3][0] += dx;
         break;
       case ControllerPosition.RIGHT_TOP:
-        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
+        if (this.options.doScale || this.keepSizeRatio) {
           if (dx * r > dy / r) {
             dy = -dx * r;
           } else {
@@ -302,7 +315,7 @@ export class BoxSizeController extends Controller {
         controlEnclosure[4][1] += dy;
         break;
       case ControllerPosition.RIGHT_BOTTOM:
-        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
+        if (this.options.doScale || this.keepSizeRatio) {
           if (dx * r > dy / r) {
             dy = dx * r;
           } else {
@@ -315,7 +328,7 @@ export class BoxSizeController extends Controller {
         controlEnclosure[3][1] += dy;
         break;
       case ControllerPosition.LEFT_BOTTOM:
-        if (this.options.doScale || shape.sizable === Sizable.RATIO) {
+        if (this.options.doScale || this.keepSizeRatio) {
           if (dx * r > dy / r) {
             dy = -dx * r;
           } else {
