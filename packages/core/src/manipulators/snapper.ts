@@ -549,7 +549,7 @@ export class SizeSnapper extends MultipointSnapper {
     let dx = controller.dxGCS;
     let dy = controller.dyGCS;
     if (dx === 0 && dy === 0) return;
-    if (controller.isKeepSizeRatio()) {
+    if (this.sizingRatio !== 0) {
       if (dx * this.sizingRatio > dy / this.sizingRatio) {
         dy = dx * this.sizingRatio;
       } else {
