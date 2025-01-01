@@ -136,18 +136,16 @@ export class SelectionsSizeController extends Controller {
     const canvas = editor.canvas;
     const selections = editor.selection.getShapes();
     const rect = editor.selection.getBoundingRect(canvas);
+    this.keepSizeRatio = !e.shiftDown;
 
     // initialize snappers
-    // this.gridSnapper.setPointToSnap(
-    //   editor,
-    //   this,
-    //   getRectPosition(rect, this.options.position)
-    // );
-    // this.sizeSnapper.setSizeToSnap(editor, shape, this);
-    // this.sizeSnapper.setReferencePoints(editor, [shape]);
-
-    // keep size ratio
-    this.keepSizeRatio = !e.shiftDown;
+    this.gridSnapper.setPointToSnap(
+      editor,
+      this,
+      getRectPosition(rect, this.options.position)
+    );
+    this.sizeSnapper.setSizeToSnap(editor, shape, this);
+    this.sizeSnapper.setReferencePoints(editor, selections);
 
     editor.transform.startAction(ActionKind.RESIZE);
     this.initialEnclosure = geometry.rectToPolygon(rect);
@@ -165,13 +163,12 @@ export class SelectionsSizeController extends Controller {
     const canvas = editor.canvas;
 
     // snapping
-    // this.gridSnapper.snap(editor, shape, this);
-    // this.sizeSnapper.snap(editor, shape, this);
+    this.gridSnapper.snap(editor, shape, this);
+    this.sizeSnapper.snap(editor, shape, this);
 
     // compute (dx, dy) in initial shape's LCS
-    // const dragPoint = ccs2lcs(canvas, shape, this.dragPointCCS);
-    let dx = this.dx; // dragPoint[0] - this.dragStartPoint[0];
-    let dy = this.dy; // dragPoint[1] - this.dragStartPoint[1];
+    let dx = this.dx;
+    let dy = this.dy;
 
     // initialize control enclosure
     let controlEnclosure = geometry.pathCopy(this.initialEnclosure);
@@ -256,7 +253,7 @@ export class SelectionsSizeController extends Controller {
       [targetLeft, targetTop],
       [targetRight, targetBottom],
     ];
-    const ratio = targetWidth / w; // shape.width;
+    const ratio = targetWidth / w;
 
     // transform shapes
     editor.transform.transact((tx) => {
@@ -347,6 +344,6 @@ export class SelectionsSizeController extends Controller {
     drawPolylineInLCS(canvas, shape, ghost);
 
     // draw snapping
-    // this.sizeSnapper.draw(editor);
+    this.sizeSnapper.draw(editor);
   }
 }

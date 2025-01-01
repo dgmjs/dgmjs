@@ -1,4 +1,5 @@
 import { BoxSizeController } from "../controllers/box-size";
+import { SelectionsSizeController } from "../controllers/selections-size";
 import { Controller, Editor } from "../editor";
 import { ControllerPosition, MAGNET_THRESHOLD } from "../graphics/const";
 import * as geometry from "../graphics/geometry";
@@ -465,9 +466,16 @@ export class SizeSnapper extends MultipointSnapper {
     }
   }
 
-  setSizeToSnap(editor: Editor, shape: Shape, controller: BoxSizeController) {
+  setSizeToSnap(
+    editor: Editor,
+    shape: Shape,
+    controller: BoxSizeController | SelectionsSizeController
+  ) {
     // set points to snap
-    const rect = shape.getBoundingRect();
+    let rect = shape.getBoundingRect();
+    if (controller instanceof SelectionsSizeController) {
+      rect = editor.selection.getBoundingRect(editor.canvas);
+    }
     const enclosure = geometry.rectToPolygon(rect, false);
 
     // compute ratio if the shape's sizable is ratio
@@ -521,7 +529,11 @@ export class SizeSnapper extends MultipointSnapper {
     this.snappedY = null;
   }
 
-  snap(editor: Editor, shape: Shape, controller: BoxSizeController) {
+  snap(
+    editor: Editor,
+    shape: Shape,
+    controller: BoxSizeController | SelectionsSizeController
+  ) {
     if (!editor.getSnapToObjects()) return;
 
     // size snapping will not work on rotated shape
