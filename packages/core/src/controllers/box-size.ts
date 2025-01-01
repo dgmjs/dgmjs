@@ -82,6 +82,10 @@ export class BoxSizeController extends Controller {
     this.initialSnapshot = {};
   }
 
+  isKeepSizeRatio(): boolean {
+    return this.options.doScale || this.keepSizeRatio;
+  }
+
   /**
    * Indicates the controller is active or not
    */
@@ -255,7 +259,7 @@ export class BoxSizeController extends Controller {
         controlEnclosure[0][1] += dy;
         controlEnclosure[1][1] += dy;
         controlEnclosure[4][1] += dy;
-        if (this.options.doScale || this.keepSizeRatio) {
+        if (this.isKeepSizeRatio()) {
           controlEnclosure[1][0] += -dy / r;
           controlEnclosure[2][0] += -dy / r;
         }
@@ -263,7 +267,7 @@ export class BoxSizeController extends Controller {
       case ControllerPosition.RIGHT:
         controlEnclosure[1][0] += dx;
         controlEnclosure[2][0] += dx;
-        if (this.options.doScale || this.keepSizeRatio) {
+        if (this.isKeepSizeRatio()) {
           controlEnclosure[2][1] += dx * r;
           controlEnclosure[3][1] += dx * r;
         }
@@ -271,7 +275,7 @@ export class BoxSizeController extends Controller {
       case ControllerPosition.BOTTOM:
         controlEnclosure[2][1] += dy;
         controlEnclosure[3][1] += dy;
-        if (this.options.doScale || this.keepSizeRatio) {
+        if (this.isKeepSizeRatio()) {
           controlEnclosure[1][0] += dy / r;
           controlEnclosure[2][0] += dy / r;
         }
@@ -280,13 +284,13 @@ export class BoxSizeController extends Controller {
         controlEnclosure[0][0] += dx;
         controlEnclosure[3][0] += dx;
         controlEnclosure[4][0] += dx;
-        if (this.options.doScale || this.keepSizeRatio) {
+        if (this.isKeepSizeRatio()) {
           controlEnclosure[2][1] += -dx * r;
           controlEnclosure[3][1] += -dx * r;
         }
         break;
       case ControllerPosition.LEFT_TOP:
-        if (this.options.doScale || this.keepSizeRatio) {
+        if (this.isKeepSizeRatio()) {
           if (dx * r > dy / r) {
             dy = dx * r;
           } else {
@@ -301,7 +305,7 @@ export class BoxSizeController extends Controller {
         controlEnclosure[3][0] += dx;
         break;
       case ControllerPosition.RIGHT_TOP:
-        if (this.options.doScale || this.keepSizeRatio) {
+        if (this.isKeepSizeRatio()) {
           if (dx * r > dy / r) {
             dy = -dx * r;
           } else {
@@ -315,7 +319,7 @@ export class BoxSizeController extends Controller {
         controlEnclosure[4][1] += dy;
         break;
       case ControllerPosition.RIGHT_BOTTOM:
-        if (this.options.doScale || this.keepSizeRatio) {
+        if (this.isKeepSizeRatio()) {
           if (dx * r > dy / r) {
             dy = dx * r;
           } else {
@@ -328,7 +332,7 @@ export class BoxSizeController extends Controller {
         controlEnclosure[3][1] += dy;
         break;
       case ControllerPosition.LEFT_BOTTOM:
-        if (this.options.doScale || this.keepSizeRatio) {
+        if (this.isKeepSizeRatio()) {
           if (dx * r > dy / r) {
             dy = -dx * r;
           } else {

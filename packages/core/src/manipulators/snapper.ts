@@ -1,9 +1,9 @@
 import { BoxSizeController } from "../controllers/box-size";
-import { Controller, Editor, Handler } from "../editor";
+import { Controller, Editor } from "../editor";
 import { ControllerPosition, MAGNET_THRESHOLD } from "../graphics/const";
 import * as geometry from "../graphics/geometry";
 import { ccs2lcs, gcs2ccs, lcs2gcs } from "../graphics/utils";
-import { Box, Movable, Shape, Sizable } from "../shapes";
+import { Box, Movable, Shape } from "../shapes";
 import * as guide from "../utils/guide";
 
 function eq(a: number, b: number): boolean {
@@ -473,7 +473,7 @@ export class SizeSnapper extends MultipointSnapper {
     // compute ratio if the shape's sizable is ratio
     const w = geometry.width(rect);
     const h = geometry.height(rect);
-    if (controller.options.doScale || shape.sizable === Sizable.RATIO) {
+    if (controller.isKeepSizeRatio()) {
       this.sizingRatio = h / w;
     } else {
       this.sizingRatio = 0;
@@ -537,7 +537,7 @@ export class SizeSnapper extends MultipointSnapper {
     let dx = controller.dxGCS;
     let dy = controller.dyGCS;
     if (dx === 0 && dy === 0) return;
-    if (controller.options.doScale || shape.sizable === Sizable.RATIO) {
+    if (controller.isKeepSizeRatio()) {
       if (dx * this.sizingRatio > dy / this.sizingRatio) {
         dy = dx * this.sizingRatio;
       } else {
