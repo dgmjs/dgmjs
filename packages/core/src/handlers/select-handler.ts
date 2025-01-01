@@ -44,8 +44,11 @@ export class SelectHandler extends Handler {
   pointerDown(editor: Editor, e: CanvasPointerEvent) {
     const canvas = editor.canvas;
     const page = editor.getCurrentPage();
+    if (!page) return;
+
     editor.duplicatedDragging = false;
     editor.pointerDownUnselectedShape = false;
+    const selectionsManipulator = manipulatorManager.get("selections");
 
     if (e.button === Mouse.BUTTON1) {
       const shape = this.getShapeAt(editor, e);
@@ -64,6 +67,13 @@ export class SelectHandler extends Handler {
             editor.selection.select([shape]);
           }
         }
+      } else if (
+        // multiple selection
+        editor.selection.size() > 1 &&
+        selectionsManipulator &&
+        selectionsManipulator.mouseIn(editor, page, e)
+      ) {
+        // do nothing to delegate to selections manipulator later
       } else {
         // area selection
         if (!e.shiftDown) {
@@ -101,12 +111,10 @@ export class SelectHandler extends Handler {
 
     if (e.button === Mouse.BUTTON3) {
       // select a shape (include disabled and invisible) if mouse right click
-      if (page) {
-        const p = canvas.globalCoordTransformRev([e.x, e.y]);
-        const shape = page.getShapeAt(canvas, p, [], true);
-        if (shape && !editor.selection.isSelected(shape))
-          editor.selection.select([shape]);
-      }
+      const p = canvas.globalCoordTransformRev([e.x, e.y]);
+      const shape = page.getShapeAt(canvas, p, [], true);
+      if (shape && !editor.selection.isSelected(shape))
+        editor.selection.select([shape]);
       editor.repaint(true);
     } else {
       // repaint without selection if mouse left click
@@ -115,32 +123,30 @@ export class SelectHandler extends Handler {
 
     // delegates to manipulators
     let cursor: [string, number] = [Cursor.DEFAULT, 0];
-    if (page) {
-      if (editor.selection.size() > 1) {
-        const manipulator = manipulatorManager.get("selections");
-        if (manipulator) {
-          try {
-            manipulator.pointerDown(editor, page, e);
-            if (manipulator.mouseIn(editor, page, e)) {
-              cursor = manipulator.mouseCursor(editor, page, e) ?? cursor;
-            }
-          } catch (e) {
-            console.error(e);
+    if (editor.selection.size() > 1) {
+      if (selectionsManipulator) {
+        try {
+          selectionsManipulator.pointerDown(editor, page, e);
+          if (selectionsManipulator.mouseIn(editor, page, e)) {
+            cursor =
+              selectionsManipulator.mouseCursor(editor, page, e) ?? cursor;
           }
+        } catch (e) {
+          console.error(e);
         }
       }
-      if (editor.selection.size() === 1) {
-        const s = editor.selection.getShapes()[0];
-        const manipulator = manipulatorManager.get(s.type);
-        if (manipulator) {
-          try {
-            manipulator.pointerDown(editor, s, e);
-            if (manipulator.mouseIn(editor, s, e)) {
-              cursor = manipulator.mouseCursor(editor, s, e) ?? cursor;
-            }
-          } catch (e) {
-            console.error(e);
+    }
+    if (editor.selection.size() === 1) {
+      const s = editor.selection.getShapes()[0];
+      const manipulator = manipulatorManager.get(s.type);
+      if (manipulator) {
+        try {
+          manipulator.pointerDown(editor, s, e);
+          if (manipulator.mouseIn(editor, s, e)) {
+            cursor = manipulator.mouseCursor(editor, s, e) ?? cursor;
           }
+        } catch (e) {
+          console.error(e);
         }
       }
     }
@@ -202,7 +208,7 @@ export class SelectHandler extends Handler {
     // delegates to manipulators
     let cursor: [string, number] = [Cursor.DEFAULT, 0];
     if (page) {
-      if (editor.selection.getShapes().length > 1) {
+      if (editor.selection.size() > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) {
           try {
@@ -268,7 +274,7 @@ export class SelectHandler extends Handler {
     // delegates to manipulators
     let cursor: [string, number] = [Cursor.DEFAULT, 0];
     if (page) {
-      if (editor.selection.getShapes().length > 1) {
+      if (editor.selection.size() > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) {
           try {
@@ -338,7 +344,7 @@ export class SelectHandler extends Handler {
     // delegates to manipulators
     const page = editor.getCurrentPage();
     if (page) {
-      if (editor.selection.getShapes().length === 1) {
+      if (editor.selection.size() === 1) {
         const shape = editor.selection.getShapes()[0];
         const manipulator = manipulatorManager.get(shape.type);
         if (manipulator) {
@@ -348,7 +354,7 @@ export class SelectHandler extends Handler {
             console.error(e);
           }
         }
-      } else if (editor.selection.getShapes().length > 1) {
+      } else if (editor.selection.size() > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) {
           try {
@@ -380,7 +386,7 @@ export class SelectHandler extends Handler {
     const page = editor.getCurrentPage();
     if (page) {
       // delegates to manipulators
-      if (editor.selection.getShapes().length > 1) {
+      if (editor.selection.size() > 1) {
         const manipulator = manipulatorManager.get("selections");
         if (manipulator) manipulator.draw(editor, page);
       }
