@@ -717,21 +717,6 @@ export class SizeSnapper extends MultipointSnapper {
       this.guidePoints = this.makeGuidePoints(controller.options.position);
     }
   }
-
-  // TODO: Remove this method. It is for test.
-  draw(editor: Editor) {
-    super.draw(editor);
-
-    const canvas = editor.canvas;
-    canvas.strokeColor = "#ff0000";
-    this.pointsToSnap.forEach((p) => {
-      const gp = gcs2ccs(canvas, p);
-      const sz = 6;
-      canvas.strokeColor = "#ff0000";
-      canvas.strokeWidth = 3;
-      canvas.ellipse(gp[0] - sz, gp[1] - sz, gp[0] + sz, gp[1] + sz);
-    });
-  }
 }
 
 /**
