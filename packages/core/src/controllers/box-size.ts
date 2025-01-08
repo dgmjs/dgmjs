@@ -204,6 +204,13 @@ export class BoxSizeController extends Controller {
   }
 
   initialize(editor: Editor, shape: Shape, e: CanvasPointerEvent): void {
+    // keep size ratio
+    if (e.shiftDown) {
+      this.keepSizeRatio = shape.sizable !== Sizable.RATIO;
+    } else {
+      this.keepSizeRatio = shape.sizable === Sizable.RATIO;
+    }
+
     // initialize snappers
     this.gridSnapper.setPointToSnap(
       editor,
@@ -212,13 +219,6 @@ export class BoxSizeController extends Controller {
     );
     this.sizeSnapper.setSizeToSnap(editor, shape, this);
     this.sizeSnapper.setReferencePoints(editor, [shape]);
-
-    // keep size ratio
-    if (e.shiftDown) {
-      this.keepSizeRatio = shape.sizable !== Sizable.RATIO;
-    } else {
-      this.keepSizeRatio = shape.sizable === Sizable.RATIO;
-    }
 
     editor.transform.startAction(ActionKind.RESIZE);
     this.initialEnclosure = shape.getEnclosure();

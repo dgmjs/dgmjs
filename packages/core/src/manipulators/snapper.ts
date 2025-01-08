@@ -370,19 +370,57 @@ export class SizeSnapper extends MultipointSnapper {
     dy: number
   ): number[][] {
     switch (position) {
-      case ControllerPosition.TOP:
-      case ControllerPosition.BOTTOM: {
-        return [
-          [pointsToSnap[0][0], pointsToSnap[0][1] + dy],
-          [pointsToSnap[1][0], pointsToSnap[1][1] + dy],
-        ];
+      case ControllerPosition.TOP: {
+        if (this.sizingRatio !== 0) {
+          return [
+            [pointsToSnap[0][0], pointsToSnap[0][1] + dy],
+            [pointsToSnap[1][0] + dx, pointsToSnap[1][1] + dy],
+          ];
+        } else {
+          return [
+            [pointsToSnap[0][0], pointsToSnap[0][1] + dy],
+            [pointsToSnap[1][0], pointsToSnap[1][1] + dy],
+          ];
+        }
       }
-      case ControllerPosition.LEFT:
+      case ControllerPosition.BOTTOM: {
+        if (this.sizingRatio !== 0) {
+          return [
+            [pointsToSnap[0][0] + dx, pointsToSnap[0][1] + dy],
+            [pointsToSnap[1][0], pointsToSnap[1][1] + dy],
+          ];
+        } else {
+          return [
+            [pointsToSnap[0][0], pointsToSnap[0][1] + dy],
+            [pointsToSnap[1][0], pointsToSnap[1][1] + dy],
+          ];
+        }
+      }
+      case ControllerPosition.LEFT: {
+        if (this.sizingRatio !== 0) {
+          return [
+            [pointsToSnap[0][0] + dx, pointsToSnap[0][1] + dy],
+            [pointsToSnap[1][0] + dx, pointsToSnap[1][1]],
+          ];
+        } else {
+          return [
+            [pointsToSnap[0][0] + dx, pointsToSnap[0][1]],
+            [pointsToSnap[1][0] + dx, pointsToSnap[1][1]],
+          ];
+        }
+      }
       case ControllerPosition.RIGHT: {
-        return [
-          [pointsToSnap[0][0] + dx, pointsToSnap[0][1]],
-          [pointsToSnap[1][0] + dx, pointsToSnap[1][1]],
-        ];
+        if (this.sizingRatio !== 0) {
+          return [
+            [pointsToSnap[0][0] + dx, pointsToSnap[0][1]],
+            [pointsToSnap[1][0] + dx, pointsToSnap[1][1] + dy],
+          ];
+        } else {
+          return [
+            [pointsToSnap[0][0] + dx, pointsToSnap[0][1]],
+            [pointsToSnap[1][0] + dx, pointsToSnap[1][1]],
+          ];
+        }
       }
       case ControllerPosition.LEFT_TOP: {
         return [
@@ -423,7 +461,7 @@ export class SizeSnapper extends MultipointSnapper {
       case ControllerPosition.TOP: {
         return [
           ...this.pointsToSnap,
-          this.initialEnclosure[2],
+          [this.pointsToSnap[1][0], this.initialEnclosure[2][1]],
           this.initialEnclosure[3],
         ];
       }
@@ -431,21 +469,21 @@ export class SizeSnapper extends MultipointSnapper {
         return [
           ...this.pointsToSnap,
           this.initialEnclosure[0],
-          this.initialEnclosure[1],
+          [this.pointsToSnap[0][0], this.initialEnclosure[1][1]],
         ];
       }
       case ControllerPosition.LEFT: {
         return [
           ...this.pointsToSnap,
           this.initialEnclosure[1],
-          this.initialEnclosure[2],
+          [this.initialEnclosure[2][0], this.pointsToSnap[0][1]],
         ];
       }
       case ControllerPosition.RIGHT: {
         return [
           ...this.pointsToSnap,
           this.initialEnclosure[0],
-          this.initialEnclosure[3],
+          [this.initialEnclosure[3][0], this.pointsToSnap[1][1]],
         ];
       }
       case ControllerPosition.LEFT_TOP: {
@@ -529,6 +567,66 @@ export class SizeSnapper extends MultipointSnapper {
     this.snappedY = null;
   }
 
+  adjustDelta(
+    controller: BoxSizeController | SelectionsSizeController,
+    dx: number,
+    dy: number
+  ) {
+    if (this.sizingRatio !== 0) {
+      switch (controller.options.position) {
+        case ControllerPosition.TOP: {
+          dx = -dy / this.sizingRatio;
+          break;
+        }
+        case ControllerPosition.BOTTOM: {
+          dx = dy / this.sizingRatio;
+          break;
+        }
+        case ControllerPosition.LEFT: {
+          dy = -dx * this.sizingRatio;
+          break;
+        }
+        case ControllerPosition.RIGHT: {
+          dy = dx * this.sizingRatio;
+          break;
+        }
+        case ControllerPosition.LEFT_TOP: {
+          if (dx * this.sizingRatio > dy / this.sizingRatio) {
+            dy = dx * this.sizingRatio;
+          } else {
+            dx = dy / this.sizingRatio;
+          }
+          break;
+        }
+        case ControllerPosition.RIGHT_TOP: {
+          if (dx * this.sizingRatio > dy / this.sizingRatio) {
+            dy = -dx * this.sizingRatio;
+          } else {
+            dx = -dy / this.sizingRatio;
+          }
+          break;
+        }
+        case ControllerPosition.LEFT_BOTTOM: {
+          if (dx * this.sizingRatio > dy / this.sizingRatio) {
+            dy = -dx * this.sizingRatio;
+          } else {
+            dx = -dy / this.sizingRatio;
+          }
+          break;
+        }
+        case ControllerPosition.RIGHT_BOTTOM: {
+          if (dx * this.sizingRatio > dy / this.sizingRatio) {
+            dy = dx * this.sizingRatio;
+          } else {
+            dx = dy / this.sizingRatio;
+          }
+          break;
+        }
+      }
+    }
+    return [dx, dy];
+  }
+
   snap(
     editor: Editor,
     shape: Shape,
@@ -545,16 +643,13 @@ export class SizeSnapper extends MultipointSnapper {
     // snapped 된 위치가 이상하게 되는 문제가 있음.
     if (shape instanceof Box && shape.anchored) return;
 
-    // adjust dx and dy if the shape is sizable ratio
     let dx = controller.dxGCS;
     let dy = controller.dyGCS;
     if (dx === 0 && dy === 0) return;
+
+    // adjust dx and dy if the shape is sizable ratio
     if (this.sizingRatio !== 0) {
-      if (dx * this.sizingRatio > dy / this.sizingRatio) {
-        dy = dx * this.sizingRatio;
-      } else {
-        dx = dy / this.sizingRatio;
-      }
+      [dx, dy] = this.adjustDelta(controller, dx, dy);
     }
 
     // move points to snap by dx and dy
@@ -569,43 +664,51 @@ export class SizeSnapper extends MultipointSnapper {
     const centroid = geometry.centroidPolygon(this.pointsToSnap);
     this.sortReferencePoints(centroid);
 
-    // compute snapped X and Y
     this.snappedX = null;
     this.snappedY = null;
+
+    // compute snapped X
     for (let i = 0; i < this.pointsToSnap.length; i++) {
       const p = this.pointsToSnap[i];
       if (this.snappedX === null) {
         this.snappedX = this.snapX(p, this.referencePoints);
         if (this.snappedX !== null) {
-          const dx = this.snappedX - p[0];
-          const dy = this.sizingRatio !== 0 ? dx * this.sizingRatio : 0;
-          this.moveDragPointGCS(editor, shape, controller, dx, dy);
+          let sdx = this.snappedX - p[0];
+          let sdy = 0;
+          if (this.sizingRatio !== 0) {
+            [sdx, sdy] = this.adjustDelta(controller, sdx, sdy);
+          }
+          this.moveDragPointGCS(editor, shape, controller, sdx, sdy);
           this.pointsToSnap = this.movePointsToSnap(
             controller.options.position,
             this.pointsToSnap,
-            dx,
-            dy
+            sdx,
+            sdy
           );
         }
       }
 
       // if sizing is ratio and X is snapped, skip snapping Y
       // because snapping Y causes broke snapped X position.
-      if (this.sizingRatio !== 0 && this.snappedX !== null) {
-        continue;
-      }
+      // if (this.sizingRatio !== 0 && this.snappedX !== null) {
+      //   continue;
+      // }
 
+      // compute snapped Y
       if (this.snappedY === null) {
         this.snappedY = this.snapY(p, this.referencePoints);
         if (this.snappedY !== null) {
-          const dy = this.snappedY - p[1];
-          const dx = this.sizingRatio !== 0 ? dy / this.sizingRatio : 0;
-          this.moveDragPointGCS(editor, shape, controller, dx, dy);
+          let sdy = this.snappedY - p[1];
+          let sdx = 0;
+          if (this.sizingRatio !== 0) {
+            [sdx, sdy] = this.adjustDelta(controller, sdx, sdy);
+          }
+          this.moveDragPointGCS(editor, shape, controller, sdx, sdy);
           this.pointsToSnap = this.movePointsToSnap(
             controller.options.position,
             this.pointsToSnap,
-            dx,
-            dy
+            sdx,
+            sdy
           );
         }
       }
@@ -613,6 +716,21 @@ export class SizeSnapper extends MultipointSnapper {
       // make guide points
       this.guidePoints = this.makeGuidePoints(controller.options.position);
     }
+  }
+
+  // TODO: Remove this method. It is for test.
+  draw(editor: Editor) {
+    super.draw(editor);
+
+    const canvas = editor.canvas;
+    canvas.strokeColor = "#ff0000";
+    this.pointsToSnap.forEach((p) => {
+      const gp = gcs2ccs(canvas, p);
+      const sz = 6;
+      canvas.strokeColor = "#ff0000";
+      canvas.strokeWidth = 3;
+      canvas.ellipse(gp[0] - sz, gp[1] - sz, gp[0] + sz, gp[1] + sz);
+    });
   }
 }
 
