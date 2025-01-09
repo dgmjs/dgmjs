@@ -247,6 +247,39 @@ export function getControllerPosition(
 }
 
 /**
+ * Returns the point of the position of the rect
+ */
+export function getRectPosition(rect: number[][], position: string) {
+  switch (position) {
+    case ControllerPosition.TOP: {
+      return [(rect[0][0] + rect[1][0]) / 2, rect[0][1]];
+    }
+    case ControllerPosition.RIGHT: {
+      return [rect[1][0], (rect[0][1] + rect[1][1]) / 2];
+    }
+    case ControllerPosition.BOTTOM: {
+      return [(rect[0][0] + rect[1][0]) / 2, rect[1][1]];
+    }
+    case ControllerPosition.LEFT: {
+      return [rect[0][0], (rect[0][1] + rect[1][1]) / 2];
+    }
+    case ControllerPosition.LEFT_TOP: {
+      return rect[0];
+    }
+    case ControllerPosition.RIGHT_TOP: {
+      return [rect[1][0], rect[0][1]];
+    }
+    case ControllerPosition.RIGHT_BOTTOM: {
+      return rect[1];
+    }
+    case ControllerPosition.LEFT_BOTTOM: {
+      return [rect[0][0], rect[1][1]];
+    }
+  }
+  return [-1, -1];
+}
+
+/**
  * Returns whether the container can contain the given shape
  */
 export function ableToContain(container: Shape, shape: Shape) {
