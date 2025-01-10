@@ -48,11 +48,13 @@ export function convertStringToTextNode(
   if (text.length > 0) {
     const lines = text.split("\n");
     lines.forEach((line, i) => {
-      doc.content.push({
-        type: "paragraph",
-        attrs: { textAlign },
-        content: [{ type: "text", text: line }],
-      });
+      if (line.length > 0) {
+        doc.content.push({
+          type: "paragraph",
+          attrs: { textAlign },
+          content: [{ type: "text", text: line }],
+        });
+      }
     });
   } else {
     doc.content.push({
