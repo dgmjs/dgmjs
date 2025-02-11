@@ -6,7 +6,11 @@ const { saveAs } = fileSaverPkg;
 
 const DEFAULT_MARGIN = 8;
 
-type ExportImageFormat = "image/png" | "image/svg+xml";
+type ExportImageFormat =
+  | "image/png"
+  | "image/jpeg"
+  | "image/webp"
+  | "image/svg+xml";
 
 type ExportImageOptions = {
   scale: number;
@@ -224,7 +228,9 @@ async function exportImageAsFile(
   styleInSVG?: string
 ) {
   switch (options.format) {
-    case "image/png": {
+    case "image/png":
+    case "image/jpeg":
+    case "image/webp": {
       const data = await getImageBlob(canvas, page, shapes, options);
       if (data) {
         saveAs(data, fileName);
@@ -263,12 +269,14 @@ async function copyToClipboard(
   options: Partial<ExportImageOptions>
 ) {
   switch (options.format) {
-    case "image/png": {
+    case "image/png":
+    case "image/jpeg":
+    case "image/webp": {
       const data = await getImageBlob(canvas, page, shapes, options);
       if (data) {
         navigator.clipboard.write([
           new ClipboardItem({
-            "image/png": data,
+            [options.format]: data,
           }),
         ]);
       }
