@@ -93,13 +93,13 @@ export function Menus() {
   };
 
   /**
-   * Export doc image to a file
+   * Export doc image to a png file
    */
   const handleExportPNG = async () => {
     const page = window.editor.getCurrentPage()!;
     const shapes = window.editor.selection.getShapes() ?? [];
     const exportOptions = {
-      scale: 1,
+      scale: 2,
       dark: darkMode,
       fillBackground: true,
       format: "image/png" as ExportImageFormat,
@@ -108,6 +108,53 @@ export function Menus() {
     const fileName = `${name}.${
       exportOptions.format === "image/png" ? "png" : "svg"
     }`;
+    exportImageAsFile(
+      window.editor.canvas,
+      page,
+      shapes,
+      fileName,
+      exportOptions
+    );
+  };
+
+  /**
+   * Export doc image to a jpeg file
+   */
+  const handleExportJPEG = async () => {
+    const page = window.editor.getCurrentPage()!;
+    const shapes = window.editor.selection.getShapes() ?? [];
+    const exportOptions = {
+      scale: 2,
+      dark: darkMode,
+      fillBackground: true,
+      format: "image/jpeg" as ExportImageFormat,
+    };
+    const name = "dgm-export";
+    const fileName = `${name}.jpg`;
+    exportImageAsFile(
+      window.editor.canvas,
+      page,
+      shapes,
+      fileName,
+      exportOptions
+    );
+  };
+
+  /**
+   * Export doc image to a webp file
+   */
+  const handleExportWebP = async () => {
+    console.log("export jpeg");
+    const page = window.editor.getCurrentPage()!;
+    const shapes = window.editor.selection.getShapes() ?? [];
+    const exportOptions = {
+      scale: 2,
+      dark: darkMode,
+      fillBackground: true,
+      format: "image/webp" as ExportImageFormat,
+    };
+    const name = "dgm-export";
+    const fileName = `${name}.webp`;
     exportImageAsFile(
       window.editor.canvas,
       page,
@@ -186,6 +233,12 @@ export function Menus() {
           <DropdownMenuSeparator />
           <DropdownMenuItem onSelect={handleExportPNG}>
             Export as PNG
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={handleExportJPEG}>
+            Export as JPEG
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={handleExportWebP}>
+            Export as WebP
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={handleExportSVG}>
             Export as SVG
