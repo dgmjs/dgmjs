@@ -189,6 +189,35 @@ export function Menus() {
     );
   };
 
+  const handleExportPDFBitmap = async () => {
+    const fonts = [];
+    for (const font of fontJson) {
+      const fontBinaryString = await loadFont(
+        `http://localhost:4321${font.src}`
+      );
+      fonts.push({
+        family: font.family,
+        style: font.style,
+        weight: font.weight,
+        binaryString: fontBinaryString,
+      });
+    }
+
+    const editor = window.editor;
+    const doc = editor.getDoc();
+    const pdfOptions: ExportPDFOptions = {
+      bitmap: true,
+      bitmapScale: 1,
+      dark: darkMode,
+      fonts: fonts,
+      pageFormat: "a4",
+      pageOrientation: "landscape",
+      createLinks: true,
+      createPageLinks: true,
+    };
+    exportPDFAsFile(editor.canvas, doc, "exported-pdf", pdfOptions);
+  };
+
   const handleExportPDF = async () => {
     const fonts = [];
     for (const font of fontJson) {
@@ -206,6 +235,7 @@ export function Menus() {
     const editor = window.editor;
     const doc = editor.getDoc();
     const pdfOptions: ExportPDFOptions = {
+      bitmap: false,
       dark: darkMode,
       fonts: fonts,
       pageFormat: "a4",
@@ -242,6 +272,9 @@ export function Menus() {
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={handleExportSVG}>
             Export as SVG
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={handleExportPDFBitmap}>
+            Export as PDF (bitmap)
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={handleExportPDF}>
             Export as PDF

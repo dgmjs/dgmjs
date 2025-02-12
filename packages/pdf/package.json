@@ -18,6 +18,7 @@
   "license": "GPLv3",
   "dependencies": {
     "@dgmjs/core": "*",
+    "@dgmjs/export": "*",
     "color-string": "^1.9.1",
     "css-font-parser": "^2.0.1",
     "jspdf": "^2.5.2",

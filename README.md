@@ -13,7 +13,7 @@ An infinite canvas with _smart shapes_. It supports:
 - 👍 Hand-drawn styles
 - 👥 Real-time collaboration
 - 🎨 Dark mode (adaptive colors)
-- 📸 Export to image (PNG, SVG)
+- 📸 Export to image (PNG, JPEG, WebP, SVG)
 - 📕 Export to PDF
 - 🔤 Rich text
 - 🧑🏻‍💻 JSON export/import
