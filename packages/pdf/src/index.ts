@@ -258,13 +258,15 @@ export async function getPDFData(
 
     // update and draw page to the new canvas
     if (bitmap) {
+      console.log("w, h, scale", w, h, autoBitmapScale(w, h, bitmapScale));
+
       // render page as bitmap
       const blob = await getImageBlob(canvas, page, [], {
         dark: options.dark,
         fillBackground: true,
         format: "image/webp",
         margin: BITMAP_IMAGE_MARGIN,
-        scale: bitmapScale,
+        scale: autoBitmapScale(w, h, bitmapScale),
       });
       const data = new Uint8Array(await blob!.arrayBuffer());
       const iw = w + BITMAP_IMAGE_MARGIN * 2;
@@ -363,4 +365,25 @@ export async function exportPDFAsFile(
 ) {
   const pdfDoc = await getPDFData(canvas, doc, options);
   pdfDoc.save(fileName);
+}
+
+/**
+ * jsPDF fails when try to add a large-size image. To avoid this issue, reduce
+ * the bitmap scale if the image size is too large.
+ */
+function autoBitmapScale(
+  width: number,
+  height: number,
+  bitmapScale: number
+): number {
+  const MAX_IMAGE_SIZE = 4096;
+  if (width >= MAX_IMAGE_SIZE || height >= MAX_IMAGE_SIZE) {
+    const scale = Math.min(
+      MAX_IMAGE_SIZE / width,
+      MAX_IMAGE_SIZE / height,
+      bitmapScale
+    );
+    return scale;
+  }
+  return bitmapScale;
 }
