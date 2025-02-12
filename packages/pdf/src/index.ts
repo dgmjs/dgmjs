@@ -82,12 +82,12 @@ export type PDFFont = {
  */
 export type ExportPDFOptions = {
   /**
-   * Render pages as bitmap images (default: false)
+   * Render page as bitmap image (default: false)
    */
   bitmap?: boolean;
 
   /**
-   * The scale of the bitmap image (default: 1)
+   * The scale (quality) of the bitmap image (default: 1)
    */
   bitmapScale?: number;
 
@@ -256,10 +256,8 @@ export async function getPDFData(
       prerenderPage(page, pdfDoc, pdfCanvas);
     }
 
-    // update and draw page to the new canvas
+    // render page
     if (bitmap) {
-      console.log("w, h, scale", w, h, autoBitmapScale(w, h, bitmapScale));
-
       // render page as bitmap
       const blob = await getImageBlob(canvas, page, [], {
         dark: options.dark,
