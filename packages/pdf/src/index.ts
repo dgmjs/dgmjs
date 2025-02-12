@@ -1,4 +1,5 @@
 import { Page, Canvas, geometry, themeColors, Doc, Shape } from "@dgmjs/core";
+import { getImageBlob } from "@dgmjs/export";
 import { jsPDF } from "jspdf";
 import { PDFContext2D } from "./jspdf-context2d";
 
@@ -8,6 +9,11 @@ declare global {
 }
 
 const DEFAULT_PAGE_MARGIN = 10;
+
+/**
+ * The margin of the bitmap image to avoid cutting off the content
+ */
+const BITMAP_IMAGE_MARGIN = 8;
 
 /**
  * Page format
@@ -75,6 +81,16 @@ export type PDFFont = {
  * Export PDF options
  */
 export type ExportPDFOptions = {
+  /**
+   * Render page as bitmap image (default: false)
+   */
+  bitmap?: boolean;
+
+  /**
+   * The scale (quality) of the bitmap image (default: 1)
+   */
+  bitmapScale?: number;
+
   /**
    * Whether to export in dark mode
    */
@@ -144,6 +160,8 @@ export async function getPDFData(
   options: Partial<ExportPDFOptions>
 ): Promise<jsPDF> {
   const {
+    bitmap,
+    bitmapScale,
     dark,
     pageMargin,
     pageFormat,
@@ -156,6 +174,8 @@ export async function getPDFData(
     postrenderPage,
     fonts,
   } = {
+    bitmap: false,
+    bitmapScale: 1,
     dark: false,
     pageMargin: DEFAULT_PAGE_MARGIN,
     pageFormat: "a4",
@@ -177,8 +197,8 @@ export async function getPDFData(
     compress: compress,
   });
 
-  // add fonts
-  if (Array.isArray(fonts)) {
+  // add fonts (only if not bitmap)
+  if (!bitmap && Array.isArray(fonts)) {
     fonts.forEach((font) => {
       const filename = `${font.family}-${font.style}.ttf`;
       pdfDoc.addFileToVFS(filename, font.binaryString);
@@ -236,9 +256,27 @@ export async function getPDFData(
       prerenderPage(page, pdfDoc, pdfCanvas);
     }
 
-    // update and draw page to the new canvas
-    page.update(pdfCanvas);
-    page.draw(pdfCanvas, false);
+    // render page
+    if (bitmap) {
+      // render page as bitmap
+      const blob = await getImageBlob(canvas, page, [], {
+        dark: options.dark,
+        fillBackground: true,
+        format: "image/webp",
+        margin: BITMAP_IMAGE_MARGIN,
+        scale: autoBitmapScale(w, h, bitmapScale),
+      });
+      const data = new Uint8Array(await blob!.arrayBuffer());
+      const iw = w + BITMAP_IMAGE_MARGIN * 2;
+      const ih = h + BITMAP_IMAGE_MARGIN * 2;
+      const ix = (pageWidth - iw * scale) / 2;
+      const iy = (pageHeight - ih * scale) / 2;
+      pdfDoc.addImage(data, "webp", ix, iy, iw * scale, ih * scale);
+    } else {
+      // render page as vector
+      page.update(pdfCanvas);
+      page.draw(pdfCanvas, false);
+    }
 
     // postrender page
     if (postrenderPage) {
@@ -325,4 +363,25 @@ export async function exportPDFAsFile(
 ) {
   const pdfDoc = await getPDFData(canvas, doc, options);
   pdfDoc.save(fileName);
+}
+
+/**
+ * jsPDF fails when try to add a large-size image. To avoid this issue, reduce
+ * the bitmap scale if the image size is too large.
+ */
+function autoBitmapScale(
+  width: number,
+  height: number,
+  bitmapScale: number
+): number {
+  const MAX_IMAGE_SIZE = 4096;
+  if (width >= MAX_IMAGE_SIZE || height >= MAX_IMAGE_SIZE) {
+    const scale = Math.min(
+      MAX_IMAGE_SIZE / width,
+      MAX_IMAGE_SIZE / height,
+      bitmapScale
+    );
+    return scale;
+  }
+  return bitmapScale;
 }
