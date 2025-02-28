@@ -255,14 +255,9 @@ export class KeymapManager {
     const hasShift = event.shiftKey;
     const ident = event.key;
     let key = String.fromCharCode(event.keyCode);
-    if (ident) {
-      if (ident.charAt(0) === "U" && ident.charAt(1) === "+") {
-        // This is a unicode code point like "U+002A", get the 002A and use that
-        key = String.fromCharCode(parseInt(ident.substring(2), 16));
-      } else {
-        // This is some non-character key, just use the raw identifier
-        key = ident;
-      }
+    // This key is a ASCII character
+    if (ident && ident.codePointAt(0)! <= 0x007f) {
+      key = ident;
     }
     // Translate some keys to their common names
     if (key === "\t") {
