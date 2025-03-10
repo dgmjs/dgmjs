@@ -11,6 +11,18 @@ Export PDF options
 
 ## Type declaration
 
+### bitmap?
+
+> `optional` **bitmap**: `boolean`
+
+Render page as bitmap image (default: false)
+
+### bitmapScale?
+
+> `optional` **bitmapScale**: `number`
+
+The scale (quality) of the bitmap image (default: 1)
+
 ### compress?
 
 > `optional` **compress**: `boolean`
@@ -103,4 +115,4 @@ A function to be called before rendering each page
 
 ## Source
 
-[index.ts:77](https://github.com/dgmjs/dgmjs/blob/main/packages/pdf/src/index.ts#L77)
+[index.ts:83](https://github.com/dgmjs/dgmjs/blob/main/packages/pdf/src/index.ts#L83)

@@ -35,4 +35,4 @@ The export the generated PDF file
 
 ## Source
 
-[index.ts:317](https://github.com/dgmjs/dgmjs/blob/main/packages/pdf/src/index.ts#L317)
+[index.ts:358](https://github.com/dgmjs/dgmjs/blob/main/packages/pdf/src/index.ts#L358)

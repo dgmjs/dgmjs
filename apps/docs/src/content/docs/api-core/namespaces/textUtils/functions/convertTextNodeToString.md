@@ -19,4 +19,4 @@ Convert text node to string
 
 ## Source
 
-[utils/text-utils.ts:70](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L70)
+[utils/text-utils.ts:72](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L72)

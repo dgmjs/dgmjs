@@ -106,6 +106,8 @@ User can redefine of shape's default behaviors how to rendering and outlining. T
 - render
 - outline
 
+For detailed information about the script language, please refer to [Script Language](/guides/script-language/).
+
 ### render
 
 The script bound to `render` should code how to draw the shape. The below code is to draw a triagle inside a box.
