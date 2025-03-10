@@ -63,6 +63,10 @@ This constraint aligns the shape relative to its parent.
 
 This constraint makes an anchor to the it's parent. When the parent shape moves, the anchored shape also move along. This is used for the text shape which is attached to a connector.
 
+:::note
+The anchored shape's `anchored` property should be `true`.
+:::
+
 ### inherit-styles
 
 This constraint inherits styles automatically from it's parent shape.
