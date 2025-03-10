@@ -5,7 +5,7 @@ prev: false
 title: "ExportImageFormat"
 ---
 
-> **ExportImageFormat**: `"image/png"` \| `"image/svg+xml"`
+> **ExportImageFormat**: `"image/png"` \| `"image/jpeg"` \| `"image/webp"` \| `"image/svg+xml"`
 
 ## Source
 

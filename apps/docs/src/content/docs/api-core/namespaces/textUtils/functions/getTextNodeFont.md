@@ -49,4 +49,4 @@ title: "getTextNodeFont"
 
 ## Source
 
-[utils/text-utils.ts:121](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L121)
+[utils/text-utils.ts:123](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L123)

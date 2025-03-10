@@ -59,4 +59,4 @@ preprocessed text node
 
 ## Source
 
-[utils/text-utils.ts:188](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L188)
+[utils/text-utils.ts:190](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L190)

@@ -31,4 +31,4 @@ The blob of the generated PDF
 
 ## Source
 
-[index.ts:300](https://github.com/dgmjs/dgmjs/blob/main/packages/pdf/src/index.ts#L300)
+[index.ts:341](https://github.com/dgmjs/dgmjs/blob/main/packages/pdf/src/index.ts#L341)

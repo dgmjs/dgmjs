@@ -31,4 +31,4 @@ title: "ExportImageOptions"
 
 ## Source
 
-[index.ts:11](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L11)
+[index.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L15)

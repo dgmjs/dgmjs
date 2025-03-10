@@ -31,4 +31,4 @@ The PDF document (jsPDF instance)
 
 ## Source
 
-[index.ts:141](https://github.com/dgmjs/dgmjs/blob/main/packages/pdf/src/index.ts#L141)
+[index.ts:157](https://github.com/dgmjs/dgmjs/blob/main/packages/pdf/src/index.ts#L157)

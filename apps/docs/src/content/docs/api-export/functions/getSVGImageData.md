@@ -39,4 +39,4 @@ The SVG image data of the shapes.
 
 ## Source
 
-[index.ts:139](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L139)
+[index.ts:143](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L143)

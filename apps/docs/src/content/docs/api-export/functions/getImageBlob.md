@@ -35,4 +35,4 @@ The blob image data of the shapes.
 
 ## Source
 
-[index.ts:109](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L109)
+[index.ts:113](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L113)

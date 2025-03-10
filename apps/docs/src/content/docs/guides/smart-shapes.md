@@ -43,7 +43,7 @@ This constraint aligns children shapes.
 
 - **orient** : `top`, `bottom`, `left`, `right`, `center`.
 - **align** : `left`, `left-outside`, `left-border`, `center`, `right`, `right-outside`, `right-border`, `top`, `top-border`, `top-outside`, `middle`, `bottom`, `bottom-border`, `bottom-outside`, `fill`.
-- **query** : Align only the matched children shapes. For example, if the query is `#compartment`, aligns only the children shapes which has `#compartment` tag.
+- **query** : Align only the matched children shapes. For example, if the query is `#compartment`, aligns only the children shapes which has `#compartment` tag. For more about query expression, see [Query](#query).
 - **fillLast** : Fill the last child shape.
 
 ![align-children](https://fs.dgm.sh/i/_lGjyzTaaz_R7sZ4L1VHe/lt@1x.png)
@@ -63,6 +63,10 @@ This constraint aligns the shape relative to its parent.
 
 This constraint makes an anchor to the it's parent. When the parent shape moves, the anchored shape also move along. This is used for the text shape which is attached to a connector.
 
+:::note
+The anchored shape's `anchored` property should be `true`.
+:::
+
 ### inherit-styles
 
 This constraint inherits styles automatically from it's parent shape.
@@ -80,7 +84,7 @@ This constraint automatically adjust route of a connector. This is used for rout
 
 This constraint automatically changes a state of the shape.
 
-- **query** : Query to find a shape from children to change state.
+- **query** : Query to find a shape from children to change state. For more about query expression, see [Query](#query).
 - **state** : State to change: `enable`, `visible`, `connectable`, `containable`, `editable`, `text`.
 - **property** : An extended property to be used as state value.
 
@@ -105,6 +109,8 @@ User can redefine of shape's default behaviors how to rendering and outlining. T
 
 - render
 - outline
+
+For detailed information about the script language, please refer to [Script Language](/guides/script-language/).
 
 ### render
 
@@ -163,3 +169,68 @@ The script bound to `outline` should express the area of the shape's viewport. T
   (def! g 10)
   [[(- l g) (- t g)] [(+ r g) (+ b g)]])
 ```
+
+## More features
+
+In addition to extended properties, constraints, and scripts, there are other properties that can adjust the characteristics of a shape.
+
+### Sizable
+
+The `sizable` property specifies the method for adjusting the size of the shape. You can choose one from:
+
+- `None` : The shape cannot be sizable.
+- `Horz` : Only the width of the shape can be sizable.
+- `Vert` : Only the height of the shape can be sizable.
+- `Free` : The shape can be sizable freely both width and height.
+- `Ratio` : The shape can be sizable while maintaining the aspect ratio.
+
+### Movable
+
+The `movable` property specifies the method for moving the shape. You can choose one from:
+
+- `None` : The shape cannot be movable.
+- `Horz` : The shape can be movable horizontal only.
+- `Vert` : The shape can be movable vertical only.
+- `Free` : The shape can be movable freely.
+- `Parent` : The shape can be movable with it's parent shape.
+
+### Containable and Containable filter
+
+The `containable` property indicates that the shape can contain other shapes inside it. To specify what kind of shapes can be contained, you can write a query expression in the `containableFilter`.
+
+### Text editable
+
+The `textEditable` property specifies whether the user can edit the text of the shape.
+
+### Path editable
+
+The `pathEditable` property specifies whether the user can edit the path points of the line shape.
+
+### Anchored
+
+The `anchored` property indicates the shape is anchored on another shape.
+
+### Connectable
+
+The `connectable` property indicates the shape can be connected by connectors.
+
+## Query
+
+You can use query expression to filter shapes.The syntax of query expression can be defined as below.
+
+```plain
+<query>         = <clause>["|" <clause>]*
+<clause>        = <term>["&" <term>]*
+<term>          = <name-selector> | <type-selector> | <tag-selector>
+<name-selector> = <name>       e.g.) OuterBox, TextName, ...
+<type-selector> = "@"<type>    e.g.) @Box, @Text, @Line, ...
+<tag-selector>  = "#"<tag>     e.g.) #label, #compartment, ...
+```
+
+Here are some examples of query expressions:
+
+- `Foo` : All shapes whose name is `Foo`.
+- `@Text` : All shapes whose type is Text.
+- `#compartment` : All shapes having a `compartment` tag.
+- `Bar&@Line` : All shapes whose name is `Bar` and type is Line.
+- `@Box|Baz|@Text&#compartment` All shapes whose type is Box or name is `Baz` or type is Text with a `compartment` tag.

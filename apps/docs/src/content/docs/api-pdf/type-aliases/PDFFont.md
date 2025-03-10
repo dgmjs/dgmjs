@@ -29,4 +29,4 @@ PDF font to be embedded
 
 ## Source
 
-[index.ts:67](https://github.com/dgmjs/dgmjs/blob/main/packages/pdf/src/index.ts#L67)
+[index.ts:73](https://github.com/dgmjs/dgmjs/blob/main/packages/pdf/src/index.ts#L73)
