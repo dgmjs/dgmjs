@@ -517,8 +517,7 @@ export class Editor {
     this.canvas = new Canvas(this.canvasElement, pixelRatio);
     this.canvas.colorVariables = { ...themeColors["light"] };
 
-    // pointer down handler
-    this.canvasElement.addEventListener("pointerdown", (e) => {
+    const pointerDownHandler = (e: PointerEvent) => {
       if (this.enabled) {
         this.focus();
         if (e.button === Mouse.BUTTON1) this.leftButtonDown = true;
@@ -544,11 +543,14 @@ export class Editor {
         }
         this.onPointerDown.emit(event);
       }
-    });
+    };
 
-    // pointer move
-    this.canvasElement.addEventListener("pointermove", (e) => {
+    const pointerMoveHandler = (e: PointerEvent) => {
       if (this.enabled) {
+        if (e.buttons === 0) {
+          this.leftButtonDown = false;
+          this.midButtonDown = false;
+        }
         const event = createPointerEvent(this.canvasElement, this.canvas, e);
         event.leftButtonDown = this.leftButtonDown;
         this.autoScroller.pointerMove(event);
@@ -572,10 +574,9 @@ export class Editor {
         }
         this.onPointerMove.emit(event);
       }
-    });
+    };
 
-    // pointer up  handler
-    this.canvasElement.addEventListener("pointerup", (e) => {
+    const pointerUpHandler = (e: PointerEvent) => {
       if (this.enabled) {
         const event = createPointerEvent(this.canvasElement, this.canvas, e);
         if (this.spaceKeyDown) {
@@ -593,15 +594,14 @@ export class Editor {
         if (e.button === Mouse.BUTTON2) this.midButtonDown = false;
         this.onPointerUp.emit(event);
       }
-    });
+    };
 
-    this.canvasElement.addEventListener("pointercancel", (e) => {
+    const pointerCancelHandler = (e: PointerEvent) => {
       if (this.enabled) {
       }
-    });
+    };
 
-    // touch start handler
-    this.canvasElement.addEventListener("touchstart", (e) => {
+    const touchStartHandler = (e: TouchEvent) => {
       if (this.enabled) {
         this.focus();
         if (e.touches.length === 2) {
@@ -612,10 +612,9 @@ export class Editor {
           this.touchPoint = [event.x, event.y];
         }
       }
-    });
+    };
 
-    // touch move handler
-    this.canvasElement.addEventListener("touchmove", (e) => {
+    const touchMoveHandler = (e: TouchEvent) => {
       if (this.enabled) {
         if (this.isPinching && e.touches.length === 2) {
           const event = createTouchEvent(this.canvasElement, this.canvas, e);
@@ -628,10 +627,9 @@ export class Editor {
           this.touchPoint = [event.x, event.y];
         }
       }
-    });
+    };
 
-    // touch end handler
-    this.canvasElement.addEventListener("touchend", (e) => {
+    const touchEndHandler = (e: TouchEvent) => {
       if (this.enabled) {
         e.stopImmediatePropagation();
         this.isPinching = false;
@@ -639,10 +637,9 @@ export class Editor {
         this.initialDistance = 0;
         this.touchPoint = [-1, -1];
       }
-    });
+    };
 
-    // mouse double click
-    this.canvasElement.addEventListener("dblclick", (e) => {
+    const dblClickHandler = (e: MouseEvent) => {
       if (this.enabled) {
         this.focus();
         this.selection.deselectAll();
@@ -688,10 +685,9 @@ export class Editor {
           this.onDblClick.emit({ shape, point: [x, y] });
         }
       }
-    });
+    };
 
-    // mouse wheel event
-    this.canvasElement.addEventListener("wheel", (e) => {
+    const wheelHandler = (e: WheelEvent) => {
       if (this.enabled) {
         const event = createPointerEvent(this.canvasElement, this.canvas, e);
         const dx = -e.deltaX;
@@ -720,15 +716,13 @@ export class Editor {
         }
       }
       e.preventDefault();
-    });
+    };
 
-    // mouse drag over event
-    this.canvasElement.addEventListener("dragover", (e) => {
+    const dragOverHandler = (e: globalThis.DragEvent) => {
       e.preventDefault();
-    });
+    };
 
-    // mouse drag drop event
-    this.canvasElement.addEventListener("drop", (e) => {
+    const dragDropHandler = (e: globalThis.DragEvent) => {
       if (this.enabled) {
         this.focus();
         e.preventDefault();
@@ -739,10 +733,9 @@ export class Editor {
           dataTransfer: e.dataTransfer as DataTransfer,
         });
       }
-    });
+    };
 
-    // key down event
-    this.canvasElement.addEventListener("keydown", (e) => {
+    const keydownHandler = (e: KeyboardEvent) => {
       if (this.enabled) {
         e.preventDefault();
         if (e.code === "Space" && this.spaceKeyDown === false) {
@@ -752,10 +745,9 @@ export class Editor {
         this.focus();
         this.onKeyDown.emit(e);
       }
-    });
+    };
 
-    // key up event
-    this.canvasElement.addEventListener("keyup", (e) => {
+    const keyupHandler = (e: KeyboardEvent) => {
       if (this.enabled) {
         e.preventDefault();
         if (e.code === "Space" && this.spaceKeyDown === true) {
@@ -765,7 +757,32 @@ export class Editor {
         this.focus();
         this.onKeyUp.emit(e);
       }
-    });
+    };
+
+    // pointer event handlers
+    this.canvasElement.addEventListener("pointerdown", pointerDownHandler);
+    this.canvasElement.addEventListener("pointermove", pointerMoveHandler);
+    this.canvasElement.addEventListener("pointerup", pointerUpHandler);
+    this.canvasElement.addEventListener("pointercancel", pointerCancelHandler);
+
+    // touch event handlers
+    this.canvasElement.addEventListener("touchstart", touchStartHandler);
+    this.canvasElement.addEventListener("touchmove", touchMoveHandler);
+    this.canvasElement.addEventListener("touchend", touchEndHandler);
+
+    // mouse double click handler
+    this.canvasElement.addEventListener("dblclick", dblClickHandler);
+
+    // mouse event handler
+    this.canvasElement.addEventListener("wheel", wheelHandler);
+
+    // mouse drag event handlers
+    this.canvasElement.addEventListener("dragover", dragOverHandler);
+    this.canvasElement.addEventListener("drop", dragDropHandler);
+
+    // key event handlers
+    this.canvasElement.addEventListener("keydown", keydownHandler);
+    this.canvasElement.addEventListener("keyup", keyupHandler);
   }
 
   private initializeKeymap() {
