@@ -550,6 +550,7 @@ export class Editor {
         if (e.buttons === 0) {
           this.leftButtonDown = false;
           this.midButtonDown = false;
+          pointerUpHandler(e);
         }
         const event = createPointerEvent(this.canvasElement, this.canvas, e);
         event.leftButtonDown = this.leftButtonDown;
@@ -1310,7 +1311,6 @@ export class Editor {
    * Repaint diagram
    */
   repaint(drawSelection: boolean = true) {
-    // console.time("repaint");
     this.clearBackground(this.canvas);
     if (this.currentPage) {
       this.drawPageAndGrid(this.canvas);
@@ -1318,7 +1318,6 @@ export class Editor {
       if (drawSelection) this.drawSelection();
       this.onRepaint.emit();
     }
-    // console.timeEnd("repaint");
   }
 
   /**
