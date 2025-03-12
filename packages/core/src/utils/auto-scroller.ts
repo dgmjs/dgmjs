@@ -20,23 +20,25 @@ export class AutoScroller {
     this.dy = 0;
     this.timerId = null;
     this.timerHandler = () => {
-      let scrolled = false;
-      if (this.dx !== 0) {
-        let x = Math.round(this.editor.canvas.origin[0] + this.dx);
-        if (this.editor.canvas.origin[0] !== x) {
-          this.editor.canvas.origin[0] = x;
-          scrolled = true;
+      if (!this.editor.spaceKeyDown) {
+        let scrolled = false;
+        if (this.dx !== 0) {
+          let x = Math.round(this.editor.canvas.origin[0] + this.dx);
+          if (this.editor.canvas.origin[0] !== x) {
+            this.editor.canvas.origin[0] = x;
+            scrolled = true;
+          }
         }
-      }
-      if (this.dy !== 0) {
-        let y = Math.round(this.editor.canvas.origin[1] + this.dy);
-        if (this.editor.canvas.origin[1] !== y) {
-          this.editor.canvas.origin[1] = y;
-          scrolled = true;
+        if (this.dy !== 0) {
+          let y = Math.round(this.editor.canvas.origin[1] + this.dy);
+          if (this.editor.canvas.origin[1] !== y) {
+            this.editor.canvas.origin[1] = y;
+            scrolled = true;
+          }
         }
-      }
-      if (scrolled) {
-        this.editor.repaint(true);
+        if (scrolled) {
+          this.editor.repaint(true);
+        }
       }
     };
   }

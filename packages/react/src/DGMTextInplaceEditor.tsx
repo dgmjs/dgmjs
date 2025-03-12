@@ -82,6 +82,14 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
       if (editor && tiptapEditor && state.textShape) {
         const textValue = tiptapEditor.getJSON();
         update(state.textShape, textValue);
+        if (state.textShape) {
+          setToolbarPosition({
+            left: state.left,
+            top: state.top,
+            width: state.textShape.width,
+            height: state.textShape.height,
+          });
+        }
       }
     },
   });
