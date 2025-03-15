@@ -1489,7 +1489,7 @@ export class Box extends Shape {
         [
           ["M", x1 + c[0], y1],
           ["L", x2 - c[1], y1],
-          ["Q", x2, y1, x2, y1 + c[1]],
+          ["A", c[1], c[1], 0, 0, 1, x2, y1 + c[1]],
           ["L", x2, y2 - c[2]],
         ],
         this.getSeed()
@@ -1500,7 +1500,7 @@ export class Box extends Shape {
         [
           ["M", x2, y1 + c[1]],
           ["L", x2, y2 - c[2]],
-          ["Q", x2, y2, x2 - c[2], y2],
+          ["A", c[2], c[2], 0, 0, 1, x2 - c[2], y2],
           ["L", x1 + c[3], y2],
         ],
         this.getSeed()
@@ -1511,7 +1511,7 @@ export class Box extends Shape {
         [
           ["M", x2 - c[2], y2],
           ["L", x1 + c[3], y2],
-          ["Q", x1, y2, x1, y2 - c[3]],
+          ["A", c[3], c[3], 0, 0, 1, x1, y2 - c[3]],
           ["L", x1, y1 + c[0]],
         ],
         this.getSeed()
@@ -1522,7 +1522,7 @@ export class Box extends Shape {
         [
           ["M", x1, y2 - c[3]],
           ["L", x1, y1 + c[0]],
-          ["Q", x1, y1, x1 + c[0], y1],
+          ["A", c[0], c[0], 0, 0, 1, x1 + c[0], y1],
           ["L", x2 - c[1], y1],
         ],
         this.getSeed()
@@ -1533,9 +1533,9 @@ export class Box extends Shape {
         [
           ["M", x1 + c[0], y1],
           ["L", x2 - c[1], y1],
-          ["Q", x2, y1, x2, y1 + c[1]],
+          ["A", c[1], c[1], 0, 0, 1, x2, y1 + c[1]],
           ["L", x2, y2 - c[2]],
-          ["Q", x2, y2, x2 - c[2], y2],
+          ["A", c[2], c[2], 0, 0, 1, x2 - c[2], y2],
           ["L", x1 + c[3], y2],
         ],
         this.getSeed()
@@ -1546,9 +1546,9 @@ export class Box extends Shape {
         [
           ["M", x2, y1 + c[1]],
           ["L", x2, y2 - c[2]],
-          ["Q", x2, y2, x2 - c[2], y2],
+          ["A", c[2], c[2], 0, 0, 1, x2 - c[2], y2],
           ["L", x1 + c[3], y2],
-          ["Q", x1, y2, x1, y2 - c[3]],
+          ["A", c[3], c[3], 0, 0, 1, x1, y2 - c[3]],
           ["L", x1, y1 + c[0]],
         ],
         this.getSeed()
@@ -1559,9 +1559,9 @@ export class Box extends Shape {
         [
           ["M", x2 - c[2], y2],
           ["L", x1 + c[3], y2],
-          ["Q", x1, y2, x1, y2 - c[3]],
+          ["A", c[3], c[3], 0, 0, 1, x1, y2 - c[3]],
           ["L", x1, y1 + c[0]],
-          ["Q", x1, y1, x1 + c[0], y1],
+          ["A", c[0], c[0], 0, 0, 1, x1 + c[0], y1],
           ["L", x2 - c[1], y1],
         ],
         this.getSeed()
@@ -1572,9 +1572,9 @@ export class Box extends Shape {
         [
           ["M", x1, y2 - c[3]],
           ["L", x1, y1 + c[0]],
-          ["Q", x1, y1, x1 + c[0], y1],
+          ["A", c[0], c[0], 0, 0, 1, x1 + c[0], y1],
           ["L", x2 - c[1], y1],
-          ["Q", x2, y1, x2, y1 + c[1]],
+          ["A", c[1], c[1], 0, 0, 1, x2, y1 + c[1]],
           ["L", x2, y2 - c[2]],
         ],
         this.getSeed()

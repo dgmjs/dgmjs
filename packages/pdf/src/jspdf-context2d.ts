@@ -210,6 +210,13 @@ export class PDFContext2D {
     this.pdf.context2d.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
   }
 
+  arcTo(x1: number, y1: number, x2: number, y2: number, radius: number) {
+    this._assignStyles();
+    // TODO: this.pdf.context2d.arcTo(x1, y1, x2, y2, radius);
+    // TODO: Use quadraticCurveTo to avoid arcTo not implemented in jsPDF
+    this.pdf.context2d.quadraticCurveTo(x1, y1, x2, y2);
+  }
+
   stroke(path2d: Path2D) {
     this._assignStyles();
     if (path2d) {
