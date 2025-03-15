@@ -16,8 +16,8 @@ export const PrototypePanel: React.FC<ShapeEditorProps> = ({
 
   return (
     <Panel title="Prototype">
-      <div className="grid h-8 grid-cols-2 items-center">
-        <Label htmlFor="shape-prototype-switch" className="font-normal">
+      <div className="grid h-7 grid-cols-2 items-center">
+        <Label htmlFor="shape-prototype-switch" className="font-normal text-xs">
           Prototype
         </Label>
         <span className="text-right">
@@ -29,12 +29,12 @@ export const PrototypePanel: React.FC<ShapeEditorProps> = ({
         </span>
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="shape-name-field" className="font-normal">
+        <Label htmlFor="shape-name-field" className="font-normal text-xs">
           Name
         </Label>
         <TextField
           id="shape-name-field"
-          className="h-8"
+          className="h-7 text-xs"
           value={name}
           onChange={(value) => {
             onChange({ name: value });
@@ -42,11 +42,15 @@ export const PrototypePanel: React.FC<ShapeEditorProps> = ({
         />
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="shape-description-field" className="font-normal">
+        <Label
+          htmlFor="shape-description-field"
+          className="font-normal text-xs"
+        >
           Description
         </Label>
         <TextareaField
           id="shape-description-field"
+          className="text-xs"
           value={description}
           rows={2}
           onChange={(value) => {

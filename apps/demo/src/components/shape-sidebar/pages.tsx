@@ -49,7 +49,7 @@ const PageView: React.FC<PageViewProps> = ({
         />
       </div>
       <div className="flex flex-col items-center">
-        <div>{(page as Page).name || "(Untitled)"}</div>
+        <div className="text-xs">{(page as Page).name || "(Untitled)"}</div>
         <div>
           <Button
             variant="ghost"

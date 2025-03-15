@@ -42,8 +42,12 @@ export const PropertySidebar: React.FC<PropertySidebarProps> = ({
     <div className="absolute inset-y-0 right-0 w-56 bg-background border-l p-2">
       <Tabs defaultValue="basic" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="basic">Basic</TabsTrigger>
-          <TabsTrigger value="advanced">Advanced</TabsTrigger>
+          <TabsTrigger className="text-xs" value="basic">
+            Basic
+          </TabsTrigger>
+          <TabsTrigger className="text-xs" value="advanced">
+            Advanced
+          </TabsTrigger>
         </TabsList>
         <TabsContent
           value="basic"

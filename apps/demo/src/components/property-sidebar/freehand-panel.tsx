@@ -16,8 +16,8 @@ export const FreehandPanel: React.FC<ShapeEditorProps> = ({
 
   return (
     <Panel title="Freehand" borderTop>
-      <div className="flex h-9 items-center gap-3">
-        <Label className="font-normal">Thining</Label>
+      <div className="flex h-7 text-xs items-center gap-3">
+        <Label className="font-normal text-xs w-28">Thining</Label>
         <div className="w-full">
           <Slider
             max={1}
@@ -30,8 +30,8 @@ export const FreehandPanel: React.FC<ShapeEditorProps> = ({
           />
         </div>
       </div>
-      <div className="flex h-9 items-center gap-3">
-        <Label className="font-normal">Tail Taper</Label>
+      <div className="flex h-7 text-xs items-center gap-3">
+        <Label className="font-normal text-xs w-28">Tail Taper</Label>
         <div className="w-full">
           <Slider
             max={1}
@@ -44,8 +44,8 @@ export const FreehandPanel: React.FC<ShapeEditorProps> = ({
           />
         </div>
       </div>
-      <div className="flex h-9 items-center gap-3">
-        <Label className="font-normal">Head Taper</Label>
+      <div className="flex h-7 text-xs items-center gap-3">
+        <Label className="font-normal text-xs w-28">Head Taper</Label>
         <div className="w-full">
           <Slider
             max={1}

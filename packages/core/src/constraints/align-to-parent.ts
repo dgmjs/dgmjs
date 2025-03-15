@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { constraintManager, Page, Shape } from "../shapes";
+import { Box, constraintManager, Page, Shape } from "../shapes";
 import type { Canvas } from "../graphics/graphics";
 import { Transaction } from "../core/transaction";
 import { moveShapes, resizeShape } from "../macro";
@@ -52,16 +52,16 @@ function constraint(
   args: z.infer<typeof schema>
 ) {
   let changed = false;
-  const parent = shape.parent;
+  const parent = shape.parent as Box;
   if (parent instanceof Shape && !(parent instanceof Page)) {
     let horz = args.horz;
     let vert = args.vert;
-    const l = parent.left;
-    const r = parent.right;
-    const t = parent.top;
-    const b = parent.bottom;
-    const w = parent.width;
-    const h = parent.height;
+    const l = parent.innerLeft;
+    const r = parent.innerRight;
+    const t = parent.innerTop;
+    const b = parent.innerBottom;
+    const w = parent.innerWidth;
+    const h = parent.innerHeight;
     const cp = shape.getCenter();
     let dx = 0;
     let dy = 0;

@@ -24,8 +24,8 @@ export const Panel: React.FC<PanelProps> = ({
   return (
     <div className={cn("px-3", borderTop ? "border-t" : "", className)}>
       <div className="flex h-9 items-center justify-between">
-        <Label>{title}</Label>
-        <div className="flex flex-row items-center gap-1">{more}</div>
+        <Label className="text-xs">{title}</Label>
+        <div className="text-xs flex flex-row items-center gap-1">{more}</div>
       </div>
       <div className="flex flex-col gap-2 pb-3">{children}</div>
     </div>

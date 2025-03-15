@@ -28,12 +28,15 @@ export const BoxPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
       <div className="flex items-center gap-2">
         <SimpleTooltip content="Width">
           <div className="flex items-center gap-2">
-            <Label htmlFor="shape-width-field" className="flex-none px-1">
+            <Label
+              htmlFor="shape-width-field"
+              className="flex-none text-xs px-1"
+            >
               W
             </Label>
             <NumberField
               id="shape-width-field"
-              className="flex-grow h-8"
+              className="flex-grow text-xs h-7"
               value={width}
               onChange={(value) => onChange({ width: value })}
             />
@@ -41,12 +44,15 @@ export const BoxPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
         </SimpleTooltip>
         <SimpleTooltip content="Height">
           <div className="flex items-center gap-2">
-            <Label htmlFor="shape-height-field" className="flex-none px-1">
+            <Label
+              htmlFor="shape-height-field"
+              className="flex-none text-xs px-1"
+            >
               H
             </Label>
             <NumberField
               id="shape-height-field"
-              className="flex-grow h-8"
+              className="flex-grow text-xs h-7"
               value={height}
               onChange={(value) => onChange({ height: value })}
             />
@@ -54,10 +60,10 @@ export const BoxPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
         </SimpleTooltip>
       </div>
       <div className="flex items-center gap-2">
-        <Label className="font-normal flex-none">Padding</Label>
+        <Label className="font-normal text-xs flex-none">Padding</Label>
         <SimpleTooltip content="Top Padding">
           <NumberField
-            className="flex-grow h-8"
+            className="flex-grow text-xs h-7 px-1"
             value={padding ? padding[0] : undefined}
             onChange={(value) => {
               const p = padding ?? [0, 0, 0, 0];
@@ -69,7 +75,7 @@ export const BoxPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
         </SimpleTooltip>
         <SimpleTooltip content="Right Padding">
           <NumberField
-            className="flex-grow h-8"
+            className="flex-grow text-xs h-7 px-1"
             value={padding ? padding[1] : undefined}
             onChange={(value) => {
               const p = padding ?? [0, 0, 0, 0];
@@ -81,7 +87,7 @@ export const BoxPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
         </SimpleTooltip>
         <SimpleTooltip content="Bottom Padding">
           <NumberField
-            className="flex-grow h-8"
+            className="flex-grow text-xs h-7 px-1"
             value={padding ? padding[2] : undefined}
             onChange={(value) => {
               const p = padding ?? [0, 0, 0, 0];
@@ -93,7 +99,7 @@ export const BoxPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
         </SimpleTooltip>
         <SimpleTooltip content="Left Padding">
           <NumberField
-            className="flex-grow h-8"
+            className="flex-grow text-xs h-7 px-1"
             value={padding ? padding[3] : undefined}
             onChange={(value) => {
               const p = padding ?? [0, 0, 0, 0];
@@ -105,10 +111,10 @@ export const BoxPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
         </SimpleTooltip>
       </div>
       <div className="flex items-center gap-2">
-        <Label className="font-normal">Corners</Label>
+        <Label className="font-normal text-xs">Corners</Label>
         <SimpleTooltip content="Left Top Corner">
           <NumberField
-            className="flex-grow h-8"
+            className="flex-grow text-xs h-7 px-1"
             value={corners ? corners[0] : undefined}
             onChange={(value) => {
               const c = corners ?? [0, 0, 0, 0];
@@ -120,7 +126,7 @@ export const BoxPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
         </SimpleTooltip>
         <SimpleTooltip content="Right Top Corner">
           <NumberField
-            className="flex-grow h-8"
+            className="flex-grow text-xs h-7 px-1"
             value={corners ? corners[1] : undefined}
             onChange={(value) => {
               const c = corners ?? [0, 0, 0, 0];
@@ -132,7 +138,7 @@ export const BoxPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
         </SimpleTooltip>
         <SimpleTooltip content="Right Bottom Corner">
           <NumberField
-            className="flex-grow h-8"
+            className="flex-grow text-xs h-7 px-1"
             value={corners ? corners[2] : undefined}
             onChange={(value) => {
               const c = corners ?? [0, 0, 0, 0];
@@ -144,7 +150,7 @@ export const BoxPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
         </SimpleTooltip>
         <SimpleTooltip content="Left Bottom Corner">
           <NumberField
-            className="flex-grow h-8"
+            className="flex-grow text-xs h-7 px-1"
             value={corners ? corners[3] : undefined}
             onChange={(value) => {
               const c = corners ?? [0, 0, 0, 0];
@@ -156,7 +162,7 @@ export const BoxPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
         </SimpleTooltip>
       </div>
       <div className="flex items-center gap-2">
-        <Label className="font-normal">Borders</Label>
+        <Label className="font-normal text-xs">Borders</Label>
         <SimpleTooltip content="Top Border">
           <div className="flex justify-center items-center w-8">
             <Checkbox
@@ -227,7 +233,7 @@ export const BoxPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
         </SimpleTooltip>
       </div>
       <div className="grid grid-cols-2 items-center gap-2 pr-3 w-full">
-        <Label className="font-normal">Position</Label>
+        <Label className="font-normal text-xs">Position</Label>
         <div className="flex items-center w-full">
           <Select
             value={borderPosition}
@@ -235,7 +241,7 @@ export const BoxPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
               onChange({ borderPosition: value as BorderPositionEnum });
             }}
           >
-            <SelectTrigger className="h-8 w-full" title="Font Weight">
+            <SelectTrigger className="h-7 text-xs w-full" title="Font Weight">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

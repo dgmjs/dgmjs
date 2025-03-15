@@ -19,7 +19,9 @@ export const Empty: React.FC<EmptyProps> = ({
       )}
       {...others}
     >
-      <Label className="text-muted-foreground font-normal">{message}</Label>
+      <Label className="text-muted-foreground font-normal text-xs">
+        {message}
+      </Label>
     </div>
   );
 };

@@ -553,13 +553,16 @@ class MemoizationCanvas {
     if (this.strokeWidth > 0) {
       if (this.roughness > 0) {
         const rd = this.generator.path(
-          `M${x + rs[0]},${y} L${x + w - rs[1]},${y} Q${x + w},${y} ${x + w},${
-            y + rs[1]
-          } L${x + w},${y + h - rs[2]} Q${x + w},${y + h} ${x + w - rs[2]},${
-            y + h
-          } L${x + rs[3]},${y + h} Q${x},${y + h} ${x},${y + h - rs[3]} L${x},${
-            y + rs[0]
-          } Q${x},${y} ${x + rs[0]},${y} Z`,
+          `M ${x + rs[0]},${y} 
+           H ${x + w - rs[1]} 
+           A ${rs[1]},${rs[1]} 0 0 1 ${x + w},${y + rs[1]} 
+           V ${y + h - rs[2]} 
+           A ${rs[2]},${rs[2]} 0 0 1 ${x + w - rs[2]},${y + h} 
+           H ${x + rs[3]} 
+           A ${rs[3]},${rs[3]} 0 0 1 ${x},${y + h - rs[3]} 
+           V ${y + rs[0]} 
+           A ${rs[0]},${rs[0]} 0 0 1 ${x + rs[0]},${y} 
+           Z`,
           {
             seed,
             roughness: this.roughness,
@@ -609,13 +612,16 @@ class MemoizationCanvas {
       : [radius, radius, radius, radius];
     if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const rd = this.generator.path(
-        `M${x + rs[0]},${y} L${x + w - rs[1]},${y} Q${x + w},${y} ${x + w},${
-          y + rs[1]
-        } L${x + w},${y + h - rs[2]} Q${x + w},${y + h} ${x + w - rs[2]},${
-          y + h
-        } L${x + rs[3]},${y + h} Q${x},${y + h} ${x},${y + h - rs[3]} L${x},${
-          y + rs[0]
-        } Q${x},${y} ${x + rs[0]},${y} Z`,
+        `M ${x + rs[0]},${y} 
+         H ${x + w - rs[1]} 
+         A ${rs[1]},${rs[1]} 0 0 1 ${x + w},${y + rs[1]} 
+         V ${y + h - rs[2]} 
+         A ${rs[2]},${rs[2]} 0 0 1 ${x + w - rs[2]},${y + h} 
+         H ${x + rs[3]} 
+         A ${rs[3]},${rs[3]} 0 0 1 ${x},${y + h - rs[3]} 
+         V ${y + rs[0]} 
+         A ${rs[0]},${rs[0]} 0 0 1 ${x + rs[0]},${y} 
+         Z`,
         {
           seed,
           roughness: this.roughness,
@@ -1226,28 +1232,31 @@ class MemoizationCanvas {
           canvas.context.beginPath();
           canvas.context.moveTo(d.x + d.radius[0], d.y);
           canvas.context.lineTo(d.x + d.w - d.radius[1], d.y);
-          canvas.context.quadraticCurveTo(
+          canvas.context.arcTo(
             d.x + d.w,
             d.y,
             d.x + d.w,
-            d.y + d.radius[1]
+            d.y + d.radius[1],
+            d.radius[1]
           );
           canvas.context.lineTo(d.x + d.w, d.y + d.h - d.radius[2]);
-          canvas.context.quadraticCurveTo(
+          canvas.context.arcTo(
             d.x + d.w,
             d.y + d.h,
             d.x + d.w - d.radius[2],
-            d.y + d.h
+            d.y + d.h,
+            d.radius[2]
           );
           canvas.context.lineTo(d.x + d.radius[3], d.y + d.h);
-          canvas.context.quadraticCurveTo(
+          canvas.context.arcTo(
             d.x,
             d.y + d.h,
             d.x,
-            d.y + d.h - d.radius[3]
+            d.y + d.h - d.radius[3],
+            d.radius[3]
           );
           canvas.context.lineTo(d.x, d.y + d.radius[0]);
-          canvas.context.quadraticCurveTo(d.x, d.y, d.x + d.radius[0], d.y);
+          canvas.context.arcTo(d.x, d.y, d.x + d.radius[0], d.y, d.radius[0]);
           canvas.context.closePath();
           canvas.context.stroke();
           break;
@@ -1258,28 +1267,31 @@ class MemoizationCanvas {
           canvas.context.beginPath();
           canvas.context.moveTo(d.x + d.radius[0], d.y);
           canvas.context.lineTo(d.x + d.w - d.radius[1], d.y);
-          canvas.context.quadraticCurveTo(
+          canvas.context.arcTo(
             d.x + d.w,
             d.y,
             d.x + d.w,
-            d.y + d.radius[1]
+            d.y + d.radius[1],
+            d.radius[1]
           );
           canvas.context.lineTo(d.x + d.w, d.y + d.h - d.radius[2]);
-          canvas.context.quadraticCurveTo(
+          canvas.context.arcTo(
             d.x + d.w,
             d.y + d.h,
             d.x + d.w - d.radius[2],
-            d.y + d.h
+            d.y + d.h,
+            d.radius[2]
           );
           canvas.context.lineTo(d.x + d.radius[3], d.y + d.h);
-          canvas.context.quadraticCurveTo(
+          canvas.context.arcTo(
             d.x,
             d.y + d.h,
             d.x,
-            d.y + d.h - d.radius[3]
+            d.y + d.h - d.radius[3],
+            d.radius[3]
           );
           canvas.context.lineTo(d.x, d.y + d.radius[0]);
-          canvas.context.quadraticCurveTo(d.x, d.y, d.x + d.radius[0], d.y);
+          canvas.context.arcTo(d.x, d.y, d.x + d.radius[0], d.y, d.radius[0]);
           canvas.context.closePath();
           canvas.context.fill();
           break;
@@ -1496,28 +1508,31 @@ class MemoizationCanvas {
             canvas.context.beginPath();
             canvas.context.moveTo(d.x + d.radius[0], d.y);
             canvas.context.lineTo(d.x + d.w - d.radius[1], d.y);
-            canvas.context.quadraticCurveTo(
+            canvas.context.arcTo(
               d.x + d.w,
               d.y,
               d.x + d.w,
-              d.y + d.radius[1]
+              d.y + d.radius[1],
+              d.radius[1]
             );
             canvas.context.lineTo(d.x + d.w, d.y + d.h - d.radius[2]);
-            canvas.context.quadraticCurveTo(
+            canvas.context.arcTo(
               d.x + d.w,
               d.y + d.h,
               d.x + d.w - d.radius[2],
-              d.y + d.h
+              d.y + d.h,
+              d.radius[2]
             );
             canvas.context.lineTo(d.x + d.radius[3], d.y + d.h);
-            canvas.context.quadraticCurveTo(
+            canvas.context.arcTo(
               d.x,
               d.y + d.h,
               d.x,
-              d.y + d.h - d.radius[3]
+              d.y + d.h - d.radius[3],
+              d.radius[3]
             );
             canvas.context.lineTo(d.x, d.y + d.radius[0]);
-            canvas.context.quadraticCurveTo(d.x, d.y, d.x + d.radius[0], d.y);
+            canvas.context.arcTo(d.x, d.y, d.x + d.radius[0], d.y, d.radius[0]);
             canvas.context.closePath();
             canvas.context.fill();
             canvas.context.clip();

@@ -39,12 +39,12 @@ export const ShadowPanel: React.FC<ShapeEditorProps> = ({
       <div className="flex items-center gap-2">
         <SimpleTooltip content="OffsetX">
           <div className="flex items-center gap-2">
-            <Label htmlFor="shadow-offset-x" className="flex-none px-1">
+            <Label htmlFor="shadow-offset-x" className="flex-none text-xs px-1">
               ΔX
             </Label>
             <NumberField
               id="shadow-offset-x"
-              className="flex-grow h-8"
+              className="flex-grow h-7 text-xs"
               value={shadowOffsetX}
               onChange={(value) =>
                 onChange({ shadowOffset: [value, shadowOffsetY ?? 0] })
@@ -54,12 +54,12 @@ export const ShadowPanel: React.FC<ShapeEditorProps> = ({
         </SimpleTooltip>
         <SimpleTooltip content="OffsetX">
           <div className="flex items-center gap-2">
-            <Label htmlFor="shadow-offset-y" className="flex-none px-1">
+            <Label htmlFor="shadow-offset-y" className="flex-none text-xs px-1">
               ΔY
             </Label>
             <NumberField
               id="shadow-offset-y"
-              className="flex-grow h-8"
+              className="flex-grow h-7 text-xs"
               value={shadowOffsetY}
               onChange={(value) =>
                 onChange({ shadowOffset: [shadowOffsetX ?? 0, value] })

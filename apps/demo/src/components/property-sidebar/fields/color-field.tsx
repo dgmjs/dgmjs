@@ -53,7 +53,7 @@ export const ColorField: React.FC<ColorFieldProps> = ({
         <Popover onOpenChange={handlePopoverOpenChange} modal={true}>
           <PopoverTrigger asChild>
             <div
-              className="h-8 w-8 rounded border cursor-pointer"
+              className="h-7 w-7 rounded border cursor-pointer"
               style={
                 color === "$transparent"
                   ? {
@@ -83,7 +83,7 @@ export const ColorField: React.FC<ColorFieldProps> = ({
       <div className="w-full">
         <Input
           value={color ?? ""}
-          className="h-8 text-muted-foreground"
+          className="h-7 text-xs text-muted-foreground"
           readOnly
         />
       </div>

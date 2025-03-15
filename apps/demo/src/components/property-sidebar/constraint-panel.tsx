@@ -74,8 +74,8 @@ export const ConstraintPanel: React.FC<ShapeEditorProps> = ({
       borderTop
     >
       {constraints.map((constraint, i) => (
-        <div key={i} className="flex h-8 items-center justify-between">
-          <div className="flex items-center h-full w-full text-sm pl-2 truncate border border-r-0 rounded-l">
+        <div key={i} className="flex h-7 items-center justify-between">
+          <div className="flex items-center h-full w-full text-xs pl-2 truncate border border-r-0 rounded-l">
             {constraint.id}
           </div>
           <div className="flex items-center">
@@ -83,7 +83,7 @@ export const ConstraintPanel: React.FC<ShapeEditorProps> = ({
               <PopoverTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="h-8 w-8 p-0 border rounded-none"
+                  className="h-7 w-7 p-0 border rounded-none"
                 >
                   <Settings2Icon size={16} />
                 </Button>
@@ -108,7 +108,7 @@ export const ConstraintPanel: React.FC<ShapeEditorProps> = ({
                 <div>
                   <Button
                     variant="ghost"
-                    className="h-8 w-8 p-0 border border-l-0 rounded-l-none"
+                    className="h-7 w-7 p-0 border border-l-0 rounded-l-none"
                   >
                     <MoreHorizontalIcon size={16} />
                   </Button>
@@ -116,6 +116,7 @@ export const ConstraintPanel: React.FC<ShapeEditorProps> = ({
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem
+                  className="text-xs"
                   onSelect={() => {
                     if (i > 0) {
                       const updated = [...constraints];
@@ -129,6 +130,7 @@ export const ConstraintPanel: React.FC<ShapeEditorProps> = ({
                   Move Up
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  className="text-xs"
                   onSelect={() => {
                     if (i < constraints.length - 1) {
                       const updated = [...constraints];
@@ -143,6 +145,7 @@ export const ConstraintPanel: React.FC<ShapeEditorProps> = ({
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
+                  className="text-xs"
                   onSelect={() => {
                     const updated = constraints.filter((c, ci) => ci !== i);
                     if (onChange) onChange({ constraints: updated });
@@ -156,7 +159,7 @@ export const ConstraintPanel: React.FC<ShapeEditorProps> = ({
         </div>
       ))}
       {constraints.length === 0 && (
-        <Empty className="h-8" message="No constraints" />
+        <Empty className="h-7" message="No constraints" />
       )}
     </Panel>
   );

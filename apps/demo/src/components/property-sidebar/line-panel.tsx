@@ -55,18 +55,26 @@ export const LinePanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
                 onChange({ lineType: value as LineTypeEnum });
             }}
           >
-            <ToggleGroupItem size="sm" value={LineType.STRAIGHT}>
+            <ToggleGroupItem
+              className="w-7 h-7 p-1"
+              size="sm"
+              value={LineType.STRAIGHT}
+            >
               <LineStraightIcon size={16} />
             </ToggleGroupItem>
-            <ToggleGroupItem size="sm" value={LineType.CURVE}>
+            <ToggleGroupItem
+              size="sm"
+              className="w-7 h-7 p-1"
+              value={LineType.CURVE}
+            >
               <LineCurveIcon size={16} />
             </ToggleGroupItem>
           </ToggleGroup>
         </div>
       </div>
       {isConnector && (
-        <div className="flex items-center h-8 gap-3">
-          <Label className="font-normal">Margin</Label>
+        <div className="flex items-center h-7 gap-3">
+          <Label className="font-normal text-xs">Margin</Label>
           <div className="w-full">
             <Slider
               max={50}

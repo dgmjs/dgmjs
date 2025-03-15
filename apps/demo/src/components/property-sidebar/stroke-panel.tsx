@@ -36,7 +36,7 @@ export const StrokePanel: React.FC<ShapeEditorProps> = ({
             </Label>
             <NumberField
               id="stroke-width-field"
-              className="flex-grow h-8"
+              className="flex-grow text-xs h-7"
               value={strokeWidth}
               onChange={(value) => onChange({ strokeWidth: value })}
             />
@@ -49,7 +49,7 @@ export const StrokePanel: React.FC<ShapeEditorProps> = ({
             </Label>
             <TextField
               id="stroke-pattern-field"
-              className="flex-grow h-8"
+              className="flex-grow text-xs h-7"
               value={
                 Array.isArray(strokePattern)
                   ? strokePattern.length > 0
@@ -69,8 +69,8 @@ export const StrokePanel: React.FC<ShapeEditorProps> = ({
           </div>
         </SimpleTooltip>
       </div>
-      <div className="flex h-8 items-center gap-3">
-        <Label className="font-normal">Roughness</Label>
+      <div className="flex h-7 items-center gap-3">
+        <Label className="font-normal text-xs">Roughness</Label>
         <div className="w-full">
           <Slider
             max={5}

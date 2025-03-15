@@ -255,32 +255,40 @@ export function Menus() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem onSelect={handleNew}>New</DropdownMenuItem>
-          <DropdownMenuItem onSelect={handleOpen}>Open...</DropdownMenuItem>
-          <DropdownMenuItem onSelect={handleSaveCopy}>
+          <DropdownMenuItem className="text-xs" onSelect={handleNew}>
+            New
+          </DropdownMenuItem>
+          <DropdownMenuItem className="text-xs" onSelect={handleOpen}>
+            Open...
+          </DropdownMenuItem>
+          <DropdownMenuItem className="text-xs" onSelect={handleSaveCopy}>
             Save copy...
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onSelect={handleExportPNG}>
+          <DropdownMenuItem className="text-xs" onSelect={handleExportPNG}>
             Export as PNG
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={handleExportJPEG}>
+          <DropdownMenuItem className="text-xs" onSelect={handleExportJPEG}>
             Export as JPEG
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={handleExportWebP}>
+          <DropdownMenuItem className="text-xs" onSelect={handleExportWebP}>
             Export as WebP
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={handleExportSVG}>
+          <DropdownMenuItem className="text-xs" onSelect={handleExportSVG}>
             Export as SVG
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={handleExportPDFBitmap}>
+          <DropdownMenuItem
+            className="text-xs"
+            onSelect={handleExportPDFBitmap}
+          >
             Export as PDF (bitmap)
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={handleExportPDF}>
+          <DropdownMenuItem className="text-xs" onSelect={handleExportPDF}>
             Export as PDF
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuCheckboxItem
+            className="text-xs"
             checked={showGrid}
             onSelect={(e) => {
               window.editor.setShowGrid(!showGrid);
@@ -290,6 +298,7 @@ export function Menus() {
             Show grid
           </DropdownMenuCheckboxItem>
           <DropdownMenuCheckboxItem
+            className="text-xs"
             checked={snapToGrid}
             onSelect={(e) => {
               window.editor.setSnapToGrid(!snapToGrid);
@@ -299,6 +308,7 @@ export function Menus() {
             Snap to grid
           </DropdownMenuCheckboxItem>
           <DropdownMenuCheckboxItem
+            className="text-xs"
             checked={snapToObjects}
             onSelect={(e) => {
               window.editor.setSnapToObjects(!snapToObjects);
@@ -309,7 +319,7 @@ export function Menus() {
           </DropdownMenuCheckboxItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <Button variant="ghost" className="h-8 w-8 p-0" onClick={handleAddPage}>
+      <Button variant="ghost" className="h-7 w-7 p-0" onClick={handleAddPage}>
         <PlusIcon size={16} />
       </Button>
     </div>

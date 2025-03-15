@@ -580,13 +580,16 @@ class Canvas {
     if (this.strokeWidth > 0) {
       if (this.roughness > 0) {
         const rd = this.generator.path(
-          `M${x + rs[0]},${y} L${x + w - rs[1]},${y} Q${x + w},${y} ${x + w},${
-            y + rs[1]
-          } L${x + w},${y + h - rs[2]} Q${x + w},${y + h} ${x + w - rs[2]},${
-            y + h
-          } L${x + rs[3]},${y + h} Q${x},${y + h} ${x},${y + h - rs[3]} L${x},${
-            y + rs[0]
-          } Q${x},${y} ${x + rs[0]},${y} Z`,
+          `M ${x + rs[0]},${y} 
+           H ${x + w - rs[1]} 
+           A ${rs[1]},${rs[1]} 0 0 1 ${x + w},${y + rs[1]} 
+           V ${y + h - rs[2]} 
+           A ${rs[2]},${rs[2]} 0 0 1 ${x + w - rs[2]},${y + h} 
+           H ${x + rs[3]} 
+           A ${rs[3]},${rs[3]} 0 0 1 ${x},${y + h - rs[3]} 
+           V ${y + rs[0]} 
+           A ${rs[0]},${rs[0]} 0 0 1 ${x + rs[0]},${y} 
+           Z`,
           {
             seed,
             roughness: this.roughness,
@@ -602,13 +605,13 @@ class Canvas {
         this.context.beginPath();
         this.context.moveTo(x + rs[0], y);
         this.context.lineTo(x + w - rs[1], y);
-        this.context.quadraticCurveTo(x + w, y, x + w, y + rs[1]);
+        this.context.arcTo(x + w, y, x + w, y + rs[1], rs[1]);
         this.context.lineTo(x + w, y + h - rs[2]);
-        this.context.quadraticCurveTo(x + w, y + h, x + w - rs[2], y + h);
+        this.context.arcTo(x + w, y + h, x + w - rs[2], y + h, rs[2]);
         this.context.lineTo(x + rs[3], y + h);
-        this.context.quadraticCurveTo(x, y + h, x, y + h - rs[3]);
+        this.context.arcTo(x, y + h, x, y + h - rs[3], rs[3]);
         this.context.lineTo(x, y + rs[0]);
-        this.context.quadraticCurveTo(x, y, x + rs[0], y);
+        this.context.arcTo(x, y, x + rs[0], y, rs[0]);
         this.context.closePath();
         this.context.stroke();
       }
@@ -639,13 +642,16 @@ class Canvas {
     this.context.globalAlpha = this.alpha;
     if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
       const rd = this.generator.path(
-        `M${x + rs[0]},${y} L${x + w - rs[1]},${y} Q${x + w},${y} ${x + w},${
-          y + rs[1]
-        } L${x + w},${y + h - rs[2]} Q${x + w},${y + h} ${x + w - rs[2]},${
-          y + h
-        } L${x + rs[3]},${y + h} Q${x},${y + h} ${x},${y + h - rs[3]} L${x},${
-          y + rs[0]
-        } Q${x},${y} ${x + rs[0]},${y} Z`,
+        `M ${x + rs[0]},${y} 
+         H ${x + w - rs[1]} 
+         A ${rs[1]},${rs[1]} 0 0 1 ${x + w},${y + rs[1]} 
+         V ${y + h - rs[2]} 
+         A ${rs[2]},${rs[2]} 0 0 1 ${x + w - rs[2]},${y + h} 
+         H ${x + rs[3]} 
+         A ${rs[3]},${rs[3]} 0 0 1 ${x},${y + h - rs[3]} 
+         V ${y + rs[0]} 
+         A ${rs[0]},${rs[0]} 0 0 1 ${x + rs[0]},${y} 
+         Z`,
         {
           seed,
           roughness: this.roughness,
@@ -662,13 +668,13 @@ class Canvas {
       this.context.beginPath();
       this.context.moveTo(x + rs[0], y);
       this.context.lineTo(x + w - rs[1], y);
-      this.context.quadraticCurveTo(x + w, y, x + w, y + rs[1]);
+      this.context.arcTo(x + w, y, x + w, y + rs[1], rs[1]);
       this.context.lineTo(x + w, y + h - rs[2]);
-      this.context.quadraticCurveTo(x + w, y + h, x + w - rs[2], y + h);
+      this.context.arcTo(x + w, y + h, x + w - rs[2], y + h, rs[2]);
       this.context.lineTo(x + rs[3], y + h);
-      this.context.quadraticCurveTo(x, y + h, x, y + h - rs[3]);
+      this.context.arcTo(x, y + h, x, y + h - rs[3], rs[3]);
       this.context.lineTo(x, y + rs[0]);
-      this.context.quadraticCurveTo(x, y, x + rs[0], y);
+      this.context.arcTo(x, y, x + rs[0], y, rs[0]);
       this.context.closePath();
       this.context.fill();
     }

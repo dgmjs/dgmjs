@@ -20,7 +20,7 @@ export const LinkPanel: React.FC<LinkPanelProps> = ({
       <div className="flex flex-col">
         <TextField
           id="shape-link-field"
-          className="h-8"
+          className="h-7 text-xs"
           placeholder="url"
           value={link}
           onChange={(value) => {
