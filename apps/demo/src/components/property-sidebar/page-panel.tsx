@@ -44,7 +44,7 @@ export const PagePanel: React.FC<PagePanelProps> = ({
     <Panel title="Page" open={open} onOpenChange={onOpenChange} borderTop>
       <div className="flex flex-col gap-2">
         <TextField
-          className="text-xs"
+          className="text-xs h-7"
           placeholder="Name"
           value={pageName}
           onChange={(value) => {
@@ -60,7 +60,7 @@ export const PagePanel: React.FC<PagePanelProps> = ({
             if (onPageChange) onPageChange({ size: JSON.parse(value) });
           }}
         >
-          <SelectTrigger className="w-full text-xs" title="Font Family">
+          <SelectTrigger className="w-full text-xs h-7" title="Font Family">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
