@@ -37,7 +37,7 @@ function ScriptEditor({
           cols={40}
           rows={10}
           value={value}
-          className="text-sm"
+          className="text-xs font-mono"
           onChange={(value) => {
             setValue(value);
           }}
@@ -45,6 +45,7 @@ function ScriptEditor({
       </div>
       <div className="flex gap-2">
         <Button
+          className="text-xs"
           onClick={() => {
             if (onChange) onChange(value);
           }}
@@ -88,7 +89,11 @@ export const ScriptPanel: React.FC<ShapeEditorProps> = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             {Object.values(ScriptType).map((id) => (
-              <DropdownMenuItem key={id} onSelect={() => addScript(id)}>
+              <DropdownMenuItem
+                className="text-xs"
+                key={id}
+                onSelect={() => addScript(id)}
+              >
                 {id}
               </DropdownMenuItem>
             ))}
@@ -98,8 +103,8 @@ export const ScriptPanel: React.FC<ShapeEditorProps> = ({
       borderTop
     >
       {scripts.map((script, i) => (
-        <div key={i} className="flex h-8 items-center justify-between">
-          <div className="flex items-center h-full w-full text-sm pl-2 truncate border border-r-0 rounded-l">
+        <div key={i} className="flex h-7 items-center justify-between">
+          <div className="flex items-center h-full w-full text-xs pl-2 truncate border border-r-0 rounded-l">
             {script.id}
           </div>
           <div className="flex items-center">
@@ -107,7 +112,7 @@ export const ScriptPanel: React.FC<ShapeEditorProps> = ({
               <PopoverTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="h-8 w-8 p-0 border rounded-none"
+                  className="h-7 w-7 text-xs p-0 border rounded-none"
                 >
                   <Settings2Icon size={16} />
                 </Button>
@@ -129,7 +134,7 @@ export const ScriptPanel: React.FC<ShapeEditorProps> = ({
                 <div>
                   <Button
                     variant="ghost"
-                    className="h-8 w-8 p-0 border border-l-0 rounded-l-none"
+                    className="h-7 w-7 p-0 border border-l-0 rounded-l-none"
                   >
                     <MoreHorizontalIcon size={16} />
                   </Button>
@@ -137,6 +142,7 @@ export const ScriptPanel: React.FC<ShapeEditorProps> = ({
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem
+                  className="text-xs"
                   onSelect={() => {
                     const updated = scripts.filter((s, si) => si !== i);
                     if (onChange) onChange({ scripts: updated });

@@ -19,12 +19,15 @@ export const IconPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
       <div className="flex items-center gap-2">
         <SimpleTooltip content="Width">
           <div className="flex items-center gap-2">
-            <Label htmlFor="shape-width-field" className="flex-none px-1">
+            <Label
+              htmlFor="shape-width-field"
+              className="flex-none px-1 text-xs"
+            >
               VW
             </Label>
             <NumberField
               id="shape-width-field"
-              className="flex-grow h-8"
+              className="flex-grow h-7 text-xs"
               value={viewWidth}
               onChange={(value) => onChange({ viewWidth: value })}
             />
@@ -32,12 +35,15 @@ export const IconPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
         </SimpleTooltip>
         <SimpleTooltip content="Height">
           <div className="flex items-center gap-2">
-            <Label htmlFor="shape-height-field" className="flex-none px-1">
+            <Label
+              htmlFor="shape-height-field"
+              className="flex-none px-1 text-xs"
+            >
               VH
             </Label>
             <NumberField
               id="shape-height-field"
-              className="flex-grow h-8"
+              className="flex-grow h-7 text-xs"
               value={viewHeight}
               onChange={(value) => onChange({ viewHeight: value })}
             />
@@ -45,10 +51,11 @@ export const IconPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
         </SimpleTooltip>
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="vg-data-field" className="font-normal">
+        <Label htmlFor="vg-data-field" className="font-normal text-xs">
           Data
         </Label>
         <TextareaField
+          className="text-xs font-mono"
           id="vg-data-field"
           value={dataString}
           rows={2}

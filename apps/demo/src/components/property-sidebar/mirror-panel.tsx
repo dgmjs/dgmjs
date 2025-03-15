@@ -29,7 +29,7 @@ export const MirrorPanel: React.FC<MirrorPanelProps> = ({
       }
     >
       <div className="w-full h-8 flex items-center justify-between text-sm ">
-        <div className="bg-accent py-1 px-2 rounded-md text-muted-foreground">
+        <div className="bg-accent py-1 px-2 rounded-md text-xs text-muted-foreground">
           {subject ? subject.name : "null"}
         </div>
         <div className="flex items-center">

@@ -28,8 +28,8 @@ export const ReferencePanel: React.FC<ReferencePanelProps> = ({
         </Button>
       }
     >
-      <div className="w-full h-8 flex items-center justify-between text-sm ">
-        <div className="bg-accent py-1 px-2 rounded-md text-muted-foreground">
+      <div className="w-full h-7 flex items-center justify-between text-sm ">
+        <div className="bg-accent text-xs py-1 px-2 rounded-md text-muted-foreground">
           {reference ? reference.name : "null"}
         </div>
         <div className="flex items-center">

@@ -112,7 +112,7 @@ export const SelectArrowhead: React.FC<SelectArrowheadProps> = ({
         <Button
           variant="outline"
           size="sm"
-          className={cn("rounded-sm h-[34px] px-2", className)}
+          className={cn("rounded-sm w-7 h-7 px-1", className)}
         >
           <ArrowheadIcon
             value={value ?? LineEndType.FLAT}

@@ -47,8 +47,8 @@ export const TagPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
       borderTop
     >
       {tags.map((tag, tagIndex) => (
-        <div key={tagIndex} className="flex h-8 items-center justify-between">
-          <div className="flex items-center h-full w-full text-sm pl-2 truncate border border-r-0 rounded-l">
+        <div key={tagIndex} className="flex h-7 items-center justify-between">
+          <div className="flex items-center h-full w-full text-xs pl-2 truncate border border-r-0 rounded-l">
             <HashIcon size={16} className="mr-1" />
             {tag}
           </div>
@@ -57,7 +57,7 @@ export const TagPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
               <PopoverTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="h-8 w-8 p-0 border rounded-none"
+                  className="h-7 w-7 p-0 border rounded-none"
                 >
                   <Settings2Icon size={16} />
                 </Button>
@@ -79,7 +79,7 @@ export const TagPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
                 <div>
                   <Button
                     variant="ghost"
-                    className="h-8 w-8 p-0 border border-l-0 rounded-l-none"
+                    className="h-7 w-7 p-0 border border-l-0 rounded-l-none"
                   >
                     <MoreHorizontalIcon size={16} />
                   </Button>
@@ -87,6 +87,7 @@ export const TagPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem
+                  className="text-xs"
                   onSelect={() => {
                     if (tagIndex > 0) {
                       const updated = [...tags];
@@ -100,6 +101,7 @@ export const TagPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
                   Move Up
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  className="text-xs"
                   onSelect={() => {
                     if (tagIndex < tags.length - 1) {
                       const updated = [...tags];
@@ -114,6 +116,7 @@ export const TagPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
+                  className="text-xs"
                   onSelect={() => {
                     if (onChange)
                       onChange({ tags: tags.filter((t, i) => i !== tagIndex) });

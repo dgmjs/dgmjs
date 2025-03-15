@@ -61,7 +61,10 @@ export const TreeNode: React.FC<TreeNodeProps> = ({
               <ChevronDownIcon className="text-muted-foreground" size={16} />
             ))}
         </div>
-        <div className="cursor-default select-none" onDoubleClick={handleClick}>
+        <div
+          className="cursor-default select-none text-xs"
+          onDoubleClick={handleClick}
+        >
           {item}
         </div>
       </div>

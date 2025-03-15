@@ -44,6 +44,7 @@ export const PagePanel: React.FC<PagePanelProps> = ({
     <Panel title="Page" open={open} onOpenChange={onOpenChange} borderTop>
       <div className="flex flex-col gap-2">
         <TextField
+          className="text-xs"
           placeholder="Name"
           value={pageName}
           onChange={(value) => {
@@ -52,20 +53,26 @@ export const PagePanel: React.FC<PagePanelProps> = ({
         />
       </div>
       <div className="flex items-center justify-between w-full gap-3">
-        <Label className="w-16 whitespace-nowrap">Size</Label>
+        <Label className="w-16 whitespace-nowrap text-xs">Size</Label>
         <Select
           value={pageSize}
           onValueChange={(value) => {
             if (onPageChange) onPageChange({ size: JSON.parse(value) });
           }}
         >
-          <SelectTrigger className="w-full" title="Font Family">
+          <SelectTrigger className="w-full text-xs" title="Font Family">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="null">Infinite</SelectItem>
-            <SelectItem value="[960,720]">4:3</SelectItem>
-            <SelectItem value="[960,540]">16:9</SelectItem>
+            <SelectItem className="text-xs" value="null">
+              Infinite
+            </SelectItem>
+            <SelectItem className="text-xs" value="[960,720]">
+              4:3
+            </SelectItem>
+            <SelectItem className="text-xs" value="[960,540]">
+              16:9
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>

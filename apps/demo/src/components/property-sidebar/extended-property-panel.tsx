@@ -83,17 +83,17 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
       }
     >
       {properties.map((property, i) => (
-        <div key={i} className="flex items-center justify-between h-8 rounded">
+        <div key={i} className="flex items-center justify-between h-7 rounded">
           <div className="grid w-full grid-cols-2">
             <div
               className={cn(
-                "h-8 w-full border border-r-0 rounded-l pl-2 flex items-center truncate text-sm",
+                "h-7 w-full border border-r-0 rounded-l pl-2 flex items-center truncate text-xs",
                 property.hidden && "text-muted-foreground/40"
               )}
             >
               {property.name}
             </div>
-            <div className="h-8 flex items-center border border-r-0">
+            <div className="h-7 flex items-center border border-r-0">
               {property.type === "enum" && (
                 <Select
                   value={property.value}
@@ -101,7 +101,7 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
                     changeProperty(i, { ...property, value })
                   }
                 >
-                  <SelectTrigger className="h-8 rounded-none border-none">
+                  <SelectTrigger className="h-7 text-xs rounded-none border-none">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -116,7 +116,7 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
               )}
               {property.type === "string" && (
                 <TextField
-                  className="h-8 rounded-none border-none"
+                  className="h-7 text-xs rounded-none border-none"
                   value={property.value}
                   onChange={(value) =>
                     changeProperty(i, { ...property, value })
@@ -140,7 +140,7 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
                     />
                   ) : (
                     <NumberField
-                      className="h-8 rounded-none border-none"
+                      className="h-7 text-xs rounded-none border-none"
                       value={property.value}
                       onChange={(value) => {
                         if (
@@ -172,7 +172,7 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
               {property.type === "text" && (
                 <TextareaField
                   rows={1}
-                  className="h-8 min-h-full max-h-8 rounded-none py-1 px-2 border-none resize-none"
+                  className="h-7 text-xs min-h-full max-h-8 rounded-none py-1 px-2 border-none resize-none"
                   value={property.value}
                   onChange={(value) =>
                     changeProperty(i, { ...property, value })
@@ -186,7 +186,7 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
               <PopoverTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="h-8 w-8 p-0 border rounded-none"
+                  className="h-7 w-7 p-0 border rounded-none"
                 >
                   <Settings2Icon size={16} />
                 </Button>
@@ -199,14 +199,14 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
                 <div className="flex flex-col items-center gap-2">
                   <div className="grid grid-cols-2 w-full items-center">
                     <Label
-                      htmlFor="extended-property-name-field"
-                      className="font-normal"
+                      htmlFor="extended-property-name-field text-xs"
+                      className="font-normal text-xs"
                     >
                       Name
                     </Label>
                     <TextField
                       id="extended-property-name-field"
-                      className="h-8"
+                      className="h-7 text-xs"
                       value={property.name}
                       onChange={(value) =>
                         changeProperty(i, { ...property, name: value })
@@ -216,7 +216,7 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
                   <div className="grid grid-cols-2 w-full items-center">
                     <Label
                       htmlFor="extended-property-type-select"
-                      className="font-normal"
+                      className="font-normal text-xs"
                     >
                       Type
                     </Label>
@@ -236,7 +236,7 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
                     >
                       <SelectTrigger
                         id="extended-property-type-select"
-                        className="h-8"
+                        className="h-7 text-xs"
                       >
                         <SelectValue />
                       </SelectTrigger>
@@ -252,13 +252,13 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
                   <div className="grid grid-cols-2 w-full items-center">
                     <Label
                       htmlFor="extended-property-extra"
-                      className="font-normal"
+                      className="font-normal text-xs"
                     >
                       Extra
                     </Label>
                     <TextField
                       id="extended-property-extra"
-                      className="h-8"
+                      className="h-7 text-xs"
                       value={property.extra}
                       onChange={(value) =>
                         changeProperty(i, { ...property, extra: value })
@@ -268,7 +268,7 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
                   <div className="grid grid-cols-2 w-full items-center">
                     <Label
                       htmlFor="extended-property-hidden"
-                      className="font-normal"
+                      className="font-normal text-xs"
                     >
                       Hidden
                     </Label>
@@ -286,12 +286,13 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
                     <div className="grid grid-cols-2 w-full items-center">
                       <Label
                         htmlFor="extended-property-options-field"
-                        className="font-normal"
+                        className="font-normal text-xs"
                       >
                         Options
                       </Label>
                       <TextareaField
                         id="extended-property-options-field"
+                        className="text-xs"
                         rows={3}
                         value={
                           Array.isArray(property.options)
@@ -312,13 +313,13 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
                       <div className="grid grid-cols-2 w-full items-center">
                         <Label
                           htmlFor="extended-property-min"
-                          className="font-normal"
+                          className="font-normal text-xs"
                         >
                           Min
                         </Label>
                         <NumberField
                           id="extended-property-min"
-                          className="h-8"
+                          className="h-7 text-xs"
                           value={property.min}
                           onChange={(value) =>
                             changeProperty(i, {
@@ -332,13 +333,13 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
                       <div className="grid grid-cols-2 w-full items-center">
                         <Label
                           htmlFor="extended-property-max"
-                          className="font-normal"
+                          className="font-normal text-xs"
                         >
                           Max
                         </Label>
                         <NumberField
                           id="extended-property-max"
-                          className="h-8"
+                          className="h-7 text-xs"
                           value={property.max}
                           onChange={(value) =>
                             changeProperty(i, {
@@ -352,13 +353,13 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
                       <div className="grid grid-cols-2 w-full items-center">
                         <Label
                           htmlFor="extended-property-setp"
-                          className="font-normal"
+                          className="font-normal text-xs"
                         >
                           Step
                         </Label>
                         <NumberField
                           id="extended-property-step"
-                          className="h-8"
+                          className="h-7 text-xs"
                           value={property.step}
                           onChange={(value) =>
                             changeProperty(i, { ...property, step: value })
@@ -375,7 +376,7 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
                 <div>
                   <Button
                     variant="ghost"
-                    className="h-8 w-8 p-0 border border-l-0 rounded-l-none"
+                    className="h-7 w-7 p-0 border border-l-0 rounded-l-none"
                   >
                     <MoreHorizontalIcon size={16} />
                   </Button>
@@ -383,6 +384,7 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem
+                  className="text-xs"
                   onSelect={() => {
                     if (i > 0) {
                       const updated = [...properties];
@@ -396,6 +398,7 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
                   Move Up
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  className="text-xs"
                   onSelect={() => {
                     if (i < properties.length - 1) {
                       const updated = [...properties];
@@ -409,7 +412,10 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
                   Move Down
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={() => deleteProperty(i)}>
+                <DropdownMenuItem
+                  className="text-xs"
+                  onSelect={() => deleteProperty(i)}
+                >
                   Delete
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -418,7 +424,7 @@ export const ExtendedPropertyPanel: React.FC<ShapeEditorProps> = ({
         </div>
       ))}
       {properties.length === 0 && (
-        <Empty className="h-8" message="No properties" />
+        <Empty className="h-7 text-xs" message="No properties" />
       )}
     </Panel>
   );

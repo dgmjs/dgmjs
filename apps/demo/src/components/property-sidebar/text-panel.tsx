@@ -74,19 +74,19 @@ export const TextPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
           value={fontFamily}
           onValueChange={(value) => onChange({ fontFamily: value })}
         >
-          <SelectTrigger className="h-8" title="Font Family">
+          <SelectTrigger className="h-7 text-xs" title="Font Family">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
             {fontFamilies.map((family) => (
-              <SelectItem key={family} value={family}>
+              <SelectItem className="text-xs" key={family} value={family}>
                 {family}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
       </div>
-      <div className="flex items-center gap-2 pr-3 w-full">
+      <div className="flex items-center gap-2 w-full">
         <div className="flex items-center w-full">
           <Select
             value={fontWeight?.toString()}
@@ -95,19 +95,37 @@ export const TextPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
               onChange({ fontWeight: numberValue });
             }}
           >
-            <SelectTrigger className="h-8 w-full" title="Font Weight">
+            <SelectTrigger className="h-7 text-xs w-full" title="Font Weight">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="100">Thin</SelectItem>
-              <SelectItem value="200">ExtraLight</SelectItem>
-              <SelectItem value="300">Light</SelectItem>
-              <SelectItem value="400">Regular</SelectItem>
-              <SelectItem value="500">Medium</SelectItem>
-              <SelectItem value="600">SemiBold</SelectItem>
-              <SelectItem value="700">Bold</SelectItem>
-              <SelectItem value="800">ExtraBold</SelectItem>
-              <SelectItem value="900">Black</SelectItem>
+              <SelectItem className="text-xs" value="100">
+                Thin
+              </SelectItem>
+              <SelectItem className="text-xs" value="200">
+                ExtraLight
+              </SelectItem>
+              <SelectItem className="text-xs" value="300">
+                Light
+              </SelectItem>
+              <SelectItem className="text-xs" value="400">
+                Regular
+              </SelectItem>
+              <SelectItem className="text-xs" value="500">
+                Medium
+              </SelectItem>
+              <SelectItem className="text-xs" value="600">
+                SemiBold
+              </SelectItem>
+              <SelectItem className="text-xs" value="700">
+                Bold
+              </SelectItem>
+              <SelectItem className="text-xs" value="800">
+                ExtraBold
+              </SelectItem>
+              <SelectItem className="text-xs" value="900">
+                Black
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -115,12 +133,12 @@ export const TextPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
           <NumberField
             value={fontSize}
             onChange={(value) => onChange({ fontSize: value })}
-            className="w-20 h-8 items-center"
+            className="w-20 h-7 text-xs items-center"
             title="Font Size"
           />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <div className="flex h-8 min-w-6 relative -left-7 items-center">
+              <div className="flex h-7 text-xs min-w-6 relative -left-7 items-center">
                 <Button
                   variant="ghost"
                   className="text-muted-foreground h-6 min-w-6 px-0"
@@ -132,6 +150,7 @@ export const TextPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
             <DropdownMenuContent>
               {FONT_SIZES.map((size) => (
                 <DropdownMenuItem
+                  className="text-xs"
                   key={size}
                   onSelect={() => onChange({ fontSize: size })}
                 >
@@ -155,21 +174,21 @@ export const TextPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
           >
             <ToggleGroupItem
               value={HorzAlign.LEFT}
-              className="h-8 w-8 p-0"
+              className="h-7 w-7 p-0"
               title="Align Left"
             >
               <AlignLeftIcon size={16} />
             </ToggleGroupItem>
             <ToggleGroupItem
               value={HorzAlign.CENTER}
-              className="h-8 w-8 p-0"
+              className="h-7 w-7 p-0"
               title="Align Center"
             >
               <AlignCenterIcon size={16} />
             </ToggleGroupItem>
             <ToggleGroupItem
               value={HorzAlign.RIGHT}
-              className="h-8 w-8 p-0"
+              className="h-7 w-7 p-0"
               title="Align Right"
             >
               <AlignRightIcon size={16} />
@@ -186,21 +205,21 @@ export const TextPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
           >
             <ToggleGroupItem
               value={VertAlign.TOP}
-              className="h-8 w-8 p-0"
+              className="h-7 w-7 p-0"
               title="Align Top"
             >
               <VerticalTopIcon size={16} />
             </ToggleGroupItem>
             <ToggleGroupItem
               value={VertAlign.MIDDLE}
-              className="h-8 w-8 p-0"
+              className="h-7 w-7 p-0"
               title="Align Middle"
             >
               <VerticalMiddleIcon size={16} />
             </ToggleGroupItem>
             <ToggleGroupItem
               value={VertAlign.BOTTOM}
-              className="h-8 w-8 p-0"
+              className="h-7 w-7 p-0"
               title="Align Bottom"
             >
               <VerticalBottomIcon size={16} />
@@ -211,24 +230,24 @@ export const TextPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
       {isBox && (
         <div className="flex w-full items-center gap-2">
           <div className="flex items-center gap-2">
-            <Label htmlFor="text-line-height-field" className="text-sm px-1">
+            <Label htmlFor="text-line-height-field" className="text-xs px-1">
               <LineHeightIcon size={16} />
             </Label>
             <NumberField
               id="text-line-height-field"
-              className="flex-grow h-8"
+              className="flex-grow text-xs h-7"
               value={lineHeight}
               onChange={(value) => onChange({ lineHeight: value })}
               title="Line Height"
             />
           </div>
           <div className="flex items-center gap-2">
-            <Label htmlFor="text-paragraph-spacing-field" className="text-sm">
+            <Label htmlFor="text-paragraph-spacing-field" className="text-xs">
               <ParagraphSpacingIcon size={16} />
             </Label>
             <NumberField
               id="text-paragraph-spacing-field"
-              className="flex-grow h-8"
+              className="flex-grow text-xs h-7"
               value={paragraphSpacing}
               onChange={(value) => onChange({ paragraphSpacing: value })}
               title="Paragraph Spacing"
@@ -237,6 +256,7 @@ export const TextPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
           <Toggle
             variant="outline"
             size="sm"
+            className="w-7 h-7 p-1"
             pressed={wordWrap}
             onPressedChange={(pressed) => onChange({ wordWrap: pressed })}
             title="Word Wrap"

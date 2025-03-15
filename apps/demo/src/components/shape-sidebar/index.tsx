@@ -24,9 +24,15 @@ export const ShapeSidebar: React.FC<ShapeSidebarProps> = ({
     >
       <Tabs defaultValue="pages" className="w-full">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="pages">Pages</TabsTrigger>
-          <TabsTrigger value="libraries">Libraries</TabsTrigger>
-          <TabsTrigger value="layers">Layers</TabsTrigger>
+          <TabsTrigger className="text-xs" value="pages">
+            Pages
+          </TabsTrigger>
+          <TabsTrigger className="text-xs" value="libraries">
+            Libraries
+          </TabsTrigger>
+          <TabsTrigger className="text-xs" value="layers">
+            Layers
+          </TabsTrigger>
         </TabsList>
         <TabsContent
           value="pages"

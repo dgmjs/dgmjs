@@ -198,7 +198,7 @@ export const EditorWrapper: React.FC<DGMEditorProps> = ({
           />
         }
         floatingToolbar={
-          <div className="bg-foreground text-background px-3 shadow-sm h-10 rounded border flex items-center">
+          <div className="bg-foreground text-sm text-background px-3 shadow-sm h-10 rounded border flex items-center">
             Floating Toolbar
           </div>
         }

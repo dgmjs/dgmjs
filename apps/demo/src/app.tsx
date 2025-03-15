@@ -206,8 +206,12 @@ function App() {
       <div className="absolute top-2 left-60 right-60 h-10 border flex items-center justify-between bg-background">
         <Menus />
         <Options />
-        <Button onClick={handleShare}>Share</Button>
-        <Button onClick={handleShareStop}>Stop</Button>
+        <Button size="sm" onClick={handleShare}>
+          Share
+        </Button>
+        <Button size="sm" onClick={handleShareStop}>
+          Stop
+        </Button>
       </div>
       <PaletteToolbar />
       <ShapeSidebar

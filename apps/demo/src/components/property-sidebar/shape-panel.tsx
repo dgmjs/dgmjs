@@ -30,7 +30,7 @@ export const CommonPanel: React.FC<ShapeEditorProps> = ({
             </Label>
             <NumberField
               id="shape-rotate-field"
-              className="flex-grow h-8"
+              className="flex-grow text-xs h-7"
               value={rotate}
               onChange={(value) => onChange({ rotate: value })}
             />
@@ -40,7 +40,7 @@ export const CommonPanel: React.FC<ShapeEditorProps> = ({
           <Toggle
             variant="outline"
             size="sm"
-            className="w-9 px-2 justify-center flex-none"
+            className="w-7 h-7 px-1 justify-center flex-none"
             pressed={!rotatable}
             onPressedChange={(pressed) => onChange({ rotatable: !pressed })}
           >
@@ -48,8 +48,8 @@ export const CommonPanel: React.FC<ShapeEditorProps> = ({
           </Toggle>
         </SimpleTooltip>
       </div>
-      <div className="flex h-9 items-center gap-3">
-        <Label className="font-normal">Opacity</Label>
+      <div className="flex h-7 items-center gap-3">
+        <Label className="font-normal text-xs">Opacity</Label>
         <div className="w-full">
           <Slider
             max={1}

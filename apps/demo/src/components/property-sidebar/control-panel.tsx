@@ -48,7 +48,7 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
 
   return (
     <Panel title="Control" borderTop>
-      <div className="grid h-8 grid-cols-2 items-center">
+      <div className="grid h-7 grid-cols-2 items-center">
         <div className="flex items-center gap-2">
           <Checkbox
             id="shape-enabled-checkbox"
@@ -57,7 +57,10 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
               if (typeof checked === "boolean") onChange({ enable: checked });
             }}
           />
-          <Label className="font-normal" htmlFor="shape-enabled-checkbox">
+          <Label
+            className="font-normal text-xs"
+            htmlFor="shape-enabled-checkbox"
+          >
             Enable
           </Label>
         </div>
@@ -69,12 +72,15 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
               if (typeof checked === "boolean") onChange({ visible: checked });
             }}
           />
-          <Label className="font-normal" htmlFor="shape-visible-checkbox">
+          <Label
+            className="font-normal text-xs"
+            htmlFor="shape-visible-checkbox"
+          >
             Visible
           </Label>
         </div>
       </div>
-      <div className="grid h-8 grid-cols-2 items-center">
+      <div className="grid h-7 grid-cols-2 items-center">
         <div className="flex items-center gap-2">
           <Checkbox
             id="shape-connectable-checkbox"
@@ -84,7 +90,10 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
                 onChange({ connectable: checked });
             }}
           />
-          <Label className="font-normal" htmlFor="shape-connectable-checkbox">
+          <Label
+            className="font-normal text-xs"
+            htmlFor="shape-connectable-checkbox"
+          >
             Connectable
           </Label>
         </div>
@@ -97,12 +106,15 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
                 onChange({ containable: checked });
             }}
           />
-          <Label className="font-normal" htmlFor="shape-containable-checkbox">
+          <Label
+            className="font-normal text-xs"
+            htmlFor="shape-containable-checkbox"
+          >
             Containable
           </Label>
         </div>
       </div>
-      <div className="grid h-8 grid-cols-2 items-center">
+      <div className="grid h-7 grid-cols-2 items-center">
         <div className="flex items-center gap-2">
           <Checkbox
             id="shape-rotatable-checkbox"
@@ -113,7 +125,7 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
             }}
           />
           <Label
-            className="font-normal peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            className="font-normal peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-xs"
             htmlFor="shape-rotatable-checkbox"
           >
             Rotatable
@@ -129,14 +141,14 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
             }}
           />
           <Label
-            className="font-normal peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            className="font-normal peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-xs"
             htmlFor="shape-anchored-checkbox"
           >
             Anchored
           </Label>
         </div>
       </div>
-      <div className="grid h-8 grid-cols-2 items-center">
+      <div className="grid h-7 grid-cols-2 items-center">
         <div className="flex items-center gap-2">
           <Checkbox
             id="shape-text-editable-checkbox"
@@ -148,7 +160,7 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
             }}
           />
           <Label
-            className="font-normal peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            className="font-normal peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-xs"
             htmlFor="shape-text-editable-checkbox"
           >
             Text Editable
@@ -165,7 +177,7 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
             }}
           />
           <Label
-            className="font-normal peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            className="font-normal peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-xs"
             htmlFor="shape-path-editable-checkbox"
           >
             Path Editable
@@ -173,8 +185,8 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
         </div>
       </div>
       {isBox && (
-        <div className="grid h-8 grid-cols-2 items-center">
-          <Label htmlFor="shape-sizable-select" className="font-normal">
+        <div className="grid h-7 grid-cols-2 items-center">
+          <Label htmlFor="shape-sizable-select" className="font-normal text-xs">
             Sizable
           </Label>
           <Select
@@ -183,12 +195,12 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
               onChange({ sizable: value as SizableEnum })
             }
           >
-            <SelectTrigger id="shape-sizable-select" className="h-8">
+            <SelectTrigger id="shape-sizable-select" className="h-7 text-xs">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               {Object.entries(Sizable).map((entry) => (
-                <SelectItem key={entry[0]} value={entry[1]}>
+                <SelectItem key={entry[0]} value={entry[1]} className="text-xs">
                   {entry[0]}
                 </SelectItem>
               ))}
@@ -196,33 +208,36 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
           </Select>
         </div>
       )}
-      <div className="grid h-8 grid-cols-2 items-center">
-        <Label htmlFor="shape-movable-select" className="font-normal">
+      <div className="grid h-7 grid-cols-2 items-center">
+        <Label htmlFor="shape-movable-select" className="font-normal text-xs">
           Movable
         </Label>
         <Select
           value={movable}
           onValueChange={(value) => onChange({ movable: value as MovableEnum })}
         >
-          <SelectTrigger id="shape-movable-select" className="h-8">
+          <SelectTrigger id="shape-movable-select" className="h-7 text-xs">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
             {Object.entries(Movable).map((entry) => (
-              <SelectItem key={entry[0]} value={entry[1]}>
+              <SelectItem className="text-xs" key={entry[0]} value={entry[1]}>
                 {entry[0]}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
       </div>
-      <div className="grid h-8 grid-cols-2 items-center">
-        <Label htmlFor="shape-containable-filter-field" className="font-normal">
+      <div className="grid h-7 grid-cols-2 items-center">
+        <Label
+          htmlFor="shape-containable-filter-field"
+          className="font-normal text-xs"
+        >
           Containable Filter
         </Label>
         <TextField
           id="shape-containable-filter-field"
-          className="h-8"
+          className="h-7 text-xs"
           value={containableFilter}
           onChange={(value) => {
             onChange({ containableFilter: value });

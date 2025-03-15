@@ -60,7 +60,7 @@ export const NameValueEditor: React.FC<NameValueEditorProps> = ({
           <div className="grid grid-cols-2 w-full items-center">
             <Label
               htmlFor={`${nameValue.name}-value-field`}
-              className="font-normal"
+              className="font-normal text-xs"
             >
               {nameValue.name}
             </Label>
@@ -74,7 +74,7 @@ export const NameValueEditor: React.FC<NameValueEditorProps> = ({
               >
                 <SelectTrigger
                   id={`${nameValue.name}-value-field`}
-                  className="h-8"
+                  className="h-7 text-xs"
                 >
                   <SelectValue />
                 </SelectTrigger>
@@ -90,7 +90,7 @@ export const NameValueEditor: React.FC<NameValueEditorProps> = ({
             {nameValue.type === "string" && (
               <TextField
                 id={`${nameValue.name}-value-field`}
-                className="h-8"
+                className="h-7 text-xs"
                 value={nameValue.value}
                 onChange={(value) => changeNameValue(nameValue.name, value)}
               />
@@ -98,13 +98,13 @@ export const NameValueEditor: React.FC<NameValueEditorProps> = ({
             {nameValue.type === "number" && (
               <NumberField
                 id={`${nameValue.name}-value-field`}
-                className="h-8"
+                className="h-7 text-xs"
                 value={nameValue.value}
                 onChange={(value) => changeNameValue(nameValue.name, value)}
               />
             )}
             {nameValue.type === "boolean" && (
-              <div className="flex h-8 items-center justify-end">
+              <div className="flex h-7 items-center justify-end">
                 <Switch
                   id={`${nameValue.name}-value-field`}
                   checked={nameValue.value}
@@ -116,6 +116,7 @@ export const NameValueEditor: React.FC<NameValueEditorProps> = ({
             )}
             {nameValue.type === "text" && (
               <TextareaField
+                className="text-xs"
                 id={`${nameValue.name}-value-field`}
                 value={nameValue.value}
                 onChange={(value) => changeNameValue(nameValue.name, value)}
@@ -124,7 +125,9 @@ export const NameValueEditor: React.FC<NameValueEditorProps> = ({
           </div>
         </div>
       ))}
-      {nameValues.length === 0 && <Empty message="No entries to edit" />}
+      {nameValues.length === 0 && (
+        <Empty className="text-xs" message="No entries to edit" />
+      )}
     </div>
   );
 };
