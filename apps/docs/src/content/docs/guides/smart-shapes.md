@@ -56,6 +56,7 @@ This constraint aligns the shape relative to its parent.
 - **vert** : `none`, `top`, `top-border`, `top-outside`, `bottom`, `bottom-border`, `bottom-outside`, `middle`, `border`, `outside`, `fill`.
 - **horzOffset** : Horizontal offset.
 - **vertOffset** : Vertical offset.
+- **innerArea** : Align to parent's inner area. It means that parent's padding values are used for aligning.
 
 ![align-to-parent](https://fs.dgm.sh/i/Rf8jUx1l3ZTMmOJQmTKZI/lt@1x.png)
 

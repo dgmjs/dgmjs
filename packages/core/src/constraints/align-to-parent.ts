@@ -39,6 +39,7 @@ const schema = z.object({
     .default("top"),
   horzOffset: z.number().default(0),
   vertOffset: z.number().default(0),
+  innerArea: z.boolean().default(false),
 });
 
 /**
@@ -53,15 +54,16 @@ function constraint(
 ) {
   let changed = false;
   const parent = shape.parent as Box;
+  const innerBox = args.innerArea;
   if (parent instanceof Shape && !(parent instanceof Page)) {
     let horz = args.horz;
     let vert = args.vert;
-    const l = parent.innerLeft;
-    const r = parent.innerRight;
-    const t = parent.innerTop;
-    const b = parent.innerBottom;
-    const w = parent.innerWidth;
-    const h = parent.innerHeight;
+    const l = innerBox ? parent.innerLeft : parent.left;
+    const r = innerBox ? parent.innerRight : parent.right;
+    const t = innerBox ? parent.innerTop : parent.top;
+    const b = innerBox ? parent.innerBottom : parent.bottom;
+    const w = innerBox ? parent.innerWidth : parent.width;
+    const h = innerBox ? parent.innerHeight : parent.height;
     const cp = shape.getCenter();
     let dx = 0;
     let dy = 0;
