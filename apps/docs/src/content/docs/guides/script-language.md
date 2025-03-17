@@ -455,6 +455,15 @@ The below is the available variables and functions in `shape` object.
 The below is the available functions in `canvas` object.
 
 ```clojure
+(. canvas :setStrokeColor c)
+(. canvas :setStrokeWidth w)
+(. canvas :setStrokePattern pattern)
+(. canvas :setFillColor c)
+(. canvas :setFillStyle style)
+(. canvas :setFontColor c)
+(. canvas :setFont font)
+(. canvas :setAlpha alpha)
+(. canvas :setRoughness roughness)
 (. canvas :line x1 y1 x2 y2)
 (. canvas :strokeRect x1 y1 x2 y2)
 (. canvas :fillRect x1 y1 x2 y2)
