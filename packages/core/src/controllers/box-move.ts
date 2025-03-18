@@ -68,10 +68,14 @@ export class BoxMoveController extends Controller {
 
   getTargetShape(editor: Editor, shape: Shape): Shape {
     let targetShape: Shape | null = shape;
-    if (targetShape.movable === Movable.PARENT)
+    if (
+      targetShape.movable === Movable.PARENT &&
+      !(targetShape.parent instanceof Page)
+    ) {
       targetShape = targetShape.findParent(
         (s) => (s as Shape).movable !== Movable.PARENT
       ) as Shape;
+    }
     return targetShape;
   }
 

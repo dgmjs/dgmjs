@@ -113,10 +113,14 @@ export class ConnectorMoveController extends Controller {
   update(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     // apply movable property
     let targetShape: Shape | null = shape;
-    if (targetShape.movable === Movable.PARENT)
+    if (
+      targetShape.movable === Movable.PARENT &&
+      !(targetShape.parent instanceof Page)
+    ) {
       targetShape = targetShape.findParent(
         (s) => (s as Shape).movable !== Movable.PARENT
       ) as Shape;
+    }
     if (!targetShape || targetShape instanceof Page) return;
 
     // return if no change
