@@ -602,7 +602,7 @@ Determine a given shape can be contained in this shape
 
 #### Source
 
-[shapes.ts:1066](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1066)
+[shapes.ts:1065](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1065)
 
 ***
 
@@ -750,7 +750,7 @@ Find all shapes matched with the query string
 
 #### Source
 
-[shapes.ts:1056](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1056)
+[shapes.ts:1055](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1055)
 
 ***
 
@@ -770,7 +770,7 @@ Find a shape first matched with the query string
 
 #### Source
 
-[shapes.ts:1043](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1043)
+[shapes.ts:1042](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1042)
 
 ***
 
@@ -962,7 +962,7 @@ Get a property object
 
 #### Source
 
-[shapes.ts:1078](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1078)
+[shapes.ts:1077](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1077)
 
 ***
 
@@ -982,7 +982,7 @@ Get a property value
 
 #### Source
 
-[shapes.ts:1088](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1088)
+[shapes.ts:1087](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1087)
 
 ***
 
@@ -1027,7 +1027,7 @@ Get a property object
 
 #### Source
 
-[shapes.ts:1096](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1096)
+[shapes.ts:1095](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1095)
 
 ***
 

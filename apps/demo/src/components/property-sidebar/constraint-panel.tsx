@@ -64,7 +64,11 @@ export const ConstraintPanel: React.FC<ShapeEditorProps> = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             {constraintManager.getIds().map((id) => (
-              <DropdownMenuItem key={id} onSelect={() => addConstraint(id)}>
+              <DropdownMenuItem
+                className="text-xs"
+                key={id}
+                onSelect={() => addConstraint(id)}
+              >
                 {id}
               </DropdownMenuItem>
             ))}

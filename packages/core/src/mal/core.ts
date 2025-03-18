@@ -39,6 +39,16 @@ function mal_throw(v: MalType): MalType {
 }
 
 /**
+ * not operator
+ * e.g.)
+ *   (not true) => false
+ *   (not false) => true
+ */
+function mal_not(v: MalType) {
+  return new MalBoolean(v.type === Node.Boolean && !v.v);
+}
+
+/**
  * query nil or not
  * e.g.)
  *   (nil? nil) => true
@@ -765,6 +775,7 @@ export const ns: Map<MalSymbol, MalFunction> = (() => {
   const ns: Record<string, typeof MalFunction.prototype.func> = {
     "=": mal_equals,
     throw: mal_throw,
+    not: mal_not,
     "nil?": mal_nilQ,
     "true?": mal_trueQ,
     "false?": mal_falseQ,

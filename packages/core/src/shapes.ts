@@ -1026,8 +1026,7 @@ export class Shape extends Obj {
           case "tag":
             return this.tags.includes(value);
           case "type":
-            // TODO: return meta.types[value] && this instanceof meta.types[value];
-            return false;
+            return this.type === value;
           default:
             return false;
         }

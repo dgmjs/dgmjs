@@ -27,7 +27,7 @@ Page
 
 #### Source
 
-[shapes.ts:1145](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1145)
+[shapes.ts:1144](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1144)
 
 ## Properties
 
@@ -371,7 +371,7 @@ Page's scroll transient state
 
 #### Source
 
-[shapes.ts:1138](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1138)
+[shapes.ts:1137](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1137)
 
 ***
 
@@ -383,7 +383,7 @@ Page's zoom transient state
 
 #### Source
 
-[shapes.ts:1143](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1143)
+[shapes.ts:1142](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1142)
 
 ***
 
@@ -583,7 +583,7 @@ Indicate how this shape can be resized
 
 #### Source
 
-[shapes.ts:1133](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1133)
+[shapes.ts:1132](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1132)
 
 ***
 
@@ -785,7 +785,7 @@ Determine a given shape can be contained in this shape
 
 #### Source
 
-[shapes.ts:1066](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1066)
+[shapes.ts:1065](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1065)
 
 ***
 
@@ -829,7 +829,7 @@ Page do not contain a point
 
 #### Source
 
-[shapes.ts:1254](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1254)
+[shapes.ts:1253](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1253)
 
 ***
 
@@ -857,7 +857,7 @@ Render the page. If shapes are given, render only the given shapes.
 
 #### Source
 
-[shapes.ts:1191](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1191)
+[shapes.ts:1190](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1190)
 
 ***
 
@@ -907,7 +907,7 @@ Finalize shape
 
 #### Source
 
-[shapes.ts:1175](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1175)
+[shapes.ts:1174](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1174)
 
 ***
 
@@ -955,7 +955,7 @@ Find all shapes matched with the query string
 
 #### Source
 
-[shapes.ts:1056](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1056)
+[shapes.ts:1055](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1055)
 
 ***
 
@@ -979,7 +979,7 @@ Find a shape first matched with the query string
 
 #### Source
 
-[shapes.ts:1043](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1043)
+[shapes.ts:1042](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1042)
 
 ***
 
@@ -1051,7 +1051,7 @@ Import shape from JSON
 
 #### Source
 
-[shapes.ts:1164](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1164)
+[shapes.ts:1163](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1163)
 
 ***
 
@@ -1071,7 +1071,7 @@ Returns a bounding box containing all shapes in the doc
 
 #### Source
 
-[shapes.ts:1207](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1207)
+[shapes.ts:1206](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1206)
 
 ***
 
@@ -1151,7 +1151,7 @@ Return a ordered array of the given shapes
 
 #### Source
 
-[shapes.ts:1244](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1244)
+[shapes.ts:1243](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1243)
 
 ***
 
@@ -1191,7 +1191,7 @@ Return the page that contains this shape
 
 #### Source
 
-[shapes.ts:1171](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1171)
+[shapes.ts:1170](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1170)
 
 ***
 
@@ -1215,7 +1215,7 @@ Get a property object
 
 #### Source
 
-[shapes.ts:1078](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1078)
+[shapes.ts:1077](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1077)
 
 ***
 
@@ -1239,7 +1239,7 @@ Get a property value
 
 #### Source
 
-[shapes.ts:1088](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1088)
+[shapes.ts:1087](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1087)
 
 ***
 
@@ -1292,7 +1292,7 @@ Get a property object
 
 #### Source
 
-[shapes.ts:1096](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1096)
+[shapes.ts:1095](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1095)
 
 ***
 
@@ -1369,7 +1369,7 @@ If shapes are not given, return the viewport of all shapes in the page.
 
 #### Source
 
-[shapes.ts:1223](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1223)
+[shapes.ts:1222](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1222)
 
 ***
 
@@ -1580,7 +1580,7 @@ Page do not overlap with anything
 
 #### Source
 
-[shapes.ts:1261](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1261)
+[shapes.ts:1260](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1260)
 
 ***
 
@@ -1845,7 +1845,7 @@ Export shape to JSON
 
 #### Source
 
-[shapes.ts:1156](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1156)
+[shapes.ts:1155](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1155)
 
 ***
 
@@ -1961,7 +1961,7 @@ Update all shapes in this page
 
 #### Source
 
-[shapes.ts:1184](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1184)
+[shapes.ts:1183](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1183)
 
 ***
 

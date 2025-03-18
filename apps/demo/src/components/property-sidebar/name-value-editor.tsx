@@ -80,7 +80,7 @@ export const NameValueEditor: React.FC<NameValueEditorProps> = ({
                 </SelectTrigger>
                 <SelectContent>
                   {nameValue.options?.map((option: any, j: number) => (
-                    <SelectItem key={j} value={option}>
+                    <SelectItem className="text-xs" key={j} value={option}>
                       {option}
                     </SelectItem>
                   ))}
