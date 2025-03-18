@@ -206,6 +206,7 @@ export function preprocessTextNode(
       }
       let block = { ...node, _height: 0, _width: 0, _minWidth: 0 };
       if (Array.isArray(node.content)) {
+        const start = block.attrs?.start ?? 1;
         block.content = node.content.map((child: any, i: number) => {
           let processed = preprocessTextNode(
             canvas,
@@ -220,7 +221,7 @@ export function preprocessTextNode(
           }
           if (block.type === "orderedList") {
             processed._list = "ordered";
-            processed._order = i + 1;
+            processed._order = i + start;
           }
           if (block.type === "doc" && i === node.content.length - 1) {
             processed._height -= shape.paragraphSpacing * shape.fontSize;
