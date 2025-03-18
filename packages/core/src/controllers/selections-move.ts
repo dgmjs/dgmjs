@@ -1,13 +1,14 @@
 import type { CanvasPointerEvent } from "../graphics/graphics";
-import { Shape, Page } from "../shapes";
+import { Shape, Page, Movable } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { Color, Cursor } from "../graphics/const";
 import { lcs2ccs } from "../graphics/utils";
 import { moveShapes, resolveAllConstraints } from "../macro";
 import { ActionKind } from "../core";
-import { ableToContain } from "./utils";
+import { ableToContain, getMovableShape } from "./utils";
 import { GridSnapper, MoveSnapper } from "../manipulators/snapper";
 import { getAllDescendant } from "../utils/shape-utils";
+import { unique } from "../std/lambda";
 
 /**
  * SelectionsMoveController
@@ -75,9 +76,16 @@ export class SelectionsMoveController extends Controller {
     return [Cursor.MOVE, 0];
   }
 
+  getTargetShapes(editor: Editor) {
+    const selection = editor.selection
+      .getShapes()
+      .map((s) => getMovableShape(s));
+    return unique(selection);
+  }
+
   initialize(editor: Editor, shape: Shape, e: CanvasPointerEvent): void {
     const rect = editor.selection.getBoundingRect(editor.canvas);
-    const selection = editor.selection.getShapes();
+    const selection = this.getTargetShapes(editor);
 
     // initialize shift movement
     this.shiftMove = "none";
@@ -97,7 +105,7 @@ export class SelectionsMoveController extends Controller {
   update(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     const canvas = editor.canvas;
     const rect = editor.selection.getBoundingRect(editor.canvas);
-    const selections = editor.selection.getShapes();
+    const selections = this.getTargetShapes(editor);
 
     // return if not moving
     if (this.dxStepGCS === 0 && this.dyStepGCS === 0) return;

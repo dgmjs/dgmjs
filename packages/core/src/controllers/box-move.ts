@@ -5,7 +5,7 @@ import { drawPolylineInLCS } from "../utils/guide";
 import { Cursor } from "../graphics/const";
 import { moveShapes, resolveAllConstraints } from "../macro";
 import { ActionKind } from "../core";
-import { ableToContain } from "./utils";
+import { ableToContain, getMovableShape } from "./utils";
 import { GridSnapper, MoveSnapper } from "../manipulators/snapper";
 import { getAllDescendant } from "../utils/shape-utils";
 
@@ -66,21 +66,8 @@ export class BoxMoveController extends Controller {
     return [Cursor.MOVE, 0];
   }
 
-  getTargetShape(editor: Editor, shape: Shape): Shape {
-    let targetShape: Shape | null = shape;
-    if (
-      targetShape.movable === Movable.PARENT &&
-      !(targetShape.parent instanceof Page)
-    ) {
-      targetShape = targetShape.findParent(
-        (s) => (s as Shape).movable !== Movable.PARENT
-      ) as Shape;
-    }
-    return targetShape;
-  }
-
   initialize(editor: Editor, shape: Shape, e: CanvasPointerEvent): void {
-    const targetShape = this.getTargetShape(editor, shape);
+    const targetShape = getMovableShape(shape);
     if (!targetShape || targetShape instanceof Page) return;
 
     // initialize shift move state
@@ -108,7 +95,7 @@ export class BoxMoveController extends Controller {
    * Update ghost
    */
   update(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
-    const targetShape = this.getTargetShape(editor, shape);
+    const targetShape = getMovableShape(shape);
     if (!targetShape || targetShape instanceof Page) return;
 
     // return if no change
