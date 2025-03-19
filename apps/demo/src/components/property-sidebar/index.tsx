@@ -95,6 +95,7 @@ export const PropertySidebar: React.FC<PropertySidebarProps> = ({
               {shapes.length === 1 && (
                 <>
                   <PrototypePanel shapes={shapes} onChange={onChange} />
+                  <ControlPanel shapes={shapes} onChange={onChange} />
                   <ExtendedPropertyPanel shapes={shapes} onChange={onChange} />
                   <ConstraintPanel shapes={shapes} onChange={onChange} />
                   <ScriptPanel shapes={shapes} onChange={onChange} />
@@ -107,7 +108,6 @@ export const PropertySidebar: React.FC<PropertySidebarProps> = ({
                   />
                 </>
               )}
-              <ControlPanel shapes={shapes} onChange={onChange} />
             </ScrollArea>
           ) : (
             <Empty message="No shapes selected" />

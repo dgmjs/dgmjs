@@ -185,23 +185,25 @@ In addition to extended properties, constraints, and scripts, there are other pr
 
 The `sizable` property specifies the method for adjusting the size of the shape. You can choose one from:
 
-- `None` : The shape cannot be sizable.
-- `Horz` : Only the width of the shape can be sizable.
-- `Vert` : Only the height of the shape can be sizable.
-- `Free` : The shape can be sizable freely both width and height.
-- `Ratio` : The shape can be sizable while maintaining the aspect ratio.
+- `none` : The shape cannot be sizable.
+- `horz` : Only the width of the shape can be sizable.
+- `vert` : Only the height of the shape can be sizable.
+- `free` : The shape can be sizable freely both width and height.
+- `ratio` : The shape can be sizable while maintaining the aspect ratio.
 
 ### Movable
 
 The `movable` property specifies the method for moving the shape. You can choose one from:
 
-- `None` : The shape cannot be movable.
-- `Horz` : The shape can be movable horizontal only.
-- `Vert` : The shape can be movable vertical only.
-- `Free` : The shape can be movable freely.
-- `Parent` : The shape can be movable with it's parent shape.
+- `none` : The shape cannot be movable.
+- `horz` : The shape can be movable horizontal only.
+- `vert` : The shape can be movable vertical only.
+- `free` : The shape can be movable freely.
+- `parent` : The shape can be movable with it's parent shape.
 
-### Containable and Containable filter
+If `movable` is `parent` and you want it to operate only on a specific type of parent, you can write a query in `movableParentFilter`.
+
+### Containable
 
 The `containable` property indicates that the shape can contain other shapes inside it. To specify what kind of shapes can be contained, you can write a query expression in the `containableFilter`.
 

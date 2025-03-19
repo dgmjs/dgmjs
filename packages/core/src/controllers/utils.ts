@@ -303,9 +303,12 @@ export function ableToContain(container: Shape, shape: Shape) {
 
 export function getMovableShape(shape: Shape): Shape {
   let movableShape: Shape | null = shape;
+  const parent = movableShape.parent as Shape;
+  const query = shape.parseQueryString(movableShape.movableParentFilter);
   if (
     movableShape.movable === Movable.PARENT &&
-    !(movableShape.parent instanceof Page)
+    !(parent instanceof Page) &&
+    parent.match(query)
   ) {
     movableShape = movableShape.findParent(
       (s) => (s as Shape).movable !== Movable.PARENT
