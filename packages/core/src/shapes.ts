@@ -2901,25 +2901,28 @@ export class Frame extends Box {
 
   /**
    * Pick a shape at specific position (x, y)
+   *
+   * Commentize this method due to the issue #358
+   * Don't understand why this override exists over default impl.
    */
-  getShapeAt(
-    canvas: Canvas,
-    point: number[],
-    exceptions: Shape[] = [],
-    allowDisabledAndInvisible: boolean = false
-  ): Shape | null {
-    const allowPick =
-      allowDisabledAndInvisible || (this.enable && this.visible);
-    if (allowPick && this.containsPoint(canvas, point)) {
-      for (let i = this.children.length - 1; i >= 0; i--) {
-        const s: Shape = this.children[i] as Shape;
-        const r = s.getShapeAt(canvas, point, exceptions);
-        if (r && !exceptions.includes(r)) return r;
-      }
-      return this;
-    }
-    return null;
-  }
+  // getShapeAt(
+  //   canvas: Canvas,
+  //   point: number[],
+  //   exceptions: Shape[] = [],
+  //   allowDisabledAndInvisible: boolean = false
+  // ): Shape | null {
+  //   const allowPick =
+  //     allowDisabledAndInvisible || (this.enable && this.visible);
+  //   if (allowPick && this.containsPoint(canvas, point)) {
+  //     for (let i = this.children.length - 1; i >= 0; i--) {
+  //       const s: Shape = this.children[i] as Shape;
+  //       const r = s.getShapeAt(canvas, point, exceptions);
+  //       if (r && !exceptions.includes(r)) return r;
+  //     }
+  //     return this;
+  //   }
+  //   return null;
+  // }
 
   /**
    * Determines whether the given rect overlaps this shape's clipping area.
