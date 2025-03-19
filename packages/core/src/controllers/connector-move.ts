@@ -111,13 +111,7 @@ export class ConnectorMoveController extends Controller {
    * Update ghost
    */
   update(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
-    // apply movable property
     let targetShape: Shape | null = shape;
-    if (targetShape.movable === Movable.PARENT)
-      targetShape = targetShape.findParent(
-        (s) => (s as Shape).movable !== Movable.PARENT
-      ) as Shape;
-    if (!targetShape || targetShape instanceof Page) return;
 
     // return if no change
     if (this.dxStepGCS === 0 && this.dyStepGCS === 0) return;

@@ -19,4 +19,4 @@ title: "renderTextShape"
 
 ## Source
 
-[utils/text-utils.ts:622](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L622)
+[utils/text-utils.ts:623](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L623)

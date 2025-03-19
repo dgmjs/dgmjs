@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Box, constraintManager, Page, Shape } from "../shapes";
+import { Box, constraintManager, Group, Page, Shape } from "../shapes";
 import type { Canvas } from "../graphics/graphics";
 import { Transaction } from "../core/transaction";
 import { moveShapes, resizeShape } from "../macro";
@@ -39,6 +39,7 @@ const schema = z.object({
     .default("top"),
   horzOffset: z.number().default(0),
   vertOffset: z.number().default(0),
+  query: z.string().default(""),
   innerArea: z.boolean().default(false),
 });
 
@@ -55,7 +56,15 @@ function constraint(
   let changed = false;
   const parent = shape.parent as Box;
   const innerBox = args.innerArea;
-  if (parent instanceof Shape && !(parent instanceof Page)) {
+  const query = shape.parseQueryString(
+    typeof args.query === "string" ? args.query : ""
+  );
+  if (
+    parent instanceof Shape &&
+    parent.match(query) &&
+    !(parent instanceof Page) &&
+    !(parent instanceof Group)
+  ) {
     let horz = args.horz;
     let vert = args.vert;
     const l = innerBox ? parent.innerLeft : parent.left;

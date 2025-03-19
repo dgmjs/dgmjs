@@ -1,6 +1,6 @@
 import type { Canvas } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Connector, Line, Mirror, Path, Shape } from "../shapes";
+import { Connector, Line, Mirror, Movable, Page, Path, Shape } from "../shapes";
 import { angleInCCS, lcs2ccs } from "../graphics/utils";
 import { minimize_Powell } from "../utils/optimization-js";
 import type { Editor } from "../editor";
@@ -299,4 +299,20 @@ export function ableToContain(container: Shape, shape: Shape) {
   // determine based on containable an containable filter
   if (!container.canContain(shape)) return false;
   return true;
+}
+
+export function getMovableShape(shape: Shape): Shape {
+  let movableShape: Shape | null = shape;
+  const parent = movableShape.parent as Shape;
+  const query = shape.parseQueryString(movableShape.movableParentFilter);
+  if (
+    movableShape.movable === Movable.PARENT &&
+    !(parent instanceof Page) &&
+    parent.match(query)
+  ) {
+    movableShape = movableShape.findParent(
+      (s) => (s as Shape).movable !== Movable.PARENT
+    ) as Shape;
+  }
+  return movableShape;
 }

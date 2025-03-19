@@ -208,6 +208,11 @@ export class Shape extends Obj {
   containableFilter: string;
 
   /**
+   * Movable parent filter
+   */
+  movableParentFilter: string;
+
+  /**
    * Connectable flag
    */
   connectable: boolean;
@@ -376,6 +381,7 @@ export class Shape extends Obj {
     this.rotatable = true;
     this.containable = true;
     this.containableFilter = "";
+    this.movableParentFilter = "";
     this.connectable = true;
     this.left = 0;
     this.top = 0;
@@ -426,6 +432,7 @@ export class Shape extends Obj {
     json.rotatable = this.rotatable;
     json.containable = this.containable;
     json.containableFilter = this.containableFilter;
+    json.movableParentFilter = this.movableParentFilter;
     json.connectable = this.connectable;
     json.left = this.left;
     json.top = this.top;
@@ -474,6 +481,8 @@ export class Shape extends Obj {
     this.rotatable = json.rotatable ?? this.rotatable;
     this.containable = json.containable ?? this.containable;
     this.containableFilter = json.containableFilter ?? this.containableFilter;
+    this.movableParentFilter =
+      json.movableParentFilter ?? this.movableParentFilter;
     this.connectable = json.connectable ?? this.connectable;
     this.left = json.left ?? this.left;
     this.top = json.top ?? this.top;

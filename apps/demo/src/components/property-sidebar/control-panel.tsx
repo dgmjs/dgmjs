@@ -20,6 +20,7 @@ import { Label } from "@/components/ui/label";
 import { TextField } from "./fields/text-field";
 import { ShapeEditorProps } from "@/types";
 import { merge } from "@/utils";
+import { cn } from "@/lib/utils";
 
 export const ControlPanel: React.FC<ShapeEditorProps> = ({
   shapes,
@@ -32,6 +33,7 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
   const visible = merge(shapes.map((s) => s.visible));
   const containable = merge(shapes.map((s) => s.containable));
   const containableFilter = merge(shapes.map((s) => s.containableFilter));
+  const movableParentFilter = merge(shapes.map((s) => s.movableParentFilter));
   const connectable = merge(shapes.map((s) => s.connectable));
   const rotatable = merge(shapes.map((s) => s.rotatable));
   const sizable = merge(shapes.map((s) => s.sizable));
@@ -228,10 +230,33 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
           </SelectContent>
         </Select>
       </div>
-      <div className="grid h-7 grid-cols-2 items-center">
+      <div className="flex flex-col items-start">
+        <Label
+          htmlFor="shape-movable-parent-filter-field"
+          className={cn(
+            "font-normal text-xs h-7 flex items-center",
+            movable !== Movable.PARENT && "opacity-50"
+          )}
+        >
+          Movable parent filter
+        </Label>
+        <TextField
+          id="shape-movable-parent-filter-field"
+          className="h-7 text-xs"
+          value={movableParentFilter}
+          disabled={movable !== Movable.PARENT}
+          onChange={(value) => {
+            onChange({ movableParentFilter: value });
+          }}
+        />
+      </div>
+      <div className="flex flex-col items-start">
         <Label
           htmlFor="shape-containable-filter-field"
-          className="font-normal text-xs"
+          className={cn(
+            "font-normal text-xs h-7 flex items-center",
+            !containable && "opacity-50"
+          )}
         >
           Containable Filter
         </Label>
@@ -239,6 +264,7 @@ export const ControlPanel: React.FC<ShapeEditorProps> = ({
           id="shape-containable-filter-field"
           className="h-7 text-xs"
           value={containableFilter}
+          disabled={!containable}
           onChange={(value) => {
             onChange({ containableFilter: value });
           }}

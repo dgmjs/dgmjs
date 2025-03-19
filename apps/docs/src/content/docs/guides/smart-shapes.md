@@ -44,6 +44,7 @@ This constraint aligns children shapes.
 - **orient** : `top`, `bottom`, `left`, `right`, `center`.
 - **align** : `left`, `left-outside`, `left-border`, `center`, `right`, `right-outside`, `right-border`, `top`, `top-border`, `top-outside`, `middle`, `bottom`, `bottom-border`, `bottom-outside`, `fill`.
 - **query** : Align only the matched children shapes. For example, if the query is `#compartment`, aligns only the children shapes which has `#compartment` tag. For more about query expression, see [Query](#query).
+- **gap** : A gap value among the children.
 - **fillLast** : Fill the last child shape.
 
 ![align-children](https://fs.dgm.sh/i/_lGjyzTaaz_R7sZ4L1VHe/lt@1x.png)
@@ -56,6 +57,7 @@ This constraint aligns the shape relative to its parent.
 - **vert** : `none`, `top`, `top-border`, `top-outside`, `bottom`, `bottom-border`, `bottom-outside`, `middle`, `border`, `outside`, `fill`.
 - **horzOffset** : Horizontal offset.
 - **vertOffset** : Vertical offset.
+- **query** : A query for determining the parent to which the constraint should be applied. For more about query expression, see [Query](#query).
 - **innerArea** : Align to parent's inner area. It means that parent's padding values are used for aligning.
 
 ![align-to-parent](https://fs.dgm.sh/i/Rf8jUx1l3ZTMmOJQmTKZI/lt@1x.png)
@@ -72,10 +74,12 @@ The anchored shape's `anchored` property should be `true`.
 
 This constraint inherits styles automatically from it's parent shape.
 
+- **opacity** : Inherit opacity.
 - **stroke** : Inherit stroke styles.
 - **fill** : Inherit fill styles.
 - **font** : Inherit font styles.
 - **textAlignment** :  : Inherit text alignments.
+- **query** : A query for determining the parent to which the constraint should be applied. For more about query expression, see [Query](#query).
 
 ### adjust-route
 
@@ -85,10 +89,10 @@ This constraint automatically adjust route of a connector. This is used for rout
 
 This constraint automatically changes a state of the shape.
 
-- **query** : Query to find a shape from children to change state. For more about query expression, see [Query](#query).
-- **state** : State to change: `enable`, `visible`, `rotatable`, `connectable`, `containable`, `opacity`, `roughness`, `width`, `height`, `rotate`, `padding`, `corners`, `borders`, `borderPosition`, `strokeColor`, `strokeWidth`, `strokePattern`, `fillColor`, `fillStyle`, `fontColor`, `fontSize`, `fontStyle`, `fontWeight`, `shadow`, `shadowColor`, `shadowOffset`, `text`, `horzAlign`, `vertAlign`, `wordWrap`, `lineHeight`, `paragraphSpacing`, `lineType`, `headEndType`, `tailEndType`.
 - **property** : An extended property to be used as state value.
 - **expression** : A script expression to be used as state value. You can use `value` for the extended property value in the expression. (e.g. `(if value "$background" "$foreground")`)
+- **query** : Query to find a shape from children to change state. For more about query expression, see [Query](#query).
+- **state** : State to change: `enable`, `visible`, `rotatable`, `connectable`, `containable`, `opacity`, `roughness`, `width`, `height`, `rotate`, `padding`, `corners`, `borders`, `borderPosition`, `strokeColor`, `strokeWidth`, `strokePattern`, `fillColor`, `fillStyle`, `fontColor`, `fontSize`, `fontStyle`, `fontWeight`, `shadow`, `shadowColor`, `shadowOffset`, `text`, `horzAlign`, `vertAlign`, `wordWrap`, `lineHeight`, `paragraphSpacing`, `lineType`, `headEndType`, `tailEndType`.
 
 ### size-size
 
@@ -111,6 +115,7 @@ User can redefine of shape's default behaviors how to rendering and outlining. T
 
 - render
 - outline
+- viewport
 
 For detailed information about the script language, please refer to [Script Language](/guides/script-language/).
 
@@ -180,23 +185,25 @@ In addition to extended properties, constraints, and scripts, there are other pr
 
 The `sizable` property specifies the method for adjusting the size of the shape. You can choose one from:
 
-- `None` : The shape cannot be sizable.
-- `Horz` : Only the width of the shape can be sizable.
-- `Vert` : Only the height of the shape can be sizable.
-- `Free` : The shape can be sizable freely both width and height.
-- `Ratio` : The shape can be sizable while maintaining the aspect ratio.
+- `none` : The shape cannot be sizable.
+- `horz` : Only the width of the shape can be sizable.
+- `vert` : Only the height of the shape can be sizable.
+- `free` : The shape can be sizable freely both width and height.
+- `ratio` : The shape can be sizable while maintaining the aspect ratio.
 
 ### Movable
 
 The `movable` property specifies the method for moving the shape. You can choose one from:
 
-- `None` : The shape cannot be movable.
-- `Horz` : The shape can be movable horizontal only.
-- `Vert` : The shape can be movable vertical only.
-- `Free` : The shape can be movable freely.
-- `Parent` : The shape can be movable with it's parent shape.
+- `none` : The shape cannot be movable.
+- `horz` : The shape can be movable horizontal only.
+- `vert` : The shape can be movable vertical only.
+- `free` : The shape can be movable freely.
+- `parent` : The shape can be movable with it's parent shape.
 
-### Containable and Containable filter
+If `movable` is `parent` and you want it to operate only on a specific type of parent, you can write a query in `movableParentFilter`.
+
+### Containable
 
 The `containable` property indicates that the shape can contain other shapes inside it. To specify what kind of shapes can be contained, you can write a query expression in the `containableFilter`.
 

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Shape, constraintManager, Box, Page, Doc } from "../shapes";
+import { Shape, constraintManager, Box, Page, Group } from "../shapes";
 import { Canvas } from "../graphics/graphics";
 import { Transaction } from "../core/transaction";
 
@@ -9,6 +9,7 @@ const schema = z.object({
   fill: z.boolean().default(false),
   font: z.boolean().default(false),
   textAlignment: z.boolean().default(false),
+  query: z.string().default(""),
 });
 
 /**
@@ -23,7 +24,15 @@ function constraint(
 ) {
   let changed = false;
   const parent = shape.parent as Shape;
-  if (parent && !(parent instanceof Doc)) {
+  const query = shape.parseQueryString(
+    typeof args.query === "string" ? args.query : ""
+  );
+  if (
+    parent instanceof Shape &&
+    parent.match(query) &&
+    !(parent instanceof Page) &&
+    !(parent instanceof Group)
+  ) {
     if (args.opacity) {
       changed = tx.assign(shape, "opacity", parent.computeOpacity()) || changed;
     }
