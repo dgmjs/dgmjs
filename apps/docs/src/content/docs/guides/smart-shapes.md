@@ -44,6 +44,7 @@ This constraint aligns children shapes.
 - **orient** : `top`, `bottom`, `left`, `right`, `center`.
 - **align** : `left`, `left-outside`, `left-border`, `center`, `right`, `right-outside`, `right-border`, `top`, `top-border`, `top-outside`, `middle`, `bottom`, `bottom-border`, `bottom-outside`, `fill`.
 - **query** : Align only the matched children shapes. For example, if the query is `#compartment`, aligns only the children shapes which has `#compartment` tag. For more about query expression, see [Query](#query).
+- **gap** : A gap value among the children.
 - **fillLast** : Fill the last child shape.
 
 ![align-children](https://fs.dgm.sh/i/_lGjyzTaaz_R7sZ4L1VHe/lt@1x.png)
@@ -73,10 +74,12 @@ The anchored shape's `anchored` property should be `true`.
 
 This constraint inherits styles automatically from it's parent shape.
 
+- **opacity** : Inherit opacity.
 - **stroke** : Inherit stroke styles.
 - **fill** : Inherit fill styles.
 - **font** : Inherit font styles.
 - **textAlignment** :  : Inherit text alignments.
+- **query** : A query for determining the parent to which the constraint should be applied. For more about query expression, see [Query](#query).
 
 ### adjust-route
 
