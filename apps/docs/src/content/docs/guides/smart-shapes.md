@@ -86,10 +86,10 @@ This constraint automatically adjust route of a connector. This is used for rout
 
 This constraint automatically changes a state of the shape.
 
-- **query** : Query to find a shape from children to change state. For more about query expression, see [Query](#query).
-- **state** : State to change: `enable`, `visible`, `rotatable`, `connectable`, `containable`, `opacity`, `roughness`, `width`, `height`, `rotate`, `padding`, `corners`, `borders`, `borderPosition`, `strokeColor`, `strokeWidth`, `strokePattern`, `fillColor`, `fillStyle`, `fontColor`, `fontSize`, `fontStyle`, `fontWeight`, `shadow`, `shadowColor`, `shadowOffset`, `text`, `horzAlign`, `vertAlign`, `wordWrap`, `lineHeight`, `paragraphSpacing`, `lineType`, `headEndType`, `tailEndType`.
 - **property** : An extended property to be used as state value.
 - **expression** : A script expression to be used as state value. You can use `value` for the extended property value in the expression. (e.g. `(if value "$background" "$foreground")`)
+- **query** : Query to find a shape from children to change state. For more about query expression, see [Query](#query).
+- **state** : State to change: `enable`, `visible`, `rotatable`, `connectable`, `containable`, `opacity`, `roughness`, `width`, `height`, `rotate`, `padding`, `corners`, `borders`, `borderPosition`, `strokeColor`, `strokeWidth`, `strokePattern`, `fillColor`, `fillStyle`, `fontColor`, `fontSize`, `fontStyle`, `fontWeight`, `shadow`, `shadowColor`, `shadowOffset`, `text`, `horzAlign`, `vertAlign`, `wordWrap`, `lineHeight`, `paragraphSpacing`, `lineType`, `headEndType`, `tailEndType`.
 
 ### size-size
 
@@ -112,6 +112,7 @@ User can redefine of shape's default behaviors how to rendering and outlining. T
 
 - render
 - outline
+- viewport
 
 For detailed information about the script language, please refer to [Script Language](/guides/script-language/).
 

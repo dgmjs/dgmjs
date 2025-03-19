@@ -14,6 +14,8 @@ import { Transaction } from "../core/transaction";
 import { evalScript } from "../mal/mal";
 
 const schema = z.object({
+  property: z.string().default(""),
+  expression: z.string().default(""),
   query: z.string().default(""),
   state: z
     .enum([
@@ -54,8 +56,6 @@ const schema = z.object({
       "tailEndType",
     ])
     .default("enable"),
-  property: z.string().default(""),
-  expression: z.string().default(""),
 });
 
 /**
