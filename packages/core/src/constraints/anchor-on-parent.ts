@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { constraintManager, Box, Shape, Page } from "../shapes";
+import { constraintManager, Box, Shape, Page, Group } from "../shapes";
 import * as geometry from "../graphics/geometry";
 import { Canvas } from "../graphics/graphics";
 import { Transaction } from "../core/transaction";
@@ -25,7 +25,8 @@ function constraint(
   if (
     shape instanceof Box &&
     parent instanceof Shape &&
-    !(parent instanceof Page)
+    !(parent instanceof Page) &&
+    !(parent instanceof Group)
   ) {
     const anchorPoint = geometry.getPointOnPath(
       parent.getOutline() ?? [],
