@@ -573,8 +573,7 @@ export function groupShapes(
 ): boolean {
   let changed = false;
   const box = getAllBoundingRect(canvas, shapes);
-  let filtered = filterDescendants(shapes) as Shape[];
-  if (filtered.length > 1) {
+  if (shapes.length > 1) {
     const group = new Group();
     group.left = box[0][0];
     group.top = box[0][1];
@@ -583,10 +582,10 @@ export function groupShapes(
     changed = tx.appendObj(group) || changed;
     changed = changeParent(tx, group, page) || changed;
     page
-      ?.traverseSequence()
+      ?.traverseDepthFirstSequence()
       .reverse()
       .forEach((s) => {
-        if (filtered.includes(s as Shape)) {
+        if (shapes.includes(s as Shape)) {
           changed = changeParent(tx, s, group) || changed;
         }
       });
