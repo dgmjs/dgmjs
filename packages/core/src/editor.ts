@@ -2067,13 +2067,18 @@ export class Manipulator {
   /**
    * Draw hovering for the shape
    */
-  drawHovering(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
+  drawHovering(
+    editor: Editor,
+    shape: Shape,
+    e: CanvasPointerEvent,
+    thickness = 1.5
+  ) {
     const canvas = editor.canvas;
     let outline = shape.getOutline();
     let outlineCCS = outline.map((p) => utils.lcs2ccs(canvas, shape, p));
     canvas.storeState();
     canvas.strokeColor = Color.SELECTION;
-    canvas.strokeWidth = canvas.px * 1.5;
+    canvas.strokeWidth = canvas.px * thickness;
     canvas.strokePattern = [];
     canvas.roughness = 0;
     canvas.alpha = 1;

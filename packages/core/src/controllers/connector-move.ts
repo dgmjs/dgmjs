@@ -222,7 +222,7 @@ export class ConnectorMoveController extends Controller {
     super.drawDragging(editor, shape, e);
     if (this.container) {
       const manipulator = manipulatorManager.get(this.container.type);
-      if (manipulator) manipulator.drawHovering(editor, this.container, e);
+      if (manipulator) manipulator.drawHovering(editor, this.container, e, 3);
     }
 
     // draw snapping

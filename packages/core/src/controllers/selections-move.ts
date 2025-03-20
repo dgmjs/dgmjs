@@ -209,7 +209,7 @@ export class SelectionsMoveController extends Controller {
   drawDragging(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
     if (this.container) {
       const manipulator = manipulatorManager.get(this.container.type);
-      if (manipulator) manipulator.drawHovering(editor, this.container, e);
+      if (manipulator) manipulator.drawHovering(editor, this.container, e, 3);
     }
 
     // draw snapping
