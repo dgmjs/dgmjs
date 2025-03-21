@@ -19,4 +19,4 @@ title: "reduceObliquePath"
 
 ## Source
 
-[graphics/geometry.ts:883](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L883)
+[graphics/geometry.ts:912](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L912)

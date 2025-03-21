@@ -712,17 +712,46 @@ function pointsOnEllipse(
   center: number[],
   radiusX: number,
   radiusY: number,
-  numPoints: number
+  segments: number = 10
 ): number[][] {
   let points = [];
-  let angleIncrement = (2 * Math.PI) / numPoints;
-  for (let i = 0; i < numPoints; i++) {
+  let angleIncrement = (2 * Math.PI) / segments;
+  for (let i = 0; i < segments; i++) {
     let angle = i * angleIncrement;
     let x = center[0] + radiusX * Math.cos(angle);
     let y = center[1] + radiusY * Math.sin(angle);
     points.push([x, y]);
   }
   points.push(points[0]);
+  return points;
+}
+
+/**
+ * Return points on arc
+ * @param center center point of arc
+ * @param rx radius x
+ * @param ry radius y
+ * @param sa start angle
+ * @param ca center angle
+ * @param segments number of segments
+ */
+function pointsOnArc(
+  center: number[],
+  rx: number,
+  ry: number,
+  sa: number,
+  ca: number,
+  segments: number = 100
+) {
+  const startAngle = (sa * Math.PI) / 180;
+  const centerAngle = (ca * Math.PI) / 180;
+  const points = [];
+  for (let i = 0; i <= segments; i++) {
+    const angle = startAngle + (i / segments) * centerAngle;
+    const x = center[0] + rx * Math.cos(angle);
+    const y = center[1] + ry * Math.sin(angle);
+    points.push([x, y]);
+  }
   return points;
 }
 
@@ -1002,6 +1031,7 @@ export {
   rotate,
   pointsOnBezier,
   pointsOnEllipse,
+  pointsOnArc,
   curveToBezier,
   curvePathPoints,
   pathLength,

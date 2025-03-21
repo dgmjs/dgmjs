@@ -28,4 +28,4 @@ distance value to find nearest segment
 
 ## Source
 
-[graphics/geometry.ts:864](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L864)
+[graphics/geometry.ts:893](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L893)

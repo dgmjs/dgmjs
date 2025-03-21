@@ -5,7 +5,7 @@ prev: false
 title: "pointsOnEllipse"
 ---
 
-> **pointsOnEllipse**(`center`, `radiusX`, `radiusY`, `numPoints`): `number`[][]
+> **pointsOnEllipse**(`center`, `radiusX`, `radiusY`, `segments`): `number`[][]
 
 Return points on a ellipse outline
 
@@ -17,7 +17,7 @@ Return points on a ellipse outline
 
 • **radiusY**: `number`
 
-• **numPoints**: `number`
+• **segments**: `number`= `10`
 
 ## Returns
 

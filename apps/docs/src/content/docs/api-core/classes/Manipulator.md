@@ -71,7 +71,7 @@ Draw controllers
 
 ### drawHovering()
 
-> **drawHovering**(`editor`, `shape`, `e`): `void`
+> **drawHovering**(`editor`, `shape`, `e`, `thickness`): `void`
 
 Draw hovering for the shape
 
@@ -82,6 +82,8 @@ Draw hovering for the shape
 • **shape**: [`Shape`](/api-core/classes/shape/)
 
 • **e**: [`CanvasPointerEvent`](/api-core/classes/canvaspointerevent/)
+
+• **thickness**: `number`= `1.5`
 
 #### Returns
 
