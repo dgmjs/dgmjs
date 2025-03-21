@@ -34,8 +34,8 @@ function ScriptEditor({
     <div>
       <div className="mb-3">
         <TextareaField
-          cols={40}
-          rows={10}
+          cols={60}
+          rows={30}
           value={value}
           className="text-xs font-mono"
           onChange={(value) => {

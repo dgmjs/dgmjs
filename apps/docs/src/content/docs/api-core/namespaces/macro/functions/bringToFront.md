@@ -21,4 +21,4 @@ A macro to bring the shape to the front
 
 ## Source
 
-[macro.ts:626](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L626)
+[macro.ts:625](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L625)

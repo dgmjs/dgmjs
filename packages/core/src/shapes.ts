@@ -710,7 +710,7 @@ export class Shape extends Obj {
     const script = this.getScript(ScriptType.RENDER);
     if (script) {
       try {
-        evalScript({ canvas: canvas, shape: this }, script);
+        evalScript({ canvas: canvas, shape: this, geometry: geometry }, script);
       } catch (err) {
         console.error("[Script Error]", err);
       }
@@ -731,7 +731,10 @@ export class Shape extends Obj {
     const script = this.getScript(ScriptType.OUTLINE);
     if (script) {
       try {
-        this._memoOutline = evalScript({ shape: this }, script);
+        this._memoOutline = evalScript(
+          { shape: this, geometry: geometry },
+          script
+        );
       } catch (err) {
         console.error("[Script Error]", err);
       }
@@ -841,7 +844,10 @@ export class Shape extends Obj {
     const script = this.getScript(ScriptType.VIEWPORT);
     if (script) {
       try {
-        this._memoViewport = evalScript({ shape: this }, script);
+        this._memoViewport = evalScript(
+          { shape: this, geometry: geometry },
+          script
+        );
       } catch (err) {
         console.error("[Script Error]", err);
       }
@@ -3011,7 +3017,7 @@ export class Frame extends Box {
     const script = this.getScript(ScriptType.RENDER);
     if (script) {
       try {
-        evalScript({ canvas: canvas, shape: this }, script);
+        evalScript({ canvas: canvas, shape: this, geometry: geometry }, script);
       } catch (err) {
         console.error("[Script Error]", err);
       }

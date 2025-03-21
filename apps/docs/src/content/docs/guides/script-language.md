@@ -395,6 +395,7 @@ In script, you can use the following accessible objects:
 
 - [`shape`](#shape)
 - [`canvas`](#canvas)
+- [`geometry`](#geometry)
 
 ### Shape
 
@@ -487,3 +488,7 @@ The below is the available functions in `canvas` object.
 (. canvas :fillText x y text)
 (. canvas :textMetric text)
 ```
+
+### geometry
+
+See `geometry` namespace of `@dgmjs/core`.
