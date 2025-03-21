@@ -594,7 +594,6 @@ function mal_js_access(o: MalType, f: MalType, ...args: MalType[]): MalType {
   const v = o.obj[f.v];
   if (typeof v === "function") {
     const r = v.call(o.obj, ...args.map((v) => mal_to_js(v)));
-    console.log("r", r);
     return js_to_mal(r);
   } else {
     return js_to_mal(v);
