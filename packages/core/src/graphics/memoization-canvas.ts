@@ -1062,8 +1062,12 @@ class MemoizationCanvas {
   /**
    * Draw filled path
    */
+  // NOTE: roughjs not work for fillStyle is "none" for path.
   fillPath(path: SVGPath, seed: number = 1) {
-    if (this.roughness > 0 || this.fillStyle !== FillStyle.SOLID) {
+    if (
+      this.roughness > 0 ||
+      (this.fillStyle !== FillStyle.SOLID && this.fillStyle !== FillStyle.NONE)
+    ) {
       const d = pathToString(path);
       const rd = this.generator.path(d, {
         seed,
@@ -1080,7 +1084,10 @@ class MemoizationCanvas {
     } else {
       this.do.push({
         type: "fillPath",
-        fillColor: this.canvas.resolveColor(this.fillColor),
+        fillColor:
+          this.fillStyle === FillStyle.NONE
+            ? this.canvas.resolveColor("$transparent")
+            : this.canvas.resolveColor(this.fillColor),
         fillStyle: this.fillStyle,
         alpha: this.alpha,
         path,
@@ -1469,7 +1476,7 @@ class MemoizationCanvas {
           canvas.context.globalAlpha = d.alpha;
           canvas.context.beginPath();
           const pathData = pathToString(d.path);
-          const path2d = new Path2D();
+          const path2d = new Path2D(pathData);
           // inject pathData into path2d so that pseudo Context2D can draw it
           (path2d as any).pathData = pathData;
           canvas.context.fill(path2d);
