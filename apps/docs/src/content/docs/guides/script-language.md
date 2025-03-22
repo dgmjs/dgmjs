@@ -238,6 +238,9 @@ nil
 
 ;; seq
 (seq [1 2 3])        ;;=> (1 2 3)
+
+;; reverse
+(reverse [1 2 3])    ;;=> [3 2 1]
 ```
 
 ### Atom
