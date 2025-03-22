@@ -1,6 +1,7 @@
 import { parseSVG, makeAbsolute } from "svg-path-parser";
+import { arcToLineSegments } from "./utils";
+import { geometry } from "@dgmjs/core";
 
-// TODO: Need to implement all absolute commands
 export function renderSVGPath(pathData: string, context2d: any): void {
   const commands = parseSVG(pathData);
   makeAbsolute(commands);
@@ -29,7 +30,10 @@ export function renderSVGPath(pathData: string, context2d: any): void {
         );
         break;
       case "S":
-        // TODO: Implement smooth cubic bezier curve
+        // TODO: implement smooth curve
+        console.warn(
+          `[@dgmjs/pdf:svg-renderer] Smooth curve ("S") is not implemented yet`
+        );
         break;
       case "Q":
         context2d.quadraticCurveTo(
@@ -45,7 +49,22 @@ export function renderSVGPath(pathData: string, context2d: any): void {
         context2d.quadraticCurveTo(item.x0, item.y0, item.x, item.y);
         break;
       case "A":
-        // TODO: Implement elliptical arc
+        const segments = item.rx + item.ry;
+        const pts = arcToLineSegments(
+          item.x0,
+          item.y0,
+          item.rx,
+          item.ry,
+          item.xAxisRotation,
+          item.largeArc ? 1 : 0,
+          item.sweep ? 1 : 0,
+          item.x,
+          item.y,
+          segments
+        );
+        for (const pt of pts) {
+          context2d.lineTo(pt[0], pt[1]);
+        }
         break;
       case "Z":
         context2d.closePath();
