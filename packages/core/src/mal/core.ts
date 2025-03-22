@@ -502,6 +502,16 @@ function mal_seq(v: MalType) {
   );
 }
 
+function mal_reverse(list: MalType) {
+  switch (list.type) {
+    case Node.List:
+      return new MalList(list.list.toReversed());
+    case Node.Vector:
+      return new MalVector([...list.list.toReversed()]);
+  }
+  throw new Error(`unexpected symbol: ${list.type}, expected: list or vector`);
+}
+
 function mal_meta(v: MalType) {
   return v.meta || MalNil.instance;
 }
@@ -594,7 +604,6 @@ function mal_js_access(o: MalType, f: MalType, ...args: MalType[]): MalType {
   const v = o.obj[f.v];
   if (typeof v === "function") {
     const r = v.call(o.obj, ...args.map((v) => mal_to_js(v)));
-    console.log("r", r);
     return js_to_mal(r);
   } else {
     return js_to_mal(v);
@@ -827,6 +836,7 @@ export const ns: Map<MalSymbol, MalFunction> = (() => {
     map: mal_map,
     conj: mal_conj,
     seq: mal_seq,
+    reverse: mal_reverse,
     meta: mal_meta,
     "with-meta": mal_withMeta,
     atom: mal_atom,

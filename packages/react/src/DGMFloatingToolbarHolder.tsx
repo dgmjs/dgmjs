@@ -1,4 +1,4 @@
-import { Editor, Shape, geometry } from "@dgmjs/core";
+import { Doc, Editor, Page, Shape, geometry } from "@dgmjs/core";
 import { useEffect, useRef, useState } from "react";
 import { moveToAboveOrBelow } from "./utils";
 
@@ -59,7 +59,9 @@ export const DGMFloatingToolbarHolder: React.FC<
     if (editor && editor.getCurrentPage() && toolbarHolderRef.current) {
       const canvasWidth = editor.canvasElement?.offsetWidth || 0;
       const canvasHeight = editor.canvasElement?.offsetHeight || 0;
-      let visible = selection.length > 0;
+      let visible =
+        selection.length > 0 &&
+        selection.every((s) => !(s instanceof Page) && !(s instanceof Doc));
       let rect = getSelectionRectInDCS(editor);
       if (
         rect[1][0] < 0 ||
