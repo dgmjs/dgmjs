@@ -3,6 +3,7 @@ import colorString from "color-string";
 import { jsPDF } from "jspdf";
 import { parseFont } from "css-font-parser";
 import { renderSVGPath } from "./svg-renderer";
+import { arcToLineSegments, findArcToConstruction } from "./utils";
 
 /**
  * PDF context2d
@@ -33,6 +34,7 @@ export class PDFContext2D {
   _lineJoin: string;
   _font: string;
   _fontSize: number;
+  _currentPoint: number[];
   stateStack: any[];
 
   constructor(canvas: Canvas, pdf: jsPDF) {
@@ -49,6 +51,7 @@ export class PDFContext2D {
     this._lineJoin = "miter";
     this._font = "16px Loranthus";
     this._fontSize = 16;
+    this._currentPoint = [0, 0];
     this.stateStack = [];
   }
 
@@ -186,16 +189,19 @@ export class PDFContext2D {
   moveTo(x: number, y: number) {
     this._assignStyles();
     this.pdf.context2d.moveTo(x, y);
+    this._currentPoint = [x, y];
   }
 
   lineTo(x: number, y: number) {
     this._assignStyles();
     this.pdf.context2d.lineTo(x, y);
+    this._currentPoint = [x, y];
   }
 
   quadraticCurveTo(cpx: number, cpy: number, x: number, y: number) {
     this._assignStyles();
     this.pdf.context2d.quadraticCurveTo(cpx, cpy, x, y);
+    this._currentPoint = [x, y];
   }
 
   bezierCurveTo(
@@ -208,17 +214,51 @@ export class PDFContext2D {
   ) {
     this._assignStyles();
     this.pdf.context2d.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
+    this._currentPoint = [x, y];
   }
 
   arcTo(x1: number, y1: number, x2: number, y2: number, radius: number) {
     this._assignStyles();
-    // current point
-    const x0 = (this.pdf.context2d as any).ctx.lastPoint.x;
-    const y0 = (this.pdf.context2d as any).ctx.lastPoint.y;
-    console.log("current point", x0, y0);
-    // TODO: this.pdf.context2d.arcTo(x1, y1, x2, y2, radius);
-    // TODO: Use quadraticCurveTo to avoid arcTo not implemented in jsPDF
-    this.pdf.context2d.quadraticCurveTo(x1, y1, x2, y2);
+    const x0 = this._currentPoint[0];
+    const y0 = this._currentPoint[1];
+    // find center of circle and tangent points (t1, t2)
+    const result = findArcToConstruction(
+      [x0, y0],
+      [x1, y1],
+      [x2, y2],
+      radius,
+      [1000, 1000],
+      1e-4
+    );
+    // return if failed to find construction
+    if (!result[0]) return;
+    // compute arc segments
+    const t1 = result[3] as number[];
+    const t2 = result[4] as number[];
+    const xAxisRotation = 0;
+    const largeArcFlag = 0;
+    const sweepFlag = 1;
+    const segments = radius;
+    const pts = arcToLineSegments(
+      t1[0],
+      t1[1],
+      radius,
+      radius,
+      xAxisRotation,
+      largeArcFlag,
+      sweepFlag,
+      t2[0],
+      t2[1],
+      segments
+    );
+    // draw arc segments
+    this.pdf.context2d.lineTo(t1[0], t1[1]);
+    for (const pt of pts) {
+      this.pdf.context2d.lineTo(pt[0], pt[1]);
+    }
+    this.pdf.context2d.lineTo(t2[0], t2[1]);
+    // set current point to t2
+    this._currentPoint = [t2[0], t2[1]];
   }
 
   stroke(path2d: Path2D) {
