@@ -212,6 +212,10 @@ export class PDFContext2D {
 
   arcTo(x1: number, y1: number, x2: number, y2: number, radius: number) {
     this._assignStyles();
+    // current point
+    const x0 = (this.pdf.context2d as any).ctx.lastPoint.x;
+    const y0 = (this.pdf.context2d as any).ctx.lastPoint.y;
+    console.log("current point", x0, y0);
     // TODO: this.pdf.context2d.arcTo(x1, y1, x2, y2, radius);
     // TODO: Use quadraticCurveTo to avoid arcTo not implemented in jsPDF
     this.pdf.context2d.quadraticCurveTo(x1, y1, x2, y2);
