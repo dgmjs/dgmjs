@@ -1,6 +1,7 @@
 import { Page, Canvas, geometry, themeColors, Shape, Doc } from "@dgmjs/core";
 import fileSaverPkg from "file-saver";
 import { Context } from "svgcanvas";
+import { overrideSVGContext } from "./svgcanvas-override";
 
 const { saveAs } = fileSaverPkg;
 
@@ -166,12 +167,15 @@ async function getSVGImageData(
   const w = geometry.width(boundingBox);
   const h = geometry.height(boundingBox);
   const ctx = new Context(w * scale, h * scale);
+  overrideSVGContext(ctx);
+
   const pseudoCanvas: HTMLCanvasElement = {
     getContext: (contextId: string) => {
       if (contextId === "2d") return ctx;
     },
   } as HTMLCanvasElement;
   const svgCanvas = new Canvas(pseudoCanvas, 1);
+  ctx.__canvas = svgCanvas;
 
   // Initialize new SVG Canvas
   svgCanvas.origin = [-boundingBox[0][0], -boundingBox[0][1]];
