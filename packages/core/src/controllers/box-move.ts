@@ -1,5 +1,5 @@
 import { CanvasPointerEvent } from "../graphics/graphics";
-import { Shape, Box, Movable, Page, Path, Mirror } from "../shapes";
+import { Shape, Box, Movable, Page, Path, Mirror, Group } from "../shapes";
 import { Controller, Editor, Manipulator, manipulatorManager } from "../editor";
 import { drawPolylineInLCS } from "../utils/guide";
 import { Cursor } from "../graphics/const";
@@ -46,11 +46,13 @@ export class BoxMoveController extends Controller {
    * Indicates the controller is active or not
    */
   active(editor: Editor, shape: Shape): boolean {
+    // allow move the shape if shape is anchored but it's parent is Page
     return (
       editor.selection.size() === 1 &&
       editor.selection.isSelected(shape) &&
       shape.movable !== Movable.NONE &&
-      !(shape as Box).anchored
+      (!(shape as Box).anchored ||
+        ((shape as Box).anchored && shape.parent instanceof Page))
     );
   }
 
