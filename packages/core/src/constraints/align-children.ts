@@ -298,19 +298,26 @@ function constraint(
         break;
       }
       case "center": {
-        const arr = [...shape.children].filter(
-          (s) => s instanceof Box && s.visible && s.match(query)
-        );
-        const cx = shape.innerLeft + Math.round(shape.innerWidth / 2);
-        const cy = shape.innerTop + Math.round(shape.innerHeight / 2);
+        const arr = [...shape.children]
+          .sort((a: any, b: any) => a.left - b.left)
+          .filter((s) => s instanceof Box && s.visible && s.match(query));
+        const sumOfWidth = arr.reduce((acc, s) => acc + (s as Box).width, 0);
+        let lx =
+          shape.innerLeft + Math.round((shape.innerWidth - sumOfWidth) / 2);
         for (let child of arr) {
           if (child instanceof Box) {
-            const x = cx - Math.round(child.width / 2);
-            const y = cy - Math.round(child.height / 2);
-            changed = setLeft(tx, child, x) || changed;
-            changed = setTop(tx, child, y) || changed;
+            changed = setLeft(tx, child, lx) || changed;
+            lx = child.right + (args.gap ?? 0);
+            changed =
+              setVertAlign(tx, page, child, shape, args.align) || changed;
+            // fill last child
+            if (args.fillLast && child === arr[arr.length - 1]) {
+              const w = shape.innerRight - child.left;
+              changed = setWidth(tx, child, Math.max(w, 0)) || changed;
+            }
           }
         }
+        break;
       }
     }
   }
