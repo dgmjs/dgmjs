@@ -235,7 +235,7 @@ Draw memoized drawing objects
 
 #### Source
 
-[graphics/memoization-canvas.ts:1193](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1193)
+[graphics/memoization-canvas.ts:1200](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1200)
 
 ***
 
@@ -265,7 +265,7 @@ Draw Image
 
 #### Source
 
-[graphics/memoization-canvas.ts:1158](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1158)
+[graphics/memoization-canvas.ts:1165](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1165)
 
 ***
 
@@ -395,7 +395,7 @@ Draw filled path
 
 #### Source
 
-[graphics/memoization-canvas.ts:1065](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1065)
+[graphics/memoization-canvas.ts:1066](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1066)
 
 ***
 
@@ -501,7 +501,7 @@ text baseline (metric.ascent - not the top of text)
 
 #### Source
 
-[graphics/memoization-canvas.ts:1142](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1142)
+[graphics/memoization-canvas.ts:1149](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1149)
 
 ***
 
@@ -551,7 +551,7 @@ Draw a path
 
 #### Source
 
-[graphics/memoization-canvas.ts:1095](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1095)
+[graphics/memoization-canvas.ts:1102](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1102)
 
 ***
 
@@ -995,7 +995,7 @@ Taper at the end of the path value must be 0~1
 
 #### Source
 
-[graphics/memoization-canvas.ts:1109](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1109)
+[graphics/memoization-canvas.ts:1116](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1116)
 
 ***
 
@@ -1117,4 +1117,4 @@ Get Text Metric
 
 #### Source
 
-[graphics/memoization-canvas.ts:1185](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1185)
+[graphics/memoization-canvas.ts:1192](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/memoization-canvas.ts#L1192)
