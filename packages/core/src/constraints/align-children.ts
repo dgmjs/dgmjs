@@ -15,7 +15,16 @@ import {
 
 const schema = z.object({
   orient: z
-    .enum(["top", "bottom", "middle", "left", "right", "center"])
+    .enum([
+      "top",
+      "bottom",
+      "middle",
+      "left",
+      "right",
+      "center",
+      "vert-fill",
+      "horz-fill",
+    ])
     .default("top"),
   align: z
     .enum([
@@ -339,6 +348,42 @@ function constraint(
               const w = shape.innerRight - child.left;
               changed = setWidth(tx, child, Math.max(w, 0)) || changed;
             }
+          }
+        }
+        break;
+      }
+      case "vert-fill": {
+        const arr = [...shape.children]
+          .sort((a: any, b: any) => a.top - b.top)
+          .filter((s) => s instanceof Box && s.visible && s.match(query));
+        const len = arr.length;
+        let ty = shape.innerTop;
+        let h = (shape.innerHeight - args.gap * (len - 1)) / len;
+        for (let child of arr) {
+          if (child instanceof Box) {
+            changed = setTop(tx, child, ty) || changed;
+            changed = setHeight(tx, child, h) || changed;
+            ty = child.bottom + (args.gap ?? 0);
+            changed =
+              setHorzAlign(tx, page, child, shape, args.align) || changed;
+          }
+        }
+        break;
+      }
+      case "horz-fill": {
+        const arr = [...shape.children]
+          .sort((a: any, b: any) => a.left - b.left)
+          .filter((s) => s instanceof Box && s.visible && s.match(query));
+        const len = arr.length;
+        let lx = shape.innerLeft;
+        let w = (shape.innerWidth - args.gap * (len - 1)) / len;
+        for (let child of arr) {
+          if (child instanceof Box) {
+            changed = setLeft(tx, child, lx) || changed;
+            changed = setWidth(tx, child, w) || changed;
+            lx = child.right + (args.gap ?? 0);
+            changed =
+              setVertAlign(tx, page, child, shape, args.align) || changed;
           }
         }
         break;

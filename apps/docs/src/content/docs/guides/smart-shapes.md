@@ -41,7 +41,7 @@ Constraint can be used to impose specific constraints on a shape. Followings are
 
 This constraint aligns children shapes.
 
-- **orient** : `top`, `bottom`, `middle`, `left`, `right`, `center`.
+- **orient** : `top`, `bottom`, `middle`, `left`, `right`, `center`, `vert-fill`, `horz-fill`.
 - **align** : `left`, `left-outside`, `left-border`, `center`, `right`, `right-outside`, `right-border`, `top`, `top-border`, `top-outside`, `middle`, `bottom`, `bottom-border`, `bottom-outside`, `fill`.
 - **query** : Align only the matched children shapes. For example, if the query is `#compartment`, aligns only the children shapes which has `#compartment` tag. For more about query expression, see [Query](#query).
 - **gap** : A gap value among the children.
