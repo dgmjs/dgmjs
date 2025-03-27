@@ -2059,7 +2059,9 @@ export class Manipulator {
     if (!this.draggingController) {
       for (let i = this.controllers.length - 1; i >= 0; i--) {
         const cp = this.controllers[i];
-        cp.active(editor, shape) && cp.draw(editor, shape);
+        if (cp.active(editor, shape)) {
+          cp.draw(editor, shape);
+        }
       }
     }
   }

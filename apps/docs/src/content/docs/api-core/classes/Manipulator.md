@@ -91,7 +91,7 @@ Draw hovering for the shape
 
 #### Source
 
-[editor.ts:2070](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L2070)
+[editor.ts:2072](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L2072)
 
 ***
 

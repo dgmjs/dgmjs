@@ -9,4 +9,4 @@ title: "ExportImageFormat"
 
 ## Source
 
-[index.ts:9](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L9)
+[index.ts:10](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L10)

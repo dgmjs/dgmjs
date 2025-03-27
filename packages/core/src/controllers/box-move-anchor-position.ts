@@ -1,5 +1,5 @@
 import * as geometry from "../graphics/geometry";
-import { Shape, Box, Movable } from "../shapes";
+import { Shape, Box, Movable, Page, Group } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import { Cursor, MAGNET_THRESHOLD } from "../graphics/const";
 import { ccs2lcs, lcs2ccs } from "../graphics/utils";
@@ -51,6 +51,9 @@ export class BoxMoveAnchorPositionController extends Controller {
       shape instanceof Box &&
       shape.movable !== Movable.NONE &&
       shape.anchored &&
+      shape.parent instanceof Shape &&
+      !(shape.parent instanceof Page) &&
+      !(shape.parent instanceof Group) &&
       !editor.duplicatedDragging
     );
   }

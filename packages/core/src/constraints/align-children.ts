@@ -14,7 +14,18 @@ import {
 } from "../macro";
 
 const schema = z.object({
-  orient: z.enum(["top", "bottom", "left", "right", "center"]).default("top"),
+  orient: z
+    .enum([
+      "top",
+      "bottom",
+      "middle",
+      "left",
+      "right",
+      "center",
+      "vert-fill",
+      "horz-fill",
+    ])
+    .default("top"),
   align: z
     .enum([
       "left",
@@ -195,7 +206,7 @@ function setVertAlign(
 
 /**
  * Align children
- * - args.orient {"top" | "bottom" | "left" | "right"}
+ * - args.orient {"top" | "bottom" | "middle" | "left" | "right" | "center"}
  * - args.align {"left" | "left-outside" | "left-border" | "center" | "right"
  *   | "right-outside" | "right-border" | "top" | "top-outside" | "top-border"
  *   | "middle" | "bottom" | "bottom-outside" | "bottom-border" | "fill"}
@@ -256,6 +267,28 @@ function constraint(
         }
         break;
       }
+      case "middle": {
+        const arr = [...shape.children]
+          .sort((a: any, b: any) => a.top - b.top)
+          .filter((s) => s instanceof Box && s.visible && s.match(query));
+        const sumOfHeight = arr.reduce((acc, s) => acc + (s as Box).height, 0);
+        let ty =
+          shape.innerTop + Math.round((shape.innerHeight - sumOfHeight) / 2);
+        for (let child of arr) {
+          if (child instanceof Box) {
+            changed = setTop(tx, child, ty) || changed;
+            ty = child.bottom + (args.gap ?? 0);
+            changed =
+              setHorzAlign(tx, page, child, shape, args.align) || changed;
+            // fill last child
+            if (args.fillLast && child === arr[arr.length - 1]) {
+              const h = shape.innerBottom - child.top;
+              changed = setHeight(tx, child, Math.max(h, 0)) || changed;
+            }
+          }
+        }
+        break;
+      }
       case "left": {
         const arr = [...shape.children]
           .sort((a: any, b: any) => a.left - b.left)
@@ -298,19 +331,62 @@ function constraint(
         break;
       }
       case "center": {
-        const arr = [...shape.children].filter(
-          (s) => s instanceof Box && s.visible && s.match(query)
-        );
-        const cx = shape.innerLeft + Math.round(shape.innerWidth / 2);
-        const cy = shape.innerTop + Math.round(shape.innerHeight / 2);
+        const arr = [...shape.children]
+          .sort((a: any, b: any) => a.left - b.left)
+          .filter((s) => s instanceof Box && s.visible && s.match(query));
+        const sumOfWidth = arr.reduce((acc, s) => acc + (s as Box).width, 0);
+        let lx =
+          shape.innerLeft + Math.round((shape.innerWidth - sumOfWidth) / 2);
         for (let child of arr) {
           if (child instanceof Box) {
-            const x = cx - Math.round(child.width / 2);
-            const y = cy - Math.round(child.height / 2);
-            changed = setLeft(tx, child, x) || changed;
-            changed = setTop(tx, child, y) || changed;
+            changed = setLeft(tx, child, lx) || changed;
+            lx = child.right + (args.gap ?? 0);
+            changed =
+              setVertAlign(tx, page, child, shape, args.align) || changed;
+            // fill last child
+            if (args.fillLast && child === arr[arr.length - 1]) {
+              const w = shape.innerRight - child.left;
+              changed = setWidth(tx, child, Math.max(w, 0)) || changed;
+            }
           }
         }
+        break;
+      }
+      case "vert-fill": {
+        const arr = [...shape.children]
+          .sort((a: any, b: any) => a.top - b.top)
+          .filter((s) => s instanceof Box && s.visible && s.match(query));
+        const len = arr.length;
+        let ty = shape.innerTop;
+        let h = (shape.innerHeight - args.gap * (len - 1)) / len;
+        for (let child of arr) {
+          if (child instanceof Box) {
+            changed = setTop(tx, child, ty) || changed;
+            changed = setHeight(tx, child, h) || changed;
+            ty = child.bottom + (args.gap ?? 0);
+            changed =
+              setHorzAlign(tx, page, child, shape, args.align) || changed;
+          }
+        }
+        break;
+      }
+      case "horz-fill": {
+        const arr = [...shape.children]
+          .sort((a: any, b: any) => a.left - b.left)
+          .filter((s) => s instanceof Box && s.visible && s.match(query));
+        const len = arr.length;
+        let lx = shape.innerLeft;
+        let w = (shape.innerWidth - args.gap * (len - 1)) / len;
+        for (let child of arr) {
+          if (child instanceof Box) {
+            changed = setLeft(tx, child, lx) || changed;
+            changed = setWidth(tx, child, w) || changed;
+            lx = child.right + (args.gap ?? 0);
+            changed =
+              setVertAlign(tx, page, child, shape, args.align) || changed;
+          }
+        }
+        break;
       }
     }
   }
