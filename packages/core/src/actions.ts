@@ -297,7 +297,7 @@ export class Actions {
   /**
    * Paste
    */
-  async paste(page?: Page) {
+  async paste(page?: Page): Promise<Shape[]> {
     const currentPage = page ?? this.editor.getCurrentPage();
     if (currentPage) {
       const canvas = this.editor.canvas;
@@ -305,7 +305,7 @@ export class Actions {
       const data = await clipboard.read(outerRefMapExtractor);
       const center = this.editor.getCenter();
 
-      // paste shapes in clipboard
+      // paste shapes from clipboard
       if (Array.isArray(data.objs)) {
         const shapes = data.objs as Shape[];
         const boundingRect = shapes
@@ -325,7 +325,7 @@ export class Actions {
         });
         this.editor.transform.endAction();
         this.editor.selection.select(shapes);
-        return;
+        return shapes;
       }
 
       // paste image in clipboard
@@ -338,7 +338,7 @@ export class Actions {
         });
         this.editor.transform.endAction();
         this.editor.selection.select([shape]);
-        return;
+        return [shape];
       }
 
       // paste text in clipboard
@@ -354,9 +354,10 @@ export class Actions {
         });
         this.editor.transform.endAction();
         this.editor.selection.select([shape]);
-        return;
+        return [shape];
       }
     }
+    return [];
   }
 
   /**
@@ -440,7 +441,7 @@ export class Actions {
   /**
    * Group selected shapes
    */
-  group(shapes?: Shape[]) {
+  group(shapes?: Shape[]): Group | null {
     const doc = this.editor.getDoc();
     const page = this.editor.getCurrentPage();
     if (page) {
@@ -453,8 +454,12 @@ export class Actions {
         resolveAllConstraints(tx, page, this.editor.canvas);
       });
       this.editor.transform.endAction();
-      if (group) this.editor.selection.select([group]);
+      if (group) {
+        this.editor.selection.select([group]);
+        return group;
+      }
     }
+    return null;
   }
 
   /**
