@@ -17,7 +17,7 @@ export interface CanvasState {
   roughness: number;
 }
 
-interface CanvasTextMetric {
+export interface CanvasTextMetric {
   width: number;
   height: number;
   ascent: number;
@@ -26,7 +26,7 @@ interface CanvasTextMetric {
   actualDescent: number;
 }
 
-type SVGPathCommand =
+export type SVGPathCommand =
   | "M"
   | "m"
   | "L"
@@ -48,20 +48,24 @@ type SVGPathCommand =
   | "Z"
   | "z";
 
-type SVGPathItem = [SVGPathCommand, ...number[]];
-type SVGPath = SVGPathItem[];
+export type SVGPathItem = [SVGPathCommand, ...number[]];
+export type SVGPath = SVGPathItem[];
 
-const FillStyle = {
+export const FillStyle = {
   NONE: "none",
   SOLID: "solid",
   HACHURE: "hachure",
   CROSS_HATCH: "cross-hatch",
 } as const;
 
+export type FillStyleEnum = (typeof FillStyle)[keyof typeof FillStyle];
+
+export const FillStyleLiterals = Object.values(FillStyle) as string[];
+
 /**
  * Convert path to a string (SVG path's d property)
  */
-function pathToString(path: SVGPath): string {
+export function pathToString(path: SVGPath): string {
   let d: string[] = [];
   for (let i = 0; i < path.length; i++) {
     const item = path[i];
@@ -176,7 +180,7 @@ function pathToString(path: SVGPath): string {
 /**
  * Canvas
  */
-class Canvas {
+export class Canvas {
   element: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
   colorVariables: Record<string, string>;
@@ -1435,7 +1439,7 @@ class Canvas {
 /**
  * CanvasPointerEvent
  */
-class CanvasPointerEvent {
+export class CanvasPointerEvent {
   /**
    * X-position in CCS (Canvas coord-system)
    */
@@ -1477,14 +1481,3 @@ class CanvasPointerEvent {
     this.touchDistance = e.touchDistance || 0;
   }
 }
-
-export {
-  FillStyle,
-  SVGPathCommand,
-  SVGPathItem,
-  SVGPath,
-  pathToString,
-  Canvas,
-  CanvasTextMetric,
-  CanvasPointerEvent,
-};
