@@ -212,7 +212,13 @@ export class Actions {
           case "text":
             if (typeof value === "string") {
               for (const s of objs) {
-                tx.assign(s, key, convertStringToTextNode(value));
+                if (s instanceof Box) {
+                  tx.assign(
+                    s,
+                    key,
+                    convertStringToTextNode(value, s.horzAlign)
+                  );
+                }
               }
             }
             break;
