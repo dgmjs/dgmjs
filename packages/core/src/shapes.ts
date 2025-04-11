@@ -31,8 +31,6 @@ export const ScriptType = {
 
 export type ScriptTypeEnum = (typeof ScriptType)[keyof typeof ScriptType];
 
-export const ScriptTypeLiterals = Object.values(ScriptType) as string[];
-
 export interface Constraint {
   id: string;
   [key: string]: any; // allow all additional fields
@@ -75,8 +73,6 @@ export const Movable = {
 
 export type MovableEnum = (typeof Movable)[keyof typeof Movable];
 
-export const MovableLiterals = Object.values(Movable) as string[];
-
 export const Sizable = {
   NONE: "none",
   HORZ: "horz",
@@ -87,8 +83,6 @@ export const Sizable = {
 
 export type SizableEnum = (typeof Sizable)[keyof typeof Sizable];
 
-export const SizableLiterals = Object.values(Sizable) as string[];
-
 export const BorderPosition = {
   CENTER: "center",
   INSIDE: "inside",
@@ -98,16 +92,12 @@ export const BorderPosition = {
 export type BorderPositionEnum =
   (typeof BorderPosition)[keyof typeof BorderPosition];
 
-export const BorderPositionLiterals = Object.values(BorderPosition) as string[];
-
 export const LineType = {
   STRAIGHT: "straight",
   CURVE: "curve",
 } as const;
 
 export type LineTypeEnum = (typeof LineType)[keyof typeof LineType];
-
-export const LineTypeLiterals = Object.values(LineType) as string[];
 
 export const LineEndType = {
   FLAT: "flat",
@@ -135,8 +125,6 @@ export const LineEndType = {
 
 export type LineEndTypeEnum = (typeof LineEndType)[keyof typeof LineEndType];
 
-export const LineEndTypeLiterals = Object.values(LineEndType) as string[];
-
 export const HorzAlign = {
   LEFT: "left",
   RIGHT: "right",
@@ -145,8 +133,6 @@ export const HorzAlign = {
 
 export type HorzAlignEnum = (typeof HorzAlign)[keyof typeof HorzAlign];
 
-export const HorzAlignLiterals = Object.values(HorzAlign) as string[];
-
 export const VertAlign = {
   TOP: "top",
   MIDDLE: "middle",
@@ -154,8 +140,6 @@ export const VertAlign = {
 } as const;
 
 export type VertAlignEnum = (typeof VertAlign)[keyof typeof VertAlign];
-
-export const VertAlignLiterals = Object.values(VertAlign) as string[];
 
 /**
  * Shape object.

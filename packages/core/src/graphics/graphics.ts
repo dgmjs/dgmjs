@@ -60,8 +60,6 @@ export const FillStyle = {
 
 export type FillStyleEnum = (typeof FillStyle)[keyof typeof FillStyle];
 
-export const FillStyleLiterals = Object.values(FillStyle) as string[];
-
 /**
  * Convert path to a string (SVG path's d property)
  */
