@@ -57,11 +57,11 @@ const PageView: React.FC<PageViewProps> = ({
             className="w-7 h-7"
             onClick={() => {
               window.editor.actions.duplicatePage(
-                page as Page,
-                idx + 1,
-                (page: Page) => {
-                  page.name = `Copy of ${page.name}`;
-                }
+                page as Page
+                // idx + 1
+                // (page: Page) => {
+                //   page.name = `Copy of ${page.name}`;
+                // }
               );
             }}
           >

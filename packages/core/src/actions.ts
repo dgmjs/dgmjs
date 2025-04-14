@@ -87,14 +87,20 @@ export class Actions {
 
   /**
    * Add a page
+   * @param pageProps - The properties of the page to add
+   * @param position - The position to add the page at. If not provided, the page will be added at the end
+   * @returns The added page
    */
-  addPage(position?: number): Page {
+  addPage(pageProps?: Partial<Page>, position?: number): Page {
     const pages = this.editor.getPages();
     position = position ?? pages.length;
     const prevPage = pages[position - 1] ?? null;
     const page = new Page();
     page.size = prevPage?.size ?? null; // set size to the previous page's size
     page.name = `Page ${position + 1}`;
+    if (pageProps) {
+      Object.assign(page, pageProps);
+    }
     this.editor.transform.startAction(ActionKind.ADD_PAGE);
     this.editor.transform.transact((tx) => {
       addPage(tx, this.editor.getDoc(), page);
@@ -109,8 +115,9 @@ export class Actions {
 
   /**
    * Remove a page
+   * @param page - The page to remove
    */
-  removePage(page: Page) {
+  removePage(page: Page): void {
     this.editor.transform.startAction(ActionKind.REMOVE_PAGE);
     this.editor.transform.transact((tx) => {
       removePage(tx, page);
@@ -120,22 +127,30 @@ export class Actions {
 
   /**
    * Reorder a page
+   * @param page - The page to reorder
+   * @param position - The new position of the page
+   * @returns The reordered page
    */
-  reorderPage(page: Page, position: number) {
+  reorderPage(page: Page, position: number): Page {
     this.editor.transform.startAction(ActionKind.REORDER_PAGE);
     this.editor.transform.transact((tx) => {
       reorderPage(tx, page, position);
     });
     this.editor.transform.endAction();
+    return page;
   }
 
   /**
    * Duplicate a page
+   * @param page - The page to duplicate
+   * @param pageProps - The properties of the duplicated page
+   * @param position - The position to add the duplicated page at. If not provided, the page will be added at the next of the original page
+   * @returns The duplicated page
    */
   duplicatePage(
     page: Page,
-    position: number,
-    initializer?: (page: Page) => void
+    pageProps?: Partial<Page>,
+    position?: number
   ): Page {
     const buffer: any[] = serialize([page]);
     const copied = deserialize(
@@ -143,11 +158,14 @@ export class Actions {
       buffer,
       outerRefMapExtractor
     )[0] as Page;
-    if (initializer) initializer(copied);
+    if (pageProps) {
+      Object.assign(copied, pageProps);
+    }
+    const originPosition = this.editor.getPages().indexOf(page);
     this.editor.transform.startAction(ActionKind.DUPLICATE_PAGE);
     this.editor.transform.transact((tx) => {
       addPage(tx, this.editor.getDoc(), copied);
-      reorderPage(tx, copied, position);
+      reorderPage(tx, copied, position ?? originPosition + 1);
     });
     this.editor.transform.endAction();
     this.editor.setCurrentPage(copied);
@@ -181,6 +199,9 @@ export class Actions {
 
   /**
    * Update obj properties
+   * @param values - The properties to update
+   * @param objs - The shapes to update. If not provided, the selected shapes will be updated
+   * @returns The updated shapes
    */
   update(values: ShapeProps, objs?: Obj[]) {
     const page = this.editor.getCurrentPage();
@@ -267,12 +288,14 @@ export class Actions {
       resolveAllConstraints(tx, page, this.editor.canvas);
     });
     this.editor.transform.endAction();
+    return objs;
   }
 
   /**
    * Remove selected shapes
+   * @param shapes - The shapes to remove. If not provided, the selected shapes will be removed
    */
-  remove(shapes?: Shape[]) {
+  remove(shapes?: Shape[]): void {
     const doc = this.editor.getDoc();
     const page = this.editor.getCurrentPage();
     if (!(page instanceof Page)) throw new Error("No page found");
@@ -288,6 +311,8 @@ export class Actions {
 
   /**
    * Copy selected shapes
+   * @param shapes - The shapes to copy. If not provided, the selected shapes will be copied
+   * @returns The copied shapes
    */
   async copy(shapes?: Shape[]) {
     shapes = shapes ?? this.editor.selection.getShapes();
@@ -295,10 +320,12 @@ export class Actions {
     await clipboard.write({
       objs: shapes,
     });
+    return shapes;
   }
 
   /**
    * Cut selected shapes
+   * @param shapes - The shapes to cut. If not provided, the selected shapes will be cut
    */
   async cut(shapes?: Shape[]) {
     const doc = this.editor.getDoc();
@@ -315,10 +342,13 @@ export class Actions {
     });
     this.editor.transform.endAction();
     this.editor.selection.deselectAll();
+    return shapes;
   }
 
   /**
    * Paste
+   * @param page - The page to paste the shapes into. If not provided, the shapes will be pasted into the current page
+   * @returns The pasted shapes
    */
   async paste(page?: Page): Promise<Shape[]> {
     const currentPage = page ?? this.editor.getCurrentPage();
@@ -377,6 +407,7 @@ export class Actions {
       this.editor.selection.select([shape]);
       return [shape];
     }
+
     return [];
   }
 
@@ -430,15 +461,19 @@ export class Actions {
 
   /**
    * Move selected shapes
+   * @param dx - The horizontal distance to move the shapes
+   * @param dy - The vertical distance to move the shapes
+   * @param shapes - The shapes to move. If not provided, the selected shapes will be moved
+   * @returns The moved shapes
    */
-  move(dx: number, dy: number, shapes?: Shape[]) {
+  move(dx: number, dy: number, shapes?: Shape[]): Shape[] {
     const page = this.editor.getCurrentPage();
     if (!(page instanceof Page)) throw new Error("No page found");
     shapes = shapes ?? this.editor.selection.getShapes();
     if (shapes.length > 0) {
       this.editor.transform.startAction(ActionKind.MOVE);
       this.editor.transform.transact((tx) => {
-        if (shapes!.every((s) => s instanceof Box && s.anchored)) {
+        if (shapes.every((s) => s instanceof Box && s.anchored)) {
           for (let s of shapes!) {
             if (s instanceof Box && s.anchored) {
               const anchorPoint = geometry.getPointOnPath(
@@ -462,10 +497,13 @@ export class Actions {
       });
       this.editor.transform.endAction();
     }
+    return shapes;
   }
 
   /**
    * Group selected shapes
+   * @param shapes - The shapes to group. If not provided, the selected shapes will be grouped
+   * @returns The created group
    */
   group(shapes?: Shape[]): Group | null {
     const doc = this.editor.getDoc();
@@ -489,8 +527,9 @@ export class Actions {
 
   /**
    * Ungroup selected shapes
+   * @param shapes - The shapes to ungroup. If not provided, the selected shapes will be ungrouped
    */
-  ungroup(shapes?: Shape[]) {
+  ungroup(shapes?: Shape[]): void {
     const doc = this.editor.getDoc();
     const page = this.editor.getCurrentPage();
     if (!(page instanceof Page)) throw new Error("No page found");
@@ -511,8 +550,10 @@ export class Actions {
 
   /**
    * Bring selected shapes to front
+   * @param shapes - The shapes to bring to front. If not provided, the selected shapes will be brought to front
+   * @returns The shapes that were brought to front
    */
-  bringToFront(shapes?: Shape[]) {
+  bringToFront(shapes?: Shape[]): Shape[] {
     const page = this.editor.getCurrentPage();
     if (!(page instanceof Page)) throw new Error("No page found");
     shapes = shapes ?? this.editor.selection.getShapes();
@@ -526,12 +567,15 @@ export class Actions {
       });
       this.editor.transform.endAction();
     }
+    return shapes;
   }
 
   /**
    * Send selected shapes to back
+   * @param shapes - The shapes to send to back. If not provided, the selected shapes will be sent to back
+   * @returns The shapes that were sent to back
    */
-  sendToBack(shapes?: Shape[]) {
+  sendToBack(shapes?: Shape[]): Shape[] {
     const page = this.editor.getCurrentPage();
     if (!(page instanceof Page)) throw new Error("No page found");
     shapes = shapes ?? this.editor.selection.getShapes();
@@ -545,12 +589,15 @@ export class Actions {
       });
       this.editor.transform.endAction();
     }
+    return shapes;
   }
 
   /**
    * Bring selected shapes forward
+   * @param shapes - The shapes to bring forward. If not provided, the selected shapes will be brought forward
+   * @returns The shapes that were brought forward
    */
-  bringForward(shapes?: Shape[]) {
+  bringForward(shapes?: Shape[]): Shape[] {
     const page = this.editor.getCurrentPage();
     if (!(page instanceof Page)) throw new Error("No page found");
     shapes = shapes ?? this.editor.selection.getShapes();
@@ -564,12 +611,15 @@ export class Actions {
       });
       this.editor.transform.endAction();
     }
+    return shapes;
   }
 
   /**
    * Send selected shapes backward
+   * @param shapes - The shapes to send backward. If not provided, the selected shapes will be sent backward
+   * @returns The shapes that were sent backward
    */
-  sendBackward(shapes?: Shape[]) {
+  sendBackward(shapes?: Shape[]): Shape[] {
     const page = this.editor.getCurrentPage();
     if (!(page instanceof Page)) throw new Error("No page found");
     shapes = shapes ?? this.editor.selection.getShapes();
@@ -583,12 +633,15 @@ export class Actions {
       });
       this.editor.transform.endAction();
     }
+    return shapes;
   }
 
   /**
    * Align selected shapes to left
+   * @param shapes - The shapes to align. If not provided, the selected shapes will be aligned
+   * @returns The shapes that were aligned
    */
-  alignLeft(shapes?: Shape[]) {
+  alignLeft(shapes?: Shape[]): Shape[] {
     const page = this.editor.getCurrentPage();
     if (!(page instanceof Page)) throw new Error("No page found");
     shapes = shapes ?? this.editor.selection.getShapes();
@@ -610,12 +663,15 @@ export class Actions {
       });
       this.editor.transform.endAction();
     }
+    return shapes;
   }
 
   /**
    * Align selected shapes to right
+   * @param shapes - The shapes to align. If not provided, the selected shapes will be aligned
+   * @returns The shapes that were aligned
    */
-  alignRight(shapes?: Shape[]) {
+  alignRight(shapes?: Shape[]): Shape[] {
     const page = this.editor.getCurrentPage();
     if (!(page instanceof Page)) throw new Error("No page found");
     shapes = shapes ?? this.editor.selection.getShapes();
@@ -637,12 +693,15 @@ export class Actions {
       });
       this.editor.transform.endAction();
     }
+    return shapes;
   }
 
   /**
    * Align selected shapes to horizontally center
+   * @param shapes - The shapes to align. If not provided, the selected shapes will be aligned
+   * @returns The shapes that were aligned
    */
-  alignCenter(shapes?: Shape[]) {
+  alignCenter(shapes?: Shape[]): Shape[] {
     const page = this.editor.getCurrentPage();
     if (!(page instanceof Page)) throw new Error("No page found");
     shapes = shapes ?? this.editor.selection.getShapes();
@@ -669,12 +728,15 @@ export class Actions {
       });
       this.editor.transform.endAction();
     }
+    return shapes;
   }
 
   /**
    * Align selected shapes to top
+   * @param shapes - The shapes to align. If not provided, the selected shapes will be aligned
+   * @returns The shapes that were aligned
    */
-  alignTop(shapes?: Shape[]) {
+  alignTop(shapes?: Shape[]): Shape[] {
     const page = this.editor.getCurrentPage();
     if (!(page instanceof Page)) throw new Error("No page found");
     shapes = shapes ?? this.editor.selection.getShapes();
@@ -696,12 +758,15 @@ export class Actions {
       });
       this.editor.transform.endAction();
     }
+    return shapes;
   }
 
   /**
    * Align selected shapes to bottom
+   * @param shapes - The shapes to align. If not provided, the selected shapes will be aligned
+   * @returns The shapes that were aligned
    */
-  alignBottom(shapes?: Shape[]) {
+  alignBottom(shapes?: Shape[]): Shape[] {
     const page = this.editor.getCurrentPage();
     if (!(page instanceof Page)) throw new Error("No page found");
     shapes = shapes ?? this.editor.selection.getShapes();
@@ -723,12 +788,15 @@ export class Actions {
       });
       this.editor.transform.endAction();
     }
+    return shapes;
   }
 
   /**
    * Align selected shapes to vertically middle
+   * @param shapes - The shapes to align. If not provided, the selected shapes will be aligned
+   * @returns The shapes that were aligned
    */
-  alignMiddle(shapes?: Shape[]) {
+  alignMiddle(shapes?: Shape[]): Shape[] {
     const page = this.editor.getCurrentPage();
     if (!(page instanceof Page)) throw new Error("No page found");
     shapes = shapes ?? this.editor.selection.getShapes();
@@ -755,12 +823,15 @@ export class Actions {
       });
       this.editor.transform.endAction();
     }
+    return shapes;
   }
 
   /**
    * Align selected shapes horizontally with space around
+   * @param shapes - The shapes to align. If not provided, the selected shapes will be aligned
+   * @returns The shapes that were aligned
    */
-  alignHorizontalSpaceAround(shapes?: Shape[]) {
+  alignHorizontalSpaceAround(shapes?: Shape[]): Shape[] {
     const page = this.editor.getCurrentPage();
     if (!(page instanceof Page)) throw new Error("No page found");
     shapes = shapes ?? this.editor.selection.getShapes();
@@ -795,12 +866,15 @@ export class Actions {
       });
       this.editor.transform.endAction();
     }
+    return shapes;
   }
 
   /**
    * Align selected shapes vertically with space around
+   * @param shapes - The shapes to align. If not provided, the selected shapes will be aligned
+   * @returns The shapes that were aligned
    */
-  alignVerticalSpaceAround(shapes?: Shape[]) {
+  alignVerticalSpaceAround(shapes?: Shape[]): Shape[] {
     const page = this.editor.getCurrentPage();
     if (!(page instanceof Page)) throw new Error("No page found");
     shapes = shapes ?? this.editor.selection.getShapes();
@@ -837,5 +911,6 @@ export class Actions {
       });
       this.editor.transform.endAction();
     }
+    return shapes;
   }
 }
