@@ -501,11 +501,12 @@ export class Actions {
   }
 
   /**
-   * Group selected shapes
+   * Group given shapes.
    * @param shapes - The shapes to group. If not provided, the selected shapes will be grouped
+   * @param parent - The parent shape to insert the group into. If not provided, the group will be inserted into the current page
    * @returns The created group
    */
-  group(shapes?: Shape[]): Group | null {
+  group(shapes?: Shape[], parent?: Shape): Group | null {
     const doc = this.editor.getDoc();
     const page = this.editor.getCurrentPage();
     if (!(page instanceof Page)) throw new Error("No page found");
@@ -513,7 +514,7 @@ export class Actions {
     let group: Group | null = null;
     this.editor.transform.startAction(ActionKind.GROUP);
     this.editor.transform.transact((tx) => {
-      groupShapes(tx, doc, page, this.editor.canvas, shapes!);
+      groupShapes(tx, doc, page, this.editor.canvas, shapes!, parent);
       group = tx.recentlyAppendedObj as Group;
       resolveAllConstraints(tx, page, this.editor.canvas);
     });
@@ -526,7 +527,7 @@ export class Actions {
   }
 
   /**
-   * Ungroup selected shapes
+   * Ungroup given groups.
    * @param shapes - The shapes to ungroup. If not provided, the selected shapes will be ungrouped
    */
   ungroup(shapes?: Shape[]): void {

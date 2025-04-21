@@ -563,13 +563,21 @@ export function deleteShapes(
 
 /**
  * A macro to create a group of shapes
+ * @param tx - transaction
+ * @param doc - document
+ * @param page - page
+ * @param canvas - canvas
+ * @param shapes - shapes to be grouped
+ * @param parent - parent shape to contain the group
+ * @returns true if changed
  */
 export function groupShapes(
   tx: Transaction,
   doc: Doc,
   page: Page,
   canvas: Canvas,
-  shapes: Shape[]
+  shapes: Shape[],
+  parent?: Shape
 ): boolean {
   let changed = false;
   const box = getAllBoundingRect(canvas, shapes);
@@ -580,7 +588,7 @@ export function groupShapes(
     group.width = geometry.width(box);
     group.height = geometry.height(box);
     changed = tx.appendObj(group) || changed;
-    changed = changeParent(tx, group, page) || changed;
+    changed = changeParent(tx, group, parent ?? page) || changed;
     page
       ?.traverseDepthFirstSequence()
       .reverse()
