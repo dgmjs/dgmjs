@@ -130,7 +130,7 @@ export class Obj {
    * Find a shape along with the parent-chain
    */
   findParent(pred: (obj: Obj) => boolean): Obj | null {
-    if (this.parent) {
+    if (this.parent instanceof Obj) {
       return pred(this.parent) ? this.parent : this.parent.findParent(pred);
     }
     return null;
