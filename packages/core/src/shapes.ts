@@ -20,7 +20,7 @@ import { Transaction } from "./core/transaction";
 import { MemoizationCanvas } from "./graphics/memoization-canvas";
 import { hashStringToNumber } from "./std/id";
 import { themeColors } from "./colors";
-import { getAllViewport } from "./utils/shape-utils";
+import { cut, cutPoint, getAllViewport } from "./utils/shape-utils";
 import { renderVGElement, VGElement } from "./graphics/vector-graphic";
 
 export const ScriptType = {
@@ -434,11 +434,11 @@ export class Shape extends Obj {
     this.setJson(json, "containableFilter", this.containableFilter, "");
     this.setJson(json, "movableParentFilter", this.movableParentFilter, "");
     this.setJson(json, "connectable", this.connectable, true);
-    this.setJson(json, "left", this.left, 0);
-    this.setJson(json, "top", this.top, 0);
-    this.setJson(json, "width", this.width, 0);
-    this.setJson(json, "height", this.height, 0);
-    this.setJson(json, "rotate", this.rotate, 0);
+    this.setJson(json, "left", cut(this.left), 0);
+    this.setJson(json, "top", cut(this.top), 0);
+    this.setJson(json, "width", cut(this.width), 0);
+    this.setJson(json, "height", cut(this.height), 0);
+    this.setJson(json, "rotate", cut(this.rotate), 0);
     this.setJson(json, "strokeColor", this.strokeColor, "$foreground");
     this.setJson(json, "strokeWidth", this.strokeWidth, 1);
     this.setJson(json, "strokePattern", this.strokePattern, []);
@@ -453,7 +453,7 @@ export class Shape extends Obj {
     this.setJson(json, "roughness", this.roughness, 0);
     this.setJson(json, "shadow", this.shadow, false);
     this.setJson(json, "shadowColor", this.shadowColor, "$foreground");
-    this.setJson(json, "shadowOffset", this.shadowOffset, [0, 0]);
+    this.setJson(json, "shadowOffset", cutPoint(this.shadowOffset), [0, 0]);
     this.setJson(json, "link", this.link, "");
     this.setJson(
       json,
@@ -1423,9 +1423,9 @@ export class Box extends Shape {
     this.setJson(json, "borders", this.borders, [true, true, true, true]);
     this.setJson(json, "borderPosition", this.borderPosition, "center");
     this.setJson(json, "anchored", this.anchored, false);
-    this.setJson(json, "anchorAngle", this.anchorAngle, 0);
-    this.setJson(json, "anchorLength", this.anchorLength, 0);
-    this.setJson(json, "anchorPosition", this.anchorPosition, 0.5);
+    this.setJson(json, "anchorAngle", cut(this.anchorAngle), 0);
+    this.setJson(json, "anchorLength", cut(this.anchorLength), 0);
+    this.setJson(json, "anchorPosition", cut(this.anchorPosition, 3), 0.5);
     this.setJson(json, "textEditable", this.textEditable, true);
     this.setJson(
       json,
@@ -1864,7 +1864,12 @@ export class Path extends Shape {
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
     this.setJson(json, "pathEditable", this.pathEditable, true);
-    this.setJson(json, "path", this.path, []);
+    this.setJson(
+      json,
+      "path",
+      this.path.map((p) => cutPoint(p)),
+      []
+    );
     return json;
   }
 
@@ -2669,8 +2674,8 @@ export class Connector extends Line {
     const json = super.toJSON(recursive, keepRefs);
     this.setJson(json, "head", this.head ? this.head.id : null, null);
     this.setJson(json, "tail", this.tail ? this.tail.id : null, null);
-    this.setJson(json, "headAnchor", this.headAnchor, [0.5, 0.5]);
-    this.setJson(json, "tailAnchor", this.tailAnchor, [0.5, 0.5]);
+    this.setJson(json, "headAnchor", cutPoint(this.headAnchor, 3), [0.5, 0.5]);
+    this.setJson(json, "tailAnchor", cutPoint(this.tailAnchor, 3), [0.5, 0.5]);
     this.setJson(json, "headMargin", this.headMargin, 0);
     this.setJson(json, "tailMargin", this.tailMargin, 0);
     if (keepRefs) {
