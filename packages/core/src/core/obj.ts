@@ -20,12 +20,34 @@ export class Obj {
     this.children = [];
   }
 
+  /**
+   * Set a field in the JSON object only if the value is defined and not equal to the default value.
+   */
+  setJson(json: any, field: string, value: any, defaultValue: any) {
+    if (typeof value !== "undefined") {
+      const isDefault = JSON.stringify(value) === JSON.stringify(defaultValue);
+      if (!isDefault) {
+        json[field] = structuredClone(value);
+      }
+    }
+  }
+
+  /**
+   * Get a field from the JSON object, return defaultValue if the field is not defined.
+   */
+  getJson(json: any, field: string, defaultValue: any) {
+    if (typeof json[field] !== "undefined") {
+      return json[field];
+    }
+    return defaultValue;
+  }
+
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json: any = {};
     json.id = this.id;
     json.type = this.type;
     json.parent = this.parent ? this.parent.id : null;
-    if (recursive) {
+    if (recursive && this.children.length > 0) {
       json.children = this.children.map((c) => c.toJSON(recursive));
     }
     if (keepRefs) {

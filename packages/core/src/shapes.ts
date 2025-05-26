@@ -379,7 +379,7 @@ export class Shape extends Obj {
     this.movable = Movable.FREE;
     this.sizable = Sizable.FREE;
     this.rotatable = true;
-    this.containable = true;
+    this.containable = false;
     this.containableFilter = "";
     this.movableParentFilter = "";
     this.connectable = true;
@@ -421,44 +421,49 @@ export class Shape extends Obj {
    */
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
-    json.name = this.name;
-    json.description = this.description;
-    json.proto = this.proto;
-    json.tags = structuredClone(this.tags);
-    json.enable = this.enable;
-    json.visible = this.visible;
-    json.movable = this.movable;
-    json.sizable = this.sizable;
-    json.rotatable = this.rotatable;
-    json.containable = this.containable;
-    json.containableFilter = this.containableFilter;
-    json.movableParentFilter = this.movableParentFilter;
-    json.connectable = this.connectable;
-    json.left = this.left;
-    json.top = this.top;
-    json.width = this.width;
-    json.height = this.height;
-    json.rotate = this.rotate;
-    json.strokeColor = this.strokeColor;
-    json.strokeWidth = this.strokeWidth;
-    json.strokePattern = structuredClone(this.strokePattern);
-    json.fillColor = this.fillColor;
-    json.fillStyle = this.fillStyle;
-    json.fontColor = this.fontColor;
-    json.fontFamily = this.fontFamily;
-    json.fontSize = this.fontSize;
-    json.fontStyle = this.fontStyle;
-    json.fontWeight = this.fontWeight;
-    json.opacity = this.opacity;
-    json.roughness = this.roughness;
-    json.shadow = this.shadow;
-    json.shadowColor = this.shadowColor;
-    json.shadowOffset = structuredClone(this.shadowOffset);
-    json.link = this.link;
-    json.reference = this.reference ? this.reference.id : null;
-    json.constraints = structuredClone(this.constraints);
-    json.properties = structuredClone(this.properties);
-    json.scripts = structuredClone(this.scripts);
+    this.setJson(json, "name", this.name, "");
+    this.setJson(json, "description", this.description, "");
+    this.setJson(json, "proto", this.proto, false);
+    this.setJson(json, "tags", this.tags, []);
+    this.setJson(json, "enable", this.enable, true);
+    this.setJson(json, "visible", this.visible, true);
+    this.setJson(json, "movable", this.movable, Movable.FREE);
+    this.setJson(json, "sizable", this.sizable, Sizable.FREE);
+    this.setJson(json, "rotatable", this.rotatable, true);
+    this.setJson(json, "containable", this.containable, true);
+    this.setJson(json, "containableFilter", this.containableFilter, "");
+    this.setJson(json, "movableParentFilter", this.movableParentFilter, "");
+    this.setJson(json, "connectable", this.connectable, true);
+    this.setJson(json, "left", this.left, 0);
+    this.setJson(json, "top", this.top, 0);
+    this.setJson(json, "width", this.width, 0);
+    this.setJson(json, "height", this.height, 0);
+    this.setJson(json, "rotate", this.rotate, 0);
+    this.setJson(json, "strokeColor", this.strokeColor, "$foreground");
+    this.setJson(json, "strokeWidth", this.strokeWidth, 1);
+    this.setJson(json, "strokePattern", this.strokePattern, []);
+    this.setJson(json, "fillColor", this.fillColor, "$background");
+    this.setJson(json, "fillStyle", this.fillStyle, FillStyle.SOLID);
+    this.setJson(json, "fontColor", this.fontColor, "$foreground");
+    this.setJson(json, "fontFamily", this.fontFamily, "Inter");
+    this.setJson(json, "fontSize", this.fontSize, DEFAULT_FONT_SIZE);
+    this.setJson(json, "fontStyle", this.fontStyle, "normal");
+    this.setJson(json, "fontWeight", this.fontWeight, 400);
+    this.setJson(json, "opacity", this.opacity, 1);
+    this.setJson(json, "roughness", this.roughness, 0);
+    this.setJson(json, "shadow", this.shadow, false);
+    this.setJson(json, "shadowColor", this.shadowColor, "$foreground");
+    this.setJson(json, "shadowOffset", this.shadowOffset, [0, 0]);
+    this.setJson(json, "link", this.link, "");
+    this.setJson(
+      json,
+      "reference",
+      this.reference ? this.reference.id : null,
+      null
+    );
+    this.setJson(json, "constraints", this.constraints, []);
+    this.setJson(json, "properties", this.properties, []);
+    this.setJson(json, "scripts", this.scripts, []);
     if (keepRefs) {
       json.reference = this.reference;
     }
@@ -470,45 +475,44 @@ export class Shape extends Obj {
    */
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.name = json.name ?? this.name;
-    this.description = json.description ?? this.description;
-    this.proto = json.proto ?? this.proto;
-    this.tags = json.tags ?? this.tags;
-    this.enable = json.enable ?? this.enable;
-    this.visible = json.visible ?? this.visible;
-    this.movable = json.movable ?? this.movable;
-    this.sizable = json.sizable ?? this.sizable;
-    this.rotatable = json.rotatable ?? this.rotatable;
-    this.containable = json.containable ?? this.containable;
-    this.containableFilter = json.containableFilter ?? this.containableFilter;
-    this.movableParentFilter =
-      json.movableParentFilter ?? this.movableParentFilter;
-    this.connectable = json.connectable ?? this.connectable;
-    this.left = json.left ?? this.left;
-    this.top = json.top ?? this.top;
-    this.width = json.width ?? this.width;
-    this.height = json.height ?? this.height;
-    this.rotate = json.rotate ?? this.rotate;
-    this.strokeColor = json.strokeColor ?? this.strokeColor;
-    this.strokeWidth = json.strokeWidth ?? this.strokeWidth;
-    this.strokePattern = json.strokePattern ?? this.strokePattern;
-    this.fillColor = json.fillColor ?? this.fillColor;
-    this.fillStyle = json.fillStyle ?? this.fillStyle;
-    this.fontColor = json.fontColor ?? this.fontColor;
-    this.fontFamily = json.fontFamily ?? this.fontFamily;
-    this.fontSize = json.fontSize ?? this.fontSize;
-    this.fontStyle = json.fontStyle ?? this.fontStyle;
-    this.fontWeight = json.fontWeight ?? this.fontWeight;
-    this.opacity = json.opacity ?? this.opacity;
-    this.roughness = json.roughness ?? this.roughness;
-    this.shadow = json.shadow ?? this.shadow;
-    this.shadowColor = json.shadowColor ?? this.shadowColor;
-    this.shadowOffset = json.shadowOffset ?? this.shadowOffset;
-    this.link = json.link ?? this.link;
-    this.reference = json.reference ?? this.reference;
-    this.constraints = json.constraints ?? this.constraints;
-    this.properties = json.properties ?? this.properties;
-    this.scripts = json.scripts ?? this.scripts;
+    this.name = this.getJson(json, "name", "");
+    this.description = this.getJson(json, "description", "");
+    this.proto = this.getJson(json, "proto", false);
+    this.tags = this.getJson(json, "tags", []);
+    this.enable = this.getJson(json, "enable", true);
+    this.visible = this.getJson(json, "visible", true);
+    this.movable = this.getJson(json, "movable", Movable.FREE);
+    this.sizable = this.getJson(json, "sizable", Sizable.FREE);
+    this.rotatable = this.getJson(json, "rotatable", true);
+    this.containable = this.getJson(json, "containable", false);
+    this.containableFilter = this.getJson(json, "containableFilter", "");
+    this.movableParentFilter = this.getJson(json, "movableParentFilter", "");
+    this.connectable = this.getJson(json, "connectable", true);
+    this.left = this.getJson(json, "left", 0);
+    this.top = this.getJson(json, "top", 0);
+    this.width = this.getJson(json, "width", 0);
+    this.height = this.getJson(json, "height", 0);
+    this.rotate = this.getJson(json, "rotate", 0);
+    this.strokeColor = this.getJson(json, "strokeColor", "$foreground");
+    this.strokeWidth = this.getJson(json, "strokeWidth", 1);
+    this.strokePattern = this.getJson(json, "strokePattern", []);
+    this.fillColor = this.getJson(json, "fillColor", "$background");
+    this.fillStyle = this.getJson(json, "fillStyle", FillStyle.SOLID);
+    this.fontColor = this.getJson(json, "fontColor", "$foreground");
+    this.fontFamily = this.getJson(json, "fontFamily", "Inter");
+    this.fontSize = this.getJson(json, "fontSize", DEFAULT_FONT_SIZE);
+    this.fontStyle = this.getJson(json, "fontStyle", "normal");
+    this.fontWeight = this.getJson(json, "fontWeight", 400);
+    this.opacity = this.getJson(json, "opacity", 1);
+    this.roughness = this.getJson(json, "roughness", 0);
+    this.shadow = this.getJson(json, "shadow", false);
+    this.shadowColor = this.getJson(json, "shadowColor", "$foreground");
+    this.shadowOffset = this.getJson(json, "shadowOffset", [0, 0]);
+    this.link = this.getJson(json, "link", "");
+    this.reference = this.getJson(json, "reference", null);
+    this.constraints = this.getJson(json, "constraints", []);
+    this.properties = this.getJson(json, "properties", []);
+    this.scripts = this.getJson(json, "scripts", []);
   }
 
   resolveRefs(idMap: Record<string, Shape>, nullIfNotFound: boolean = false) {
@@ -1130,13 +1134,13 @@ export class Doc extends Obj {
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
-    json.version = this.version;
+    this.setJson(json, "version", this.version, 1);
     return json;
   }
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.version = json.version ?? this.version;
+    this.version = this.getJson(json, "version", 1);
   }
 }
 
@@ -1169,17 +1173,17 @@ export class Page extends Shape {
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
-    json.size = structuredClone(this.size);
-    json.pageOrigin = structuredClone(this.pageOrigin);
-    json.pageScale = this.pageScale;
+    this.setJson(json, "size", this.size, null);
+    this.setJson(json, "pageOrigin", this.pageOrigin, null);
+    this.setJson(json, "pageScale", this.pageScale, 1);
     return json;
   }
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.size = json.size ?? this.size;
-    this.pageOrigin = json.pageOrigin ?? this.pageOrigin;
-    this.pageScale = json.pageScale ?? this.pageScale;
+    this.size = this.getJson(json, "size", null);
+    this.pageOrigin = this.getJson(json, "pageOrigin", null);
+    this.pageScale = this.getJson(json, "pageScale", 1);
   }
 
   getPage(): Page | null {
@@ -1407,46 +1411,57 @@ export class Box extends Shape {
     this.vertAlign = VertAlign.MIDDLE;
     this.lineHeight = 1.2;
     this.paragraphSpacing = 0;
+
+    // transient states
     this.allowRenderText = true;
   }
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
-    json.padding = structuredClone(this.padding);
-    json.corners = structuredClone(this.corners);
-    json.borders = structuredClone(this.borders);
-    json.borderPosition = this.borderPosition;
-    json.anchored = this.anchored;
-    json.anchorAngle = this.anchorAngle;
-    json.anchorLength = this.anchorLength;
-    json.anchorPosition = this.anchorPosition;
-    json.textEditable = this.textEditable;
-    json.text = structuredClone(this.text);
-    json.wordWrap = this.wordWrap;
-    json.horzAlign = this.horzAlign;
-    json.vertAlign = this.vertAlign;
-    json.lineHeight = this.lineHeight;
-    json.paragraphSpacing = this.paragraphSpacing;
+    this.setJson(json, "padding", this.padding, [0, 0, 0, 0]);
+    this.setJson(json, "corners", this.corners, [0, 0, 0, 0]);
+    this.setJson(json, "borders", this.borders, [true, true, true, true]);
+    this.setJson(json, "borderPosition", this.borderPosition, "center");
+    this.setJson(json, "anchored", this.anchored, false);
+    this.setJson(json, "anchorAngle", this.anchorAngle, 0);
+    this.setJson(json, "anchorLength", this.anchorLength, 0);
+    this.setJson(json, "anchorPosition", this.anchorPosition, 0.5);
+    this.setJson(json, "textEditable", this.textEditable, true);
+    this.setJson(
+      json,
+      "text",
+      this.text,
+      convertStringToTextNode("", HorzAlign.CENTER)
+    );
+    this.setJson(json, "wordWrap", this.wordWrap, false);
+    this.setJson(json, "horzAlign", this.horzAlign, HorzAlign.CENTER);
+    this.setJson(json, "vertAlign", this.vertAlign, VertAlign.MIDDLE);
+    this.setJson(json, "lineHeight", this.lineHeight, 1.2);
+    this.setJson(json, "paragraphSpacing", this.paragraphSpacing, 0);
     return json;
   }
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.padding = json.padding ?? this.padding;
-    this.corners = json.corners ?? this.corners;
-    this.borders = json.borders ?? this.borders;
-    this.borderPosition = json.borderPosition ?? this.borderPosition;
-    this.anchored = json.anchored ?? this.anchored;
-    this.anchorAngle = json.anchorAngle ?? this.anchorAngle;
-    this.anchorLength = json.anchorLength ?? this.anchorLength;
-    this.anchorPosition = json.anchorPosition ?? this.anchorPosition;
-    this.textEditable = json.textEditable ?? this.textEditable;
-    this.text = json.text ?? this.text;
-    this.wordWrap = json.wordWrap ?? this.wordWrap;
-    this.horzAlign = json.horzAlign ?? this.horzAlign;
-    this.vertAlign = json.vertAlign ?? this.vertAlign;
-    this.lineHeight = json.lineHeight ?? this.lineHeight;
-    this.paragraphSpacing = json.paragraphSpacing ?? this.paragraphSpacing;
+    this.padding = this.getJson(json, "padding", [0, 0, 0, 0]);
+    this.corners = this.getJson(json, "corners", [0, 0, 0, 0]);
+    this.borders = this.getJson(json, "borders", [true, true, true, true]);
+    this.borderPosition = this.getJson(json, "borderPosition", "center");
+    this.anchored = this.getJson(json, "anchored", false);
+    this.anchorAngle = this.getJson(json, "anchorAngle", 0);
+    this.anchorLength = this.getJson(json, "anchorLength", 0);
+    this.anchorPosition = this.getJson(json, "anchorPosition", 0.5);
+    this.textEditable = this.getJson(json, "textEditable", true);
+    this.text = this.getJson(
+      json,
+      "text",
+      convertStringToTextNode("", HorzAlign.CENTER)
+    );
+    this.wordWrap = this.getJson(json, "wordWrap", false);
+    this.horzAlign = this.getJson(json, "horzAlign", HorzAlign.CENTER);
+    this.vertAlign = this.getJson(json, "vertAlign", VertAlign.MIDDLE);
+    this.lineHeight = this.getJson(json, "lineHeight", 1.2);
+    this.paragraphSpacing = this.getJson(json, "paragraphSpacing", 0);
   }
 
   get innerLeft(): number {
@@ -1848,15 +1863,15 @@ export class Path extends Shape {
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
-    json.pathEditable = this.pathEditable;
-    json.path = structuredClone(this.path);
+    this.setJson(json, "pathEditable", this.pathEditable, true);
+    this.setJson(json, "path", this.path, []);
     return json;
   }
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.pathEditable = json.pathEditable ?? this.pathEditable;
-    this.path = json.path ?? this.path;
+    this.pathEditable = this.getJson(json, "pathEditable", true);
+    this.path = this.getJson(json, "path", []);
   }
 
   /**
@@ -2119,17 +2134,17 @@ export class Image extends Box {
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
-    json.imageData = this.imageData;
-    json.imageWidth = this.imageWidth;
-    json.imageHeight = this.imageHeight;
+    this.setJson(json, "imageData", this.imageData, "");
+    this.setJson(json, "imageWidth", this.imageWidth, 0);
+    this.setJson(json, "imageHeight", this.imageHeight, 0);
     return json;
   }
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.imageData = json.imageData ?? this.imageData;
-    this.imageWidth = json.imageWidth ?? this.imageWidth;
-    this.imageHeight = json.imageHeight ?? this.imageHeight;
+    this.imageData = this.getJson(json, "imageData", "");
+    this.imageWidth = this.getJson(json, "imageWidth", 0);
+    this.imageHeight = this.getJson(json, "imageHeight", 0);
   }
 
   renderDefault(canvas: MemoizationCanvas): void {
@@ -2215,17 +2230,17 @@ export class Icon extends Box {
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
-    json.viewWidth = this.viewWidth;
-    json.viewHeight = this.viewHeight;
-    json.data = structuredClone(this.data);
+    this.setJson(json, "viewWidth", this.viewWidth, 0);
+    this.setJson(json, "viewHeight", this.viewHeight, 0);
+    this.setJson(json, "data", this.data, []);
     return json;
   }
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.viewWidth = json.viewWidth ?? this.viewWidth;
-    this.viewHeight = json.viewHeight ?? this.viewHeight;
-    this.data = json.data ?? this.data;
+    this.viewWidth = this.getJson(json, "viewWidth", 0);
+    this.viewHeight = this.getJson(json, "viewHeight", 0);
+    this.data = this.getJson(json, "data", []);
   }
 
   /**
@@ -2293,17 +2308,17 @@ export class Line extends Path {
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
-    json.lineType = this.lineType;
-    json.headEndType = this.headEndType;
-    json.tailEndType = this.tailEndType;
+    this.setJson(json, "lineType", this.lineType, LineType.STRAIGHT);
+    this.setJson(json, "headEndType", this.headEndType, LineEndType.FLAT);
+    this.setJson(json, "tailEndType", this.tailEndType, LineEndType.FLAT);
     return json;
   }
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.lineType = json.lineType ?? this.lineType;
-    this.headEndType = json.headEndType ?? this.headEndType;
-    this.tailEndType = json.tailEndType ?? this.tailEndType;
+    this.lineType = this.getJson(json, "lineType", LineType.STRAIGHT);
+    this.headEndType = this.getJson(json, "headEndType", LineEndType.FLAT);
+    this.tailEndType = this.getJson(json, "tailEndType", LineEndType.FLAT);
   }
 
   /**
@@ -2652,12 +2667,12 @@ export class Connector extends Line {
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
-    json.head = this.head ? this.head.id : null;
-    json.tail = this.tail ? this.tail.id : null;
-    json.headAnchor = structuredClone(this.headAnchor);
-    json.tailAnchor = structuredClone(this.tailAnchor);
-    json.headMargin = this.headMargin;
-    json.tailMargin = this.tailMargin;
+    this.setJson(json, "head", this.head ? this.head.id : null, null);
+    this.setJson(json, "tail", this.tail ? this.tail.id : null, null);
+    this.setJson(json, "headAnchor", this.headAnchor, [0.5, 0.5]);
+    this.setJson(json, "tailAnchor", this.tailAnchor, [0.5, 0.5]);
+    this.setJson(json, "headMargin", this.headMargin, 0);
+    this.setJson(json, "tailMargin", this.tailMargin, 0);
     if (keepRefs) {
       json.head = this.head;
       json.tail = this.tail;
@@ -2667,12 +2682,12 @@ export class Connector extends Line {
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.head = json.head ?? this.head;
-    this.tail = json.tail ?? this.tail;
-    this.headAnchor = json.headAnchor ?? this.headAnchor;
-    this.tailAnchor = json.tailAnchor ?? this.tailAnchor;
-    this.headMargin = json.headMargin ?? this.headMargin;
-    this.tailMargin = json.tailMargin ?? this.tailMargin;
+    this.head = this.getJson(json, "head", null);
+    this.tail = this.getJson(json, "tail", null);
+    this.headAnchor = this.getJson(json, "headAnchor", [0.5, 0.5]);
+    this.tailAnchor = this.getJson(json, "tailAnchor", [0.5, 0.5]);
+    this.headMargin = this.getJson(json, "headMargin", 0);
+    this.tailMargin = this.getJson(json, "tailMargin", 0);
   }
 
   resolveRefs(idMap: Record<string, Shape>, nullIfNotFound: boolean = false) {
@@ -2795,17 +2810,17 @@ export class Freehand extends Path {
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
-    json.thinning = this.thinning;
-    json.tailTaper = this.tailTaper;
-    json.headTaper = this.headTaper;
+    this.setJson(json, "thinning", this.thinning, 0);
+    this.setJson(json, "tailTaper", this.tailTaper, 0);
+    this.setJson(json, "headTaper", this.headTaper, 0);
     return json;
   }
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.thinning = json.thinning ?? this.thinning;
-    this.tailTaper = json.tailTaper ?? this.tailTaper;
-    this.headTaper = json.headTaper ?? this.headTaper;
+    this.thinning = this.getJson(json, "thinning", 0);
+    this.tailTaper = this.getJson(json, "tailTaper", 0);
+    this.headTaper = this.getJson(json, "headTaper", 0);
   }
 
   renderDefault(canvas: MemoizationCanvas): void {
@@ -3066,7 +3081,7 @@ export class Mirror extends Box {
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
-    json.subject = this.subject ? this.subject.id : null;
+    this.setJson(json, "subject", this.subject ? this.subject.id : null, null);
     if (keepRefs) {
       json.subject = this.subject;
     }
@@ -3075,7 +3090,7 @@ export class Mirror extends Box {
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.subject = json.subject ?? this.subject;
+    this.subject = this.getJson(json, "subject", null);
   }
 
   resolveRefs(idMap: Record<string, Shape>, nullIfNotFound: boolean = false) {
@@ -3205,13 +3220,13 @@ export class Embed extends Box {
 
   toJSON(recursive: boolean = false, keepRefs: boolean = false) {
     const json = super.toJSON(recursive, keepRefs);
-    json.src = this.src;
+    this.setJson(json, "src", this.src, "");
     return json;
   }
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.src = json.src ?? this.src;
+    this.src = this.getJson(json, "src", "");
   }
 
   /**
