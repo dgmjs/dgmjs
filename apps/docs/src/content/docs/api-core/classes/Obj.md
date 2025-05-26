@@ -88,7 +88,7 @@ Find an shape in breath-first order
 
 #### Source
 
-[core/obj.ts:106](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L106)
+[core/obj.ts:147](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L147)
 
 ***
 
@@ -108,7 +108,7 @@ Find an shape in depth-first order
 
 #### Source
 
-[core/obj.ts:119](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L119)
+[core/obj.ts:160](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L160)
 
 ***
 
@@ -128,7 +128,7 @@ Find a shape along with the parent-chain
 
 #### Source
 
-[core/obj.ts:132](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L132)
+[core/obj.ts:173](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L173)
 
 ***
 
@@ -146,7 +146,31 @@ Find a shape along with the parent-chain
 
 #### Source
 
-[core/obj.ts:37](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L37)
+[core/obj.ts:78](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L78)
+
+***
+
+### getJson()
+
+> **getJson**(`json`, `field`, `defaultValue`): `any`
+
+Get a field from the JSON object, return defaultValue if the field is not defined.
+
+#### Parameters
+
+• **json**: `any`
+
+• **field**: `string`
+
+• **defaultValue**: `any`
+
+#### Returns
+
+`any`
+
+#### Source
+
+[core/obj.ts:53](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L53)
 
 ***
 
@@ -166,7 +190,7 @@ Test whether the given shape is a descendant
 
 #### Source
 
-[core/obj.ts:142](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L142)
+[core/obj.ts:183](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L183)
 
 ***
 
@@ -192,13 +216,51 @@ assign null if not found
 
 #### Source
 
-[core/obj.ts:47](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L47)
+[core/obj.ts:88](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L88)
+
+***
+
+### setJson()
+
+> **setJson**(`json`, `field`, `value`, `defaultValue`, `enforce`): `void`
+
+Set a field in the JSON object only if the value is defined and not equal to the default value.
+
+#### Parameters
+
+• **json**: `any`
+
+The JSON object to set the field in.
+
+• **field**: `string`
+
+The field name to set.
+
+• **value**: `any`
+
+The value to set.
+
+• **defaultValue**: `any`
+
+The default value to compare against.
+
+• **enforce**: `boolean`= `false`
+
+If true, the field will be set even if it is equal to the default value.
+
+#### Returns
+
+`void`
+
+#### Source
+
+[core/obj.ts:31](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L31)
 
 ***
 
 ### toJSON()
 
-> **toJSON**(`recursive`, `keepRefs`): `any`
+> **toJSON**(`recursive`, `keepRefs`, `enforce`): `any`
 
 #### Parameters
 
@@ -206,13 +268,15 @@ assign null if not found
 
 • **keepRefs**: `boolean`= `false`
 
+• **enforce**: `boolean`= `false`
+
 #### Returns
 
 `any`
 
 #### Source
 
-[core/obj.ts:23](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L23)
+[core/obj.ts:60](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L60)
 
 ***
 
@@ -234,7 +298,7 @@ Traverse all objects in breath-first order
 
 #### Source
 
-[core/obj.ts:60](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L60)
+[core/obj.ts:101](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L101)
 
 ***
 
@@ -256,7 +320,7 @@ Traverse all shapes in depth-first order
 
 #### Source
 
-[core/obj.ts:74](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L74)
+[core/obj.ts:115](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L115)
 
 ***
 
@@ -272,7 +336,7 @@ Returns an array of shapes in order of traverse sequence.
 
 #### Source
 
-[core/obj.ts:97](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L97)
+[core/obj.ts:138](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L138)
 
 ***
 
@@ -288,4 +352,4 @@ Returns an array of shapes in order of traverse sequence.
 
 #### Source
 
-[core/obj.ts:88](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L88)
+[core/obj.ts:129](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L129)

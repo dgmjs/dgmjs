@@ -23,7 +23,7 @@ Editor actions
 
 #### Source
 
-[actions.ts:69](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L69)
+[actions.ts:70](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L70)
 
 ## Properties
 
@@ -33,33 +33,41 @@ Editor actions
 
 #### Source
 
-[actions.ts:67](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L67)
+[actions.ts:68](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L68)
 
 ## Methods
 
 ### addPage()
 
-> **addPage**(`position`?): [`Page`](/api-core/classes/page/)
+> **addPage**(`pageProps`?, `position`?): [`Page`](/api-core/classes/page/)
 
 Add a page
 
 #### Parameters
 
+• **pageProps?**: `Partial`\<[`Page`](/api-core/classes/page/)\>
+
+The properties of the page to add
+
 • **position?**: `number`
+
+The position to add the page at. If not provided, the page will be added at the end
 
 #### Returns
 
 [`Page`](/api-core/classes/page/)
 
+The added page
+
 #### Source
 
-[actions.ts:90](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L90)
+[actions.ts:94](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L94)
 
 ***
 
 ### alignBottom()
 
-> **alignBottom**(`shapes`?): `void`
+> **alignBottom**(`shapes`?): [`Shape`](/api-core/classes/shape/)[]
 
 Align selected shapes to bottom
 
@@ -67,19 +75,23 @@ Align selected shapes to bottom
 
 • **shapes?**: [`Shape`](/api-core/classes/shape/)[]
 
+The shapes to align. If not provided, the selected shapes will be aligned
+
 #### Returns
 
-`void`
+[`Shape`](/api-core/classes/shape/)[]
+
+The shapes that were aligned
 
 #### Source
 
-[actions.ts:683](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L683)
+[actions.ts:770](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L770)
 
 ***
 
 ### alignCenter()
 
-> **alignCenter**(`shapes`?): `void`
+> **alignCenter**(`shapes`?): [`Shape`](/api-core/classes/shape/)[]
 
 Align selected shapes to horizontally center
 
@@ -87,19 +99,23 @@ Align selected shapes to horizontally center
 
 • **shapes?**: [`Shape`](/api-core/classes/shape/)[]
 
+The shapes to align. If not provided, the selected shapes will be aligned
+
 #### Returns
 
-`void`
+[`Shape`](/api-core/classes/shape/)[]
+
+The shapes that were aligned
 
 #### Source
 
-[actions.ts:622](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L622)
+[actions.ts:705](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L705)
 
 ***
 
 ### alignHorizontalSpaceAround()
 
-> **alignHorizontalSpaceAround**(`shapes`?): `void`
+> **alignHorizontalSpaceAround**(`shapes`?): [`Shape`](/api-core/classes/shape/)[]
 
 Align selected shapes horizontally with space around
 
@@ -107,19 +123,23 @@ Align selected shapes horizontally with space around
 
 • **shapes?**: [`Shape`](/api-core/classes/shape/)[]
 
+The shapes to align. If not provided, the selected shapes will be aligned
+
 #### Returns
 
-`void`
+[`Shape`](/api-core/classes/shape/)[]
+
+The shapes that were aligned
 
 #### Source
 
-[actions.ts:744](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L744)
+[actions.ts:835](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L835)
 
 ***
 
 ### alignLeft()
 
-> **alignLeft**(`shapes`?): `void`
+> **alignLeft**(`shapes`?): [`Shape`](/api-core/classes/shape/)[]
 
 Align selected shapes to left
 
@@ -127,19 +147,23 @@ Align selected shapes to left
 
 • **shapes?**: [`Shape`](/api-core/classes/shape/)[]
 
+The shapes to align. If not provided, the selected shapes will be aligned
+
 #### Returns
 
-`void`
+[`Shape`](/api-core/classes/shape/)[]
+
+The shapes that were aligned
 
 #### Source
 
-[actions.ts:566](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L566)
+[actions.ts:645](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L645)
 
 ***
 
 ### alignMiddle()
 
-> **alignMiddle**(`shapes`?): `void`
+> **alignMiddle**(`shapes`?): [`Shape`](/api-core/classes/shape/)[]
 
 Align selected shapes to vertically middle
 
@@ -147,19 +171,23 @@ Align selected shapes to vertically middle
 
 • **shapes?**: [`Shape`](/api-core/classes/shape/)[]
 
+The shapes to align. If not provided, the selected shapes will be aligned
+
 #### Returns
 
-`void`
+[`Shape`](/api-core/classes/shape/)[]
+
+The shapes that were aligned
 
 #### Source
 
-[actions.ts:711](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L711)
+[actions.ts:800](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L800)
 
 ***
 
 ### alignRight()
 
-> **alignRight**(`shapes`?): `void`
+> **alignRight**(`shapes`?): [`Shape`](/api-core/classes/shape/)[]
 
 Align selected shapes to right
 
@@ -167,19 +195,23 @@ Align selected shapes to right
 
 • **shapes?**: [`Shape`](/api-core/classes/shape/)[]
 
+The shapes to align. If not provided, the selected shapes will be aligned
+
 #### Returns
 
-`void`
+[`Shape`](/api-core/classes/shape/)[]
+
+The shapes that were aligned
 
 #### Source
 
-[actions.ts:594](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L594)
+[actions.ts:675](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L675)
 
 ***
 
 ### alignTop()
 
-> **alignTop**(`shapes`?): `void`
+> **alignTop**(`shapes`?): [`Shape`](/api-core/classes/shape/)[]
 
 Align selected shapes to top
 
@@ -187,19 +219,23 @@ Align selected shapes to top
 
 • **shapes?**: [`Shape`](/api-core/classes/shape/)[]
 
+The shapes to align. If not provided, the selected shapes will be aligned
+
 #### Returns
 
-`void`
+[`Shape`](/api-core/classes/shape/)[]
+
+The shapes that were aligned
 
 #### Source
 
-[actions.ts:655](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L655)
+[actions.ts:740](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L740)
 
 ***
 
 ### alignVerticalSpaceAround()
 
-> **alignVerticalSpaceAround**(`shapes`?): `void`
+> **alignVerticalSpaceAround**(`shapes`?): [`Shape`](/api-core/classes/shape/)[]
 
 Align selected shapes vertically with space around
 
@@ -207,19 +243,23 @@ Align selected shapes vertically with space around
 
 • **shapes?**: [`Shape`](/api-core/classes/shape/)[]
 
+The shapes to align. If not provided, the selected shapes will be aligned
+
 #### Returns
 
-`void`
+[`Shape`](/api-core/classes/shape/)[]
+
+The shapes that were aligned
 
 #### Source
 
-[actions.ts:787](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L787)
+[actions.ts:878](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L878)
 
 ***
 
 ### bringForward()
 
-> **bringForward**(`shapes`?): `void`
+> **bringForward**(`shapes`?): [`Shape`](/api-core/classes/shape/)[]
 
 Bring selected shapes forward
 
@@ -227,19 +267,23 @@ Bring selected shapes forward
 
 • **shapes?**: [`Shape`](/api-core/classes/shape/)[]
 
+The shapes to bring forward. If not provided, the selected shapes will be brought forward
+
 #### Returns
 
-`void`
+[`Shape`](/api-core/classes/shape/)[]
+
+The shapes that were brought forward
 
 #### Source
 
-[actions.ts:526](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L526)
+[actions.ts:601](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L601)
 
 ***
 
 ### bringToFront()
 
-> **bringToFront**(`shapes`?): `void`
+> **bringToFront**(`shapes`?): [`Shape`](/api-core/classes/shape/)[]
 
 Bring selected shapes to front
 
@@ -247,19 +291,23 @@ Bring selected shapes to front
 
 • **shapes?**: [`Shape`](/api-core/classes/shape/)[]
 
+The shapes to bring to front. If not provided, the selected shapes will be brought to front
+
 #### Returns
 
-`void`
+[`Shape`](/api-core/classes/shape/)[]
+
+The shapes that were brought to front
 
 #### Source
 
-[actions.ts:486](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L486)
+[actions.ts:557](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L557)
 
 ***
 
 ### copy()
 
-> **copy**(`shapes`?): `Promise`\<`void`\>
+> **copy**(`shapes`?): `Promise`\<[`Shape`](/api-core/classes/shape/)[]\>
 
 Copy selected shapes
 
@@ -267,19 +315,23 @@ Copy selected shapes
 
 • **shapes?**: [`Shape`](/api-core/classes/shape/)[]
 
+The shapes to copy. If not provided, the selected shapes will be copied
+
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`\<[`Shape`](/api-core/classes/shape/)[]\>
+
+The copied shapes
 
 #### Source
 
-[actions.ts:268](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L268)
+[actions.ts:317](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L317)
 
 ***
 
 ### cut()
 
-> **cut**(`shapes`?): `Promise`\<`void`\>
+> **cut**(`shapes`?): `Promise`\<[`Shape`](/api-core/classes/shape/)[]\>
 
 Cut selected shapes
 
@@ -287,13 +339,15 @@ Cut selected shapes
 
 • **shapes?**: [`Shape`](/api-core/classes/shape/)[]
 
+The shapes to cut. If not provided, the selected shapes will be cut
+
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`\<[`Shape`](/api-core/classes/shape/)[]\>
 
 #### Source
 
-[actions.ts:279](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L279)
+[actions.ts:330](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L330)
 
 ***
 
@@ -327,13 +381,13 @@ The parent shape to insert the duplicated shapes into. If not provided, the dupl
 
 #### Source
 
-[actions.ts:369](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L369)
+[actions.ts:421](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L421)
 
 ***
 
 ### duplicatePage()
 
-> **duplicatePage**(`page`, `position`, `initializer`?): [`Page`](/api-core/classes/page/)
+> **duplicatePage**(`page`, `pageProps`?, `position`?): [`Page`](/api-core/classes/page/)
 
 Duplicate a page
 
@@ -341,43 +395,59 @@ Duplicate a page
 
 • **page**: [`Page`](/api-core/classes/page/)
 
-• **position**: `number`
+The page to duplicate
 
-• **initializer?**
+• **pageProps?**: `Partial`\<[`Page`](/api-core/classes/page/)\>
+
+The properties of the duplicated page
+
+• **position?**: `number`
+
+The position to add the duplicated page at. If not provided, the page will be added at the next of the original page
 
 #### Returns
 
 [`Page`](/api-core/classes/page/)
 
+The duplicated page
+
 #### Source
 
-[actions.ts:134](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L134)
+[actions.ts:150](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L150)
 
 ***
 
 ### group()
 
-> **group**(`shapes`?): `void`
+> **group**(`shapes`?, `parent`?): `null` \| [`Group`](/api-core/classes/group/)
 
-Group selected shapes
+Group given shapes.
 
 #### Parameters
 
 • **shapes?**: [`Shape`](/api-core/classes/shape/)[]
 
+The shapes to group. If not provided, the selected shapes will be grouped
+
+• **parent?**: [`Shape`](/api-core/classes/shape/)
+
+The parent shape to insert the group into. If not provided, the group will be inserted into the current page
+
 #### Returns
 
-`void`
+`null` \| [`Group`](/api-core/classes/group/)
+
+The created group
 
 #### Source
 
-[actions.ts:443](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L443)
+[actions.ts:509](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L509)
 
 ***
 
 ### insert()
 
-> **insert**(`shape`, `parent`?): `void`
+> **insert**(`shape`, `parent`?): [`Shape`](/api-core/classes/shape/)
 
 Insert a shape into the current page or another shape
 
@@ -393,17 +463,17 @@ The parent shape to insert the shape into. If not provided, the shape will be in
 
 #### Returns
 
-`void`
+[`Shape`](/api-core/classes/shape/)
 
 #### Source
 
-[actions.ts:161](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L161)
+[actions.ts:180](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L180)
 
 ***
 
 ### move()
 
-> **move**(`dx`, `dy`, `shapes`?): `void`
+> **move**(`dx`, `dy`, `shapes`?): [`Shape`](/api-core/classes/shape/)[]
 
 Move selected shapes
 
@@ -411,23 +481,31 @@ Move selected shapes
 
 • **dx**: `number`
 
+The horizontal distance to move the shapes
+
 • **dy**: `number`
+
+The vertical distance to move the shapes
 
 • **shapes?**: [`Shape`](/api-core/classes/shape/)[]
 
+The shapes to move. If not provided, the selected shapes will be moved
+
 #### Returns
 
-`void`
+[`Shape`](/api-core/classes/shape/)[]
+
+The moved shapes
 
 #### Source
 
-[actions.ts:406](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L406)
+[actions.ts:469](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L469)
 
 ***
 
 ### paste()
 
-> **paste**(`page`?): `Promise`\<`void`\>
+> **paste**(`page`?): `Promise`\<[`Shape`](/api-core/classes/shape/)[]\>
 
 Paste
 
@@ -435,13 +513,17 @@ Paste
 
 • **page?**: [`Page`](/api-core/classes/page/)
 
+The page to paste the shapes into. If not provided, the shapes will be pasted into the current page
+
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`\<[`Shape`](/api-core/classes/shape/)[]\>
+
+The pasted shapes
 
 #### Source
 
-[actions.ts:300](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L300)
+[actions.ts:353](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L353)
 
 ***
 
@@ -457,7 +539,7 @@ Redo
 
 #### Source
 
-[actions.ts:83](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L83)
+[actions.ts:84](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L84)
 
 ***
 
@@ -471,13 +553,15 @@ Remove selected shapes
 
 • **shapes?**: [`Shape`](/api-core/classes/shape/)[]
 
+The shapes to remove. If not provided, the selected shapes will be removed
+
 #### Returns
 
 `void`
 
 #### Source
 
-[actions.ts:250](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L250)
+[actions.ts:298](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L298)
 
 ***
 
@@ -491,19 +575,21 @@ Remove a page
 
 • **page**: [`Page`](/api-core/classes/page/)
 
+The page to remove
+
 #### Returns
 
 `void`
 
 #### Source
 
-[actions.ts:112](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L112)
+[actions.ts:120](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L120)
 
 ***
 
 ### reorderPage()
 
-> **reorderPage**(`page`, `position`): `void`
+> **reorderPage**(`page`, `position`): [`Page`](/api-core/classes/page/)
 
 Reorder a page
 
@@ -511,21 +597,27 @@ Reorder a page
 
 • **page**: [`Page`](/api-core/classes/page/)
 
+The page to reorder
+
 • **position**: `number`
+
+The new position of the page
 
 #### Returns
 
-`void`
+[`Page`](/api-core/classes/page/)
+
+The reordered page
 
 #### Source
 
-[actions.ts:123](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L123)
+[actions.ts:134](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L134)
 
 ***
 
 ### sendBackward()
 
-> **sendBackward**(`shapes`?): `void`
+> **sendBackward**(`shapes`?): [`Shape`](/api-core/classes/shape/)[]
 
 Send selected shapes backward
 
@@ -533,19 +625,23 @@ Send selected shapes backward
 
 • **shapes?**: [`Shape`](/api-core/classes/shape/)[]
 
+The shapes to send backward. If not provided, the selected shapes will be sent backward
+
 #### Returns
 
-`void`
+[`Shape`](/api-core/classes/shape/)[]
+
+The shapes that were sent backward
 
 #### Source
 
-[actions.ts:546](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L546)
+[actions.ts:623](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L623)
 
 ***
 
 ### sendToBack()
 
-> **sendToBack**(`shapes`?): `void`
+> **sendToBack**(`shapes`?): [`Shape`](/api-core/classes/shape/)[]
 
 Send selected shapes to back
 
@@ -553,13 +649,17 @@ Send selected shapes to back
 
 • **shapes?**: [`Shape`](/api-core/classes/shape/)[]
 
+The shapes to send to back. If not provided, the selected shapes will be sent to back
+
 #### Returns
 
-`void`
+[`Shape`](/api-core/classes/shape/)[]
+
+The shapes that were sent to back
 
 #### Source
 
-[actions.ts:506](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L506)
+[actions.ts:579](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L579)
 
 ***
 
@@ -575,7 +675,7 @@ Undo
 
 #### Source
 
-[actions.ts:76](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L76)
+[actions.ts:77](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L77)
 
 ***
 
@@ -583,11 +683,13 @@ Undo
 
 > **ungroup**(`shapes`?): `void`
 
-Ungroup selected shapes
+Ungroup given groups.
 
 #### Parameters
 
 • **shapes?**: [`Shape`](/api-core/classes/shape/)[]
+
+The shapes to ungroup. If not provided, the selected shapes will be ungrouped
 
 #### Returns
 
@@ -595,13 +697,13 @@ Ungroup selected shapes
 
 #### Source
 
-[actions.ts:463](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L463)
+[actions.ts:533](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L533)
 
 ***
 
 ### update()
 
-> **update**(`values`, `objs`?): `void`
+> **update**(`values`, `objs`?): `undefined` \| [`Obj`](/api-core/classes/obj/)[]
 
 Update obj properties
 
@@ -609,12 +711,18 @@ Update obj properties
 
 • **values**: `Partial`\<[`Shape`](/api-core/classes/shape/) & [`Doc`](/api-core/classes/doc/) & [`Page`](/api-core/classes/page/) & [`Box`](/api-core/classes/box/) & [`Path`](/api-core/classes/path/) & [`Line`](/api-core/classes/line/) & [`Rectangle`](/api-core/classes/rectangle/) & [`Ellipse`](/api-core/classes/ellipse/) & [`Text`](/api-core/classes/text/) & [`Image`](/api-core/classes/image/) & [`Icon`](/api-core/classes/icon/) & [`Connector`](/api-core/classes/connector/) & [`Freehand`](/api-core/classes/freehand/) & [`Highlighter`](/api-core/classes/highlighter/) & [`Group`](/api-core/classes/group/) & [`Frame`](/api-core/classes/frame/) & [`Mirror`](/api-core/classes/mirror/) & [`Embed`](/api-core/classes/embed/)\>
 
+The properties to update
+
 • **objs?**: [`Obj`](/api-core/classes/obj/)[]
+
+The shapes to update. If not provided, the selected shapes will be updated
 
 #### Returns
 
-`void`
+`undefined` \| [`Obj`](/api-core/classes/obj/)[]
+
+The updated shapes
 
 #### Source
 
-[actions.ts:176](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L176)
+[actions.ts:206](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L206)
