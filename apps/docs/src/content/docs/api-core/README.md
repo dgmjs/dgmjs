@@ -81,6 +81,7 @@ title: "@dgmjs/core"
 - [BorderPositionEnum](/api-core/type-aliases/borderpositionenum/)
 - [Colors](/api-core/type-aliases/colors/)
 - [ConstraintFn](/api-core/type-aliases/constraintfn/)
+- [FillStyleEnum](/api-core/type-aliases/fillstyleenum/)
 - [HorzAlignEnum](/api-core/type-aliases/horzalignenum/)
 - [KeyMap](/api-core/type-aliases/keymap/)
 - [LineEndTypeEnum](/api-core/type-aliases/lineendtypeenum/)

@@ -261,7 +261,7 @@ Draw dragging
 
 #### Source
 
-[handlers/line-handler.ts:208](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L208)
+[handlers/line-handler.ts:221](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L221)
 
 ***
 
@@ -287,7 +287,7 @@ Draw hovering
 
 #### Source
 
-[handlers/line-handler.ts:204](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L204)
+[handlers/line-handler.ts:217](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L217)
 
 ***
 
@@ -341,6 +341,24 @@ Finalize handler
 
 ***
 
+### finishMultipointMode()
+
+> **finishMultipointMode**(`editor`): `void`
+
+#### Parameters
+
+• **editor**: [`Editor`](/api-core/classes/editor/)
+
+#### Returns
+
+`void`
+
+#### Source
+
+[handlers/line-handler.ts:187](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L187)
+
+***
+
 ### initialize()
 
 > **initialize**(`editor`, `e`): `void`
@@ -389,7 +407,7 @@ keyDown
 
 #### Source
 
-[handlers/line-handler.ts:171](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L171)
+[handlers/line-handler.ts:180](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L180)
 
 ***
 
@@ -439,7 +457,7 @@ Triggered when action is performed (unclude undo and redo)
 
 #### Source
 
-[handlers/line-handler.ts:200](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L200)
+[handlers/line-handler.ts:213](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L213)
 
 ***
 
@@ -463,7 +481,7 @@ Triggered when activated
 
 #### Source
 
-[handlers/line-handler.ts:189](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L189)
+[handlers/line-handler.ts:202](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L202)
 
 ***
 
@@ -487,7 +505,7 @@ Triggered when deactivate
 
 #### Source
 
-[handlers/line-handler.ts:195](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L195)
+[handlers/line-handler.ts:208](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L208)
 
 ***
 
@@ -539,7 +557,7 @@ pointerMove
 
 #### Source
 
-[handlers/line-handler.ts:133](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L133)
+[handlers/line-handler.ts:142](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L142)
 
 ***
 
@@ -565,7 +583,7 @@ pointerUp
 
 #### Source
 
-[handlers/line-handler.ts:158](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L158)
+[handlers/line-handler.ts:167](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/line-handler.ts#L167)
 
 ***
 
