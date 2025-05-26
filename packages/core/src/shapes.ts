@@ -419,51 +419,74 @@ export class Shape extends Obj {
   /**
    * Export shape to JSON
    */
-  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
-    const json = super.toJSON(recursive, keepRefs);
-    this.setJson(json, "name", this.name, "");
-    this.setJson(json, "description", this.description, "");
-    this.setJson(json, "proto", this.proto, false);
-    this.setJson(json, "tags", this.tags, []);
-    this.setJson(json, "enable", this.enable, true);
-    this.setJson(json, "visible", this.visible, true);
-    this.setJson(json, "movable", this.movable, Movable.FREE);
-    this.setJson(json, "sizable", this.sizable, Sizable.FREE);
-    this.setJson(json, "rotatable", this.rotatable, true);
-    this.setJson(json, "containable", this.containable, true);
-    this.setJson(json, "containableFilter", this.containableFilter, "");
-    this.setJson(json, "movableParentFilter", this.movableParentFilter, "");
-    this.setJson(json, "connectable", this.connectable, true);
-    this.setJson(json, "left", cut(this.left), 0);
-    this.setJson(json, "top", cut(this.top), 0);
-    this.setJson(json, "width", cut(this.width), 0);
-    this.setJson(json, "height", cut(this.height), 0);
-    this.setJson(json, "rotate", cut(this.rotate), 0);
-    this.setJson(json, "strokeColor", this.strokeColor, "$foreground");
-    this.setJson(json, "strokeWidth", this.strokeWidth, 1);
-    this.setJson(json, "strokePattern", this.strokePattern, []);
-    this.setJson(json, "fillColor", this.fillColor, "$background");
-    this.setJson(json, "fillStyle", this.fillStyle, FillStyle.SOLID);
-    this.setJson(json, "fontColor", this.fontColor, "$foreground");
-    this.setJson(json, "fontFamily", this.fontFamily, "Inter");
-    this.setJson(json, "fontSize", this.fontSize, DEFAULT_FONT_SIZE);
-    this.setJson(json, "fontStyle", this.fontStyle, "normal");
-    this.setJson(json, "fontWeight", this.fontWeight, 400);
-    this.setJson(json, "opacity", this.opacity, 1);
-    this.setJson(json, "roughness", this.roughness, 0);
-    this.setJson(json, "shadow", this.shadow, false);
-    this.setJson(json, "shadowColor", this.shadowColor, "$foreground");
-    this.setJson(json, "shadowOffset", cutPoint(this.shadowOffset), [0, 0]);
-    this.setJson(json, "link", this.link, "");
+  toJSON(
+    recursive: boolean = false,
+    keepRefs: boolean = false,
+    enforce: boolean = false
+  ) {
+    const json = super.toJSON(recursive, keepRefs, enforce);
+    this.setJson(json, "name", this.name, "", enforce);
+    this.setJson(json, "description", this.description, "", enforce);
+    this.setJson(json, "proto", this.proto, false, enforce);
+    this.setJson(json, "tags", this.tags, [], enforce);
+    this.setJson(json, "enable", this.enable, true, enforce);
+    this.setJson(json, "visible", this.visible, true, enforce);
+    this.setJson(json, "movable", this.movable, Movable.FREE, enforce);
+    this.setJson(json, "sizable", this.sizable, Sizable.FREE, enforce);
+    this.setJson(json, "rotatable", this.rotatable, true, enforce);
+    this.setJson(json, "containable", this.containable, true, enforce);
+    this.setJson(
+      json,
+      "containableFilter",
+      this.containableFilter,
+      "",
+      enforce
+    );
+    this.setJson(
+      json,
+      "movableParentFilter",
+      this.movableParentFilter,
+      "",
+      enforce
+    );
+    this.setJson(json, "connectable", this.connectable, true, enforce);
+    this.setJson(json, "left", cut(this.left), 0, enforce);
+    this.setJson(json, "top", cut(this.top), 0, enforce);
+    this.setJson(json, "width", cut(this.width), 0, enforce);
+    this.setJson(json, "height", cut(this.height), 0, enforce);
+    this.setJson(json, "rotate", cut(this.rotate), 0, enforce);
+    this.setJson(json, "strokeColor", this.strokeColor, "$foreground", enforce);
+    this.setJson(json, "strokeWidth", this.strokeWidth, 1, enforce);
+    this.setJson(json, "strokePattern", this.strokePattern, [], enforce);
+    this.setJson(json, "fillColor", this.fillColor, "$background", enforce);
+    this.setJson(json, "fillStyle", this.fillStyle, FillStyle.SOLID, enforce);
+    this.setJson(json, "fontColor", this.fontColor, "$foreground", enforce);
+    this.setJson(json, "fontFamily", this.fontFamily, "Inter", enforce);
+    this.setJson(json, "fontSize", this.fontSize, DEFAULT_FONT_SIZE, enforce);
+    this.setJson(json, "fontStyle", this.fontStyle, "normal", enforce);
+    this.setJson(json, "fontWeight", this.fontWeight, 400, enforce);
+    this.setJson(json, "opacity", this.opacity, 1, enforce);
+    this.setJson(json, "roughness", this.roughness, 0, enforce);
+    this.setJson(json, "shadow", this.shadow, false, enforce);
+    this.setJson(json, "shadowColor", this.shadowColor, "$foreground", enforce);
+    this.setJson(
+      json,
+      "shadowOffset",
+      cutPoint(this.shadowOffset),
+      [0, 0],
+      enforce
+    );
+    this.setJson(json, "link", this.link, "", enforce);
     this.setJson(
       json,
       "reference",
       this.reference ? this.reference.id : null,
-      null
+      null,
+      enforce
     );
-    this.setJson(json, "constraints", this.constraints, []);
-    this.setJson(json, "properties", this.properties, []);
-    this.setJson(json, "scripts", this.scripts, []);
+    this.setJson(json, "constraints", this.constraints, [], enforce);
+    this.setJson(json, "properties", this.properties, [], enforce);
+    this.setJson(json, "scripts", this.scripts, [], enforce);
     if (keepRefs) {
       json.reference = this.reference;
     }
@@ -1132,9 +1155,13 @@ export class Doc extends Obj {
     this.version = 1;
   }
 
-  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
-    const json = super.toJSON(recursive, keepRefs);
-    this.setJson(json, "version", this.version, 1);
+  toJSON(
+    recursive: boolean = false,
+    keepRefs: boolean = false,
+    enforce: boolean = false
+  ) {
+    const json = super.toJSON(recursive, keepRefs, enforce);
+    this.setJson(json, "version", this.version, 1, enforce);
     return json;
   }
 
@@ -1171,11 +1198,15 @@ export class Page extends Shape {
     this.pageScale = 1;
   }
 
-  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
-    const json = super.toJSON(recursive, keepRefs);
-    this.setJson(json, "size", this.size, null);
-    this.setJson(json, "pageOrigin", this.pageOrigin, null);
-    this.setJson(json, "pageScale", this.pageScale, 1);
+  toJSON(
+    recursive: boolean = false,
+    keepRefs: boolean = false,
+    enforce: boolean = false
+  ) {
+    const json = super.toJSON(recursive, keepRefs, enforce);
+    this.setJson(json, "size", this.size, null, enforce);
+    this.setJson(json, "pageOrigin", this.pageOrigin, null, enforce);
+    this.setJson(json, "pageScale", this.pageScale, 1, enforce);
     return json;
   }
 
@@ -1416,28 +1447,51 @@ export class Box extends Shape {
     this.allowRenderText = true;
   }
 
-  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
-    const json = super.toJSON(recursive, keepRefs);
-    this.setJson(json, "padding", this.padding, [0, 0, 0, 0]);
-    this.setJson(json, "corners", this.corners, [0, 0, 0, 0]);
-    this.setJson(json, "borders", this.borders, [true, true, true, true]);
-    this.setJson(json, "borderPosition", this.borderPosition, "center");
-    this.setJson(json, "anchored", this.anchored, false);
-    this.setJson(json, "anchorAngle", cut(this.anchorAngle), 0);
-    this.setJson(json, "anchorLength", cut(this.anchorLength), 0);
-    this.setJson(json, "anchorPosition", cut(this.anchorPosition, 3), 0.5);
-    this.setJson(json, "textEditable", this.textEditable, true);
+  toJSON(
+    recursive: boolean = false,
+    keepRefs: boolean = false,
+    enforce: boolean = false
+  ) {
+    const json = super.toJSON(recursive, keepRefs, enforce);
+    this.setJson(json, "padding", this.padding, [0, 0, 0, 0], enforce);
+    this.setJson(json, "corners", this.corners, [0, 0, 0, 0], enforce);
+    this.setJson(
+      json,
+      "borders",
+      this.borders,
+      [true, true, true, true],
+      enforce
+    );
+    this.setJson(
+      json,
+      "borderPosition",
+      this.borderPosition,
+      "center",
+      enforce
+    );
+    this.setJson(json, "anchored", this.anchored, false, enforce);
+    this.setJson(json, "anchorAngle", cut(this.anchorAngle), 0, enforce);
+    this.setJson(json, "anchorLength", cut(this.anchorLength), 0, enforce);
+    this.setJson(
+      json,
+      "anchorPosition",
+      cut(this.anchorPosition, 3),
+      0.5,
+      enforce
+    );
+    this.setJson(json, "textEditable", this.textEditable, true, enforce);
     this.setJson(
       json,
       "text",
       this.text,
-      convertStringToTextNode("", HorzAlign.CENTER)
+      convertStringToTextNode("", HorzAlign.CENTER),
+      enforce
     );
-    this.setJson(json, "wordWrap", this.wordWrap, false);
-    this.setJson(json, "horzAlign", this.horzAlign, HorzAlign.CENTER);
-    this.setJson(json, "vertAlign", this.vertAlign, VertAlign.MIDDLE);
-    this.setJson(json, "lineHeight", this.lineHeight, 1.2);
-    this.setJson(json, "paragraphSpacing", this.paragraphSpacing, 0);
+    this.setJson(json, "wordWrap", this.wordWrap, false, enforce);
+    this.setJson(json, "horzAlign", this.horzAlign, HorzAlign.CENTER, enforce);
+    this.setJson(json, "vertAlign", this.vertAlign, VertAlign.MIDDLE, enforce);
+    this.setJson(json, "lineHeight", this.lineHeight, 1.2, enforce);
+    this.setJson(json, "paragraphSpacing", this.paragraphSpacing, 0, enforce);
     return json;
   }
 
@@ -1861,14 +1915,19 @@ export class Path extends Shape {
     this.containable = false;
   }
 
-  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
-    const json = super.toJSON(recursive, keepRefs);
-    this.setJson(json, "pathEditable", this.pathEditable, true);
+  toJSON(
+    recursive: boolean = false,
+    keepRefs: boolean = false,
+    enforce: boolean = false
+  ) {
+    const json = super.toJSON(recursive, keepRefs, enforce);
+    this.setJson(json, "pathEditable", this.pathEditable, true, enforce);
     this.setJson(
       json,
       "path",
       this.path.map((p) => cutPoint(p)),
-      []
+      [],
+      enforce
     );
     return json;
   }
@@ -2137,11 +2196,15 @@ export class Image extends Box {
     this._imageDOM = null;
   }
 
-  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
-    const json = super.toJSON(recursive, keepRefs);
-    this.setJson(json, "imageData", this.imageData, "");
-    this.setJson(json, "imageWidth", this.imageWidth, 0);
-    this.setJson(json, "imageHeight", this.imageHeight, 0);
+  toJSON(
+    recursive: boolean = false,
+    keepRefs: boolean = false,
+    enforce: boolean = false
+  ) {
+    const json = super.toJSON(recursive, keepRefs, enforce);
+    this.setJson(json, "imageData", this.imageData, "", enforce);
+    this.setJson(json, "imageWidth", this.imageWidth, 0, enforce);
+    this.setJson(json, "imageHeight", this.imageHeight, 0, enforce);
     return json;
   }
 
@@ -2233,11 +2296,15 @@ export class Icon extends Box {
     this.data = [];
   }
 
-  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
-    const json = super.toJSON(recursive, keepRefs);
-    this.setJson(json, "viewWidth", this.viewWidth, 0);
-    this.setJson(json, "viewHeight", this.viewHeight, 0);
-    this.setJson(json, "data", this.data, []);
+  toJSON(
+    recursive: boolean = false,
+    keepRefs: boolean = false,
+    enforce: boolean = false
+  ) {
+    const json = super.toJSON(recursive, keepRefs, enforce);
+    this.setJson(json, "viewWidth", this.viewWidth, 0, enforce);
+    this.setJson(json, "viewHeight", this.viewHeight, 0, enforce);
+    this.setJson(json, "data", this.data, [], enforce);
     return json;
   }
 
@@ -2311,11 +2378,27 @@ export class Line extends Path {
     this.containable = false;
   }
 
-  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
-    const json = super.toJSON(recursive, keepRefs);
-    this.setJson(json, "lineType", this.lineType, LineType.STRAIGHT);
-    this.setJson(json, "headEndType", this.headEndType, LineEndType.FLAT);
-    this.setJson(json, "tailEndType", this.tailEndType, LineEndType.FLAT);
+  toJSON(
+    recursive: boolean = false,
+    keepRefs: boolean = false,
+    enforce: boolean = false
+  ) {
+    const json = super.toJSON(recursive, keepRefs, enforce);
+    this.setJson(json, "lineType", this.lineType, LineType.STRAIGHT, enforce);
+    this.setJson(
+      json,
+      "headEndType",
+      this.headEndType,
+      LineEndType.FLAT,
+      enforce
+    );
+    this.setJson(
+      json,
+      "tailEndType",
+      this.tailEndType,
+      LineEndType.FLAT,
+      enforce
+    );
     return json;
   }
 
@@ -2670,14 +2753,30 @@ export class Connector extends Line {
     this.tailMargin = 0;
   }
 
-  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
-    const json = super.toJSON(recursive, keepRefs);
-    this.setJson(json, "head", this.head ? this.head.id : null, null);
-    this.setJson(json, "tail", this.tail ? this.tail.id : null, null);
-    this.setJson(json, "headAnchor", cutPoint(this.headAnchor, 3), [0.5, 0.5]);
-    this.setJson(json, "tailAnchor", cutPoint(this.tailAnchor, 3), [0.5, 0.5]);
-    this.setJson(json, "headMargin", this.headMargin, 0);
-    this.setJson(json, "tailMargin", this.tailMargin, 0);
+  toJSON(
+    recursive: boolean = false,
+    keepRefs: boolean = false,
+    enforce: boolean = false
+  ) {
+    const json = super.toJSON(recursive, keepRefs, enforce);
+    this.setJson(json, "head", this.head ? this.head.id : null, null, enforce);
+    this.setJson(json, "tail", this.tail ? this.tail.id : null, null, enforce);
+    this.setJson(
+      json,
+      "headAnchor",
+      cutPoint(this.headAnchor, 3),
+      [0.5, 0.5],
+      enforce
+    );
+    this.setJson(
+      json,
+      "tailAnchor",
+      cutPoint(this.tailAnchor, 3),
+      [0.5, 0.5],
+      enforce
+    );
+    this.setJson(json, "headMargin", this.headMargin, 0, enforce);
+    this.setJson(json, "tailMargin", this.tailMargin, 0, enforce);
     if (keepRefs) {
       json.head = this.head;
       json.tail = this.tail;
@@ -2813,11 +2912,15 @@ export class Freehand extends Path {
     this.headTaper = 0;
   }
 
-  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
-    const json = super.toJSON(recursive, keepRefs);
-    this.setJson(json, "thinning", this.thinning, 0);
-    this.setJson(json, "tailTaper", this.tailTaper, 0);
-    this.setJson(json, "headTaper", this.headTaper, 0);
+  toJSON(
+    recursive: boolean = false,
+    keepRefs: boolean = false,
+    enforce: boolean = false
+  ) {
+    const json = super.toJSON(recursive, keepRefs, enforce);
+    this.setJson(json, "thinning", this.thinning, 0, enforce);
+    this.setJson(json, "tailTaper", this.tailTaper, 0, enforce);
+    this.setJson(json, "headTaper", this.headTaper, 0, enforce);
     return json;
   }
 
@@ -3084,9 +3187,19 @@ export class Mirror extends Box {
     this.subject = null;
   }
 
-  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
-    const json = super.toJSON(recursive, keepRefs);
-    this.setJson(json, "subject", this.subject ? this.subject.id : null, null);
+  toJSON(
+    recursive: boolean = false,
+    keepRefs: boolean = false,
+    enforce: boolean = false
+  ) {
+    const json = super.toJSON(recursive, keepRefs, enforce);
+    this.setJson(
+      json,
+      "subject",
+      this.subject ? this.subject.id : null,
+      null,
+      enforce
+    );
     if (keepRefs) {
       json.subject = this.subject;
     }
@@ -3223,8 +3336,12 @@ export class Embed extends Box {
     super.finalize(canvas);
   }
 
-  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
-    const json = super.toJSON(recursive, keepRefs);
+  toJSON(
+    recursive: boolean = false,
+    keepRefs: boolean = false,
+    enforce: boolean = false
+  ) {
+    const json = super.toJSON(recursive, keepRefs, enforce);
     this.setJson(json, "src", this.src, "");
     return json;
   }

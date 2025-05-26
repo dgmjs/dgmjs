@@ -22,9 +22,24 @@ export class Obj {
 
   /**
    * Set a field in the JSON object only if the value is defined and not equal to the default value.
+   * @param json The JSON object to set the field in.
+   * @param field The field name to set.
+   * @param value The value to set.
+   * @param defaultValue The default value to compare against.
+   * @param enforce If true, the field will be set even if it is equal to the default value.
    */
-  setJson(json: any, field: string, value: any, defaultValue: any) {
+  setJson(
+    json: any,
+    field: string,
+    value: any,
+    defaultValue: any,
+    enforce: boolean = false
+  ) {
     if (typeof value !== "undefined") {
+      if (enforce) {
+        json[field] = structuredClone(value);
+        return;
+      }
       const isDefault = JSON.stringify(value) === JSON.stringify(defaultValue);
       if (!isDefault) {
         json[field] = structuredClone(value);
@@ -42,7 +57,11 @@ export class Obj {
     return defaultValue;
   }
 
-  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
+  toJSON(
+    recursive: boolean = false,
+    keepRefs: boolean = false,
+    enforce: boolean = false
+  ): any {
     const json: any = {};
     json.id = this.id;
     json.type = this.type;

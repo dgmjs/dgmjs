@@ -28,12 +28,12 @@ export function fitEnclosureInCSS(
   targetEnclosureInCSS: number[][]
 ): number[] {
   // save shape states
-  let memento = shape.toJSON(false, true);
+  let memento = shape.toJSON(false, true, true);
   shape.left = initialLeft;
   shape.top = initialTop;
   shape.width = initialWidth;
   shape.height = initialHeight;
-  let initialState = shape.toJSON(false, true);
+  let initialState = shape.toJSON(false, true, true);
   const objective = (vec: number[]) => {
     shape.fromJSON(initialState);
     // move shape as [dx, dy] and get the enclosure
@@ -67,14 +67,14 @@ export function fitPathInCSS(
   pathInCSS: number[][]
 ): number[] {
   // save shape states
-  let memento = line.toJSON(false, true);
+  let memento = line.toJSON(false, true, true);
   const rect = geometry.boundingRect(path);
   line.path = geometry.pathCopy(path);
   line.left = rect[0][0];
   line.top = rect[0][1];
   line.width = geometry.width(rect);
   line.height = geometry.height(rect);
-  let initialState = line.toJSON(false, true);
+  let initialState = line.toJSON(false, true, true);
   const objective = (vec: number[]) => {
     line.fromJSON(initialState);
     // move edge as [dx, dy] and get the outline
