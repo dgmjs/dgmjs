@@ -113,7 +113,16 @@ export class LineFactoryHandler extends Handler {
             p[0] += snapped[0];
             p[1] += snapped[1];
           }
-          this.points.push(p);
+          // clicked on the last point, close the path
+          if (
+            this.points.length > 1 &&
+            geometry.distance(this.points[this.points.length - 1], p) <=
+              MAGNET_THRESHOLD
+          ) {
+            this.finishMultipointMode(editor);
+          } else {
+            this.points.push(p);
+          }
         }
       } else {
         this.dragging = true;
@@ -169,21 +178,25 @@ export class LineFactoryHandler extends Handler {
   }
 
   keyDown(editor: Editor, e: KeyboardEvent): boolean {
-    if (e.key === "Escape" && this.dragging) {
-      const page = editor.getCurrentPage();
-      if (page && this.shape) {
-        editor.transform.transact((tx) => {
-          setPath(tx, this.shape!, structuredClone(this.points));
-          resolveAllConstraints(tx, page, editor.canvas);
-        });
-        this.shape.update(editor.canvas);
-      }
-      this.finalize(editor);
-      editor.repaint();
-      this.reset();
-      this.complete(editor);
+    if ((e.key === "Escape" || e.key === "Enter") && this.dragging) {
+      this.finishMultipointMode(editor);
     }
     return false;
+  }
+
+  finishMultipointMode(editor: Editor) {
+    const page = editor.getCurrentPage();
+    if (page && this.shape) {
+      editor.transform.transact((tx) => {
+        setPath(tx, this.shape!, structuredClone(this.points));
+        resolveAllConstraints(tx, page, editor.canvas);
+      });
+      this.shape.update(editor.canvas);
+    }
+    this.finalize(editor);
+    editor.repaint();
+    this.reset();
+    this.complete(editor);
   }
 
   onActivate(editor: Editor): void {
