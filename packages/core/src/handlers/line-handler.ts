@@ -113,7 +113,7 @@ export class LineFactoryHandler extends Handler {
             p[0] += snapped[0];
             p[1] += snapped[1];
           }
-          // clicked on the last point, close the path
+          // if clicked on the last point, finalize multipoint mode
           if (
             this.points.length > 1 &&
             geometry.distance(this.points[this.points.length - 1], p) <=
