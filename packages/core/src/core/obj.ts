@@ -20,12 +20,53 @@ export class Obj {
     this.children = [];
   }
 
-  toJSON(recursive: boolean = false, keepRefs: boolean = false) {
+  /**
+   * Set a field in the JSON object only if the value is defined and not equal to the default value.
+   * @param json The JSON object to set the field in.
+   * @param field The field name to set.
+   * @param value The value to set.
+   * @param defaultValue The default value to compare against.
+   * @param enforce If true, the field will be set even if it is equal to the default value.
+   */
+  setJson(
+    json: any,
+    field: string,
+    value: any,
+    defaultValue: any,
+    enforce: boolean = false
+  ) {
+    if (typeof value !== "undefined") {
+      if (enforce) {
+        json[field] = structuredClone(value);
+        return;
+      }
+      const isDefault = JSON.stringify(value) === JSON.stringify(defaultValue);
+      if (!isDefault) {
+        json[field] = structuredClone(value);
+      }
+    }
+  }
+
+  /**
+   * Get a field from the JSON object, return defaultValue if the field is not defined.
+   */
+  getJson(json: any, field: string, defaultValue: any) {
+    if (typeof json[field] !== "undefined") {
+      return json[field];
+    }
+    return defaultValue;
+  }
+
+  toJSON(
+    recursive: boolean = false,
+    keepRefs: boolean = false,
+    enforce: boolean = false
+  ): any {
     const json: any = {};
     json.id = this.id;
     json.type = this.type;
     json.parent = this.parent ? this.parent.id : null;
-    if (recursive) {
+    if (recursive && this.children.length > 0) {
       json.children = this.children.map((c) => c.toJSON(recursive));
     }
     if (keepRefs) {
@@ -130,7 +171,7 @@ export class Obj {
    * Find a shape along with the parent-chain
    */
   findParent(pred: (obj: Obj) => boolean): Obj | null {
-    if (this.parent) {
+    if (this.parent instanceof Obj) {
       return pred(this.parent) ? this.parent : this.parent.findParent(pred);
     }
     return null;

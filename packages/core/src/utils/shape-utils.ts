@@ -110,3 +110,24 @@ export function duplicateShapes(store: Store, shapes: Shape[]): Shape[] | null {
   }
   return null;
 }
+
+/**
+ * Cuts a number to a given decimal place
+ * @param value The number to cut
+ * @param decimalPlace The number of decimal places to keep
+ * @returns The cut number
+ */
+export function cut(value: number, decimalPlace: number = 2): number {
+  const factor = Math.pow(10, decimalPlace);
+  return Math.floor(value * factor) / factor;
+}
+
+/**
+ * Cuts a point to a given decimal place
+ * @param point The point to cut
+ * @param decimalPlace The number of decimal places to keep
+ * @returns The cut point
+ */
+export function cutPoint(point: number[], decimalPlace: number = 2): number[] {
+  return [cut(point[0], decimalPlace), cut(point[1], decimalPlace)];
+}

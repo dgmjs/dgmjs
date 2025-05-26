@@ -151,7 +151,9 @@ export class SelectionsSizeController extends Controller {
     this.initialEnclosure = geometry.rectToPolygon(rect);
     this.initialSnapshot = {};
     for (const sh of selections) {
-      sh.traverse((s) => (this.initialSnapshot[s.id] = s.toJSON(false, true)));
+      sh.traverse(
+        (s) => (this.initialSnapshot[s.id] = s.toJSON(false, true, true))
+      );
     }
   }
 

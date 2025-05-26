@@ -223,7 +223,9 @@ export class BoxSizeController extends Controller {
     editor.transform.startAction(ActionKind.RESIZE);
     this.initialEnclosure = shape.getEnclosure();
     this.initialSnapshot = {};
-    shape.traverse((s) => (this.initialSnapshot[s.id] = s.toJSON(false, true)));
+    shape.traverse(
+      (s) => (this.initialSnapshot[s.id] = s.toJSON(false, true, true))
+    );
   }
 
   /**
@@ -237,7 +239,7 @@ export class BoxSizeController extends Controller {
     this.sizeSnapper.snap(editor, shape, this);
 
     // remember current shape states
-    const memo = shape.toJSON(false, true);
+    const memo = shape.toJSON(false, true, true);
     const initialShape = this.initialSnapshot[shape.id];
     shape.fromJSON(initialShape);
 
