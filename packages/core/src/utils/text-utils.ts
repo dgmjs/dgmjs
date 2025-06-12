@@ -54,6 +54,11 @@ export function convertStringToTextNode(
           attrs: { textAlign },
           content: [{ type: "text", text: line }],
         });
+      } else {
+        doc.content.push({
+          type: "paragraph",
+          attrs: { textAlign },
+        });
       }
     });
   } else {
