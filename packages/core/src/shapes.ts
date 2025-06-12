@@ -434,7 +434,7 @@ export class Shape extends Obj {
     this.setJson(json, "movable", this.movable, Movable.FREE, enforce);
     this.setJson(json, "sizable", this.sizable, Sizable.FREE, enforce);
     this.setJson(json, "rotatable", this.rotatable, true, enforce);
-    this.setJson(json, "containable", this.containable, true, enforce);
+    this.setJson(json, "containable", this.containable, false, enforce);
     this.setJson(
       json,
       "containableFilter",
@@ -3029,29 +3029,34 @@ export class Frame extends Box {
   }
 
   /**
-   * Pick a shape at specific position (x, y)
-   *
-   * Commentize this method due to the issue #358
-   * Don't understand why this override exists over default impl.
+   * Pick a shape at specific position (x, y).
+   * Prevent to pick children shapes if point is outside of the frame.
    */
-  // getShapeAt(
-  //   canvas: Canvas,
-  //   point: number[],
-  //   exceptions: Shape[] = [],
-  //   allowDisabledAndInvisible: boolean = false
-  // ): Shape | null {
-  //   const allowPick =
-  //     allowDisabledAndInvisible || (this.enable && this.visible);
-  //   if (allowPick && this.containsPoint(canvas, point)) {
-  //     for (let i = this.children.length - 1; i >= 0; i--) {
-  //       const s: Shape = this.children[i] as Shape;
-  //       const r = s.getShapeAt(canvas, point, exceptions);
-  //       if (r && !exceptions.includes(r)) return r;
-  //     }
-  //     return this;
-  //   }
-  //   return null;
-  // }
+  getShapeAt(
+    canvas: Canvas,
+    point: number[],
+    exceptions: Shape[] = [],
+    allowDisabledAndInvisible: boolean = false
+  ): Shape | null {
+    if (this.enable && this.visible && this.containsPoint(canvas, point)) {
+      for (let i = this.children.length - 1; i >= 0; i--) {
+        const s: Shape = this.children[i] as Shape;
+        const r = s.getShapeAt(
+          canvas,
+          point,
+          exceptions,
+          allowDisabledAndInvisible
+        );
+        if (r && !exceptions.includes(r)) return r;
+      }
+    }
+    const allowPick =
+      allowDisabledAndInvisible || (this.enable && this.visible);
+    if (allowPick && this.containsPoint(canvas, point)) {
+      return this;
+    }
+    return null;
+  }
 
   /**
    * Determines whether the given rect overlaps this shape's clipping area.
