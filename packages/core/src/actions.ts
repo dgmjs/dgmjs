@@ -241,6 +241,12 @@ export class Actions {
                   );
                 }
               }
+            } else if (typeof value === "object") {
+              for (const s of objs) {
+                if (s instanceof Box) {
+                  tx.assign(s, key, value);
+                }
+              }
             }
             break;
           case "horzAlign":
