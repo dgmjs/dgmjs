@@ -272,8 +272,10 @@ function constraint(
           .sort((a: any, b: any) => a.top - b.top)
           .filter((s) => s instanceof Box && s.visible && s.match(query));
         const sumOfHeight = arr.reduce((acc, s) => acc + (s as Box).height, 0);
+        const sumOfGaps = arr.length > 1 ? args.gap * (arr.length - 1) : 0;
         let ty =
-          shape.innerTop + Math.round((shape.innerHeight - sumOfHeight) / 2);
+          shape.innerTop +
+          Math.round((shape.innerHeight - (sumOfHeight + sumOfGaps)) / 2);
         for (let child of arr) {
           if (child instanceof Box) {
             changed = setTop(tx, child, ty) || changed;
@@ -335,8 +337,10 @@ function constraint(
           .sort((a: any, b: any) => a.left - b.left)
           .filter((s) => s instanceof Box && s.visible && s.match(query));
         const sumOfWidth = arr.reduce((acc, s) => acc + (s as Box).width, 0);
+        const sumOfGaps = arr.length > 1 ? args.gap * (arr.length - 1) : 0;
         let lx =
-          shape.innerLeft + Math.round((shape.innerWidth - sumOfWidth) / 2);
+          shape.innerLeft +
+          Math.round((shape.innerWidth - (sumOfWidth + sumOfGaps)) / 2);
         for (let child of arr) {
           if (child instanceof Box) {
             changed = setLeft(tx, child, lx) || changed;

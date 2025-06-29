@@ -408,6 +408,11 @@ export class Actions {
       this.editor.transform.transact((tx) => {
         addShape(tx, shape, currentPage);
         resolveAllConstraints(tx, currentPage, canvas);
+        if (shape.width > 600) {
+          tx.assign(shape, "width", 600);
+          tx.assign(shape, "wordWrap", true);
+          resolveAllConstraints(tx, currentPage, canvas);
+        }
       });
       this.editor.transform.endAction();
       this.editor.selection.select([shape]);
