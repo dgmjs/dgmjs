@@ -19,6 +19,18 @@ type ExportImageOptions = {
   fillBackground: boolean;
   format: ExportImageFormat;
   margin: number;
+  prerender?: (
+    canvas: Canvas,
+    width: number,
+    height: number,
+    options: Partial<ExportImageOptions>
+  ) => void;
+  postrender?: (
+    canvas: Canvas,
+    width: number,
+    height: number,
+    options: Partial<ExportImageOptions>
+  ) => void;
 };
 
 /**
@@ -35,7 +47,8 @@ function getImageCanvas(
   shapes: Shape[],
   options: ExportImageOptions
 ): HTMLCanvasElement {
-  const { scale, dark, fillBackground, margin } = options;
+  const { scale, dark, fillBackground, margin, prerender, postrender } =
+    options;
   const theme = dark ? "dark" : "light";
   const colorVariables = themeColors[theme];
 
@@ -69,12 +82,19 @@ function getImageCanvas(
     );
   }
 
+  // prerender the canvas if needed
+  if (prerender) prerender(newCanvas, w, h, options);
+
   // update and draw page to the new canvas
   page.update(newCanvas);
   page.draw(newCanvas, false, orderedShapes);
 
+  // postrender the canvas if needed
+  if (postrender) postrender(newCanvas, w, h, options);
+
   // update page to (existing) canvas
   page.update(canvas);
+
   return newCanvasElement;
 }
 
@@ -191,9 +211,15 @@ async function getSVGImageData(
     svgCanvas.context.fillRect(0, 0, svgCanvasWidth, svgCanvasHeight);
   }
 
+  // prerender the canvas if needed
+  if (options.prerender) options.prerender(svgCanvas, w, h, options);
+
   // update and draw page to the new canvas
   page.update(svgCanvas);
   page.draw(svgCanvas, false, orderedShapes);
+
+  // postrender the canvas if needed
+  if (options.postrender) options.postrender(svgCanvas, w, h, options);
 
   // add fonts in defs (temporal impls)
   const svg: SVGSVGElement = ctx.getSvg();
