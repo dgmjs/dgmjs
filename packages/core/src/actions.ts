@@ -168,7 +168,6 @@ export class Actions {
       reorderPage(tx, copied, position ?? originPosition + 1);
     });
     this.editor.transform.endAction();
-    this.editor.setCurrentPage(copied);
     return copied;
   }
 

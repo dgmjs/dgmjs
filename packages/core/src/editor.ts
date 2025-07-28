@@ -485,14 +485,17 @@ export class Editor {
     this.transform.onTransaction.addListener(() => this.repaint());
     this.transform.onUndo.addListener(() => {
       if (this.activeHandler) this.activeHandler.onActionPerformed(this);
+      this.checkCurrentPage();
       this.repaint();
     });
     this.transform.onRedo.addListener(() => {
       if (this.activeHandler) this.activeHandler.onActionPerformed(this);
+      this.checkCurrentPage();
       this.repaint();
     });
     this.transform.onAction.addListener(() => {
       if (this.activeHandler) this.activeHandler.onActionPerformed(this);
+      this.checkCurrentPage();
     });
   }
 
@@ -846,6 +849,19 @@ export class Editor {
   setEnabled(enabled: boolean) {
     this.enabled = enabled;
     this.canvasElement.style.opacity = enabled ? "1" : "0.5";
+  }
+
+  /**
+   * Check if the current page is valid
+   */
+  checkCurrentPage() {
+    if (this.currentPage) {
+      const id = this.currentPage.id;
+      const obj = this.store.getById(id);
+      if (!obj && this.getPages().length > 0) {
+        this.setCurrentPage(this.getPages()[0]);
+      }
+    }
   }
 
   /**
