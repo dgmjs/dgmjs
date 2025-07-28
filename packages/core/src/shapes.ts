@@ -1322,7 +1322,9 @@ export class Box extends Shape {
   padding: number[];
 
   /**
-   * Corner radius [top-left, top-right, bottom-right, bottom-left] (same with CSS)
+   * Corner radius [top-left, top-right, bottom-right, bottom-left] (same with CSS).
+   * if positive value, it is pixels.
+   * if negative value, it is the percentage ratio of the shorter one between the width and the height.
    */
   corners: number[];
 
@@ -1542,6 +1544,19 @@ export class Box extends Shape {
     return this.innerBottom - this.innerTop;
   }
 
+  computeCorners(): number[] {
+    const m = Math.min(this.width, this.height);
+    return this.corners.map((v) => {
+      if (v < 0) {
+        // if negative, convert to percentage
+        return m * Math.min(Math.abs(v / 100), 0.5);
+      } else {
+        // if positive, use as is (px)
+        return v;
+      }
+    });
+  }
+
   renderBorders(
     canvas: MemoizationCanvas,
     x1: number,
@@ -1550,7 +1565,7 @@ export class Box extends Shape {
     y2: number
   ): void {
     const b = this.borders;
-    const c = this.corners;
+    const c = this.computeCorners();
     if (b[0] && b[1] && b[2] && b[3]) {
       // all borders
       canvas.strokeRoundRect(x1, y1, x2, y2, c, this.getSeed());
@@ -1680,7 +1695,7 @@ export class Box extends Shape {
         this.top,
         this.right,
         this.bottom,
-        this.corners,
+        this.computeCorners(),
         this.getSeed()
       );
     }
@@ -1746,7 +1761,7 @@ export class Box extends Shape {
         this.top + offsetY,
         this.right + offsetX,
         this.bottom + offsetY,
-        this.corners,
+        this.computeCorners(),
         this.getSeed()
       );
       canvas.restoreState();
@@ -2131,7 +2146,7 @@ export class Text extends Box {
         this.top,
         this.right,
         this.bottom,
-        this.corners,
+        this.computeCorners(),
         this.getSeed()
       );
     }
@@ -2226,7 +2241,7 @@ export class Image extends Box {
       this.top,
       this.width,
       this.height,
-      this.corners
+      this.computeCorners()
     );
   }
 }
@@ -3106,7 +3121,7 @@ export class Frame extends Box {
           this.top,
           this.right,
           this.bottom,
-          this.corners,
+          this.computeCorners(),
           this.getSeed()
         );
       }
@@ -3119,7 +3134,7 @@ export class Frame extends Box {
         this.top,
         this.right,
         this.bottom,
-        this.corners,
+        this.computeCorners(),
         this.getSeed()
       );
       canvas.context.clip();
@@ -3167,7 +3182,7 @@ export class Frame extends Box {
         this.top,
         this.right,
         this.bottom,
-        this.corners,
+        this.computeCorners(),
         this.getSeed()
       );
     }
