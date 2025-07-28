@@ -10,9 +10,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { fileOpen, fileSave } from "browser-fs-access";
 import { useDemoStore } from "@/demo-store";
-import { ExportImageFormat, exportImageAsFile } from "@dgmjs/export";
+import {
+  ExportImageFormat,
+  ExportImageOptions,
+  exportImageAsFile,
+} from "@dgmjs/export";
 import { exportPDFAsFile, ExportPDFOptions } from "@dgmjs/pdf";
 import fontJson from "@/fonts.json";
+import { Canvas, geometry, Page, utils } from "@dgmjs/core";
 
 function arrayBufferToBinaryString(buffer: ArrayBuffer) {
   return new Uint8Array(buffer).reduce(
@@ -26,6 +31,52 @@ async function loadFont(url: string) {
   const buffer = await res.arrayBuffer();
   return arrayBufferToBinaryString(buffer);
 }
+
+const postrenderWatermark = (
+  canvas: Canvas,
+  width: number,
+  height: number,
+  options: Partial<ExportImageOptions>
+) => {
+  // Decomment the code for watermark
+  // --------------------------------
+  const scale = options.scale || 1;
+  const text = "TRIALMODE";
+  canvas.font = utils.toCssFont("normal", 400, 16, "Inter");
+  const tm = canvas.textMetric(text);
+  const xc = Math.round(width / tm.width + 1);
+  const yc = Math.round(height / tm.height + 1);
+  canvas.font = utils.toCssFont("normal", 400, 16 * scale, "Inter");
+  canvas.fontColor = "$foreground";
+  canvas.alpha = 0.2;
+  for (let i = 0; i < yc; i++) {
+    for (let j = 0; j < xc; j++) {
+      canvas.fillText(j * (tm.width + 4) * scale, i * tm.height * scale, text);
+    }
+  }
+};
+
+const postrenderPdfWatermark = (page: Page, jsPDF: any, canvas: Canvas) => {
+  // Decomment the code for watermark
+  // --------------------------------
+  const scale = canvas.ratio || 1;
+  const text = "TRIALMODE";
+  canvas.font = utils.toCssFont("normal", 400, 16, "Inter");
+  const tm = canvas.textMetric(text);
+  const viewport = page.getViewport(canvas, []);
+  const width = geometry.width(viewport);
+  const height = geometry.height(viewport);
+  const xc = Math.round(width / tm.width + 1);
+  const yc = Math.round(height / tm.height + 1);
+  canvas.font = utils.toCssFont("normal", 400, 16 * scale, "Inter");
+  canvas.fontColor = "$foreground";
+  canvas.alpha = 0.2;
+  for (let i = 0; i < yc; i++) {
+    for (let j = 0; j < xc; j++) {
+      canvas.fillText(j * (tm.width + 4) * scale, i * tm.height * scale, text);
+    }
+  }
+};
 
 export function Menus() {
   const {
@@ -103,6 +154,7 @@ export function Menus() {
       dark: darkMode,
       fillBackground: true,
       format: "image/png" as ExportImageFormat,
+      postrender: postrenderWatermark,
     };
     const name = "dgm-export";
     const fileName = `${name}.${
@@ -128,6 +180,7 @@ export function Menus() {
       dark: darkMode,
       fillBackground: true,
       format: "image/jpeg" as ExportImageFormat,
+      postrender: postrenderWatermark,
     };
     const name = "dgm-export";
     const fileName = `${name}.jpg`;
@@ -152,6 +205,7 @@ export function Menus() {
       dark: darkMode,
       fillBackground: true,
       format: "image/webp" as ExportImageFormat,
+      postrender: postrenderWatermark,
     };
     const name = "dgm-export";
     const fileName = `${name}.webp`;
@@ -175,6 +229,7 @@ export function Menus() {
       dark: darkMode,
       fillBackground: true,
       format: "image/svg+xml" as ExportImageFormat,
+      postrender: postrenderWatermark,
     };
     const name = "dgm-export";
     const fileName = `${name}.${
@@ -214,6 +269,7 @@ export function Menus() {
       pageOrientation: "landscape",
       createLinks: true,
       createPageLinks: true,
+      postrenderPage: postrenderPdfWatermark,
     };
     exportPDFAsFile(editor.canvas, doc, "exported-pdf", pdfOptions);
   };
@@ -242,6 +298,7 @@ export function Menus() {
       pageOrientation: "landscape",
       createLinks: true,
       createPageLinks: true,
+      postrenderPage: postrenderPdfWatermark,
     };
     exportPDFAsFile(editor.canvas, doc, "exported-pdf", pdfOptions);
   };

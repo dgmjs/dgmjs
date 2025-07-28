@@ -17,6 +17,7 @@ interface PageViewProps extends React.HTMLAttributes<HTMLDivElement> {
   doc: Doc;
   page: Page;
   idx: number;
+  onSelect?: () => void;
 }
 
 const PageView: React.FC<PageViewProps> = ({
@@ -24,6 +25,7 @@ const PageView: React.FC<PageViewProps> = ({
   page,
   idx,
   className,
+  onSelect,
   ...others
 }) => {
   const { darkMode } = useDemoStore();
@@ -46,6 +48,7 @@ const PageView: React.FC<PageViewProps> = ({
           maxScale={1}
           scaleAdjust={page.size ? 1 : 0.8}
           darkMode={darkMode}
+          onClick={onSelect}
         />
       </div>
       <div className="flex flex-col items-center">
@@ -56,9 +59,10 @@ const PageView: React.FC<PageViewProps> = ({
             size="icon"
             className="w-7 h-7"
             onClick={() => {
-              window.editor.actions.duplicatePage(page as Page, {
+              const cloned = window.editor.actions.duplicatePage(page as Page, {
                 name: `Copy of ${page.name}`,
               });
+              window.editor.setCurrentPage(cloned);
             }}
           >
             <CopyIcon size={16} />
@@ -132,7 +136,7 @@ export const Pages: React.FC<PagesProps> = ({
           page={page as Page}
           idx={idx}
           className={cn(page.id === currentPage?.id && "bg-muted")}
-          onClick={() => {
+          onSelect={() => {
             if (onPageSelect) onPageSelect(page as Page);
           }}
         />
