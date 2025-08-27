@@ -148,7 +148,7 @@ export class BoxMoveController extends Controller {
     const canvas = editor.canvas;
     let p2 = targetShape.localCoordTransform(canvas, this.dragPoint, false);
     this.container =
-      editor.getCurrentPage()?.getShapeAt(canvas, p2, [shape]) ?? null;
+      editor.getCurrentPage()?.getContainerAt(canvas, p2, [shape]) ?? null;
     if (this.container && !ableToContain(this.container, targetShape)) {
       this.container = null;
     }
