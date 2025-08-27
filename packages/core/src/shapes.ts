@@ -625,6 +625,26 @@ export class Shape extends Obj {
   }
 
   /**
+   * Pick a container shape at specific position (x, y)
+   */
+  getContainerAt(
+    canvas: Canvas,
+    point: number[],
+    exceptions: Shape[] = []
+  ): Shape | null {
+    for (let i = this.children.length - 1; i >= 0; i--) {
+      const s: Shape = this.children[i] as Shape;
+      const r = s.getContainerAt(canvas, point, exceptions);
+      if (r && !exceptions.includes(r)) return r;
+    }
+    const allowPick = this.enable && this.visible && this.containable;
+    if (allowPick && this.containsPoint(canvas, point, false)) {
+      return this;
+    }
+    return null;
+  }
+
+  /**
    * Visit all shapes in breath-first order. The difference from traverse()
    * is that each shape determine visit into children or not.
    * (e.g. Group and Frame doens't visit into children)
@@ -965,11 +985,15 @@ export class Shape extends Obj {
   /**
    * Determines whether this shape contains a point in GCS
    */
-  containsPoint(canvas: Canvas, point: number[]): boolean {
+  containsPoint(
+    canvas: Canvas,
+    point: number[],
+    regardFillStyle: boolean = true
+  ): boolean {
     const outline = this.getOutline().map((p) =>
       this.localCoordTransform(canvas, p, true)
     );
-    if (this.fillStyle === FillStyle.NONE) {
+    if (regardFillStyle && this.fillStyle === FillStyle.NONE) {
       return (
         geometry.getNearSegment(
           point,
@@ -3053,7 +3077,11 @@ export class Frame extends Box {
     exceptions: Shape[] = [],
     allowDisabledAndInvisible: boolean = false
   ): Shape | null {
-    if (this.enable && this.visible && this.containsPoint(canvas, point)) {
+    if (
+      this.enable &&
+      this.visible &&
+      this.containsPoint(canvas, point, false)
+    ) {
       for (let i = this.children.length - 1; i >= 0; i--) {
         const s: Shape = this.children[i] as Shape;
         const r = s.getShapeAt(

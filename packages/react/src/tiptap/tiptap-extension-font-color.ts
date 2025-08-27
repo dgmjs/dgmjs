@@ -19,7 +19,14 @@ export const FontColor = Extension.create({
           color: {
             default: null,
             parseHTML: (element) => {
-              return element.style.color?.replace(/['"]+/g, "");
+              const cstr = element.style.color?.replace(/['"]+/g, "");
+              if (cstr && cstr.trim().startsWith("var(--colors-")) {
+                const cvar = cstr.match(/var\(--colors-(\w+)\)/);
+                if (cvar && cvar[1]) {
+                  return `$${cvar[1]}`;
+                }
+              }
+              return cstr;
             },
             renderHTML: (attributes) => {
               if (!attributes.color) {

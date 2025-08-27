@@ -142,7 +142,7 @@ export class SelectionsMoveController extends Controller {
     this.container =
       editor
         .getCurrentPage()
-        ?.getShapeAt(canvas, this.dragPointGCS, selections) ?? null;
+        ?.getContainerAt(canvas, this.dragPointGCS, selections) ?? null;
     if (this.container) {
       for (let s of selections) {
         if (!ableToContain(this.container, s)) {
