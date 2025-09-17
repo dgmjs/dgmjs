@@ -7,7 +7,7 @@ import {
 } from "./graphics/const";
 import * as geometry from "./graphics/geometry";
 import * as utils from "./graphics/utils";
-import { ZodSchema } from "zod";
+import { z, ZodSchema } from "zod";
 import {
   convertStringToTextNode,
   renderTextShape,
@@ -3707,3 +3707,99 @@ export type ShapeProps = Partial<
     Mirror &
     Embed
 >;
+
+export const ShapePropsSchema = z.object({
+  // Shape
+  id: z.string().optional(),
+  type: z.string().optional(),
+  name: z.string().optional(),
+  description: z.string().optional(),
+  proto: z.boolean().optional(),
+  tags: z.array(z.string()).optional(),
+  enable: z.boolean().optional(),
+  visible: z.boolean().optional(),
+  movable: z.nativeEnum(Movable).optional(),
+  sizable: z.nativeEnum(Sizable).optional(),
+  rotatable: z.boolean().optional(),
+  containable: z.boolean().optional(),
+  containableFilter: z.string().optional(),
+  movableParentFilter: z.string().optional(),
+  connectable: z.boolean().optional(),
+  left: z.number().optional(),
+  top: z.number().optional(),
+  width: z.number().optional(),
+  height: z.number().optional(),
+  rotate: z.number().optional(),
+  strokeColor: z.string().optional(),
+  strokeWidth: z.number().optional(),
+  strokePattern: z.array(z.number()).optional(),
+  fillColor: z.string().optional(),
+  fillStyle: z.nativeEnum(FillStyle).optional(),
+  fontColor: z.string().optional(),
+  fontFamily: z.string().optional(),
+  fontSize: z.number().optional(),
+  fontStyle: z.string().optional(),
+  fontWeight: z.number().optional(),
+  opacity: z.number().optional(),
+  roughness: z.number().optional(),
+  shadow: z.boolean().optional(),
+  shadowColor: z.string().optional(),
+  shadowOffset: z.array(z.number()).optional(),
+  link: z.any().optional(), // any?
+  reference: z.any().optional(), // any?
+  constraints: z.array(z.any()).optional(),
+  properties: z.array(z.any()).optional(),
+  scripts: z.array(z.any()).optional(),
+  // Doc
+  version: z.number().optional(),
+  // Page
+  size: z.array(z.number()).nullable().optional(),
+  pageOrigin: z.array(z.number()).nullable().optional(),
+  pageScale: z.number().optional(),
+  // Box
+  padding: z.array(z.number()).length(4).optional(),
+  corners: z.array(z.number()).length(4).optional(),
+  borders: z.array(z.boolean()).length(4).optional(),
+  borderPosition: z.nativeEnum(BorderPosition).optional(),
+  anchored: z.boolean().optional(),
+  anchorAngle: z.number().optional(),
+  anchorLength: z.number().optional(),
+  anchorPosition: z.number().optional(),
+  textEditable: z.boolean().optional(),
+  text: z.any().optional(), // TextNode
+  wordWrap: z.boolean().optional(),
+  horzAlign: z.nativeEnum(HorzAlign).optional(),
+  vertAlign: z.nativeEnum(VertAlign).optional(),
+  lineHeight: z.number().optional(),
+  paragraphSpacing: z.number().optional(),
+  // Path
+  pathEditable: z.boolean().optional(),
+  path: z.array(z.array(z.number())).optional(),
+  // Line
+  lineType: z.nativeEnum(LineType).optional(),
+  headEndType: z.nativeEnum(LineEndType).optional(),
+  tailEndType: z.nativeEnum(LineEndType).optional(),
+  // Image
+  imageData: z.string().optional(),
+  imageWidth: z.number().optional(),
+  imageHeight: z.number().optional(),
+  // Icon
+  viewWidth: z.number().optional(),
+  viewHeight: z.number().optional(),
+  data: z.array(z.any()).optional(), // VGElement[]
+  // Connector
+  head: z.any().optional(), // Shape
+  tail: z.any().optional(), // Shape
+  headAnchor: z.array(z.number()).length(2).optional(),
+  tailAnchor: z.array(z.number()).length(2).optional(),
+  headMargin: z.number().optional(),
+  tailMargin: z.number().optional(),
+  // Freehand
+  thinning: z.number().optional(),
+  tailTaper: z.number().optional(),
+  headTaper: z.number().optional(),
+  // Mirror
+  subject: z.any().optional(), // Shape
+  // Embed
+  src: z.string().optional(),
+});

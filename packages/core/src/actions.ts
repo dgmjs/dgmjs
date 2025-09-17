@@ -7,6 +7,7 @@ import {
   Page,
   Path,
   Mirror,
+  ShapePropsSchema,
 } from "./shapes";
 import * as geometry from "./graphics/geometry";
 import { Obj } from "./core/obj";
@@ -31,6 +32,7 @@ import {
 import { convertStringToTextNode, visitTextNodes } from "./utils/text-utils";
 import { ActionKind, Store } from "./core";
 import { getAllDescendant } from "./utils/shape-utils";
+import { trimObject } from "./utils/utils";
 
 /**
  * Extract outer refs in objs from the store
@@ -99,7 +101,9 @@ export class Actions {
     page.size = prevPage?.size ?? null; // set size to the previous page's size
     page.name = `Page ${position + 1}`;
     if (pageProps) {
-      Object.assign(page, pageProps);
+      const props = trimObject(pageProps);
+      ShapePropsSchema.parse(props);
+      Object.assign(page, props);
     }
     this.editor.transform.startAction(ActionKind.ADD_PAGE);
     this.editor.transform.transact((tx) => {
@@ -159,7 +163,9 @@ export class Actions {
       outerRefMapExtractor
     )[0] as Page;
     if (pageProps) {
-      Object.assign(copied, pageProps);
+      const props = trimObject(pageProps);
+      ShapePropsSchema.parse(props);
+      Object.assign(copied, props);
     }
     const originPosition = this.editor.getPages().indexOf(page);
     this.editor.transform.startAction(ActionKind.DUPLICATE_PAGE);
@@ -205,11 +211,13 @@ export class Actions {
   update(values: ShapeProps, objs?: Obj[]) {
     const page = this.editor.getCurrentPage();
     if (!(page instanceof Page)) throw new Error("No page found");
+    const props = trimObject(values);
+    ShapePropsSchema.parse(props);
     this.editor.transform.startAction(ActionKind.UPDATE);
     this.editor.transform.transact((tx) => {
       objs = objs ?? this.editor.selection.getShapes();
-      for (let key in values) {
-        const value = (values as any)[key];
+      for (let key in props) {
+        const value = (props as any)[key];
         switch (key) {
           case "reference": {
             for (const s of objs) {
