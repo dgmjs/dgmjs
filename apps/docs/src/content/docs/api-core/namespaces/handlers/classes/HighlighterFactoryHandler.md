@@ -33,7 +33,7 @@ Highlighter Factory Handler
 
 #### Source
 
-[editor.ts:1456](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1456)
+[packages/core/src/editor.ts:1472](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1472)
 
 ## Properties
 
@@ -43,7 +43,7 @@ Highlighter Factory Handler
 
 #### Source
 
-[handlers/highlighter-handler.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L17)
+[packages/core/src/handlers/highlighter-handler.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L17)
 
 ***
 
@@ -57,7 +57,7 @@ Highlighter Factory Handler
 
 #### Source
 
-[handlers/highlighter-handler.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L15)
+[packages/core/src/handlers/highlighter-handler.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L15)
 
 ***
 
@@ -71,7 +71,7 @@ Highlighter Factory Handler
 
 #### Source
 
-[handlers/highlighter-handler.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L14)
+[packages/core/src/handlers/highlighter-handler.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L14)
 
 ***
 
@@ -85,7 +85,7 @@ Highlighter Factory Handler
 
 #### Source
 
-[handlers/highlighter-handler.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L13)
+[packages/core/src/handlers/highlighter-handler.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L13)
 
 ***
 
@@ -95,7 +95,7 @@ Highlighter Factory Handler
 
 #### Source
 
-[handlers/highlighter-handler.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L16)
+[packages/core/src/handlers/highlighter-handler.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L16)
 
 ***
 
@@ -109,7 +109,7 @@ Highlighter Factory Handler
 
 #### Source
 
-[editor.ts:1450](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1450)
+[packages/core/src/editor.ts:1466](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1466)
 
 ***
 
@@ -123,7 +123,7 @@ Highlighter Factory Handler
 
 #### Source
 
-[editor.ts:1451](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1451)
+[packages/core/src/editor.ts:1467](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1467)
 
 ***
 
@@ -133,7 +133,7 @@ Highlighter Factory Handler
 
 #### Source
 
-[handlers/highlighter-handler.ts:18](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L18)
+[packages/core/src/handlers/highlighter-handler.ts:18](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L18)
 
 ## Methods
 
@@ -157,7 +157,7 @@ Activate the handler
 
 #### Source
 
-[editor.ts:1489](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1489)
+[packages/core/src/editor.ts:1505](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1505)
 
 ***
 
@@ -181,7 +181,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[editor.ts:1480](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1480)
+[packages/core/src/editor.ts:1496](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1496)
 
 ***
 
@@ -205,7 +205,7 @@ Deactivate the handler
 
 #### Source
 
-[editor.ts:1497](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1497)
+[packages/core/src/editor.ts:1513](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1513)
 
 ***
 
@@ -231,7 +231,7 @@ Draw dragging
 
 #### Source
 
-[editor.ts:1613](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1613)
+[packages/core/src/editor.ts:1629](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1629)
 
 ***
 
@@ -257,7 +257,7 @@ Draw hovering
 
 #### Source
 
-[editor.ts:1608](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1608)
+[packages/core/src/editor.ts:1624](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1624)
 
 ***
 
@@ -281,7 +281,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[editor.ts:1603](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1603)
+[packages/core/src/editor.ts:1619](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1619)
 
 ***
 
@@ -307,7 +307,7 @@ Finalize handler
 
 #### Source
 
-[handlers/highlighter-handler.ts:53](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L53)
+[packages/core/src/handlers/highlighter-handler.ts:53](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L53)
 
 ***
 
@@ -333,7 +333,7 @@ Initialize handler
 
 #### Source
 
-[handlers/highlighter-handler.ts:29](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L29)
+[packages/core/src/handlers/highlighter-handler.ts:29](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L29)
 
 ***
 
@@ -359,7 +359,7 @@ keyDown
 
 #### Source
 
-[handlers/highlighter-handler.ts:108](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L108)
+[packages/core/src/handlers/highlighter-handler.ts:108](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L108)
 
 ***
 
@@ -385,7 +385,7 @@ keyUp
 
 #### Source
 
-[editor.ts:1598](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1598)
+[packages/core/src/editor.ts:1614](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1614)
 
 ***
 
@@ -409,7 +409,7 @@ Triggered when action is performed (unclude undo and redo)
 
 #### Source
 
-[editor.ts:1514](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1514)
+[packages/core/src/editor.ts:1530](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1530)
 
 ***
 
@@ -433,7 +433,7 @@ Triggered when activated
 
 #### Source
 
-[handlers/highlighter-handler.ts:118](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L118)
+[packages/core/src/handlers/highlighter-handler.ts:118](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L118)
 
 ***
 
@@ -457,7 +457,7 @@ Triggered when deactivate
 
 #### Source
 
-[handlers/highlighter-handler.ts:122](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L122)
+[packages/core/src/handlers/highlighter-handler.ts:122](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L122)
 
 ***
 
@@ -483,7 +483,7 @@ pointerDown
 
 #### Source
 
-[handlers/highlighter-handler.ts:69](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L69)
+[packages/core/src/handlers/highlighter-handler.ts:69](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L69)
 
 ***
 
@@ -509,7 +509,7 @@ pointerMove
 
 #### Source
 
-[handlers/highlighter-handler.ts:84](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L84)
+[packages/core/src/handlers/highlighter-handler.ts:84](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L84)
 
 ***
 
@@ -535,7 +535,7 @@ pointerUp
 
 #### Source
 
-[handlers/highlighter-handler.ts:99](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L99)
+[packages/core/src/handlers/highlighter-handler.ts:99](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L99)
 
 ***
 
@@ -555,7 +555,7 @@ Reset the states of handler
 
 #### Source
 
-[handlers/highlighter-handler.ts:20](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L20)
+[packages/core/src/handlers/highlighter-handler.ts:20](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L20)
 
 ***
 
@@ -581,7 +581,7 @@ Update handler
 
 #### Source
 
-[handlers/highlighter-handler.ts:41](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L41)
+[packages/core/src/handlers/highlighter-handler.ts:41](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/highlighter-handler.ts#L41)
 
 ***
 
@@ -607,4 +607,4 @@ Update handler when hovering (not dragging)
 
 #### Source
 
-[editor.ts:1529](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1529)
+[packages/core/src/editor.ts:1545](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1545)

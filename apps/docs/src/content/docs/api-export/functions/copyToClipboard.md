@@ -33,4 +33,4 @@ The options for drawing.
 
 ## Source
 
-[index.ts:269](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L269)
+[index.ts:295](https://github.com/dgmjs/dgmjs/blob/main/packages/export/src/index.ts#L295)

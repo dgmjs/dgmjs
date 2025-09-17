@@ -13,7 +13,7 @@ title: "CanvasState"
 
 #### Source
 
-[graphics/graphics.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L16)
+[packages/core/src/graphics/graphics.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L16)
 
 ***
 
@@ -23,7 +23,7 @@ title: "CanvasState"
 
 #### Source
 
-[graphics/graphics.ts:12](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L12)
+[packages/core/src/graphics/graphics.ts:12](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L12)
 
 ***
 
@@ -33,7 +33,7 @@ title: "CanvasState"
 
 #### Source
 
-[graphics/graphics.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L13)
+[packages/core/src/graphics/graphics.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L13)
 
 ***
 
@@ -43,7 +43,7 @@ title: "CanvasState"
 
 #### Source
 
-[graphics/graphics.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L15)
+[packages/core/src/graphics/graphics.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L15)
 
 ***
 
@@ -53,7 +53,7 @@ title: "CanvasState"
 
 #### Source
 
-[graphics/graphics.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L14)
+[packages/core/src/graphics/graphics.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L14)
 
 ***
 
@@ -63,7 +63,7 @@ title: "CanvasState"
 
 #### Source
 
-[graphics/graphics.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L17)
+[packages/core/src/graphics/graphics.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L17)
 
 ***
 
@@ -73,7 +73,7 @@ title: "CanvasState"
 
 #### Source
 
-[graphics/graphics.ts:9](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L9)
+[packages/core/src/graphics/graphics.ts:9](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L9)
 
 ***
 
@@ -83,7 +83,7 @@ title: "CanvasState"
 
 #### Source
 
-[graphics/graphics.ts:11](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L11)
+[packages/core/src/graphics/graphics.ts:11](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L11)
 
 ***
 
@@ -93,4 +93,4 @@ title: "CanvasState"
 
 #### Source
 
-[graphics/graphics.ts:10](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L10)
+[packages/core/src/graphics/graphics.ts:10](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L10)

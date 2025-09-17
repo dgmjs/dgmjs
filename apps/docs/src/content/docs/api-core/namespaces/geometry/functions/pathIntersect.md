@@ -35,4 +35,4 @@ Returns a intersection point or null
 
 ## Source
 
-[graphics/geometry.ts:543](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L543)
+[packages/core/src/graphics/geometry.ts:543](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L543)

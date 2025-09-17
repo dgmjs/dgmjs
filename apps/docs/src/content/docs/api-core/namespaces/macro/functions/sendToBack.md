@@ -21,4 +21,4 @@ A macro to send the shape to the back
 
 ## Source
 
-[macro.ts:645](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L645)
+[packages/core/src/macro.ts:645](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L645)

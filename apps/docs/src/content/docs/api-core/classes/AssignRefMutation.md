@@ -35,7 +35,7 @@ Assign a ref to an object field
 
 #### Source
 
-[core/transaction.ts:128](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L128)
+[packages/core/src/core/transaction.ts:128](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L128)
 
 ## Properties
 
@@ -45,7 +45,7 @@ Assign a ref to an object field
 
 #### Source
 
-[core/transaction.ts:124](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L124)
+[packages/core/src/core/transaction.ts:124](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L124)
 
 ***
 
@@ -55,7 +55,7 @@ Assign a ref to an object field
 
 #### Source
 
-[core/transaction.ts:125](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L125)
+[packages/core/src/core/transaction.ts:125](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L125)
 
 ***
 
@@ -65,7 +65,7 @@ Assign a ref to an object field
 
 #### Source
 
-[core/transaction.ts:123](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L123)
+[packages/core/src/core/transaction.ts:123](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L123)
 
 ***
 
@@ -75,7 +75,7 @@ Assign a ref to an object field
 
 #### Source
 
-[core/transaction.ts:126](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L126)
+[packages/core/src/core/transaction.ts:126](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L126)
 
 ***
 
@@ -89,7 +89,7 @@ Assign a ref to an object field
 
 #### Source
 
-[core/transaction.ts:18](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L18)
+[packages/core/src/core/transaction.ts:18](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L18)
 
 ## Methods
 
@@ -111,7 +111,7 @@ Assign a ref to an object field
 
 #### Source
 
-[core/transaction.ts:136](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L136)
+[packages/core/src/core/transaction.ts:136](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L136)
 
 ***
 
@@ -149,7 +149,7 @@ Assign a ref to an object field
 
 #### Source
 
-[core/transaction.ts:146](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L146)
+[packages/core/src/core/transaction.ts:146](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L146)
 
 ***
 
@@ -171,4 +171,4 @@ Assign a ref to an object field
 
 #### Source
 
-[core/transaction.ts:141](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L141)
+[packages/core/src/core/transaction.ts:141](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L141)

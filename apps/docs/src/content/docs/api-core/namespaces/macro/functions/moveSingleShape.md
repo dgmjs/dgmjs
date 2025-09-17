@@ -25,4 +25,4 @@ A macro to move a single shape
 
 ## Source
 
-[macro.ts:274](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L274)
+[packages/core/src/macro.ts:274](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L274)

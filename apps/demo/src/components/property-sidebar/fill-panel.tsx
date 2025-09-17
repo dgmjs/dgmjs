@@ -2,7 +2,7 @@ import React from "react";
 import { ColorField } from "./fields/color-field";
 import { Panel } from "../common/panel";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { FillStyle } from "@dgmjs/core";
+import { FillStyle, FillStyleEnum } from "@dgmjs/core";
 import {
   FillCrossHatchIcon,
   FillHachureIcon,
@@ -32,7 +32,8 @@ export const FillPanel: React.FC<ShapeEditorProps> = ({ shapes, onChange }) => {
           type="single"
           value={fillStyle}
           onValueChange={(value) => {
-            if (onChange && value) onChange({ fillStyle: value });
+            if (onChange && value)
+              onChange({ fillStyle: value as FillStyleEnum });
           }}
         >
           <SimpleTooltip content="Solid">

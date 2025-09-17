@@ -107,6 +107,7 @@ title: "@dgmjs/core"
 - [Movable](/api-core/variables/movable/)
 - [MutationType](/api-core/variables/mutationtype/)
 - [ScriptType](/api-core/variables/scripttype/)
+- [ShapePropsSchema](/api-core/variables/shapepropsschema/)
 - [Sizable](/api-core/variables/sizable/)
 - [VertAlign](/api-core/variables/vertalign/)
 - [constraintManager](/api-core/variables/constraintmanager/)

@@ -48,11 +48,227 @@ export class Obj {
   }
 
   /**
-   * Get a field from the JSON object, return defaultValue if the field is not defined.
+   * Read an any value from the JSON object,
+   * return defaultValue if the field is undefined.
    */
-  getJson(json: any, field: string, defaultValue: any) {
+  readAny(json: any, field: string, defaultValue: any): any {
     if (typeof json[field] !== "undefined") {
       return json[field];
+    }
+    return defaultValue;
+  }
+
+  /**
+   * Read an array of any value from the JSON object,
+   * return defaultValue if the field is not an array.
+   */
+  readArrayAny(json: any, field: string, defaultValue: any[]): any[] {
+    if (Array.isArray(json[field])) {
+      return json[field];
+    }
+    return defaultValue;
+  }
+
+  /**
+   * Read a number field from the JSON object,
+   * return defaultValue if the field is not a number.
+   */
+  readNumber(json: any, field: string, defaultValue: number): number {
+    if (typeof json[field] !== "number") {
+      return defaultValue;
+    }
+    return json[field];
+  }
+
+  /**
+   * Read a number field from the JSON object,
+   * return defaultValue if the field is not a number.
+   */
+  readArrayNumber(
+    json: any,
+    field: string,
+    defaultValue: number[],
+    length?: number
+  ): number[] {
+    if (json[field] === null) {
+      return null as any;
+    }
+    if (
+      !Array.isArray(json[field]) ||
+      !json[field].every((v: any) => typeof v === "number")
+    ) {
+      return defaultValue;
+    }
+    if (typeof length === "number" && json[field].length !== length) {
+      return defaultValue;
+    }
+    return json[field];
+  }
+
+  /**
+   * Read a string field from the JSON object,
+   * return defaultValue if the field is not a string.
+   */
+  readString(json: any, field: string, defaultValue: string): string {
+    if (typeof json[field] !== "string") {
+      return defaultValue;
+    }
+    return json[field];
+  }
+
+  /**
+   * Read an array of string from the JSON object,
+   * return defaultValue if the field is not an array of string.
+   */
+  readArrayString(json: any, field: string, defaultValue: string[]): string[] {
+    if (
+      !Array.isArray(json[field]) ||
+      !json[field].every((v: any) => typeof v === "string")
+    ) {
+      return defaultValue;
+    }
+    return json[field];
+  }
+
+  /**
+   * Read a boolean field from the JSON object,
+   * return defaultValue if the field is not a boolean.
+   */
+  readBoolean(json: any, field: string, defaultValue: boolean): boolean {
+    if (typeof json[field] !== "boolean") {
+      return defaultValue;
+    }
+    return json[field];
+  }
+
+  /**
+   * Read an array of boolean from the JSON object,
+   * return defaultValue if the field is not an array of boolean.
+   */
+  readArrayBoolean(
+    json: any,
+    field: string,
+    defaultValue: boolean[],
+    length?: number
+  ): boolean[] {
+    if (
+      !Array.isArray(json[field]) ||
+      !json[field].every((v: any) => typeof v === "boolean")
+    ) {
+      return defaultValue;
+    }
+    if (typeof length === "number" && json[field].length !== length) {
+      return defaultValue;
+    }
+    return json[field];
+  }
+
+  /**
+   * Read a color field from the JSON object,
+   * return defaultValue if the field is not a string or not a valid color.
+   */
+  readColor(json: any, field: string, defaultValue: string): string {
+    const val = json[field];
+    if (
+      typeof val === "string" &&
+      (val.startsWith("#") || val.startsWith("$"))
+    ) {
+      return val;
+    }
+    return defaultValue;
+  }
+
+  /**
+   * Read an enum value from the JSON object,
+   * return defaultValue if the field is not a valid enum value.
+   */
+  readEnum(
+    json: any,
+    field: string,
+    enumType: any,
+    defaultValue: string
+  ): string {
+    const literals = Object.values(enumType);
+    if (literals.includes(json[field])) {
+      return json[field];
+    }
+    return defaultValue;
+  }
+
+  /**
+   * Read a reference to object from the JSON object,
+   * return defaultValue if the field is not string (obj's id) or null.
+   */
+  readRef(json: any, field: string): string | null {
+    if (typeof json[field] === "string" || json[field] === null) {
+      return json[field];
+    }
+    return null;
+  }
+
+  /**
+   * Read a point value from the JSON object,
+   * return defaultValue if the field is not a point.
+   */
+  readPoint(
+    json: any,
+    field: string,
+    defaultValue: [number, number]
+  ): [number, number] {
+    if (
+      Array.isArray(json[field]) &&
+      json[field].length === 2 &&
+      typeof json[field][0] === "number" &&
+      typeof json[field][1] === "number"
+    ) {
+      return [json[field][0], json[field][1]];
+    }
+    return defaultValue;
+  }
+
+  /**
+   * Read a point or null value from the JSON object,
+   * return defaultValue if the field is not a point or null.
+   */
+  readPointOrNull(
+    json: any,
+    field: string,
+    defaultValue: [number, number] | null
+  ): [number, number] | null {
+    if (json[field] === null) {
+      return null;
+    }
+    if (
+      Array.isArray(json[field]) &&
+      json[field].length === 2 &&
+      typeof json[field][0] === "number" &&
+      typeof json[field][1] === "number"
+    ) {
+      return [json[field][0], json[field][1]];
+    }
+    return defaultValue;
+  }
+
+  /**
+   * Read a, array of point value from the JSON object,
+   * return defaultValue if the field is not an array of point.
+   */
+  readArrayPoint(
+    json: any,
+    field: string,
+    defaultValue: [number, number][]
+  ): [number, number][] {
+    if (
+      Array.isArray(json[field]) &&
+      json[field].every(
+        (p: any) =>
+          Array.isArray(p) &&
+          p.length === 2 &&
+          typeof p[0] === "number" &&
+          typeof p[1] === "number"
+      )
+    ) {
+      return json[field].map((p: any) => [p[0], p[1]]);
     }
     return defaultValue;
   }

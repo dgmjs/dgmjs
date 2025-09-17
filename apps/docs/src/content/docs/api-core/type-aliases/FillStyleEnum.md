@@ -9,4 +9,4 @@ title: "FillStyleEnum"
 
 ## Source
 
-[graphics/graphics.ts:61](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L61)
+[packages/core/src/graphics/graphics.ts:61](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/graphics.ts#L61)

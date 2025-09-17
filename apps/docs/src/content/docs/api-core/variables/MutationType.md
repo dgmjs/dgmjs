@@ -39,4 +39,4 @@ title: "MutationType"
 
 ## Source
 
-[core/transaction.ts:4](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L4)
+[packages/core/src/core/transaction.ts:4](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L4)

@@ -19,4 +19,4 @@ Return whether is the path is closed or not
 
 ## Source
 
-[graphics/geometry.ts:639](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L639)
+[packages/core/src/graphics/geometry.ts:639](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L639)

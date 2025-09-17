@@ -27,4 +27,4 @@ The cut point
 
 ## Source
 
-[utils/shape-utils.ts:131](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/shape-utils.ts#L131)
+[packages/core/src/utils/shape-utils.ts:131](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/shape-utils.ts#L131)

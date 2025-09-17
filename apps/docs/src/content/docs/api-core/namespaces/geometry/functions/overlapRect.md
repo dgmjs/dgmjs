@@ -21,4 +21,4 @@ Test whether two rects are overlap or not
 
 ## Source
 
-[graphics/geometry.ts:377](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L377)
+[packages/core/src/graphics/geometry.ts:377](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L377)

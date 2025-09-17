@@ -25,4 +25,4 @@ index of segment (-1 if not found)
 
 ## Source
 
-[graphics/geometry.ts:468](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L468)
+[packages/core/src/graphics/geometry.ts:468](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L468)

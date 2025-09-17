@@ -141,4 +141,4 @@ ActionKind
 
 ## Source
 
-[core/transform.ts:12](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L12)
+[packages/core/src/core/transform.ts:12](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L12)

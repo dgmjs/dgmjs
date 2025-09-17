@@ -25,6 +25,42 @@ title: "ExportImageOptions"
 
 > **margin**: `number`
 
+### postrender()?
+
+> `optional` **postrender**: (`canvas`, `width`, `height`, `options`) => `void`
+
+#### Parameters
+
+• **canvas**: `Canvas`
+
+• **width**: `number`
+
+• **height**: `number`
+
+• **options**: `Partial`\<[`ExportImageOptions`](/api-export/type-aliases/exportimageoptions/)\>
+
+#### Returns
+
+`void`
+
+### prerender()?
+
+> `optional` **prerender**: (`canvas`, `width`, `height`, `options`) => `void`
+
+#### Parameters
+
+• **canvas**: `Canvas`
+
+• **width**: `number`
+
+• **height**: `number`
+
+• **options**: `Partial`\<[`ExportImageOptions`](/api-export/type-aliases/exportimageoptions/)\>
+
+#### Returns
+
+`void`
+
 ### scale
 
 > **scale**: `number`

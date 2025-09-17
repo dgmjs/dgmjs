@@ -27,4 +27,4 @@ The cut number
 
 ## Source
 
-[utils/shape-utils.ts:120](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/shape-utils.ts#L120)
+[packages/core/src/utils/shape-utils.ts:120](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/shape-utils.ts#L120)

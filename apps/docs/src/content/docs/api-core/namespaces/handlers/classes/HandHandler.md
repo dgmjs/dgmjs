@@ -33,7 +33,7 @@ Hand Handler
 
 #### Source
 
-[editor.ts:1456](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1456)
+[packages/core/src/editor.ts:1472](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1472)
 
 ## Properties
 
@@ -47,7 +47,7 @@ Hand Handler
 
 #### Source
 
-[handlers/hand-handler.ts:12](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L12)
+[packages/core/src/handlers/hand-handler.ts:12](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L12)
 
 ***
 
@@ -61,7 +61,7 @@ Hand Handler
 
 #### Source
 
-[handlers/hand-handler.ts:11](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L11)
+[packages/core/src/handlers/hand-handler.ts:11](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L11)
 
 ***
 
@@ -75,7 +75,7 @@ Hand Handler
 
 #### Source
 
-[handlers/hand-handler.ts:10](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L10)
+[packages/core/src/handlers/hand-handler.ts:10](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L10)
 
 ***
 
@@ -85,7 +85,7 @@ Hand Handler
 
 #### Source
 
-[handlers/hand-handler.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L13)
+[packages/core/src/handlers/hand-handler.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L13)
 
 ***
 
@@ -95,7 +95,7 @@ Hand Handler
 
 #### Source
 
-[handlers/hand-handler.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L14)
+[packages/core/src/handlers/hand-handler.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L14)
 
 ***
 
@@ -109,7 +109,7 @@ Hand Handler
 
 #### Source
 
-[editor.ts:1450](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1450)
+[packages/core/src/editor.ts:1466](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1466)
 
 ***
 
@@ -123,7 +123,7 @@ Hand Handler
 
 #### Source
 
-[editor.ts:1451](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1451)
+[packages/core/src/editor.ts:1467](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1467)
 
 ## Methods
 
@@ -147,7 +147,7 @@ Activate the handler
 
 #### Source
 
-[editor.ts:1489](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1489)
+[packages/core/src/editor.ts:1505](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1505)
 
 ***
 
@@ -171,7 +171,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[editor.ts:1480](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1480)
+[packages/core/src/editor.ts:1496](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1496)
 
 ***
 
@@ -195,7 +195,7 @@ Deactivate the handler
 
 #### Source
 
-[editor.ts:1497](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1497)
+[packages/core/src/editor.ts:1513](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1513)
 
 ***
 
@@ -221,7 +221,7 @@ Draw dragging
 
 #### Source
 
-[editor.ts:1613](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1613)
+[packages/core/src/editor.ts:1629](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1629)
 
 ***
 
@@ -247,7 +247,7 @@ Draw hovering
 
 #### Source
 
-[editor.ts:1608](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1608)
+[packages/core/src/editor.ts:1624](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1624)
 
 ***
 
@@ -271,7 +271,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[editor.ts:1603](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1603)
+[packages/core/src/editor.ts:1619](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1619)
 
 ***
 
@@ -297,7 +297,7 @@ Finalize handler
 
 #### Source
 
-[editor.ts:1534](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1534)
+[packages/core/src/editor.ts:1550](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1550)
 
 ***
 
@@ -323,7 +323,7 @@ Initialize handler
 
 #### Source
 
-[editor.ts:1519](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1519)
+[packages/core/src/editor.ts:1535](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1535)
 
 ***
 
@@ -349,7 +349,7 @@ keyDown
 
 #### Source
 
-[editor.ts:1585](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1585)
+[packages/core/src/editor.ts:1601](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1601)
 
 ***
 
@@ -375,7 +375,7 @@ keyUp
 
 #### Source
 
-[editor.ts:1598](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1598)
+[packages/core/src/editor.ts:1614](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1614)
 
 ***
 
@@ -399,7 +399,7 @@ Triggered when action is performed (unclude undo and redo)
 
 #### Source
 
-[editor.ts:1514](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1514)
+[packages/core/src/editor.ts:1530](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1530)
 
 ***
 
@@ -423,7 +423,7 @@ Triggered when activated
 
 #### Source
 
-[handlers/hand-handler.ts:64](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L64)
+[packages/core/src/handlers/hand-handler.ts:64](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L64)
 
 ***
 
@@ -447,7 +447,7 @@ Triggered when deactivate
 
 #### Source
 
-[handlers/hand-handler.ts:68](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L68)
+[packages/core/src/handlers/hand-handler.ts:68](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L68)
 
 ***
 
@@ -473,7 +473,7 @@ handle pointer down event
 
 #### Source
 
-[handlers/hand-handler.ts:27](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L27)
+[packages/core/src/handlers/hand-handler.ts:27](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L27)
 
 ***
 
@@ -499,7 +499,7 @@ handle pointer move event
 
 #### Source
 
-[handlers/hand-handler.ts:42](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L42)
+[packages/core/src/handlers/hand-handler.ts:42](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L42)
 
 ***
 
@@ -525,7 +525,7 @@ handle pointer up event
 
 #### Source
 
-[handlers/hand-handler.ts:56](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L56)
+[packages/core/src/handlers/hand-handler.ts:56](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L56)
 
 ***
 
@@ -545,7 +545,7 @@ Reset the states of handler
 
 #### Source
 
-[handlers/hand-handler.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L16)
+[packages/core/src/handlers/hand-handler.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/hand-handler.ts#L16)
 
 ***
 
@@ -571,7 +571,7 @@ Update handler
 
 #### Source
 
-[editor.ts:1524](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1524)
+[packages/core/src/editor.ts:1540](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1540)
 
 ***
 
@@ -597,4 +597,4 @@ Update handler when hovering (not dragging)
 
 #### Source
 
-[editor.ts:1529](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1529)
+[packages/core/src/editor.ts:1545](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1545)

@@ -21,4 +21,4 @@ Test whether the two reacts are equals or not
 
 ## Source
 
-[graphics/geometry.ts:452](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L452)
+[packages/core/src/graphics/geometry.ts:452](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L452)

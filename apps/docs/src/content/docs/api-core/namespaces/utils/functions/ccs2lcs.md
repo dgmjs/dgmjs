@@ -23,4 +23,4 @@ Transform canvas coord to local coord (CCS --> LCS)
 
 ## Source
 
-[graphics/utils.ts:34](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/utils.ts#L34)
+[packages/core/src/graphics/utils.ts:34](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/utils.ts#L34)

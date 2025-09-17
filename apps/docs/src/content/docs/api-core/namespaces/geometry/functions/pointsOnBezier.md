@@ -23,4 +23,4 @@ Return points on a given bezier path
 
 ## Source
 
-[graphics/geometry.ts:696](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L696)
+[packages/core/src/graphics/geometry.ts:696](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L696)

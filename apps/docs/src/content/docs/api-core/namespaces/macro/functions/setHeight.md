@@ -23,4 +23,4 @@ A macro to set height
 
 ## Source
 
-[macro.ts:222](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L222)
+[packages/core/src/macro.ts:222](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L222)

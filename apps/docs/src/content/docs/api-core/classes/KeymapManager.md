@@ -21,7 +21,7 @@ title: "KeymapManager"
 
 #### Source
 
-[keymap-manager.ts:9](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L9)
+[packages/core/src/keymap-manager.ts:9](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L9)
 
 ## Properties
 
@@ -31,7 +31,7 @@ title: "KeymapManager"
 
 #### Source
 
-[keymap-manager.ts:6](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L6)
+[packages/core/src/keymap-manager.ts:6](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L6)
 
 ***
 
@@ -41,7 +41,7 @@ title: "KeymapManager"
 
 #### Source
 
-[keymap-manager.ts:7](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L7)
+[packages/core/src/keymap-manager.ts:7](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L7)
 
 ## Methods
 
@@ -61,7 +61,7 @@ Add keymaps
 
 #### Source
 
-[keymap-manager.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L17)
+[packages/core/src/keymap-manager.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L17)
 
 ***
 
@@ -79,7 +79,7 @@ Add keymaps
 
 #### Source
 
-[keymap-manager.ts:306](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L306)
+[packages/core/src/keymap-manager.ts:306](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L306)
 
 ***
 
@@ -105,7 +105,7 @@ Add keymaps
 
 #### Source
 
-[keymap-manager.ts:158](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L158)
+[packages/core/src/keymap-manager.ts:158](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L158)
 
 ***
 
@@ -123,7 +123,7 @@ Add keymaps
 
 #### Source
 
-[keymap-manager.ts:33](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L33)
+[packages/core/src/keymap-manager.ts:33](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L33)
 
 ***
 
@@ -139,7 +139,7 @@ Get current keymap
 
 #### Source
 
-[keymap-manager.ts:29](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L29)
+[packages/core/src/keymap-manager.ts:29](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L29)
 
 ***
 
@@ -157,7 +157,7 @@ Get current keymap
 
 #### Source
 
-[keymap-manager.ts:298](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L298)
+[packages/core/src/keymap-manager.ts:298](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L298)
 
 ***
 
@@ -171,7 +171,7 @@ Get current keymap
 
 #### Source
 
-[keymap-manager.ts:277](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L277)
+[packages/core/src/keymap-manager.ts:277](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L277)
 
 ***
 
@@ -185,7 +185,7 @@ Get current keymap
 
 #### Source
 
-[keymap-manager.ts:273](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L273)
+[packages/core/src/keymap-manager.ts:273](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L273)
 
 ***
 
@@ -203,7 +203,7 @@ Get current keymap
 
 #### Source
 
-[keymap-manager.ts:286](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L286)
+[packages/core/src/keymap-manager.ts:286](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L286)
 
 ***
 
@@ -223,7 +223,7 @@ Get current keymap
 
 #### Source
 
-[keymap-manager.ts:192](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L192)
+[packages/core/src/keymap-manager.ts:192](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L192)
 
 ***
 
@@ -241,7 +241,7 @@ Get current keymap
 
 #### Source
 
-[keymap-manager.ts:118](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L118)
+[packages/core/src/keymap-manager.ts:118](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L118)
 
 ***
 
@@ -261,4 +261,4 @@ Translate key event to normalized key descriptor
 
 #### Source
 
-[keymap-manager.ts:251](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L251)
+[packages/core/src/keymap-manager.ts:251](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L251)

@@ -21,4 +21,4 @@ Returns bounding rect of all of given shapes
 
 ## Source
 
-[utils/shape-utils.ts:84](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/shape-utils.ts#L84)
+[packages/core/src/utils/shape-utils.ts:84](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/shape-utils.ts#L84)

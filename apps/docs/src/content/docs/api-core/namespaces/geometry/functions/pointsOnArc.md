@@ -41,4 +41,4 @@ number of segments
 
 ## Source
 
-[graphics/geometry.ts:738](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L738)
+[packages/core/src/graphics/geometry.ts:738](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L738)

@@ -23,4 +23,4 @@ A macro to add a child and change the child's parent
 
 ## Source
 
-[macro.ts:51](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L51)
+[packages/core/src/macro.ts:51](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L51)

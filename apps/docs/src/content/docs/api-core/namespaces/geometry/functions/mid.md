@@ -21,4 +21,4 @@ Returns a mid point of the given two points
 
 ## Source
 
-[graphics/geometry.ts:53](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L53)
+[packages/core/src/graphics/geometry.ts:53](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L53)

@@ -9,4 +9,4 @@ title: "KeyMap"
 
 ## Source
 
-[keymap-manager.ts:3](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L3)
+[packages/core/src/keymap-manager.ts:3](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/keymap-manager.ts#L3)

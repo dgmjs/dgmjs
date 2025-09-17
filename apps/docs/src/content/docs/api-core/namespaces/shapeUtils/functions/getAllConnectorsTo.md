@@ -21,4 +21,4 @@ Returns all connectors connected to the any of the set of objects
 
 ## Source
 
-[utils/shape-utils.ts:26](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/shape-utils.ts#L26)
+[packages/core/src/utils/shape-utils.ts:26](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/shape-utils.ts#L26)

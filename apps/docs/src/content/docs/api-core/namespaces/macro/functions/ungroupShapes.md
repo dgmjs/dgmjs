@@ -27,4 +27,4 @@ A macro to ungroup shapes
 
 ## Source
 
-[macro.ts:607](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L607)
+[packages/core/src/macro.ts:607](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L607)

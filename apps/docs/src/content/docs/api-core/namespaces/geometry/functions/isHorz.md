@@ -21,4 +21,4 @@ Test whether the two points are horizontal
 
 ## Source
 
-[graphics/geometry.ts:74](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L74)
+[packages/core/src/graphics/geometry.ts:74](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L74)

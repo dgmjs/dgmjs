@@ -95,4 +95,4 @@ title: "LineEndType"
 
 ## Source
 
-[shapes.ts:102](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L102)
+[packages/core/src/shapes.ts:102](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L102)

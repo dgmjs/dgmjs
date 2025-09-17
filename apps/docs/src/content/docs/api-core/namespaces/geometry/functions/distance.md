@@ -21,4 +21,4 @@ Distance between two points
 
 ## Source
 
-[graphics/geometry.ts:146](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L146)
+[packages/core/src/graphics/geometry.ts:146](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L146)

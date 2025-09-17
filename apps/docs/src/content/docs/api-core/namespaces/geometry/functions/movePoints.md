@@ -23,4 +23,4 @@ Returns points moved as dx and dy
 
 ## Source
 
-[graphics/geometry.ts:67](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L67)
+[packages/core/src/graphics/geometry.ts:67](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L67)

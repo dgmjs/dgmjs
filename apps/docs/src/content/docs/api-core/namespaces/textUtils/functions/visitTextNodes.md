@@ -25,4 +25,4 @@ Visit all text nodes
 
 ## Source
 
-[utils/text-utils.ts:653](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L653)
+[packages/core/src/utils/text-utils.ts:658](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L658)
