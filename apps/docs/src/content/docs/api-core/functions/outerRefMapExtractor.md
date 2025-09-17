@@ -21,4 +21,4 @@ Extract outer refs in objs from the store
 
 ## Source
 
-[actions.ts:38](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L38)
+[packages/core/src/actions.ts:40](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L40)

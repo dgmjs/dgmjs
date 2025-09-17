@@ -21,4 +21,4 @@ Transform global coord to DOM coord (GCS --> DCS) on canvas element
 
 ## Source
 
-[graphics/utils.ts:68](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/utils.ts#L68)
+[packages/core/src/graphics/utils.ts:68](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/utils.ts#L68)

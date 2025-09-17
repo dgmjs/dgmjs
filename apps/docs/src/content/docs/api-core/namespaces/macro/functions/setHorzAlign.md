@@ -23,4 +23,4 @@ A macro to change horz align
 
 ## Source
 
-[macro.ts:313](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L313)
+[packages/core/src/macro.ts:313](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L313)

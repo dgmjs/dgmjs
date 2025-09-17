@@ -33,7 +33,7 @@ Eraser Handler
 
 #### Source
 
-[editor.ts:1456](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1456)
+[packages/core/src/editor.ts:1472](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1472)
 
 ## Properties
 
@@ -43,7 +43,7 @@ Eraser Handler
 
 #### Source
 
-[handlers/eraser-handler.ts:18](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L18)
+[packages/core/src/handlers/eraser-handler.ts:18](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L18)
 
 ***
 
@@ -57,7 +57,7 @@ Eraser Handler
 
 #### Source
 
-[handlers/eraser-handler.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L15)
+[packages/core/src/handlers/eraser-handler.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L15)
 
 ***
 
@@ -71,7 +71,7 @@ Eraser Handler
 
 #### Source
 
-[handlers/eraser-handler.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L14)
+[packages/core/src/handlers/eraser-handler.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L14)
 
 ***
 
@@ -85,7 +85,7 @@ Eraser Handler
 
 #### Source
 
-[handlers/eraser-handler.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L13)
+[packages/core/src/handlers/eraser-handler.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L13)
 
 ***
 
@@ -95,7 +95,7 @@ Eraser Handler
 
 #### Source
 
-[handlers/eraser-handler.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L16)
+[packages/core/src/handlers/eraser-handler.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L16)
 
 ***
 
@@ -105,7 +105,7 @@ Eraser Handler
 
 #### Source
 
-[handlers/eraser-handler.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L17)
+[packages/core/src/handlers/eraser-handler.ts:17](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L17)
 
 ***
 
@@ -119,7 +119,7 @@ Eraser Handler
 
 #### Source
 
-[editor.ts:1450](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1450)
+[packages/core/src/editor.ts:1466](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1466)
 
 ***
 
@@ -133,7 +133,7 @@ Eraser Handler
 
 #### Source
 
-[editor.ts:1451](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1451)
+[packages/core/src/editor.ts:1467](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1467)
 
 ## Methods
 
@@ -157,7 +157,7 @@ Activate the handler
 
 #### Source
 
-[editor.ts:1489](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1489)
+[packages/core/src/editor.ts:1505](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1505)
 
 ***
 
@@ -177,7 +177,7 @@ Activate the handler
 
 #### Source
 
-[handlers/eraser-handler.ts:29](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L29)
+[packages/core/src/handlers/eraser-handler.ts:29](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L29)
 
 ***
 
@@ -201,7 +201,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[editor.ts:1480](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1480)
+[packages/core/src/editor.ts:1496](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1496)
 
 ***
 
@@ -225,7 +225,7 @@ Deactivate the handler
 
 #### Source
 
-[editor.ts:1497](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1497)
+[packages/core/src/editor.ts:1513](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1513)
 
 ***
 
@@ -251,7 +251,7 @@ Draw dragging
 
 #### Source
 
-[editor.ts:1613](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1613)
+[packages/core/src/editor.ts:1629](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1629)
 
 ***
 
@@ -277,7 +277,7 @@ Draw hovering
 
 #### Source
 
-[editor.ts:1608](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1608)
+[packages/core/src/editor.ts:1624](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1624)
 
 ***
 
@@ -301,7 +301,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[editor.ts:1603](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1603)
+[packages/core/src/editor.ts:1619](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1619)
 
 ***
 
@@ -327,7 +327,7 @@ Finalize handler
 
 #### Source
 
-[handlers/eraser-handler.ts:52](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L52)
+[packages/core/src/handlers/eraser-handler.ts:52](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L52)
 
 ***
 
@@ -353,7 +353,7 @@ Initialize handler
 
 #### Source
 
-[handlers/eraser-handler.ts:43](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L43)
+[packages/core/src/handlers/eraser-handler.ts:43](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L43)
 
 ***
 
@@ -379,7 +379,7 @@ keyDown
 
 #### Source
 
-[handlers/eraser-handler.ts:105](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L105)
+[packages/core/src/handlers/eraser-handler.ts:105](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L105)
 
 ***
 
@@ -405,7 +405,7 @@ keyUp
 
 #### Source
 
-[editor.ts:1598](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1598)
+[packages/core/src/editor.ts:1614](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1614)
 
 ***
 
@@ -429,7 +429,7 @@ Triggered when action is performed (unclude undo and redo)
 
 #### Source
 
-[editor.ts:1514](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1514)
+[packages/core/src/editor.ts:1530](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1530)
 
 ***
 
@@ -453,7 +453,7 @@ Triggered when activated
 
 #### Source
 
-[handlers/eraser-handler.ts:115](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L115)
+[packages/core/src/handlers/eraser-handler.ts:115](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L115)
 
 ***
 
@@ -477,7 +477,7 @@ Triggered when deactivate
 
 #### Source
 
-[handlers/eraser-handler.ts:119](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L119)
+[packages/core/src/handlers/eraser-handler.ts:119](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L119)
 
 ***
 
@@ -503,7 +503,7 @@ handle pointer down event
 
 #### Source
 
-[handlers/eraser-handler.ts:67](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L67)
+[packages/core/src/handlers/eraser-handler.ts:67](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L67)
 
 ***
 
@@ -529,7 +529,7 @@ handle pointer move event
 
 #### Source
 
-[handlers/eraser-handler.ts:82](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L82)
+[packages/core/src/handlers/eraser-handler.ts:82](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L82)
 
 ***
 
@@ -555,7 +555,7 @@ handle pointer up event
 
 #### Source
 
-[handlers/eraser-handler.ts:96](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L96)
+[packages/core/src/handlers/eraser-handler.ts:96](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L96)
 
 ***
 
@@ -575,7 +575,7 @@ Reset the states of handler
 
 #### Source
 
-[handlers/eraser-handler.ts:20](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L20)
+[packages/core/src/handlers/eraser-handler.ts:20](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L20)
 
 ***
 
@@ -601,7 +601,7 @@ Update handler
 
 #### Source
 
-[handlers/eraser-handler.ts:48](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L48)
+[packages/core/src/handlers/eraser-handler.ts:48](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/eraser-handler.ts#L48)
 
 ***
 
@@ -627,4 +627,4 @@ Update handler when hovering (not dragging)
 
 #### Source
 
-[editor.ts:1529](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1529)
+[packages/core/src/editor.ts:1545](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1545)

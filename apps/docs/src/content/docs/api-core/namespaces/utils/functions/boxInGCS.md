@@ -21,4 +21,4 @@ Return the bounding box of shape in GCS
 
 ## Source
 
-[graphics/utils.ts:98](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/utils.ts#L98)
+[packages/core/src/graphics/utils.ts:98](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/utils.ts#L98)

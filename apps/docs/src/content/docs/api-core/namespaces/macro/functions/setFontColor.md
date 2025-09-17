@@ -23,4 +23,4 @@ A macro to change font color
 
 ## Source
 
-[macro.ts:380](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L380)
+[packages/core/src/macro.ts:380](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L380)

@@ -23,7 +23,7 @@ Selection Manager
 
 #### Source
 
-[selection-manager.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L15)
+[packages/core/src/selection-manager.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L15)
 
 ## Properties
 
@@ -33,7 +33,7 @@ Selection Manager
 
 #### Source
 
-[selection-manager.ts:11](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L11)
+[packages/core/src/selection-manager.ts:11](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L11)
 
 ***
 
@@ -43,7 +43,7 @@ Selection Manager
 
 #### Source
 
-[selection-manager.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L13)
+[packages/core/src/selection-manager.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L13)
 
 ***
 
@@ -53,7 +53,7 @@ Selection Manager
 
 #### Source
 
-[selection-manager.ts:12](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L12)
+[packages/core/src/selection-manager.ts:12](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L12)
 
 ## Methods
 
@@ -73,7 +73,7 @@ Deselect the given shapes.
 
 #### Source
 
-[selection-manager.ts:125](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L125)
+[packages/core/src/selection-manager.ts:125](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L125)
 
 ***
 
@@ -89,7 +89,7 @@ Deselect all shapes.
 
 #### Source
 
-[selection-manager.ts:137](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L137)
+[packages/core/src/selection-manager.ts:137](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L137)
 
 ***
 
@@ -109,7 +109,7 @@ Returns bounding rect of selected shapes
 
 #### Source
 
-[selection-manager.ts:147](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L147)
+[packages/core/src/selection-manager.ts:147](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L147)
 
 ***
 
@@ -129,7 +129,7 @@ Returns enclosure of selected shapes
 
 #### Source
 
-[selection-manager.ts:165](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L165)
+[packages/core/src/selection-manager.ts:165](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L165)
 
 ***
 
@@ -147,7 +147,7 @@ an array of selected shapes.
 
 #### Source
 
-[selection-manager.ts:45](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L45)
+[packages/core/src/selection-manager.ts:45](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L45)
 
 ***
 
@@ -167,7 +167,7 @@ isChanged
 
 #### Source
 
-[selection-manager.ts:24](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L24)
+[packages/core/src/selection-manager.ts:24](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L24)
 
 ***
 
@@ -185,7 +185,7 @@ isChanged
 
 #### Source
 
-[selection-manager.ts:56](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L56)
+[packages/core/src/selection-manager.ts:56](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L56)
 
 ***
 
@@ -211,7 +211,7 @@ clear the current selection if true.
 
 #### Source
 
-[selection-manager.ts:65](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L65)
+[packages/core/src/selection-manager.ts:65](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L65)
 
 ***
 
@@ -227,7 +227,7 @@ Select all shapes in the current page
 
 #### Source
 
-[selection-manager.ts:112](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L112)
+[packages/core/src/selection-manager.ts:112](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L112)
 
 ***
 
@@ -265,7 +265,7 @@ clear the current selection if true.
 
 #### Source
 
-[selection-manager.ts:83](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L83)
+[packages/core/src/selection-manager.ts:83](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L83)
 
 ***
 
@@ -281,4 +281,4 @@ Return the number of selections
 
 #### Source
 
-[selection-manager.ts:52](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L52)
+[packages/core/src/selection-manager.ts:52](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/selection-manager.ts#L52)

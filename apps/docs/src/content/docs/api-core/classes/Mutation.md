@@ -33,7 +33,7 @@ Mutation is an atomic modification on an object in store
 
 #### Source
 
-[core/transaction.ts:19](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L19)
+[packages/core/src/core/transaction.ts:19](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L19)
 
 ## Properties
 
@@ -43,7 +43,7 @@ Mutation is an atomic modification on an object in store
 
 #### Source
 
-[core/transaction.ts:18](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L18)
+[packages/core/src/core/transaction.ts:18](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L18)
 
 ## Methods
 
@@ -61,7 +61,7 @@ Mutation is an atomic modification on an object in store
 
 #### Source
 
-[core/transaction.ts:22](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L22)
+[packages/core/src/core/transaction.ts:22](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L22)
 
 ***
 
@@ -75,7 +75,7 @@ Mutation is an atomic modification on an object in store
 
 #### Source
 
-[core/transaction.ts:24](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L24)
+[packages/core/src/core/transaction.ts:24](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L24)
 
 ***
 
@@ -93,4 +93,4 @@ Mutation is an atomic modification on an object in store
 
 #### Source
 
-[core/transaction.ts:23](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L23)
+[packages/core/src/core/transaction.ts:23](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L23)

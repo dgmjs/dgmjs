@@ -24,4 +24,4 @@ https://basarat.gitbook.io/typescript/main-1/typed-event
 
 ## Source
 
-[std/typed-event.ts:7](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/std/typed-event.ts#L7)
+[packages/core/src/std/typed-event.ts:7](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/std/typed-event.ts#L7)

@@ -21,4 +21,4 @@ A function to duplicate an array of shapes
 
 ## Source
 
-[utils/shape-utils.ts:105](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/shape-utils.ts#L105)
+[packages/core/src/utils/shape-utils.ts:105](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/shape-utils.ts#L105)

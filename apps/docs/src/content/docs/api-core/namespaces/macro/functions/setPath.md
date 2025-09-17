@@ -23,4 +23,4 @@ A macro to set path (including left, top, width, height)
 
 ## Source
 
-[macro.ts:235](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L235)
+[packages/core/src/macro.ts:235](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L235)

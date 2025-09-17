@@ -25,4 +25,4 @@ distance center point to line segment
 
 ## Source
 
-[graphics/geometry.ts:242](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L242)
+[packages/core/src/graphics/geometry.ts:242](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L242)

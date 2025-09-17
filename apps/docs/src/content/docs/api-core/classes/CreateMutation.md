@@ -31,7 +31,7 @@ Create an object
 
 #### Source
 
-[core/transaction.ts:35](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L35)
+[packages/core/src/core/transaction.ts:35](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L35)
 
 ## Properties
 
@@ -41,7 +41,7 @@ Create an object
 
 #### Source
 
-[core/transaction.ts:33](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L33)
+[packages/core/src/core/transaction.ts:33](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L33)
 
 ***
 
@@ -55,7 +55,7 @@ Create an object
 
 #### Source
 
-[core/transaction.ts:18](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L18)
+[packages/core/src/core/transaction.ts:18](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L18)
 
 ## Methods
 
@@ -77,7 +77,7 @@ Create an object
 
 #### Source
 
-[core/transaction.ts:40](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L40)
+[packages/core/src/core/transaction.ts:40](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L40)
 
 ***
 
@@ -95,7 +95,7 @@ Create an object
 
 #### Source
 
-[core/transaction.ts:50](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L50)
+[packages/core/src/core/transaction.ts:50](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L50)
 
 ***
 
@@ -117,4 +117,4 @@ Create an object
 
 #### Source
 
-[core/transaction.ts:45](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L45)
+[packages/core/src/core/transaction.ts:45](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transaction.ts#L45)

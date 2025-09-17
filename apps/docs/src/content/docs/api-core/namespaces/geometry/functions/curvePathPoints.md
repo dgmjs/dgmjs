@@ -19,4 +19,4 @@ Returns points on curve line path
 
 ## Source
 
-[graphics/geometry.ts:800](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L800)
+[packages/core/src/graphics/geometry.ts:800](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L800)

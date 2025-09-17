@@ -23,4 +23,4 @@ Compare two paths are equals (allows tolerance)
 
 ## Source
 
-[graphics/geometry.ts:504](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L504)
+[packages/core/src/graphics/geometry.ts:504](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L504)

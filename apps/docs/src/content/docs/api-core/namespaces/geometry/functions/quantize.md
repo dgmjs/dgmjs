@@ -19,4 +19,4 @@ Quantize point
 
 ## Source
 
-[graphics/geometry.ts:44](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L44)
+[packages/core/src/graphics/geometry.ts:44](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L44)

@@ -23,7 +23,7 @@ Action is a collection of transactions, which can be undone/redone as a whole.
 
 #### Source
 
-[core/transform.ts:54](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L54)
+[packages/core/src/core/transform.ts:54](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L54)
 
 ## Properties
 
@@ -33,7 +33,7 @@ Action is a collection of transactions, which can be undone/redone as a whole.
 
 #### Source
 
-[core/transform.ts:51](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L51)
+[packages/core/src/core/transform.ts:51](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L51)
 
 ***
 
@@ -43,7 +43,7 @@ Action is a collection of transactions, which can be undone/redone as a whole.
 
 #### Source
 
-[core/transform.ts:52](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L52)
+[packages/core/src/core/transform.ts:52](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L52)
 
 ## Methods
 
@@ -61,7 +61,7 @@ Action is a collection of transactions, which can be undone/redone as a whole.
 
 #### Source
 
-[core/transform.ts:63](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L63)
+[packages/core/src/core/transform.ts:63](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L63)
 
 ***
 
@@ -79,7 +79,7 @@ Action is a collection of transactions, which can be undone/redone as a whole.
 
 #### Source
 
-[core/transform.ts:59](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L59)
+[packages/core/src/core/transform.ts:59](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L59)
 
 ***
 
@@ -97,4 +97,4 @@ Action is a collection of transactions, which can be undone/redone as a whole.
 
 #### Source
 
-[core/transform.ts:70](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L70)
+[packages/core/src/core/transform.ts:70](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/transform.ts#L70)

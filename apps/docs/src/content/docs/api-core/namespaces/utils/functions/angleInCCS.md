@@ -21,4 +21,4 @@ Returns the angle of shape in CCS
 
 ## Source
 
-[graphics/utils.ts:76](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/utils.ts#L76)
+[packages/core/src/graphics/utils.ts:76](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/utils.ts#L76)

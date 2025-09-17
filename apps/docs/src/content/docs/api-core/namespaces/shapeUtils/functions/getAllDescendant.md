@@ -20,4 +20,4 @@ set without any duplications.
 
 ## Source
 
-[utils/shape-utils.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/shape-utils.ts#L13)
+[packages/core/src/utils/shape-utils.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/shape-utils.ts#L13)

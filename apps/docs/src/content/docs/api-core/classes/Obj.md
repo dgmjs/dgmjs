@@ -28,7 +28,7 @@ Base object.
 
 #### Source
 
-[core/obj.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L16)
+[packages/core/src/core/obj.ts:16](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L16)
 
 ## Properties
 
@@ -38,7 +38,7 @@ Base object.
 
 #### Source
 
-[core/obj.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L14)
+[packages/core/src/core/obj.ts:14](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L14)
 
 ***
 
@@ -48,7 +48,7 @@ Base object.
 
 #### Source
 
-[core/obj.ts:11](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L11)
+[packages/core/src/core/obj.ts:11](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L11)
 
 ***
 
@@ -58,7 +58,7 @@ Base object.
 
 #### Source
 
-[core/obj.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L13)
+[packages/core/src/core/obj.ts:13](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L13)
 
 ***
 
@@ -68,7 +68,7 @@ Base object.
 
 #### Source
 
-[core/obj.ts:12](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L12)
+[packages/core/src/core/obj.ts:12](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L12)
 
 ## Methods
 
@@ -88,7 +88,7 @@ Find an shape in breath-first order
 
 #### Source
 
-[core/obj.ts:147](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L147)
+[packages/core/src/core/obj.ts:363](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L363)
 
 ***
 
@@ -108,7 +108,7 @@ Find an shape in depth-first order
 
 #### Source
 
-[core/obj.ts:160](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L160)
+[packages/core/src/core/obj.ts:376](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L376)
 
 ***
 
@@ -128,7 +128,7 @@ Find a shape along with the parent-chain
 
 #### Source
 
-[core/obj.ts:173](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L173)
+[packages/core/src/core/obj.ts:389](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L389)
 
 ***
 
@@ -146,31 +146,7 @@ Find a shape along with the parent-chain
 
 #### Source
 
-[core/obj.ts:78](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L78)
-
-***
-
-### getJson()
-
-> **getJson**(`json`, `field`, `defaultValue`): `any`
-
-Get a field from the JSON object, return defaultValue if the field is not defined.
-
-#### Parameters
-
-• **json**: `any`
-
-• **field**: `string`
-
-• **defaultValue**: `any`
-
-#### Returns
-
-`any`
-
-#### Source
-
-[core/obj.ts:53](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L53)
+[packages/core/src/core/obj.ts:294](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L294)
 
 ***
 
@@ -190,7 +166,361 @@ Test whether the given shape is a descendant
 
 #### Source
 
-[core/obj.ts:183](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L183)
+[packages/core/src/core/obj.ts:399](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L399)
+
+***
+
+### readAny()
+
+> **readAny**(`json`, `field`, `defaultValue`): `any`
+
+Read an any value from the JSON object,
+return defaultValue if the field is undefined.
+
+#### Parameters
+
+• **json**: `any`
+
+• **field**: `string`
+
+• **defaultValue**: `any`
+
+#### Returns
+
+`any`
+
+#### Source
+
+[packages/core/src/core/obj.ts:54](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L54)
+
+***
+
+### readArrayAny()
+
+> **readArrayAny**(`json`, `field`, `defaultValue`): `any`[]
+
+Read an array of any value from the JSON object,
+return defaultValue if the field is not an array.
+
+#### Parameters
+
+• **json**: `any`
+
+• **field**: `string`
+
+• **defaultValue**: `any`[]
+
+#### Returns
+
+`any`[]
+
+#### Source
+
+[packages/core/src/core/obj.ts:65](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L65)
+
+***
+
+### readArrayBoolean()
+
+> **readArrayBoolean**(`json`, `field`, `defaultValue`, `length`?): `boolean`[]
+
+Read an array of boolean from the JSON object,
+return defaultValue if the field is not an array of boolean.
+
+#### Parameters
+
+• **json**: `any`
+
+• **field**: `string`
+
+• **defaultValue**: `boolean`[]
+
+• **length?**: `number`
+
+#### Returns
+
+`boolean`[]
+
+#### Source
+
+[packages/core/src/core/obj.ts:148](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L148)
+
+***
+
+### readArrayNumber()
+
+> **readArrayNumber**(`json`, `field`, `defaultValue`, `length`?): `number`[]
+
+Read a number field from the JSON object,
+return defaultValue if the field is not a number.
+
+#### Parameters
+
+• **json**: `any`
+
+• **field**: `string`
+
+• **defaultValue**: `number`[]
+
+• **length?**: `number`
+
+#### Returns
+
+`number`[]
+
+#### Source
+
+[packages/core/src/core/obj.ts:87](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L87)
+
+***
+
+### readArrayPoint()
+
+> **readArrayPoint**(`json`, `field`, `defaultValue`): [`number`, `number`][]
+
+Read a, array of point value from the JSON object,
+return defaultValue if the field is not an array of point.
+
+#### Parameters
+
+• **json**: `any`
+
+• **field**: `string`
+
+• **defaultValue**: [`number`, `number`][]
+
+#### Returns
+
+[`number`, `number`][]
+
+#### Source
+
+[packages/core/src/core/obj.ts:256](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L256)
+
+***
+
+### readArrayString()
+
+> **readArrayString**(`json`, `field`, `defaultValue`): `string`[]
+
+Read an array of string from the JSON object,
+return defaultValue if the field is not an array of string.
+
+#### Parameters
+
+• **json**: `any`
+
+• **field**: `string`
+
+• **defaultValue**: `string`[]
+
+#### Returns
+
+`string`[]
+
+#### Source
+
+[packages/core/src/core/obj.ts:123](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L123)
+
+***
+
+### readBoolean()
+
+> **readBoolean**(`json`, `field`, `defaultValue`): `boolean`
+
+Read a boolean field from the JSON object,
+return defaultValue if the field is not a boolean.
+
+#### Parameters
+
+• **json**: `any`
+
+• **field**: `string`
+
+• **defaultValue**: `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Source
+
+[packages/core/src/core/obj.ts:137](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L137)
+
+***
+
+### readColor()
+
+> **readColor**(`json`, `field`, `defaultValue`): `string`
+
+Read a color field from the JSON object,
+return defaultValue if the field is not a string or not a valid color.
+
+#### Parameters
+
+• **json**: `any`
+
+• **field**: `string`
+
+• **defaultValue**: `string`
+
+#### Returns
+
+`string`
+
+#### Source
+
+[packages/core/src/core/obj.ts:170](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L170)
+
+***
+
+### readEnum()
+
+> **readEnum**(`json`, `field`, `enumType`, `defaultValue`): `string`
+
+Read an enum value from the JSON object,
+return defaultValue if the field is not a valid enum value.
+
+#### Parameters
+
+• **json**: `any`
+
+• **field**: `string`
+
+• **enumType**: `any`
+
+• **defaultValue**: `string`
+
+#### Returns
+
+`string`
+
+#### Source
+
+[packages/core/src/core/obj.ts:185](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L185)
+
+***
+
+### readNumber()
+
+> **readNumber**(`json`, `field`, `defaultValue`): `number`
+
+Read a number field from the JSON object,
+return defaultValue if the field is not a number.
+
+#### Parameters
+
+• **json**: `any`
+
+• **field**: `string`
+
+• **defaultValue**: `number`
+
+#### Returns
+
+`number`
+
+#### Source
+
+[packages/core/src/core/obj.ts:76](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L76)
+
+***
+
+### readPoint()
+
+> **readPoint**(`json`, `field`, `defaultValue`): [`number`, `number`]
+
+Read a point value from the JSON object,
+return defaultValue if the field is not a point.
+
+#### Parameters
+
+• **json**: `any`
+
+• **field**: `string`
+
+• **defaultValue**: [`number`, `number`]
+
+#### Returns
+
+[`number`, `number`]
+
+#### Source
+
+[packages/core/src/core/obj.ts:213](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L213)
+
+***
+
+### readPointOrNull()
+
+> **readPointOrNull**(`json`, `field`, `defaultValue`): `null` \| [`number`, `number`]
+
+Read a point or null value from the JSON object,
+return defaultValue if the field is not a point or null.
+
+#### Parameters
+
+• **json**: `any`
+
+• **field**: `string`
+
+• **defaultValue**: `null` \| [`number`, `number`]
+
+#### Returns
+
+`null` \| [`number`, `number`]
+
+#### Source
+
+[packages/core/src/core/obj.ts:233](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L233)
+
+***
+
+### readRef()
+
+> **readRef**(`json`, `field`): `null` \| `string`
+
+Read a reference to object from the JSON object,
+return defaultValue if the field is not string (obj's id) or null.
+
+#### Parameters
+
+• **json**: `any`
+
+• **field**: `string`
+
+#### Returns
+
+`null` \| `string`
+
+#### Source
+
+[packages/core/src/core/obj.ts:202](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L202)
+
+***
+
+### readString()
+
+> **readString**(`json`, `field`, `defaultValue`): `string`
+
+Read a string field from the JSON object,
+return defaultValue if the field is not a string.
+
+#### Parameters
+
+• **json**: `any`
+
+• **field**: `string`
+
+• **defaultValue**: `string`
+
+#### Returns
+
+`string`
+
+#### Source
+
+[packages/core/src/core/obj.ts:112](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L112)
 
 ***
 
@@ -216,7 +546,7 @@ assign null if not found
 
 #### Source
 
-[core/obj.ts:88](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L88)
+[packages/core/src/core/obj.ts:304](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L304)
 
 ***
 
@@ -254,7 +584,7 @@ If true, the field will be set even if it is equal to the default value.
 
 #### Source
 
-[core/obj.ts:31](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L31)
+[packages/core/src/core/obj.ts:31](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L31)
 
 ***
 
@@ -276,7 +606,7 @@ If true, the field will be set even if it is equal to the default value.
 
 #### Source
 
-[core/obj.ts:60](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L60)
+[packages/core/src/core/obj.ts:276](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L276)
 
 ***
 
@@ -298,7 +628,7 @@ Traverse all objects in breath-first order
 
 #### Source
 
-[core/obj.ts:101](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L101)
+[packages/core/src/core/obj.ts:317](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L317)
 
 ***
 
@@ -320,7 +650,7 @@ Traverse all shapes in depth-first order
 
 #### Source
 
-[core/obj.ts:115](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L115)
+[packages/core/src/core/obj.ts:331](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L331)
 
 ***
 
@@ -336,7 +666,7 @@ Returns an array of shapes in order of traverse sequence.
 
 #### Source
 
-[core/obj.ts:138](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L138)
+[packages/core/src/core/obj.ts:354](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L354)
 
 ***
 
@@ -352,4 +682,4 @@ Returns an array of shapes in order of traverse sequence.
 
 #### Source
 
-[core/obj.ts:129](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L129)
+[packages/core/src/core/obj.ts:345](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L345)

@@ -29,4 +29,4 @@ A macro to move shapes
 
 ## Source
 
-[macro.ts:455](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L455)
+[packages/core/src/macro.ts:455](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L455)

@@ -21,4 +21,4 @@ Test whether a point is inside a rect
 
 ## Source
 
-[graphics/geometry.ts:90](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L90)
+[packages/core/src/graphics/geometry.ts:90](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L90)

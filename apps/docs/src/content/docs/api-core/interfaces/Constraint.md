@@ -17,4 +17,4 @@ title: "Constraint"
 
 #### Source
 
-[shapes.ts:35](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L35)
+[packages/core/src/shapes.ts:35](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L35)

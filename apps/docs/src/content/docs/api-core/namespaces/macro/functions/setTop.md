@@ -23,4 +23,4 @@ A macro to set top
 
 ## Source
 
-[macro.ts:169](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L169)
+[packages/core/src/macro.ts:169](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L169)

@@ -21,4 +21,4 @@ Transform canvas coord to global coord (CCS --> GCS)
 
 ## Source
 
-[graphics/utils.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/utils.ts#L15)
+[packages/core/src/graphics/utils.ts:15](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/utils.ts#L15)

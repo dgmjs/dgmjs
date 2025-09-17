@@ -21,4 +21,4 @@ Returns all mirrors of the given set of objects
 
 ## Source
 
-[utils/shape-utils.ts:54](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/shape-utils.ts#L54)
+[packages/core/src/utils/shape-utils.ts:54](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/shape-utils.ts#L54)

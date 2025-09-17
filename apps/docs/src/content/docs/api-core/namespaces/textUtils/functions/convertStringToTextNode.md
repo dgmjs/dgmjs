@@ -21,4 +21,4 @@ Convert a string to text node
 
 ## Source
 
-[utils/text-utils.ts:40](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L40)
+[packages/core/src/utils/text-utils.ts:40](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L40)

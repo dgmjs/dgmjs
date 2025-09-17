@@ -43,4 +43,4 @@ true if changed
 
 ## Source
 
-[macro.ts:574](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L574)
+[packages/core/src/macro.ts:574](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/macro.ts#L574)

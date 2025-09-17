@@ -9,4 +9,4 @@ title: "BorderPositionEnum"
 
 ## Source
 
-[shapes.ts:92](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L92)
+[packages/core/src/shapes.ts:92](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L92)

@@ -25,4 +25,4 @@ Convert font attributes to CSS font string
 
 ## Source
 
-[graphics/utils.ts:114](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/utils.ts#L114)
+[packages/core/src/graphics/utils.ts:114](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/utils.ts#L114)

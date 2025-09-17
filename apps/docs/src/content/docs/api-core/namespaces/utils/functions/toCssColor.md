@@ -19,4 +19,4 @@ Convert color to CSS color string
 
 ## Source
 
-[graphics/utils.ts:107](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/utils.ts#L107)
+[packages/core/src/graphics/utils.ts:107](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/utils.ts#L107)

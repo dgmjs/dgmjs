@@ -23,4 +23,4 @@ Returns a point rotated as a given degree based on the center point
 
 ## Source
 
-[graphics/geometry.ts:678](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L678)
+[packages/core/src/graphics/geometry.ts:678](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/graphics/geometry.ts#L678)

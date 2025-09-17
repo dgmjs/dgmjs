@@ -23,7 +23,7 @@ Shape factory
 
 #### Source
 
-[factory.ts:49](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L49)
+[packages/core/src/factory.ts:49](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L49)
 
 ## Properties
 
@@ -35,7 +35,7 @@ Event emitter for shape creation
 
 #### Source
 
-[factory.ts:42](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L42)
+[packages/core/src/factory.ts:42](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L42)
 
 ***
 
@@ -47,7 +47,7 @@ Event emitter for shape initialization
 
 #### Source
 
-[factory.ts:47](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L47)
+[packages/core/src/factory.ts:47](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L47)
 
 ## Methods
 
@@ -69,7 +69,7 @@ Create an anchored text
 
 #### Source
 
-[factory.ts:127](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L127)
+[packages/core/src/factory.ts:127](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L127)
 
 ***
 
@@ -97,7 +97,7 @@ Create a connector
 
 #### Source
 
-[factory.ts:196](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L196)
+[packages/core/src/factory.ts:196](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L196)
 
 ***
 
@@ -117,7 +117,7 @@ Create an ellipse
 
 #### Source
 
-[factory.ts:84](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L84)
+[packages/core/src/factory.ts:84](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L84)
 
 ***
 
@@ -137,7 +137,7 @@ Create an embed
 
 #### Source
 
-[factory.ts:330](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L330)
+[packages/core/src/factory.ts:330](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L330)
 
 ***
 
@@ -157,7 +157,7 @@ Create a frame
 
 #### Source
 
-[factory.ts:285](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L285)
+[packages/core/src/factory.ts:285](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L285)
 
 ***
 
@@ -179,7 +179,7 @@ Create a freehand lines
 
 #### Source
 
-[factory.ts:223](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L223)
+[packages/core/src/factory.ts:223](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L223)
 
 ***
 
@@ -199,7 +199,7 @@ Create a freehand lines
 
 #### Source
 
-[factory.ts:244](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L244)
+[packages/core/src/factory.ts:244](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L244)
 
 ***
 
@@ -223,7 +223,7 @@ Create a freehand lines
 
 #### Source
 
-[factory.ts:264](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L264)
+[packages/core/src/factory.ts:264](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L264)
 
 ***
 
@@ -245,7 +245,7 @@ Create an image
 
 #### Source
 
-[factory.ts:150](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L150)
+[packages/core/src/factory.ts:150](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L150)
 
 ***
 
@@ -267,7 +267,7 @@ create a line (or polygon)
 
 #### Source
 
-[factory.ts:177](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L177)
+[packages/core/src/factory.ts:177](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L177)
 
 ***
 
@@ -289,7 +289,7 @@ Create a mirror
 
 #### Source
 
-[factory.ts:307](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L307)
+[packages/core/src/factory.ts:307](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L307)
 
 ***
 
@@ -309,7 +309,7 @@ Create a rectangle
 
 #### Source
 
-[factory.ts:67](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L67)
+[packages/core/src/factory.ts:67](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L67)
 
 ***
 
@@ -331,4 +331,4 @@ Create a text
 
 #### Source
 
-[factory.ts:101](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L101)
+[packages/core/src/factory.ts:101](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/factory.ts#L101)
