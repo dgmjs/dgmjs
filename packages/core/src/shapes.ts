@@ -1,5 +1,5 @@
 import { assert } from "./std/assert";
-import { FillStyle, Canvas } from "./graphics/graphics";
+import { FillStyle, Canvas, FillStyleEnum } from "./graphics/graphics";
 import {
   CONTROL_POINT_APOTHEM,
   DEFAULT_FONT_SIZE,
@@ -265,7 +265,7 @@ export class Shape extends Obj {
   /**
    * Fill style
    */
-  fillStyle: string;
+  fillStyle: FillStyleEnum;
 
   /**
    * Font color
@@ -498,44 +498,57 @@ export class Shape extends Obj {
    */
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.name = this.getJson(json, "name", "");
-    this.description = this.getJson(json, "description", "");
-    this.proto = this.getJson(json, "proto", false);
-    this.tags = this.getJson(json, "tags", []);
-    this.enable = this.getJson(json, "enable", true);
-    this.visible = this.getJson(json, "visible", true);
-    this.movable = this.getJson(json, "movable", Movable.FREE);
-    this.sizable = this.getJson(json, "sizable", Sizable.FREE);
-    this.rotatable = this.getJson(json, "rotatable", true);
-    this.containable = this.getJson(json, "containable", false);
-    this.containableFilter = this.getJson(json, "containableFilter", "");
-    this.movableParentFilter = this.getJson(json, "movableParentFilter", "");
-    this.connectable = this.getJson(json, "connectable", true);
-    this.left = this.getJson(json, "left", 0);
-    this.top = this.getJson(json, "top", 0);
-    this.width = this.getJson(json, "width", 0);
-    this.height = this.getJson(json, "height", 0);
-    this.rotate = this.getJson(json, "rotate", 0);
-    this.strokeColor = this.getJson(json, "strokeColor", "$foreground");
-    this.strokeWidth = this.getJson(json, "strokeWidth", 1);
-    this.strokePattern = this.getJson(json, "strokePattern", []);
-    this.fillColor = this.getJson(json, "fillColor", "$background");
-    this.fillStyle = this.getJson(json, "fillStyle", FillStyle.SOLID);
-    this.fontColor = this.getJson(json, "fontColor", "$foreground");
-    this.fontFamily = this.getJson(json, "fontFamily", "Inter");
-    this.fontSize = this.getJson(json, "fontSize", DEFAULT_FONT_SIZE);
-    this.fontStyle = this.getJson(json, "fontStyle", "normal");
-    this.fontWeight = this.getJson(json, "fontWeight", 400);
-    this.opacity = this.getJson(json, "opacity", 1);
-    this.roughness = this.getJson(json, "roughness", 0);
-    this.shadow = this.getJson(json, "shadow", false);
-    this.shadowColor = this.getJson(json, "shadowColor", "$foreground");
-    this.shadowOffset = this.getJson(json, "shadowOffset", [0, 0]);
-    this.link = this.getJson(json, "link", "");
-    this.reference = this.getJson(json, "reference", null);
-    this.constraints = this.getJson(json, "constraints", []);
-    this.properties = this.getJson(json, "properties", []);
-    this.scripts = this.getJson(json, "scripts", []);
+    this.name = this.readString(json, "name", "");
+    this.description = this.readString(json, "description", "");
+    this.proto = this.readBoolean(json, "proto", false);
+    this.tags = this.readArrayString(json, "tags", []);
+    this.enable = this.readBoolean(json, "enable", true);
+    this.visible = this.readBoolean(json, "visible", true);
+    this.movable = this.readString(
+      json,
+      "movable",
+      Movable.FREE
+    ) as MovableEnum;
+    this.sizable = this.readString(
+      json,
+      "sizable",
+      Sizable.FREE
+    ) as SizableEnum;
+    this.rotatable = this.readBoolean(json, "rotatable", true);
+    this.containable = this.readBoolean(json, "containable", false);
+    this.containableFilter = this.readString(json, "containableFilter", "");
+    this.movableParentFilter = this.readString(json, "movableParentFilter", "");
+    this.connectable = this.readBoolean(json, "connectable", true);
+    this.left = this.readNumber(json, "left", 0);
+    this.top = this.readNumber(json, "top", 0);
+    this.width = this.readNumber(json, "width", 0);
+    this.height = this.readNumber(json, "height", 0);
+    this.rotate = this.readNumber(json, "rotate", 0);
+    this.strokeColor = this.readColor(json, "strokeColor", "$foreground");
+    this.strokeWidth = this.readNumber(json, "strokeWidth", 1);
+    this.strokePattern = this.readArrayNumber(json, "strokePattern", []);
+    this.fillColor = this.readColor(json, "fillColor", "$background");
+    this.fillStyle = this.readEnum(
+      json,
+      "fillStyle",
+      FillStyle,
+      FillStyle.SOLID
+    ) as FillStyleEnum;
+    this.fontColor = this.readColor(json, "fontColor", "$foreground");
+    this.fontFamily = this.readString(json, "fontFamily", "Inter");
+    this.fontSize = this.readNumber(json, "fontSize", DEFAULT_FONT_SIZE);
+    this.fontStyle = this.readString(json, "fontStyle", "normal");
+    this.fontWeight = this.readNumber(json, "fontWeight", 400);
+    this.opacity = this.readNumber(json, "opacity", 1);
+    this.roughness = this.readNumber(json, "roughness", 0);
+    this.shadow = this.readBoolean(json, "shadow", false);
+    this.shadowColor = this.readColor(json, "shadowColor", "$foreground");
+    this.shadowOffset = this.readPoint(json, "shadowOffset", [0, 0]);
+    this.link = this.readAny(json, "link", "");
+    this.reference = this.readRef(json, "reference") as Shape | null;
+    this.constraints = this.readArrayAny(json, "constraints", []);
+    this.properties = this.readArrayAny(json, "properties", []);
+    this.scripts = this.readArrayAny(json, "scripts", []);
   }
 
   resolveRefs(idMap: Record<string, Shape>, nullIfNotFound: boolean = false) {
@@ -1191,7 +1204,7 @@ export class Doc extends Obj {
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.version = this.getJson(json, "version", 1);
+    this.version = this.readNumber(json, "version", 1);
   }
 }
 
@@ -1236,9 +1249,9 @@ export class Page extends Shape {
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.size = this.getJson(json, "size", null);
-    this.pageOrigin = this.getJson(json, "pageOrigin", null);
-    this.pageScale = this.getJson(json, "pageScale", 1);
+    this.size = this.readPointOrNull(json, "size", null);
+    this.pageOrigin = this.readPointOrNull(json, "pageOrigin", null);
+    this.pageScale = this.readNumber(json, "pageScale", 1);
   }
 
   getPage(): Page | null {
@@ -1523,25 +1536,45 @@ export class Box extends Shape {
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.padding = this.getJson(json, "padding", [0, 0, 0, 0]);
-    this.corners = this.getJson(json, "corners", [0, 0, 0, 0]);
-    this.borders = this.getJson(json, "borders", [true, true, true, true]);
-    this.borderPosition = this.getJson(json, "borderPosition", "center");
-    this.anchored = this.getJson(json, "anchored", false);
-    this.anchorAngle = this.getJson(json, "anchorAngle", 0);
-    this.anchorLength = this.getJson(json, "anchorLength", 0);
-    this.anchorPosition = this.getJson(json, "anchorPosition", 0.5);
-    this.textEditable = this.getJson(json, "textEditable", true);
-    this.text = this.getJson(
+    this.padding = this.readArrayNumber(json, "padding", [0, 0, 0, 0], 4);
+    this.corners = this.readArrayNumber(json, "corners", [0, 0, 0, 0], 4);
+    this.borders = this.readArrayBoolean(
+      json,
+      "borders",
+      [true, true, true, true],
+      4
+    );
+    this.borderPosition = this.readEnum(
+      json,
+      "borderPosition",
+      BorderPosition,
+      BorderPosition.CENTER
+    ) as BorderPositionEnum;
+    this.anchored = this.readBoolean(json, "anchored", false);
+    this.anchorAngle = this.readNumber(json, "anchorAngle", 0);
+    this.anchorLength = this.readNumber(json, "anchorLength", 0);
+    this.anchorPosition = this.readNumber(json, "anchorPosition", 0.5);
+    this.textEditable = this.readBoolean(json, "textEditable", true);
+    this.text = this.readAny(
       json,
       "text",
       convertStringToTextNode("", HorzAlign.CENTER)
     );
-    this.wordWrap = this.getJson(json, "wordWrap", false);
-    this.horzAlign = this.getJson(json, "horzAlign", HorzAlign.CENTER);
-    this.vertAlign = this.getJson(json, "vertAlign", VertAlign.MIDDLE);
-    this.lineHeight = this.getJson(json, "lineHeight", 1.2);
-    this.paragraphSpacing = this.getJson(json, "paragraphSpacing", 0);
+    this.wordWrap = this.readBoolean(json, "wordWrap", false);
+    this.horzAlign = this.readEnum(
+      json,
+      "horzAlign",
+      HorzAlign,
+      HorzAlign.CENTER
+    ) as HorzAlignEnum;
+    this.vertAlign = this.readEnum(
+      json,
+      "vertAlign",
+      VertAlign,
+      VertAlign.MIDDLE
+    ) as VertAlignEnum;
+    this.lineHeight = this.readNumber(json, "lineHeight", 1.2);
+    this.paragraphSpacing = this.readNumber(json, "paragraphSpacing", 0);
   }
 
   get innerLeft(): number {
@@ -1973,8 +2006,8 @@ export class Path extends Shape {
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.pathEditable = this.getJson(json, "pathEditable", true);
-    this.path = this.getJson(json, "path", []);
+    this.pathEditable = this.readBoolean(json, "pathEditable", true);
+    this.path = this.readArrayPoint(json, "path", []);
   }
 
   /**
@@ -2249,9 +2282,9 @@ export class Image extends Box {
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.imageData = this.getJson(json, "imageData", "");
-    this.imageWidth = this.getJson(json, "imageWidth", 0);
-    this.imageHeight = this.getJson(json, "imageHeight", 0);
+    this.imageData = this.readString(json, "imageData", "");
+    this.imageWidth = this.readNumber(json, "imageWidth", 0);
+    this.imageHeight = this.readNumber(json, "imageHeight", 0);
   }
 
   renderDefault(canvas: MemoizationCanvas): void {
@@ -2349,9 +2382,9 @@ export class Icon extends Box {
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.viewWidth = this.getJson(json, "viewWidth", 0);
-    this.viewHeight = this.getJson(json, "viewHeight", 0);
-    this.data = this.getJson(json, "data", []);
+    this.viewWidth = this.readNumber(json, "viewWidth", 0);
+    this.viewHeight = this.readNumber(json, "viewHeight", 0);
+    this.data = this.readArrayAny(json, "data", []);
   }
 
   /**
@@ -2443,9 +2476,24 @@ export class Line extends Path {
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.lineType = this.getJson(json, "lineType", LineType.STRAIGHT);
-    this.headEndType = this.getJson(json, "headEndType", LineEndType.FLAT);
-    this.tailEndType = this.getJson(json, "tailEndType", LineEndType.FLAT);
+    this.lineType = this.readEnum(
+      json,
+      "lineType",
+      LineType,
+      LineType.STRAIGHT
+    ) as LineTypeEnum;
+    this.headEndType = this.readEnum(
+      json,
+      "headEndType",
+      LineEndType,
+      LineEndType.FLAT
+    ) as LineEndTypeEnum;
+    this.tailEndType = this.readEnum(
+      json,
+      "tailEndType",
+      LineEndType,
+      LineEndType.FLAT
+    ) as LineEndTypeEnum;
   }
 
   /**
@@ -2825,12 +2873,12 @@ export class Connector extends Line {
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.head = this.getJson(json, "head", null);
-    this.tail = this.getJson(json, "tail", null);
-    this.headAnchor = this.getJson(json, "headAnchor", [0.5, 0.5]);
-    this.tailAnchor = this.getJson(json, "tailAnchor", [0.5, 0.5]);
-    this.headMargin = this.getJson(json, "headMargin", 0);
-    this.tailMargin = this.getJson(json, "tailMargin", 0);
+    this.head = this.readRef(json, "head") as Shape | null;
+    this.tail = this.readRef(json, "tail") as Shape | null;
+    this.headAnchor = this.readPoint(json, "headAnchor", [0.5, 0.5]);
+    this.tailAnchor = this.readPoint(json, "tailAnchor", [0.5, 0.5]);
+    this.headMargin = this.readNumber(json, "headMargin", 0);
+    this.tailMargin = this.readNumber(json, "tailMargin", 0);
   }
 
   resolveRefs(idMap: Record<string, Shape>, nullIfNotFound: boolean = false) {
@@ -2965,9 +3013,9 @@ export class Freehand extends Path {
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.thinning = this.getJson(json, "thinning", 0);
-    this.tailTaper = this.getJson(json, "tailTaper", 0);
-    this.headTaper = this.getJson(json, "headTaper", 0);
+    this.thinning = this.readNumber(json, "thinning", 0);
+    this.tailTaper = this.readNumber(json, "tailTaper", 0);
+    this.headTaper = this.readNumber(json, "headTaper", 0);
   }
 
   renderDefault(canvas: MemoizationCanvas): void {
@@ -3256,7 +3304,7 @@ export class Mirror extends Box {
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.subject = this.getJson(json, "subject", null);
+    this.subject = this.readRef(json, "subject") as Shape | null;
   }
 
   resolveRefs(idMap: Record<string, Shape>, nullIfNotFound: boolean = false) {
@@ -3396,7 +3444,7 @@ export class Embed extends Box {
 
   fromJSON(json: any) {
     super.fromJSON(json);
-    this.src = this.getJson(json, "src", "");
+    this.src = this.readString(json, "src", "");
   }
 
   /**
