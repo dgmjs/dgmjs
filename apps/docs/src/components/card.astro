@@ -1,0 +1,26 @@
+---
+const { url } = Astro.props;
+---
+
+<a href={url} target="_blank" style={{ textDecoration: "none" }}>
+  <div
+    class="flex flex-col h-full p-4 bg-slate-50 rounded-xl group hover:bg-white hover:shadow-2xl duration-300 outline-transparent hover:outline hover:outline-slate-50"
+  >
+    <div
+      class="inline-flex p-4 bg-white rounded-lg group-hover:bg-sand-100 duration-300 group-hover:-rotate-12 group-hover:-translate-y-2 w-fit mb-8"
+    >
+      <slot name="icon" />
+    </div>
+    <div class="px-1">
+      <h3
+        style={{ fontSize: "16px !important" }}
+        class="font-medium text-[20px] text-base-900 mb-2"
+      >
+        <slot name="title" />
+      </h3>
+      <p class="font-medium leading-6 text-sm">
+        <slot name="description" />
+      </p>
+    </div>
+  </div>
+</a>

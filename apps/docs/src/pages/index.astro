@@ -3,6 +3,7 @@ import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
 import Header from "@/components/header.astro";
 import Footer from "@/components/footer.astro";
 import Feature from "@/components/feature.astro";
+import Card from "@/components/card.astro";
 import { siteConfig } from "../../site-config";
 import App from "@/components/app/app";
 import "@/styles/fonts.css";
@@ -227,6 +228,40 @@ import "@/styles/splash.css";
           handle.
         </div>
       </Feature>
+    </div>
+  </section>
+
+  <section id="powered-by" class="py-12 space-y-12">
+    <div class="">
+      <h2>Made with DGM.js</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+      <Card url="https://frame0.app">
+        <img
+          slot="icon"
+          class="h-8 w-8"
+          src="https://mklaabs.com/images/logo-frame0.png"
+          alt="Frame0 logo"
+        />
+        <span slot="title">Frame0</span>
+        <span slot="description">
+          A low-fidelity wireframing tool for quickly sketching and validating
+          ideas for modern applications
+        </span>
+      </Card>
+      <Card url="https://dgm.sh">
+        <img
+          slot="icon"
+          class="h-8 w-8"
+          src="https://mklaabs.com/images/logo-dgm.png"
+          alt="DGM logo"
+        />
+        <span slot="title">DGM App</span>
+        <span slot="description">
+          A web-based application that allows you to easily create and manage
+          your own sketchnotes online.
+        </span>
+      </Card>
     </div>
   </section>
   <Footer />
