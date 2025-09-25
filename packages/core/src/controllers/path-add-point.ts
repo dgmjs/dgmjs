@@ -1,6 +1,6 @@
 import type { CanvasPointerEvent } from "../graphics/graphics";
 import * as geometry from "../graphics/geometry";
-import { Shape, Line, Path } from "../shapes";
+import { Shape, Line, Path, Connector } from "../shapes";
 import { Controller, Editor, Manipulator } from "../editor";
 import { Cursor, LINE_STRATIFY_ANGLE_THRESHOLD } from "../graphics/const";
 import { lcs2ccs, ccs2lcs, angleInCCS } from "../graphics/utils";
@@ -79,7 +79,6 @@ export class PathAddPointController extends Controller {
       shape as Line,
       this.dragStartPoint
     );
-
     // initialize snappers
     if (this.controlPoint >= 0) {
       this.gridSnapper.setPointToSnap(
@@ -91,7 +90,6 @@ export class PathAddPointController extends Controller {
         )
       );
     }
-
     editor.transform.startAction(ActionKind.REPATH);
   }
 

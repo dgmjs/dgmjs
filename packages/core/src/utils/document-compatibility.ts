@@ -117,7 +117,6 @@ export function fixDoc(doc: Obj): any {
           [hp[0], hp[1]],
         ];
       }
-      console.log("path", obj, obj.path);
     }
     // if parent ref is broken
     if (obj.parent === null) {
