@@ -107,11 +107,31 @@ export class ConnectorReconnectController extends Controller {
     this.gridSnapper.snap(editor, shape, this);
 
     // find an end and anchor
-    const [newEnd, anchor] = findConnectionAnchor(
+    let [newEnd, anchor] = findConnectionAnchor(
       editor,
       shape as Connector,
       this.dragPoint
     );
+
+    // prevent to connect to the same end
+    if (
+      this.controlPoint > 0 &&
+      newEnd &&
+      (shape as Connector).tail &&
+      newEnd === (shape as Connector).tail
+    ) {
+      newEnd = null;
+      anchor = [0.5, 0.5];
+    }
+    if (
+      this.controlPoint === 0 &&
+      newEnd &&
+      (shape as Connector).head &&
+      newEnd === (shape as Connector).head
+    ) {
+      newEnd = null;
+      anchor = [0.5, 0.5];
+    }
 
     // update the path
     let newPath = geometry.pathCopy(this.controlPath);
