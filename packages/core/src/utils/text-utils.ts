@@ -547,6 +547,7 @@ export function renderTextDocNode(
         const w = shape.fontSize * 0.1;
         canvas.strokeColor = canvas.fontColor;
         canvas.strokeWidth = w;
+        canvas.strokePattern = [];
         canvas.line(
           left,
           top + w,
@@ -558,6 +559,7 @@ export function renderTextDocNode(
       if (node.marks?.some((m: any) => m.type === "strike")) {
         canvas.strokeColor = canvas.fontColor;
         canvas.strokeWidth = shape.fontSize * 0.1;
+        canvas.strokePattern = [];
         canvas.line(
           left,
           top - node._ascent / 3,

@@ -98,16 +98,24 @@ export function fixDoc(doc: Obj): any {
       }
       // fix path's null points
       const tailPoint = obj.path[0];
-      if (tailPoint[0] === null || tailPoint[1] === null) {
+      if (tailPoint && (tailPoint[0] === null || tailPoint[1] === null)) {
         const tp = obj.getTailAnchorPoint();
         tailPoint[0] = tp[0];
         tailPoint[1] = tp[1];
       }
       const headPoint = obj.path[obj.path.length - 1];
-      if (headPoint[0] === null || headPoint[1] === null) {
+      if (headPoint && (headPoint[0] === null || headPoint[1] === null)) {
         const hp = obj.getHeadAnchorPoint();
         headPoint[0] = hp[0];
         headPoint[1] = hp[1];
+      }
+      if (!Array.isArray(obj.path) || obj.path.length < 2) {
+        const tp = obj.getTailAnchorPoint();
+        const hp = obj.getHeadAnchorPoint();
+        obj.path = [
+          [tp[0], tp[1]],
+          [hp[0], hp[1]],
+        ];
       }
     }
     // if parent ref is broken

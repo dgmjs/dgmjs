@@ -199,7 +199,10 @@ export class Obj {
    * Read a reference to object from the JSON object,
    * return defaultValue if the field is not string (obj's id) or null.
    */
-  readRef(json: any, field: string): string | null {
+  readRef(json: any, field: string): Obj | string | null {
+    if (json[field] instanceof Obj) {
+      return json[field];
+    }
     if (typeof json[field] === "string" || json[field] === null) {
       return json[field];
     }
@@ -273,6 +276,12 @@ export class Obj {
     return defaultValue;
   }
 
+  /**
+   * Serialize to JSON object
+   * @param recursive recursively serialize children
+   * @param keepRefs keep references as object (for undo-redo)
+   * @param enforce
+   */
   toJSON(
     recursive: boolean = false,
     keepRefs: boolean = false,

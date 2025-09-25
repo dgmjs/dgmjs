@@ -61,10 +61,24 @@ export class EllipseFactoryHandler extends Handler {
     // update shape
     const page = editor.getCurrentPage();
     if (page && this.shape) {
-      const rect = geometry.normalizeRect([
-        this.dragStartPoint,
-        this.dragPoint,
-      ]);
+      let p1 = geometry.copy(this.dragStartPoint);
+      let p2 = geometry.copy(this.dragPoint);
+      // if shift key is down, make it circle
+      if (e.shiftDown) {
+        const rect = geometry.normalizeRect([p1, p2]);
+        const size = Math.max(geometry.width(rect), geometry.height(rect));
+        if (p2[0] < p1[0]) {
+          p2[0] = p1[0] - size;
+        } else {
+          p2[0] = p1[0] + size;
+        }
+        if (p2[1] < p1[1]) {
+          p2[1] = p1[1] - size;
+        } else {
+          p2[1] = p1[1] + size;
+        }
+      }
+      const rect = geometry.normalizeRect([p1, p2]);
       editor.transform.transact((tx) => {
         tx.assign(this.shape!, "left", rect[0][0]);
         tx.assign(this.shape!, "top", rect[0][1]);
