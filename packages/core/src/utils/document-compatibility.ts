@@ -112,10 +112,22 @@ export function fixDoc(doc: Obj): any {
       if (!Array.isArray(obj.path) || obj.path.length < 2) {
         const tp = obj.getTailAnchorPoint();
         const hp = obj.getHeadAnchorPoint();
-        obj.path = [
-          [tp[0], tp[1]],
-          [hp[0], hp[1]],
-        ];
+        if (
+          Array.isArray(tp) &&
+          Array.isArray(hp) &&
+          tp.length === 2 &&
+          hp.length === 2
+        ) {
+          obj.path = [
+            [tp[0], tp[1]],
+            [hp[0], hp[1]],
+          ];
+        } else {
+          obj.path = [
+            [0, 0],
+            [100, 100],
+          ];
+        }
       }
     }
     // if parent ref is broken
