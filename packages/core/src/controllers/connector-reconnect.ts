@@ -89,6 +89,12 @@ export class ConnectorReconnectController extends Controller {
       if (guide.inControlPoint(editor.canvas, this.dragStartPointCCS, tpCCS))
         this.controlPoint = 0;
       this.controlPath = geometry.pathCopy(shape.path);
+      // update control path's head and tail points if connected to shapes
+      if (shape.tail instanceof Shape)
+        this.controlPath[0] = shape.getTailAnchorPoint();
+      if (shape.head instanceof Shape)
+        this.controlPath[this.controlPath.length - 1] =
+          shape.getHeadAnchorPoint();
     }
 
     // initialize snappers
@@ -103,8 +109,27 @@ export class ConnectorReconnectController extends Controller {
    * Update ghost
    */
   update(editor: Editor, shape: Shape, e: CanvasPointerEvent) {
+    const isHead = this.controlPoint > 0;
+
     // snap dragging points
     this.gridSnapper.snap(editor, shape, this);
+
+    // if shift is pressed, snap to angles of 15 degrees
+    if (e.shiftDown && this.controlPoint >= 0) {
+      const fixedPoint = isHead
+        ? geometry.copy(this.controlPath.at(-2)!)
+        : geometry.copy(this.controlPath.at(1)!);
+      const angle = Math.atan2(
+        this.dragPoint[1] - fixedPoint[1],
+        this.dragPoint[0] - fixedPoint[0]
+      );
+      const length = geometry.distance(this.dragPoint, fixedPoint);
+      const snappedAngle = Math.round(angle / (Math.PI / 12)) * (Math.PI / 12); // 15 degrees
+      this.dragPoint = [
+        fixedPoint[0] + length * Math.cos(snappedAngle),
+        fixedPoint[1] + length * Math.sin(snappedAngle),
+      ];
+    }
 
     // find an end and anchor
     let [newEnd, anchor] = findConnectionAnchor(
@@ -138,7 +163,6 @@ export class ConnectorReconnectController extends Controller {
     if (!newEnd) {
       newPath[this.controlPoint] = this.dragPoint;
     }
-    const isHead = this.controlPoint > 0;
 
     // transform shape
     editor.transform.transact((tx) => {

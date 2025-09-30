@@ -108,9 +108,25 @@ export class PathAddPointController extends Controller {
     );
     newPath[this.controlPoint + 1][0] += this.dx;
     newPath[this.controlPoint + 1][1] += this.dy;
+
+    // if shift is pressed, snap to angles of 15 degrees
+    if (e.shiftDown && this.controlPoint >= 0) {
+      const fixedPoint = geometry.copy(this.controlPath[this.controlPoint]);
+      const angle = Math.atan2(
+        this.dragPoint[1] - fixedPoint[1],
+        this.dragPoint[0] - fixedPoint[0]
+      );
+      const length = geometry.distance(this.dragPoint, fixedPoint);
+      const snappedAngle = Math.round(angle / (Math.PI / 12)) * (Math.PI / 12); // 15 degrees
+      const snappedPoint = [
+        fixedPoint[0] + length * Math.cos(snappedAngle),
+        fixedPoint[1] + length * Math.sin(snappedAngle),
+      ];
+      newPath[this.controlPoint + 1] = snappedPoint;
+    }
+
     // update ghost by simplified routing
     newPath = reducePath(newPath, LINE_STRATIFY_ANGLE_THRESHOLD);
-
     const canvas = editor.canvas;
     const newPathCCS = newPath.map((p) => lcs2ccs(canvas, shape, p));
 
