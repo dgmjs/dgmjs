@@ -82,49 +82,65 @@ export function fixJson(json: any): any {
 export function fixDoc(doc: Obj): any {
   // fix connector issues
   doc.traverse((obj) => {
-    if (obj instanceof Connector) {
-      // fix tail and head anchors
-      if (Array.isArray(obj.tailAnchor)) {
-        if (obj.tailAnchor[0] < 0) obj.tailAnchor[0] = 0;
-        if (obj.tailAnchor[0] > 1) obj.tailAnchor[0] = 1;
-        if (obj.tailAnchor[1] < 0) obj.tailAnchor[1] = 0;
-        if (obj.tailAnchor[1] > 1) obj.tailAnchor[1] = 1;
-      }
-      if (Array.isArray(obj.headAnchor)) {
-        if (obj.headAnchor[0] < 0) obj.headAnchor[0] = 0;
-        if (obj.headAnchor[0] > 1) obj.headAnchor[0] = 1;
-        if (obj.headAnchor[1] < 0) obj.headAnchor[1] = 0;
-        if (obj.headAnchor[1] > 1) obj.headAnchor[1] = 1;
-      }
-      // fix path's null points
-      const tailPoint = obj.path[0];
-      if (tailPoint && (tailPoint[0] === null || tailPoint[1] === null)) {
-        const tp = obj.getTailAnchorPoint();
-        tailPoint[0] = tp[0];
-        tailPoint[1] = tp[1];
-      }
-      const headPoint = obj.path[obj.path.length - 1];
-      if (headPoint && (headPoint[0] === null || headPoint[1] === null)) {
-        const hp = obj.getHeadAnchorPoint();
-        headPoint[0] = hp[0];
-        headPoint[1] = hp[1];
-      }
-      if (!Array.isArray(obj.path) || obj.path.length < 2) {
-        const tp = obj.getTailAnchorPoint();
-        const hp = obj.getHeadAnchorPoint();
-        obj.path = [
-          [tp[0], tp[1]],
-          [hp[0], hp[1]],
-        ];
-      }
-    }
-    // if parent ref is broken
-    if (obj.parent === null) {
-      doc.traverse((o) => {
-        if (Array.isArray(o.children) && o.children.includes(obj)) {
-          obj.parent = o;
+    try {
+      if (obj instanceof Connector) {
+        // fix tail and head anchors
+        if (Array.isArray(obj.tailAnchor)) {
+          if (obj.tailAnchor[0] < 0) obj.tailAnchor[0] = 0;
+          if (obj.tailAnchor[0] > 1) obj.tailAnchor[0] = 1;
+          if (obj.tailAnchor[1] < 0) obj.tailAnchor[1] = 0;
+          if (obj.tailAnchor[1] > 1) obj.tailAnchor[1] = 1;
         }
-      });
+        if (Array.isArray(obj.headAnchor)) {
+          if (obj.headAnchor[0] < 0) obj.headAnchor[0] = 0;
+          if (obj.headAnchor[0] > 1) obj.headAnchor[0] = 1;
+          if (obj.headAnchor[1] < 0) obj.headAnchor[1] = 0;
+          if (obj.headAnchor[1] > 1) obj.headAnchor[1] = 1;
+        }
+        // fix path's null points
+        const tailPoint = obj.path[0];
+        if (tailPoint && (tailPoint[0] === null || tailPoint[1] === null)) {
+          const tp = obj.getTailAnchorPoint();
+          tailPoint[0] = tp[0];
+          tailPoint[1] = tp[1];
+        }
+        const headPoint = obj.path[obj.path.length - 1];
+        if (headPoint && (headPoint[0] === null || headPoint[1] === null)) {
+          const hp = obj.getHeadAnchorPoint();
+          headPoint[0] = hp[0];
+          headPoint[1] = hp[1];
+        }
+        if (!Array.isArray(obj.path) || obj.path.length < 2) {
+          const tp = obj.getTailAnchorPoint();
+          const hp = obj.getHeadAnchorPoint();
+          if (
+            Array.isArray(tp) &&
+            Array.isArray(hp) &&
+            tp.length === 2 &&
+            hp.length === 2
+          ) {
+            obj.path = [
+              [tp[0], tp[1]],
+              [hp[0], hp[1]],
+            ];
+          } else {
+            obj.path = [
+              [0, 0],
+              [100, 100],
+            ];
+          }
+        }
+      }
+      // if parent ref is broken
+      if (obj.parent === null) {
+        doc.traverse((o) => {
+          if (Array.isArray(o.children) && o.children.includes(obj)) {
+            obj.parent = o;
+          }
+        });
+      }
+    } catch (err) {
+      console.error("Error fixing object:", obj, err);
     }
   });
 }
