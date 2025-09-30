@@ -80,6 +80,21 @@ export class ConnectorFactoryHandler extends Handler {
       ];
     }
 
+    // if shift is pressed, snap to angles of 15 degrees
+    if (e.shiftDown) {
+      const startPoint = geometry.copy(this.dragStartPoint);
+      const angle = Math.atan2(
+        this.dragPoint[1] - startPoint[1],
+        this.dragPoint[0] - startPoint[0]
+      );
+      const length = geometry.distance(this.dragPoint, startPoint);
+      const snappedAngle = Math.round(angle / (Math.PI / 12)) * (Math.PI / 12); // 15 degrees
+      this.dragPoint = [
+        startPoint[0] + length * Math.cos(snappedAngle),
+        startPoint[1] + length * Math.sin(snappedAngle),
+      ];
+    }
+
     // update shape
     const page = editor.getCurrentPage();
     if (page) {
