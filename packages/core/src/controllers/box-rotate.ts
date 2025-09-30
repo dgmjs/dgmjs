@@ -138,9 +138,12 @@ export class BoxRotateController extends Controller {
     const center = geometry.mid(enclosure[0], enclosure[2]);
     const angle0 = geometry.angle(center, cp);
     const angle1 = geometry.angle(center, this.dragPoint);
-    const d = geometry.normalizeAngle(angle1 - angle0);
-    const delta = Math.round(d / ANGLE_STEP) * ANGLE_STEP;
+    const delta = geometry.normalizeAngle(angle1 - angle0);
+    // if shift key is pressed, snap to ANGLE_STEP
     let angle = Math.round(geometry.normalizeAngle(shape.rotate + delta));
+    if (e.shiftDown) {
+      angle = Math.round(angle / ANGLE_STEP) * ANGLE_STEP;
+    }
     // transform shapes
     editor.transform.transact((tx) => {
       const page = editor.getCurrentPage()!;
