@@ -114,7 +114,7 @@ export class ShapeFactory {
     text.vertAlign = VertAlign.TOP;
     text.constraints.push({
       id: "set-size",
-      width: "text",
+      width: "text-min",
       height: "text",
     });
     this.onShapeInitialize.emit(text);
@@ -137,7 +137,7 @@ export class ShapeFactory {
     text.constraints.push({ id: "anchor-on-parent" });
     text.constraints.push({
       id: "set-size",
-      width: "text",
+      width: "text-min",
       height: "text",
     });
     this.onShapeInitialize.emit(text);
