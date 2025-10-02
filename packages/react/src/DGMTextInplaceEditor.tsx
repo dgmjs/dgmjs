@@ -260,8 +260,12 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
 
   const handleEditorFactoryCreate = (shape: Shape) => {
     if (shape instanceof Text && shape.textEditable) {
-      editor.selection.deselectAll();
-      open(shape);
+      setTimeout(() => {
+        editor.selection.deselectAll();
+        setTimeout(() => {
+          open(shape);
+        }, 0);
+      }, 0);
     }
   };
 
