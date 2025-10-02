@@ -181,6 +181,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
 
       setTimeout(() => {
         if (onOpen) onOpen(textShape as Box);
+        tiptapEditor?.commands.focus();
       }, 0);
     }
   };
