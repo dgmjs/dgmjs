@@ -2594,7 +2594,7 @@ export class Line extends Path {
     canvas.fillStyle = FillStyle.SOLID;
     switch (edgeEndType) {
       case LineEndType.ARROW:
-        canvas.polyline([grid[3][1], grid[0][3], grid[3][5]], this.getSeed());
+        canvas.polyline([grid[5][1], grid[0][3], grid[5][5]], this.getSeed());
         return grid[0][3];
       case LineEndType.SOLID_ARROW:
         canvas.polygon(
