@@ -181,6 +181,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
 
       setTimeout(() => {
         if (onOpen) onOpen(textShape as Box);
+        tiptapEditor?.commands.focus();
       }, 0);
     }
   };
@@ -260,8 +261,12 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
 
   const handleEditorFactoryCreate = (shape: Shape) => {
     if (shape instanceof Text && shape.textEditable) {
-      editor.selection.deselectAll();
-      open(shape);
+      setTimeout(() => {
+        editor.selection.deselectAll();
+        setTimeout(() => {
+          open(shape);
+        }, 0);
+      }, 0);
     }
   };
 

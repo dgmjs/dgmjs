@@ -6,11 +6,11 @@ const SvgLineEndArrow = ({
   ...props
 }: IconProps) => (
   <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
     width={size}
     height={size}
+    viewBox="0 0 24 24"
     fill="none"
+    xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
     <path
@@ -20,7 +20,7 @@ const SvgLineEndArrow = ({
       strokeLinecap="round"
     />
     <path
-      d="M16 8L20 12L16 16"
+      d="M12 6L20 12L12 18"
       stroke="currentColor"
       strokeWidth={strokeWidth}
     />

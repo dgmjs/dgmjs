@@ -64,6 +64,22 @@ export class LineFactoryHandler extends Handler {
       ];
     }
 
+    // if shift is pressed, snap to angles of 15 degrees
+    if (e.shiftDown) {
+      const startPoint = geometry.copy(this.points.at(-1)!);
+      const angle = Math.atan2(
+        this.dragPoint[1] - startPoint[1],
+        this.dragPoint[0] - startPoint[0]
+      );
+      const length = geometry.distance(startPoint, this.dragPoint);
+      const snappedAngle =
+        Math.round((angle * 180) / Math.PI / 15) * ((15 * Math.PI) / 180);
+      this.dragPoint = [
+        startPoint[0] + length * Math.cos(snappedAngle),
+        startPoint[1] + length * Math.sin(snappedAngle),
+      ];
+    }
+
     // update shape
     const page = editor.getCurrentPage();
     if (page && this.shape) {
@@ -106,22 +122,25 @@ export class LineFactoryHandler extends Handler {
           this.reset();
           this.complete(editor);
         } else {
-          // snap intermediate point
-          const p = canvas.globalCoordTransformRev([e.x, e.y]);
-          const snapped = this.snapper.snap(editor, p);
-          if (snapped) {
-            p[0] += snapped[0];
-            p[1] += snapped[1];
+          // snap intermediate point (unless shift is pressed)
+          if (!e.shiftDown) {
+            const snapped = this.snapper.snap(editor, this.dragPoint);
+            if (snapped) {
+              this.dragPoint[0] += snapped[0];
+              this.dragPoint[1] += snapped[1];
+            }
           }
           // if clicked on the last point, finalize multipoint mode
           if (
             this.points.length > 1 &&
-            geometry.distance(this.points[this.points.length - 1], p) <=
-              MAGNET_THRESHOLD
+            geometry.distance(
+              this.points[this.points.length - 1],
+              this.dragPoint
+            ) <= MAGNET_THRESHOLD
           ) {
             this.finishMultipointMode(editor);
           } else {
-            this.points.push(p);
+            this.points.push(geometry.copy(this.dragPoint));
           }
         }
       } else {

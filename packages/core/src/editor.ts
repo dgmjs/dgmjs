@@ -443,7 +443,7 @@ export class Editor {
     this.canvas = null as any;
     this.enabled = true;
     this.darkMode = false;
-    this.gridSize = [8, 8];
+    this.gridSize = [16, 16];
     this.showGrid = false;
     this.snapToGrid = false;
     this.snapToObjects = false;
@@ -1258,34 +1258,42 @@ export class Editor {
       const sz = this.getSize();
       const p1 = canvas.globalCoordTransformRev([0, 0]);
       const p2 = canvas.globalCoordTransformRev(sz);
-      let w = this.gridSize[0] * 2;
-      let h = this.gridSize[1] * 2;
       let thick = Math.max(Math.round(1 / scale), 1);
-      if (scale < 0.2) {
-        w = this.gridSize[0] * 16;
-        h = this.gridSize[1] * 16;
-      } else if (scale < 0.4) {
-        w = this.gridSize[0] * 8;
-        h = this.gridSize[1] * 8;
-      } else if (scale < 0.8) {
-        w = this.gridSize[0] * 4;
-        h = this.gridSize[1] * 4;
+      // small grids
+      if (scale >= 0.5) {
+        let w = this.gridSize[0] * 2;
+        let h = this.gridSize[1] * 2;
+        const wc = Math.floor((p2[0] - p1[0]) / w);
+        const hc = Math.floor((p2[1] - p1[1]) / h);
+        canvas.strokeColor = this.canvas.resolveColor(
+          this.options.gridColor ?? Color.GRID
+        );
+        canvas.strokeWidth = thick;
+        canvas.strokePattern = [4, 4];
+        canvas.roughness = 0;
+        canvas.alpha = 1;
+        for (let i = 0; i <= wc; i++) {
+          const x = p1[0] + i * w - (p1[0] % w);
+          canvas.line(x, p1[1], x, p2[1]);
+        }
+        for (let i = 0; i <= hc; i++) {
+          const y = p1[1] + i * h - (p1[1] % h);
+          canvas.line(p1[0], y, p2[0], y);
+        }
       }
-      const wc = Math.floor((p2[0] - p1[0]) / w);
-      const wh = Math.floor((p2[1] - p1[1]) / h);
-      canvas.strokeColor = this.canvas.resolveColor(
-        this.options.gridColor ?? Color.GRID
-      );
+      // bigger grids
+      let wl = this.gridSize[0] * 8;
+      let hl = this.gridSize[1] * 8;
+      const wlc = Math.floor((p2[0] - p1[0]) / wl);
+      const hlc = Math.floor((p2[1] - p1[1]) / hl);
       canvas.strokeWidth = thick;
       canvas.strokePattern = [];
-      canvas.roughness = 0;
-      canvas.alpha = 1;
-      for (let i = 0; i <= wc; i++) {
-        const x = p1[0] + i * w - (p1[0] % w);
+      for (let i = 0; i <= wlc; i++) {
+        const x = p1[0] + i * wl - (p1[0] % wl);
         canvas.line(x, p1[1], x, p2[1]);
       }
-      for (let i = 0; i <= wh; i++) {
-        const y = p1[1] + i * h - (p1[1] % h);
+      for (let i = 0; i <= hlc; i++) {
+        const y = p1[1] + i * hl - (p1[1] % hl);
         canvas.line(p1[0], y, p2[0], y);
       }
     }
