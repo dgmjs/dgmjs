@@ -43,4 +43,4 @@ Measure text size
 
 ## Source
 
-[packages/core/src/utils/text-utils.ts:593](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L593)
+[packages/core/src/utils/text-utils.ts:595](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/utils/text-utils.ts#L595)

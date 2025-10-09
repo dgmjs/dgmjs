@@ -13,4 +13,4 @@ title: "HandlerOptions"
 
 #### Source
 
-[packages/core/src/editor.ts:1459](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1459)
+[packages/core/src/editor.ts:1467](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1467)

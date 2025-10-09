@@ -33,7 +33,7 @@ Rectangle Factory Handler
 
 #### Source
 
-[packages/core/src/editor.ts:1472](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1472)
+[packages/core/src/editor.ts:1480](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1480)
 
 ## Properties
 
@@ -47,7 +47,7 @@ Rectangle Factory Handler
 
 #### Source
 
-[packages/core/src/editor.ts:1470](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1470)
+[packages/core/src/editor.ts:1478](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1478)
 
 ***
 
@@ -61,7 +61,7 @@ Rectangle Factory Handler
 
 #### Source
 
-[packages/core/src/editor.ts:1469](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1469)
+[packages/core/src/editor.ts:1477](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1477)
 
 ***
 
@@ -75,7 +75,7 @@ Rectangle Factory Handler
 
 #### Source
 
-[packages/core/src/editor.ts:1468](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1468)
+[packages/core/src/editor.ts:1476](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1476)
 
 ***
 
@@ -89,7 +89,7 @@ Rectangle Factory Handler
 
 #### Source
 
-[packages/core/src/editor.ts:1466](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1466)
+[packages/core/src/editor.ts:1474](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1474)
 
 ***
 
@@ -103,7 +103,7 @@ Rectangle Factory Handler
 
 #### Source
 
-[packages/core/src/editor.ts:1467](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1467)
+[packages/core/src/editor.ts:1475](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1475)
 
 ***
 
@@ -147,7 +147,7 @@ Activate the handler
 
 #### Source
 
-[packages/core/src/editor.ts:1505](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1505)
+[packages/core/src/editor.ts:1513](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1513)
 
 ***
 
@@ -171,7 +171,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[packages/core/src/editor.ts:1496](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1496)
+[packages/core/src/editor.ts:1504](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1504)
 
 ***
 
@@ -195,7 +195,7 @@ Deactivate the handler
 
 #### Source
 
-[packages/core/src/editor.ts:1513](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1513)
+[packages/core/src/editor.ts:1521](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1521)
 
 ***
 
@@ -221,7 +221,7 @@ Draw dragging
 
 #### Source
 
-[packages/core/src/handlers/rectangle-handler.ts:113](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/rectangle-handler.ts#L113)
+[packages/core/src/handlers/rectangle-handler.ts:127](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/rectangle-handler.ts#L127)
 
 ***
 
@@ -247,7 +247,7 @@ Draw hovering
 
 #### Source
 
-[packages/core/src/handlers/rectangle-handler.ts:109](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/rectangle-handler.ts#L109)
+[packages/core/src/handlers/rectangle-handler.ts:123](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/rectangle-handler.ts#L123)
 
 ***
 
@@ -271,7 +271,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[packages/core/src/editor.ts:1619](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1619)
+[packages/core/src/editor.ts:1627](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1627)
 
 ***
 
@@ -297,7 +297,7 @@ Finalize handler
 
 #### Source
 
-[packages/core/src/handlers/rectangle-handler.ts:84](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/rectangle-handler.ts#L84)
+[packages/core/src/handlers/rectangle-handler.ts:98](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/rectangle-handler.ts#L98)
 
 ***
 
@@ -349,7 +349,7 @@ keyDown
 
 #### Source
 
-[packages/core/src/editor.ts:1601](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1601)
+[packages/core/src/editor.ts:1609](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1609)
 
 ***
 
@@ -375,7 +375,7 @@ keyUp
 
 #### Source
 
-[packages/core/src/editor.ts:1614](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1614)
+[packages/core/src/editor.ts:1622](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1622)
 
 ***
 
@@ -399,7 +399,7 @@ Triggered when action is performed (unclude undo and redo)
 
 #### Source
 
-[packages/core/src/handlers/rectangle-handler.ts:105](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/rectangle-handler.ts#L105)
+[packages/core/src/handlers/rectangle-handler.ts:119](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/rectangle-handler.ts#L119)
 
 ***
 
@@ -423,7 +423,7 @@ Triggered when activated
 
 #### Source
 
-[packages/core/src/handlers/rectangle-handler.ts:96](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/rectangle-handler.ts#L96)
+[packages/core/src/handlers/rectangle-handler.ts:110](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/rectangle-handler.ts#L110)
 
 ***
 
@@ -447,7 +447,7 @@ Triggered when deactivate
 
 #### Source
 
-[packages/core/src/handlers/rectangle-handler.ts:101](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/rectangle-handler.ts#L101)
+[packages/core/src/handlers/rectangle-handler.ts:115](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/rectangle-handler.ts#L115)
 
 ***
 
@@ -473,7 +473,7 @@ pointerDown
 
 #### Source
 
-[packages/core/src/editor.ts:1555](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1555)
+[packages/core/src/editor.ts:1563](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1563)
 
 ***
 
@@ -501,7 +501,7 @@ pointerMove
 
 #### Source
 
-[packages/core/src/editor.ts:1584](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1584)
+[packages/core/src/editor.ts:1592](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1592)
 
 ***
 
@@ -529,7 +529,7 @@ pointerUp
 
 #### Source
 
-[packages/core/src/editor.ts:1571](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1571)
+[packages/core/src/editor.ts:1579](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1579)
 
 ***
 
@@ -601,4 +601,4 @@ Update handler when hovering (not dragging)
 
 #### Source
 
-[packages/core/src/handlers/rectangle-handler.ts:78](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/rectangle-handler.ts#L78)
+[packages/core/src/handlers/rectangle-handler.ts:92](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/handlers/rectangle-handler.ts#L92)

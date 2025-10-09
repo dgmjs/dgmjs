@@ -445,7 +445,7 @@ Draw selection
 
 #### Source
 
-[packages/core/src/editor.ts:1309](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1309)
+[packages/core/src/editor.ts:1317](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1317)
 
 ***
 
@@ -595,7 +595,7 @@ Get cursor
 
 #### Source
 
-[packages/core/src/editor.ts:1342](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1342)
+[packages/core/src/editor.ts:1350](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1350)
 
 ***
 
@@ -627,7 +627,7 @@ Get the document
 
 #### Source
 
-[packages/core/src/editor.ts:1357](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1357)
+[packages/core/src/editor.ts:1365](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1365)
 
 ***
 
@@ -811,7 +811,7 @@ Load from JSON
 
 #### Source
 
-[packages/core/src/editor.ts:1385](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1385)
+[packages/core/src/editor.ts:1393](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1393)
 
 ***
 
@@ -849,7 +849,7 @@ Create a new document
 
 #### Source
 
-[packages/core/src/editor.ts:1371](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1371)
+[packages/core/src/editor.ts:1379](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1379)
 
 ***
 
@@ -869,7 +869,7 @@ Repaint diagram
 
 #### Source
 
-[packages/core/src/editor.ts:1329](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1329)
+[packages/core/src/editor.ts:1337](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1337)
 
 ***
 
@@ -885,7 +885,7 @@ Save to JSON
 
 #### Source
 
-[packages/core/src/editor.ts:1402](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1402)
+[packages/core/src/editor.ts:1410](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1410)
 
 ***
 
@@ -1008,7 +1008,7 @@ Set cursor
 
 #### Source
 
-[packages/core/src/editor.ts:1349](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1349)
+[packages/core/src/editor.ts:1357](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1357)
 
 ***
 
@@ -1048,7 +1048,7 @@ Set the document
 
 #### Source
 
-[packages/core/src/editor.ts:1364](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1364)
+[packages/core/src/editor.ts:1372](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1372)
 
 ***
 
@@ -1228,7 +1228,7 @@ Update all shapes
 
 #### Source
 
-[packages/core/src/editor.ts:1318](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1318)
+[packages/core/src/editor.ts:1326](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1326)
 
 ***
 
