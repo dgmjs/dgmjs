@@ -1260,16 +1260,16 @@ export class Editor {
       const p2 = canvas.globalCoordTransformRev(sz);
       let thick = Math.max(Math.round(1 / scale), 1);
       // small grids
-      if (scale > 0.65) {
-        let w = this.gridSize[0] * 2;
-        let h = this.gridSize[1] * 2;
+      if (scale >= 0.5) {
+        let w = this.gridSize[0] * 4;
+        let h = this.gridSize[1] * 4;
         const wc = Math.floor((p2[0] - p1[0]) / w);
         const hc = Math.floor((p2[1] - p1[1]) / h);
         canvas.strokeColor = this.canvas.resolveColor(
           this.options.gridColor ?? Color.GRID
         );
         canvas.strokeWidth = thick;
-        canvas.strokePattern = [3, 3];
+        canvas.strokePattern = [2, 2];
         canvas.roughness = 0;
         canvas.alpha = 1;
         for (let i = 0; i <= wc; i++) {
@@ -1282,14 +1282,14 @@ export class Editor {
         }
       }
       // bigger grids
-      let wl = this.gridSize[0] * 10;
-      let hl = this.gridSize[1] * 10;
+      let wl = this.gridSize[0] * 16;
+      let hl = this.gridSize[1] * 16;
       const wlc = Math.floor((p2[0] - p1[0]) / wl);
       const hlc = Math.floor((p2[1] - p1[1]) / hl);
       canvas.strokeColor = this.canvas.resolveColor(
         this.options.gridColor ?? Color.GRID
       );
-      canvas.strokeWidth = thick;
+      canvas.strokeWidth = thick * 1.5;
       canvas.strokePattern = [];
       canvas.roughness = 0;
       canvas.alpha = 1;
