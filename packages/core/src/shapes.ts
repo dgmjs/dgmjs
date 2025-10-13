@@ -2230,7 +2230,9 @@ export class Text extends Box {
         visitTextNodes(this.text, (node) => {
           if (Array.isArray(node.marks)) {
             node.marks.forEach((mark: any) => {
-              delete mark.attrs.color;
+              if (mark.attrs) {
+                delete mark.attrs.color;
+              }
             });
           }
         });

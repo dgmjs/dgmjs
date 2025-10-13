@@ -335,4 +335,4 @@ title: "ShapePropsSchema"
 
 ## Source
 
-[packages/core/src/shapes.ts:3711](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3711)
+[packages/core/src/shapes.ts:3713](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3713)

@@ -27,7 +27,7 @@ Image
 
 #### Source
 
-[packages/core/src/shapes.ts:2261](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2261)
+[packages/core/src/shapes.ts:2263](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2263)
 
 ## Properties
 
@@ -419,7 +419,7 @@ Text horizontal alignment
 
 #### Source
 
-[packages/core/src/shapes.ts:2252](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2252)
+[packages/core/src/shapes.ts:2254](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2254)
 
 ***
 
@@ -429,7 +429,7 @@ Text horizontal alignment
 
 #### Source
 
-[packages/core/src/shapes.ts:2254](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2254)
+[packages/core/src/shapes.ts:2256](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2256)
 
 ***
 
@@ -439,7 +439,7 @@ Text horizontal alignment
 
 #### Source
 
-[packages/core/src/shapes.ts:2253](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2253)
+[packages/core/src/shapes.ts:2255](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2255)
 
 ***
 
@@ -1316,7 +1316,7 @@ Find an shape in breath-first order
 
 #### Source
 
-[packages/core/src/core/obj.ts:363](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L363)
+[packages/core/src/core/obj.ts:372](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L372)
 
 ***
 
@@ -1388,7 +1388,7 @@ Find an shape in depth-first order
 
 #### Source
 
-[packages/core/src/core/obj.ts:376](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L376)
+[packages/core/src/core/obj.ts:385](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L385)
 
 ***
 
@@ -1412,7 +1412,7 @@ Find a shape along with the parent-chain
 
 #### Source
 
-[packages/core/src/core/obj.ts:389](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L389)
+[packages/core/src/core/obj.ts:398](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L398)
 
 ***
 
@@ -1436,7 +1436,7 @@ Import shape from JSON
 
 #### Source
 
-[packages/core/src/shapes.ts:2283](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2283)
+[packages/core/src/shapes.ts:2285](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2285)
 
 ***
 
@@ -1849,7 +1849,7 @@ Test whether the given shape is a descendant
 
 #### Source
 
-[packages/core/src/core/obj.ts:399](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L399)
+[packages/core/src/core/obj.ts:408](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L408)
 
 ***
 
@@ -2241,7 +2241,7 @@ return defaultValue if the field is not an array of point.
 
 #### Source
 
-[packages/core/src/core/obj.ts:256](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L256)
+[packages/core/src/core/obj.ts:259](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L259)
 
 ***
 
@@ -2417,7 +2417,7 @@ return defaultValue if the field is not a point.
 
 #### Source
 
-[packages/core/src/core/obj.ts:213](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L213)
+[packages/core/src/core/obj.ts:216](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L216)
 
 ***
 
@@ -2446,13 +2446,13 @@ return defaultValue if the field is not a point or null.
 
 #### Source
 
-[packages/core/src/core/obj.ts:233](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L233)
+[packages/core/src/core/obj.ts:236](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L236)
 
 ***
 
 ### readRef()
 
-> **readRef**(`json`, `field`): `null` \| `string`
+> **readRef**(`json`, `field`): `null` \| `string` \| [`Obj`](/api-core/classes/obj/)
 
 Read a reference to object from the JSON object,
 return defaultValue if the field is not string (obj's id) or null.
@@ -2465,7 +2465,7 @@ return defaultValue if the field is not string (obj's id) or null.
 
 #### Returns
 
-`null` \| `string`
+`null` \| `string` \| [`Obj`](/api-core/classes/obj/)
 
 #### Inherited from
 
@@ -2584,7 +2584,7 @@ Default render this shape
 
 #### Source
 
-[packages/core/src/shapes.ts:2290](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2290)
+[packages/core/src/shapes.ts:2292](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2292)
 
 ***
 
@@ -2828,7 +2828,7 @@ Export shape to JSON
 
 #### Source
 
-[packages/core/src/shapes.ts:2271](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2271)
+[packages/core/src/shapes.ts:2273](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L2273)
 
 ***
 
@@ -2854,7 +2854,7 @@ Traverse all objects in breath-first order
 
 #### Source
 
-[packages/core/src/core/obj.ts:317](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L317)
+[packages/core/src/core/obj.ts:326](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L326)
 
 ***
 
@@ -2880,7 +2880,7 @@ Traverse all shapes in depth-first order
 
 #### Source
 
-[packages/core/src/core/obj.ts:331](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L331)
+[packages/core/src/core/obj.ts:340](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L340)
 
 ***
 
@@ -2900,7 +2900,7 @@ Returns an array of shapes in order of traverse sequence.
 
 #### Source
 
-[packages/core/src/core/obj.ts:354](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L354)
+[packages/core/src/core/obj.ts:363](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L363)
 
 ***
 
@@ -2920,7 +2920,7 @@ Returns an array of shapes in order of traverse sequence.
 
 #### Source
 
-[packages/core/src/core/obj.ts:345](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L345)
+[packages/core/src/core/obj.ts:354](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/core/obj.ts#L354)
 
 ***
 

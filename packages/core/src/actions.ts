@@ -261,7 +261,8 @@ export class Actions {
               if (s instanceof Box) {
                 const nodes = structuredClone(s.text);
                 visitTextNodes(nodes, (node) => {
-                  if (node.attrs?.textAlign) node.attrs.textAlign = value;
+                  if (typeof node.attrs?.textAlign !== "undefined")
+                    node.attrs.textAlign = value;
                 });
                 if (s.hasOwnProperty(key)) {
                   tx.assign(s, key, value);

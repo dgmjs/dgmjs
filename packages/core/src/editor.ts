@@ -1286,8 +1286,13 @@ export class Editor {
       let hl = this.gridSize[1] * 8;
       const wlc = Math.floor((p2[0] - p1[0]) / wl);
       const hlc = Math.floor((p2[1] - p1[1]) / hl);
+      canvas.strokeColor = this.canvas.resolveColor(
+        this.options.gridColor ?? Color.GRID
+      );
       canvas.strokeWidth = thick;
       canvas.strokePattern = [];
+      canvas.roughness = 0;
+      canvas.alpha = 1;
       for (let i = 0; i <= wlc; i++) {
         const x = p1[0] + i * wl - (p1[0] % wl);
         canvas.line(x, p1[1], x, p2[1]);

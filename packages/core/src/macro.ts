@@ -318,7 +318,7 @@ export function setHorzAlign(
   let changed = false;
   let doc = structuredClone(box.text);
   visitTextNodes(doc, (docNode) => {
-    if (docNode.attrs && docNode.attrs.textAlign)
+    if (docNode.attrs && typeof docNode.attrs.textAlign !== "undefined")
       docNode.attrs.textAlign = horzAlign;
   });
   changed = tx.assign(box, "text", doc) || changed;
