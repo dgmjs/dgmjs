@@ -1269,7 +1269,7 @@ export class Editor {
           this.options.gridColor ?? Color.GRID
         );
         canvas.strokeWidth = thick;
-        canvas.strokePattern = [2, 2];
+        canvas.strokePattern = [4, 4];
         canvas.roughness = 0;
         canvas.alpha = 1;
         for (let i = 0; i <= wc; i++) {
