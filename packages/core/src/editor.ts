@@ -1260,7 +1260,7 @@ export class Editor {
       const p2 = canvas.globalCoordTransformRev(sz);
       let thick = Math.max(Math.round(1 / scale), 1);
       // small grids
-      if (scale >= 0.5) {
+      if (scale > 0.65) {
         let w = this.gridSize[0] * 2;
         let h = this.gridSize[1] * 2;
         const wc = Math.floor((p2[0] - p1[0]) / w);
