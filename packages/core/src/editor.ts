@@ -443,7 +443,7 @@ export class Editor {
     this.canvas = null as any;
     this.enabled = true;
     this.darkMode = false;
-    this.gridSize = [16, 16];
+    this.gridSize = [8, 8];
     this.showGrid = false;
     this.snapToGrid = false;
     this.snapToObjects = false;
@@ -1269,7 +1269,7 @@ export class Editor {
           this.options.gridColor ?? Color.GRID
         );
         canvas.strokeWidth = thick;
-        canvas.strokePattern = [4, 4];
+        canvas.strokePattern = [3, 3];
         canvas.roughness = 0;
         canvas.alpha = 1;
         for (let i = 0; i <= wc; i++) {
@@ -1282,8 +1282,8 @@ export class Editor {
         }
       }
       // bigger grids
-      let wl = this.gridSize[0] * 8;
-      let hl = this.gridSize[1] * 8;
+      let wl = this.gridSize[0] * 10;
+      let hl = this.gridSize[1] * 10;
       const wlc = Math.floor((p2[0] - p1[0]) / wl);
       const hlc = Math.floor((p2[1] - p1[1]) / hl);
       canvas.strokeColor = this.canvas.resolveColor(
