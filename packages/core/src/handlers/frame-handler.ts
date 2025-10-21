@@ -106,10 +106,14 @@ export class FrameFactoryHandler extends Handler {
     ) {
       editor.transform.cancelAction();
     } else {
+      const page = editor.getCurrentPage();
+      this.includedShapes.sort(
+        (a, b) => page!.children.indexOf(a) - page!.children.indexOf(b)
+      );
       editor.transform.transact((tx) => {
-        this.includedShapes.forEach((s) => {
+        for (const s of this.includedShapes) {
           macro.changeParent(tx, s, this.shape!);
-        });
+        }
       });
       editor.transform.endAction();
       editor.factory.triggerCreate(this.shape as Shape);
@@ -134,16 +138,15 @@ export class FrameFactoryHandler extends Handler {
   }
 
   drawDragging(editor: Editor, e: CanvasPointerEvent) {
-    // console.log("draw dragging", this.dragStartPoint, this.dragPoint);
     const page = editor.getCurrentPage();
     if (!page) return;
     this.includedShapes = [];
     const rect = geometry.normalizeRect([this.dragStartPoint, this.dragPoint]);
-    page.visit((s) => {
+    page.children.forEach((shape) => {
+      const s = shape as Shape;
       if (
         s.visible &&
         s.enable &&
-        s.parent === page &&
         geometry.includeRect(rect, s.getBoundingRect()) &&
         this.shape !== s
       ) {
