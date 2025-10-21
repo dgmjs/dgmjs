@@ -3114,6 +3114,7 @@ export class Frame extends Box {
     this.type = "Frame";
     this.name = "Frame";
     this.containable = true;
+    this.fillStyle = FillStyle.NONE;
     this._memoShadowCanvas = new MemoizationCanvas();
   }
 

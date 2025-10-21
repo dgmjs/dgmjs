@@ -129,6 +129,8 @@ export function TiptapEditorComponent({
         editor={editor}
         className="RichTextEditor"
         style={{
+          backgroundColor:
+            "#ffffff01" /* trick to show cursor in empty editor in Safari */,
           width: "100%",
           fontFamily: fontFamily,
           fontSize: fontSize,
