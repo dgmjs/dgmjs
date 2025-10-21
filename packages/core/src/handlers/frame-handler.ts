@@ -1,17 +1,19 @@
 import * as geometry from "../graphics/geometry";
-import { Editor, Handler } from "../editor";
+import { Editor, Handler, manipulatorManager } from "../editor";
 import { CanvasPointerEvent } from "../graphics/graphics";
-import { Cursor, Mouse } from "../graphics/const";
+import { Cursor } from "../graphics/const";
 import { Frame, Shape } from "../shapes";
 import { addShape, resolveAllConstraints } from "../macro";
 import { ActionKind } from "../core";
 import { HandlerSnapper } from "../manipulators/snapper";
+import { macro } from "..";
 
 /**
  * Frame Factory Handler
  */
 export class FrameFactoryHandler extends Handler {
   shape: Frame | null = null;
+  includedShapes: Shape[] = [];
   snapper: HandlerSnapper = new HandlerSnapper();
 
   reset(): void {
@@ -104,6 +106,11 @@ export class FrameFactoryHandler extends Handler {
     ) {
       editor.transform.cancelAction();
     } else {
+      editor.transform.transact((tx) => {
+        this.includedShapes.forEach((s) => {
+          macro.changeParent(tx, s, this.shape!);
+        });
+      });
       editor.transform.endAction();
       editor.factory.triggerCreate(this.shape as Shape);
     }
@@ -127,6 +134,29 @@ export class FrameFactoryHandler extends Handler {
   }
 
   drawDragging(editor: Editor, e: CanvasPointerEvent) {
+    // console.log("draw dragging", this.dragStartPoint, this.dragPoint);
+    const page = editor.getCurrentPage();
+    if (!page) return;
+    this.includedShapes = [];
+    const rect = geometry.normalizeRect([this.dragStartPoint, this.dragPoint]);
+    page.visit((s) => {
+      if (
+        s.visible &&
+        s.enable &&
+        s.parent === page &&
+        geometry.includeRect(rect, s.getBoundingRect()) &&
+        this.shape !== s
+      ) {
+        this.includedShapes.push(s);
+      }
+    });
+    this.includedShapes.forEach((s) => {
+      const manipulator = manipulatorManager.get(s.type);
+      if (manipulator) {
+        manipulator.drawHovering(editor, s, e);
+      }
+    });
+
     this.snapper.draw(editor);
   }
 }
