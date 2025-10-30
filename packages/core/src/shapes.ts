@@ -3153,6 +3153,46 @@ export class Frame extends Box {
   }
 
   /**
+   * Determines whether this shape contains a point in GCS
+   */
+  containsPoint(
+    canvas: Canvas,
+    point: number[],
+    regardFillStyle: boolean = true
+  ): boolean {
+    let result = false;
+    const outline = this.getOutline().map((p) =>
+      this.localCoordTransform(canvas, p, true)
+    );
+    if (regardFillStyle && this.fillStyle === FillStyle.NONE) {
+      result =
+        geometry.getNearSegment(
+          point,
+          outline,
+          LINE_SELECTION_THRESHOLD * canvas.px
+        ) > -1;
+    } else {
+      result = geometry.inPolygon(point, outline);
+    }
+    // allow to select frame by its name text (only if render script is not defined)
+    if (!result) {
+      const script = this.getScript(ScriptType.RENDER);
+      if (!script) {
+        const tm = canvas.textMetric(this.name);
+        const margin = tm.descent * 1.2;
+        const textRect = [
+          [this.left, this.top - margin - tm.ascent],
+          [this.left + tm.width, this.top],
+        ];
+        if (geometry.inRect(point, textRect)) {
+          result = true;
+        }
+      }
+    }
+    return result;
+  }
+
+  /**
    * Determines whether the given rect overlaps this shape's clipping area.
    * If the shape don't have clipping area, return true.
    * If the shape has clipping area, return true if the rect overlaps the
