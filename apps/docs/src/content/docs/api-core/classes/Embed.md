@@ -27,7 +27,7 @@ Embed
 
 #### Source
 
-[packages/core/src/shapes.ts:3422](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3422)
+[packages/core/src/shapes.ts:3463](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3463)
 
 ## Properties
 
@@ -753,7 +753,7 @@ Indicate how this shape can be resized
 
 #### Source
 
-[packages/core/src/shapes.ts:3415](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3415)
+[packages/core/src/shapes.ts:3456](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3456)
 
 ***
 
@@ -1244,7 +1244,7 @@ Determines whether this shape contains a point in GCS
 
 #### Source
 
-[packages/core/src/shapes.ts:3468](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3468)
+[packages/core/src/shapes.ts:3509](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3509)
 
 ***
 
@@ -1294,7 +1294,7 @@ Finalize shape
 
 #### Source
 
-[packages/core/src/shapes.ts:3429](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3429)
+[packages/core/src/shapes.ts:3470](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3470)
 
 ***
 
@@ -1438,7 +1438,7 @@ Import shape from JSON
 
 #### Source
 
-[packages/core/src/shapes.ts:3447](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3447)
+[packages/core/src/shapes.ts:3488](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3488)
 
 ***
 
@@ -2588,7 +2588,7 @@ Default render this shape
 
 #### Source
 
-[packages/core/src/shapes.ts:3501](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3501)
+[packages/core/src/shapes.ts:3542](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3542)
 
 ***
 
@@ -2832,7 +2832,7 @@ Export shape to JSON
 
 #### Source
 
-[packages/core/src/shapes.ts:3437](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3437)
+[packages/core/src/shapes.ts:3478](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3478)
 
 ***
 

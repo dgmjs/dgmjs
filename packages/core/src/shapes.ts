@@ -3153,6 +3153,54 @@ export class Frame extends Box {
   }
 
   /**
+   * Determines whether this shape contains a point in GCS
+   */
+  containsPoint(
+    canvas: Canvas,
+    point: number[],
+    regardFillStyle: boolean = true
+  ): boolean {
+    let result = false;
+    const outline = this.getOutline().map((p) =>
+      this.localCoordTransform(canvas, p, true)
+    );
+    if (regardFillStyle && this.fillStyle === FillStyle.NONE) {
+      result =
+        geometry.getNearSegment(
+          point,
+          outline,
+          LINE_SELECTION_THRESHOLD * canvas.px
+        ) > -1;
+    } else {
+      result = geometry.inPolygon(point, outline);
+    }
+    // allow to select frame by its name text (only if render script is not defined)
+    if (!result) {
+      const script = this.getScript(ScriptType.RENDER);
+      if (!script) {
+        const _font = canvas.font;
+        canvas.font = utils.toCssFont(
+          this.fontStyle,
+          this.fontWeight,
+          this.fontSize,
+          this.fontFamily
+        );
+        const tm = canvas.textMetric(this.name);
+        canvas.font = _font;
+        const margin = 2;
+        const textRect = [
+          [this.left, this.top - tm.descent - tm.ascent - margin],
+          [this.left + tm.width, this.top],
+        ];
+        if (geometry.inRect(point, textRect)) {
+          result = true;
+        }
+      }
+    }
+    return result;
+  }
+
+  /**
    * Determines whether the given rect overlaps this shape's clipping area.
    * If the shape don't have clipping area, return true.
    * If the shape has clipping area, return true if the rect overlaps the
@@ -3252,9 +3300,11 @@ export class Frame extends Box {
    * Default render this shape
    */
   renderDefault(canvas: MemoizationCanvas) {
-    const tm = canvas.textMetric(this.name);
-    const margin = tm.descent * 1.2;
-    canvas.fillText(this.left, this.top - margin, this.name);
+    if (this.allowRenderText) {
+      const tm = canvas.textMetric(this.name);
+      const margin = 2;
+      canvas.fillText(this.left, this.top - tm.descent - margin, this.name);
+    }
     if (this.strokeWidth > 0) {
       canvas.strokeRoundRect(
         this.left,

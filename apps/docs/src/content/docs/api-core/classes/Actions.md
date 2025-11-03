@@ -85,7 +85,7 @@ The shapes that were aligned
 
 #### Source
 
-[packages/core/src/actions.ts:788](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L788)
+[packages/core/src/actions.ts:789](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L789)
 
 ***
 
@@ -109,7 +109,7 @@ The shapes that were aligned
 
 #### Source
 
-[packages/core/src/actions.ts:723](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L723)
+[packages/core/src/actions.ts:724](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L724)
 
 ***
 
@@ -133,7 +133,7 @@ The shapes that were aligned
 
 #### Source
 
-[packages/core/src/actions.ts:853](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L853)
+[packages/core/src/actions.ts:854](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L854)
 
 ***
 
@@ -157,7 +157,7 @@ The shapes that were aligned
 
 #### Source
 
-[packages/core/src/actions.ts:663](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L663)
+[packages/core/src/actions.ts:664](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L664)
 
 ***
 
@@ -181,7 +181,7 @@ The shapes that were aligned
 
 #### Source
 
-[packages/core/src/actions.ts:818](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L818)
+[packages/core/src/actions.ts:819](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L819)
 
 ***
 
@@ -205,7 +205,7 @@ The shapes that were aligned
 
 #### Source
 
-[packages/core/src/actions.ts:693](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L693)
+[packages/core/src/actions.ts:694](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L694)
 
 ***
 
@@ -229,7 +229,7 @@ The shapes that were aligned
 
 #### Source
 
-[packages/core/src/actions.ts:758](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L758)
+[packages/core/src/actions.ts:759](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L759)
 
 ***
 
@@ -253,7 +253,7 @@ The shapes that were aligned
 
 #### Source
 
-[packages/core/src/actions.ts:896](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L896)
+[packages/core/src/actions.ts:897](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L897)
 
 ***
 
@@ -277,7 +277,7 @@ The shapes that were brought forward
 
 #### Source
 
-[packages/core/src/actions.ts:619](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L619)
+[packages/core/src/actions.ts:620](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L620)
 
 ***
 
@@ -301,7 +301,7 @@ The shapes that were brought to front
 
 #### Source
 
-[packages/core/src/actions.ts:575](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L575)
+[packages/core/src/actions.ts:576](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L576)
 
 ***
 
@@ -325,7 +325,7 @@ The copied shapes
 
 #### Source
 
-[packages/core/src/actions.ts:330](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L330)
+[packages/core/src/actions.ts:331](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L331)
 
 ***
 
@@ -347,7 +347,7 @@ The shapes to cut. If not provided, the selected shapes will be cut
 
 #### Source
 
-[packages/core/src/actions.ts:343](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L343)
+[packages/core/src/actions.ts:344](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L344)
 
 ***
 
@@ -381,7 +381,7 @@ The parent shape to insert the duplicated shapes into. If not provided, the dupl
 
 #### Source
 
-[packages/core/src/actions.ts:439](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L439)
+[packages/core/src/actions.ts:440](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L440)
 
 ***
 
@@ -441,7 +441,7 @@ The created group
 
 #### Source
 
-[packages/core/src/actions.ts:527](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L527)
+[packages/core/src/actions.ts:528](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L528)
 
 ***
 
@@ -499,7 +499,7 @@ The moved shapes
 
 #### Source
 
-[packages/core/src/actions.ts:487](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L487)
+[packages/core/src/actions.ts:488](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L488)
 
 ***
 
@@ -523,7 +523,7 @@ The pasted shapes
 
 #### Source
 
-[packages/core/src/actions.ts:366](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L366)
+[packages/core/src/actions.ts:367](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L367)
 
 ***
 
@@ -561,7 +561,7 @@ The shapes to remove. If not provided, the selected shapes will be removed
 
 #### Source
 
-[packages/core/src/actions.ts:311](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L311)
+[packages/core/src/actions.ts:312](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L312)
 
 ***
 
@@ -635,7 +635,7 @@ The shapes that were sent backward
 
 #### Source
 
-[packages/core/src/actions.ts:641](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L641)
+[packages/core/src/actions.ts:642](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L642)
 
 ***
 
@@ -659,7 +659,7 @@ The shapes that were sent to back
 
 #### Source
 
-[packages/core/src/actions.ts:597](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L597)
+[packages/core/src/actions.ts:598](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L598)
 
 ***
 
@@ -697,7 +697,7 @@ The shapes to ungroup. If not provided, the selected shapes will be ungrouped
 
 #### Source
 
-[packages/core/src/actions.ts:551](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L551)
+[packages/core/src/actions.ts:552](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/actions.ts#L552)
 
 ***
 
