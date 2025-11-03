@@ -36,6 +36,7 @@ Constraint can be used to impose specific constraints on a shape. Followings are
 - [set-state-from-property](#set-state-from-property)
 - [set-size](#size-size)
 - [set-line](#set-line)
+- [fill-text](#fill-text)
 
 ### align-children
 
@@ -78,7 +79,7 @@ This constraint inherits styles automatically from it's parent shape.
 - **stroke** : Inherit stroke styles.
 - **fill** : Inherit fill styles.
 - **font** : Inherit font styles.
-- **textAlignment** :  : Inherit text alignments.
+- **textAlignment** : : Inherit text alignments.
 - **query** : A query for determining the parent to which the constraint should be applied. For more about query expression, see [Query](#query).
 
 ### adjust-route
@@ -108,6 +109,12 @@ This constraint automatically changes the size of the shape.
 This constraint automatically changes the form of a line shape.
 
 - **type** : `free`, `horzontal`, `vertical`.
+
+### fill-text
+
+This constraint automatically fills the shape with the provided text or lorem ipsum text, adjusting the text length to fit the size of the shape.
+
+- **text** : Text string value to fill. (If empty, lorem ipsum text will be used)
 
 ## Scripts
 

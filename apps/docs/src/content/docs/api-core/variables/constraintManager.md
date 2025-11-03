@@ -9,4 +9,4 @@ title: "constraintManager"
 
 ## Source
 
-[packages/core/src/shapes.ts:3597](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3597)
+[packages/core/src/shapes.ts:3638](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3638)

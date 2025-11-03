@@ -6,3 +6,4 @@ import "./adjust-route";
 import "./set-state-from-property";
 import "./set-size";
 import "./set-line";
+import "./fill-text";

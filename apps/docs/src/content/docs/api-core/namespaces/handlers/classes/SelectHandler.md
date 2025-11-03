@@ -33,7 +33,7 @@ Select Handler
 
 #### Source
 
-[packages/core/src/editor.ts:1480](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1480)
+[packages/core/src/editor.ts:1485](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1485)
 
 ## Properties
 
@@ -47,7 +47,7 @@ Select Handler
 
 #### Source
 
-[packages/core/src/editor.ts:1478](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1478)
+[packages/core/src/editor.ts:1483](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1483)
 
 ***
 
@@ -61,7 +61,7 @@ Select Handler
 
 #### Source
 
-[packages/core/src/editor.ts:1477](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1477)
+[packages/core/src/editor.ts:1482](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1482)
 
 ***
 
@@ -75,7 +75,7 @@ Select Handler
 
 #### Source
 
-[packages/core/src/editor.ts:1476](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1476)
+[packages/core/src/editor.ts:1481](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1481)
 
 ***
 
@@ -89,7 +89,7 @@ Select Handler
 
 #### Source
 
-[packages/core/src/editor.ts:1474](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1474)
+[packages/core/src/editor.ts:1479](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1479)
 
 ***
 
@@ -103,7 +103,7 @@ Select Handler
 
 #### Source
 
-[packages/core/src/editor.ts:1475](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1475)
+[packages/core/src/editor.ts:1480](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1480)
 
 ## Methods
 
@@ -127,7 +127,7 @@ Activate the handler
 
 #### Source
 
-[packages/core/src/editor.ts:1513](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1513)
+[packages/core/src/editor.ts:1518](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1518)
 
 ***
 
@@ -151,7 +151,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[packages/core/src/editor.ts:1504](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1504)
+[packages/core/src/editor.ts:1509](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1509)
 
 ***
 
@@ -175,7 +175,7 @@ Deactivate the handler
 
 #### Source
 
-[packages/core/src/editor.ts:1521](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1521)
+[packages/core/src/editor.ts:1526](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1526)
 
 ***
 
@@ -201,7 +201,7 @@ Draw dragging
 
 #### Source
 
-[packages/core/src/editor.ts:1637](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1637)
+[packages/core/src/editor.ts:1642](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1642)
 
 ***
 
@@ -227,7 +227,7 @@ Draw hovering
 
 #### Source
 
-[packages/core/src/editor.ts:1632](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1632)
+[packages/core/src/editor.ts:1637](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1637)
 
 ***
 
@@ -277,7 +277,7 @@ Finalize handler
 
 #### Source
 
-[packages/core/src/editor.ts:1558](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1558)
+[packages/core/src/editor.ts:1563](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1563)
 
 ***
 
@@ -325,7 +325,7 @@ Initialize handler
 
 #### Source
 
-[packages/core/src/editor.ts:1543](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1543)
+[packages/core/src/editor.ts:1548](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1548)
 
 ***
 
@@ -401,7 +401,7 @@ Triggered when action is performed (unclude undo and redo)
 
 #### Source
 
-[packages/core/src/editor.ts:1538](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1538)
+[packages/core/src/editor.ts:1543](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1543)
 
 ***
 
@@ -425,7 +425,7 @@ Triggered when activated
 
 #### Source
 
-[packages/core/src/editor.ts:1528](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1528)
+[packages/core/src/editor.ts:1533](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1533)
 
 ***
 
@@ -449,7 +449,7 @@ Triggered when deactivate
 
 #### Source
 
-[packages/core/src/editor.ts:1533](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1533)
+[packages/core/src/editor.ts:1538](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1538)
 
 ***
 
@@ -547,7 +547,7 @@ Reset the states of handler
 
 #### Source
 
-[packages/core/src/editor.ts:1495](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1495)
+[packages/core/src/editor.ts:1500](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1500)
 
 ***
 
@@ -573,7 +573,7 @@ Update handler
 
 #### Source
 
-[packages/core/src/editor.ts:1548](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1548)
+[packages/core/src/editor.ts:1553](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1553)
 
 ***
 
@@ -599,4 +599,4 @@ Update handler when hovering (not dragging)
 
 #### Source
 
-[packages/core/src/editor.ts:1553](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1553)
+[packages/core/src/editor.ts:1558](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1558)

@@ -1186,13 +1186,13 @@ Determines whether this shape contains a point in GCS
 
 `boolean`
 
-#### Inherited from
+#### Overrides
 
 [`Box`](/api-core/classes/box/).[`containsPoint`](/api-core/classes/box/#containspoint)
 
 #### Source
 
-[packages/core/src/shapes.ts:1001](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L1001)
+[packages/core/src/shapes.ts:3158](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3158)
 
 ***
 
@@ -1222,7 +1222,7 @@ Render vs Draw
 
 #### Source
 
-[packages/core/src/shapes.ts:3184](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3184)
+[packages/core/src/shapes.ts:3225](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3225)
 
 ***
 
@@ -1755,7 +1755,7 @@ Prevent to pick children shapes if point is outside of the frame.
 
 #### Source
 
-[packages/core/src/shapes.ts:3124](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3124)
+[packages/core/src/shapes.ts:3125](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3125)
 
 ***
 
@@ -1967,7 +1967,7 @@ clipping area. (e.g. Frame)
 
 #### Source
 
-[packages/core/src/shapes.ts:3160](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3160)
+[packages/core/src/shapes.ts:3201](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3201)
 
 ***
 
@@ -1994,7 +1994,7 @@ In the case of Frame, it returns true only if the rect includes the frame.
 
 #### Source
 
-[packages/core/src/shapes.ts:3168](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3168)
+[packages/core/src/shapes.ts:3209](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3209)
 
 ***
 
@@ -2508,7 +2508,7 @@ Render this shape
 
 #### Source
 
-[packages/core/src/shapes.ts:3233](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3233)
+[packages/core/src/shapes.ts:3274](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3274)
 
 ***
 
@@ -2562,7 +2562,7 @@ Default render this shape
 
 #### Source
 
-[packages/core/src/shapes.ts:3253](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3253)
+[packages/core/src/shapes.ts:3294](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3294)
 
 ***
 
@@ -2922,7 +2922,7 @@ Update shape
 
 #### Source
 
-[packages/core/src/shapes.ts:3175](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3175)
+[packages/core/src/shapes.ts:3216](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3216)
 
 ***
 

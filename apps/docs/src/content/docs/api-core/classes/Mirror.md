@@ -27,7 +27,7 @@ Mirror
 
 #### Source
 
-[packages/core/src/shapes.ts:3279](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3279)
+[packages/core/src/shapes.ts:3320](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3320)
 
 ## Properties
 
@@ -803,7 +803,7 @@ The subject shape to be mirrored
 
 #### Source
 
-[packages/core/src/shapes.ts:3277](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3277)
+[packages/core/src/shapes.ts:3318](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3318)
 
 ***
 
@@ -1224,7 +1224,7 @@ Render vs Draw
 
 #### Source
 
-[packages/core/src/shapes.ts:3323](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3323)
+[packages/core/src/shapes.ts:3364](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3364)
 
 ***
 
@@ -1418,7 +1418,7 @@ Import shape from JSON
 
 #### Source
 
-[packages/core/src/shapes.ts:3307](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3307)
+[packages/core/src/shapes.ts:3348](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3348)
 
 ***
 
@@ -1696,7 +1696,7 @@ and don't forget to apply transform scale to the DOM element.
 
 #### Source
 
-[packages/core/src/shapes.ts:3371](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3371)
+[packages/core/src/shapes.ts:3412](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3412)
 
 ***
 
@@ -2580,7 +2580,7 @@ Default render this shape
 
 #### Source
 
-[packages/core/src/shapes.ts:3357](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3357)
+[packages/core/src/shapes.ts:3398](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3398)
 
 ***
 
@@ -2724,7 +2724,7 @@ Render default viewport
 
 #### Source
 
-[packages/core/src/shapes.ts:3386](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3386)
+[packages/core/src/shapes.ts:3427](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3427)
 
 ***
 
@@ -2754,7 +2754,7 @@ assign null if not found
 
 #### Source
 
-[packages/core/src/shapes.ts:3312](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3312)
+[packages/core/src/shapes.ts:3353](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3353)
 
 ***
 
@@ -2824,7 +2824,7 @@ Export shape to JSON
 
 #### Source
 
-[packages/core/src/shapes.ts:3288](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3288)
+[packages/core/src/shapes.ts:3329](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3329)
 
 ***
 
