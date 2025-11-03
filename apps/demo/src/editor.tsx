@@ -209,9 +209,6 @@ export const EditorWrapper: React.FC<DGMEditorProps> = ({
           setEditingText(shape as Box);
         }}
         onFloatingToolbarMove={(onBelow: boolean) => {}}
-        onFrameNameInplaceEditorMount={() => {
-          console.log("Frame name editor mounted");
-        }}
         onFrameNameInplaceEditorOpen={() => {
           console.log("Frame name editor opened");
         }}
