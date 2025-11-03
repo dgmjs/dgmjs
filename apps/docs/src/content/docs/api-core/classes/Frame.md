@@ -1222,7 +1222,7 @@ Render vs Draw
 
 #### Source
 
-[packages/core/src/shapes.ts:3225](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3225)
+[packages/core/src/shapes.ts:3233](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3233)
 
 ***
 
@@ -1967,7 +1967,7 @@ clipping area. (e.g. Frame)
 
 #### Source
 
-[packages/core/src/shapes.ts:3201](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3201)
+[packages/core/src/shapes.ts:3209](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3209)
 
 ***
 
@@ -1994,7 +1994,7 @@ In the case of Frame, it returns true only if the rect includes the frame.
 
 #### Source
 
-[packages/core/src/shapes.ts:3209](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3209)
+[packages/core/src/shapes.ts:3217](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3217)
 
 ***
 
@@ -2508,7 +2508,7 @@ Render this shape
 
 #### Source
 
-[packages/core/src/shapes.ts:3274](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3274)
+[packages/core/src/shapes.ts:3282](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3282)
 
 ***
 
@@ -2562,7 +2562,7 @@ Default render this shape
 
 #### Source
 
-[packages/core/src/shapes.ts:3294](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3294)
+[packages/core/src/shapes.ts:3302](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3302)
 
 ***
 
@@ -2922,7 +2922,7 @@ Update shape
 
 #### Source
 
-[packages/core/src/shapes.ts:3216](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3216)
+[packages/core/src/shapes.ts:3224](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/shapes.ts#L3224)
 
 ***
 

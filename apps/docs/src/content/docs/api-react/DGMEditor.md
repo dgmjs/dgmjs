@@ -12,11 +12,12 @@ The editor component with [`DGMTextInplaceEditor`](/api-react/dgm-text-inplace-e
 
 Provides all properties of `DGMEditorCore` with following additional properties:
 
-| Prop | Type | Default |
-| ---- | ---- | ------- |
-| `textInplaceEditorToolbar` |  `React.ReactNode` | |
-| `floatingToolbar` |  `React.ReactNode` | |
-| `floatingToolbarDistance` |  `number` | |
-| `onTextInplaceEditorMount` |  (`tiptapEditor`: [`TiptapEditor`](https://tiptap.dev/docs/editor/api/editor)) => `void` | |
-| `onTextInplaceEditorOpen` |  (`shape`: `Box`) => `void` | |
-| `onFloatingToolbarMove` |  (`onBelow`: `boolean`) => `void` | |
+| Prop                           | Type                                                                                    | Default |
+| ------------------------------ | --------------------------------------------------------------------------------------- | ------- |
+| `textInplaceEditorToolbar`     | `React.ReactNode`                                                                       |         |
+| `floatingToolbar`              | `React.ReactNode`                                                                       |         |
+| `floatingToolbarDistance`      | `number`                                                                                |         |
+| `onTextInplaceEditorMount`     | (`tiptapEditor`: [`TiptapEditor`](https://tiptap.dev/docs/editor/api/editor)) => `void` |         |
+| `onTextInplaceEditorOpen`      | (`shape`: `Box`) => `void`                                                              |         |
+| `onFloatingToolbarMove`        | (`onBelow`: `boolean`) => `void`                                                        |         |
+| `onFrameNameInplaceEditorOpen` | (`shape`: `Frame`) => `void`                                                            |         |
