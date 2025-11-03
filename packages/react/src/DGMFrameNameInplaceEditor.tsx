@@ -55,7 +55,6 @@ function isNameEditableFrame(shape: Shape | null) {
 interface DGMFrameNameInplaceEditorProps
   extends React.HTMLAttributes<HTMLDivElement> {
   editor: Editor;
-  onMount?: (input: any) => void;
   onOpen?: (shape: Frame) => void;
 }
 
@@ -74,7 +73,7 @@ interface InternalState {
 
 export const DGMFrameNameInplaceEditor: React.FC<
   DGMFrameNameInplaceEditorProps
-> = ({ editor, onMount, onOpen, ...others }) => {
+> = ({ editor, onOpen, ...others }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [name, setName] = useState<string>("");
   const [state, setState] = useState<InternalState>({
