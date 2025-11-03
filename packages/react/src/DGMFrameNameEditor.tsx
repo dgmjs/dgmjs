@@ -8,13 +8,22 @@ import {
   Frame,
   geometry,
   utils,
+  ScriptType,
 } from "@dgmjs/core";
 import { useEffect, useRef, useState } from "react";
 
 function getFrameNameRect(editor: Editor, frameShape: Frame, name: string) {
   const canvas = editor.canvas;
+  const _font = canvas.font;
+  canvas.font = utils.toCssFont(
+    frameShape.fontStyle,
+    frameShape.fontWeight,
+    frameShape.fontSize,
+    frameShape.fontFamily
+  );
   const textMetric = editor.canvas.textMetric(name);
-  const margin = Math.floor(textMetric.descent * 1.2);
+  canvas.font = _font;
+  const margin = 2;
   const rect = [
     [frameShape.left, frameShape.top - textMetric.height - margin],
     [frameShape.left + textMetric.width, frameShape.top - margin],
@@ -36,6 +45,11 @@ function getFrameNameRect(editor: Editor, frameShape: Frame, name: string) {
     width: width,
     height: height,
   };
+}
+
+function isNameEditableFrame(shape: Shape | null) {
+  const script = shape?.getScript(ScriptType.RENDER);
+  return shape instanceof Frame && !shape.textEditable && !script;
 }
 
 interface DGMFrameNameEditorProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -156,14 +170,7 @@ export const DGMFrameNameEditor: React.FC<DGMFrameNameEditorProps> = ({
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      if (editor.selection.size() === 1) {
-        const shape = editor.selection.shapes[0];
-        if (shape instanceof Frame && !shape.textEditable) {
-          open(shape);
-        }
-      }
-    } else if (event.key === "Escape") {
+    if (event.key === "Enter" || event.key === "Escape") {
       close();
     }
   };
@@ -172,25 +179,25 @@ export const DGMFrameNameEditor: React.FC<DGMFrameNameEditorProps> = ({
     if (event.key === "Enter") {
       if (editor.selection.size() === 1) {
         const shape = editor.selection.shapes[0];
-        if (shape instanceof Frame && !shape.textEditable) {
-          open(shape);
+        if (isNameEditableFrame(shape)) {
+          open(shape as Frame);
         }
       }
     }
   };
 
   const handleEditorDblClick = ({ shape, point }: DblClickEvent) => {
-    if (shape instanceof Frame && !shape.textEditable) {
-      open(shape);
+    if (isNameEditableFrame(shape)) {
+      open(shape as Frame);
     }
   };
 
   const handleEditorFactoryCreate = (shape: Shape) => {
-    if (shape instanceof Frame && !shape.textEditable) {
+    if (isNameEditableFrame(shape)) {
       setTimeout(() => {
         editor.selection.deselectAll();
         setTimeout(() => {
-          open(shape);
+          open(shape as Frame);
         }, 0);
       }, 0);
     }
@@ -228,7 +235,6 @@ export const DGMFrameNameEditor: React.FC<DGMFrameNameEditorProps> = ({
               value={name}
               style={{
                 backgroundColor: "transparent",
-                border: "1px solid #888",
                 outline: "none",
                 fontFamily: state.fontFamily,
                 fontSize: state.fontSize,
@@ -238,6 +244,7 @@ export const DGMFrameNameEditor: React.FC<DGMFrameNameEditorProps> = ({
                 width: state.width,
               }}
               onChange={(e) => {
+                if (!state.frameShape) return;
                 setName(e.target.value);
                 update(state.frameShape, e.target.value);
               }}

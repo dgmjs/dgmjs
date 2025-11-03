@@ -3178,10 +3178,18 @@ export class Frame extends Box {
     if (!result) {
       const script = this.getScript(ScriptType.RENDER);
       if (!script) {
+        const _font = canvas.font;
+        canvas.font = utils.toCssFont(
+          this.fontStyle,
+          this.fontWeight,
+          this.fontSize,
+          this.fontFamily
+        );
         const tm = canvas.textMetric(this.name);
-        const margin = tm.descent * 1.2;
+        canvas.font = _font;
+        const margin = 2;
         const textRect = [
-          [this.left, this.top - margin - tm.ascent],
+          [this.left, this.top - tm.descent - tm.ascent - margin],
           [this.left + tm.width, this.top],
         ];
         if (geometry.inRect(point, textRect)) {
@@ -3294,8 +3302,8 @@ export class Frame extends Box {
   renderDefault(canvas: MemoizationCanvas) {
     if (this.allowRenderText) {
       const tm = canvas.textMetric(this.name);
-      const margin = tm.descent * 1.2;
-      canvas.fillText(this.left, this.top - margin, this.name);
+      const margin = 2;
+      canvas.fillText(this.left, this.top - tm.descent - margin, this.name);
     }
     if (this.strokeWidth > 0) {
       canvas.strokeRoundRect(
