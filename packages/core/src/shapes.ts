@@ -3292,9 +3292,11 @@ export class Frame extends Box {
    * Default render this shape
    */
   renderDefault(canvas: MemoizationCanvas) {
-    const tm = canvas.textMetric(this.name);
-    const margin = tm.descent * 1.2;
-    canvas.fillText(this.left, this.top - margin, this.name);
+    if (this.allowRenderText) {
+      const tm = canvas.textMetric(this.name);
+      const margin = tm.descent * 1.2;
+      canvas.fillText(this.left, this.top - margin, this.name);
+    }
     if (this.strokeWidth > 0) {
       canvas.strokeRoundRect(
         this.left,

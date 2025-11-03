@@ -4,6 +4,7 @@ import { DGMEditorCore, DGMEditorCoreProps } from "./DGMEditorCore";
 import { DGMTextInplaceEditor } from "./DGMTextInplaceEditor";
 import { DGMFloatingToolbarHolder } from "./DGMFloatingToolbarHolder";
 import { Editor as TiptapEditor } from "@tiptap/react";
+import { DGMFrameNameEditor } from "./DGMFrameNameEditor";
 
 export interface DGMEditorProps extends DGMEditorCoreProps {
   textInplaceEditorToolbar?: React.ReactNode;
@@ -12,6 +13,8 @@ export interface DGMEditorProps extends DGMEditorCoreProps {
   onTextInplaceEditorMount?: (tiptapEditor: TiptapEditor) => void;
   onTextInplaceEditorOpen?: (shape: Box) => void;
   onFloatingToolbarMove?: (onBelow: boolean) => void;
+  onFrameNameEditorMount?: (input: any) => void;
+  onFrameNameEditorOpen?: (shape: Box) => void;
 }
 
 export const DGMEditor: React.FC<DGMEditorProps> = ({
@@ -22,6 +25,8 @@ export const DGMEditor: React.FC<DGMEditorProps> = ({
   onTextInplaceEditorMount,
   onTextInplaceEditorOpen,
   onFloatingToolbarMove,
+  onFrameNameEditorMount,
+  onFrameNameEditorOpen,
   ...props
 }) => {
   const [editor, setEditor] = useState<Editor | null>(null);
@@ -46,6 +51,11 @@ export const DGMEditor: React.FC<DGMEditorProps> = ({
           toolbar={floatingToolbar}
           distance={floatingToolbarDistance}
           onMove={onFloatingToolbarMove}
+        />
+        <DGMFrameNameEditor
+          editor={editor as Editor}
+          onMount={onFrameNameEditorMount}
+          onOpen={onFrameNameEditorOpen}
         />
       </DGMEditorCore>
     </>
