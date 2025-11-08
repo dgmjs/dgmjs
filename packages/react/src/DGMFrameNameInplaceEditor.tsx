@@ -42,7 +42,7 @@ function getFrameNameRect(editor: Editor, frameShape: Frame, name: string) {
   return {
     left: rectInDCS[0][0],
     top: rectInDCS[0][1],
-    width: width,
+    width: Math.max(width, 1),
     height: height,
   };
 }
@@ -88,6 +88,8 @@ export const DGMFrameNameInplaceEditor: React.FC<
     width: 0,
     height: 0,
   });
+
+  console.log("state.width", state.width);
 
   useEffect(() => {
     if (editor) {
