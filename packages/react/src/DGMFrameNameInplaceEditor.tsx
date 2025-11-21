@@ -89,8 +89,6 @@ export const DGMFrameNameInplaceEditor: React.FC<
     height: 0,
   });
 
-  console.log("state.width", state.width);
-
   useEffect(() => {
     if (editor) {
       editor.onDblClick.addListener(handleEditorDblClick);
