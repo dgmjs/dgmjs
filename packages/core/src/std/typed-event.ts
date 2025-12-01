@@ -32,6 +32,10 @@ export class TypedEvent<T> {
     if (callbackIndex > -1) this.listeners.splice(callbackIndex, 1);
   };
 
+  hasListeners = (): boolean => {
+    return this.listeners.length > 0 || this.listenersOncer.length > 0;
+  };
+
   emit = (event: T) => {
     /** Update any general listeners */
     this.listeners.forEach((listener) => listener(event));
