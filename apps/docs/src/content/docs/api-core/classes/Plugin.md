@@ -23,7 +23,7 @@ Plugin
 
 #### Source
 
-[packages/core/src/editor.ts:2130](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L2130)
+[packages/core/src/editor.ts:2132](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L2132)
 
 ## Properties
 
@@ -33,7 +33,7 @@ Plugin
 
 #### Source
 
-[packages/core/src/editor.ts:2128](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L2128)
+[packages/core/src/editor.ts:2130](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L2130)
 
 ## Methods
 
@@ -51,7 +51,7 @@ Plugin
 
 #### Source
 
-[packages/core/src/editor.ts:2134](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L2134)
+[packages/core/src/editor.ts:2136](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L2136)
 
 ***
 
@@ -69,4 +69,4 @@ Plugin
 
 #### Source
 
-[packages/core/src/editor.ts:2135](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L2135)
+[packages/core/src/editor.ts:2137](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L2137)

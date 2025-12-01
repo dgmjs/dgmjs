@@ -1,4 +1,4 @@
-import { Box, Editor, FileDropEvent } from "@dgmjs/core";
+import { Box, FileDropEvent } from "@dgmjs/core";
 import { useState, useEffect } from "react";
 import { TiptapEditor, DGMEditor, DGMEditorProps } from "@dgmjs/react";
 import { Toggle } from "@/components/ui/toggle";

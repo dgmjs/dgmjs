@@ -33,7 +33,7 @@ Embed Factory Handler
 
 #### Source
 
-[packages/core/src/editor.ts:1485](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1485)
+[packages/core/src/editor.ts:1487](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1487)
 
 ## Properties
 
@@ -47,7 +47,7 @@ Embed Factory Handler
 
 #### Source
 
-[packages/core/src/editor.ts:1483](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1483)
+[packages/core/src/editor.ts:1485](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1485)
 
 ***
 
@@ -61,7 +61,7 @@ Embed Factory Handler
 
 #### Source
 
-[packages/core/src/editor.ts:1482](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1482)
+[packages/core/src/editor.ts:1484](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1484)
 
 ***
 
@@ -75,7 +75,7 @@ Embed Factory Handler
 
 #### Source
 
-[packages/core/src/editor.ts:1481](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1481)
+[packages/core/src/editor.ts:1483](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1483)
 
 ***
 
@@ -89,7 +89,7 @@ Embed Factory Handler
 
 #### Source
 
-[packages/core/src/editor.ts:1479](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1479)
+[packages/core/src/editor.ts:1481](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1481)
 
 ***
 
@@ -103,7 +103,7 @@ Embed Factory Handler
 
 #### Source
 
-[packages/core/src/editor.ts:1480](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1480)
+[packages/core/src/editor.ts:1482](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1482)
 
 ***
 
@@ -137,7 +137,7 @@ Activate the handler
 
 #### Source
 
-[packages/core/src/editor.ts:1518](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1518)
+[packages/core/src/editor.ts:1520](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1520)
 
 ***
 
@@ -161,7 +161,7 @@ Trigger when the handler action is complete
 
 #### Source
 
-[packages/core/src/editor.ts:1509](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1509)
+[packages/core/src/editor.ts:1511](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1511)
 
 ***
 
@@ -185,7 +185,7 @@ Deactivate the handler
 
 #### Source
 
-[packages/core/src/editor.ts:1526](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1526)
+[packages/core/src/editor.ts:1528](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1528)
 
 ***
 
@@ -261,7 +261,7 @@ Draw ghost for the selected shape
 
 #### Source
 
-[packages/core/src/editor.ts:1632](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1632)
+[packages/core/src/editor.ts:1634](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1634)
 
 ***
 
@@ -339,7 +339,7 @@ keyDown
 
 #### Source
 
-[packages/core/src/editor.ts:1614](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1614)
+[packages/core/src/editor.ts:1616](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1616)
 
 ***
 
@@ -365,7 +365,7 @@ keyUp
 
 #### Source
 
-[packages/core/src/editor.ts:1627](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1627)
+[packages/core/src/editor.ts:1629](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1629)
 
 ***
 
@@ -463,7 +463,7 @@ pointerDown
 
 #### Source
 
-[packages/core/src/editor.ts:1568](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1568)
+[packages/core/src/editor.ts:1570](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1570)
 
 ***
 
@@ -491,7 +491,7 @@ pointerMove
 
 #### Source
 
-[packages/core/src/editor.ts:1597](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1597)
+[packages/core/src/editor.ts:1599](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1599)
 
 ***
 
@@ -519,7 +519,7 @@ pointerUp
 
 #### Source
 
-[packages/core/src/editor.ts:1584](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1584)
+[packages/core/src/editor.ts:1586](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1586)
 
 ***
 
@@ -539,7 +539,7 @@ Reset the states of handler
 
 #### Source
 
-[packages/core/src/editor.ts:1500](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1500)
+[packages/core/src/editor.ts:1502](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L1502)
 
 ***
 
