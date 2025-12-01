@@ -73,6 +73,20 @@ passes through events as they happen. You will not get events from before you st
 
 #### Source
 
+[packages/core/src/std/typed-event.ts:39](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/std/typed-event.ts#L39)
+
+***
+
+### hasListeners()
+
+> **hasListeners**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Source
+
 [packages/core/src/std/typed-event.ts:35](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/std/typed-event.ts#L35)
 
 ***
@@ -91,7 +105,7 @@ passes through events as they happen. You will not get events from before you st
 
 #### Source
 
-[packages/core/src/std/typed-event.ts:47](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/std/typed-event.ts#L47)
+[packages/core/src/std/typed-event.ts:51](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/std/typed-event.ts#L51)
 
 ***
 

@@ -1,4 +1,4 @@
-import { Box } from "@dgmjs/core";
+import { Box, FileDropEvent } from "@dgmjs/core";
 import { useState, useEffect } from "react";
 import { TiptapEditor, DGMEditor, DGMEditorProps } from "@dgmjs/react";
 import { Toggle } from "@/components/ui/toggle";
@@ -82,7 +82,6 @@ export function TextInplaceEditorToolbar({
             theme={darkMode ? "dark" : "light"}
             palette={simplePalette}
             onClick={(value: any) => {
-              console.log(value);
               (tiptapEditor.chain().focus() as any).setColor(value).run();
             }}
           />
@@ -184,6 +183,35 @@ export const EditorWrapper: React.FC<DGMEditorProps> = ({
   const [tiptapEditor, setTiptapEditor] = useState<any>(null);
   const [editingText, setEditingText] = useState<Box | null>(null);
 
+  const handleFileDrop = async ({
+    event,
+    dataTransfer,
+    originalEvent,
+  }: FileDropEvent) => {
+    try {
+      const editor = window.editor;
+      const p = editor.canvas.globalCoordTransformRev([event.x, event.y]);
+      if (originalEvent.dataTransfer?.types.includes("Files")) {
+        const files = Array.from(originalEvent.dataTransfer.files);
+        if (files.length === 1) {
+          const file = files[0];
+          switch (file.type) {
+            case "image/png":
+            case "image/jpeg":
+            case "image/webp":
+            case "image/svg+xml": {
+              const image = await editor.factory.createImage(file, p);
+              editor.actions.insert(image);
+              break;
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error handling file drop:", error);
+    }
+  };
+
   return (
     <>
       <DGMEditor
@@ -212,6 +240,7 @@ export const EditorWrapper: React.FC<DGMEditorProps> = ({
         onFrameNameInplaceEditorOpen={() => {
           console.log("Frame name editor opened");
         }}
+        onFileDrop={handleFileDrop}
         {...props}
       />
     </>

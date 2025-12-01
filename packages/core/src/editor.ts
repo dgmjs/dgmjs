@@ -50,6 +50,7 @@ export interface DragEvent {
 export interface FileDropEvent {
   event: CanvasPointerEvent;
   dataTransfer: DataTransfer;
+  originalEvent: globalThis.DragEvent;
 }
 
 /**
@@ -735,6 +736,7 @@ export class Editor {
         this.onFileDrop.emit({
           event,
           dataTransfer: e.dataTransfer as DataTransfer,
+          originalEvent: e,
         });
       }
     };

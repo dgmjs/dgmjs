@@ -24,3 +24,13 @@ title: "FileDropEvent"
 #### Source
 
 [packages/core/src/editor.ts:51](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L51)
+
+***
+
+### originalEvent
+
+> **originalEvent**: `DragEvent`
+
+#### Source
+
+[packages/core/src/editor.ts:53](https://github.com/dgmjs/dgmjs/blob/main/packages/core/src/editor.ts#L53)
