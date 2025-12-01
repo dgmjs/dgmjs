@@ -191,8 +191,8 @@ export const EditorWrapper: React.FC<DGMEditorProps> = ({
     try {
       const editor = window.editor;
       const p = editor.canvas.globalCoordTransformRev([event.x, event.y]);
-      if (originalEvent.dataTransfer?.types.includes("Files")) {
-        const files = Array.from(originalEvent.dataTransfer.files);
+      if (dataTransfer.types.includes("Files")) {
+        const files = Array.from(dataTransfer.files);
         if (files.length === 1) {
           const file = files[0];
           switch (file.type) {
