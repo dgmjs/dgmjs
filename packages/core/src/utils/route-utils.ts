@@ -1,6 +1,6 @@
 import { LINE_STRATIFY_ANGLE_THRESHOLD } from "../graphics/const";
 import * as geometry from "../graphics/geometry";
-import { Connector, Path } from "../shapes";
+import { Connector, Path, Shape } from "../shapes";
 
 /**
  * Move end point
@@ -54,12 +54,12 @@ export function adjustRoute(connector: Connector): number[][] {
       LINE_STRATIFY_ANGLE_THRESHOLD
     );
     // attach tail point
-    if (connector.tail) {
+    if (connector.tail instanceof Shape) {
       const tp = connector.getTailAnchorPoint();
       const p = newPath[1];
       if (connector.tail instanceof Path && !connector.tail.isClosed()) {
         newPath[0] = geometry.getPointAtDistance(tp, p, connector.tailMargin);
-      } else if (connector.tail) {
+      } else if (connector.tail instanceof Shape) {
         const outline = connector.tail
           .getOutline()
           .map((p) =>
@@ -72,7 +72,7 @@ export function adjustRoute(connector: Connector): number[][] {
       }
     }
     // attach head point
-    if (connector.head) {
+    if (connector.head instanceof Shape) {
       const hp = connector.getHeadAnchorPoint();
       const p = newPath[newPath.length - 2];
       if (connector.head instanceof Path && !connector.head.isClosed()) {
@@ -81,7 +81,7 @@ export function adjustRoute(connector: Connector): number[][] {
           p,
           connector.headMargin
         );
-      } else if (connector.head) {
+      } else if (connector.head instanceof Shape) {
         const outline = connector.head
           .getOutline()
           .map((p) =>

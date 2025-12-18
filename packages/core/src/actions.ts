@@ -8,6 +8,7 @@ import {
   Path,
   Mirror,
   ShapePropsSchema,
+  Image,
 } from "./shapes";
 import * as geometry from "./graphics/geometry";
 import { Obj } from "./core/obj";
@@ -289,6 +290,16 @@ export class Actions {
                 if (s.hasOwnProperty(key)) {
                   tx.assign(s, key, value);
                   tx.assign(s, "text", nodes);
+                }
+              }
+            }
+            break;
+          case "imageData":
+            for (const s of objs) {
+              if (s instanceof Image) {
+                tx.assign(s, key, value);
+                if ((s as any)._imageDOM) {
+                  (s as any)._imageDOM.src = value;
                 }
               }
             }
