@@ -52,22 +52,22 @@ function constraint(
     ) {
       const textSize = measureText(canvas, shape, shape.text);
       if (args.width === "text")
-        width = Math.ceil(
+        width = Math.round(
           textSize.minWidth + shape.padding[1] + shape.padding[3]
         );
       if (args.width === "text-min")
         width = Math.max(
           shape.width,
-          Math.ceil(textSize.width + shape.padding[1] + shape.padding[3])
+          Math.round(textSize.width + shape.padding[1] + shape.padding[3])
         );
       if (args.height === "text")
-        height = Math.ceil(
+        height = Math.round(
           textSize.height + shape.padding[0] + shape.padding[2]
         );
       if (args.height === "text-min")
         height = Math.max(
           shape.height,
-          Math.ceil(textSize.height + shape.padding[0] + shape.padding[2])
+          Math.round(textSize.height + shape.padding[0] + shape.padding[2])
         );
     }
 
