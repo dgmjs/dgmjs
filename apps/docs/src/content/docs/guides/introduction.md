@@ -18,7 +18,7 @@ Basically, In DGM.js, you can create a diagram by combining the primitive shapes
 - Highlighter
 - Group
 
-![Primitive shapes](https://fs.dgm.sh/i/odAJcVEPXYrAR6htSAw5n/lwuge9q2@2x.png)
+![Primitive shapes](https://fs.dgmjs.dev/i/odAJcVEPXYrAR6htSAw5n/lwuge9q2@2x.png)
 
 All primitive shapes are [smart shapes](/guides/smart-shapes).
 

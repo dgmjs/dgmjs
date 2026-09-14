@@ -77,7 +77,7 @@ export function Palette({ onPropsChange }: PaletteProps) {
       </div>
 
       <div>
-        <a href="https://dgm.sh" target="_blank" className="px-2">
+        <a href="https://app.dgmjs.dev" target="_blank" className="px-2">
           more...
         </a>
       </div>
