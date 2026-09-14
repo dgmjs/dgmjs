@@ -1,4 +1,4 @@
-![DGM.js](https://fs.dgm.sh/i/7GS5SV8W3uojHd3cbfVzJ/lwpx3u3x@2x.png)
+![DGM.js](https://fs.dgmjs.dev/i/7GS5SV8W3uojHd3cbfVzJ/lwpx3u3x@2x.png)
 
 # DGM.js
 
@@ -27,7 +27,7 @@ An infinite canvas with _smart shapes_. It supports:
 ## Showcase
 
 - [Frame0](https://frame0.app) - Sketch-style low-fi wireframing tool
-- [DGM App](https://dgm.sh/home) - Full-featured web-based sketchnotes app
+- [DGM App](https://app.dgmjs.dev/home) - Full-featured web-based sketchnotes app
 - [Nakso](https://nakso.app) - A local-first whiteboard application.
 - [draw2app](https://draw2app.pages.dev/) - Generate web app from low-fidelity sketch by OpenAI.
 

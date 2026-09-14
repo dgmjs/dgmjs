@@ -59,10 +59,10 @@ export class Collab {
   start(editor: Editor, roomId: string, userIdentity: UserIdentity) {
     this.editor = editor;
     this.docSyncPlugin = this.editor.getPlugin(
-      "dgmjs/yjs-doc-sync"
+      "dgmjs/yjs-doc-sync",
     ) as YjsDocSyncPlugin;
     this.userPresencePlugin = this.editor.getPlugin(
-      "dgmjs/yjs-user-presence"
+      "dgmjs/yjs-user-presence",
     ) as YjsUserPresencePlugin;
 
     // initialize yDoc
@@ -77,7 +77,7 @@ export class Collab {
 
     this.yProvider = new WebrtcProvider(roomId, this.yDoc, {
       // signaling: ["ws://localhost:4444"],
-      signaling: ["wss://webrtc.dgm.sh"],
+      signaling: ["wss://webrtc.dgmjs.dev"],
       password: "1234",
     });
     this.docSyncPlugin.start(this.yDoc);

@@ -48,7 +48,7 @@ This constraint aligns children shapes.
 - **gap** : A gap value among the children.
 - **fillLast** : Fill the last child shape.
 
-![align-children](https://fs.dgm.sh/i/_lGjyzTaaz_R7sZ4L1VHe/lt@1x.png)
+![align-children](https://fs.dgmjs.dev/i/_lGjyzTaaz_R7sZ4L1VHe/lt@1x.png)
 
 ### align-to-parent
 
@@ -61,7 +61,7 @@ This constraint aligns the shape relative to its parent.
 - **query** : A query for determining the parent to which the constraint should be applied. For more about query expression, see [Query](#query).
 - **innerArea** : Align to parent's inner area. It means that parent's padding values are used for aligning.
 
-![align-to-parent](https://fs.dgm.sh/i/Rf8jUx1l3ZTMmOJQmTKZI/lt@1x.png)
+![align-to-parent](https://fs.dgmjs.dev/i/Rf8jUx1l3ZTMmOJQmTKZI/lt@1x.png)
 
 ### anchor-on-parent
 
