@@ -106,7 +106,7 @@ export const DGMTextInplaceEditor: React.FC<DGMTextInplaceEditorProps> = ({
         editor.factory.onCreate.removeListener(handleEditorFactoryCreate);
       }
     };
-  }, [editor]);
+  }, [editor, tiptapEditor]);
 
   useEffect(() => {
     if (tiptapEditor && onMount) {
